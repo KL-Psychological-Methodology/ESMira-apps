@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	
+	<item
+		android:id="@+id/contact_researcher"
+		android:title="@string/contact_researcher"/>
+	
+	<item
+		android:id="@+id/informed_consent"
+		android:title="@string/informed_consent"/>
+	
+	<item
+		android:id="@+id/leave_study"
+		android:title="@string/leave_study"/>
+</menu>

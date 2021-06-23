@@ -1,0 +1,131 @@
+<resources>
+	
+	<!--	Activities: -->
+	
+	<style name="AppTheme" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+		<item name="materialButtonStyle">@style/AppTheme.DefaultButton</item>
+		<item name="buttonBarButtonStyle">@style/AppTheme.DialogButton</item>
+		<item name="borderlessButtonStyle">@style/AppTheme.DialogButton</item>
+		
+		<item name="colorPrimary">@color/colorPrimaryLight</item>
+		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+		<item name="colorAccent">@color/colorAccent</item>
+		<item name="colorControlHighlight">@color/colorPrimaryLight</item> <!-- ripple color for elements with ?attr/selectableItemBackground-->
+	</style>
+	
+	
+	
+	<style name="AppTheme.NoActionBar" parent="AppTheme">
+		<item name="windowActionBar">false</item>
+		<item name="windowNoTitle">true</item>
+	</style>
+	<style name="AppTheme.Transparent" parent="AppTheme.NoActionBar">
+		<item name="android:windowIsTranslucent">true</item>
+		<item name="android:windowBackground">@android:color/transparent</item>
+		<item name="android:windowIsFloating">false</item>
+	</style>
+	
+	
+	<style name="AppTheme.WideDialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+		<item name="materialButtonStyle">@style/AppTheme.DefaultButton</item>
+		<item name="buttonBarButtonStyle">@style/AppTheme.DialogButton</item>
+		<item name="borderlessButtonStyle">@style/AppTheme.DialogButton</item>
+		
+		<item name="colorPrimary">@color/colorPrimaryDark</item>
+		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+		<item name="colorAccent">@color/colorAccent</item>
+		<item name="colorControlHighlight">@color/colorPrimaryLight</item> <!-- ripple color for elements with ?attr/selectableItemBackground-->
+		
+		<item name="android:windowMinWidthMajor">96%</item>
+		<item name="android:windowMinWidthMinor">96%</item>
+	
+	</style>
+	
+	<style name="AppTheme.ActivityDialog" parent="Theme.MaterialComponents.DayNight.Dialog.Alert">
+		<item name="materialButtonStyle">@style/AppTheme.DefaultButton</item>
+		<item name="buttonBarButtonStyle">@style/AppTheme.DialogButton</item>
+		<item name="borderlessButtonStyle">@style/AppTheme.DialogButton</item>
+		
+		<item name="colorPrimary">@color/colorPrimaryDark</item>
+		<item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+		<item name="colorAccent">@color/colorAccent</item>
+		<item name="colorControlHighlight">@color/colorPrimaryLight</item> <!-- ripple color for elements with ?attr/selectableItemBackground-->
+	</style>
+	
+	<style name="AppTheme.ActivityWelcome" parent="AppTheme.NoActionBar">
+<!--		<item name="android:textSize">18sp</item>-->
+	</style>
+	
+	
+	<style name="AppTheme.MainToolbar" parent="AppTheme">
+		<item name="android:textColorPrimary">#fff</item>
+		<item name="android:textColorSecondary">#fff</item>
+	</style>
+	
+	
+	<!--	Buttons: -->
+	
+	<style name="AppTheme.DefaultButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+		<item name="android:textColor">@color/accent_disabled_accent_alpha</item>
+		<item name="iconTint">@color/accent_disabled_accent_alpha</item>
+		<item name="rippleColor">@color/accent_alpha</item>
+	</style>
+	
+	<style name="AppTheme.UnimportantButton" parent="Widget.MaterialComponents.Button.TextButton">
+		<item name="android:textColor">@color/colorPrimaryLight</item>
+		<item name="iconTint">@color/colorPrimaryLight</item>
+		<item name="strokeWidth">0dp</item><!--	because default style is Widget.MaterialComponents.Button.OutlinedButton which has a stroke set-->
+	</style>
+	
+	<style name="AppTheme.IconButton" parent="Widget.MaterialComponents.Button.TextButton">
+		<item name="android:textColor">@color/primarydark_disabled_primarydark_alpha</item>
+		<item name="iconTint">@color/primarydark_disabled_primarydark_alpha</item>
+		<item name="strokeWidth">0dp</item><!--	because default style is Widget.MaterialComponents.Button.OutlinedButton which has a stroke set-->
+		<item name="iconPadding">0dp</item>
+	</style>
+	
+	<style name="AppTheme.DialogButton" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+		<item name="android:textColor">@color/primarydark_disabled_primarydark_alpha</item>
+		<item name="iconTint">@color/primarydark_disabled_primarydark_alpha</item>
+		<item name="strokeWidth">0dp</item><!--	because default style is Widget.MaterialComponents.Button.OutlinedButton which has a stroke set-->
+	</style>
+	
+	<!--	BottomSheet: -->
+	
+	<style name="AppTheme.BottomSheetDialog_with_roundCorners" parent="ThemeOverlay.MaterialComponents.DayNight.BottomSheetDialog">
+		<item name="bottomSheetStyle">@style/AppTheme.BottomSheetDialog_with_roundCorners.background</item>
+	</style>
+	<style name="AppTheme.BottomSheetDialog_with_roundCorners.background" parent="Theme.MaterialComponents.DayNight.BottomSheetDialog">
+		<item name="android:background">@android:color/transparent</item>
+	</style>
+	
+	
+	<!--	Misc-->
+	<style name="AppTheme.ViewContainer" parent="AppTheme">
+		<item name="android:paddingStart">20dp</item>
+		<item name="android:paddingLeft">20dp</item>
+		<item name="android:paddingEnd">20dp</item>
+		<item name="android:paddingRight">20dp</item>
+	</style>
+	
+	
+	<!--	Additional attributes: -->
+	
+	<attr name="dateTimeMode" format="enum">
+		<enum name="dateTime" value="0"/>
+		<enum name="date" value="1"/>
+		<enum name="time" value="2"/>
+	</attr>
+	<declare-styleable name="Element_DateTimeInput">
+		<attr name="dateTimeMode"/>
+	</declare-styleable>
+	
+	<attr name="fixedPosition" format="enum">
+		<enum name="modelSettings" value="1"/>
+		<enum name="additionalSettings" value="5"/>
+	</attr>
+	<declare-styleable name="Element_SetupNotifications">
+		<attr name="fixedPosition"/>
+	</declare-styleable>
+
+</resources>

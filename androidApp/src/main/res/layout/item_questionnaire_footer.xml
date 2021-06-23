@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical">
+	
+	<TextView
+		android:id="@+id/footerText"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_margin="10dp"
+		android:textSize="18sp"/>
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:layout_margin="10dp"
+		android:background="@color/light_gray"/>
+	
+	<TextView
+		android:id="@+id/info_required"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="20dp"
+		android:text="@string/info_required"
+		android:padding="10dp"/>
+	<Button
+		style="@style/AppTheme.DialogButton"
+		android:id="@+id/btn_save"
+		android:layout_width="150dp"
+		android:layout_height="50dp"
+		android:layout_gravity="end"
+		app:icon="@drawable/ic_check_accent_24dp"
+		app:iconGravity="end"
+		android:text="@string/save"/>
+	<Button
+		style="@style/AppTheme.DialogButton"
+		android:visibility="gone"
+		android:id="@+id/btn_continue"
+		android:layout_width="150dp"
+		android:layout_height="50dp"
+		android:layout_gravity="end"
+		android:gravity="center|end"
+		app:icon="@drawable/ic_light_arrow_right_24dp"
+		app:iconGravity="end"
+		android:text="@string/continue_"/>
+</LinearLayout>

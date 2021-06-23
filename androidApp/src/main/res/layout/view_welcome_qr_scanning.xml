@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	style="@style/AppTheme.ViewContainer"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	
+	<ScrollView
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintBottom_toTopOf="@id/btn_back">
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+			<ImageView
+				android:id="@+id/camera"
+				android:layout_width="100dp"
+				android:layout_height="100dp"
+				android:layout_gravity="center"
+				android:src="@drawable/ic_camera_24dp"
+				app:layout_constraintLeft_toLeftOf="parent"
+				app:layout_constraintRight_toRightOf="parent"
+				app:layout_constraintTop_toTopOf="parent"
+				app:tint="?android:attr/textColorSecondary"/>
+			
+			<TextView
+				android:id="@+id/question"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:text="@string/welcome_qr_instructions"
+				android:textSize="@dimen/welcome_textSize"
+				app:layout_constraintLeft_toLeftOf="parent"
+				app:layout_constraintRight_toRightOf="parent"
+				app:layout_constraintTop_toBottomOf="@id/camera"/>
+			
+			<Button
+				style="@style/AppTheme.DefaultButton"
+				android:id="@+id/btn_continue"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_margin="10dp"
+				android:text="@string/start"
+				app:layout_constraintLeft_toLeftOf="parent"
+				app:layout_constraintRight_toRightOf="parent"
+				app:layout_constraintTop_toBottomOf="@id/question"/>
+		</androidx.constraintlayout.widget.ConstraintLayout>
+	</ScrollView>
+	<View
+		android:layout_width="0dp"
+		android:layout_height="1dp"
+		android:background="@color/colorPrimaryDark"
+		app:layout_constraintBottom_toTopOf="@id/btn_back"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent"/>
+	
+	<Button
+		style="@style/AppTheme.DialogButton"
+		android:id="@+id/btn_back"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/back"
+		app:icon="@drawable/ic_back_accent_24dp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

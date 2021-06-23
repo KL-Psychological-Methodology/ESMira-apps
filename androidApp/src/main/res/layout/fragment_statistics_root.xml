@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+	<androidx.viewpager.widget.ViewPager
+		android:id="@+id/container"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+		
+		
+		<com.google.android.material.tabs.TabLayout
+			android:id="@+id/tab_layout"
+			android:visibility="gone"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content" />
+	</androidx.viewpager.widget.ViewPager>
+	<LinearLayout
+		android:id="@+id/state_loading_public_statistics"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="bottom"
+		android:orientation="horizontal">
+		<ProgressBar
+			android:layout_width="30dp"
+			android:layout_height="30dp"
+			android:layout_margin="5dp"/>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center"
+			android:text="@string/state_loading_public_statistics"/>
+		
+		
+	</LinearLayout>
+</FrameLayout>

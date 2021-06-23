@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:paddingHorizontal="10dp"
+	android:paddingBottom="10dp"
+	android:layout_margin="5dp"
+	android:background="@drawable/message_from_server">
+	
+	<TextView
+		android:id="@+id/sent"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="end"
+		tools:text="01.01.1989, 12:00"
+		android:textSize="12sp"
+		android:textColor="@android:color/white"
+		android:paddingHorizontal="5dp"
+		android:paddingTop="5dp"/>
+	
+	<TextView
+		android:id="@+id/content"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingHorizontal="5dp"
+		android:paddingBottom="5dp"
+		tools:text="content"
+		android:textColor="@android:color/white"
+		android:textSize="16sp"/>
+</LinearLayout>

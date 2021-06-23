@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	style="@style/AppTheme.ViewContainer"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+	<ScrollView
+		android:layout_width="0dp"
+		android:layout_height="0dp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintBottom_toTopOf="@id/btn_back">
+		<androidx.constraintlayout.widget.ConstraintLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+			
+			<ImageView
+				android:id="@+id/qr_example"
+				android:layout_width="100dp"
+				android:layout_height="100dp"
+				android:layout_margin="10dp"
+				android:src="@drawable/ic_accesskey_24dp"
+				app:layout_constraintLeft_toLeftOf="parent"
+				app:layout_constraintRight_toRightOf="parent"
+				app:layout_constraintTop_toTopOf="parent"
+				app:tint="?android:attr/textColorSecondary"/>
+			<TextView
+				android:id="@+id/title"
+				android:layout_width="50dp"
+				android:layout_height="wrap_content"
+				android:layout_margin="10dp"
+				android:layout_gravity="center"
+				android:textSize="64sp"
+				android:textStyle="bold"
+				android:text="@string/questionMark"
+				app:layout_constraintLeft_toRightOf="@id/qr_example"
+				app:layout_constraintTop_toTopOf="@id/qr_example"
+				app:layout_constraintBottom_toBottomOf="@id/qr_example"/>
+			
+			<TextView
+				android:id="@+id/question"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp"
+				android:gravity="center"
+				android:text="@string/welcome_accessKey_question"
+				android:textSize="@dimen/welcome_textSize"
+				app:layout_constraintLeft_toLeftOf="parent"
+				app:layout_constraintRight_toRightOf="parent"
+				app:layout_constraintTop_toBottomOf="@id/qr_example"/>
+			
+			<Button
+				style="@style/AppTheme.DefaultButton"
+				android:id="@+id/btn_yes"
+				android:layout_width="300dp"
+				android:layout_height="wrap_content"
+				android:layout_margin="10dp"
+				android:text="@string/yes"
+				app:layout_constraintLeft_toLeftOf="parent"
+				app:layout_constraintRight_toRightOf="parent"
+				app:layout_constraintTop_toBottomOf="@id/question"/>
+			
+			<Button
+				style="@style/AppTheme.DefaultButton"
+				android:id="@+id/btn_no"
+				android:layout_width="300dp"
+				android:layout_height="wrap_content"
+				android:layout_margin="10dp"
+				android:text="@string/welcome_join_public_study"
+				app:layout_constraintLeft_toLeftOf="parent"
+				app:layout_constraintRight_toRightOf="parent"
+				app:layout_constraintTop_toBottomOf="@id/btn_yes"/>
+		</androidx.constraintlayout.widget.ConstraintLayout>
+	</ScrollView>
+	<View
+		android:layout_width="0dp"
+		android:layout_height="1dp"
+		android:background="@color/colorPrimaryDark"
+		app:layout_constraintBottom_toTopOf="@id/btn_back"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintRight_toRightOf="parent"/>
+	
+	<Button
+		style="@style/AppTheme.DialogButton"
+		android:id="@+id/btn_back"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/back"
+		app:icon="@drawable/ic_back_accent_24dp"
+		app:layout_constraintLeft_toLeftOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

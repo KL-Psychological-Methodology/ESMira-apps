@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	style="@style/AppTheme.ViewContainer"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/recyclerView"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+		tools:listitem="@layout/item_header_email"/>
+	<TextView
+		android:id="@+id/info_emptyList"
+		android:visibility="gone"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_margin="20dp"
+		android:gravity="center"
+		android:textSize="18sp"
+		android:text="@string/info_no_studies_joined"/>
+	<View
+		android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:background="@color/colorPrimaryDark"
+		app:layout_constraintBottom_toTopOf="@id/btn_permissions"
+		app:layout_constraintLeft_toLeftOf="parent"/>
+	<com.google.android.material.button.MaterialButton
+		style="@style/AppTheme.DialogButton"
+		android:id="@+id/btn_back"
+		android:layout_width="wrap_content"
+		android:layout_height="50dp"
+		app:icon="@drawable/ic_back_accent_24dp"
+		android:text="@string/back"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintLeft_toLeftOf="parent"/>
+</LinearLayout>
