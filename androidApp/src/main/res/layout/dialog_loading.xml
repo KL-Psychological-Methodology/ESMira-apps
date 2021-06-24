@@ -9,7 +9,7 @@
 		android:orientation="vertical"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:background="@drawable/shape_round_top_corners"
+		android:background="?attr/colorSurface"
 		android:padding="20dp"
 		android:layout_marginLeft="5dp"
 		android:layout_marginRight="5dp"
