@@ -11,7 +11,6 @@ import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.TextView
 import androidx.core.content.ContextCompat
-import androidx.core.text.HtmlCompat
 import androidx.recyclerview.widget.LinearSmoothScroller
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.SmoothScroller
@@ -52,7 +51,7 @@ class Fragment_questionnaireDetail : Base_fragment() {
 			init {
 				if(page.header.isNotEmpty()) {
 					val headerEl = itemView.findViewById<TextView>(R.id.headerText)
-					headerEl.text = HtmlCompat.fromHtml(page.header, HtmlCompat.FROM_HTML_MODE_LEGACY)
+					headerEl.text = HtmlHandler.fromHtml(page.header)
 					headerEl.movementMethod = LinkMovementMethod.getInstance()
 				}
 				else
@@ -93,7 +92,7 @@ class Fragment_questionnaireDetail : Base_fragment() {
 				
 				if(page.footer.isNotEmpty()) {
 					val footerEl = itemView.findViewById<TextView>(R.id.footerText)
-					footerEl.text = HtmlCompat.fromHtml(page.footer, HtmlCompat.FROM_HTML_MODE_LEGACY)
+					footerEl.text = HtmlHandler.fromHtml(page.footer)
 					footerEl.movementMethod = LinkMovementMethod.getInstance()
 				}
 				else

@@ -8,7 +8,6 @@ import android.text.method.LinkMovementMethod
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.text.HtmlCompat
 import at.jodlidev.esmira.sharedCode.NativeLink
 
 /**
@@ -25,7 +24,7 @@ public class Activity_dialog : AppCompatActivity() {
 		}
 
 		val msgEl = findViewById<TextView>(R.id.msg)
-		msgEl.text = HtmlCompat.fromHtml(extras.getString(EXTRAS_MSG) ?: "", HtmlCompat.FROM_HTML_MODE_LEGACY)
+		msgEl.text = HtmlHandler.fromHtml(extras.getString(EXTRAS_MSG) ?: "")
 		msgEl.movementMethod = LinkMovementMethod.getInstance()
 		
 		title = extras.getString(EXTRAS_TITLE)

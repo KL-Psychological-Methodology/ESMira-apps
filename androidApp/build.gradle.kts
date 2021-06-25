@@ -5,7 +5,10 @@ plugins {
 
 repositories {
     gradlePluginPortal() //for debug-db & barcodescanner:zxing
-    maven { setUrl("https://jitpack.io") } // for MPAndroidChart
+    maven {
+        setUrl("https://jitpack.io") // for MPAndroidChart
+    }
+    mavenCentral()
 }
 dependencies {
     implementation(project(":sharedCode"))
@@ -24,6 +27,8 @@ dependencies {
     implementation("me.dm7.barcodescanner:zxing:1.9.13") //qr scanner
     implementation("androidx.preference:preference:1.1.1") //PreferenceFragment
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0") //https://github.com/PhilJay/MPAndroidChart
+    
+    implementation("com.github.NightWhistler:HtmlSpanner:0.4") //https://github.com/NightWhistler/HtmlSpanner
 }
 
 version = "2.4.2.1"

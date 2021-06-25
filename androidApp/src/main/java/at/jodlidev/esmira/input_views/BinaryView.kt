@@ -2,7 +2,7 @@ package at.jodlidev.esmira.input_views
 
 import android.content.Context
 import androidx.core.content.ContextCompat
-import androidx.core.text.HtmlCompat
+import at.jodlidev.esmira.HtmlHandler
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
 import at.jodlidev.esmira.sharedCode.data_structure.Input
@@ -66,8 +66,8 @@ class BinaryView(context: Context) : TextElView(context, R.layout.view_input_bin
 //				buttonGroup.check(R.id.right)
 //		}
 		
-		leftEl.text = HtmlCompat.fromHtml(input.leftSideLabel, HtmlCompat.FROM_HTML_MODE_LEGACY)
-		rightEl.text = HtmlCompat.fromHtml(input.rightSideLabel, HtmlCompat.FROM_HTML_MODE_LEGACY)
+		leftEl.text = HtmlHandler.fromHtml(input.leftSideLabel)
+		rightEl.text = HtmlHandler.fromHtml(input.rightSideLabel)
 		setValue(input.value)
 	}
 }

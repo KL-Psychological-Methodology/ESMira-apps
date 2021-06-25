@@ -5,8 +5,8 @@ import android.view.View
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
-import androidx.core.text.HtmlCompat
 import androidx.core.view.ViewCompat
+import at.jodlidev.esmira.HtmlHandler
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
 import at.jodlidev.esmira.sharedCode.data_structure.Input
@@ -32,8 +32,8 @@ class LikertView(context: Context) : TextElView(context, R.layout.view_input_lik
 		isBound = false //in case this view was reused
 		radioBox.removeAllViews()
 		
-		leftEl.text = HtmlCompat.fromHtml(input.leftSideLabel, HtmlCompat.FROM_HTML_MODE_LEGACY)
-		rightEl.text = HtmlCompat.fromHtml(input.rightSideLabel, HtmlCompat.FROM_HTML_MODE_LEGACY)
+		leftEl.text = HtmlHandler.fromHtml(input.leftSideLabel)
+		rightEl.text = HtmlHandler.fromHtml(input.rightSideLabel)
 		val steps = input.likertSteps
 		
 		val s = input.value

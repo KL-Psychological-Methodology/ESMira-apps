@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.core.text.HtmlCompat
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import at.jodlidev.esmira.sharedCode.DbLogic
@@ -36,7 +35,7 @@ class Fragment_studyRegistered : Base_fragment() {
 		}
 		val study: Study = DbLogic.getStudy(id) ?: return
 		if(study.postInstallInstructions.isNotEmpty())
-			rootView.findViewById<TextView>(R.id.instructions).text = HtmlCompat.fromHtml(study.postInstallInstructions, HtmlCompat.FROM_HTML_MODE_LEGACY)
+			rootView.findViewById<TextView>(R.id.instructions).text = HtmlHandler.fromHtml(study.postInstallInstructions)
 		rootView.findViewById<View>(R.id.btn_complete).setOnClickListener {
 			val intent = Intent(context, Activity_main::class.java)
 			intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

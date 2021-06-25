@@ -4,7 +4,7 @@ import android.content.Context
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
-import androidx.core.text.HtmlCompat
+import at.jodlidev.esmira.HtmlHandler
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
 import at.jodlidev.esmira.sharedCode.data_structure.Input
@@ -38,8 +38,8 @@ class VaScaleView(context: Context) : TextElView(context, R.layout.view_input_va
 	override fun bindData(input: Input, questionnaire: Questionnaire) {
 		isBound = false //in case this view was reused
 		
-		leftEl.text = HtmlCompat.fromHtml(input.leftSideLabel, HtmlCompat.FROM_HTML_MODE_LEGACY)
-		rightEl.text = HtmlCompat.fromHtml(input.rightSideLabel, HtmlCompat.FROM_HTML_MODE_LEGACY)
+		leftEl.text = HtmlHandler.fromHtml(input.leftSideLabel)
+		rightEl.text = HtmlHandler.fromHtml(input.rightSideLabel)
 		
 		
 		if(input.value.isNotEmpty()) {

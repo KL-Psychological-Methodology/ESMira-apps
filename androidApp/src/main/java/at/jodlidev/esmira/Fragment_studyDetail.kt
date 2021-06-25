@@ -2,11 +2,13 @@ package at.jodlidev.esmira
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.text.HtmlCompat
 import at.jodlidev.esmira.sharedCode.data_structure.Study
+
 
 /**
  * Created by JodliDev on 11.04.2019.
@@ -43,7 +45,8 @@ class Fragment_studyDetail : Base_fragment() {
 				Toast.makeText(context, R.string.error_no_email_client, Toast.LENGTH_LONG).show()
 			}
 		}
-		rootView.findViewById<TextView>(R.id.desc).text = HtmlCompat.fromHtml(study.studyDescription, HtmlCompat.FROM_HTML_MODE_LEGACY)
+		rootView.findViewById<TextView>(R.id.desc).text = HtmlHandler.fromHtml(study.studyDescription)
+		println(study.studyDescription)
 		
 		if(study.needsPermissionScreen()) {
 			rootView.findViewById<View>(R.id.btn_permissions).setOnClickListener {

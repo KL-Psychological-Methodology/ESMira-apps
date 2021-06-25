@@ -6,7 +6,7 @@ import android.view.InflateException
 import android.view.View
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.text.HtmlCompat
+import at.jodlidev.esmira.HtmlHandler
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
 import at.jodlidev.esmira.sharedCode.data_structure.Input
@@ -37,7 +37,10 @@ open class TextElView : ConstraintLayout, AndroidInputViewInterface {
 	override fun bindData(input: Input, questionnaire: Questionnaire) {
 		this.input = input
 		this.isBound = true
-		descEl.text = HtmlCompat.fromHtml(input.desc, HtmlCompat.FROM_HTML_MODE_LEGACY)
+		println(input.desc)
+		println(HtmlHandler.fromHtml(input.desc))
+//		descEl.text = (input.desc)
+		descEl.text = HtmlHandler.fromHtml(input.desc)
 		descEl.movementMethod = LinkMovementMethod.getInstance()
 	}
 }

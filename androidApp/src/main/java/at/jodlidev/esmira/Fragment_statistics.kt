@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import android.widget.TextView
-import androidx.core.text.HtmlCompat
 import at.jodlidev.esmira.androidNative.statistics.ChartTypeChooser
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.data_structure.Study
@@ -60,7 +59,7 @@ class Fragment_statistics : Base_fragment() {
 			chartViewContainer.addView(parent)
 			val box = View.inflate(context, R.layout.item_statistic_chart, parent)
 			box.findViewById<TextView>(R.id.header).text = chartInfo.title
-			box.findViewById<TextView>(R.id.desc).text = HtmlCompat.fromHtml(chartInfo.chartDescription, HtmlCompat.FROM_HTML_MODE_LEGACY)
+			box.findViewById<TextView>(R.id.desc).text = HtmlHandler.fromHtml(chartInfo.chartDescription)
 			
 			if(studyStateIsJoined && chartInfo.hideUntilCompletion) {
 				val noChartDesc = TextView(context)

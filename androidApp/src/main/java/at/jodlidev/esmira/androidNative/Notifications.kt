@@ -13,7 +13,6 @@ import android.os.Build
 import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.text.HtmlCompat
 import at.jodlidev.esmira.*
 import at.jodlidev.esmira.sharedCode.NotificationsInterface
 import at.jodlidev.esmira.sharedCode.data_structure.*
@@ -104,8 +103,8 @@ object Notifications: NotificationsInterface {
 		return NotificationCompat.Builder(context, channel)
 			.setSmallIcon(R.drawable.ic_notification)
 			.setContentTitle(title)
-			.setContentText(HtmlCompat.fromHtml(msg, HtmlCompat.FROM_HTML_MODE_LEGACY))
-			.setStyle(NotificationCompat.BigTextStyle().bigText(HtmlCompat.fromHtml(msg, HtmlCompat.FROM_HTML_MODE_LEGACY)))
+			.setContentText(HtmlHandler.fromHtml(msg))
+			.setStyle(NotificationCompat.BigTextStyle().bigText(HtmlHandler.fromHtml(msg)))
 			.setContentIntent(pendingIntent)
 			.setAutoCancel(true)
 			.setSound(Uri.parse("${ContentResolver.SCHEME_ANDROID_RESOURCE}://${context.packageName}/${R.raw.notifcation}"))
