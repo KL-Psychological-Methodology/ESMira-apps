@@ -59,7 +59,7 @@ class Fragment_statistics : Base_fragment() {
 			chartViewContainer.addView(parent)
 			val box = View.inflate(context, R.layout.item_statistic_chart, parent)
 			box.findViewById<TextView>(R.id.header).text = chartInfo.title
-			box.findViewById<TextView>(R.id.desc).text = HtmlHandler.fromHtml(chartInfo.chartDescription)
+			HtmlHandler.setHtml(chartInfo.chartDescription, box.findViewById<TextView>(R.id.desc))
 			
 			if(studyStateIsJoined && chartInfo.hideUntilCompletion) {
 				val noChartDesc = TextView(context)

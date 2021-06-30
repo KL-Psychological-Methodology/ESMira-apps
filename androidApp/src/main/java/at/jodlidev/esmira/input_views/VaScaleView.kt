@@ -38,8 +38,8 @@ class VaScaleView(context: Context) : TextElView(context, R.layout.view_input_va
 	override fun bindData(input: Input, questionnaire: Questionnaire) {
 		isBound = false //in case this view was reused
 		
-		leftEl.text = HtmlHandler.fromHtml(input.leftSideLabel)
-		rightEl.text = HtmlHandler.fromHtml(input.rightSideLabel)
+		HtmlHandler.setHtml(input.leftSideLabel, leftEl)
+		HtmlHandler.setHtml(input.rightSideLabel, rightEl)
 		
 		
 		if(input.value.isNotEmpty()) {

@@ -100,11 +100,12 @@ object Notifications: NotificationsInterface {
 	}
 	
 	private fun createNotification(context: Context, title: String, msg: String, pendingIntent: PendingIntent, channel: String): NotificationCompat.Builder {
+		val msg = HtmlHandler.fromHtml(msg, context)
 		return NotificationCompat.Builder(context, channel)
 			.setSmallIcon(R.drawable.ic_notification)
 			.setContentTitle(title)
-			.setContentText(HtmlHandler.fromHtml(msg))
-			.setStyle(NotificationCompat.BigTextStyle().bigText(HtmlHandler.fromHtml(msg)))
+			.setContentText(msg)
+			.setStyle(NotificationCompat.BigTextStyle().bigText(msg))
 			.setContentIntent(pendingIntent)
 			.setAutoCancel(true)
 			.setSound(Uri.parse("${ContentResolver.SCHEME_ANDROID_RESOURCE}://${context.packageName}/${R.raw.notifcation}"))

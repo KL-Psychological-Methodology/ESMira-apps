@@ -1,7 +1,6 @@
 package at.jodlidev.esmira.input_views
 
 import android.content.Context
-import android.text.method.LinkMovementMethod
 import android.view.InflateException
 import android.view.View
 import android.widget.TextView
@@ -29,7 +28,7 @@ open class TextElView : ConstraintLayout, AndroidInputViewInterface {
 			View.inflate(context, res, this)
 		}
 		catch(e: InflateException) {
-			View.inflate(context, R.layout.view_input_text, this)
+			View.inflate(context, R.layout.view_input_text_template, this)
 		}
 		descEl = findViewById(R.id.desc)
 	}
@@ -37,10 +36,6 @@ open class TextElView : ConstraintLayout, AndroidInputViewInterface {
 	override fun bindData(input: Input, questionnaire: Questionnaire) {
 		this.input = input
 		this.isBound = true
-		println(input.desc)
-		println(HtmlHandler.fromHtml(input.desc))
-//		descEl.text = (input.desc)
-		descEl.text = HtmlHandler.fromHtml(input.desc)
-		descEl.movementMethod = LinkMovementMethod.getInstance()
+		HtmlHandler.setHtml(input.desc, descEl)
 	}
 }

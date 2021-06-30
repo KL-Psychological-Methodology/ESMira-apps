@@ -35,7 +35,7 @@ class Fragment_studyRegistered : Base_fragment() {
 		}
 		val study: Study = DbLogic.getStudy(id) ?: return
 		if(study.postInstallInstructions.isNotEmpty())
-			rootView.findViewById<TextView>(R.id.instructions).text = HtmlHandler.fromHtml(study.postInstallInstructions)
+			HtmlHandler.setHtml(study.postInstallInstructions, rootView.findViewById<TextView>(R.id.instructions))
 		rootView.findViewById<View>(R.id.btn_complete).setOnClickListener {
 			val intent = Intent(context, Activity_main::class.java)
 			intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

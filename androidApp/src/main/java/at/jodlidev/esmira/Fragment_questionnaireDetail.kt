@@ -51,8 +51,7 @@ class Fragment_questionnaireDetail : Base_fragment() {
 			init {
 				if(page.header.isNotEmpty()) {
 					val headerEl = itemView.findViewById<TextView>(R.id.headerText)
-					headerEl.text = HtmlHandler.fromHtml(page.header)
-					headerEl.movementMethod = LinkMovementMethod.getInstance()
+					HtmlHandler.setHtml(page.header, headerEl)
 				}
 				else
 					itemView.findViewById<TextView>(R.id.headerText).visibility = View.GONE
@@ -92,8 +91,7 @@ class Fragment_questionnaireDetail : Base_fragment() {
 				
 				if(page.footer.isNotEmpty()) {
 					val footerEl = itemView.findViewById<TextView>(R.id.footerText)
-					footerEl.text = HtmlHandler.fromHtml(page.footer)
-					footerEl.movementMethod = LinkMovementMethod.getInstance()
+					HtmlHandler.setHtml(page.footer, footerEl)
 				}
 				else
 					itemView.findViewById<TextView>(R.id.footerText).visibility = View.GONE

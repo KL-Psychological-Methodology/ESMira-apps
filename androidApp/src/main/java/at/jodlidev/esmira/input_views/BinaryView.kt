@@ -66,8 +66,8 @@ class BinaryView(context: Context) : TextElView(context, R.layout.view_input_bin
 //				buttonGroup.check(R.id.right)
 //		}
 		
-		leftEl.text = HtmlHandler.fromHtml(input.leftSideLabel)
-		rightEl.text = HtmlHandler.fromHtml(input.rightSideLabel)
+		HtmlHandler.setHtml(input.leftSideLabel, leftEl)
+		HtmlHandler.setHtml(input.rightSideLabel, rightEl)
 		setValue(input.value)
 	}
 }

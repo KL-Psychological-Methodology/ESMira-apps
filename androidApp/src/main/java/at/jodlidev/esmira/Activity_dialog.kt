@@ -24,8 +24,7 @@ public class Activity_dialog : AppCompatActivity() {
 		}
 
 		val msgEl = findViewById<TextView>(R.id.msg)
-		msgEl.text = HtmlHandler.fromHtml(extras.getString(EXTRAS_MSG) ?: "")
-		msgEl.movementMethod = LinkMovementMethod.getInstance()
+		HtmlHandler.setHtml(extras.getString(EXTRAS_MSG) ?: "", msgEl)
 		
 		title = extras.getString(EXTRAS_TITLE)
 		findViewById<View>(R.id.btn_ok).setOnClickListener {

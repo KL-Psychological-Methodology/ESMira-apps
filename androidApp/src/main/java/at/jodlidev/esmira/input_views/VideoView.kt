@@ -1,6 +1,7 @@
 package at.jodlidev.esmira.input_views
 
 import android.content.Context
+import android.os.Build
 import android.webkit.*
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
@@ -29,7 +30,11 @@ class VideoView(context: Context) : TextElView(context, R.layout.view_input_vide
 			}
 		}
 		val webSettings = video.settings
-		webSettings.javaScriptEnabled = true
+		
+		// We need to be careful about JavaScript:
+		// https://developer.android.com/reference/android/webkit/WebView#addJavascriptInterface(java.lang.Object,%20java.lang.String)
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+			webSettings.javaScriptEnabled = true
 		webSettings.loadWithOverviewMode = true
 		webSettings.useWideViewPort = true
 		video.loadUrl(input.url)
