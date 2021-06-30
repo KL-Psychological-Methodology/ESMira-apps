@@ -90,6 +90,18 @@ android {
         minSdkVersion(16)
         targetSdkVersion(30)
     }
+    
+    
+    //androidMain is not shown as a Module. We can add it manually:
+    //https://youtrack.jetbrains.com/issue/KT-46472
+    //https://youtrack.jetbrains.com/issue/KT-44789
+    //https://discuss.kotlinlang.org/t/androidmain-and-android-tests-folder-not-recognised-as-module/19203
+//    sourceSets {
+//        getByName("main") {
+//            java.srcDirs(file("src/android${name.capitalize()}/kotlin"))
+////            java.srcDirs(file("../iosApp/ESMira/ESMira"))
+//        }
+//    }
 }
 
 val packForXcode by tasks.creating(Sync::class) {

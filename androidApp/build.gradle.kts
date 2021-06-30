@@ -31,8 +31,8 @@ dependencies {
     implementation("com.github.NightWhistler:HtmlSpanner:0.4") //https://github.com/NightWhistler/HtmlSpanner
 }
 
-version = "2.4.2.1"
-val versionC = 94
+version = "2.4.2.3"
+val versionC = 96
 group = "at.jodlidev.esmira"
 
 android {
