@@ -8,15 +8,9 @@
 	android:layout_height="wrap_content"
 	android:padding="10dp">
 	
-	<TextView
+	<include
 		android:id="@+id/desc"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:gravity="center"
-		android:paddingBottom="10dp"
-		android:textSize="18sp"
-		tools:text="Lorem ipsum dolor sit amet, consectetur adipisici elit"
-		android:labelFor="@id/input"/>
+		layout="@layout/view_input_text_template"/>
 	
 	<Spinner
 		android:id="@+id/list_box_dropdown"
@@ -31,9 +25,6 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:gravity="start"
-		android:orientation="vertical"
-		app:layout_constraintTop_toBottomOf="@id/left"
-		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintRight_toRightOf="parent"/>
+		android:orientation="vertical"/>
 
 </LinearLayout>

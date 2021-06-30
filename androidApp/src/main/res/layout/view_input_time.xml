@@ -7,15 +7,10 @@
 	android:layout_height="wrap_content"
 	android:padding="10dp">
 	
-	<TextView
+	
+	<include
 		android:id="@+id/desc"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:gravity="center"
-		android:paddingBottom="10dp"
-		android:textSize="18sp"
-		tools:text="Lorem ipsum dolor sit amet, consectetur adipisici elit"
-		android:labelFor="@id/input"/>
+		layout="@layout/view_input_text_template"/>
 	
 	<at.jodlidev.esmira.Element_DateTimeInput
 		android:id="@+id/input"

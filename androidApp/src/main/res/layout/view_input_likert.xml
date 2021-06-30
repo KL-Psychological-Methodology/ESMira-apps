@@ -8,17 +8,13 @@
 	android:layout_height="wrap_content"
 	android:padding="10dp">
 	
-	<TextView
+	<include
 		android:id="@+id/desc"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:gravity="center"
-		android:paddingBottom="10dp"
-		android:textSize="18sp"
-		tools:text="Lorem ipsum dolor sit amet, consectetur adipisici elit"
+		layout="@layout/view_input_text_template"
 		app:layout_constraintLeft_toLeftOf="parent"
 		app:layout_constraintRight_toRightOf="parent"
 		app:layout_constraintTop_toTopOf="parent"/>
+	
 	<TextView
 		android:id="@+id/left"
 		android:layout_width="0dp"
