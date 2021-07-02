@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         with: 
-          repository: org/parent_repository
+          repository: KL-Psychological-Methodology/ESMira
           token: ${{ secrets.KL_PUBLIC_WRITE_READ }}
 
       - name: Pull & update submodules recursively
@@ -25,5 +25,5 @@ jobs:
           git config user.email "actions@github.com"
           git config user.name "Submodule bot"
           git add --all
-          git commit -m "Update submodules" || echo "No changes to commit"
+          git commit -m "Updated submodule references" || echo "No changes to commit"
           git push
