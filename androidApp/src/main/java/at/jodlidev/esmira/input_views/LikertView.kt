@@ -32,8 +32,8 @@ class LikertView(context: Context) : TextElView(context, R.layout.view_input_lik
 		isBound = false //in case this view was reused
 		radioBox.removeAllViews()
 		
-		HtmlHandler.setHtml(input.leftSideLabel, leftEl)
-		HtmlHandler.setHtml(input.rightSideLabel, rightEl)
+		leftEl.text = input.leftSideLabel
+		rightEl.text = input.rightSideLabel
 		val steps = input.likertSteps
 		
 		val s = input.value

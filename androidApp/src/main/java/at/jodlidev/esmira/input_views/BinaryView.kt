@@ -59,15 +59,8 @@ class BinaryView(context: Context) : TextElView(context, R.layout.view_input_bin
 	override fun bindData(input: Input, questionnaire: Questionnaire) {
 		super.bindData(input, questionnaire)
 		
-//		when(input.value) {
-//			"0" ->
-//				buttonGroup.check(R.id.left)
-//			"1" ->
-//				buttonGroup.check(R.id.right)
-//		}
-		
-		HtmlHandler.setHtml(input.leftSideLabel, leftEl)
-		HtmlHandler.setHtml(input.rightSideLabel, rightEl)
+		leftEl.text = input.leftSideLabel
+		rightEl.text = input.rightSideLabel
 		setValue(input.value)
 	}
 }
