@@ -52,7 +52,7 @@ struct SettingsView: View {
 	
 	init() {
 		self.hasNoStudies = DbLogic().hasNoStudies()
-		self.hasEditableSchedules = self.hasNoStudies && DbLogic().hasEditableSchedules()
+		self.hasEditableSchedules = !self.hasNoStudies && DbLogic().hasEditableSchedules()
 		self._unSyncedCount = State(initialValue: DbLogic().getUnSyncedDataSetCount())
 		self.errorCount = DbLogic().getErrorCount()
 		self.isDev = DbLogic().isDev()
@@ -78,7 +78,7 @@ struct SettingsView: View {
 				iconName: "clock",
 				header: Text("change_schedules"),
 				desc: Text("desc_update_schedules")
-			).disabled(self.hasEditableSchedules)
+			).disabled(!self.hasEditableSchedules)
 			
 			SettingsButton(
 				action: {

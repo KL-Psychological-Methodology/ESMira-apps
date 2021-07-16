@@ -162,7 +162,7 @@ class Study internal constructor(
 			DbLogic.getJsonConfig().decodeFromString(personalChartsJsonString)
 		}
 		catch(e: Exception) {
-			ErrorBox.error("Study", "Could not load personal charts", e)
+			ErrorBox.error("Study", "Could not load personal charts from study \"$title\"", e)
 			ErrorBox.log("Study", personalChartsJsonString)
 			ArrayList()
 		}
