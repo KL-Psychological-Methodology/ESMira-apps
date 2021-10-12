@@ -12,7 +12,7 @@ import kotlinx.serialization.json.*
 internal object Updater {
 	const val EXPECTED_SERVER_VERSION: Int = 10
 	const val DATABASE_VERSION = 32
-	const val LIBRARY_VERSION = 16 //this is mainly used for iOS so we can check that changes in the library have been used in the C library
+	const val LIBRARY_VERSION = 17 //this is mainly used for iOS so we can check that changes in the library have been used in the C library
 	
 	fun updateSQL(db: SQLiteInterface, oldVersion: Int) {
 		if(oldVersion >= DATABASE_VERSION)

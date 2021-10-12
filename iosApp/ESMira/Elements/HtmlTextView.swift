@@ -35,7 +35,7 @@ struct HtmlTextRepresentable: UIViewRepresentable {
 	}
 	
 	func makeUIView(context: UIViewRepresentableContext<Self>) -> UITextView {
-		let label = UITextView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 10, height: CGFloat.greatestFiniteMagnitude))
+		let label = UITextView(frame: CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width - 10, height: 0))
 		
 		
 		label.isEditable = false
@@ -59,8 +59,8 @@ struct HtmlTextRepresentable: UIViewRepresentable {
 			) {
 				label.attributedText = attributedString
 //				label.sizeToFit()
+				print(self.dynamicHeight)
 				self.dynamicHeight = label.sizeThatFits(CGSize(width: label.frame.width, height: CGFloat.greatestFiniteMagnitude)).height
-
 //				let fixedWidth = label.frame.size.width
 //				let newSize = label.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
 //				label.frame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)

@@ -1134,7 +1134,7 @@ object DbLogic {
 			"${Alarm.KEY_SCHEDULE_ID} = ?", arrayOf(schedule.id.toString()),
 			null,
 			null,
-			null,
+			"${Alarm.KEY_TIMESTAMP} ASC",
 			"1"
 		)
 		
@@ -1151,7 +1151,7 @@ object DbLogic {
 			"${Alarm.KEY_QUESTIONNAIRE_ID} = ?", arrayOf(questionnaire.id.toString()),
 			null,
 			null,
-			null,
+			"${Alarm.KEY_TIMESTAMP} ASC",
 			"1"
 		)
 

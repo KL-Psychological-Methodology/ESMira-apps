@@ -212,7 +212,7 @@ class Fragment_questionnaireDetail : Base_fragment() {
 				if(errorIndex == -1) {
 					questionnaire.saveQuestionnaire(formStarted)
 					message(R.string.info_questionnaire_success)
-					goToAsSub(Activity_main.SITE_LIST_QUESTIONNAIRES, null)
+					goToAsRoot(Activity_main.SITE_LIST_QUESTIONNAIRES, null)
 				}
 				else
 					messageMissing(contentBox, errorIndex)
@@ -246,6 +246,11 @@ class Fragment_questionnaireDetail : Base_fragment() {
 	
 	
 	private fun createState(pageIndex: Int, bundle: Bundle = Bundle()): Bundle {
+		bundle.putInt(KEY_PAGE, pageIndex)
+		bundle.putLong(KEY_FORM_STARTED, formStarted)
+		if(!this::questionnaire.isInitialized)
+			return bundle
+		
 		for((i, page) in questionnaire.pages.withIndex()) {
 			val pageCache = ArrayList<String>()
 			for(input in page.orderedInputs) {
@@ -254,8 +259,6 @@ class Fragment_questionnaireDetail : Base_fragment() {
 			bundle.putStringArrayList("$STATE_INPUT_DATA$i", pageCache)
 		}
 		bundle.putLong(KEY_QUESTIONNAIRE, questionnaire.id)
-		bundle.putInt(KEY_PAGE, pageIndex)
-		bundle.putLong(KEY_FORM_STARTED, formStarted)
 		
 		return bundle
 	}
