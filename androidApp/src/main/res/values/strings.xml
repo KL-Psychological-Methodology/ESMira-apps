@@ -82,7 +82,7 @@
     <string name="info_leave_empty_if_unsure">(can be left empty)</string>
     <string name="info_loading">Loading…</string>
     <string name="info_message_sent">Message has been sent</string>
-    <plurals name="info_missed_notifications" comment="Needs to be short">
+    <plurals name="android_info_missed_notifications" comment="Needs to be short">
         <item quantity="one" formatted="true">1 missed notification.</item>
         <item quantity="other" formatted="true">%1$d missed notifications.</item>
     </plurals>

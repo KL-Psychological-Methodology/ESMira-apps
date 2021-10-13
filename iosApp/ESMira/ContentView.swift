@@ -54,7 +54,7 @@ struct ContentView: View {
 
 				let missedNotifications = DbLogic().getMissedInvitations()
 				if(missedNotifications != 0) {
-					self.appState.showToast(String(format: NSLocalizedString("info_missed_notifications", comment: ""), missedNotifications))
+					self.appState.showToast(String(format: NSLocalizedString("ios_info_missed_notifications", comment: ""), missedNotifications))
 					DbLogic().resetMissedInvitations()
 				}
 			}

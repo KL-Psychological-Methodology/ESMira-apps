@@ -171,7 +171,7 @@ class Activity_main : AppCompatActivity(), ActivityTopInterface {
 		if(missedNotifications != 0) {
 			val snackbar = Snackbar.make(
 				findViewById(R.id.main_window),
-				resources.getQuantityString(R.plurals.info_missed_notifications, missedNotifications, missedNotifications),
+				resources.getQuantityString(R.plurals.android_info_missed_notifications, missedNotifications, missedNotifications),
 				Snackbar.LENGTH_INDEFINITE
 			)
 			snackbar.setAction(R.string.understood) { snackbar.dismiss() }
