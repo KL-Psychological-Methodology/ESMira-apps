@@ -113,7 +113,7 @@
     <string name="info_thank_you">Thank you!</string>
     <string name="info_update_complete">Update complete (%1$d updates downloaded).</string>
     <string name="info_update_failed">There was an error while updating your studies</string>
-    <string name="informed_consent">Informed Consent</string>
+    <string name="informed_consent">Informed consent</string>
     <string name="informed_consent_desc">In order to continue, please read the informed consent and agree.</string>
     <string name="messages">Messages</string>
     <string name="leave">Leave</string>
