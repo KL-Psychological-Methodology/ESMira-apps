@@ -52,7 +52,7 @@ class Fragment_listNewStudies : Base_fragment() {
 		if(studies.isEmpty()) {
 			val accessKey = a.accessKey
 			val infoEmptyList: TextView = rootView.findViewById(R.id.info_emptyList)
-			infoEmptyList.text = if(accessKey.isEmpty()) getString(R.string.info_no_studies_noAccessKey) else getString(R.string.info_no_studies_withAccessKey, accessKey)
+			infoEmptyList.text = if(accessKey.isEmpty()) getString(R.string.info_no_studies_noAccessKey) else getString(R.string.android_info_no_studies_withAccessKey, accessKey)
 			infoEmptyList.visibility = View.VISIBLE
 		}
 		

@@ -22,7 +22,7 @@ struct StudyListView: View {
 					Text("info_no_studies_noAccessKey").padding()
 				}
 				else {
-					Text(String(format: NSLocalizedString("info_no_studies_withAccessKey", comment: ""), self.studyState.accessKey)).padding()
+					Text(String(format: NSLocalizedString("ios_info_no_studies_withAccessKey", comment: ""), self.studyState.accessKey)).padding()
 				}
 			}
 			else if(self.studyState.studiesList.count == 1) {

@@ -169,7 +169,11 @@ class Activity_main : AppCompatActivity(), ActivityTopInterface {
 		super.onResume()
 		val missedNotifications = DbLogic.getMissedInvitations()
 		if(missedNotifications != 0) {
-			val snackbar = Snackbar.make(findViewById(R.id.main_window), getString(R.string.info_missed_notifications, missedNotifications), Snackbar.LENGTH_INDEFINITE)
+			val snackbar = Snackbar.make(
+				findViewById(R.id.main_window),
+				resources.getQuantityString(R.plurals.info_missed_notifications, missedNotifications, missedNotifications),
+				Snackbar.LENGTH_INDEFINITE
+			)
 			snackbar.setAction(R.string.understood) { snackbar.dismiss() }
 			snackbar.show()
 			DbLogic.resetMissedInvitations()

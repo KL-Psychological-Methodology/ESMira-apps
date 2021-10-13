@@ -142,7 +142,7 @@ object Notifications: NotificationsInterface {
 		val context = context.get() ?: return
 		ErrorBox.log("update_studies", "schedules have been reset")
 		val intent = Intent(context, Activity_editSchedules::class.java)
-		fire(context.getString(R.string.info_study_updated, study.title), context.getString(R.string.info_study_updated_desc), study.id.toInt(), CHANNEL_ID_STUDY_UPDATED, intent)
+		fire(context.getString(R.string.android_info_study_updated, study.title), context.getString(R.string.info_study_updated_desc), study.id.toInt(), CHANNEL_ID_STUDY_UPDATED, intent)
 	}
 	
 	override fun fireQuestionnaireBing(title: String, msg: String, questionnaire: Questionnaire, timeoutMin: Int, type: String, scheduledToTimestamp: Long) {

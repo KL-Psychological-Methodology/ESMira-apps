@@ -17,7 +17,7 @@
     <string name="additional_notification_settings_zte_blade_l110_2">Then select \"HeartBeat Sync Settings\".</string>
     <string name="additional_notification_settings_zte_blade_l110_3">Now search the list for \"ESMira\", and make sure that the checkbox is enabled.</string>
     <string name="additional_notification_settings_finish">After you are done, press the back-key on your phone to return to this screen.</string>
-    <string name="app_version">Version: %1$s, %2$s</string>
+    <string name="android_version">Version: %1$s, %2$s</string>
     <string name="ask_model_settings_correct">Were you able to adjust the settings as instructed?</string>
     <string name="ask_notification_posted">Did you receive a notification?</string>
     <string name="back">Back</string>
@@ -26,7 +26,7 @@
     <string name="change_schedules">Change schedules</string>
     <string name="close">Close</string>
     <string name="complete">Complete</string>
-    <string name="contact_email">Contact %1$s</string>
+    <string name="android_contact_email">Contact %1$s</string>
     <string name="contentDesc_more_studies">Opens an option menu for this study.</string>
     <string name="continue_">Continue</string>
     <string name="consent">Consent</string>
@@ -47,13 +47,13 @@
     <string name="dialogDesc_delete_statistics">Do you want to delete all statistics for this study?</string>
     <string name="dialogTitle_leave_study">Leave study?</string>
     <string name="dialogDesc_leave_study">Do you want to leave this study? You will have to reenter its credentials to join again.</string>
-    <string name="email_study_subject">Regarding your study: %1$s</string>
+    <string name="android_email_study_subject">Regarding your study: %1$s</string>
     <string name="enter_manually">Enter manually</string>
     <string name="enable">Enable</string>
     <string name="enable_notifications">Enable notifications</string>
     <string name="error_app_update_needed_title">ESMira update.</string>
     <string name="error_app_update_needed_msg">A critical update was found. Please update ESMira in the app store.</string>
-    <string name="error_general">Error: %1$s</string>
+    <string name="android_error_general">Error: %1$s</string>
     <string name="error_input">Broken input</string>
     <string name="error_loading_failed">Loading failed…</string>
     <string name="error_missing_fields">Please fill out all required fields!</string>
@@ -73,11 +73,7 @@
     <string name="i_agree">I agree</string>
     <string name="ignore">Ignore</string>
     <string name="in_x_days">in %1$d days</string>
-    <string name="ios_backgroundRefresh">Background App Refresh</string>
-    <string name="ios_backgroundRefresh_desc">ESMira checks periodically in the background for study updates and makes sure that all required notifications are scheduled. In order to do that the \"Background App refresh\" permission is needed.</string>
-    <string name="ios_dialogDesc_backgroundRefresh_disabled">Please enable \"Background App Refresh\". in the following settings. Then make sure that it is also enabled globally by going back up to \"Settings\" and then to: \"Global\" &gt; \"Background App Refresh\" and enable \"Background App Refresh\" at the top.</string>
-    <string name="ios_dialogDesc_notifications_disabled">This study will not work properly. Please consider allowing notifications before you continue. You can do that by enabling \"Allow Notifications\" in the settings. Then switch back to ESMira.</string>
-    <string name="info_copied_x_to_clipboard">Copied \"%1$s\" to clipboard</string>
+    <string name="android_info_copied_x_to_clipboard">Copied \"%1$s\" to clipboard</string>
     <string name="info_detected_x_errors">Detected %1$d errors in total</string>
     <string name="info_dev_active">You are a developer now!</string>
     <string name="info_dev_inactive">Developer mode disabled</string>
@@ -86,14 +82,17 @@
     <string name="info_leave_empty_if_unsure">(can be left empty)</string>
     <string name="info_loading">Loading…</string>
     <string name="info_message_sent">Message has been sent</string>
-    <string name="info_missed_notifications" comment="Needs to be short">%1$d missed notification(s).</string>
+    <plurals name="info_missed_notifications" comment="Needs to be short">
+        <item quantity="one" formatted="true">1 missed notification.</item>
+        <item quantity="other" formatted="true">%1$d missed notifications.</item>
+    </plurals>
     <string name="info_model_settings">To ensure that ESMira can issue notifications from the background, some special settings are necessary for your phone model. Tap \"Open device specific setup\" below to open your phone settings.</string>
     <string name="info_new_message">You got a new message!</string>
     <string name="info_no_errors">No errors to report</string>
     <string name="info_no_messages">There are no messages.</string>
     <string name="info_no_model_settings">No device settings were found.</string>
     <string name="info_no_studies_noAccessKey">Could not find public studies on this server.</string>
-    <string name="info_no_studies_withAccessKey">Could not find studies with the access key \"%1$s\" on this server.</string>
+    <string name="android_info_no_studies_withAccessKey">Could not find studies with the access key \"%1$s\" on this server.</string>
     <string name="info_no_schedules">No schedules to change.</string>
     <string name="info_no_statistics">No statistics to display.</string>
     <string name="info_no_studies_joined">You have not joined any study.</string>
@@ -106,7 +105,7 @@
     <string name="info_required">* input required</string>
     <string name="info_schedule_changed_after_one_day">Your changes will take effect after one day.</string>
     <string name="info_study_permissionSetup_ended">The configuration has been completed. You can now click on \"Participate\" to join the study.</string>
-    <string name="info_study_updated">%1$s was updated!</string>
+    <string name="android_info_study_updated">%1$s was updated!</string>
     <string name="info_study_updated_desc">Your schedules have been reset due to an update to the study.</string>
     <string name="info_sync_complete">Sync complete (%1$d datasets synced)</string>
     <string name="info_sync_failed">Sync failed!</string>
@@ -177,7 +176,7 @@
     <string name="update_studies">Update studies</string>
     <string name="upload">Upload</string>
     <string name="upload_screenshots">Upload screenshots</string>
-    <string name="user_id">User-id: %1$s</string>
+    <string name="android_user_id">User-id: %1$s</string>
     <string name="visible_when_study_finished">Only visible when the study has ended.</string>
     <string name="welcome_accessKey_question">Do you have an access key?</string>
     <string name="welcome_exit_questionTitle">Do you really want to cancel?</string>

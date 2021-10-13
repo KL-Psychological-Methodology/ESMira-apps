@@ -91,7 +91,7 @@ class Notifications: NotificationsInterface {
 	func fireSchedulesChanged(study: Study) {
 		createNotification(
 			id: String("schedule_\(study.id)"),
-			title: String(format: NSLocalizedString("info_study_updated", comment: ""), String(study.title)),
+			title: String(format: NSLocalizedString("ios_info_study_updated", comment: ""), String(study.title)),
 			msg: NSLocalizedString("info_study_updated_desc", comment: "")
 		)
 	}

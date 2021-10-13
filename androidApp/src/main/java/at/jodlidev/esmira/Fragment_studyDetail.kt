@@ -38,7 +38,7 @@ class Fragment_studyDetail : Base_fragment() {
 		emailEl.setOnClickListener {
 			val intent = Intent(Intent.ACTION_SEND)
 			intent.putExtra(Intent.EXTRA_EMAIL, study.contactEmail)
-			intent.putExtra(Intent.EXTRA_SUBJECT, context?.getString(R.string.email_study_subject, study.title))
+			intent.putExtra(Intent.EXTRA_SUBJECT, context?.getString(R.string.android_email_study_subject, study.title))
 			intent.type = "plain/text"
 			try {
 				startActivity(intent)

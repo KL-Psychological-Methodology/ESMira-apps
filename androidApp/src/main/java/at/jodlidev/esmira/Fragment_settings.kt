@@ -125,13 +125,13 @@ class Fragment_settings : PreferenceFragmentCompat(), Preference.OnPreferenceCli
 		//User-Id
 		//
 		val userId = findPreference<Preference>(KEY_USER_ID)
-		userId?.title = getString(R.string.user_id, DbLogic.getUid())
+		userId?.title = getString(R.string.android_user_id, DbLogic.getUid())
 		userId?.onPreferenceClickListener = this
 		
 		//
 		//App-Version
 		//
-		findPreference<Preference>(KEY_APP_VERSION)!!.title = getString(R.string.app_version, BuildConfig.VERSION_NAME, DbLogic.getVersion())
+		findPreference<Preference>(KEY_APP_VERSION)!!.title = getString(R.string.android_version, BuildConfig.VERSION_NAME, DbLogic.getVersion())
 		
 		setTitle(R.string.settings)
 	}
@@ -203,7 +203,7 @@ class Fragment_settings : PreferenceFragmentCompat(), Preference.OnPreferenceCli
 					val clipBoard = it.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 					val clipData = ClipData.newPlainText("label", userId)
 					clipBoard.setPrimaryClip(clipData)
-					Toast.makeText(it, it.getString(R.string.info_copied_x_to_clipboard, userId), Toast.LENGTH_SHORT).show()
+					Toast.makeText(it, it.getString(R.string.android_info_copied_x_to_clipboard, userId), Toast.LENGTH_SHORT).show()
 				}
 			}
 		}
@@ -229,7 +229,7 @@ class Fragment_settings : PreferenceFragmentCompat(), Preference.OnPreferenceCli
 					output.close()
 				}
 				catch(e: IOException) {
-					Toast.makeText(context, getString(R.string.error_general, e.message), Toast.LENGTH_LONG).show()
+					Toast.makeText(context, getString(R.string.android_error_general, e.message), Toast.LENGTH_LONG).show()
 				}
 			}
 			INTENT_LOAD_BACKUP -> {
@@ -271,7 +271,7 @@ class Fragment_settings : PreferenceFragmentCompat(), Preference.OnPreferenceCli
 					requireActivity().finish()
 				}
 				catch(e: IOException) {
-					Toast.makeText(context, getString(R.string.error_general, e.message), Toast.LENGTH_LONG).show()
+					Toast.makeText(context, getString(R.string.android_error_general, e.message), Toast.LENGTH_LONG).show()
 				}
 			}
 		}

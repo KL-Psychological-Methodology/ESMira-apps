@@ -18,7 +18,7 @@
     <string name="additional_notification_settings_zte_blade_l110_2">Dann klicken Sie auf \"HeartBeat-Synchronisierung\".</string>
     <string name="additional_notification_settings_zte_blade_l110_3">Nun suchen Sie in der Liste nach dem Eintrag von \"ESMira\" und stellen Sie sicher, dass die Box daneben aktiviert ist.</string>
     <string name="additional_notification_settings_finish">Sobald sie fertig sind, drücken Sie die Zurück-Taste um wieder zu diesem Bildschirm zurück zu gelangen.</string>
-    <string name="app_version">Version: %1$s, %2$s</string>
+    <string name="android_version">Version: %1$s, %2$s</string>
     <string name="ask_model_settings_correct">Konnten Sie die App-Einstellungen entsprechend den Instruktionen setzen?</string>
     <string name="ask_notification_posted">Haben Sie eine Benachrichtigung erhalten?</string>
     <string name="back">Zurück</string>
@@ -27,7 +27,7 @@
     <string name="change_schedules">Zeitpläne verändern</string>
     <string name="close">Schließen</string>
     <string name="complete">Abschließen</string>
-    <string name="contact_email">Kontaktiere %1$s</string>
+    <string name="android_contact_email">Kontaktiere %1$s</string>
     <string name="contact_researcher">ForscherIn kontaktieren</string>
     <string name="contentDesc_more_studies">Öffnet zusätzliche Einstellungen für diese Studie.</string>
     <string name="continue_">Weiter</string>
@@ -48,13 +48,13 @@
     <string name="dialogDesc_delete_statistics">Sollen alle Statistiken für diese Studie gelöscht werden?</string>
     <string name="dialogTitle_leave_study">Studie verlassen?</string>
     <string name="dialogDesc_leave_study">Möchten Sie diese Studie verlassen? Um wieder beitreten zu können, müssen die Zugangsdaten erneut eingegeben werden.</string>
-    <string name="email_study_subject">Bezüglich der Studie: %1$s</string>
+    <string name="android_email_study_subject">Bezüglich der Studie: %1$s</string>
     <string name="enter_manually">Manuelle Eingabe</string>
     <string name="enable">Aktivieren</string>
     <string name="enable_notifications">Benachrichtigungen aktivieren</string>
     <string name="error_app_update_needed_title">ESMira update.</string>
     <string name="error_app_update_needed_msg">Ein kritisches Update wurde gefunden! Bitte aktualisieren Sie ESMira über den App-Store.</string>
-    <string name="error_general">Fehler: %1$s</string>
+    <string name="android_error_general">Fehler: %1$s</string>
     <string name="error_input">Fehlerhafter Input</string>
     <string name="error_loading_failed">Laden fehlgeschlagen…</string>
     <string name="error_missing_fields">Bitte machen Sie alle notwendigen Angaben!</string>
@@ -74,11 +74,7 @@
     <string name="i_agree">Ich stimme zu</string>
     <string name="ignore">Ignorieren</string>
     <string name="in_x_days">in %1$d Tagen</string>
-    <string name="ios_backgroundRefresh">Hintergrundaktualisierungen</string>
-    <string name="ios_backgroundRefresh_desc">ESMira prüft regelmäßig im Hintergrund nach Studien-Updates und stellt sicher dass die Benachrichtigungen richtig gesetzt sind. Dafür wird die Berechtigung für \"Hintergrundaktualisierungen\" benötigt.</string>
-    <string name="ios_dialogDesc_backgroundRefresh_disabled">Bitte aktivieren Sie in den folgenden Einstellungen \"Hintergrundaktualisierung\". Dann stellen Sie sicher, dass diese auch global aktiviert sind in dem Sie einen Bildschirm zurück zu den \"Einstellungen\" gehen und dann \"Allgemein\" &gt; \"Hintergrundaktualisierung\" auswählen. Dort ganz oben aktivieren Sie bitte \"Hintergrundaktualisierung\".</string>
-    <string name="ios_dialogDesc_notifications_disabled">Diese Studie wird nicht korrekt funktionieren. Wenn möglich, geben Sie bitte die Berechtigung für Benachrichtigen indem Sie in den Einstellungen \"Mitteilungen erlauben\" aktivieren. Wechseln Sie dann zurück zu ESMira.</string>
-    <string name="info_copied_x_to_clipboard">\"%1$s\" wurde in Zwischenablage kopiert</string>
+    <string name="android_info_copied_x_to_clipboard">\"%1$s\" wurde in Zwischenablage kopiert</string>
     <string name="info_detected_x_errors">Insgesamt %1$d Fehler entdeckt</string>
     <string name="info_dev_active">Sie sind nun ein Entwickler!</string>
     <string name="info_dev_inactive">Entwicklermodus deaktiviert</string>
@@ -87,14 +83,17 @@
     <string name="info_leave_empty_if_unsure">(kann leer bleiben)</string>
     <string name="info_loading">Lade…</string>
     <string name="info_message_sent">Nachricht wurde verschickt</string>
-    <string name="info_missed_notifications" comment="Needs to be short">%1$d verpasste Benachrichtigung(en).</string>
+    <plurals name="info_missed_notifications" comment="Needs to be short">
+        <item quantity="one" formatted="true">1 verpasste Benachrichtigung.</item>
+        <item quantity="other" formatted="true">%1$d verpasste Benachrichtigungen.</item>
+    </plurals>
     <string name="info_model_settings">Damit ESMira aus dem Hintergrund Benachrichtigungen verschicken kann, sind auf Ihrem Smartphone Modell spezielle Einstellungen notwendig. Klicken Sie auf \"Einstellungen öffnen\" um die Einstellungen Ihres Smartphones zu öffnen.</string>
     <string name="info_new_message">Eine neue Nachricht!</string>
     <string name="info_no_errors">Keine Fehler gefunden</string>
     <string name="info_no_messages">Keine Nachrichten gefunden.</string>
     <string name="info_no_model_settings">Es wurden keine Modell-Einstellungen gefunden.</string>
     <string name="info_no_studies_noAccessKey">Auf diesem Server konnten keine öffentlichen Studien gefunden werden.</string>
-    <string name="info_no_studies_withAccessKey">Auf diesem Server konnten keine Studien mit dem Zugangscode \"%1$s\" gefunden werden.</string>
+    <string name="android_info_no_studies_withAccessKey">Auf diesem Server konnten keine Studien mit dem Zugangscode \"%1$s\" gefunden werden.</string>
     <string name="info_no_questionnaires">Momentan keine Fragebögen vorhanden…</string>
     <string name="info_no_schedules">Keine Zeitpläne zum Verändern.</string>
     <string name="info_no_statistics">Keine Statistiken zum Anzeigen verfügbar.</string>
@@ -110,7 +109,7 @@
     <string name="info_required">* Eingabe erforderlich</string>
     <string name="info_schedule_changed_after_one_day">Ihre Änderungen werden nach einem Tag wirksam.</string>
     <string name="info_study_permissionSetup_ended">Die Konfiguration wurde abgeschlossen. Sie können nun auf \"Teilnehmen\" klicken, um der Studie beizutreten.</string>
-    <string name="info_study_updated">%1$s wurde aktualisiert!</string>
+    <string name="android_info_study_updated">%1$s wurde aktualisiert!</string>
     <string name="info_study_updated_desc">Ihre Zeitpläne wurden durch ein Update zurückgesetzt.</string>
     <string name="info_sync_complete">Synchronisation erfolgreich. (%1$d Datensätze synchronisiert)</string>
     <string name="info_sync_failed">Fehler bei der Synchronisation!</string>
@@ -181,7 +180,7 @@
     <string name="update_studies">Studien aktualisieren</string>
     <string name="upload">Hochladen</string>
     <string name="upload_screenshots">Screenshots hochladen</string>
-    <string name="user_id">User-id: %1$s</string>
+    <string name="android_user_id">User-id: %1$s</string>
     <string name="visible_when_study_finished">Erst sichtbar, wenn die Studie beendet wurde.</string>
     <string name="welcome_accessKey_question">Haben Sie einen Zugangscode?</string>
     <string name="welcome_exit_questionTitle">Wirklich beenden?</string>

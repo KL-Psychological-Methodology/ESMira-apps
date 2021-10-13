@@ -101,7 +101,7 @@ class Fragment_listQuestionnaires : Base_fragment() {
 							if(study.contactEmail.isEmpty())
 								menu.findItem(R.id.contact_researcher).isEnabled = false
 							else
-								menu.findItem(R.id.contact_researcher).title = context.getString(R.string.contact_email, study.contactEmail)
+								menu.findItem(R.id.contact_researcher).title = context.getString(R.string.android_contact_email, study.contactEmail)
 
 							popup.setOnMenuItemClickListener(object : PopupMenu.OnMenuItemClickListener {
 								override fun onMenuItemClick(menuItem: MenuItem): Boolean {
@@ -109,7 +109,7 @@ class Fragment_listQuestionnaires : Base_fragment() {
 										R.id.contact_researcher -> {
 											val intent = Intent(Intent.ACTION_SEND)
 											intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(study.contactEmail))
-											intent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.email_study_subject, study.title))
+											intent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.android_email_study_subject, study.title))
 											intent.type = "plain/text"
 											try {
 												v.context.startActivity(intent)

@@ -75,7 +75,7 @@ struct ListQuestionnairesView: View {
 			}
 			.actionSheet(isPresented: self.$showStudyOptions) {
 				ActionSheet(title: Text(self.currentStudy!.title), buttons: [
-					.default(Text(String(format: NSLocalizedString("contact_email", comment: ""), self.currentStudy!.contactEmail))) {
+					.default(Text(String(format: NSLocalizedString("ios_contact_email", comment: ""), self.currentStudy!.contactEmail))) {
 						if let url = URL(string: "mailto:\(self.currentStudy!.contactEmail)") {
 							if #available(iOS 10.0, *) {
 								UIApplication.shared.open(url)

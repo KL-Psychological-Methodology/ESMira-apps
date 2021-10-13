@@ -173,16 +173,16 @@ struct SettingsView: View {
 			
 			VStack(alignment: .leading) {
 				HStack {
-					Text(String(format: NSLocalizedString("user_id", comment: ""), String(DbLogic().getUid())))
+					Text(String(format: NSLocalizedString("ios_user_id", comment: ""), String(DbLogic().getUid())))
 					Button(action: {
 						UIPasteboard.general.string = DbLogic().getUid()
-						self.appState.showTranslatedToast(String(format: NSLocalizedString("info_copied_x_to_clipboard", comment: ""), DbLogic().getUid()))
+						self.appState.showTranslatedToast(String(format: NSLocalizedString("ios_info_copied_x_to_clipboard", comment: ""), DbLogic().getUid()))
 					}) {
 						Image(systemName: "doc.on.clipboard")
 					}
 				}
 					.foregroundColor(Color("Accent"))
-				Text(String(format: NSLocalizedString("app_version", comment: ""), "\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Error")", DbLogic().getVersion()))
+				Text(String(format: NSLocalizedString("ios_version", comment: ""), "\(Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "Error")", DbLogic().getVersion()))
 					.foregroundColor(Color("Accent"))
 			}
 		}
