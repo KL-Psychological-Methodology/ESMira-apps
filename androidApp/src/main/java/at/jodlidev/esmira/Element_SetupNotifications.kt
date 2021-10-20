@@ -403,6 +403,7 @@ class Element_SetupNotifications(context: Context, attrs: AttributeSet?) : Const
 			Pair(ComponentName("com.iqoo.secure", "com.iqoo.secure.ui.phoneoptimize.BgStartUpManager"), 0),															//Vivo
 			Pair(ComponentName("com.vivo.permissionmanager", "com.vivo.permissionmanager.activity.BgStartUpManagerActivity"), 0),									//Vivo
 			Pair(ComponentName("com.samsung.android.lool", "com.samsung.android.sm.ui.battery.BatteryActivity"), R.layout.device_layout_samsung),						//Samsung
+			Pair(ComponentName("com.samsung.android.lool", "com.samsung.android.sm.ui.battery.BatteryActivity"), R.layout.device_layout_samsung),						//Samsung
 			Pair(ComponentName("com.htc.pitroad", "com.htc.pitroad.landingpage.activity.LandingPageActivity"), 0),
 			Pair(ComponentName("com.asus.mobilemanager", "com.asus.mobilemanager.MainActivity"), 0),
 			Pair(ComponentName("com.asus.mobilemanager", "com.asus.mobilemanager.powersaver.PowerSaverSettings"), 0),												//ASUS ROG

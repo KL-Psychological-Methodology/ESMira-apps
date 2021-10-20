@@ -70,7 +70,7 @@ class Web {
 	}
 	private fun close() = client.close()
 	
-	private suspend fun updateStudies(): Int {
+	private suspend fun updateStudies(forceStudyUpdate: Boolean): Int {
 		ErrorBox.log("Web", "Searching for updated studies...")
 		var updatedCount = 0
 		val studies = DbLogic.getJoinedStudies()
@@ -95,7 +95,12 @@ class Web {
 			else
 				studyInfoList = container[study.serverUrl]!!
 			
-			studyInfoList[study.webId.toString()] = StudyInfo(version = study.version, msgTimestamp = study.msgTimestamp, accessKey = study.accessKey)
+			studyInfoList[study.webId.toString()] = StudyInfo(
+				version = study.version,
+				msgTimestamp = study.msgTimestamp,
+				accessKey = study.accessKey,
+				forceStudyUpdate = forceStudyUpdate
+			)
 		}
 		
 		
@@ -104,7 +109,10 @@ class Web {
 			ErrorBox.log("Updating studies", "Updating $url (${studyInfo.size} studies)")
 			val response: String
 			try {
-				response = postJson("$url$URL_UPDATE_STUDY", PostStructure.UpdateStructure(studyInfo))
+				response = postJson(
+					"$url${URL_UPDATE_STUDY.replace("%s", NativeLink.smartphoneData.lang)}",
+					PostStructure.UpdateStructure(studyInfo)
+				)
 			}
 			catch(e: Throwable) {
 				ErrorBox.warn("Updating studies failed", "Could not update studies for $url", e)
@@ -127,7 +135,7 @@ class Web {
 
 				val newStudyJson = updateInfo.study
 				if(newStudyJson != null) {
-					ErrorBox.log("Updating studies", "Got study update")
+					ErrorBox.log("Updating studies", "Found study update")
 					val newStudy: Study
 					try {
 						newStudy = Study.newInstance(study.serverUrl, study.accessKey, newStudyJson)
@@ -138,7 +146,6 @@ class Web {
 						continue
 					}
 					study.updateWith(newStudy)
-//					study.updateWith(updateInfo.study)
 					++updatedCount
 				}
 				
@@ -149,7 +156,7 @@ class Web {
 						if(msg.sent > latest)
 							latest = msg.sent
 					}
-					ErrorBox.log("Message", "Got ${updateInfo.msgs.size} messages for study ${study.id}")
+					ErrorBox.log("Message", "Found ${updateInfo.msgs.size} messages for study ${study.id}")
 					DataSet.createShortDataSet(DataSet.TYPE_STUDY_MSG, study)
 					if(latest != -1L)
 						study.saveMsgTimestamp(latest)
@@ -211,7 +218,10 @@ class Web {
 	
 	private suspend fun sendMessage(content: String, study: Study): String? {
 		try {
-			postJson(study.serverUrl + URL_UPLOAD_MESSAGE, PostStructure.MessageStructure(content, study.webId))
+			postJson(
+				"${study.serverUrl}${URL_UPLOAD_MESSAGE.replace("%s", NativeLink.smartphoneData.lang)}",
+				PostStructure.MessageStructure(content, study.webId)
+			)
 		}
 		catch(e: Throwable) {
 			ErrorBox.warn("Errorreport", "Could not send message", e)
@@ -248,13 +258,13 @@ class Web {
 		const val DEV_SERVER = "https://esmira.kl.ac.at"
 		private const val DEBUG_EMULATOR_SERVER = "http://10.0.2.2/smartphones/ESMira/ESMira-web/dist"
 		
-		private const val URL_LIST_STUDIES: String = "/studies.php"
-		private const val URL_LIST_STUDIES_PASSWORD: String = "/studies.php?access_key=%s"
+		private const val URL_LIST_STUDIES: String = "/studies.php?lang=%s"
+		private const val URL_LIST_STUDIES_PASSWORD: String = "/studies.php?access_key=%s1&lang=%s2"
 		private const val URL_PUBLIC_STATISTICS: String = "/statistics.php?id=%d&access_key=%s"
-		private const val URL_UPDATE_STUDY: String = "/update.php"
+		private const val URL_UPDATE_STUDY: String = "/update.php?lang=%s"
 		private const val URL_UPLOAD_EVENT: String = "/datasets.php"
 		private const val URL_UPLOAD_ERRORBOX: String = "/save_errors.php"
-		private const val URL_UPLOAD_MESSAGE: String = "/save_message.php"
+		private const val URL_UPLOAD_MESSAGE: String = "/save_message.php?lang=%s"
 		
 		internal class SuccessFailedException(msg: String) : Throwable(if(msg.isEmpty()) "Failed with empty response from server" else msg)
 		
@@ -267,7 +277,8 @@ class Web {
 		class StudyInfo(
 			val version: Int,
 			val msgTimestamp: Long,
-			val accessKey: String
+			val accessKey: String,
+			val forceStudyUpdate: Boolean = false
 		)
 		
 		@Serializable
@@ -377,9 +388,9 @@ class Web {
 					val response = web.get(
 						urlFormatted + (
 								if ((accessKey.isNotEmpty()))
-									URL_LIST_STUDIES_PASSWORD.replace("%s", accessKey)
+									URL_LIST_STUDIES_PASSWORD.replace("%s1", accessKey).replace("%s2", NativeLink.smartphoneData.lang)
 								else
-									URL_LIST_STUDIES
+									URL_LIST_STUDIES.replace("%s", NativeLink.smartphoneData.lang)
 								)
 					)
 //					if(!web.client.isActive)
@@ -403,19 +414,19 @@ class Web {
 		}
 		
 		@Suppress("unused")
-		fun updateStudiesBlocking(): Int {
+		fun updateStudiesBlocking(forceStudyUpdate: Boolean = false): Int {
 			var updateCount = -1
 			nativeBlocking {
 				val web = Web()
-				updateCount = web.updateStudies()
+				updateCount = web.updateStudies(forceStudyUpdate)
 			}
 			return updateCount
 		}
 		@Synchronized
-		fun updateStudiesAsync(continueWith: ((Int) -> Unit)? = null) {
+		fun updateStudiesAsync(forceStudyUpdate: Boolean = false, continueWith: ((Int) -> Unit)? = null) {
 			nativeAsync {
 				val web = Web()
-				val r = web.updateStudies()
+				val r = web.updateStudies(forceStudyUpdate)
 				if(continueWith != null)
 					continueWith(r)
 			}

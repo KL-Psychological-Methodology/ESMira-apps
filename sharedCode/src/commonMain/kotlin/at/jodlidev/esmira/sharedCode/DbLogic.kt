@@ -29,6 +29,7 @@ object DbLogic {
 			${User.KEY_IS_DEV} INTEGER,
 			${User.KEY_WAS_DEV} INTEGER,
 			${User.KEY_NOTIFICATIONS_MISSED} INTEGER DEFAULT 0,
+			${User.KEY_APP_LANG} TEXT,
 			${User.KEY_UID} TEXT)""")
 		
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${StudyToken.TABLE} (
@@ -42,6 +43,7 @@ object DbLogic {
 			${Study.KEY_ACCESS_KEY} TEXT,
 			${Study.KEY_VERSION} INTEGER,
 			${Study.KEY_SUB_VERSION} INTEGER,
+			${Study.KEY_LANG} TEXT DEFAULT '',
 			${Study.KEY_JOINED} INTEGER DEFAULT CURRENT_TIMESTAMP,
 			${Study.KEY_STATE} INTEGER DEFAULT ${Study.STATES.Pending.ordinal},
 			${Study.KEY_LAST_MSG_TIMESTAMP} INTEGER DEFAULT 0,
@@ -211,6 +213,7 @@ object DbLogic {
 			${DataSet.KEY_QUESTIONNAIRE_INTERNAL_ID} INTEGER,
 			${DataSet.KEY_STUDY_VERSION} INTEGER,
 			${DataSet.KEY_STUDY_SUB_VERSION} INTEGER,
+			${DataSet.KEY_STUDY_LANG} TEXT DEFAULT '',
 			${DataSet.KEY_TIMEZONE} TEXT,
 			${DataSet.KEY_RESPONSE_TIME} INTEGER,
 			${DataSet.KEY_TYPE} TEXT,
@@ -254,6 +257,7 @@ object DbLogic {
 		const val KEY_IS_DEV = "is_dev"
 		const val KEY_WAS_DEV = "was_dev"
 		const val KEY_NOTIFICATIONS_MISSED = "notifications_missed"
+		const val KEY_APP_LANG = "app_lang"
 	}
 	
 	fun getUid(): String {
@@ -347,18 +351,57 @@ object DbLogic {
 		return true
 	}
 	
+	fun getLang(): String {
+		val c = NativeLink.sql.select(
+			User.TABLE,
+			arrayOf(User.KEY_APP_LANG),
+			null, null,
+			null,
+			null,
+			null,
+			"1"
+		)
+		
+		val r = if(c.moveToFirst()) c.getString(0) else ""
+		c.close()
+		return r
+	}
+	fun setLang(lang: String) {
+		val db = NativeLink.sql
+		val values = db.getValueBox()
+		values.putString(User.KEY_APP_LANG, lang)
+		db.update(User.TABLE, values, null, null)
+	}
+	
 	
 	fun startupApp() {
-		ErrorBox.log("Main", "Cold starting app")
+		ErrorBox.log("startupApp", "Cold starting app (v${NativeLink.smartphoneData.appVersion} / ${NativeLink.smartphoneData.lang})")
 		if(hasNewErrors())
 			NativeLink.dialogOpener.errorReport()
 		else {
 			Scheduler.checkMissedAlarms(true)
 			NativeLink.postponedActions.syncDataSets()
+			
+			val newLang = NativeLink.smartphoneData.lang
+			
 			if(!hasNoJoinedStudies()) {
 				checkLeaveStudies()
-				Web.updateStudiesAsync()
+				
+				if(newLang != getLang()) {
+					ErrorBox.log("startupApp", "Detected change in language to \"$newLang\"")
+					Web.updateStudiesAsync(true) { updatedCount ->
+						if(updatedCount != -1)
+							setLang(newLang)
+					}
+				}
+				else
+					Web.updateStudiesAsync()
+				
 				NativeLink.postponedActions.updateStudiesRegularly()
+			}
+			else if(newLang != getLang()) {
+				ErrorBox.log("startupApp", "Detected change in language to \"$newLang\"")
+				setLang(newLang)
 			}
 		}
 	}

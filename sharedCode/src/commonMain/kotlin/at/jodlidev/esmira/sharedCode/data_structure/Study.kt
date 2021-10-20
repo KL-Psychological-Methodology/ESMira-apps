@@ -33,18 +33,19 @@ class Study internal constructor(
 		accessKey = c.getString(4)
 		version = c.getInt(5)
 		subVersion = c.getInt(6)
-		joined = c.getLong(7)
-		title = c.getString(8)
-		studyDescription = c.getString(9)
-		contactEmail = c.getString(10)
-		informedConsentForm = c.getString(11)
-		postInstallInstructions = c.getString(12)
-		publicChartsJsonString = c.getString(13)
-		personalChartsJsonString = c.getString(14)
-		msgTimestamp = c.getLong(15)
-		publicStatisticsNeeded = c.getBoolean(16)
-		sendMessagesAllowed = c.getBoolean(17)
-		eventUploadSettingsString = c.getString(18)
+		lang = c.getString(7)
+		joined = c.getLong(8)
+		title = c.getString(9)
+		studyDescription = c.getString(10)
+		contactEmail = c.getString(11)
+		informedConsentForm = c.getString(12)
+		postInstallInstructions = c.getString(13)
+		publicChartsJsonString = c.getString(14)
+		personalChartsJsonString = c.getString(15)
+		msgTimestamp = c.getLong(16)
+		publicStatisticsNeeded = c.getBoolean(17)
+		sendMessagesAllowed = c.getBoolean(18)
+		eventUploadSettingsString = c.getString(19)
 	}
 	
 	@Transient
@@ -69,6 +70,7 @@ class Study internal constructor(
 	var version: Int = -1
 	var subVersion: Int = -1
 	var serverVersion: Int = -1
+	var lang: String = ""
 	
 	@Transient
 	var joined: Long = 0 //is automatically set to CURRENT_TIMESTAMP by sql
@@ -440,6 +442,7 @@ class Study internal constructor(
 		values.putString(KEY_ACCESS_KEY, accessKey)
 		values.putInt(KEY_VERSION, version)
 		values.putInt(KEY_SUB_VERSION, subVersion)
+		values.putString(KEY_LANG, lang)
 		values.putInt(KEY_STATE, state.ordinal)
 		values.putLong(KEY_LAST_MSG_TIMESTAMP, msgTimestamp)
 		values.putString(KEY_TITLE, title)
@@ -583,6 +586,7 @@ class Study internal constructor(
 		const val KEY_ACCESS_KEY = "accessKey"
 		const val KEY_VERSION = "version"
 		const val KEY_SUB_VERSION = "subVersion"
+		const val KEY_LANG = "study_lang"
 		const val KEY_JOINED = "joined"
 		const val KEY_STATE = "state"
 		const val KEY_LAST_MSG_TIMESTAMP = "msgTimestamp"
@@ -605,6 +609,7 @@ class Study internal constructor(
 			KEY_ACCESS_KEY,
 			KEY_VERSION,
 			KEY_SUB_VERSION,
+			KEY_LANG,
 			"strftime('%s', $KEY_JOINED)",
 			KEY_TITLE,
 			KEY_DESC,

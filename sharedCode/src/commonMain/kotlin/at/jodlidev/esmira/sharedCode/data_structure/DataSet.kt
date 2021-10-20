@@ -25,6 +25,7 @@ class DataSet internal constructor(
 	
 	private var studyVersion = 0
 	private var studySubVersion = 0
+	private var studyLang = ""
 	lateinit var accessKey: String
 	private var questionnaireName: String = ""
 	private var groupName: String = "" // TODO: remove when Server is version 10
@@ -55,7 +56,7 @@ class DataSet internal constructor(
 		}
 	var reupload = false //not in db. Mainly for server. Is true when synced == STATES.NOT_SYNCED_SERVER_ERROR
 	
-	internal constructor(c: SQLiteCursor): this(eventType = c.getString(11)) {
+	internal constructor(c: SQLiteCursor): this(eventType = c.getString(12)) {
 		id = c.getLong(0)
 		studyId = c.getLong(1)
 		studyWebId = c.getLong(2)
@@ -67,12 +68,13 @@ class DataSet internal constructor(
 		groupInternalId = c.getLong(6) // TODO: remove when Server is version 10
 		studyVersion = c.getInt(7)
 		studySubVersion = c.getInt(8)
-		timezone = c.getString(9)
-		responseTime = c.getLong(10)
-		
-		setResponses(c.getString(12))
-		_synced = STATES.values()[c.getInt(13)]
-		token = c.getLong(14)
+		studyLang = c.getString(9)
+		timezone = c.getString(10)
+		responseTime = c.getLong(11)
+		//eventType is in constructor^^^^
+		setResponses(c.getString(13))
+		_synced = STATES.values()[c.getInt(14)]
+		token = c.getLong(15)
 		reupload = _synced == STATES.NOT_SYNCED_SERVER_ERROR
 	}
 	
@@ -98,6 +100,7 @@ class DataSet internal constructor(
 			studySubVersion = study.subVersion
 			serverUrl = study.serverUrl
 			accessKey = study.accessKey
+			studyLang = study.lang
 		}
 		else {
 			ErrorBox.error(
@@ -134,9 +137,7 @@ class DataSet internal constructor(
 	
 	fun saveQuestionnaire(questionnaire: Questionnaire, formStarted: Long) {
 		responseTime = NativeLink.getNowMillis()
-		addResponseData("form_duration", responseTime - formStarted) //TODO: remove when Server is version 9
 		addResponseData("formDuration", responseTime - formStarted)
-		addResponseData("last_notification", questionnaire.lastNotificationUtc) //TODO: remove when Server is version 10
 		addResponseData("lastInvitation", questionnaire.lastNotificationUtc)
 		
 		for(score in questionnaire.sumScores) { //needs to happen before we create statistics in case it is used for a statistic
@@ -203,6 +204,7 @@ class DataSet internal constructor(
 			values.putLong(KEY_QUESTIONNAIRE_INTERNAL_ID, questionnaireInternalId)
 			values.putInt(KEY_STUDY_VERSION, studyVersion)
 			values.putInt(KEY_STUDY_SUB_VERSION, studySubVersion)
+			values.putString(KEY_STUDY_LANG, studyLang)
 			values.putString(KEY_TIMEZONE, timezone)
 			values.putLong(KEY_RESPONSE_TIME, responseTime)
 			values.putString(KEY_TYPE, eventType)
@@ -231,6 +233,7 @@ class DataSet internal constructor(
 		const val KEY_QUESTIONNAIRE_INTERNAL_ID = "group_internal_id"
 		const val KEY_STUDY_VERSION = "study_version"
 		const val KEY_STUDY_SUB_VERSION = "study_subVersion"
+		const val KEY_STUDY_LANG = "study_lang"
 		const val KEY_TIMEZONE = "timezone"
 		const val KEY_RESPONSE_TIME = "response_time"
 		const val KEY_TYPE = "event_type"
@@ -268,6 +271,7 @@ class DataSet internal constructor(
 			"$TABLE.$KEY_QUESTIONNAIRE_INTERNAL_ID",
 			"$TABLE.$KEY_STUDY_VERSION",
 			"$TABLE.$KEY_STUDY_SUB_VERSION",
+			"$TABLE.$KEY_STUDY_LANG",
 			"$TABLE.$KEY_TIMEZONE",
 			"$TABLE.$KEY_RESPONSE_TIME",
 			"$TABLE.$KEY_TYPE",

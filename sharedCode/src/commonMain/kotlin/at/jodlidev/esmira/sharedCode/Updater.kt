@@ -11,7 +11,7 @@ import kotlinx.serialization.json.*
  */
 internal object Updater {
 	const val EXPECTED_SERVER_VERSION: Int = 10
-	const val DATABASE_VERSION = 32
+	const val DATABASE_VERSION = 33
 	const val LIBRARY_VERSION = 17 //this is mainly used for iOS so we can check that changes in the library have been used in the C library
 	
 	fun updateSQL(db: SQLiteInterface, oldVersion: Int) {
@@ -397,6 +397,15 @@ internal object Updater {
 		}
 		if(oldVersion <= 31) {
 			db.execSQL("ALTER TABLE studies ADD COLUMN uploadSettingsString TEXT DEFAULT '{}';")
+		}
+		if(oldVersion <= 32) {
+			db.execSQL("ALTER TABLE studies ADD COLUMN study_lang TEXT DEFAULT '';")
+			db.execSQL("ALTER TABLE dataSets ADD COLUMN study_lang TEXT DEFAULT '';")
+			db.execSQL("ALTER TABLE user ADD COLUMN app_lang;")
+			
+			val values = db.getValueBox()
+			values.putString(DbLogic.User.KEY_APP_LANG, NativeLink.smartphoneData.lang)
+			db.update(DbLogic.User.TABLE, values, null, null)
 		}
 	}
 	

@@ -9,4 +9,5 @@ interface SmartphoneDataInterface {
 	val manufacturer: String
 	val appVersion: String
 	val appType: String
+	val lang: String
 }
