@@ -15,6 +15,7 @@
 	<at.jodlidev.esmira.Element_DateTimeInput
 		android:id="@+id/input"
 		custom:dateTimeMode="time"
+		android:layout_gravity="center"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"/>
 </LinearLayout>
