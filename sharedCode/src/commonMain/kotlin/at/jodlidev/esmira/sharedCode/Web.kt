@@ -258,13 +258,13 @@ class Web {
 		const val DEV_SERVER = "https://esmira.kl.ac.at"
 		private const val DEBUG_EMULATOR_SERVER = "http://10.0.2.2/smartphones/ESMira/ESMira-web/dist"
 		
-		private const val URL_LIST_STUDIES: String = "/studies.php?lang=%s"
-		private const val URL_LIST_STUDIES_PASSWORD: String = "/studies.php?access_key=%s1&lang=%s2"
-		private const val URL_PUBLIC_STATISTICS: String = "/statistics.php?id=%d&access_key=%s"
-		private const val URL_UPDATE_STUDY: String = "/update.php?lang=%s"
-		private const val URL_UPLOAD_EVENT: String = "/datasets.php"
-		private const val URL_UPLOAD_ERRORBOX: String = "/save_errors.php"
-		private const val URL_UPLOAD_MESSAGE: String = "/save_message.php?lang=%s"
+		private const val URL_LIST_STUDIES: String = "/api/studies.php?lang=%s"
+		private const val URL_LIST_STUDIES_PASSWORD: String = "/api/studies.php?access_key=%s1&lang=%s2"
+		private const val URL_PUBLIC_STATISTICS: String = "/api/statistics.php?id=%d&access_key=%s"
+		private const val URL_UPDATE_STUDY: String = "/api/update.php?lang=%s"
+		private const val URL_UPLOAD_EVENT: String = "/api/datasets.php"
+		private const val URL_UPLOAD_ERRORBOX: String = "/api/save_errors.php"
+		private const val URL_UPLOAD_MESSAGE: String = "/api/save_message.php?lang=%s"
 		
 		internal class SuccessFailedException(msg: String) : Throwable(if(msg.isEmpty()) "Failed with empty response from server" else msg)
 		
