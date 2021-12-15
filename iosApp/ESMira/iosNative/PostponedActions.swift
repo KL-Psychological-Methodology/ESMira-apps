@@ -77,7 +77,7 @@ class PostponedActions: PostponedActionsInterface {
 			
 		}
 		
-		Web.Companion().updateStudiesBlocking()
+		Web.Companion().updateStudiesBlocking(forceStudyUpdate: false)
 		task.setTaskCompleted(success: web.error)
 	}
 	

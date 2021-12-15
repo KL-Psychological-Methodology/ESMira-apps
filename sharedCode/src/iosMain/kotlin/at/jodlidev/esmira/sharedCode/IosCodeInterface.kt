@@ -10,5 +10,4 @@ interface IosCodeInterface {
 	fun formatShortDate(ms: Long): String
 	fun formatTime(ms: Long): String
 	fun formatDateTime(ms: Long): String
-	fun getLang(): String
 }

@@ -32,4 +32,9 @@ class SmartphoneData: SmartphoneDataInterface {
 			return "\(os.majorVersion).\(os.minorVersion).\(os.patchVersion)"
 		}
 	}
+	var lang: String {
+		get {
+			return Locale.current.languageCode ?? "en"
+		}
+	}
 }
