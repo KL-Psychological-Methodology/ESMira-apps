@@ -25,17 +25,6 @@ class EventTrigger internal constructor() {
 
 	internal var specificQuestionnaireInternalId: Long = -1
 	
-	//TODO: Remove when server is version 10-->
-//	var skipThisQuestionnaire = false
-//	internal var specificQuestionnaireInternalId: Long = -1
-//	init {
-//		if(!skipThisQuestionnaire && skipThisQuestionnaire)
-//			skipThisQuestionnaire = skipThisQuestionnaire
-//		if(specificQuestionnaireInternalId == -1L && specificQuestionnaireInternalId != -1L)
-//			specificQuestionnaireInternalId = specificQuestionnaireInternalId
-//	}
-	//<--
-	
 	internal constructor(actionTrigger: ActionTrigger, c: SQLiteCursor): this() {
 		getMinimalCursor(c)
 		actionTriggerId = actionTrigger.id

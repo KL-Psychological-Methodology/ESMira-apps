@@ -105,16 +105,6 @@ class Study internal constructor(
 	private lateinit var _jsonQuestionnaires: List<Questionnaire>
 	
 	
-	//TODO: Remove when server is version 10-->
-	@SerialName("groups")
-	private var _jsonOldGroups: List<Questionnaire> = ArrayList()
-	init {
-		if(this::_jsonQuestionnaires.isInitialized && _jsonOldGroups.isNotEmpty() && _jsonQuestionnaires.isEmpty())
-			_jsonQuestionnaires = _jsonOldGroups
-	}
-	//<--
-	
-	
 	@Transient
 	private lateinit var _questionnaires: List<Questionnaire>
 	
