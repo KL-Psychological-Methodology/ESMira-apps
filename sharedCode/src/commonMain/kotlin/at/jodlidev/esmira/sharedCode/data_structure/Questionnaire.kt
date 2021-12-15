@@ -361,7 +361,8 @@ class Questionnaire internal constructor() {
 				true
 			else {
 				val joined = study.joined*1000
-				(durationPeriodDays==0 || now <= joined + durationPeriodDays * (1000*60*60*24)) || (durationStartingAfterDays== 0 || now >= joined + durationStartingAfterDays * (1000*60*60*24))
+				(durationPeriodDays == 0 || now <= joined + durationPeriodDays * (1000*60*60*24))
+					&& (durationStartingAfterDays == 0 || now >= joined + durationStartingAfterDays * (1000*60*60*24))
 			}
 		}
 		else true
