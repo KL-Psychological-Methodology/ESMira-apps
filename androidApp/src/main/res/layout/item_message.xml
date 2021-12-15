@@ -29,5 +29,8 @@
 		android:paddingBottom="5dp"
 		tools:text="content"
 		android:textColor="@android:color/white"
-		android:textSize="16sp"/>
+		android:textSize="16sp"
+		android:autoLink="all"
+		android:linksClickable="true"
+		android:textIsSelectable="true"/>
 </LinearLayout>
