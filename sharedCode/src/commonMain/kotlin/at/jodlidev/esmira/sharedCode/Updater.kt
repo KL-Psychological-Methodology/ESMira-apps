@@ -404,7 +404,15 @@ internal object Updater {
 			db.execSQL("ALTER TABLE user ADD COLUMN app_lang;")
 			
 			val values = db.getValueBox()
-			values.putString(DbLogic.User.KEY_APP_LANG, NativeLink.smartphoneData.lang)
+			try {
+				values.putString(DbLogic.User.KEY_APP_LANG, NativeLink.smartphoneData.lang)
+			}
+			catch(e : Throwable) {
+				// NativeLink.smartphoneData probably is not ready yet
+				println("Could not detect language??")
+				e.printStackTrace()
+				values.putString(DbLogic.User.KEY_APP_LANG, "")
+			}
 			db.update(DbLogic.User.TABLE, values, null, null)
 		}
 	}
