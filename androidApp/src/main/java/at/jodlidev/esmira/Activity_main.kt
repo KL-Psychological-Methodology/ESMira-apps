@@ -179,6 +179,7 @@ class Activity_main : AppCompatActivity(), ActivityTopInterface {
 			DbLogic.resetMissedInvitations()
 		}
 		
+		DbLogic.checkLeaveStudies()
 		updateNavigationIcon()
 	}
 	
