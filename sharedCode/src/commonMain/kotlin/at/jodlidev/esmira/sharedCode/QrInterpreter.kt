@@ -27,21 +27,21 @@ class QrInterpreter {
 	
 	// example.com/KEY+1234				example.com/KEY+1234.0
 	// example.com/KEY+a1234			example.com/KEY+a1234.0
-	private val patternWithPass = "^([\\w/.:]+/)([\\w-_]+)\\+a?(\\d+)\\.?(\\d*)$".toRegex() //url, key, studyId, (qIndex)
+	private val patternWithPass = "^([\\w/.:-]+/)([\\w-_]+)\\+a?(\\d+)\\.?(\\d*)$".toRegex() //url, key, studyId, (qIndex)
 	
 	// example.com/1234				example.com/1234.0
 	// example.com/a1234			example.com/a1234.0
-	private val patternWithoutPass = "^([\\w/.:]+/)a?(\\d+)\\.?(\\d*)$".toRegex() //url, studyId, (qIndex)
+	private val patternWithoutPass = "^([\\w/.:-]+/)a?(\\d+)\\.?(\\d*)$".toRegex() //url, studyId, (qIndex)
 	//TODO: <--
 	
 	
 	
 	// example.com/survey-12345		example.com/survey-12345-KEY
-	private val patternQuestionnaire = "^([\\w/.:]+/)survey-(\\d+)-?([a-zA-Z][a-zA-Z0-9]+)?$".toRegex() //url, qId, (accessKey)
+	private val patternQuestionnaire = "^([\\w/.:-]+/)survey-(\\d+)-?([a-zA-Z][a-zA-Z0-9]+)?$".toRegex() //url, qId, (accessKey)
 	
 	// example.com/KEY				example.com/1234				example.com/1234-KEY
 	// example.com/app-KEY			example.com/app-1234			example.com/app-1234-KEY
-	private val patternStudy = "^([\\w/.:]+/)(app-)?(\\d*)-?([a-zA-Z][a-zA-Z0-9]+)?$".toRegex() //url, ("app-"), (studyId), (accessKey)
+	private val patternStudy = "^([\\w/.:-]+/)(app-)?(\\d*)-?([a-zA-Z][a-zA-Z0-9]+)?$".toRegex() //url, ("app-"), (studyId), (accessKey)
 	
 	
 	fun check(s: String): ConnectData? {
@@ -83,7 +83,5 @@ class QrInterpreter {
 				}
 			}
 		}
-		
-		
 	}
 }

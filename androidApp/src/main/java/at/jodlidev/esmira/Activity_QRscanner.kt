@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import at.jodlidev.esmira.sharedCode.QrInterpreter
@@ -63,8 +64,10 @@ class Activity_QRscanner : AppCompatActivity(), ZXingScannerView.ResultHandler {
 			}
 			
 		}
-		else
+		else {
+			Toast.makeText(this, R.string.qrCodeInvalid, Toast.LENGTH_SHORT).show()
 			scannerView.resumeCameraPreview(this)
+		}
 		
 	}
 	
