@@ -185,6 +185,7 @@ object Notifications: NotificationsInterface {
 	}
 	
 	override fun removeQuestionnaireBing(questionnaire: Questionnaire) {
+		remove(questionnaire.id.toInt())
 		val context = context.get() ?: return
 		WorkerBox.cancelNotificationTimeout(context, questionnaire.id)
 	}
