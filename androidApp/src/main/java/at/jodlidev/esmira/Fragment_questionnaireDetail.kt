@@ -29,6 +29,7 @@ class Fragment_questionnaireDetail : Base_fragment() {
 	private lateinit var questionnaire: Questionnaire
 	private var pageIndex: Int = 0
 	private var formStarted: Long = 0
+	private var originalOrientation: Int = 0
 	
 	private class ListAdapter constructor(
 		context: Context,
@@ -173,10 +174,11 @@ class Fragment_questionnaireDetail : Base_fragment() {
 		
 		for(i in 0 .. pageIndex) {
 			for((j, value) in (state.getStringArrayList("$STATE_INPUT_DATA$i") ?: ArrayList()).withIndex()) {
-				questionnaire.pages[i].orderedInputs[j].value = value
+				questionnaire.pages[i].orderedInputs[j].fromBackupString(value)
 			}
 		}
 		
+		originalOrientation = requireActivity().requestedOrientation
 		activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_NOSENSOR
 	}
 	
@@ -254,7 +256,7 @@ class Fragment_questionnaireDetail : Base_fragment() {
 		for((i, page) in questionnaire.pages.withIndex()) {
 			val pageCache = ArrayList<String>()
 			for(input in page.orderedInputs) {
-				pageCache.add(input.value)
+				pageCache.add(input.getBackupString())
 			}
 			bundle.putStringArrayList("$STATE_INPUT_DATA$i", pageCache)
 		}
@@ -270,7 +272,7 @@ class Fragment_questionnaireDetail : Base_fragment() {
 	}
 	
 	override fun onDestroy() {
-		activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_SENSOR
+		activity?.requestedOrientation = originalOrientation
 		super.onDestroy()
 	}
 	

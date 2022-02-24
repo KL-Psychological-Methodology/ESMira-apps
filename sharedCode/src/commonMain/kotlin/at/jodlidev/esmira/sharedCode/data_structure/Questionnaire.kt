@@ -215,6 +215,10 @@ class Questionnaire internal constructor() {
 		for(page in pages) {
 			for(input in page.inputs) {
 				dataSet.addResponseData(input.name, input.value)
+				val additionalName = "${input.name}~"
+				for(additionalValue in input.additionalValues) {
+					dataSet.addResponseData(additionalName + additionalValue.key, additionalValue.value)
+				}
 			}
 		}
 		dataSet.saveQuestionnaire(this, formStarted)
@@ -331,6 +335,13 @@ class Questionnaire internal constructor() {
 	fun usesPostponedActions(): Boolean {
 		for(trigger in actionTriggers) {
 			if(trigger.usesPostponedActions())
+				return true
+		}
+		return false
+	}
+	fun hasScreenTracking(): Boolean {
+		for(page in pages) {
+			if(page.hasScreenTracking())
 				return true
 		}
 		return false

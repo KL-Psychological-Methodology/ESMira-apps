@@ -15,6 +15,7 @@ object InputViewChooser {
 			Input.TYPES.va_scale -> VaScaleView(context)
 			Input.TYPES.likert -> LikertView(context)
 			Input.TYPES.number -> NumberView(context)
+			Input.TYPES.app_usage -> AppUsageView(context)
 			Input.TYPES.text_input -> TextInputView(context)
 			Input.TYPES.time -> TimeView(context)
 			Input.TYPES.time_old -> TimeOldView(context) //TODO: can be removed when Selinas study is done

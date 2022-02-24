@@ -198,4 +198,15 @@
     <string name="what_is_sent">Was wird gesendet?</string>
     <string name="word_and">und</string>
     <string name="yes">Ja</string>
+    <string name="app_usage">App Nutzungsdaten</string>
+    <string name="app_usage_desc">Diese Studie benötigt den Zugriff auf Nutzungsdaten. Bitte stellen Sie sicher, dass der Zugriff für ESMira zugelassen ist und drücken Sie dann den zurück-Button Ihres Smartphones.</string>
+    <string name="app_usage_whatFor">Manche Fragebögen dieser Studie ermitteln die Nutzungsdaten von bestimmten Apps (oder des Smartphones im Allgemeinen) über den letzten Tag. Diese Daten werden NICHT im Hintergrund erhoben und NUR DANN gespeichert wenn Sie den entsprechenden Fragebogen abschicken. Sie können vor dem Abschicken des Fragebogens einsehen ob und welche Daten gespeichert werden.</string>
+    <string name="failed">Fehlgeschlagen</string>
+    <string name="feature_is_not_supported">Dieses Feature wird auf Ihrem Smartphone nicht unterstützt</string>
+    <string name="time_format_android">%1$d:%2$d:%3$d</string>
+    <string name="not_installed">Nicht installiert</string>
+    <string name="colon_total_screenTime">Gesamte Bildschirmzeit</string>
+    <string name="qrCodeInvalid">Der QR code ist fehlerhaft</string>
+    <string name="colon_usageTime">Nutzungszeit:</string>
+    <string name="colon_usageCount">Nutzungsanzahl:</string>
 </resources>

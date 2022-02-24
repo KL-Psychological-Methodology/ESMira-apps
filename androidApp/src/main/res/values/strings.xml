@@ -194,4 +194,15 @@
     <string name="what_is_sent">What is sent?</string>
     <string name="word_and">and</string>
     <string name="yes">Yes</string>
+    <string name="app_usage">App usage</string>
+    <string name="app_usage_desc">This study needs permission for usage access. Please make sure, that ESMira is enabled in the permission screen and then press the back button on your phone.</string>
+    <string name="app_usage_whatFor">Some questionnaires of this study track the usage times for specific apps (or the smartphone in general) over the course of the last day. This data will NOT be accessed in the background and is ONLY saved when you send the according questionnaire. Before sending the questionnaire you will be informed if and which data is sent.</string>
+    <string name="failed">Failed</string>
+    <string name="feature_is_not_supported">This feature is not supported on your phone</string>
+    <string name="time_format_android">%1$d:%2$d:%3$d</string>
+    <string name="not_installed">Not installed</string>
+    <string name="colon_total_screenTime">Total screen time</string>
+    <string name="qrCodeInvalid">QR code is not valid</string>
+    <string name="colon_usageTime">Usage time:</string>
+    <string name="colon_usageCount">Usage count:</string>
 </resources>

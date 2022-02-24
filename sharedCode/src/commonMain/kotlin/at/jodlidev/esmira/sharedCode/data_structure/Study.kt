@@ -335,6 +335,15 @@ class Study internal constructor(
 	}
 	
 	@Suppress("unused")
+	fun hasScreenTracking(): Boolean {
+		for(q in questionnaires) {
+			if(q.hasScreenTracking())
+				return true
+		}
+		return false
+	}
+	
+	@Suppress("unused")
 	fun usesPostponedActions(): Boolean {
 		for(q in questionnaires) {
 			if(q.usesPostponedActions())
@@ -358,7 +367,7 @@ class Study internal constructor(
 	
 	@Suppress("unused")
 	fun needsPermissionScreen(): Boolean {
-		return hasInformedConsent() || usesPostponedActions() || hasNotifications()
+		return hasInformedConsent() || usesPostponedActions() || hasNotifications() || hasScreenTracking()
 	}
 	
 	@Suppress("unused")

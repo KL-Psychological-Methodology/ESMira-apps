@@ -27,4 +27,12 @@ class Page internal constructor( ) {
 		}
 		return _inputs
 	}
+	
+	fun hasScreenTracking(): Boolean {
+		for(input in inputs) {
+			if(input.hasScreenTracking())
+				return true
+		}
+		return false
+	}
 }

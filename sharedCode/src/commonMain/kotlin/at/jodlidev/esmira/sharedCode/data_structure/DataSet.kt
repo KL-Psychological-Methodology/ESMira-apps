@@ -84,9 +84,7 @@ class DataSet internal constructor(
 	
 	constructor(type: String, questionnaire: Questionnaire): this(eventType = type) {
 		questionnaireName = questionnaire.title
-		groupName = questionnaire.title // TODO: remove when Server is version 10
 		questionnaireInternalId = questionnaire.internalId
-		groupInternalId = questionnaire.internalId // TODO: remove when Server is version 10
 		questionnaireId = questionnaire.id
 		studyWebId = questionnaire.studyWebId //not needed because init() sets this too, but if study is not found, it will be helpful for the error report
 		initStudy(DbLogic.getStudy(questionnaire.studyId))

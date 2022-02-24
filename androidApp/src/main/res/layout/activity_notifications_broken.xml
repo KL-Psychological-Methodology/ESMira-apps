@@ -23,7 +23,7 @@
 			android:paddingTop="10dp"
 			android:paddingBottom="10dp">
 			
-			<at.jodlidev.esmira.Element_SetupNotifications
+			<at.jodlidev.esmira.NotificationsPermission
 				android:id="@+id/additionalSettings"
 				android:visibility="gone"
 				android:layout_width="match_parent"
@@ -52,7 +52,7 @@
 				android:paddingBottom="10dp"
 				android:text="@string/error_notifications_broken_android_model_settings"/>
 			
-			<at.jodlidev.esmira.Element_SetupNotifications
+			<at.jodlidev.esmira.NotificationsPermission
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				custom:fixedPosition="modelSettings"/>

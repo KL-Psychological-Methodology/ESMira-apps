@@ -1,13 +1,17 @@
 package at.jodlidev.esmira
 
+import android.Manifest
 import android.animation.LayoutTransition
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import at.jodlidev.esmira.permissionBoxes.APermissionBox
+import at.jodlidev.esmira.permissionBoxes.InformedConsentPermission
+import at.jodlidev.esmira.permissionBoxes.AppUsagePermission
 import at.jodlidev.esmira.sharedCode.data_structure.Study
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.lang.ref.WeakReference
 
 
@@ -15,16 +19,10 @@ import java.lang.ref.WeakReference
  * Created by JodliDev on 11.04.2019.
  */
 class Fragment_studyPermissions : Base_fragment() {
-	enum class Progress {
-		Consent, Notifications, Done
-	}
-	private var progress: Progress = Progress.Consent
 	private lateinit var study: Study
-	
-	private var headerCount: Int = 0
-	private lateinit var headerInformedConsent: WeakReference<View>
-	private lateinit var headerNotifications: WeakReference<View>
-	private lateinit var setupNotifications: WeakReference<Element_SetupNotifications>
+	private var permissionBoxes = ArrayList<WeakReference<APermissionBox>>()
+	private var permissionProgress = 0
+	private var currentBox: WeakReference<APermissionBox> = WeakReference(null)
 	
 	
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -43,29 +41,39 @@ class Fragment_studyPermissions : Base_fragment() {
 		study = (activity as Activity_addStudy).studies[index]
 		
 		
+		
+		var headerCount = 0
+		if(study.hasInformedConsent())
+			permissionBoxes.add(WeakReference(InformedConsentPermission(requireContext(), study, ++headerCount)))
+		
+		if(study.usesPostponedActions() || study.hasNotifications())
+			permissionBoxes.add(WeakReference(NotificationsPermission(requireContext(), ++headerCount)))
+		
+		if(study.hasScreenTracking())
+			permissionBoxes.add(WeakReference(AppUsagePermission(this, ++headerCount)))
+		
+		requestPermissions(arrayOf(Manifest.permission.PACKAGE_USAGE_STATS),
+			Fragment_studyPermissions.REQUEST_PERMISSION
+		)
+		
+		addPermissionBoxes(rootView)
+		doProgress()
+	}
+	
+	private fun addPermissionBoxes(rootView: View) {
 		val container = rootView.findViewById<ViewGroup>(R.id.container)
 		var hasPermissions = false
-		if(study.hasInformedConsent()) {
-			headerInformedConsent = createHeader(container, R.string.informed_consent, -1, false)
+		for(box in permissionBoxes) {
+			if(box.get() == null)
+				continue;
 			
-			val view = View.inflate(context, R.layout.view_informed_consent, container)
-			view.setPadding(0, 0, 0, 20)
 			hasPermissions = true
+			container.addView(box.get())
 		}
 		
-		if(study.usesPostponedActions() || study.hasNotifications()) {
-			headerNotifications = createHeader(container, R.string.notifications, R.string.notification_setup_desc)
-			
-			val setupNotifications = Element_SetupNotifications(requireContext(), null)
-			this.setupNotifications = WeakReference(setupNotifications)
-			container.addView(setupNotifications)
-			setupNotifications.alpha = 0.3f
-			hasPermissions = true
+		rootView.findViewById<View>(R.id.btn_back).setOnClickListener {
+			activity?.onBackPressed()
 		}
-		
-		 rootView.findViewById<View>(R.id.btn_back).setOnClickListener {
-			 activity?.onBackPressed()
-		 }
 		val btnParticipate = rootView.findViewById<View>(R.id.btn_participate)
 		if(hasPermissions) {
 			btnParticipate.isEnabled = false
@@ -74,82 +82,24 @@ class Fragment_studyPermissions : Base_fragment() {
 		btnParticipate.setOnClickListener {
 			studyParticipate()
 		}
-		
-		doProgress()
-	}
-	
-	
-	private fun createHeader(container: ViewGroup, headerString: Int, msgString: Int = -1, alpha: Boolean = true): WeakReference<View> {
-		val header = View.inflate(context, R.layout.item_header_whatfor, null)
-		val headerText = header.findViewById<TextView>(R.id.header)
-		headerText.text = "${++headerCount}. ${getString(headerString)}"
-		if(alpha)
-			header.alpha = 0.3f
-		if(msgString != -1)
-			context?.let {it1 ->
-				header.findViewById<View>(R.id.btn_whatFor).setOnClickListener {
-					MaterialAlertDialogBuilder(it1, R.style.AppTheme_ActivityDialog)
-						.setMessage(msgString)
-						.setPositiveButton(R.string.close, null)
-						.show()
-				}
-			}
-		else
-			header.findViewById<View>(R.id.btn_whatFor).visibility = View.GONE
-		
-		container.addView(header)
-		return WeakReference<View>(header)
-	}
-	
-	private fun nextProgress() {
-		if(this.progress == Progress.Done)
-			return
-		this.progress = Progress.values()[progress.ordinal+1]
-		doProgress()
 	}
 	
 	private fun doProgress() {
-		val rootView = view ?: return
-		when(progress) {
-			Progress.Consent -> {
-				val btnConsent = rootView.findViewById<View>(R.id.btn_consent) ?: return nextProgress()
-				
-				btnConsent.setOnClickListener {
-					context?.let { it1 ->
-						MaterialAlertDialogBuilder(it1, R.style.AppTheme_ActivityDialog)
-							.setTitle(getString(R.string.informed_consent))
-							.setMessage(study.informedConsentForm)
-							.setPositiveButton(R.string.i_agree) { _, _ ->
-								nextProgress()
-								btnConsent.visibility = View.GONE
-								headerInformedConsent.get()?.findViewById<View>(R.id.completed)?.visibility = View.VISIBLE
-//								headerInformedConsent.get()?.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(it1, R.drawable.ic_success_green_24dp), null)
-								rootView.findViewById<View>(R.id.desc_informed_consent).visibility = View.GONE
-							}
-							.setNegativeButton(android.R.string.cancel, null).show()
-					}
-				}
+		if(permissionProgress < permissionBoxes.size) {
+			currentBox = permissionBoxes[permissionProgress]
+			val view = currentBox.get()
+			++permissionProgress
+			
+			if(view == null) {
+				doProgress()
+				return
 			}
-			Progress.Notifications -> {
-				if(!this::setupNotifications.isInitialized)
-					return nextProgress()
-				val setupNotifications = setupNotifications.get() ?: return nextProgress()
-				
-				headerNotifications.get()?.alpha = 1f
-				setupNotifications.alpha = 1f
-				setupNotifications.setListener {
-					context?.let {
-						headerNotifications.get()?.findViewById<View>(R.id.completed)?.visibility = View.VISIBLE
-//						headerNotifications.get()
-//							?.setCompoundDrawablesWithIntrinsicBounds(null, null, ContextCompat.getDrawable(it, if(success) R.drawable.ic_success_green_24dp else R.drawable.ic_error_red_24dp), null)
-					}
-					nextProgress()
-				}
-			}
-			Progress.Done -> {
-				rootView.findViewById<View>(R.id.setup_ended).visibility = View.VISIBLE
-				rootView.findViewById<View>(R.id.btn_participate).isEnabled = true
-			}
+			view.enable(this::doProgress)
+		}
+		else {
+			val rootView = view ?: return
+			rootView.findViewById<View>(R.id.setup_ended).visibility = View.VISIBLE
+			rootView.findViewById<View>(R.id.btn_participate).isEnabled = true
 		}
 	}
 	
@@ -165,5 +115,22 @@ class Fragment_studyPermissions : Base_fragment() {
 		else {
 			activity?.let { Activity_main.start(it) }
 		}
+	}
+	
+	override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+		if(requestCode == REQUEST_PERMISSION) {
+			if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+				currentBox.get()?.permissionGranted()
+			else
+				currentBox.get()?.permissionGranted(false)
+		}
+	}
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		if(requestCode == REQUEST_PERMISSION)
+			currentBox.get()?.handleResult(resultCode)
+	}
+	
+	companion object {
+		public const val REQUEST_PERMISSION = 101
 	}
 }

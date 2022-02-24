@@ -24,14 +24,18 @@ class Input internal constructor( ) {
 	var rightSideLabel: String = ""
 	var numberHasDecimal: Boolean = false
 	var asDropDown: Boolean = true
+	var packageId: String = "" //for app_usage
 	
 	var forceInt: Boolean = false
+	
+	val additionalValues: HashMap<String, String> = HashMap()
 	
 	@Transient private var _value: String = if(required) "" else defaultValue
 	var value: String
 		get() {
 			return if(type == TYPES.dynamic_input && this::dynamicInput.isInitialized)
-				"$_value/${dynamicInput.value}"
+//				"$_value/${dynamicInput.value}"
+				dynamicInput.value
 			else
 				_value
 		}
@@ -76,7 +80,7 @@ class Input internal constructor( ) {
 		time_old,  //TODO: can be removed when Selinas study is done
 		date,
 		date_old,  //TODO: can be removed when Selinas study is done
-		datetime, dynamic_input, video, image, ERROR
+		datetime, dynamic_input, app_usage, video, image, ERROR
 	}
 	
 	fun getDynamicInput(questionnaire: Questionnaire): Input {
@@ -110,7 +114,8 @@ class Input internal constructor( ) {
 			dynamicIndex = lastIndexBox.index
 		
 		
-		value = dynamicIndex.toString()
+//		value = dynamicIndex.toString()
+		additionalValues["index"] = dynamicIndex.toString();
 		dynamicInput = subInputs[dynamicIndex]
 		
 		required = dynamicInput.required
@@ -125,5 +130,32 @@ class Input internal constructor( ) {
 			value.isEmpty()
 		else
 			false
+	}
+	
+	fun getBackupString(): String {
+		var r = "$value~"
+		
+		if(additionalValues.isNotEmpty()) {
+			for(additionalValue in additionalValues) {
+				r += "${additionalValue.key}=${additionalValue.value},"
+			}
+			return r.substring(0, r.length-1)
+		}
+		
+		return r
+	}
+	fun fromBackupString(backup: String) {
+		val parts = backup.split("~")
+		value = parts[0]
+		if(parts[1].isNotEmpty()) {
+			parts[1].split(",").associateTo(additionalValues) {
+				val (key, value) = it.split("=")
+				key to value
+			}
+		}
+	}
+	
+	internal fun hasScreenTracking(): Boolean {
+		return type == TYPES.app_usage
 	}
 }
