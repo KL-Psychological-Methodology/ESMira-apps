@@ -57,7 +57,7 @@ struct ContentView: View {
 					self.appState.showToast(String(format: NSLocalizedString("ios_info_missed_notifications", comment: ""), missedNotifications))
 					DbLogic().resetMissedInvitations()
 				}
-				DbLogic.checkLeaveStudies()
+				DbLogic().checkLeaveStudies()
 			}
 			.sheet(item: self.$appState.openScreen) { item in
 				self.getScreenDialogView()

@@ -8,7 +8,8 @@
 import SwiftUI
 import sharedCode
 
-struct StudyPermissions: View {
+struct StudyPermissions: View, PermissionListProtocol {
+	
 	class LineData {
 		let header: String
 		let desc: String
@@ -39,8 +40,9 @@ struct StudyPermissions: View {
 		self.study = study
 	}
 	
-	@State private var progress = 0
-	@State private var shownLines: [LineData] = []
+	
+	@State private var progress = -1
+	@State private var shownLines: [PermissionLine] = []
 	@State private var completedLines: [Int] = []
 	@State private var failedLines: [Int] = []
 	
@@ -55,7 +57,8 @@ struct StudyPermissions: View {
 		VStack(alignment: .leading) {
 			NavigationLink(destination: StudyJoinedView(study: self.study), isActive: self.$openStudyJoined, label: { EmptyView() }).isDetailLink(false)
 			ForEach(self.shownLines.indices, id: \.self) { index in
-				self.createLine(index: index, line: self.shownLines[index])
+				let line : PermissionLine = self.shownLines[index]
+				PermissionLineView(lineData: line, listRoot: self)
 			}
 			Spacer()
 			if(self.isDone) {
@@ -78,35 +81,19 @@ struct StudyPermissions: View {
 			}
 		}
 		.onAppear {
-			var shownLines: [LineData] = []
+			var shownLines: [PermissionLine] = []
+			var count = 1
 			if(self.study.hasInformedConsent()) {
-				shownLines.append(LineData(header: "informed_consent", desc: "informed_consent_desc", btn: "show_informed_consent", whatFor: nil) {
-					self.alertView = {Alert(title: Text("informed_consent"), message: Text(self.study.informedConsentForm), primaryButton: .default(Text("i_agree"), action: {
-						self.nextProgress()
-					}), secondaryButton: .cancel())}
-					self.showAlert = true
-				})
+				shownLines.append(InformedConsentPermission(self, count))
+				count += 1
+			}
+			if(study.usesPostponedActions() || study.hasNotifications()) {
+				shownLines.append(NotificationsPermission(self, count))
+				count += 1
 			}
 			
-			if(self.study.hasSchedules() || self.study.hasEvents()) {
-				let line = LineData(header: "notifications", desc: "notification_permission_check", btn: "enable_notifications", whatFor: "notification_setup_desc") {
-					Notifications.authorize { success in
-						self.nextProgress(failed: !success)
-					}
-				}
-				line.errorDesc = "ios_dialogDesc_notifications_disabled"
-				line.errorBtn = "open_settings"
-				line.errorAction = {
-					self.openSettings()
-				}
-				
-				shownLines.append(line)
-			}
-			
-			if(shownLines.count == 0) {
-				self.isDone = true
-			}
 			self.shownLines = shownLines
+			next()
 		}
 		.alert(isPresented: self.$showAlert, content: self.alertView)
 		.padding()
@@ -150,23 +137,35 @@ struct StudyPermissions: View {
 		.opacity(isFailed || isCompleted || isCurrent ? 1 : 0.3)
 	}
 	
-	private func nextProgress(failed: Bool = false) {
-		if(failed) {
-			self.failedLines.append(self.progress)
-		}
-		else {
-			self.completedLines.append(self.progress)
-		}
+	func alert(_ alertObj: Alert) {
+		self.alertView = {alertObj}
+		self.showAlert = true
+	}
+	
+	func next() {
 		withAnimation {
 			self.progress += 1
 			if(self.progress >= self.shownLines.count) {
 				self.isDone = true
 			}
+			else {
+				self.shownLines[self.progress].enable();
+			}
+		}
+		
+	}
+	func getStudy() -> Study {
+		return self.study
+	}
+	
+	private func prevProgress() {
+		withAnimation {
+			self.progress -= 1
 		}
 		
 	}
 	
-	private func openSettings() {
+	func openAppSettings() {
 		guard let settingsUrl = URL(string: UIApplication.openSettingsURLString) else {
 			self.appState.showTranslatedToast("error_settings_not_opened")
 			return
