@@ -55,32 +55,15 @@ class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_a
 		val todayMs = cal.timeInMillis
 		val yesterdayMs = todayMs - 86400000
 		
-		val todayAppUsageTime: Long
-		var todayAppUsageTimeVisible = -1L
-		var todayAppUsageCount = 0
-		
 		val yesterdayAppUsageTime: Long
 		var yesterdayAppUsageTimeVisible = -1L
 		var yesterdayAppUsageCount = 0
 		
-		val fromQuestionnaireAppUsageTime: Long
-		var fromQuestionnaireAppUsageTimeVisible = -1L
-		var fromQuestionnaireAppUsageCount = 0
-		
 		//general screen time:
 		if(input.packageId == "") {
-			val todayPair = countTotalEvents(todayMs, nowMs)
-			todayAppUsageCount = todayPair.first
-			todayAppUsageTime = todayPair.second
-			
 			val yesterdayPair = countTotalEvents(yesterdayMs, todayMs)
 			yesterdayAppUsageCount = yesterdayPair.first
 			yesterdayAppUsageTime = yesterdayPair.second
-			
-			val fromQuestionnairePair = countTotalEvents(lastQuestionnaireFrom, nowMs)
-			fromQuestionnaireAppUsageCount = fromQuestionnairePair.first
-			fromQuestionnaireAppUsageTime = fromQuestionnairePair.second
-			
 			
 			appNameElement.text = context.getString(R.string.colon_total_screenTime)
 			packageIdElement.visibility = GONE
@@ -90,20 +73,10 @@ class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_a
 		else {
 			val packageId = input.packageId
 			
-			val todayTriple = countSpecificAppEvents(packageId, todayMs, nowMs)
-			todayAppUsageCount = todayTriple.first
-			todayAppUsageTime = todayTriple.second
-			todayAppUsageTimeVisible = todayTriple.third
-			
 			val yesterdayTriple = countSpecificAppEvents(packageId, yesterdayMs, todayMs)
 			yesterdayAppUsageCount = yesterdayTriple.first
 			yesterdayAppUsageTime = yesterdayTriple.second
 			yesterdayAppUsageTimeVisible = yesterdayTriple.third
-			
-			val fromQuestionnaireTriple = countSpecificAppEvents(packageId, lastQuestionnaireFrom, nowMs)
-			fromQuestionnaireAppUsageCount = fromQuestionnaireTriple.first
-			fromQuestionnaireAppUsageTime = fromQuestionnaireTriple.second
-			fromQuestionnaireAppUsageTimeVisible = fromQuestionnaireTriple.third
 			
 			
 			packageIdElement.visibility = VISIBLE
@@ -121,29 +94,17 @@ class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_a
 				appIconElement.visibility = INVISIBLE
 			}
 		}
-		input.value = lastQuestionnaireFrom.toString()
-		input.additionalValues["usageTime"] = fromQuestionnaireAppUsageTime.toString()
-		input.additionalValues["visibleTime"] = fromQuestionnaireAppUsageTimeVisible.toString()
-		input.additionalValues["usageCount"] = fromQuestionnaireAppUsageCount.toString()
+		input.value = yesterdayAppUsageTime.toString()
+		input.additionalValues["visibleTime"] = yesterdayAppUsageTimeVisible.toString()
+		input.additionalValues["usageCount"] = yesterdayAppUsageCount.toString()
 		
-		input.additionalValues["todayUsageTime"] = todayAppUsageTime.toString()
-		input.additionalValues["todayVisibleTime"] = todayAppUsageTimeVisible.toString()
-		input.additionalValues["todayUsageCount"] = todayAppUsageCount.toString()
-		
-		input.additionalValues["yesterdayUsageTime"] = yesterdayAppUsageTime.toString()
-		input.additionalValues["yesterdayVisibleTime"] = yesterdayAppUsageTimeVisible.toString()
-		input.additionalValues["yesterdayUsageCount"] = yesterdayAppUsageCount.toString()
-		
-		isBound = false //in case this view was reused
-		
-		val hours = TimeUnit.MILLISECONDS.toHours(fromQuestionnaireAppUsageTime)
-		val minutes = TimeUnit.MILLISECONDS.toMinutes(fromQuestionnaireAppUsageTime) % 60
-		val seconds = TimeUnit.MILLISECONDS.toSeconds(fromQuestionnaireAppUsageTime) % 60
+		val hours = TimeUnit.MILLISECONDS.toHours(yesterdayAppUsageTime)
+		val minutes = TimeUnit.MILLISECONDS.toMinutes(yesterdayAppUsageTime) % 60
+		val seconds = TimeUnit.MILLISECONDS.toSeconds(yesterdayAppUsageTime) % 60
 		
 		
 		appUsageElement.text = context.getString(R.string.time_format_android, hours, minutes, seconds)
-		appUsageCountElement.text = fromQuestionnaireAppUsageCount.toString()
-		
+		appUsageCountElement.text = yesterdayAppUsageCount.toString()
 		
 		
 		
