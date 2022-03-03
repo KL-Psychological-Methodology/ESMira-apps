@@ -127,6 +127,8 @@ struct InputView: View {
 				return AnyView(ListMultipleStruct(viewModel: self.viewModel))
 			case Input.TYPES.number:
 				return AnyView(NumberStruct(viewModel: self.viewModel))
+			case Input.TYPES.photo:
+			   return AnyView(PhotoStruct(viewModel: self.viewModel))
 			case Input.TYPES.textInput:
 				return AnyView(TextInputStruct(viewModel: self.viewModel))
 			case Input.TYPES.time:

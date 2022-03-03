@@ -1,14 +1,16 @@
 package at.jodlidev.esmira
 
+import android.app.Activity.RESULT_OK
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
-import android.text.method.LinkMovementMethod
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearSmoothScroller
@@ -20,6 +22,10 @@ import at.jodlidev.esmira.sharedCode.data_structure.Input
 import at.jodlidev.esmira.sharedCode.data_structure.Page
 import at.jodlidev.esmira.input_views.AndroidInputViewInterface
 import at.jodlidev.esmira.sharedCode.DbLogic
+
+import android.graphics.BitmapFactory
+import android.util.Base64
+import kotlin.collections.ArrayList
 
 
 /**
@@ -276,11 +282,43 @@ class Fragment_questionnaireDetail : Base_fragment() {
 		super.onDestroy()
 	}
 	
+	override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+		if(data == null)
+			return
+		val extras = data.extras ?: return
+		if(requestCode == Activity_photoCamera.REQUEST_PHOTO_RESPONSE && resultCode == RESULT_OK) {
+			val inputName = extras.getString(Activity_photoCamera.INPUT_NAME) ?: return
+			
+			val imagePreview: ImageView = requireView().findViewWithTag(inputName)
+			val byteArray = extras.getByteArray(Activity_photoCamera.PHOTO_DATA) ?: return
+			val imageBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+			imagePreview.setImageBitmap(imageBitmap)
+			
+			//find input:
+			var input: Input? = null
+			for(loopInput: Input in questionnaire.pages[pageIndex].inputs) {
+				if(loopInput.name == inputName) {
+					input = loopInput
+					break
+				}
+			}
+			if(input == null)
+				return
+			
+			input.value = Base64.encodeToString(byteArray, Base64.DEFAULT)
+		}
+	}
+	
+	
 	companion object {
 		const val KEY_QUESTIONNAIRE: String = "questionnaire_id"
 		private const val KEY_PAGE: String = "pageIndex"
 		private const val KEY_FORM_STARTED: String = "form_started"
 		private const val KEY_RESPONSES: String = "responses"
 		private const val STATE_INPUT_DATA: String = "input_data"
+		const val REQUEST_CAMERA_PERMISSION: Int = 101
+		const val REQUEST_CAMERA: Int = 301
+		const val CAMERA_INPUT_NAME: String = "input"
+		const val CAMERA_PREVIEW_ID: String = "previewId"
 	}
 }

@@ -80,7 +80,7 @@ class Input internal constructor( ) {
 		time_old,  //TODO: can be removed when Selinas study is done
 		date,
 		date_old,  //TODO: can be removed when Selinas study is done
-		datetime, dynamic_input, app_usage, video, image, ERROR
+		datetime, dynamic_input, app_usage, video, image, photo, ERROR
 	}
 	
 	fun getDynamicInput(questionnaire: Questionnaire): Input {

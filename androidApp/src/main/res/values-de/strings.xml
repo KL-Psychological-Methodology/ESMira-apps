@@ -209,4 +209,6 @@
     <string name="qrCodeInvalid">Der QR code ist fehlerhaft</string>
     <string name="colon_usageTime">Nutzungszeit:</string>
     <string name="colon_usageCount">Nutzungsanzahl:</string>
+    <string name="take_picture">Foto aufnehmen</string>
+    <string name="error_no_cameraApp">Es konnte keine Kamere-App gefunden werden!</string>
 </resources>

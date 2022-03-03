@@ -205,4 +205,6 @@
     <string name="qrCodeInvalid">QR code is not valid</string>
     <string name="colon_usageTime">Usage time:</string>
     <string name="colon_usageCount">Usage count:</string>
+    <string name="take_picture">Take picture</string>
+    <string name="error_no_cameraApp">Could not find a camera app!</string>
 </resources>

@@ -26,6 +26,7 @@ object InputViewChooser {
 			Input.TYPES.dynamic_input -> DynamicInputView(context)
 			Input.TYPES.image -> ImageElView(context)
 			Input.TYPES.video -> VideoView(context)
+			Input.TYPES.photo -> PhotoView(context)
 			else -> ErrorView(context)
 		}
 	}

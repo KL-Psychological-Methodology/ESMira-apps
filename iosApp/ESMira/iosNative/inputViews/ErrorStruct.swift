@@ -29,5 +29,8 @@ struct ErrorStruct: View {
 		}
 		.foregroundColor(Color.red)
 		.padding(.vertical)
+		.onAppear {
+			self.viewModel.isReady = true
+		}
 	}
 }

@@ -27,6 +27,13 @@
 		6B183D1625EE3A0F0036CFFF /* NewMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B183D1525EE3A0F0036CFFF /* NewMessageView.swift */; };
 		6B20B76D2715E6AA0040A9B9 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 6B20B76B2715E6AA0040A9B9 /* Localizable.stringsdict */; };
 		6B28C77525651E4600A65D15 /* CustomSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B28C77425651E4600A65D15 /* CustomSliderView.swift */; };
+		6B30E88927A2B99400CCAE61 /* InformedConsentPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B30E88827A2B99400CCAE61 /* InformedConsentPermission.swift */; };
+		6B30E88D27A8423300CCAE61 /* NotificationsPermission.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B30E88C27A8423300CCAE61 /* NotificationsPermission.swift */; };
+		6B30E89127A9757000CCAE61 /* PermissionListProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B30E89027A9757000CCAE61 /* PermissionListProtocol.swift */; };
+		6B30E89527AAA59600CCAE61 /* PermissionLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B30E89427AAA59600CCAE61 /* PermissionLine.swift */; };
+		6B30E89727B5334500CCAE61 /* PermissionLineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B30E89627B5334500CCAE61 /* PermissionLineView.swift */; };
+		6B30E89927C8F21A00CCAE61 /* PhotoStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B30E89827C8F21A00CCAE61 /* PhotoStruct.swift */; };
+		6B30E89B27C9000000CCAE61 /* CameraView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B30E89A27C9000000CCAE61 /* CameraView.swift */; };
 		6B36CD7D254AEE1700847EF7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6B36CD7B254AEE1700847EF7 /* Localizable.strings */; };
 		6B8AB87E269DBE1C00672FCD /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8AB87D269DBE1C00672FCD /* WelcomeView.swift */; };
 		6B8AB880269DBE7400672FCD /* StudyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B8AB87F269DBE7400672FCD /* StudyState.swift */; };
@@ -144,6 +151,13 @@
 		6B20B76C2715E6AA0040A9B9 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = de; path = de.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		6B20B7712716A6330040A9B9 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		6B28C77425651E4600A65D15 /* CustomSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSliderView.swift; sourceTree = "<group>"; };
+		6B30E88827A2B99400CCAE61 /* InformedConsentPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InformedConsentPermission.swift; sourceTree = "<group>"; };
+		6B30E88C27A8423300CCAE61 /* NotificationsPermission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationsPermission.swift; sourceTree = "<group>"; };
+		6B30E89027A9757000CCAE61 /* PermissionListProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionListProtocol.swift; sourceTree = "<group>"; };
+		6B30E89427AAA59600CCAE61 /* PermissionLine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionLine.swift; sourceTree = "<group>"; };
+		6B30E89627B5334500CCAE61 /* PermissionLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PermissionLineView.swift; sourceTree = "<group>"; };
+		6B30E89827C8F21A00CCAE61 /* PhotoStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoStruct.swift; sourceTree = "<group>"; };
+		6B30E89A27C9000000CCAE61 /* CameraView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraView.swift; sourceTree = "<group>"; };
 		6B36CD7C254AEE1700847EF7 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6B36CD7E254AEE2000847EF7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6B8AB87D269DBE1C00672FCD /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
@@ -234,6 +248,7 @@
 		5AF0E02CAD97257DDAB19507 /* iosNative */ = {
 			isa = PBXGroup;
 			children = (
+				D613009ACD00820E8F44DBEB /* inputViews */,
 				6B232D23252DCF7600AEFE74 /* statistics */,
 				5AF0E6DB1FA4669320D0AB4D /* SmartphoneData.swift */,
 				5AF0E758F7310098E565EBCA /* SQLiteHelper.swift */,
@@ -282,7 +297,6 @@
 				D61D6A1FC36DB37B3BC481DF /* Elements */,
 				D614253EAB71C09CF029B73C /* Assets */,
 				D6167128F8918F6A3D7180FE /* AppState.swift */,
-				D613009ACD00820E8F44DBEB /* inputViews */,
 				D616D240E856466FED5360A7 /* OrientationLockedController.swift */,
 				D6138B86351ED6805EB8BD80 /* StyleDialogButton.swift */,
 				D61A12D4B3A5E2BE784E0650 /* Workarounds.swift */,
@@ -325,9 +339,22 @@
 			path = statistics;
 			sourceTree = "<group>";
 		};
+		6B30E88727A2B96700CCAE61 /* Permissions */ = {
+			isa = PBXGroup;
+			children = (
+				6B30E88827A2B99400CCAE61 /* InformedConsentPermission.swift */,
+				6B30E89027A9757000CCAE61 /* PermissionListProtocol.swift */,
+				6B30E89427AAA59600CCAE61 /* PermissionLine.swift */,
+				6B30E88C27A8423300CCAE61 /* NotificationsPermission.swift */,
+				6B30E89627B5334500CCAE61 /* PermissionLineView.swift */,
+			);
+			path = Permissions;
+			sourceTree = "<group>";
+		};
 		6B8AB87C269DBDF900672FCD /* AddStudyView */ = {
 			isa = PBXGroup;
 			children = (
+				6B30E88727A2B96700CCAE61 /* Permissions */,
 				6B8AB87D269DBE1C00672FCD /* WelcomeView.swift */,
 				6B8AB881269DBEB900672FCD /* QrExistsView.swift */,
 				6B8AB883269DBEF100672FCD /* ServerQuestion.swift */,
@@ -346,6 +373,7 @@
 			children = (
 				D612B3CC40517DCA59AC2770 /* TextStruct.swift */,
 				D612C6DE33CC9FF7D66A5760 /* BinaryStruct.swift */,
+				6B30E89827C8F21A00CCAE61 /* PhotoStruct.swift */,
 				D61999245E0F953BFFB025D1 /* DateStruct.swift */,
 				D61017F368BA1A978F9B9AFB /* LikertStruct.swift */,
 				D61B9844158C0D242C5BED57 /* ListSingleStruct.swift */,
@@ -415,6 +443,7 @@
 				D616DB4C9F5EEC8244BEB639 /* LoadingView.swift */,
 				D61A2105ED33F8BC3E562CD2 /* TextFieldAlert.swift */,
 				6BF5EEE12577B2EB004481BC /* scrollAction.swift */,
+				6B30E89A27C9000000CCAE61 /* CameraView.swift */,
 			);
 			path = Elements;
 			sourceTree = "<group>";
@@ -562,6 +591,7 @@
 			files = (
 				63101F77245AD7230068A8B9 /* AppDelegate.swift in Sources */,
 				63101F79245AD7230068A8B9 /* SceneDelegate.swift in Sources */,
+				6B30E88D27A8423300CCAE61 /* NotificationsPermission.swift in Sources */,
 				5AF0E6178AFCB005FD9AB7D3 /* ContentView.swift in Sources */,
 				5AF0ECF6A85A5AC1A5FA3000 /* SmartphoneData.swift in Sources */,
 				5AF0E5508AD0A1E15B5AB57F /* SQLiteHelper.swift in Sources */,
@@ -588,6 +618,8 @@
 				D61A7535F52F9B170DDA2ACF /* Toast.swift in Sources */,
 				D61AD32F1DBE25A378BF1953 /* DateWindowView.swift in Sources */,
 				6B8AB888269DBF4800672FCD /* StudyDetailView.swift in Sources */,
+				6B30E89B27C9000000CCAE61 /* CameraView.swift in Sources */,
+				6B30E89727B5334500CCAE61 /* PermissionLineView.swift in Sources */,
 				D6171AA90445118B40C6DFED /* RadioButtonView.swift in Sources */,
 				D61A9569EACDCCCB49D6DC5B /* TextStruct.swift in Sources */,
 				6B183D1025ECF1E80036CFFF /* MessagesView.swift in Sources */,
@@ -601,16 +633,20 @@
 				D6181098ED238F1DC2338051 /* TextInputStruct.swift in Sources */,
 				D6155B1AE90D6032974534B4 /* ErrorStruct.swift in Sources */,
 				D61CCE6257C1F54D69A2AF93 /* NumberStruct.swift in Sources */,
+				6B30E89127A9757000CCAE61 /* PermissionListProtocol.swift in Sources */,
+				6B30E89527AAA59600CCAE61 /* PermissionLine.swift in Sources */,
 				D6196EBC295EBB5670E55495 /* TimeStruct.swift in Sources */,
 				D6111DADA22E83E9A5F8525A /* VideoStruct.swift in Sources */,
 				D6150AA993AD299E668E4024 /* VideoPlayerView.swift in Sources */,
 				D613E43A5AC4B49053DF736B /* DynamicStruct.swift in Sources */,
 				D61D9C5276048A72519BA2A6 /* DateStruct_old.swift in Sources */,
 				D61D1EAE42681B859DED8B05 /* TimeStruct_old.swift in Sources */,
+				6B30E89927C8F21A00CCAE61 /* PhotoStruct.swift in Sources */,
 				5AF0EDEED8924C600335AA95 /* SaveFilePickerView.swift in Sources */,
 				6B8AB88C269DBFA900672FCD /* StudyJoinedView.swift in Sources */,
 				6B28C77525651E4600A65D15 /* CustomSliderView.swift in Sources */,
 				5AF0E38631F65C95C6E50D52 /* OpenFilePickerView.swift in Sources */,
+				6B30E88927A2B99400CCAE61 /* InformedConsentPermission.swift in Sources */,
 				6B8AB884269DBEF100672FCD /* ServerQuestion.swift in Sources */,
 				D61970AF516988BD6FA73C60 /* NextNotificationsView.swift in Sources */,
 				D6183696C5A2513F3A82C958 /* ChangeSchedulesView.swift in Sources */,
