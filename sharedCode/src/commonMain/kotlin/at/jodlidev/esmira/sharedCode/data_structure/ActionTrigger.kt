@@ -389,7 +389,7 @@ class ActionTrigger internal constructor() {
 				timestamp,
 				alarm.eventTriggerId,
 				alarm.signalTimeId
-			) ?: return
+			)
 			
 			
 			NativeLink.notifications.firePostponed(newAlarm, msg)

@@ -361,6 +361,15 @@ class Study internal constructor(
 	}
 	
 	@Suppress("unused")
+	fun hasNotYetActiveQuestionnaires(): Boolean {
+		for(q in questionnaires) {
+			if(q.willBeActiveIn(this) > 0)
+				return true
+		}
+		return false
+	}
+	
+	@Suppress("unused")
 	fun hasInformedConsent(): Boolean {
 		return informedConsentForm.isNotEmpty()
 	}
@@ -529,7 +538,7 @@ class Study internal constructor(
 	}
 
 	fun leaveAfterCheck() {
-		if(state != STATES.HasLeft && !isActive()) {
+		if(state != STATES.HasLeft && !isActive() && !hasNotYetActiveQuestionnaires()) {
 			ErrorBox.log("Study", "Leaving study \"$title\" because it is not active anymore")
 			leave()
 		}

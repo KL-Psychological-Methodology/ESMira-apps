@@ -289,7 +289,7 @@ object Scheduler {
 		now: Long = NativeLink.getNowMillis(),
 		evenTriggerId: Long = -1,
 		signalTimeId: Long = -1
-	): Alarm? {
+	): Alarm {
 		ErrorBox.log("Scheduler", "Creating Reminder")
 		val timestamp = now + delayMinutes * 60 * 1000
 		return Alarm.createAsReminder(timestamp, questionnaireId, actionTriggerId, label, index, count, evenTriggerId, signalTimeId)
@@ -360,7 +360,7 @@ object Scheduler {
 	}
 	
 	//NOTE: this will cancel all reminder from the whole questionnaire
-	internal fun removeReminder(questionnaireId: Long) {
+	private fun removeReminder(questionnaireId: Long) {
 		for(alarm in DbLogic.getReminderAlarmsFrom(questionnaireId)) {
 			alarm.delete()
 		}

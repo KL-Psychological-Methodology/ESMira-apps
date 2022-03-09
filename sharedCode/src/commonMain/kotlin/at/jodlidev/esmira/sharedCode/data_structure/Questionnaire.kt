@@ -382,14 +382,10 @@ class Questionnaire internal constructor() {
 				&& ((durationStart == 0L || now >= durationStart)
 				&& (durationEnd == 0L || now <= durationEnd))
 				&& (!completableOnce || lastCompletedUtc == 0L))
-//		return (durationCheck
-//				&& ((durationStart == 0L || now >= durationStart)
-//				&& (durationEnd == 0L || now <= durationEnd))
-//				&& (completeRepeatType != COMPLETE_REPEAT_TYPE_NO_REPEAT || lastCompletedUtc == 0L))
 	}
 	
-	fun willBeActiveIn(): Long {
-		val joined = DbLogic.getStudy(studyId)?.joined ?: 0
+	fun willBeActiveIn(study: Study? = DbLogic.getStudy(studyId)): Long {
+		val joined = study?.joined ?: 0
 		val now = NativeLink.getNowMillis()
 		
 		return (durationStart - now).coerceAtLeast(joined*1000 + durationStartingAfterDays.toLong() * (1000*60*60*24) - now).coerceAtLeast(0)
