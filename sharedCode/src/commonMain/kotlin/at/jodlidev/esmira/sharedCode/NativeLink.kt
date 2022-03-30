@@ -15,6 +15,7 @@ expect object NativeLink {
 	val dialogOpener: DialogOpenerInterface
 	val notifications: NotificationsInterface
 	val postponedActions: PostponedActionsInterface
+	val fileOpener: FileOpener
 	
 	fun getNowMillis(): Long
 	fun getTimezone(): String

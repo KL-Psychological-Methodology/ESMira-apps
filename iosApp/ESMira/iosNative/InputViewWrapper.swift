@@ -70,42 +70,6 @@ struct InputView: View {
 	}
 	
 	func getInput() -> some View {
-//		switch (input.type) {
-//			case Input.TYPES.text:
-//				return AnyView(TextStruct(input: input))
-//			case Input.TYPES.binary:
-//				return AnyView(BinaryStruct(value: self.$viewModel.value, input: input))
-//			case Input.TYPES.date:
-//				return AnyView(DateStruct(value: self.$viewModel.value, input: input))
-//			case Input.TYPES.dateOld:
-//				return AnyView(DateStruct_old(value: self.$viewModel.value, input: input))
-//			case Input.TYPES.dynamicInput:
-//				return AnyView(DynamicStruct(value: self.$viewModel.value, input: input, questionnaire: questionnaire, readyCounter: self.$readyCounter))
-//			case Input.TYPES.image:
-//				return AnyView(ImageStruct(value: self.$viewModel.value, input: input))
-//			case Input.TYPES.likert:
-//				return AnyView(LikertStruct(value: self.$viewModel.value, input: input))
-//			case Input.TYPES.listSingle:
-//				return AnyView(ListSingleStruct(value: self.$viewModel.value, input: input))
-//			case Input.TYPES.listMultiple:
-//				return AnyView(ListMultipleStruct(value: self.$viewModel.value, input: input))
-//			case Input.TYPES.number:
-//				return AnyView(NumberStruct(value: self.$viewModel.value, input: input))
-//			case Input.TYPES.textInput:
-//				return AnyView(TextInputStruct(value: self.$viewModel.value, input: input))
-//			case Input.TYPES.time:
-//				return AnyView(TimeStruct(value: self.$viewModel.value, input: input))
-//			case Input.TYPES.timeOld:
-//				return AnyView(TimeStruct_old(value: self.$viewModel.value, input: input))
-//			case Input.TYPES.vaScale:
-//				return AnyView(VaScaleStruct(value: self.$viewModel.value, input: input))
-//			case Input.TYPES.video:
-//				return AnyView(VideoStruct(value: self.$viewModel.value, input: input))
-//
-//			default:
-//				return AnyView(ErrorStruct(input: input))
-//		}
-		
 		switch (input.type) {
 			case Input.TYPES.text:
 				return AnyView(TextStruct(viewModel: self.viewModel))
@@ -128,7 +92,7 @@ struct InputView: View {
 			case Input.TYPES.number:
 				return AnyView(NumberStruct(viewModel: self.viewModel))
 			case Input.TYPES.photo:
-			   return AnyView(PhotoStruct(viewModel: self.viewModel))
+			   return AnyView(PhotoStruct(viewModel: self.viewModel, studyId: self.questionnaire.studyId))
 			case Input.TYPES.textInput:
 				return AnyView(TextInputStruct(viewModel: self.viewModel))
 			case Input.TYPES.time:

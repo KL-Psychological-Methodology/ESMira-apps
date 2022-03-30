@@ -24,8 +24,8 @@ import at.jodlidev.esmira.input_views.AndroidInputViewInterface
 import at.jodlidev.esmira.sharedCode.DbLogic
 
 import android.graphics.BitmapFactory
-import android.util.Base64
 import kotlin.collections.ArrayList
+import java.io.File
 
 
 /**
@@ -288,13 +288,12 @@ class Fragment_questionnaireDetail : Base_fragment() {
 		val extras = data.extras ?: return
 		if(requestCode == Activity_photoCamera.REQUEST_PHOTO_RESPONSE && resultCode == RESULT_OK) {
 			val inputName = extras.getString(Activity_photoCamera.INPUT_NAME) ?: return
-			
 			val imagePreview: ImageView = requireView().findViewWithTag(inputName)
-			val byteArray = extras.getByteArray(Activity_photoCamera.PHOTO_DATA) ?: return
-			val imageBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+			val file = extras.getSerializable(Activity_photoCamera.PHOTO_FILE) as File ?: return
+			val filePath: String = file.path
+			val imageBitmap = BitmapFactory.decodeFile(filePath)
 			imagePreview.setImageBitmap(imageBitmap)
 			
-			//find input:
 			var input: Input? = null
 			for(loopInput: Input in questionnaire.pages[pageIndex].inputs) {
 				if(loopInput.name == inputName) {
@@ -305,7 +304,29 @@ class Fragment_questionnaireDetail : Base_fragment() {
 			if(input == null)
 				return
 			
-			input.value = Base64.encodeToString(byteArray, Base64.DEFAULT)
+			input.addImage(filePath, questionnaire.studyId)
+			
+			
+			
+			
+			
+			
+//			val byteArray = extras.getByteArray(Activity_photoCamera.PHOTO_DATA) ?: return
+//			val imageBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+//			imagePreview.setImageBitmap(imageBitmap)
+//
+//			//find input:
+//			var input: Input? = null
+//			for(loopInput: Input in questionnaire.pages[pageIndex].inputs) {
+//				if(loopInput.name == inputName) {
+//					input = loopInput
+//					break
+//				}
+//			}
+//			if(input == null)
+//				return
+//
+//			input.value = Base64.encodeToString(byteArray, Base64.DEFAULT)
 		}
 	}
 	

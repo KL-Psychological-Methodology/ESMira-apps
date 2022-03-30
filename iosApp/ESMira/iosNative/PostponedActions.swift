@@ -192,9 +192,9 @@ class PostponedActions: PostponedActionsInterface {
 			}
 			else {
 				PostponedActions.isRunning = true
-				Web.Companion().syncDataSetsAsync { syncCount in
+				Web.Companion().syncDataSetsAsync { success in
 					PostponedActions.isRunning = false;
-					if(syncCount == -1) {
+					if(!(success as! Bool)) {
 						print("Failed. We try again later")
 						PostponedActions.scheduleSync()
 					}
@@ -203,7 +203,7 @@ class PostponedActions: PostponedActionsInterface {
 		}
 		else {
 			print("Syncing in Background Thread")
-			if(Web.Companion().syncDataSetsBlocking(web: Web()) == -1) {
+			if(!Web.Companion().syncDataSetsBlocking(web: Web())) {
 				PostponedActions.scheduleSync()
 			}
 		}

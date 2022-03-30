@@ -12,7 +12,9 @@ import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.PictureResult
 import android.graphics.Bitmap
+import com.otaliastudios.cameraview.CameraUtils
 import java.io.ByteArrayOutputStream
+import java.io.File
 
 
 /**
@@ -41,26 +43,24 @@ class Activity_photoCamera : AppCompatActivity() {
 		
 		cameraView.addCameraListener(object: CameraListener() {
 			override fun onPictureTaken(result: PictureResult) {
-				result.toBitmap(800, 800) { bitmap ->
+				val fileName = System.currentTimeMillis().toString()
+				val file = File(applicationContext.filesDir, fileName)
+				
+				result.toBitmap(2000, 2000) { bitmap ->
 					Thread {
 						val byteStream = ByteArrayOutputStream()
-						bitmap?.compress(Bitmap.CompressFormat.PNG, 50, byteStream)
+						bitmap?.compress(Bitmap.CompressFormat.PNG, 100, byteStream);
 						
-						val intent = Intent()
-						intent.putExtra(PHOTO_DATA, byteStream.toByteArray())
-						intent.putExtra(INPUT_NAME, inputName)
-						setResult(RESULT_OK, intent)
-						cameraView.close();
-						finish()
+						CameraUtils.writeToFile(byteStream.toByteArray(), file) {
+							val intent = Intent()
+							intent.putExtra(PHOTO_FILE, file)
+							intent.putExtra(INPUT_NAME, inputName)
+							setResult(RESULT_OK, intent)
+							cameraView.close();
+							finish()
+						}
 					}.run()
-					
-					
-//					val intent = Intent()
-//					intent.putExtra(PHOTO_DATA, bitmap)
-//					intent.putExtra(INPUT_NAME, inputName)
-//					setResult(RESULT_OK, intent)
-//					cameraView.close();
-//					finish()
+				
 				}
 			}
 		})
@@ -82,7 +82,7 @@ class Activity_photoCamera : AppCompatActivity() {
 	
 	companion object {
 		const val REQUEST_PHOTO_RESPONSE = 203
-		const val PHOTO_DATA = "photoData"
+		const val PHOTO_FILE = "photoFile"
 		const val INPUT_NAME = "inputName"
 		private const val REQUEST_CAMERA_PERMISSION = 101
 		

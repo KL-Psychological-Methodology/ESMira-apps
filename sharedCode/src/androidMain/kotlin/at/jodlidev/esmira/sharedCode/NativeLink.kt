@@ -19,6 +19,7 @@ actual object NativeLink {
 		dialogOpener: DialogOpenerInterface,
 		notifications: NotificationsInterface,
 		postponedActions: PostponedActionsInterface
+//		fileOpener: FileOpener
 	) {
 		println("Initializing Android NativeLink")
 		if(_sql.get() == null)
@@ -27,6 +28,7 @@ actual object NativeLink {
 		_dialogOpener.set(dialogOpener)
 		_notifications.set(notifications)
 		_postponedActions.set(postponedActions)
+//		_fileOpener.set(fileOpener)
 		
 		_isInitialized.set(true)
 	}
@@ -56,6 +58,12 @@ actual object NativeLink {
 	private val _postponedActions = AtomicReference<PostponedActionsInterface>(null)
 	actual val postponedActions: PostponedActionsInterface
 		get() = _postponedActions.get()!!
+	
+//	private val _fileOpener = AtomicReference<FileOpenerInterface>(null)
+//	actual val fileOpener: FileOpenerInterface
+//		get() = _fileOpener.get()!!
+
+	actual val fileOpener = FileOpener()
 	
 	
 	actual fun resetSql(sql: SQLiteInterface) {

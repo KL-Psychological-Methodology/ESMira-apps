@@ -100,10 +100,10 @@ struct SettingsView: View {
 			
 			SettingsButton(
 				action:{
-					Web.Companion().syncDataSetsAsync { syncedCount in
+					Web.Companion().syncDataSetsAsync { success in
 						DispatchQueue.main.async {
-							if(syncedCount != -1) {
-								self.appState.showToast(String(format: NSLocalizedString("info_sync_complete", comment: ""), Int(truncating: syncedCount)))
+							if(success as! Bool) {
+								self.appState.showTranslatedToast("info_sync_complete")
 							}
 							else {
 								self.appState.showTranslatedToast("info_sync_failed")

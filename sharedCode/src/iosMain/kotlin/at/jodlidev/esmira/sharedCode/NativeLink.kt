@@ -50,6 +50,8 @@ actual object NativeLink {
 	actual val postponedActions: PostponedActionsInterface
 		get() = _postponedActions.value!!
 	
+	actual val fileOpener = FileOpener()
+
 	actual fun getExceptionStackTrace(e: Throwable): String {
 		val result = StringBuilder("${e.cause}: ${e.message}")
 		for(line: String in e.getStackTrace()) {

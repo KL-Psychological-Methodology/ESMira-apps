@@ -28,9 +28,7 @@ class DataSet internal constructor(
 	private var studyLang = ""
 	lateinit var accessKey: String
 	private var questionnaireName: String = ""
-	private var groupName: String = "" // TODO: remove when Server is version 10
 	private var questionnaireInternalId: Long = -1
-	private var groupInternalId: Long = -1 // TODO: remove when Server is version 10
 	private lateinit var timezone: String
 	var responseTime: Long = 0
 	@SerialName("responses") private var responseTemp: MutableMap<String, JsonElement> = HashMap() //not in db. Just used to fill data and then create a response-string
@@ -63,9 +61,7 @@ class DataSet internal constructor(
 		serverUrl = c.getString(3)
 		accessKey = c.getString(4)
 		questionnaireName = c.getString(5)
-		groupName = c.getString(5) // TODO: remove when Server is version 10
 		questionnaireInternalId = c.getLong(6)
-		groupInternalId = c.getLong(6) // TODO: remove when Server is version 10
 		studyVersion = c.getInt(7)
 		studySubVersion = c.getInt(8)
 		studyLang = c.getString(9)
@@ -208,7 +204,7 @@ class DataSet internal constructor(
 			values.putString(KEY_TYPE, eventType)
 			values.putString(KEY_RESPONSES, responses)
 			values.putInt(KEY_SYNCED, _synced.ordinal)
-			db.insert(TABLE, values)
+			id = db.insert(TABLE, values)
 			
 			NativeLink.postponedActions.syncDataSets()
 			ErrorBox.log(

@@ -60,18 +60,17 @@ class Input internal constructor( ) {
 		}
 	
 	
-	var listChoices: List<String> = ArrayList()
-	var subInputs: List<Input> = ArrayList()
-//	@Serializable(with = JsonToStringSerializer::class) private var listChoices: String = ""
-//	val listChoices: List<String>
-//		get() {
-//			return DbLogic.getJsonConfig().decodeFromString(listChoices)
-//		}
-//	val subInputs: List<Input>
-//		get() {
-//			return DbLogic.getJsonConfig().decodeFromString(listChoices)
-//		}
+	val listChoices: List<String> = ArrayList()
+	val subInputs: List<Input> = ArrayList()
+	@Transient val addedFiles : MutableList<FileUpload> = ArrayList()
 	
+	fun addImage(filePath: String, studyId: Long) {
+		val study = DbLogic.getStudy(studyId) ?: return
+		val fileUpload = FileUpload(study, filePath, FileUpload.TYPES.Image)
+		fileUpload.save()
+		addedFiles.add(fileUpload)
+		value = fileUpload.identifier.toString()
+	}
 	
 	@Transient private lateinit var dynamicInput: Input
 	
@@ -157,5 +156,16 @@ class Input internal constructor( ) {
 	
 	internal fun hasScreenTracking(): Boolean {
 		return type == TYPES.app_usage
+	}
+	
+	internal fun fillIntoDataSet(dataSet: DataSet) {
+		dataSet.addResponseData(name, value)
+		val additionalName = "${name}~"
+		for(additionalValue in additionalValues) {
+			dataSet.addResponseData(additionalName + additionalValue.key, additionalValue.value)
+		}
+		for(fileUpload in addedFiles) {
+			fileUpload.setReadyForUpload()
+		}
 	}
 }

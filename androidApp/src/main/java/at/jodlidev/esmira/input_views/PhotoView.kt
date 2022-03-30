@@ -31,29 +31,8 @@ class PhotoView(context: Context) : View.OnClickListener, TextElView(context, R.
 	
 	override fun onClick(v: View?) {
 		Activity_photoCamera.start(FragmentManager.findFragment(this), input.name)
+		//response will be processed in Fragment_questionnaireDetail.onActivityResult()
 		
-		
-//		val activity = (context as AppCompatActivity) ?: return
-//
-//		if(ActivityCompat.checkSelfPermission(activity, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-//			ActivityCompat.requestPermissions(
-//				activity,
-//				arrayOf(Manifest.permission.CAMERA),
-//				Fragment_questionnaireDetail.REQUEST_CAMERA_PERMISSION
-//			)
-//			return
-//		}
-//
-//		val fragment: Base_fragment = FragmentManager.findFragment(this)
-//		val intent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-////		intent.putExtra(Fragment_questionnaireDetail.CAMERA_INPUT_NAME, input.name)
-////		intent.putExtra(Fragment_questionnaireDetail.CAMERA_PREVIEW_ID, id)
-//
-//		try {
-//			fragment.startActivityForResult(intent, Fragment_questionnaireDetail.REQUEST_CAMERA)
-//		} catch (e: ActivityNotFoundException) {
-//			Toast.makeText(context, context.getString(R.string.error_no_cameraApp), Toast.LENGTH_LONG).show()
-//		}
 	}
 	
 	override fun bindData(input: Input, questionnaire: Questionnaire) {

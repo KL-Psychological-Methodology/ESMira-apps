@@ -21,10 +21,8 @@ class WorkerBox constructor(context: Context, params: WorkerParameters) : Worker
 
 		when(data.getInt(DATA_TYPE, -1)) {
 			TYPE_SYNC -> {
-				val syncCount: Int = Web.syncDataSetsBlocking()
-				if(syncCount == -1)
+				if(!Web.syncDataSetsBlocking())
 					return Result.failure()
-//				Fragment_settings.broadcast(context, true, context.getString(R.string.info_sync_complete, syncCount))
 			}
 			TYPE_UPDATE_STUDIES -> {
 				ErrorBox.log("WorkerBox", "Background update check started...")
