@@ -33,8 +33,8 @@ dependencies {
     implementation("com.otaliastudios:cameraview:2.7.2") //https://github.com/natario1/CameraView
 }
 
-version = "2.4.4.4"
-val versionC = 103
+version = "2.5.0.0"
+val versionC = 105
 group = "at.jodlidev.esmira"
 
 android {
