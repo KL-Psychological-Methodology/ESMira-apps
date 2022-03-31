@@ -143,11 +143,11 @@ class Fragment_settings : PreferenceFragmentCompat(), Preference.OnPreferenceCli
 			KEY_NOTIFICATIONS_BROKEN ->
                 Activity_notificationsBroken.start(requireActivity(), true)
 			KEY_SEND_SYNC_NOW ->
-				Web.syncDataSetsAsync { syncCount ->
+				Web.syncDataSetsAsync { success ->
 					val a = activity ?: return@syncDataSetsAsync
 					a.runOnUiThread {
-						if(syncCount != -1)
-							Toast.makeText(context, requireContext().getString(R.string.info_sync_complete, syncCount), Toast.LENGTH_SHORT).show()
+						if(success)
+							Toast.makeText(context, requireContext().getString(R.string.info_sync_complete), Toast.LENGTH_SHORT).show()
 						else
 							Toast.makeText(context, requireContext().getString(R.string.info_sync_failed), Toast.LENGTH_SHORT).show()
 						

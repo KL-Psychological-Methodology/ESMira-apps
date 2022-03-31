@@ -222,6 +222,17 @@ object DbLogic {
 			FOREIGN KEY(${DataSet.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}),
 			FOREIGN KEY(${DataSet.KEY_STUDY_WEB_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_WEB_ID}))""")
 		
+		db.execSQL("""CREATE TABLE IF NOT EXISTS ${FileUpload.TABLE} (
+			${FileUpload.KEY_ID} INTEGER PRIMARY KEY,
+			${FileUpload.KEY_STUDY_ID} INTEGER,
+			${FileUpload.KEY_STUDY_WEB_ID} INTEGER,
+			${FileUpload.KEY_SERVER_URL} TEXT,
+			${FileUpload.KEY_IS_TEMPORARY} INTEGER,
+			${FileUpload.KEY_FILE_PATH} TEXT,
+			${FileUpload.KEY_IDENTIFIER} INTEGER,
+			${FileUpload.KEY_TYPE} INTEGER,
+			FOREIGN KEY(${FileUpload.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}))""")
+		
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${DynamicInputData.TABLE} (
 			${DynamicInputData.KEY_QUESTIONNAIRE_ID} INTEGER,
 			${DynamicInputData.KEY_VARIABLE} TEXT,
@@ -381,6 +392,7 @@ object DbLogic {
 		else {
 			Scheduler.checkMissedAlarms(true)
 			NativeLink.postponedActions.syncDataSets()
+			cleanupFiles();
 			
 			val newLang = NativeLink.smartphoneData.lang
 			
@@ -406,6 +418,13 @@ object DbLogic {
 		}
 	}
 
+	fun cleanupFiles() {
+		val files = getTemporaryFileUploads()
+		for(file: FileUpload in files) {
+			file.delete();
+		}
+	}
+	
 	fun getJsonConfig(): Json { //TODO: Where does this function fit best..?
 		return Json {ignoreUnknownKeys = true}
 	}
@@ -822,7 +841,7 @@ object DbLogic {
 	//DataSets
 	//
 	fun hasUnsyncedDataSetsAfterQuit(studyId: Long): Boolean {
-		val c = NativeLink.sql.select(
+		var c = NativeLink.sql.select(
 			DataSet.TABLE,
 			arrayOf(DataSet.KEY_STUDY_ID),
 			"${DataSet.KEY_STUDY_ID} = ? AND ${DataSet.KEY_SYNCED} IS NOT ${DataSet.STATES.SYNCED.ordinal} AND ${DataSet.KEY_TYPE} != 'quit'", arrayOf(studyId.toString()),
@@ -831,12 +850,26 @@ object DbLogic {
 			null,
 			null
 		)
-		val r = c.moveToFirst()
+		var r = c.moveToFirst()
 		c.close()
+		
+		if(!r) {
+			c = NativeLink.sql.select(
+				FileUpload.TABLE,
+				FileUpload.COLUMNS,
+				"${FileUpload.KEY_IS_TEMPORARY} IS 0", null,
+				null,
+				null,
+				null,
+				null
+			)
+			r = c.moveToFirst()
+			c.close()
+		}
 		return r
 	}
 	fun getUnSyncedDataSetCount(): Int {
-		val c = NativeLink.sql.select(
+		var c = NativeLink.sql.select(
 			DataSet.TABLE,
 			arrayOf("COUNT(*)"),
 			"${DataSet.KEY_SYNCED} IS NOT ${DataSet.STATES.SYNCED.ordinal}", null,
@@ -845,31 +878,29 @@ object DbLogic {
 			null,
 			null
 		)
-		val r = if(c.moveToFirst())
+		var r = if(c.moveToFirst())
 			c.getInt(0)
 		else
 			0
 		c.close()
+		
+		
+		c = NativeLink.sql.select(
+			FileUpload.TABLE,
+			arrayOf("COUNT(*)"),
+			"${FileUpload.KEY_IS_TEMPORARY} IS 0", null,
+			null,
+			null,
+			null,
+			null
+		)
+		r = (if(c.moveToFirst())
+			c.getInt(0)
+		else
+			0).coerceAtLeast(r)
+		c.close()
 		return r
 	}
-	
-//	fun getUnSyncedDataSets(): List<DataSet> {
-//		val c = NativeLink.sql.select(
-//			DataSet.TABLE,
-//			DataSet.COLUMNS,
-//			"${DataSet.KEY_SYNCED} IS NOT ${DataSet.STATE_SYNCED}", null,
-//			null,
-//			null,
-//			"${DataSet.KEY_SYNCED} ASC",  //we have to make sure that erroneous entries that lead to crashes dont prevent new entries from getting synced
-//			null
-//		)
-//		val dataSets: MutableList<DataSet> = ArrayList()
-//		while(c.moveToNext()) {
-//			dataSets.add(DataSet(c))
-//		}
-//		c.close()
-//		return dataSets
-//	}
 	
 	fun getUnSyncedDataSets(): Map<String, List<DataSet>> { //grouped by serverUrl
 		val c = NativeLink.sql.select(
@@ -904,6 +935,44 @@ object DbLogic {
 		val r = if(c.moveToFirst()) DataSet(c) else null
 		c.close()
 		return r
+	}
+	
+	//
+	//FileUpload
+	//
+	fun getPendingFileUploads(): List<FileUpload> {
+		val c = NativeLink.sql.select(
+			FileUpload.TABLE,
+			FileUpload.COLUMNS,
+			"${FileUpload.KEY_IS_TEMPORARY} IS 0", null,
+			null,
+			null,
+			null,
+			null
+		)
+		val container = ArrayList<FileUpload>()
+		while(c.moveToNext()) {
+			container.add(FileUpload(c))
+		}
+		c.close()
+		return container
+	}
+	fun getTemporaryFileUploads(): List<FileUpload> {
+		val c = NativeLink.sql.select(
+			FileUpload.TABLE,
+			FileUpload.COLUMNS,
+			"${FileUpload.KEY_IS_TEMPORARY} IS 1", null,
+			null,
+			null,
+			null,
+			null
+		)
+		val container = ArrayList<FileUpload>()
+		while(c.moveToNext()) {
+			container.add(FileUpload(c))
+		}
+		c.close()
+		return container
 	}
 	
 	//

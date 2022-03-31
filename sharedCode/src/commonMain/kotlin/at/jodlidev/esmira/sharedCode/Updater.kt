@@ -11,7 +11,7 @@ import kotlinx.serialization.json.*
  */
 internal object Updater {
 	const val EXPECTED_SERVER_VERSION: Int = 10
-	const val DATABASE_VERSION = 33
+	const val DATABASE_VERSION = 34
 	const val LIBRARY_VERSION = 17 //this is mainly used for iOS so we can check that changes in the library have been used in the C library
 	
 	fun updateSQL(db: SQLiteInterface, oldVersion: Int) {
@@ -414,6 +414,18 @@ internal object Updater {
 				values.putString(DbLogic.User.KEY_APP_LANG, "")
 			}
 			db.update(DbLogic.User.TABLE, values, null, null)
+		}
+		if(oldVersion <= 33) {
+			db.execSQL("""CREATE TABLE IF NOT EXISTS fileUploads (
+			_id INTEGER PRIMARY KEY,
+			study_id INTEGER,
+			study_webId INTEGER,
+			server_url TEXT,
+			isTemporary INTEGER,
+			filePath TEXT,
+			identifier INTEGER,
+			uploadType INTEGER,
+			FOREIGN KEY(study_id) REFERENCES studies(_id))""")
 		}
 	}
 	

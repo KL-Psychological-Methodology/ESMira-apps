@@ -29,10 +29,12 @@ dependencies {
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0") //https://github.com/PhilJay/MPAndroidChart
     
     implementation("com.github.NightWhistler:HtmlSpanner:0.4") //https://github.com/NightWhistler/HtmlSpanner
+    
+    implementation("com.otaliastudios:cameraview:2.7.2") //https://github.com/natario1/CameraView
 }
 
-version = "2.4.4.5"
-val versionC = 104
+version = "2.5.0.0"
+val versionC = 105
 group = "at.jodlidev.esmira"
 
 android {

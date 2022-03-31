@@ -111,7 +111,7 @@
     <string name="info_study_permissionSetup_ended">Die Konfiguration wurde abgeschlossen. Sie können nun auf \"Teilnehmen\" klicken, um der Studie beizutreten.</string>
     <string name="android_info_study_updated">%1$s wurde aktualisiert!</string>
     <string name="info_study_updated_desc">Ihre Zeitpläne wurden durch ein Update zurückgesetzt.</string>
-    <string name="info_sync_complete">Synchronisation erfolgreich. (%1$d Datensätze synchronisiert)</string>
+    <string name="info_sync_complete">Synchronisation erfolgreich.</string>
     <string name="info_sync_failed">Fehler bei der Synchronisation!</string>
     <string name="info_test_notifications">Bitte drücken Sie \"Test-Benachrichtigung\" um zu testen, ob Benachrichtigungen auf Ihrem Smartphone korrekt empfangen werden können.</string>
     <string name="info_thank_you">Vielen Dank!</string>
@@ -209,4 +209,6 @@
     <string name="qrCodeInvalid">Der QR code ist fehlerhaft</string>
     <string name="colon_usageTime">Nutzungszeit:</string>
     <string name="colon_usageCount">Nutzungsanzahl:</string>
+    <string name="take_picture">Foto aufnehmen</string>
+    <string name="error_no_cameraApp">Es konnte keine Kamere-App gefunden werden!</string>
 </resources>

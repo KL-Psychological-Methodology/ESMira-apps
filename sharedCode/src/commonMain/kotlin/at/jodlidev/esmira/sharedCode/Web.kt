@@ -6,10 +6,12 @@ import io.ktor.client.engine.ClientEngineClosedException
 import io.ktor.client.features.HttpTimeout
 import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
+import io.ktor.client.request.forms.*
 import io.ktor.client.request.get
 import io.ktor.client.request.post
-import io.ktor.http.ContentType
-import io.ktor.http.contentType
+import io.ktor.http.*
+import io.ktor.http.ContentDisposition.Companion.File
+import io.ktor.utils.io.core.*
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -50,6 +52,51 @@ class Web {
 		val interpreter: GetStructure = client.post(url) {
 			body = data
 		}
+		checkResponse(interpreter)
+		return interpreter.dataset
+	}
+	private suspend fun postFile(url: String, fileUpload: FileUpload): String {
+		println("postFile to: $url")
+		val file = fileUpload.getFile()
+
+		val interpreter: GetStructure = client.submitFormWithBinaryData(
+			url = url,
+			formData = formData {
+				append("userId", DbLogic.getUid())
+				append("studyId", fileUpload.webId)
+				append("dataType", fileUpload.type.toString())
+				append("appVersion", NativeLink.smartphoneData.appVersion)
+				append("appType", DbLogic.getAdminAppType())
+				append("serverVersion", Updater.EXPECTED_SERVER_VERSION)
+
+				append("upload", file, Headers.build {
+					append(HttpHeaders.ContentType, "image/png")
+					append(HttpHeaders.ContentDisposition, "filename=${fileUpload.identifier}")
+				})
+			}
+		)
+
+//		val interpreter: GetStructure = client.post(url) {
+//			body = MultiPartFormDataContent(
+//				formData {
+//					this.append(FormPart("userId", DbLogic.getUid()))
+//					this.append(FormPart("studyId", fileUpload.webId))
+//					this.append(FormPart("dataType", fileUpload.type.toString()))
+//					this.append(FormPart("appVersion", NativeLink.smartphoneData.appVersion))
+//					this.append(FormPart("appType", DbLogic.getAdminAppType()))
+//					this.append(FormPart("serverVersion", Updater.EXPECTED_SERVER_VERSION))
+//
+//					this.appendInput(
+//						key = "upload",
+//						headers = Headers.build {
+//							append(HttpHeaders.ContentDisposition, "filename=${fileUpload.identifier}")
+//						},
+//						//size = fileUpload.getFileSize()
+//						size = fileUpload.getFileSize()
+//					) { buildPacket { writeFully(file) } }
+//				}
+//			)
+//		}
 		checkResponse(interpreter)
 		return interpreter.dataset
 	}
@@ -168,13 +215,13 @@ class Web {
 		close()
 		return if(error) -1 else updatedCount
 	}
-	private suspend fun syncDataSets(): Int {
+	private suspend fun syncDataSets(): Boolean {
 		val container = DbLogic.getUnSyncedDataSets()
 		for((url, dataSetList) in container) {
 			ErrorBox.log("Syncing", "Syncing $url (${dataSetList.size} dataSets)")
 			val response: String
 			try {
-				response = postJson("$url$URL_UPLOAD_EVENT", PostStructure.SyncStructure(dataSetList))
+				response = postJson("$url$URL_UPLOAD_DATASET", PostStructure.SyncStructure(dataSetList))
 			}
 			catch(e: Throwable) {
 				ErrorBox.warn("Syncing failed", "Could not sync ${dataSetList.size} dataSets to $url", e)
@@ -212,8 +259,29 @@ class Web {
 			}
 		}
 		
+		error = syncFiles() || error
 		close()
-		return if(error) -1 else container.size
+		return !error && container.size != -1
+	}
+	private suspend fun syncFiles(): Boolean {
+		val fileUploads = DbLogic.getPendingFileUploads()
+		for(fileUpload in fileUploads) {
+			val url = fileUpload.serverUrl
+			ErrorBox.log("FileUpload", "Uploading ${fileUpload.identifier} to $url")
+			try {
+				postFile("$url$URL_UPLOAD_FILE", fileUpload)
+			}
+			catch(e: Throwable) {
+				ErrorBox.warn("Syncing failed", "Could not upload ${fileUpload.identifier} to $url", e)
+				
+				error = true
+				continue
+			}
+			
+			fileUpload.delete()
+		}
+		
+		return error
 	}
 	
 	private suspend fun sendMessage(content: String, study: Study): String? {
@@ -262,7 +330,8 @@ class Web {
 		private const val URL_LIST_STUDIES_PASSWORD: String = "/api/studies.php?access_key=%s1&lang=%s2"
 		private const val URL_PUBLIC_STATISTICS: String = "/api/statistics.php?id=%d&access_key=%s"
 		private const val URL_UPDATE_STUDY: String = "/api/update.php?lang=%s"
-		private const val URL_UPLOAD_EVENT: String = "/api/datasets.php"
+		private const val URL_UPLOAD_DATASET: String = "/api/datasets.php"
+		private const val URL_UPLOAD_FILE: String = "/api/file_uploads.php"
 		private const val URL_UPLOAD_ERRORBOX: String = "/api/save_errors.php"
 		private const val URL_UPLOAD_MESSAGE: String = "/api/save_message.php?lang=%s"
 		
@@ -433,16 +502,16 @@ class Web {
 		}
 		
 		@Suppress("unused")
-		fun syncDataSetsBlocking(web: Web = Web()): Int {
-			var syncCount = -1
+		fun syncDataSetsBlocking(web: Web = Web()): Boolean {
+			var r = false
 			nativeBlocking {
-				syncCount = web.syncDataSets()
+				r = web.syncDataSets()
 			}
-			return syncCount
+			return r
 		}
 		@Suppress("unused")
 		@Synchronized
-		fun syncDataSetsAsync(continueWith: (Int) -> Unit): Web {
+		fun syncDataSetsAsync(continueWith: (Boolean) -> Unit): Web {
 			val web = Web()
 			nativeAsync {
 				continueWith(web.syncDataSets())

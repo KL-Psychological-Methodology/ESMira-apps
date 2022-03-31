@@ -43,6 +43,11 @@
             android:label="@string/add_a_study">
         </activity>
         <activity
+            android:name="at.jodlidev.esmira.Activity_photoCamera"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/app_name">
+        </activity>
+        <activity
             android:name="at.jodlidev.esmira.Activity_QRscanner"
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/app_name">

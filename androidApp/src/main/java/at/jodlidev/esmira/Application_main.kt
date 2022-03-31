@@ -12,6 +12,7 @@ import at.jodlidev.esmira.androidNative.*
  */
 class Application_main : Application() {
 	override fun onCreate() {
+//		NativeLink.init(SQLite(applicationContext), SmartphoneData, DialogOpener, Notifications, PostponedActions, FileOpener)
 		NativeLink.init(SQLite(applicationContext), SmartphoneData, DialogOpener, Notifications, PostponedActions)
 		CrashExceptionHandler.init(applicationContext)
 		DialogOpener.init(applicationContext)

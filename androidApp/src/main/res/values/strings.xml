@@ -107,7 +107,7 @@
     <string name="info_study_permissionSetup_ended">The configuration has been completed. You can now click on \"Participate\" to join the study.</string>
     <string name="android_info_study_updated">%1$s was updated!</string>
     <string name="info_study_updated_desc">Your schedules have been reset due to an update to the study.</string>
-    <string name="info_sync_complete">Sync complete (%1$d datasets synced)</string>
+    <string name="info_sync_complete">Sync successfully completed.</string>
     <string name="info_sync_failed">Sync failed!</string>
     <string name="info_test_notifications">Press \"Send test notification\" to test if your phone can receive notification messages.</string>
     <string name="info_thank_you">Thank you!</string>
@@ -205,4 +205,6 @@
     <string name="qrCodeInvalid">QR code is not valid</string>
     <string name="colon_usageTime">Usage time:</string>
     <string name="colon_usageCount">Usage count:</string>
+    <string name="take_picture">Take picture</string>
+    <string name="error_no_cameraApp">Could not find a camera app!</string>
 </resources>

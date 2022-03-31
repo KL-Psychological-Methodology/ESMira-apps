@@ -214,11 +214,7 @@ class Questionnaire internal constructor() {
 		
 		for(page in pages) {
 			for(input in page.inputs) {
-				dataSet.addResponseData(input.name, input.value)
-				val additionalName = "${input.name}~"
-				for(additionalValue in input.additionalValues) {
-					dataSet.addResponseData(additionalName + additionalValue.key, additionalValue.value)
-				}
+				input.fillIntoDataSet(dataSet)
 			}
 		}
 		dataSet.saveQuestionnaire(this, formStarted)
