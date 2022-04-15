@@ -16,9 +16,9 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import at.jodlidev.esmira.androidNative.SQLite
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
+import at.jodlidev.esmira.sharedCode.SQLite
 import at.jodlidev.esmira.sharedCode.Web
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import java.io.*

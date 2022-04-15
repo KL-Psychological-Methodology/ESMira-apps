@@ -6,7 +6,7 @@ import java.io.*
 /**
  * Created by JodliDev on 17.03.2022.
  */
-actual class FileOpener {
+actual object FileOpener {
 	actual fun deleteFile(path: String): Boolean {
 		val file = File(path)
 		return file.delete()

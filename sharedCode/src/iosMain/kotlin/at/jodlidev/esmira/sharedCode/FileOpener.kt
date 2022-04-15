@@ -8,7 +8,7 @@ import platform.posix.memcpy
 /**
  * Created by JodliDev on 17.03.2022.
  */
-actual class FileOpener {
+actual object FileOpener {
 	private fun getPath(fileName: String): String {
 		val documentPath = NSFileManager.defaultManager.URLsForDirectory(NSDocumentDirectory, NSUserDomainMask)[0] as NSURL
 		return "${documentPath.path}/$fileName"

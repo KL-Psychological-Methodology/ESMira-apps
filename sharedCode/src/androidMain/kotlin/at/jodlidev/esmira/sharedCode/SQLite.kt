@@ -1,4 +1,4 @@
-package at.jodlidev.esmira.androidNative
+package at.jodlidev.esmira.sharedCode
 
 import android.content.ContentValues
 import android.content.Context
@@ -15,7 +15,7 @@ import at.jodlidev.esmira.sharedCode.SQLiteValues
  * Created by JodliDev on 05.05.2020.
  */
 
-class SQLite internal constructor(context: Context) : SQLiteInterface, SQLiteOpenHelper(context, DbLogic.DATABASE_NAME, null, DbLogic.DATABASE_VERSION) {
+class SQLite constructor(context: Context?, name: String? = DbLogic.DATABASE_NAME) : SQLiteInterface, SQLiteOpenHelper(context, name, null, DbLogic.DATABASE_VERSION) {
 	
 	private class DirectWrapper(private val db: SQLiteDatabase) : SQLiteInterface {
 		override fun select(
