@@ -73,8 +73,10 @@ class ObservedVariable internal constructor() {
 		values.putLong(KEY_TIME_INTERVAL, timeInterval)
 		if(exists)
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
-		else
+		else {
 			id = db.insert(TABLE, values)
+			exists = true
+		}
 	}
 	
 	private fun stringToDouble(s: String): Double {
@@ -86,41 +88,46 @@ class ObservedVariable internal constructor() {
 		}
 	}
 	
-	fun createStatistic(responses: Map<String, JsonElement>) { //the logic of this function is pretty slow and the same condition-JSON is interpreted every time - but it should not matter
-		var conditionIsMet = true
-		if(conditionType != Condition.TYPE_ALL) {
+	//internal for testing
+	internal fun checkCondition(responses: Map<String, JsonElement>): Boolean {
+		//the logic of this function is pretty slow and the same condition-JSON is interpreted every time - but it should not matter
+		if(conditionType == Condition.TYPE_ALL)
+			return true
+		
+		val conditions = DbLogic.getJsonConfig().decodeFromString<List<Condition>>(conditionsJson)
+		val conditionTypeIsOr = conditionType == Condition.TYPE_OR
+		val conditionTypeIsAnd = conditionType == Condition.TYPE_AND
+		val conditionIsMet = !conditionTypeIsOr
+		
+		
+		for(condition in conditions) {
+			val rawResponse = responses[condition.key]!!
+			//Note: JsonPrimitive.toString() adds quotes around value. So we get the value directly
+			val response = if(rawResponse.jsonPrimitive.doubleOrNull != null) rawResponse.jsonPrimitive.double.toString() else rawResponse.jsonPrimitive.content
+			val conditionValue = if(condition.value.toDoubleOrNull() != null) condition.value.toDouble().toString() else condition.value
 			
-			val conditions = DbLogic.getJsonConfig().decodeFromString<List<Condition>>(conditionsJson)
-			val conditionTypeIsOr = conditionType == Condition.TYPE_OR
-			val conditionTypeIsAnd = conditionType == Condition.TYPE_AND
-			conditionIsMet = !conditionTypeIsOr
-			
-			
-			for(condition in conditions) {
-				var isTrue: Boolean
-				val response = responses[condition.key].toString()
-				val conditionValue = condition.value
-
-				isTrue = when(condition.operator) {
-					Condition.OPERATOR_EQUAL -> response == conditionValue
-					Condition.OPERATOR_UNEQUAL -> response != conditionValue
-					Condition.OPERATOR_GREATER -> stringToDouble(response) >= stringToDouble(conditionValue)
-					Condition.OPERATOR_LESS -> stringToDouble(response) <= stringToDouble(conditionValue)
-					else -> true
-				}
-				if(isTrue) {
-					if(conditionTypeIsOr) {
-						conditionIsMet = true
-						break
-					}
-				}
-				else if(conditionTypeIsAnd) {
-					conditionIsMet = false
-					break
+			val isTrue = when(condition.operator) {
+				Condition.OPERATOR_EQUAL -> response == conditionValue
+				Condition.OPERATOR_UNEQUAL -> response != conditionValue
+				Condition.OPERATOR_GREATER -> stringToDouble(response) >= stringToDouble(conditionValue)
+				Condition.OPERATOR_LESS -> stringToDouble(response) <= stringToDouble(conditionValue)
+				else -> true
+			}
+			if(isTrue) {
+				if(conditionTypeIsOr) {
+					return true
 				}
 			}
+			else if(conditionTypeIsAnd) {
+				return false
+			}
 		}
-		if(conditionIsMet) {
+		
+		return conditionIsMet
+	}
+	
+	fun createStatistic(responses: Map<String, JsonElement>) {
+		if(checkCondition(responses)) {
 			when(storageType) {
 				STORAGE_TYPE_TIMED -> {
 					val content = responses[variableName]?.jsonPrimitive?.content ?: ""
@@ -128,7 +135,7 @@ class ObservedVariable internal constructor() {
 					StatisticData_timed.getInstance(this, num).save()
 				}
 				STORAGE_TYPE_FREQ_DISTR ->
-//					StatisticData_perValue.getInstance(this, responses[variableName].toString()).save()
+					//Note: JsonPrimitive.toString() adds quotes around value. So we get the value directly
 					StatisticData_perValue.getInstance(this, responses[variableName]?.jsonPrimitive?.content ?: "").save()
 			}
 		}

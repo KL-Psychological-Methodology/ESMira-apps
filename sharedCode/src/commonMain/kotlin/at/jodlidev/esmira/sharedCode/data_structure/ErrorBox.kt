@@ -148,7 +148,7 @@ class ErrorBox {
 		}
 		
 		fun error(title: String, msg: String) {
-			add("$title (${NativeLink.smartphoneData.appVersion})", SEVERITY_ERROR, msg)
+			add(title, SEVERITY_ERROR, msg)
 			NativeLink.dialogOpener.errorReport()
 		}
 		
@@ -156,8 +156,8 @@ class ErrorBox {
 			error(title, "$msg\n${exceptionToString(e)}")
 		}
 		
-		fun add(title: String, severity: Int, msg: String) {
-			val error = ErrorBox(title, severity, msg)
+		private fun add(title: String, severity: Int, msg: String) {
+			val error = ErrorBox("$title (${NativeLink.smartphoneData.appVersion})", severity, msg)
 			println("${error.timestamp}: $msg")
 			error.save()
 		}

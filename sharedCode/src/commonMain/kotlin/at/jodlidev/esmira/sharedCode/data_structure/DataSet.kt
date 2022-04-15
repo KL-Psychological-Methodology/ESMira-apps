@@ -11,9 +11,7 @@ import kotlinx.serialization.json.*
  * Created by JodliDev on 17.04.2019.
  */
 @Serializable
-class DataSet internal constructor(
-	internal var eventType: String
-) {
+class DataSet {
 	enum class STATES {
 		NOT_SYNCED,
 		SYNCED,
@@ -23,13 +21,14 @@ class DataSet internal constructor(
 	@SerialName("dataSetId") var id: Long = 0
 	@SerialName("studyId") private var studyWebId: Long = 0
 	
-	private var studyVersion = 0
-	private var studySubVersion = 0
-	private var studyLang = ""
-	lateinit var accessKey: String
-	private var questionnaireName: String = ""
-	private var questionnaireInternalId: Long = -1
-	private lateinit var timezone: String
+	private val eventType: String
+	private val studyVersion: Int
+	private val studySubVersion: Int
+	private val studyLang: String
+	private val accessKey: String
+	private val questionnaireName: String
+	private val questionnaireInternalId: Long
+	private val timezone: String
 	var responseTime: Long = 0
 	@SerialName("responses") private var responseTemp: MutableMap<String, JsonElement> = HashMap() //not in db. Just used to fill data and then create a response-string
 	
@@ -54,7 +53,7 @@ class DataSet internal constructor(
 		}
 	var reupload = false //not in db. Mainly for server. Is true when synced == STATES.NOT_SYNCED_SERVER_ERROR
 	
-	internal constructor(c: SQLiteCursor): this(eventType = c.getString(12)) {
+	internal constructor(c: SQLiteCursor) {
 		id = c.getLong(0)
 		studyId = c.getLong(1)
 		studyWebId = c.getLong(2)
@@ -67,47 +66,52 @@ class DataSet internal constructor(
 		studyLang = c.getString(9)
 		timezone = c.getString(10)
 		responseTime = c.getLong(11)
-		//eventType is in constructor^^^^
+		eventType = c.getString(12)
 		setResponses(c.getString(13))
 		_synced = STATES.values()[c.getInt(14)]
 		token = c.getLong(15)
 		reupload = _synced == STATES.NOT_SYNCED_SERVER_ERROR
 	}
 	
-	constructor(type: String, study: Study): this(eventType = type) {
-		initStudy(study)
+	
+	constructor(
+		eventType: String,
+		study: Study,
+		questionnaireName: String,
+		questionnaireId: Long,
+		questionnaireInternalId: Long
+	) {
+		this.questionnaireName = questionnaireName
+		this.questionnaireId = questionnaireId
+		this.questionnaireInternalId = questionnaireInternalId
+		this.eventType = eventType
+		this.studyId = study.id
+		this.studyWebId = study.webId
+		this.studyVersion = study.version
+		this.studySubVersion = study.subVersion
+		this.serverUrl = study.serverUrl
+		this.accessKey = study.accessKey
+		this.studyLang = study.lang
+		this.responseTime = NativeLink.getNowMillis()
+		this.timezone = NativeLink.getTimezone()
 	}
 	
-	constructor(type: String, questionnaire: Questionnaire): this(eventType = type) {
-		questionnaireName = questionnaire.title
+	constructor(eventType: String, study: Study): this(
+		eventType = eventType,
+		study = study,
+		questionnaireName = "",
+		questionnaireId = -1,
+		questionnaireInternalId = -1
+	)
+	
+	constructor(eventType: String, questionnaire: Questionnaire): this(
+		eventType = eventType,
+		study = DbLogic.getStudy(questionnaire.studyId)!!,
+		questionnaireName = questionnaire.title,
+		questionnaireId = questionnaire.id,
 		questionnaireInternalId = questionnaire.internalId
-		questionnaireId = questionnaire.id
+	) {
 		studyWebId = questionnaire.studyWebId //not needed because init() sets this too, but if study is not found, it will be helpful for the error report
-		initStudy(DbLogic.getStudy(questionnaire.studyId))
-	}
-	
-	private fun initStudy(study: Study?) {
-		if(study != null) {
-			studyId = study.id
-			studyWebId = study.webId
-			studyVersion = study.version
-			studySubVersion = study.subVersion
-			serverUrl = study.serverUrl
-			accessKey = study.accessKey
-			studyLang = study.lang
-		}
-		else {
-			ErrorBox.error(
-				"DataSet",
-				"DataSet is not connected to a study (study_id: $studyWebId, Questionnaire: $questionnaireName)!"
-			)
-		}
-		responseTime = NativeLink.getNowMillis()
-		timezone = NativeLink.getTimezone()
-	}
-	
-	fun getResponseString(): String {
-		return JsonObject(responseTemp).toString()
 	}
 	
 	fun setResponses(json: String) {
@@ -115,15 +119,9 @@ class DataSet internal constructor(
 			responseTemp = DbLogic.getJsonConfig().decodeFromString<Map<String, JsonElement>>(json).toMutableMap()
 	}
 	
-	fun addResponseData(key: String, value: Long) {
-		responseTemp[key] = JsonPrimitive(value.toString())
-	}
-	fun addResponseData(key: String, value: Int) {
-		responseTemp[key] = JsonPrimitive(value.toString())
-	}
-	fun addResponseData(key: String, value: Boolean) {
-		responseTemp[key] = JsonPrimitive(value.toString())
-	}
+	fun addResponseData(key: String, value: Long) = addResponseData(key, value.toString())
+	fun addResponseData(key: String, value: Int) = addResponseData(key, value.toString())
+	fun addResponseData(key: String, value: Boolean) = addResponseData(key, value.toString())
 	fun addResponseData(key: String, value: String) {
 		responseTemp[key] = JsonPrimitive(value)
 	}
@@ -132,7 +130,7 @@ class DataSet internal constructor(
 	fun saveQuestionnaire(questionnaire: Questionnaire, formStarted: Long) {
 		responseTime = NativeLink.getNowMillis()
 		addResponseData("formDuration", responseTime - formStarted)
-		addResponseData("lastInvitation", questionnaire.lastNotificationUtc)
+		addResponseData("lastInvitation", questionnaire.lastNotification)
 		
 		for(score in questionnaire.sumScores) { //needs to happen before we create statistics in case it is used for a statistic
 			var sum = 0
@@ -173,7 +171,6 @@ class DataSet internal constructor(
 		}
 		
 		save()
-		
 	}
 	
 	private fun save(study: Study? = null): Boolean {
@@ -182,7 +179,6 @@ class DataSet internal constructor(
 		
 		if((study ?: DbLogic.getStudy(studyId))?.isEventUploaded(eventType) != false) {
 			addResponseData("osVersion", NativeLink.smartphoneData.osVersion)
-			addResponseData("os_version", NativeLink.smartphoneData.osVersion) //TODO: Remove when server is version 9
 			addResponseData("model", NativeLink.smartphoneData.model)
 			addResponseData("manufacturer", NativeLink.smartphoneData.manufacturer)
 			
@@ -281,14 +277,12 @@ class DataSet internal constructor(
 		
 		fun createScheduleChangedDataSet(schedule: Schedule) {
 			val dataSet = DataSet(TYPE_SCHEDULE_CHANGED, schedule.getQuestionnaire())
-			dataSet.addResponseData("new_schedule", schedule.toDescString()) //TODO: remove when Server is version 9
 			dataSet.addResponseData("newSchedule", schedule.toDescString())
 			dataSet.save()
 		}
 		
 		fun createActionSentDataSet(type: String, questionnaire: Questionnaire, scheduledToTimestamp: Long) {
 			val dataSet = DataSet(type, questionnaire)
-			dataSet.addResponseData("notification_scheduled", scheduledToTimestamp) //TODO: remove when Server is version 10
 			dataSet.addResponseData("actionScheduledTo", scheduledToTimestamp)
 			dataSet.save()
 		}

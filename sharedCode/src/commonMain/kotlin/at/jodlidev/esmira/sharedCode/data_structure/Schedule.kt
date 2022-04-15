@@ -111,7 +111,7 @@ class Schedule internal constructor() {
 		val questionnaireId = actionTrigger.questionnaire.id
 		val values = db.getValueBox()
 		values.putLong(KEY_ACTION_TRIGGER, actionTrigger.id)
-		values.putInt(KEY_LAST_SCHEDULED, 0) //is always 0 when newly created or updated (and emptied in the process)
+		values.putLong(KEY_LAST_SCHEDULED, 0) //is always 0 when newly created or updated (and emptied in the process)
 		values.putBoolean(KEY_EDITABLE, userEditable)
 		values.putLong(KEY_QUESTIONNAIRE_ID, questionnaireId)
 		values.putInt(KEY_REPEAT_RATE, dailyRepeatRate)

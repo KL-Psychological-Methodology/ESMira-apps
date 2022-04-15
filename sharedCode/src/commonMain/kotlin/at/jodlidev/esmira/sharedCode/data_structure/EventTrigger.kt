@@ -8,9 +8,9 @@ import kotlinx.serialization.Serializable
  * Created by JodliDev on 29.05.2019.
  */
 @Serializable
-class EventTrigger internal constructor() {
+class EventTrigger {
 	var label: String = "Event"
-	var cueCode: String = "joined"
+	var cueCode: String = DataSet.TYPE_JOIN
 	var randomDelay = false
 	var delaySec = 0
 	var delayMinimumSec = 0
@@ -25,7 +25,7 @@ class EventTrigger internal constructor() {
 
 	internal var specificQuestionnaireInternalId: Long = -1
 	
-	internal constructor(actionTrigger: ActionTrigger, c: SQLiteCursor): this() {
+	internal constructor(actionTrigger: ActionTrigger, c: SQLiteCursor) {
 		getMinimalCursor(c)
 		actionTriggerId = actionTrigger.id
 		studyId = actionTrigger.studyId
@@ -33,7 +33,7 @@ class EventTrigger internal constructor() {
 		actionString = actionTrigger.actionsString
 	}
 	
-	internal constructor(c: SQLiteCursor): this() {
+	internal constructor(c: SQLiteCursor) {
 		getMinimalCursor(c)
 		actionTriggerId = c.getLong(8)
 		studyId = c.getLong(9)

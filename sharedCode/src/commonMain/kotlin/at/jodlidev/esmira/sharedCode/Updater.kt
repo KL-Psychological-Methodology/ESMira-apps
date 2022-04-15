@@ -11,7 +11,7 @@ import kotlinx.serialization.json.*
  */
 internal object Updater {
 	const val EXPECTED_SERVER_VERSION: Int = 10
-	const val DATABASE_VERSION = 34
+	const val DATABASE_VERSION = 35
 	const val LIBRARY_VERSION = 17 //this is mainly used for iOS so we can check that changes in the library have been used in the C library
 	
 	fun updateSQL(db: SQLiteInterface, oldVersion: Int) {
@@ -426,6 +426,30 @@ internal object Updater {
 			identifier INTEGER,
 			uploadType INTEGER,
 			FOREIGN KEY(study_id) REFERENCES studies(_id))""")
+		}
+		if(oldVersion <= 34) {
+			db.execSQL("ALTER TABLE studies ADD COLUMN joinedTimestamp INTEGER DEFAULT 0;")
+			
+			val c = db.select(
+				"studies",
+				arrayOf("_id", "strftime('%s', joined)"),
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			)
+			
+			while(c.moveToNext()) {
+				val id = c.getLong(0)
+				val joined = c.getLong(1)
+				
+				val values = db.getValueBox()
+				values.putLong("joinedTimestamp", joined)
+				
+				db.update("studies", values, "_id = ?", arrayOf(id.toString()))
+			}
 		}
 	}
 	

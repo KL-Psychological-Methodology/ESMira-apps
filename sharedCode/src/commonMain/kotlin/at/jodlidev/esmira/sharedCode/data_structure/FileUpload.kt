@@ -1,6 +1,7 @@
 package at.jodlidev.esmira.sharedCode.data_structure
 
 import at.jodlidev.esmira.sharedCode.DbLogic
+import at.jodlidev.esmira.sharedCode.FileOpener
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.SQLiteCursor
 import kotlinx.serialization.*
@@ -76,7 +77,7 @@ class FileUpload {
 		}
 	}
 	internal fun delete() {
-		if(!NativeLink.fileOpener.deleteFile(filePath)) {
+		if(!FileOpener.deleteFile(filePath)) {
 			setTemporary()
 			ErrorBox.error("FileOpener", "Could not delete temporary file $filePath ($identifier)")
 			return
@@ -86,10 +87,10 @@ class FileUpload {
 	}
 	
 	fun getFile(): ByteArray {
-		return NativeLink.fileOpener.getFile(filePath)
+		return FileOpener.getFile(filePath)
 	}
 	fun getFileSize(): Long {
-		return NativeLink.fileOpener.getFileSize(filePath)
+		return FileOpener.getFileSize(filePath)
 	}
 	
 	companion object {

@@ -43,7 +43,7 @@ class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_a
 		}
 		
 		val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-		val lastQuestionnaireFrom = questionnaire.lastCompletedUtc
+		val lastQuestionnaireFrom = questionnaire.lastCompleted
 		val nowMs = System.currentTimeMillis()
 		
 		val cal = Calendar.getInstance()

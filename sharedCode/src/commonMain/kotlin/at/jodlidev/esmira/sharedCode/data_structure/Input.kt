@@ -13,6 +13,13 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 class Input internal constructor( ) {
+	enum class TYPES {
+		text, binary, va_scale, likert, list_single, list_multiple, number, text_input, time,
+		time_old,  //TODO: can be removed when Selinas study is done
+		date,
+		date_old,  //TODO: can be removed when Selinas study is done
+		datetime, dynamic_input, app_usage, video, image, photo, ERROR
+	}
 	var name: String = "input"
 	private var text: String = ""
 	var required: Boolean = false
@@ -59,10 +66,12 @@ class Input internal constructor( ) {
 			}
 		}
 	
-	
 	val listChoices: List<String> = ArrayList()
 	val subInputs: List<Input> = ArrayList()
 	@Transient val addedFiles : MutableList<FileUpload> = ArrayList()
+	
+	@Transient private lateinit var dynamicInput: Input
+	
 	
 	fun addImage(filePath: String, studyId: Long) {
 		val study = DbLogic.getStudy(studyId) ?: return
@@ -70,16 +79,6 @@ class Input internal constructor( ) {
 		fileUpload.save()
 		addedFiles.add(fileUpload)
 		value = fileUpload.identifier.toString()
-	}
-	
-	@Transient private lateinit var dynamicInput: Input
-	
-	enum class TYPES {
-		text, binary, va_scale, likert, list_single, list_multiple, number, text_input, time,
-		time_old,  //TODO: can be removed when Selinas study is done
-		date,
-		date_old,  //TODO: can be removed when Selinas study is done
-		datetime, dynamic_input, app_usage, video, image, photo, ERROR
 	}
 	
 	fun getDynamicInput(questionnaire: Questionnaire): Input {
@@ -90,7 +89,7 @@ class Input internal constructor( ) {
 		val variable = name
 		val length = subInputs.size
 		var lastIndexBox = DbLogic.getLastDynamicTextIndex(questionnaire.id, variable)
-		if(lastIndexBox == null || lastIndexBox.createdTime < questionnaire.lastCompletedUtc || lastIndexBox.index >= length) { //current_index can be bigger than length when the study was updated
+		if(lastIndexBox == null || lastIndexBox.createdTime < questionnaire.lastCompleted || lastIndexBox.index >= length) { //lastIndexBox.index can be bigger than length when the study was updated
 			if(random) {
 				val checkedChoices = DbLogic.getAvailableListForDynamicText(questionnaire.id, variable, length)
 				val index = checkedChoices.indices.random()

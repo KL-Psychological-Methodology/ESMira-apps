@@ -13,7 +13,7 @@ import kotlin.math.abs
  * Created by JodliDev on 15.04.2019.
  */
 @Serializable
-class ActionTrigger internal constructor() {
+class ActionTrigger {
 	@SerialName("actions") @Serializable(with = JsonToStringSerializer::class) var actionsString: String = "[]"
 	
 	@Transient var exists = false
@@ -21,7 +21,16 @@ class ActionTrigger internal constructor() {
 	@Transient var id: Long = -1
 	@Transient var enabled = false
 	@Transient var studyId: Long = -1
-	@Transient lateinit var questionnaire: Questionnaire
+	
+	@Transient var questionnaireId: Long = -1
+	@Transient private lateinit var _questionnaire: Questionnaire
+	val questionnaire: Questionnaire
+		get() {
+			if(!this::_questionnaire.isInitialized)
+				_questionnaire = DbLogic.getQuestionnaire(questionnaireId)
+					?: throw Exception("ActionTrigger (id=$id) had an error. Questionnaire (id=$questionnaireId) is null!")
+			return _questionnaire
+		}
 	
 	@SerialName("eventTriggers") private var jsonEventTriggers: List<EventTrigger> = ArrayList()
 	@Transient private lateinit var _eventTriggers: List<EventTrigger>
@@ -47,27 +56,24 @@ class ActionTrigger internal constructor() {
 		return _schedules
 	}
 	
-	constructor(questionnaire: Questionnaire, c: SQLiteCursor) : this() {
-		initCursor(c)
-		this.questionnaire = questionnaire
-	}
-	constructor(c: SQLiteCursor) : this() {
-		initCursor(c)
-		this.questionnaire = DbLogic.getQuestionnaire(c.getLong(4)) ?: throw Exception("ActionTrigger (id=$id) had an error. Questionnaire (id=${c.getLong(4)}) is null!")
-	}
 	
-	internal fun bindParent(studyId: Long, questionnaire: Questionnaire) {
-		this.studyId = studyId
-		this.questionnaire = questionnaire
-	}
-	
-	private fun initCursor(c: SQLiteCursor) {
+	constructor(c: SQLiteCursor) {
 		id = c.getLong(0)
 		enabled = c.getBoolean(1)
 		actionsString = c.getString(2)
 		studyId = c.getLong(3)
+		questionnaireId = c.getLong(4)
 		exists = true
 		fromJson = false
+	}
+	constructor(questionnaire: Questionnaire, c: SQLiteCursor): this(c) {
+		this._questionnaire = questionnaire
+	}
+	
+	internal fun bindParent(studyId: Long, questionnaire: Questionnaire) {
+		this.studyId = studyId
+		this._questionnaire = questionnaire
+		this.questionnaireId = questionnaire.id
 	}
 	
 	
@@ -215,7 +221,8 @@ class ActionTrigger internal constructor() {
 						schedule.empty(db)
 					}
 					db.delete(Schedule.TABLE, Schedule.KEY_ACTION_TRIGGER + " = ?", arrayOf(id.toString()))
-					NativeLink.notifications.fireSchedulesChanged(DbLogic.getStudy(studyId)!!)
+					val study = DbLogic.getStudy(studyId)!!
+					NativeLink.notifications.fireSchedulesChanged(study)
 					
 					_schedules = jsonSchedules
 					for(schedule in schedules) {

@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
  * Created by JodliDev on 04.05.2020.
  */
 @Serializable
-class Questionnaire internal constructor() {
+class Questionnaire {
 	@Transient var exists = false
 	@Transient var fromJson = true
 	
@@ -18,8 +18,8 @@ class Questionnaire internal constructor() {
 	@Transient var studyId: Long = -1
 	@Transient var studyWebId: Long = -2
 	@Transient var enabled = true
-	@Transient var lastNotificationUtc: Long = 0
-	@Transient var lastCompletedUtc: Long = 0
+	@Transient var lastNotification: Long = 0
+	@Transient var lastCompleted: Long = 0
 	
 	var title: String = "Error"
 	var internalId: Long = -1
@@ -84,13 +84,13 @@ class Questionnaire internal constructor() {
 	}
 
 
-	internal constructor(c: SQLiteCursor): this() {
+	internal constructor(c: SQLiteCursor) {
 		id = c.getLong(0)
 		studyId = c.getLong(1)
 		studyWebId = c.getLong(2)
 		enabled = c.getBoolean(3)
-		lastNotificationUtc = c.getLong(4)
-		lastCompletedUtc = c.getLong(5)
+		lastNotification = c.getLong(4)
+		lastCompleted = c.getLong(5)
 		
 		durationPeriodDays = c.getInt(6)
 		durationStartingAfterDays = c.getInt(7)
@@ -166,7 +166,7 @@ class Questionnaire internal constructor() {
 		values.putBoolean(KEY_COMPLETABLE_AT_SPECIFIC_TIME, completableAtSpecificTime)
 		values.putInt(KEY_COMPLETABLE_AT_SPECIFIC_TIME_START, completableAtSpecificTimeStart)
 		values.putInt(KEY_COMPLETABLE_AT_SPECIFIC_TIME_END, completableAtSpecificTimeEnd)
-		values.putString(KEY_NAME, title)
+		values.putString(KEY_TITLE, title)
 		values.putLong(KEY_INTERNAL_ID, internalId)
 		values.putString(KEY_PAGES, pagesString)
 		values.putString(KEY_SUMSCORES, sumScoresString)
@@ -232,7 +232,6 @@ class Questionnaire internal constructor() {
 			nextAlarm.delete()
 			nextAlarm = DbLogic.getNextAlarm(this)
 		}
-
 	}
 	@Suppress("unused")
 	fun checkQuestionnaire(pageI: Int): Int {
@@ -245,23 +244,23 @@ class Questionnaire internal constructor() {
 	}
 	
 	fun updateLastNotification(timestamp: Long = NativeLink.getNowMillis()) { //we need this because we don't want to recreate all triggers again
-		lastNotificationUtc = timestamp
+		lastNotification = timestamp
 		if(exists) {
 			val db = NativeLink.sql
 			val values = db.getValueBox()
-			values.putLong(KEY_LAST_NOTIFICATION, lastNotificationUtc)
+			values.putLong(KEY_LAST_NOTIFICATION, lastNotification)
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
 		}
 	}
 	
 	@Suppress("unused") fun updateLastCompleted(reset_last_notification: Boolean) { //we need this because we dont want to recreate all triggers again
-		lastCompletedUtc = NativeLink.getNowMillis()
+		lastCompleted = NativeLink.getNowMillis()
 		if(exists) {
 			val db = NativeLink.sql
 			val values = db.getValueBox()
-			values.putLong(KEY_LAST_COMPLETED, lastCompletedUtc)
+			values.putLong(KEY_LAST_COMPLETED, lastCompleted)
 			if(reset_last_notification) {
-				lastNotificationUtc = 0
+				lastNotification = 0
 				values.putInt(KEY_LAST_NOTIFICATION, 0)
 			}
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -343,18 +342,13 @@ class Questionnaire internal constructor() {
 		return false
 	}
 	fun hasEditableSchedules(): Boolean {
-		val c = NativeLink.sql.select(
-			Schedule.TABLE,
-			arrayOf(Schedule.KEY_ID),
-			"${Schedule.KEY_QUESTIONNAIRE_ID} = ? AND ${Schedule.KEY_EDITABLE} = 1", arrayOf(id.toString()),
-			null,
-			null,
-			null,
-			"1"
-		)
-		val r = c.moveToFirst()
-		c.close()
-		return r
+		for(trigger in actionTriggers) {
+			for(schedule in trigger.schedules) {
+				if(schedule.userEditable)
+					return true
+			}
+		}
+		return false
 	}
 	private fun hasQuestionnaire(): Boolean {
 		return pages.isNotEmpty()
@@ -377,7 +371,7 @@ class Questionnaire internal constructor() {
 		return (durationCheck
 				&& ((durationStart == 0L || now >= durationStart)
 				&& (durationEnd == 0L || now <= durationEnd))
-				&& (!completableOnce || lastCompletedUtc == 0L))
+				&& (!completableOnce || lastCompleted == 0L))
 	}
 	
 	fun willBeActiveIn(study: Study? = DbLogic.getStudy(studyId)): Long {
@@ -389,50 +383,10 @@ class Questionnaire internal constructor() {
 	
 	fun canBeFilledOut(now: Long = NativeLink.getNowMillis()): Boolean { //if there are any questionnaires at the current time
 		val fromMidnight = now - NativeLink.getMidnightMillis()
-//		val completedCheck = when(completeRepeatType) {
-//			COMPLETE_REPEAT_TYPE_NO_REPEAT ->
-//				lastCompletedUtc == 0L
-//			COMPLETE_REPEAT_TYPE_ONCE_PER_NOTIFICATION ->
-//				lastNotificationUtc >= lastCompletedUtc
-//			COMPLETE_REPEAT_TYPE_MINUTES ->
-//				now >= lastCompletedUtc + completeRepeatMinutes * 60 * 1000
-//			COMPLETE_REPEAT_TYPE_ALWAYS ->
-//				true
-//			else -> {
-//				ErrorBox.warn("Questionnaire", "Unsupported complete_repeat_type ($completeRepeatType) in Questionnaire: $name")
-//				true
-//			}
-//		}
-//		val timeConstraintCheck = when(timeConstraintType) {
-//			TIME_CONSTRAINT_TYPE_TIMEPERIOD ->
-//				if(timeConstraintStart != -1 && timeConstraintEnd != -1) {
-//					if(timeConstraintStart > timeConstraintEnd)
-//						fromMidnight >= timeConstraintStart || fromMidnight <= timeConstraintEnd
-//					else
-//						fromMidnight in timeConstraintStart .. timeConstraintEnd
-//				}
-//				else
-//					if(timeConstraintStart != -1)
-//						fromMidnight >= timeConstraintStart
-//					else if(timeConstraintEnd != -1)
-//						fromMidnight <= timeConstraintEnd
-//					else
-//						true
-//			TIME_CONSTRAINT_TYPE_AFTER_NOTIFICATION ->
-//				timeConstraintPeriodMinutes == 0 && lastNotificationUtc != 0L || now - lastNotificationUtc <= timeConstraintPeriodMinutes * 60 * 1000
-//			TIME_CONSTRAINT_TYPE_NONE ->
-//				true
-//			else -> {
-//				ErrorBox.warn("Questionnaire", "Unsupported timeConstraint_type ($timeConstraintType) in Questionnaire: $name")
-//				true
-//			}
-//		}
-//		return hasQuestionnaire() && isActive() && completedCheck && timeConstraintCheck && (!isIOS() || publishedIOS) && (!isAndroid() || publishedAndroid)
-		
 		
 		val oncePerNotification = (!completableOncePerNotification ||
-				(lastNotificationUtc != 0L && lastNotificationUtc >= lastCompletedUtc &&
-						(completableMinutesAfterNotification == 0 || now - lastNotificationUtc <= completableMinutesAfterNotification * 60 * 1000)
+				(lastNotification != 0L && lastNotification >= lastCompleted &&
+						(completableMinutesAfterNotification == 0 || now - lastNotification <= completableMinutesAfterNotification * 60 * 1000)
 						)
 				)
 		val specificTime = !completableAtSpecificTime ||
@@ -449,7 +403,7 @@ class Questionnaire internal constructor() {
 						fromMidnight <= completableAtSpecificTimeEnd
 					else
 						true
-		val completionFrequency = (!limitCompletionFrequency || (now >= lastCompletedUtc + completionFrequencyMinutes * 60 * 1000))
+		val completionFrequency = (!limitCompletionFrequency || (now >= lastCompleted + completionFrequencyMinutes * 60 * 1000))
 
 		return hasQuestionnaire() && isActive() &&
 				oncePerNotification &&
@@ -496,7 +450,7 @@ class Questionnaire internal constructor() {
 		const val KEY_COMPLETABLE_AT_SPECIFIC_TIME_START = "completableAtSpecificTimeStart"
 		const val KEY_COMPLETABLE_AT_SPECIFIC_TIME_END = "completableAtSpecificTimeEnd"
 
-		const val KEY_NAME = "title"
+		const val KEY_TITLE = "title"
 		const val KEY_INTERNAL_ID = "internal_id"
 		const val KEY_PAGES = "pages"
 		const val KEY_SUMSCORES = "sumScores"
@@ -531,36 +485,12 @@ class Questionnaire internal constructor() {
 			KEY_COMPLETABLE_AT_SPECIFIC_TIME,
 			KEY_COMPLETABLE_AT_SPECIFIC_TIME_START,
 			KEY_COMPLETABLE_AT_SPECIFIC_TIME_END,
-			KEY_NAME,
+			KEY_TITLE,
 			KEY_INTERNAL_ID,
 			KEY_PAGES,
 			KEY_SUMSCORES,
 			KEY_PUBLISHEDANDROID,
 			KEY_PUBLISHEDIOS
 		)
-//		val COLUMNS = arrayOf(
-//			KEY_ID,
-//			KEY_STUDY_ID,
-//			KEY_STUDY_WEB_ID,
-//			KEY_ENABLED,
-//			KEY_LAST_NOTIFICATION,
-//			KEY_LAST_COMPLETED,
-//			KEY_COMPLETE_REPEAT_TYPE,
-//			KEY_COMPLETE_REPEAT_MINUTES,
-//			KEY_DURATION_PERIOD_DAYS,
-//			KEY_DURATION_STARTING_AFTER_DAYS,
-//			KEY_DURATION_START,
-//			KEY_DURATION_END,
-//			KEY_TIME_CONSTRAINT_TYPE,
-//			KEY_TIME_CONSTRAINT_START,
-//			KEY_TIME_CONSTRAINT_END,
-//			KEY_TIME_CONSTRAINT_PERIOD,
-//			KEY_NAME,
-//			KEY_INTERNAL_ID,
-//			KEY_PAGES,
-//			KEY_SUMSCORES,
-//			KEY_PUBLISHEDANDROID,
-//			KEY_PUBLISHEDIOS
-//		)
 	}
 }

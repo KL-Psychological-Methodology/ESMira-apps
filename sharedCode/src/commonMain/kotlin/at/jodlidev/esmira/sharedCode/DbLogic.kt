@@ -44,7 +44,7 @@ object DbLogic {
 			${Study.KEY_VERSION} INTEGER,
 			${Study.KEY_SUB_VERSION} INTEGER,
 			${Study.KEY_LANG} TEXT DEFAULT '',
-			${Study.KEY_JOINED} INTEGER DEFAULT CURRENT_TIMESTAMP,
+			${Study.KEY_JOINED} INTEGER DEFAULT 0,
 			${Study.KEY_STATE} INTEGER DEFAULT ${Study.STATES.Pending.ordinal},
 			${Study.KEY_LAST_MSG_TIMESTAMP} INTEGER DEFAULT 0,
 			${Study.KEY_TITLE} TEXT,
@@ -99,7 +99,7 @@ object DbLogic {
 		
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${Questionnaire.TABLE} (
 			${Questionnaire.KEY_ID} INTEGER PRIMARY KEY,
-			${Questionnaire.KEY_NAME} TEXT,
+			${Questionnaire.KEY_TITLE} TEXT,
 			${Questionnaire.KEY_INTERNAL_ID} INTEGER,
 			${Questionnaire.KEY_STUDY_ID} INTEGER,
 			${Questionnaire.KEY_STUDY_WEB_ID} INTEGER,

@@ -125,13 +125,9 @@ class Study internal constructor(
 		return r
 	}
 	
-	private var publicStatistics: StatisticBox =
-		StatisticBox(
-			HashMap(),
-			""
-		) //only used by JSON
+	private var publicStatistics: StatisticBox = StatisticBox(HashMap(), "") //only used by JSON
 	@Transient
-	private lateinit var publicChartsJsonString: String //will be set in completeJSON() or from db
+	private lateinit var publicChartsJsonString: String //will be set in finishJSON() or from db
 	val publicCharts: List<ChartInfo> get() {
 		return try {
 			DbLogic.getJsonConfig().decodeFromString(publicChartsJsonString)
@@ -142,11 +138,7 @@ class Study internal constructor(
 		}
 	}
 	
-	private var personalStatistics: StatisticBox =
-		StatisticBox(
-			HashMap(),
-			""
-		) //only used by JSON
+	private var personalStatistics: StatisticBox = StatisticBox(HashMap(), "") //only used by JSON
 	@Transient
 	private lateinit var personalChartsJsonString: String //will be set in finishJSON() or from db
 	val personalCharts: List<ChartInfo> get() {
@@ -197,10 +189,10 @@ class Study internal constructor(
 	}
 	
 	@Transient
-	private lateinit var _actionTriggers: List<ActionTrigger>
+	private lateinit var _enabledActionTriggers: List<ActionTrigger>
 	@Suppress("unused")
-	val actionTriggers: List<ActionTrigger> get() { //only loaded from db
-		if(!this::_actionTriggers.isInitialized) {
+	val enabledActionTriggers: List<ActionTrigger> get() { //only loaded from db
+		if(!this::_enabledActionTriggers.isInitialized) {
 			val c = NativeLink.sql.select(
 				ActionTrigger.TABLE,
 				ActionTrigger.COLUMNS,
@@ -216,21 +208,19 @@ class Study internal constructor(
 			}
 			c.close()
 			
-			_actionTriggers = actionTriggers
+			_enabledActionTriggers = actionTriggers
 		}
-		return _actionTriggers
+		return _enabledActionTriggers
 	}
 	
 	@Transient
 	private lateinit var _editableSignalTimes: List<SignalTime>
 	@Suppress("unused")
 	val editableSignalTimes: List<SignalTime> get() { //only loaded from db
-		return if(this::_editableSignalTimes.isInitialized)
-			this._editableSignalTimes
-		else {
+		if(!this::_editableSignalTimes.isInitialized) {
 			val list = ArrayList<SignalTime>()
 			
-			for(trigger: ActionTrigger in actionTriggers) {
+			for(trigger: ActionTrigger in enabledActionTriggers) {
 				for(schedule: Schedule in trigger.schedules) {
 					if(!schedule.userEditable)
 						continue
@@ -240,21 +230,21 @@ class Study internal constructor(
 				}
 			}
 			this._editableSignalTimes = list
-			list
 		}
+		return this._editableSignalTimes
 	}
 	
 	
 	@Suppress("unused")
 	fun saveSchedules(rescheduleNow: Boolean): Boolean {
 		//make sure that there are no errors:
-		for(trigger in actionTriggers) {
+		for(trigger in enabledActionTriggers) {
 			if(trigger.schedulesAreFaulty())
 				return false
 		}
 		
 		//now we can save stuff:
-		for(trigger in actionTriggers) {
+		for(trigger in enabledActionTriggers) {
 			trigger.saveScheduleTimeFrames(rescheduleNow)
 		}
 		
@@ -279,7 +269,7 @@ class Study internal constructor(
 		return questionnaires
 	}
 	
-	private fun finishJSON(serverUrl: String, accessKey: String) {
+	internal fun finishJSON(serverUrl: String, accessKey: String) {
 		fromJson = true
 		this.serverUrl = serverUrl
 		this.accessKey = accessKey
@@ -384,7 +374,7 @@ class Study internal constructor(
 		return postInstallInstructions.isNotEmpty() || hasSchedules()
 	}
 	
-	private fun getOldLeftStudy(): Study? {
+	internal fun getOldLeftStudy(): Study? {
 		val c = NativeLink.sql.select(
 			TABLE,
 			COLUMNS,
@@ -438,11 +428,13 @@ class Study internal constructor(
 	fun join() {
 		ErrorBox.log("Study", "Joining study $title ($webId)")
 		state = STATES.Joined
+		joined = NativeLink.getNowMillis()
 		save()
+		DataSet.createShortDataSet(DataSet.TYPE_JOIN, this)
 		NativeLink.postponedActions.updateStudiesRegularly()
 	}
 	
-	fun save() {
+	internal fun save() {
 		val db = NativeLink.sql
 		val values = db.getValueBox()
 		values.putLong(KEY_WEB_ID, webId)
@@ -452,6 +444,7 @@ class Study internal constructor(
 		values.putInt(KEY_SUB_VERSION, subVersion)
 		values.putString(KEY_LANG, lang)
 		values.putInt(KEY_STATE, state.ordinal)
+		values.putLong(KEY_JOINED, joined)
 		values.putLong(KEY_LAST_MSG_TIMESTAMP, msgTimestamp)
 		values.putString(KEY_TITLE, title)
 		values.putString(KEY_DESC, studyDescription)
@@ -508,10 +501,8 @@ class Study internal constructor(
 			observedVariable.studyId = id //this is not needed because a newly created ObservedVariable already gets this study-object. But I feel safer leaving it in there
 			observedVariable.save()
 		}
-		if(!exists) {
-			DataSet.createShortDataSet(DataSet.TYPE_JOIN, this)
-			exists = true
-		}
+		
+		exists = true
 	}
 
 	fun saveMsgTimestamp(t: Long) {
@@ -595,7 +586,7 @@ class Study internal constructor(
 		const val KEY_VERSION = "version"
 		const val KEY_SUB_VERSION = "subVersion"
 		const val KEY_LANG = "study_lang"
-		const val KEY_JOINED = "joined"
+		const val KEY_JOINED = "joinedTimestamp"
 		const val KEY_STATE = "state"
 		const val KEY_LAST_MSG_TIMESTAMP = "msgTimestamp"
 		const val KEY_TITLE = "title"
@@ -633,15 +624,16 @@ class Study internal constructor(
 		)
 		
 		val defaultSettings = hashMapOf(
-			"rejoined" to false,
-			"invitation" to false,
-			"invitation_missed" to false,
-			"notification" to false,
-			"message" to false,
-			"study_message" to false,
-			"schedule_changed" to true,
-			"study_updated" to false,
-			"statistic_viewed" to false
+			DataSet.TYPE_REJOIN to false,
+			DataSet.TYPE_INVITATION to false,
+			DataSet.TYPE_INVITATION_MISSED to false,
+			DataSet.TYPE_NOTIFICATION to false,
+			DataSet.TYPE_MSG to false,
+			DataSet.TYPE_STUDY_MSG to false,
+			DataSet.TYPE_SCHEDULE_CHANGED to true,
+			DataSet.TYPE_STUDY_UPDATED to false,
+			DataSet.TYPE_STATISTIC_VIEWED to false,
+			DataSet.TYPE_ALARM_EXECUTED to false
 		)
 		
 		@Suppress("unused") fun newInstance(serverUrl: String, accessKey: String, json: String, checkUpdate: Boolean = true): Study {

@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  * Created by JodliDev on 04.06.2019.
  */
 @Serializable
-class SignalTime internal constructor() {
+class SignalTime {
 	var label: String = ""
 	var random = false
 	var randomFixed = false
@@ -26,21 +26,16 @@ class SignalTime internal constructor() {
 	
 	@Transient var timeHasChanged: Boolean = false //not in db for manual schedule changes
 	
-	@Transient lateinit var schedule: Schedule
+	@Transient private lateinit var _schedule: Schedule
+	val schedule: Schedule
+		get() {
+			if(!this::_schedule.isInitialized)
+				_schedule = DbLogic.getSchedule(scheduleId)
+					?: throw Exception("SignalTime \"$label\" (id=$id) had an error. Schedule (id=$scheduleId) is null!")
+			return _schedule
+		}
 	
-	constructor(c: SQLiteCursor): this() {
-		initCursor(c)
-		schedule = DbLogic.getSchedule(scheduleId) ?: throw Exception("SignalTime \"$label\" (id=$id) had an error. Schedule (id=$scheduleId) is null!")
-		exists = true
-	}
-	
-	constructor(c: SQLiteCursor, schedule: Schedule): this() {
-		initCursor(c)
-		this.schedule = schedule
-		exists = true
-	}
-	
-	private fun initCursor(c: SQLiteCursor) {
+	constructor(c: SQLiteCursor) {
 		id = c.getLong(0)
 		scheduleId = c.getLong(1)
 		questionnaireId = c.getLong(2)
@@ -53,19 +48,59 @@ class SignalTime internal constructor() {
 		endTimeOfDay = c.getInt(9)
 		originalStartTimeOfDay = c.getInt(10)
 		originalEndTimeOfDay = c.getInt(11)
+		exists = true
+	}
+	
+	constructor(c: SQLiteCursor, schedule: Schedule) : this(c) {
+		this._schedule = schedule
 	}
 	
 	fun bindParent(questionnaireId: Long, schedule: Schedule) {
 		this.scheduleId = schedule.id
 		this.questionnaireId = questionnaireId
-		this.schedule = schedule
+		this._schedule = schedule
 		
 		if(frequency == 0) //Should never happen. But it would break a lot (dividing by Zero and stuff). So we better play safe
 			frequency = 1
 	}
 	
 	fun isFaulty(): Boolean {
-		return random && endTimeOfDay - startTimeOfDay < (frequency * minutesBetween + minutesBetween) * 60000
+		return if(!random)
+			false
+		else if(frequency <= 1)
+			endTimeOfDay - startTimeOfDay < minutesBetween
+		else
+			endTimeOfDay - startTimeOfDay < (frequency * minutesBetween + minutesBetween) * 60000
+	}
+	fun isDifferent(other: SignalTime): Boolean {
+		val start: Int
+		val end: Int
+		if(exists) {
+			start = originalStartTimeOfDay
+			end = originalEndTimeOfDay
+		}
+		else { //originalStartTimeOfDay and originalEndTimeOfDay will get set when save() was called the first time. So it doesnt exist yet
+			start = startTimeOfDay
+			end = endTimeOfDay
+		}
+		val startOther: Int
+		val endOther: Int
+		if(other.exists) {
+			startOther = other.originalStartTimeOfDay
+			endOther = other.originalEndTimeOfDay
+		}
+		else {
+			startOther = startTimeOfDay
+			endOther = endTimeOfDay
+		}
+		
+		return label != other.label
+			|| random != other.random
+			|| randomFixed != other.randomFixed
+			|| frequency != other.frequency
+			|| minutesBetween != other.minutesBetween
+			|| start != startOther
+			|| end != endOther
 	}
 	
 	private fun correctStartEndPeriod() {
@@ -100,36 +135,6 @@ class SignalTime internal constructor() {
 		return NativeLink.formatTime(NativeLink.getMidnightMillis() + endTimeOfDay)
 	}
 	
-	fun isDifferent(other: SignalTime): Boolean {
-		val start: Int
-		val end: Int
-		if(exists) {
-			start = originalStartTimeOfDay
-			end = originalEndTimeOfDay
-		}
-		else { //originalStartTimeOfDay and originalEndTimeOfDay will get set when save() was called the first time. So it doesnt exist yet
-			start = startTimeOfDay
-			end = endTimeOfDay
-		}
-		val startOther: Int
-		val endOther: Int
-		if(other.exists) {
-			startOther = other.originalStartTimeOfDay
-			endOther = other.originalEndTimeOfDay
-		}
-		else {
-			startOther = startTimeOfDay
-			endOther = endTimeOfDay
-		}
-		
-		return label != other.label
-				|| random != other.random
-				|| randomFixed != other.randomFixed
-				|| frequency != other.frequency
-				|| minutesBetween != other.minutesBetween
-				|| start != startOther
-				|| end != endOther
-	}
 	
 	fun save(db: SQLiteInterface = NativeLink.sql) {
 		if(!exists) {

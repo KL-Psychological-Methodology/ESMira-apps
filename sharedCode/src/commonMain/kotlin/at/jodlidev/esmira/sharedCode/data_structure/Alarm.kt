@@ -105,6 +105,7 @@ class Alarm {
 		this.type = TYPES.SignalTime
 		this.indexNum = indexNum
 		this.label = signalTime.label
+		this._signalTime = signalTime
 //		wasRescheduled = canBeRescheduled
 	}
 	
@@ -183,9 +184,7 @@ class Alarm {
 			ErrorBox.log(
 				"Alarm",
 				"Scheduled \"$label\" (id=$id, type=$type), starting in: ${(timestamp - NativeLink.getNowMillis()) / 60000} min (${
-					NativeLink.formatDateTime(
-						timestamp
-					)
+					NativeLink.formatDateTime(timestamp)
 				})"
 			)
 		}
@@ -193,9 +192,7 @@ class Alarm {
 			ErrorBox.warn(
 				"Alarm",
 				"Could not schedule alarm \"$label\" (id=$id, type=$type), starting in: ${(timestamp - NativeLink.getNowMillis()) / 60000} min (${
-					NativeLink.formatDateTime(
-						timestamp
-					)
+					NativeLink.formatDateTime(timestamp)
 				})"
 			)
 			delete()
@@ -223,19 +220,11 @@ class Alarm {
 					ErrorBox.log(
 						"Alarm",
 						"Scheduling \"$label\" (id=$id) ahead. Anchor in ${(timestampAnchor - NativeLink.getNowMillis()) / 60000} min (${
-							NativeLink.formatDateTime(
-								timestampAnchor
-							)
+							NativeLink.formatDateTime(timestampAnchor)
 						})"
 					)
 					Scheduler.rescheduleSignalTime(signalTime, actionTriggerId, timestampAnchor)
 				}
-//				val limitTimestamp = NativeLink.getNowMillis() + Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS
-//				val loopMs = Scheduler.ONE_DAY_MS * signalTime.dailyRepeatRate
-//				while(timestampAnchor < limitTimestamp) {
-//					Scheduler.rescheduleSignalTime(signalTime, actionTriggerId, timestampAnchor)
-//					timestampAnchor += loopMs
-//				}
 			}
 		}
 	}
@@ -375,7 +364,7 @@ class Alarm {
 		}
 		
 		internal fun createAsReminder(
-			utcTimestamp: Long,
+			timestamp: Long,
 			questionnaireId: Long,
 			actionTriggerId: Long,
 			label: String,
@@ -384,7 +373,7 @@ class Alarm {
 			evenTriggerId: Long = -1,
 			signalTimeId: Long = -1
 		): Alarm {
-			val alarm = Alarm(utcTimestamp, questionnaireId, actionTriggerId, label, onlySingleActionIndex, reminderCount, evenTriggerId, signalTimeId)
+			val alarm = Alarm(timestamp, questionnaireId, actionTriggerId, label, onlySingleActionIndex, reminderCount, evenTriggerId, signalTimeId)
 			alarm.save()
 			return alarm
 		}
