@@ -443,7 +443,7 @@ internal object Updater {
 			
 			while(c.moveToNext()) {
 				val id = c.getLong(0)
-				val joined = c.getLong(1)
+				val joined = c.getLong(1)*1000
 				
 				val values = db.getValueBox()
 				values.putLong("joinedTimestamp", joined)

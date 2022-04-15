@@ -361,7 +361,7 @@ class Questionnaire {
 			if(study == null) //happens when we test for a study that we have not joined yet
 				true
 			else {
-				val joined = study.joined*1000
+				val joined = study.joined
 				(durationPeriodDays == 0 || now <= joined + durationPeriodDays * (1000*60*60*24))
 					&& (durationStartingAfterDays == 0 || now >= joined + durationStartingAfterDays * (1000*60*60*24))
 			}
@@ -378,7 +378,19 @@ class Questionnaire {
 		val joined = study?.joined ?: 0
 		val now = NativeLink.getNowMillis()
 		
-		return (durationStart - now).coerceAtLeast(joined*1000 + durationStartingAfterDays.toLong() * (1000*60*60*24) - now).coerceAtLeast(0)
+		val durationValue = durationStart - now
+		val startingAfterDaysValue = joined + durationStartingAfterDays.toLong() * (1000*60*60*24) - now
+		
+		return when {
+			durationValue <= 0 ->
+				startingAfterDaysValue.coerceAtLeast(0)
+			startingAfterDaysValue <= 0 ->
+				durationValue.coerceAtLeast(0)
+			else ->
+				durationValue.coerceAtMost(startingAfterDaysValue)
+		}
+		
+//		return (durationStart - now).coerceAtLeast(joined + durationStartingAfterDays.toLong() * (1000*60*60*24) - now).coerceAtLeast(0)
 	}
 	
 	fun canBeFilledOut(now: Long = NativeLink.getNowMillis()): Boolean { //if there are any questionnaires at the current time

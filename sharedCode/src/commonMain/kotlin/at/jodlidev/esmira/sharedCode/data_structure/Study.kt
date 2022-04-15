@@ -609,7 +609,7 @@ class Study internal constructor(
 			KEY_VERSION,
 			KEY_SUB_VERSION,
 			KEY_LANG,
-			"strftime('%s', $KEY_JOINED)",
+			KEY_JOINED,
 			KEY_TITLE,
 			KEY_DESC,
 			KEY_EMAIL,
