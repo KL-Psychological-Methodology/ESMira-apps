@@ -10,7 +10,26 @@ import kotlin.math.ceil
  * Created by JodliDev on 29.05.2019.
  */
 @Serializable
-class Schedule internal constructor() {
+class Schedule {
+	internal constructor(actionTrigger: ActionTrigger, c: SQLiteCursor) {
+		initCursor(c)
+		this.actionTrigger = actionTrigger
+		
+		exists = true
+		fromJson = false
+	}
+	internal constructor(c: SQLiteCursor) {
+		initCursor(c)
+		val aT = DbLogic.getActionTrigger(c.getLong(COLUMNS.size-1))
+		if(aT == null)
+			ErrorBox.error("Schedule", "ActionTrigger is null (Schedule=$id, actionTrigger=${c.getLong(
+				COLUMNS.size-1)})")
+		else
+			this.actionTrigger = aT
+		exists = true
+		fromJson = false
+	}
+	
 	var dailyRepeatRate: Int = 1
 	var weekdays: Int = 0
 	var dayOfMonth: Int = 0
@@ -23,37 +42,6 @@ class Schedule internal constructor() {
 	@Transient var lastScheduled: Long = 0
 	@Transient private lateinit var actionTrigger: ActionTrigger
 	
-	internal constructor(actionTrigger: ActionTrigger, c: SQLiteCursor): this() {
-		initCursor(c)
-		this.actionTrigger = actionTrigger
-		
-		exists = true
-		fromJson = false
-	}
-	internal constructor(c: SQLiteCursor): this() {
-		initCursor(c)
-		val aT = DbLogic.getActionTrigger(c.getLong(COLUMNS.size-1))
-		if(aT == null)
-			ErrorBox.error("Schedule", "ActionTrigger is null (Schedule=$id, actionTrigger=${c.getLong(
-				COLUMNS.size-1)})")
-		else
-			this.actionTrigger = aT
-		exists = true
-		fromJson = false
-	}
-	private fun initCursor(c: SQLiteCursor) {
-		id = c.getLong(0)
-		lastScheduled = c.getLong(1)
-		userEditable = c.getBoolean(2)
-		dailyRepeatRate = c.getInt(3)
-		skipFirstInLoop = c.getBoolean(4)
-		weekdays = c.getInt(5)
-		dayOfMonth = c.getInt(6)
-	}
-	
-	fun bindParent(actionTrigger: ActionTrigger) {
-		this.actionTrigger = actionTrigger
-	}
 	@SerialName("signalTimes") private var jsonSignalTimes: List<SignalTime> = ArrayList()
 	@Transient private lateinit var _signalTimes: List<SignalTime>
 	val signalTimes: List<SignalTime> get() {
@@ -81,9 +69,27 @@ class Schedule internal constructor() {
 		return _signalTimes
 	}
 	
+	private fun initCursor(c: SQLiteCursor) {
+		id = c.getLong(0)
+		lastScheduled = c.getLong(1)
+		userEditable = c.getBoolean(2)
+		dailyRepeatRate = c.getInt(3)
+		skipFirstInLoop = c.getBoolean(4)
+		weekdays = c.getInt(5)
+		dayOfMonth = c.getInt(6)
+	}
+	fun bindParent(actionTrigger: ActionTrigger) {
+		this.actionTrigger = actionTrigger
+	}
+	
 	internal fun isDifferent(other: Schedule): Boolean {
-		if(userEditable != other.userEditable || dailyRepeatRate != other.dailyRepeatRate || weekdays != other.weekdays || dayOfMonth != other.dayOfMonth || skipFirstInLoop != other.skipFirstInLoop) {
-			
+		if(
+			userEditable != other.userEditable ||
+			dailyRepeatRate != other.dailyRepeatRate ||
+			weekdays != other.weekdays ||
+			dayOfMonth != other.dayOfMonth ||
+			skipFirstInLoop != other.skipFirstInLoop
+		) {
 			println("Schedule content is different: $userEditable==${other.userEditable}, $dailyRepeatRate==${other.dailyRepeatRate}, $weekdays==${other.weekdays}, $dayOfMonth==${other.dayOfMonth}, $skipFirstInLoop==${other.skipFirstInLoop}")
 			return true
 		}

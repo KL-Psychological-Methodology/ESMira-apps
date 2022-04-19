@@ -394,7 +394,7 @@ class Questionnaire {
 	}
 	
 	fun canBeFilledOut(now: Long = NativeLink.getNowMillis()): Boolean { //if there are any questionnaires at the current time
-		val fromMidnight = now - NativeLink.getMidnightMillis()
+		val fromMidnight = now - NativeLink.getMidnightMillis(now)
 		
 		val oncePerNotification = (!completableOncePerNotification ||
 				(lastNotification != 0L && lastNotification >= lastCompleted &&
