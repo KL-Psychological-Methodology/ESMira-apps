@@ -68,7 +68,7 @@ class SignalTime {
 		return if(!random)
 			false
 		else if(frequency <= 1)
-			endTimeOfDay - startTimeOfDay < minutesBetween
+			endTimeOfDay - startTimeOfDay < minutesBetween * 60000
 		else
 			endTimeOfDay - startTimeOfDay < (frequency * minutesBetween + minutesBetween) * 60000
 	}
