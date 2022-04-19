@@ -183,7 +183,7 @@ class SignalTime {
 		
 		if(rescheduleNow) { //this will reschedule immediately. If false, the changes will take effect after the current Alarm has been issued
 			Scheduler.remove(this)
-			Scheduler.scheduleSignalTime(this, schedule.getActionTriggerId(), NativeLink.getNowMillis(), schedule.getInitialDelay())
+			Scheduler.scheduleSignalTime(this, schedule.getActionTriggerId(), NativeLink.getNowMillis(), schedule.getInitialDelayDays())
 		}
 		else if(isIOS()) {
 			val cancelAlarms = DbLogic.getAlarmsAfterToday(this)
@@ -201,7 +201,7 @@ class SignalTime {
 			
 			val alarm = DbLogic.getLastSignalTimeAlarm(this)
 			if(alarm == null)
-				Scheduler.scheduleSignalTime(this, schedule.getActionTriggerId(), NativeLink.getNowMillis(), schedule.getInitialDelay())
+				Scheduler.scheduleSignalTime(this, schedule.getActionTriggerId(), NativeLink.getNowMillis(), schedule.getInitialDelayDays())
 			else
 				alarm.scheduleAhead()
 		}

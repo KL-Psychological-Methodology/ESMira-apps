@@ -140,7 +140,7 @@ class Schedule {
 		//create alarms:
 		if(!exists) {
 			if(actionTrigger.enabled) {
-				val initialDelay = getInitialDelay()
+				val initialDelay = getInitialDelayDays()
 				for(signalTime in signalTimes) {
 					Scheduler.scheduleSignalTime(signalTime, actionTrigger.id, NativeLink.getNowMillis(), initialDelay)
 				}
@@ -168,7 +168,7 @@ class Schedule {
 		db.delete(SignalTime.TABLE, "${SignalTime.KEY_SCHEDULE_ID} = ?", arrayOf(id.toString()))
 	}
 	
-	internal fun getInitialDelay():Int { //in days
+	internal fun getInitialDelayDays():Int { //in days
 		var initialDelay = if(skipFirstInLoop) dailyRepeatRate else 0
 		val willBeActiveIn = ceil(getQuestionnaire().willBeActiveIn().toDouble() / Scheduler.ONE_DAY_MS).toInt() //transform into days
 		if(willBeActiveIn > initialDelay)
