@@ -232,7 +232,6 @@ class DataSet {
 		
 		const val TABLE_JOINED = "$TABLE LEFT JOIN ${StudyToken.TABLE} ON $TABLE.$KEY_STUDY_ID=${StudyToken.TABLE}.${StudyToken.KEY_STUDY_ID}"
 		
-		const val STATE_NOT_SYNCED: Int = 0
 		const val STATE_SYNCED: Int = 1
 		const val STATE_NOT_SYNCED_ERROR: Int = 2
 		

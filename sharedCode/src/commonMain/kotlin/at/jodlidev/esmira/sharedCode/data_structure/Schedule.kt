@@ -159,7 +159,7 @@ class Schedule {
 			true
 		
 		for(signalTime in signalTimes) {
-			signalTime.saveTimeFrames(db, this, rescheduleNow)
+			signalTime.saveTimeFrames(this, rescheduleNow, db)
 		}
 	}
 	

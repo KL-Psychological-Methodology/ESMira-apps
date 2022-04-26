@@ -32,19 +32,6 @@ class StudyToken(
 			KEY_TOKEN
 		)
 		
-//		fun getToken(studyId: Long): Long {
-//			val c = NativeLink.sql.select(
-//				TABLE,
-//				arrayOf(KEY_TOKEN),
-//				"$KEY_STUDY_ID = ?", arrayOf(studyId.toString()),
-//				null,
-//				null,
-//				null,
-//				null
-//			)
-//
-//			return if(c.moveToFirst()) c.getLong(0) else -1
-//		}
 		fun hasToken(studyId: Long): Boolean {
 			val c = NativeLink.sql.select(
 				TABLE,

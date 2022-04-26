@@ -11,20 +11,20 @@ import kotlinx.serialization.Serializable
 class SignalTime {
 	var label: String = ""
 	var random = false
-	var randomFixed = false
+	internal var randomFixed = false
 	var frequency = 1
-	var minutesBetween = 60
-	var startTimeOfDay = 0 //starting from midnight; can be changed by the user
-	var endTimeOfDay = 0 //starting from midnight; can be changed by the user
+	internal var minutesBetween = 60
+	internal var startTimeOfDay = 0 //starting from midnight; can be changed by the user
+	internal var endTimeOfDay = 0 //starting from midnight; can be changed by the user
 	private var originalStartTimeOfDay = 0 //starting from midnight
 	private var originalEndTimeOfDay = 0 //starting from midnight
 	
-	@Transient var exists = false
-	@Transient var id: Long = -1
-	@Transient var scheduleId: Long = -1
-	@Transient var questionnaireId: Long = -1
+	@Transient internal var exists = false
+	@Transient internal var id: Long = -1
+	@Transient internal var scheduleId: Long = -1
+	@Transient internal var questionnaireId: Long = -1
 	
-	@Transient var timeHasChanged: Boolean = false //not in db for manual schedule changes
+	@Transient internal var timeHasChanged: Boolean = false //not in db for manual schedule changes
 	
 	@Transient private lateinit var _schedule: Schedule
 	val schedule: Schedule
@@ -55,20 +55,27 @@ class SignalTime {
 		this._schedule = schedule
 	}
 	
+	init {
+		if(!random) {
+			randomFixed = false
+			frequency = 1
+		}
+		if(frequency == 0) //Should never happen. But it would break a lot (dividing by Zero and stuff). So we better play safe
+			frequency = 1
+	}
+	
 	fun bindParent(questionnaireId: Long, schedule: Schedule) {
 		this.scheduleId = schedule.id
 		this.questionnaireId = questionnaireId
 		this._schedule = schedule
 		
-		if(frequency == 0) //Should never happen. But it would break a lot (dividing by Zero and stuff). So we better play safe
-			frequency = 1
 	}
 	
 	fun isFaulty(): Boolean {
 		return if(!random)
 			false
 		else if(frequency <= 1)
-			endTimeOfDay - startTimeOfDay < minutesBetween * 60000
+			endTimeOfDay - startTimeOfDay < minutesBetween * 60000 //makes sure that user can not have time window that is too small (default 60 min)
 		else
 			endTimeOfDay - startTimeOfDay < (frequency * minutesBetween + minutesBetween) * 60000
 	}
@@ -79,7 +86,7 @@ class SignalTime {
 			start = originalStartTimeOfDay
 			end = originalEndTimeOfDay
 		}
-		else { //originalStartTimeOfDay and originalEndTimeOfDay will get set when save() was called the first time. So it doesnt exist yet
+		else { //originalStartTimeOfDay and originalEndTimeOfDay will get set when save() was called the first time. So they don't exist yet
 			start = startTimeOfDay
 			end = endTimeOfDay
 		}
@@ -90,8 +97,8 @@ class SignalTime {
 			endOther = other.originalEndTimeOfDay
 		}
 		else {
-			startOther = startTimeOfDay
-			endOther = endTimeOfDay
+			startOther = other.startTimeOfDay
+			endOther = other.endTimeOfDay
 		}
 		
 		return label != other.label
@@ -109,20 +116,19 @@ class SignalTime {
 	}
 	
 	fun setStart(timestamp: Long) {
-		startTimeOfDay = (timestamp - NativeLink.getMidnightMillis()).toInt() % ONE_DAY
+		startTimeOfDay = (timestamp - NativeLink.getMidnightMillis(timestamp)).toInt() % ONE_DAY
+		correctStartEndPeriod()
+		timeHasChanged = true
+	}
+	fun setEnd(timestamp: Long) {
+		endTimeOfDay = (timestamp - NativeLink.getMidnightMillis(timestamp)).toInt() % ONE_DAY
 		correctStartEndPeriod()
 		timeHasChanged = true
 	}
 	
-	fun setEnd(timestamp: Long) {
-		endTimeOfDay = (timestamp - NativeLink.getMidnightMillis()).toInt() % ONE_DAY
-		correctStartEndPeriod()
-		timeHasChanged = true
-	}
 	fun getStart(): Long {
 		return NativeLink.getMidnightMillis() + startTimeOfDay
 	}
-	
 	fun getEnd(): Long {
 		return NativeLink.getMidnightMillis() + endTimeOfDay
 	}
@@ -159,11 +165,13 @@ class SignalTime {
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
 		}
-		else
+		else {
 			id = db.insert(TABLE, values)
+			exists = true
+		}
 	}
 	
-	fun saveTimeFrames(db: SQLiteInterface = NativeLink.sql, schedule: Schedule, rescheduleNow: Boolean = false) {
+	internal fun saveTimeFrames(schedule: Schedule, rescheduleNow: Boolean = false, db: SQLiteInterface = NativeLink.sql,) {
 		if(!exists) {
 			ErrorBox.error("SignalTime", "SignalTime(label=$label, id=$id) does not exist!")
 			return

@@ -16,7 +16,7 @@ class StatisticData_timed internal constructor() : StatisticData() {
 	override var sum: Double = 0.0
 	override var count: Int = 0
 	
-	constructor(dayTimestamp: Long, variableName: String, index: Int): this() {
+	internal constructor(dayTimestamp: Long, variableName: String, index: Int): this() {
 		this.dayTimestampSec = dayTimestamp
 		this.observableIndex = index
 		this.variableName = variableName
@@ -30,19 +30,19 @@ class StatisticData_timed internal constructor() : StatisticData() {
 		variableName = observedVariable.variableName
 	}
 	
-	constructor(c: SQLiteCursor): this() {
+	internal constructor(c: SQLiteCursor): this() {
 		loadCursor(c)
 		observableIndex = c.getInt(6)
 		variableName = c.getString(7)
 	}
 	
-	constructor(c: SQLiteCursor, observedVariable: ObservedVariable): this() {
+	private constructor(c: SQLiteCursor, observedVariable: ObservedVariable): this() {
 		loadCursor(c)
 		observableIndex = observedVariable.index
 		variableName = observedVariable.variableName
 	}
 	
-	fun addData(dayTimestamp: Long, variableName: String, index: Int, studyId: Long) {
+	fun completeData(dayTimestamp: Long, variableName: String, index: Int, studyId: Long) {
 		this.studyId = studyId
 		dayTimestampSec = dayTimestamp
 		observableIndex = index

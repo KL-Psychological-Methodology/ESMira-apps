@@ -69,7 +69,7 @@ class Study internal constructor(
 	
 	var version: Int = -1
 	var subVersion: Int = -1
-	var serverVersion: Int = -1
+	var serverVersion: Int = Updater.EXPECTED_SERVER_VERSION
 	var lang: String = ""
 	
 	@Transient
@@ -102,7 +102,7 @@ class Study internal constructor(
 	}
 	
 	@SerialName("questionnaires")
-	private lateinit var _jsonQuestionnaires: List<Questionnaire>
+	private var _jsonQuestionnaires: List<Questionnaire> = ArrayList()
 	
 	
 	@Transient
@@ -110,7 +110,7 @@ class Study internal constructor(
 	
 	val questionnaires: List<Questionnaire> get() {
 		if(!this::_questionnaires.isInitialized) {
-			_questionnaires = if(this::_jsonQuestionnaires.isInitialized) _jsonQuestionnaires else loadQuestionnairesDB()
+			_questionnaires = if(fromJson) _jsonQuestionnaires else loadQuestionnairesDB()
 		}
 		return _questionnaires
 	}
@@ -460,7 +460,7 @@ class Study internal constructor(
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
 			
-			if(this::_jsonQuestionnaires.isInitialized) { //Meaning that we want to override it
+			if(fromJson) { //Meaning that we want to override it
 				val dbQuestionnaires = loadQuestionnairesDB()
 				if(dbQuestionnaires.size != _jsonQuestionnaires.size) { //if true, too much has changed. We just recreate everything
 					for(q in dbQuestionnaires) {
@@ -524,7 +524,7 @@ class Study internal constructor(
 		db.delete(ObservedVariable.TABLE, "${ObservedVariable.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StatisticData_timed.TABLE, "${StatisticData_timed.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StatisticData_perValue.TABLE, "${StatisticData_perValue.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
-		db.delete(DataSet.TABLE, "${DataSet.KEY_STUDY_ID} = ? AND ${DataSet.KEY_SYNCED} IS NOT ${DataSet.STATE_NOT_SYNCED}", arrayOf(id.toString()))
+		db.delete(DataSet.TABLE, "${DataSet.KEY_STUDY_ID} = ? AND ${DataSet.KEY_SYNCED} IS NOT ${DataSet.STATES.NOT_SYNCED}", arrayOf(id.toString()))
 		db.delete(TABLE, "$KEY_ID = ?", arrayOf(id.toString()))
 	}
 

@@ -334,7 +334,7 @@ class Alarm {
 		const val KEY_REMINDER_COUNT = "reminder_count"
 		const val KEY_ONLY_SINGLE_ACTION_INDEX = "only_single_action_index"
 		
-		val COLUMNS = arrayOf( //needs to be mirrored in COLUMNS_CONNECTED
+		val COLUMNS = arrayOf(
 			KEY_ID,
 			KEY_QUESTIONNAIRE_ID,
 			KEY_ACTION_TRIGGER_ID,

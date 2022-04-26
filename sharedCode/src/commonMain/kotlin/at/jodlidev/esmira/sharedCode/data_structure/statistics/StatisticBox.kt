@@ -10,6 +10,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 class StatisticBox (
 	var observedVariables: Map<String, List<ObservedVariable>> = HashMap(),
-//	@Serializable(with = JsonToStringSerializer::class) var observed_variables: String,
 	@Serializable(with = JsonToStringSerializer::class) var charts: String
 )
