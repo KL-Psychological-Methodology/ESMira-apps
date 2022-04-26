@@ -338,7 +338,8 @@ class Web {
 		internal class SuccessFailedException(msg: String) : Throwable(if(msg.isEmpty()) "Failed with empty response from server" else msg)
 		
 		private val debugServerList = arrayOf(
-			Pair("Emulator Server", DEBUG_EMULATOR_SERVER)
+			Pair("Emulator Server", DEBUG_EMULATOR_SERVER),
+			Pair("Test Server", "https://esmira.jodli.dev")
 		)
 		
 		@Suppress("unused")
