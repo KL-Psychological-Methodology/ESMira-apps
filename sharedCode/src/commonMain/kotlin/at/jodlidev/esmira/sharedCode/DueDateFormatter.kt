@@ -14,29 +14,13 @@ class DueDateFormatter(
 ) {
 	private val now: Long = NativeLink.getNowMillis()
 	private val soon: Long = now + SOON_MS
-	private val endOfToday: Long
-	private val endOfTomorrow: Long
+	private val endOfToday: Long = NativeLink.getMidnightMillis() + ONE_DAY
+	private val endOfTomorrow: Long = endOfToday + ONE_DAY
 	
 	private var getExact: Boolean = false
 	
 	constructor(): this("", "", "", "") {
 		getExact = true
-	}
-	
-	
-	init {
-		val dateNow = GMTDate(now)
-		val dateEndOfToday = GMTDate(
-			seconds = 59,
-			minutes = 59,
-			hours = 23,
-			dayOfMonth = dateNow.dayOfMonth,
-			month = dateNow.month,
-			year = dateNow.year
-		)
-		
-		endOfToday = dateEndOfToday.timestamp
-		endOfTomorrow = dateEndOfToday.plus(ONE_DAY).timestamp
 	}
 	
 	fun get(timestamp: Long): String {
