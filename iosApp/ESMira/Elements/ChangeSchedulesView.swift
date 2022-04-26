@@ -94,7 +94,7 @@ struct ChangeSchedulesView: View {
 	
 	init(isShown: Binding<Bool>, studyId: Int64 = -1) {
 		self._isShown = isShown
-		self.studies = DbLogic().getStudiesWithSchedules()
+		self.studies = DbLogic().getStudiesWithEditableSchedules()
 		
 		if(studyId != -1) {
 			self.resetSchedules = studyId != -1

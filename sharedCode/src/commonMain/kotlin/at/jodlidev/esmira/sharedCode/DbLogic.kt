@@ -16,6 +16,11 @@ object DbLogic {
 	const val DATABASE_VERSION = Updater.DATABASE_VERSION
 	const val ADMIN_PASSWORD: String = "Jaynestown"
 	
+	
+	fun getJsonConfig(): Json { //TODO: Where does this function fit best..?
+		return Json {ignoreUnknownKeys = true}
+	}
+	
 	fun getVersion(): String {
 		return "${Updater.LIBRARY_VERSION}-${Updater.DATABASE_VERSION}-${Updater.EXPECTED_SERVER_VERSION}"
 	}
@@ -395,11 +400,12 @@ object DbLogic {
 			cleanupFiles();
 			
 			val newLang = NativeLink.smartphoneData.lang
+			val oldLang = getLang()
 			
 			if(!hasNoJoinedStudies()) {
 				checkLeaveStudies()
 				
-				if(newLang != getLang()) {
+				if(newLang != oldLang) {
 					ErrorBox.log("startupApp", "Detected change in language to \"$newLang\"")
 					Web.updateStudiesAsync(true) { updatedCount ->
 						if(updatedCount != -1)
@@ -411,22 +417,11 @@ object DbLogic {
 				
 				NativeLink.postponedActions.updateStudiesRegularly()
 			}
-			else if(newLang != getLang()) {
-				ErrorBox.log("startupApp", "Detected change in language to \"$newLang\"")
+			else if(newLang != oldLang) {
+				ErrorBox.log("startupApp", "Detected change in language from \"$oldLang\" to \"$newLang\"")
 				setLang(newLang)
 			}
 		}
-	}
-
-	fun cleanupFiles() {
-		val files = getTemporaryFileUploads()
-		for(file: FileUpload in files) {
-			file.delete();
-		}
-	}
-	
-	fun getJsonConfig(): Json { //TODO: Where does this function fit best..?
-		return Json {ignoreUnknownKeys = true}
 	}
 	
 	//
@@ -518,7 +513,7 @@ object DbLogic {
 		val c = NativeLink.sql.select(
 			Study.TABLE,
 			Study.COLUMNS,
-			"LENGTH(${Study.KEY_PUBLIC_CHARTS_JSON}) > 4 OR LENGTH(${Study.KEY_PERSONAL_CHARTS_JSON}) > 4", null,
+			"LENGTH(${Study.KEY_PUBLIC_CHARTS_JSON}) > 2 OR LENGTH(${Study.KEY_PERSONAL_CHARTS_JSON}) > 2", null,
 			null,
 			null,
 			null,
@@ -545,37 +540,6 @@ object DbLogic {
 			r = true
 		c.close()
 		return r
-		
-		
-//		val cMessages = NativeLink.sql.select(
-//			Message.TABLE,
-//			Message.COLUMNS,
-//			null, null,
-//			null,
-//			null,
-//			null,
-//			"1"
-//		)
-//		var r = false
-//		if(cMessages.moveToFirst())
-//			r = true
-//		cMessages.close()
-//
-//		if(!r) {
-//			val cStudies = NativeLink.sql.select(
-//				Study.TABLE,
-//				Study.COLUMNS,
-//				"${Study.KEY_SEND_MESSAGES_ALLOWED} = 1 OR ${Study.KEY_LAST_MSG_TIMESTAMP} = NOT 0", null,
-//				null,
-//				null,
-//				null,
-//				"1"
-//			)
-//			if(cStudies.moveToFirst())
-//				r = true
-//			cStudies.close()
-//		}
-//		return r
 	}
 	
 	fun getStudy(id: Long): Study? {
@@ -626,7 +590,7 @@ object DbLogic {
 		return studies
 	}
 	
-	fun getStudiesWithSchedules(): List<Study> {
+	fun getStudiesWithEditableSchedules(): List<Study> {
 		val c = NativeLink.sql.select(
 			Study.TABLE,
 			Study.COLUMNS,
@@ -650,7 +614,7 @@ object DbLogic {
 		val c = NativeLink.sql.select(
 			Study.TABLE,
 			Study.COLUMNS,
-			"LENGTH(${Study.KEY_PUBLIC_CHARTS_JSON}) > 4 OR LENGTH(${Study.KEY_PERSONAL_CHARTS_JSON}) > 4", null,
+			"LENGTH(${Study.KEY_PUBLIC_CHARTS_JSON}) > 2 OR LENGTH(${Study.KEY_PERSONAL_CHARTS_JSON}) > 2", null,
 			null,
 			null,
 			null,
@@ -906,7 +870,7 @@ object DbLogic {
 		val c = NativeLink.sql.select(
 			DataSet.TABLE_JOINED,
 			DataSet.COLUMNS,
-			"${DataSet.KEY_SYNCED} IS NOT ${DataSet.STATE_SYNCED}", null,
+			"${DataSet.KEY_SYNCED} IS NOT ${DataSet.STATES.SYNCED.ordinal}", null,
 			null,
 			null,
 			"${DataSet.KEY_SYNCED} ASC", //we have to make sure that erroneous entries who lead to crashes dont prevent new entries from getting synced
@@ -940,6 +904,14 @@ object DbLogic {
 	//
 	//FileUpload
 	//
+	
+	fun cleanupFiles() {
+		val files = getTemporaryFileUploads()
+		for(file: FileUpload in files) {
+			file.delete();
+		}
+	}
+	
 	fun getPendingFileUploads(): List<FileUpload> {
 		val c = NativeLink.sql.select(
 			FileUpload.TABLE,
@@ -1086,6 +1058,40 @@ object DbLogic {
 		c.close()
 		return alarms
 	}
+	fun getAlarms(timestamp: Long, questionnaireId: Long): List<Alarm> {
+		val c = NativeLink.sql.select(
+			Alarm.TABLE,
+			Alarm.COLUMNS,
+			"${Alarm.KEY_TIMESTAMP} <= ? AND ${Alarm.KEY_QUESTIONNAIRE_ID} = ?", arrayOf(timestamp.toString(), questionnaireId.toString()),
+			null,
+			null,
+			"${Alarm.KEY_TIMESTAMP} ASC",
+			null
+		)
+		val alarms = ArrayList<Alarm>()
+		while(c.moveToNext()) {
+			alarms.add(Alarm(c))
+		}
+		c.close()
+		return alarms
+	}
+	fun getAlarms(schedule: Schedule): List<Alarm> {
+		val c = NativeLink.sql.select(
+			Alarm.TABLE,
+			Alarm.COLUMNS,
+			"${Alarm.KEY_SCHEDULE_ID} = ?", arrayOf(schedule.id.toString()),
+			null,
+			null,
+			"${Alarm.KEY_TIMESTAMP} ASC",
+			null
+		)
+		val alarms = ArrayList<Alarm>()
+		while(c.moveToNext()) {
+			alarms.add(Alarm(c))
+		}
+		c.close()
+		return alarms
+	}
 	
 	fun getAlarmsBefore(timestamp: Long, questionnaireId: Long): List<Alarm> {
 		val c = NativeLink.sql.select(
@@ -1122,47 +1128,11 @@ object DbLogic {
 		return alarms
 	}
 	
-	fun getAlarms(timestamp: Long, questionnaireId: Long): List<Alarm> {
-		val c = NativeLink.sql.select(
-			Alarm.TABLE,
-			Alarm.COLUMNS,
-			"${Alarm.KEY_TIMESTAMP} <= ? AND ${Alarm.KEY_QUESTIONNAIRE_ID} = ?", arrayOf(timestamp.toString(), questionnaireId.toString()),
-			null,
-			null,
-			"${Alarm.KEY_TIMESTAMP} ASC",
-			null
-		)
-		val alarms = ArrayList<Alarm>()
-		while(c.moveToNext()) {
-			alarms.add(Alarm(c))
-		}
-		c.close()
-		return alarms
-	}
-	
-	fun getAlarms(schedule: Schedule): List<Alarm> {
-		val c = NativeLink.sql.select(
-			Alarm.TABLE,
-			Alarm.COLUMNS,
-			"${Alarm.KEY_SCHEDULE_ID} = ?", arrayOf(schedule.id.toString()),
-			null,
-			null,
-			"${Alarm.KEY_TIMESTAMP} ASC",
-			null
-		)
-		val alarms = ArrayList<Alarm>()
-		while(c.moveToNext()) {
-			alarms.add(Alarm(c))
-		}
-		c.close()
-		return alarms
-	}
-	
 	fun getAlarmsAfterToday(signalTime: SignalTime): List<Alarm> { //used in Scheduler.scheduleAhead() for IOS where a separate service has to set alarms manually for the next day
 		val c = NativeLink.sql.select(
 			Alarm.TABLE,
 			Alarm.COLUMNS,
-			"${Alarm.KEY_SIGNAL_TIME_ID} = ? AND ${Alarm.KEY_TIMESTAMP} > ?", arrayOf(signalTime.id.toString(), (NativeLink.getMidnightMillis() + Scheduler.ONE_DAY_MS).toString()),
+			"${Alarm.KEY_SIGNAL_TIME_ID} = ? AND ${Alarm.KEY_TIMESTAMP} >= ?", arrayOf(signalTime.id.toString(), (NativeLink.getMidnightMillis() + Scheduler.ONE_DAY_MS).toString()),
 			null,
 			null,
 			"${Alarm.KEY_TIMESTAMP} ASC",
@@ -1193,14 +1163,18 @@ object DbLogic {
 		return r
 	}
 	
-	fun getLastAlarms(): List<Alarm> {
+	fun getLastAlarmPerSignalTime(): List<Alarm> {
+		//a bit weird since this value will not be used and only "tricks" sql to group by the highest timestamp value
+		// but it has the lowest chance of breaking when code changes occur:
+		val columns = Alarm.COLUMNS.plus("MAX(${Alarm.KEY_TIMESTAMP})")
+		
 		val c = NativeLink.sql.select(
 			Alarm.TABLE,
-			Alarm.COLUMNS,
+			columns,
 			null, null,
 			Alarm.KEY_SIGNAL_TIME_ID,
 			null,
-			"${Alarm.KEY_TIMESTAMP} DESC",
+			null,
 			null
 		)
 		val alarms = ArrayList<Alarm>()
@@ -1214,10 +1188,18 @@ object DbLogic {
 	
 	fun getNextAlarms(studyId: Long = -1): List<Alarm> {
 		val groupByQuestionnaires = studyId != -1L
+		
+		//a bit weird since this value will not be used and only "tricks" sql to group by the highest timestamp value
+		// but it has the lowest chance of breaking when code changes occur:
 		val columns = if(groupByQuestionnaires)
-			Array(Alarm.COLUMNS.size) { i: Int -> "MIN(${Alarm.COLUMNS[i]})" }
+			Alarm.COLUMNS.plus("MIN(${Alarm.KEY_TIMESTAMP})")
 		else
 			Alarm.COLUMNS
+		
+//		val columns = if(groupByQuestionnaires)
+//			Array(Alarm.COLUMNS.size) { i: Int -> "MIN(${Alarm.COLUMNS[i]})" }
+//		else
+//			Alarm.COLUMNS
 		
 		val c = NativeLink.sql.select(
 			Alarm.TABLE,
@@ -1309,7 +1291,6 @@ object DbLogic {
 		c.close()
 		return alarms
 	}
-	
 	fun getAlarmsFrom(actionTrigger: ActionTrigger): List<Alarm> {
 		val c = NativeLink.sql.select(
 			Alarm.TABLE,
@@ -1327,7 +1308,6 @@ object DbLogic {
 		c.close()
 		return alarms
 	}
-	
 	fun getAlarmsFrom(eventTrigger: EventTrigger): List<Alarm> {
 		val c = NativeLink.sql.select(
 			Alarm.TABLE,
@@ -1345,7 +1325,6 @@ object DbLogic {
 		c.close()
 		return alarms
 	}
-	
 	fun getAlarmsFrom(schedule: Schedule): List<Alarm> {
 		val c = NativeLink.sql.select(
 			Alarm.TABLE,
@@ -1363,7 +1342,6 @@ object DbLogic {
 		c.close()
 		return alarms
 	}
-	
 	fun getAlarmsFrom(signalTime: SignalTime): List<Alarm> {
 		val c = NativeLink.sql.select(
 			Alarm.TABLE,
@@ -1385,6 +1363,21 @@ object DbLogic {
 	//
 	//ActionTrigger
 	//
+	fun getActionTrigger(action_id: Long): ActionTrigger? {
+		val c = NativeLink.sql.select(
+			ActionTrigger.TABLE,
+			ActionTrigger.COLUMNS,
+			"${ActionTrigger.KEY_ID} = ?", arrayOf(action_id.toString()),
+			null,
+			null,
+			null,
+			null
+		)
+		val actionTrigger = if(c.moveToFirst()) ActionTrigger(c) else null
+		c.close()
+		return actionTrigger
+	}
+	
 	fun getActionTriggers(study_id: Long): List<ActionTrigger> {
 		val c = NativeLink.sql.select(
 			ActionTrigger.TABLE,
@@ -1403,39 +1396,24 @@ object DbLogic {
 		return schedules
 	}
 	
-	fun getActionTrigger(action_id: Long): ActionTrigger? {
-		val c = NativeLink.sql.select(
-			ActionTrigger.TABLE,
-			ActionTrigger.COLUMNS,
-			"${ActionTrigger.KEY_ID} = ?", arrayOf(action_id.toString()),
-			null,
-			null,
-			null,
-			null
-		)
-		val actionTrigger = if(c.moveToFirst()) ActionTrigger(c) else null
-		c.close()
-		return actionTrigger
-	}
-	
-//	fun saveSchedulesFromActionTriggers(triggers: List<ActionTrigger>, rescheduleNow: Boolean): Boolean {
-//		//make sure that there are no errors:
-//		for(trigger in triggers) {
-//			if(trigger.schedulesAreFaulty())
-//				return false
-//		}
-//
-//		//now we can save stuff:
-//		for(trigger in triggers) {
-//			trigger.saveScheduleTimeFrames(rescheduleNow)
-//		}
-//
-//		return true
-//	}
-	
 	//
 	//EventTrigger
 	//
+	fun getEventTrigger(id: Long): EventTrigger? {
+		val c = NativeLink.sql.select(
+			EventTrigger.TABLE_JOINED,
+			EventTrigger.COLUMNS_JOINED,
+			"${EventTrigger.EXT_KEY_ID} = ?", arrayOf(id.toString()),
+			null,
+			null,
+			null,
+			"1"
+		)
+		val r = if(c.moveToFirst()) EventTrigger(c) else null
+		c.close()
+		return r
+	}
+	
 	fun getEventTriggers(study_id: Long, cue: String): List<EventTrigger> {
 		val c = NativeLink.sql.select(
 			EventTrigger.TABLE_JOINED,
@@ -1450,21 +1428,6 @@ object DbLogic {
 		while(c.moveToNext()) {
 			r.add(EventTrigger(c))
 		}
-		c.close()
-		return r
-	}
-	
-	fun getEventTrigger(id: Long): EventTrigger? {
-		val c = NativeLink.sql.select(
-			EventTrigger.TABLE_JOINED,
-			EventTrigger.COLUMNS_JOINED,
-			"${EventTrigger.EXT_KEY_ID} = ?", arrayOf(id.toString()),
-			null,
-			null,
-			null,
-			"1"
-		)
-		val r = if(c.moveToFirst()) EventTrigger(c) else null
 		c.close()
 		return r
 	}
@@ -1558,11 +1521,11 @@ object DbLogic {
 		return r
 	}
 	
-	fun signalTimeHasAlarms(id: Long): Boolean {
+	fun signalTimeHasAlarms(signalTimeId: Long): Boolean {
 		val c = NativeLink.sql.select(
 			Alarm.TABLE,
 			arrayOf(Alarm.KEY_ID),
-			"${Alarm.KEY_SIGNAL_TIME_ID} = ?", arrayOf(id.toString()),
+			"${Alarm.KEY_SIGNAL_TIME_ID} = ?", arrayOf(signalTimeId.toString()),
 			null,
 			null,
 			null,
@@ -1617,10 +1580,7 @@ object DbLogic {
 			
 			//load data
 			do {
-				val statistic =
-					StatisticData_timed(
-						c
-					)
+				val statistic = StatisticData_timed(c)
 				val day = statistic.dayTimestampSec
 				val index = statistic.observableIndex
 				val variableName = statistic.variableName
@@ -1675,10 +1635,7 @@ object DbLogic {
 		)
 		if(c.moveToFirst()) {
 			do {
-				val statistic =
-					StatisticData_perValue(
-						c
-					)
+				val statistic = StatisticData_perValue(c)
 				val key = statistic.variableName + statistic.observableIndex
 				var dataList: MutableList<StatisticData>
 				if(dataListContainer.containsKey(key)) {

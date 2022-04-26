@@ -56,7 +56,7 @@ class Activity_editSchedules : AppCompatActivity() {
 		setContentView(R.layout.activity_edit_schedules)
 		setTitle(R.string.change_schedules)
 		
-		studies = DbLogic.getStudiesWithSchedules()
+		studies = DbLogic.getStudiesWithEditableSchedules()
 		val viewPager = findViewById<ViewPager>(R.id.container)
 		val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
 		

@@ -163,7 +163,7 @@ object Scheduler {
 		}
 	}
 	@Suppress("unused") fun scheduleAhead() { //used in IOS so a separate service can schedule ahead
-		for(alarm in DbLogic.getLastAlarms()) {
+		for(alarm in DbLogic.getLastAlarmPerSignalTime()) {
 			alarm.scheduleAhead()
 		}
 	}
