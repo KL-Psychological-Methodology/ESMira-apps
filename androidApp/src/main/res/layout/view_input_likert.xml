@@ -20,18 +20,17 @@
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		tools:text="left"
-		android:gravity="end"
 		app:layout_constraintLeft_toLeftOf="parent"
-		app:layout_constraintRight_toLeftOf="@id/list_box_radio"
+		app:layout_constraintRight_toLeftOf="@id/right"
 		app:layout_constraintTop_toBottomOf="@id/desc"/>
 	<TextView
 		android:id="@+id/right"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:gravity="start"
 		tools:text="right"
+		android:gravity="end"
 		app:layout_constraintRight_toRightOf="parent"
-		app:layout_constraintLeft_toRightOf="@id/list_box_radio"
+		app:layout_constraintLeft_toRightOf="@id/left"
 		app:layout_constraintTop_toBottomOf="@id/desc"/>
 	<RadioGroup
 		android:id="@+id/list_box_radio"
