@@ -1,0 +1,185 @@
+{
+  "questionnaires": [
+	{
+	  "actionTriggers": [
+		{
+		  "actions": [
+			{}
+		  ],
+		  "schedules": [
+			{
+			  "signalTimes": [
+				{
+				  "startTimeOfDay": 3600000,
+				  "endTimeOfDay": 10800000,
+				  "random": true
+				}
+			  ]
+			}
+		  ],
+		  "eventTriggers": []
+		},
+		{
+		  "actions": [],
+		  "schedules": [
+			{
+			  "signalTimes": [
+				{}
+			  ],
+			  "userEditable": false
+			}
+		  ],
+		  "eventTriggers": []
+		}
+	  ],
+	  "pages": [
+		{
+		  "inputs": [
+			{
+			  "subInputs": [],
+			  "listChoices": [],
+			  "responseType": "app_usage",
+			  "name": "item1"
+			}
+		  ]
+		}
+	  ],
+	  "sumScores": [],
+	  "title": "Questionnaire 1",
+	  "internalId": 65138,
+	  "completableOnce": true
+	},
+	{
+	  "actionTriggers": [
+		{
+		  "actions": [],
+		  "schedules": [],
+		  "eventTriggers": [
+			{
+			  "delaySec": 10
+			}
+		  ]
+		},
+		{
+		  "actions": [],
+		  "schedules": [],
+		  "eventTriggers": [
+			{}
+		  ]
+		}
+	  ],
+	  "pages": [
+		{
+		  "inputs": [
+			{
+			  "subInputs": [],
+			  "listChoices": [],
+			  "name": "item2"
+			}
+		  ]
+		}
+	  ],
+	  "sumScores": [],
+	  "title": "Questionnaire 2",
+	  "internalId": 71250
+	},
+	{
+	  "actionTriggers": [],
+	  "pages": [],
+	  "sumScores": [],
+	  "title": "empty",
+	  "internalId": 98369
+	}
+  ],
+  "title": "UnitTestStudy",
+  "groups": [],
+  "publicStatistics": {
+	"charts": [
+	  {
+		"publicVariables": [],
+		"axisContainer": [],
+		"title": "Public chart 1",
+		"storageType": 0
+	  },
+	  {
+		"publicVariables": [],
+		"axisContainer": [],
+		"title": "Public chart 2",
+		"storageType": 0
+	  }
+	],
+	"observedVariables": {}
+  },
+  "personalStatistics": {
+	"charts": [
+	  {
+		"publicVariables": [],
+		"axisContainer": [
+		  {
+			"xAxis": {
+			  "conditions": [],
+			  "observedVariableIndex": -1
+			},
+			"yAxis": {
+			  "conditions": [],
+			  "variableName": "item1"
+			}
+		  },
+		  {
+			"xAxis": {
+			  "conditions": [],
+			  "observedVariableIndex": -1
+			},
+			"yAxis": {
+			  "conditions": [],
+			  "variableName": "item2"
+			}
+		  }
+		],
+		"title": "Individual chart 1",
+		"storageType": 0
+	  },
+	  {
+		"publicVariables": [],
+		"axisContainer": [],
+		"title": "Individual chart 2",
+		"storageType": 0
+	  },
+	  {
+		"publicVariables": [],
+		"axisContainer": [],
+		"title": "Individual chart 3",
+		"storageType": 0
+	  }
+	],
+	"observedVariables": {
+	  "item1": [
+		{
+		  "conditions": [],
+		  "conditionType": 0,
+		  "storageType": 0,
+		  "timeInterval": 86400
+		}
+	  ],
+	  "item2": [
+		{
+		  "conditions": [],
+		  "conditionType": 0,
+		  "storageType": 0,
+		  "timeInterval": 86400
+		}
+	  ]
+	}
+  },
+  "id": 4019,
+  "version": 1,
+  "subVersion": 21,
+  "serverVersion": 10,
+  "new_changes": true,
+  "accessKeys": [],
+  "langCodes": [],
+  "eventUploadSettings": {
+	"invitation": true,
+	"schedule_changed": false
+  }
+}

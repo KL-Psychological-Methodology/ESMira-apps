@@ -159,7 +159,7 @@ class Alarm {
 		id = db.insert(TABLE, values)
 		
 		schedule()
-		if(isIOS())
+		if(NativeLink.smartphoneData.phoneType == PhoneType.IOS)
 			scheduleReminder()
 	}
 //	private fun setWasRescheduled() { //only ued in IOS
@@ -213,7 +213,7 @@ class Alarm {
 				val timestampAnchor = alarm.timestamp
 				
 				//if the dailyRepeatRate is greater than IOS_DAYS_TO_SCHEDULE_AHEAD_MS we make sure that alarm is repeated at least once:
-				val daysToScheduleAhead = Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS.coerceAtLeast(alarm.signalTime?.schedule?.dailyRepeatRate?.toLong() ?: 1 + 1)
+				val daysToScheduleAhead = Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS.coerceAtLeast((alarm.signalTime?.schedule?.dailyRepeatRate?.toLong() ?: 1 + 1) * Scheduler.ONE_DAY_MS)
 				
 				
 				if(timestampAnchor < NativeLink.getNowMillis() + daysToScheduleAhead) {
@@ -236,48 +236,52 @@ class Alarm {
 		delete()
 		
 		val q = DbLogic.getQuestionnaire(questionnaireId)
+		
+		if(q == null) {
+			ErrorBox.error(
+				"Alarm",
+				"Questionnaire is null! Alarm=$id, SignalTime=$signalTimeId, ActionTrigger=$actionTriggerId, Questionnaire=$questionnaireId"
+			)
+			return
+		}
+		else if(!q.isActive()) {
+			if(type == TYPES.SignalTime) {
+				if(q.willBeActiveIn() > 0) {
+					ErrorBox.log(
+						"Alarm",
+						"Questionnaire \"${q.title}\" is not active yet. Postponing alarm (id=$id, type=$type)."
+					)
+					Scheduler.rescheduleSignalTimeFromAlarm(this)
+				}
+				else {
+					ErrorBox.log(
+						"Alarm",
+						"Questionnaire \"${q.title}\" is not active anymore. Canceling alarm (id=$id, type=$type)."
+					)
+				}
+			}
+			return
+		}
+		
 		val studyId: Long
 		when(type) {
 			TYPES.SignalTime -> {
-				if(q == null) {
-					ErrorBox.error(
-						"Alarm",
-						"Questionnaire is null! Alarm=$id, SignalTime=$signalTimeId, ActionTrigger=$actionTriggerId, Questionnaire=$questionnaireId"
-					)
-					return
-				}
 				studyId = q.studyId
 				
-				if(!q.isActive()) { //dont do anything if study-questionnaire is already finished
-					if(q.willBeActiveIn() > 0) {
+				//on Android Alarms are executed immediately and THEN rescheduled. But on iOS Alarms are scheduled beforehand for the next Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS days
+				if(NativeLink.smartphoneData.phoneType == PhoneType.Android) {
+					val nextAlarm = getLastAlarm()
+					if(nextAlarm != null) {
 						ErrorBox.log(
 							"Alarm",
-							"Questionnaire \"${q.title}\" is not active yet. Postponing alarm (id=$id, type=$type)."
+							"A newer version (id=${nextAlarm.id}) of this alarm (id=$id, type=$type) already exists and should be executed momentarily - skipping"
 						)
-					}
-					else {
-						ErrorBox.log(
-							"Alarm",
-							"Questionnaire \"${q.title}\" is not active anymore. Canceling alarm (id=$id, type=$type)."
-						)
-						return
+						if(actionTrigger.hasInvitation())
+							DbLogic.reportMissedInvitation(q, timestamp)
+						return //a newer alarm already exists and will be run momentarily. There is no reason to run it multiple times and it should also be scheduled only once
 					}
 				}
-				else {
-					if(isAndroid()) { //on Android Alarms are executed immediately and THEN rescheduled. But on iOS Alarms are scheduled beforehand for the next Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS days
-						val nextAlarm = getLastAlarm()
-						if(nextAlarm != null) {
-							ErrorBox.log(
-								"Alarm",
-								"A newer version (id=${nextAlarm.id}) of this alarm (id=$id, type=$type) already exists and should be executed momentarily - skipping"
-							)
-							if(actionTrigger.hasInvitation())
-								DbLogic.reportMissedInvitation(q, timestamp)
-							return //a newer alarm already exists and will be run momentarily. There is no reason to run it multiple times and it should also be scheduled only once
-						}
-					}
-					actionTrigger.execActions(label, timestamp, fireNotifications)
-				}
+				actionTrigger.execActions(label, timestamp, fireNotifications)
 				
 				Scheduler.rescheduleSignalTimeFromAlarm(this)
 			}
@@ -292,20 +296,13 @@ class Alarm {
 				studyId = eventTrigger.studyId
 			}
 			TYPES.Reminder -> {
-				if(q == null) {
-					ErrorBox.error(
-						"Alarm",
-						"Questionnaire is null! Alarm=$id, SignalTime=$signalTimeId, ActionTrigger=$actionTriggerId, Questionnaire=$questionnaireId"
-					)
-					return
-				}
 				studyId = q.studyId
 				if(fireNotifications)
 					actionTrigger.issueReminder(label, timestamp, onlySingleActionIndex, reminderCount)
 			}
 		}
 
-		if(isIOS())
+		if(NativeLink.smartphoneData.phoneType == PhoneType.IOS)
 			DataSet.createAlarmExecuted(q, studyId, timestamp)
 	}
 	
@@ -352,7 +349,7 @@ class Alarm {
 		internal fun createFromSignalTime(signalTime: SignalTime, actionTriggerId: Long, timestamp: Long, indexNum: Int=1): Alarm {
 			val alarm = Alarm(signalTime, actionTriggerId, timestamp, indexNum)
 			alarm.save()
-			if(isIOS())
+			if(NativeLink.smartphoneData.phoneType == PhoneType.IOS)
 				alarm.scheduleAhead()
 			return alarm
 		}

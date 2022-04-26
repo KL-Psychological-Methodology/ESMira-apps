@@ -1449,6 +1449,18 @@ object DbLogic {
 		return r
 	}
 	
+	internal fun triggerEventTrigger(studyId: Long, cue: String, qId: Long): Boolean {
+		val list: List<EventTrigger> = getEventTriggers(studyId, cue)
+		if(list.isNotEmpty()) {
+			val q = if(qId == -1L) null else getQuestionnaire(qId)
+			for(eventTrigger in list) {
+				eventTrigger.triggerCheck(q)
+			}
+			return true
+		}
+		return false
+	}
+	
 	//
 	//Schedules
 	//

@@ -136,7 +136,7 @@ class ActionTrigger {
 					return true
 			}
 		}
-		return if(isAndroid()) false else usesPostponedActions()
+		return if(NativeLink.smartphoneData.phoneType == PhoneType.Android) false else usesPostponedActions()
 	}
 	fun hasInvitation(): Boolean {
 		val actions = getActionArray()
@@ -491,9 +491,9 @@ class ActionTrigger {
 		private const val JSON_TIMEOUT_MINUTES = "timeout"
 		private const val JSON_REMINDER_COUNT = "reminder_count"
 		private const val JSON_REMINDER_DELAY_MINUTES = "reminder_delay_minu"
-		private const val JSON_ACTION_TYPE_INVITATION = 1
-		private const val JSON_ACTION_TYPE_MSG = 2
-		private const val JSON_ACTION_TYPE_NOTIFICATION = 3
+		internal const val JSON_ACTION_TYPE_INVITATION = 1
+		internal const val JSON_ACTION_TYPE_MSG = 2
+		internal const val JSON_ACTION_TYPE_NOTIFICATION = 3
 		val COLUMNS = arrayOf(
 				KEY_ID,
 				KEY_ENABLED,
@@ -501,17 +501,5 @@ class ActionTrigger {
 				KEY_STUDY_ID,
 				KEY_QUESTIONNAIRE_ID
 		)
-		
-		fun triggerEventTrigger(studyId: Long, cue: String, qId: Long): Boolean {
-			val list: List<EventTrigger> = DbLogic.getEventTriggers(studyId, cue)
-			if(list.isNotEmpty()) {
-				val q = if(qId == -1L) null else DbLogic.getQuestionnaire(qId)
-				for(eventTrigger in list) {
-					eventTrigger.triggerCheck(q)
-				}
-				return true
-			}
-			return false
-		}
 	}
 }

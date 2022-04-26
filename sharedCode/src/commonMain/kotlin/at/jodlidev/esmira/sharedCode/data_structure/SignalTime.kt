@@ -193,7 +193,7 @@ class SignalTime {
 			Scheduler.remove(this)
 			Scheduler.scheduleSignalTime(this, schedule.getActionTriggerId(), NativeLink.getNowMillis(), schedule.getInitialDelayDays())
 		}
-		else if(isIOS()) {
+		else if(NativeLink.smartphoneData.phoneType == PhoneType.IOS) {
 			val cancelAlarms = DbLogic.getAlarmsAfterToday(this)
 			var searchFirst = true
 			for(alarm in cancelAlarms) {

@@ -208,7 +208,7 @@ class DataSet {
 				"Sending \"$eventType\" to $serverUrl:$studyWebId (Questionnaire: $questionnaireName)"
 			)
 		}
-		return ActionTrigger.triggerEventTrigger(studyId, eventType, questionnaireId)
+		return DbLogic.triggerEventTrigger(studyId, eventType, questionnaireId)
 	}
 	
 	companion object {
@@ -236,19 +236,19 @@ class DataSet {
 		const val STATE_NOT_SYNCED_ERROR: Int = 2
 		
 		const val TYPE_JOIN = "joined"
-		const val TYPE_REJOIN = "rejoined"
-		const val TYPE_LEAVE = "quit"
 		const val TYPE_QUESTIONNAIRE = "questionnaire"
+		const val TYPE_QUIT = "quit"
 		const val TYPE_ALARM_EXECUTED = "actions_executed" //only on iOS
 		const val TYPE_INVITATION = "invitation" //only on Android
 		const val TYPE_INVITATION_MISSED = "invitation_missed"
 		const val TYPE_INVITATION_REMINDER = "reminder" //only on Android
-		const val TYPE_NOTIFICATION = "notification" //only on Android
 		const val TYPE_MSG = "message"
-		const val TYPE_STUDY_MSG = "study_message"
+		const val TYPE_NOTIFICATION = "notification" //only on Android
+		const val TYPE_REJOIN = "rejoined"
 		const val TYPE_SCHEDULE_CHANGED = "schedule_changed"
-		const val TYPE_STUDY_UPDATED = "study_updated"
 		const val TYPE_STATISTIC_VIEWED = "statistic_viewed"
+		const val TYPE_STUDY_MSG = "study_message"
+		const val TYPE_STUDY_UPDATED = "study_updated"
 
 		val COLUMNS = arrayOf(
 			"$TABLE.$KEY_ID",

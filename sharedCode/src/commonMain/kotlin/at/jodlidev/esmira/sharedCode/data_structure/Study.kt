@@ -524,7 +524,7 @@ class Study internal constructor(
 		db.delete(ObservedVariable.TABLE, "${ObservedVariable.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StatisticData_timed.TABLE, "${StatisticData_timed.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StatisticData_perValue.TABLE, "${StatisticData_perValue.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
-		db.delete(DataSet.TABLE, "${DataSet.KEY_STUDY_ID} = ? AND ${DataSet.KEY_SYNCED} IS NOT ${DataSet.STATES.NOT_SYNCED}", arrayOf(id.toString()))
+		db.delete(DataSet.TABLE, "${DataSet.KEY_STUDY_ID} = ? AND ${DataSet.KEY_SYNCED} IS NOT ${DataSet.STATES.NOT_SYNCED.ordinal}", arrayOf(id.toString()))
 		db.delete(TABLE, "$KEY_ID = ?", arrayOf(id.toString()))
 	}
 
@@ -542,7 +542,7 @@ class Study internal constructor(
 		values.putInt(KEY_STATE, state.ordinal)
 		db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
 
-		if(!DataSet.createShortDataSet(DataSet.TYPE_LEAVE, this))
+		if(!DataSet.createShortDataSet(DataSet.TYPE_QUIT, this))
 			execLeave()
 	}
 
@@ -624,16 +624,20 @@ class Study internal constructor(
 		)
 		
 		val defaultSettings = hashMapOf(
-			DataSet.TYPE_REJOIN to false,
+			DataSet.TYPE_JOIN to true,
+			DataSet.TYPE_QUESTIONNAIRE to true,
+			DataSet.TYPE_QUIT to true,
+			DataSet.TYPE_ALARM_EXECUTED to false,
 			DataSet.TYPE_INVITATION to false,
 			DataSet.TYPE_INVITATION_MISSED to false,
-			DataSet.TYPE_NOTIFICATION to false,
+			DataSet.TYPE_INVITATION_REMINDER to false,
 			DataSet.TYPE_MSG to false,
-			DataSet.TYPE_STUDY_MSG to false,
+			DataSet.TYPE_NOTIFICATION to false,
+			DataSet.TYPE_REJOIN to false,
 			DataSet.TYPE_SCHEDULE_CHANGED to true,
-			DataSet.TYPE_STUDY_UPDATED to false,
 			DataSet.TYPE_STATISTIC_VIEWED to false,
-			DataSet.TYPE_ALARM_EXECUTED to false
+			DataSet.TYPE_STUDY_MSG to false,
+			DataSet.TYPE_STUDY_UPDATED to false,
 		)
 		
 		@Suppress("unused") fun newInstance(serverUrl: String, accessKey: String, json: String, checkUpdate: Boolean = true): Study {
@@ -661,7 +665,9 @@ class Study internal constructor(
 			for(jsonStudy in jsonList) {
 				try {
 					val study = newInstance(url, accessKey, jsonStudy.toString())
-					if(((isAndroid() && study.publishedAndroid) || (isIOS() && study.publishedIOS)) && !study.alreadyExists() && study.isActive()) {
+					if(((NativeLink.smartphoneData.phoneType == PhoneType.Android && study.publishedAndroid)
+							|| (NativeLink.smartphoneData.phoneType == PhoneType.IOS && study.publishedIOS))
+						&& !study.alreadyExists() && study.isActive()) {
 						if(study.webId == studyWebId)
 							return arrayListOf(study)
 						else {

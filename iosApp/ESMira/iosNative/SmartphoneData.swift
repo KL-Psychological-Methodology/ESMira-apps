@@ -6,6 +6,8 @@ import Foundation
 import sharedCode
 
 class SmartphoneData: SmartphoneDataInterface {
+	var phoneType: PhoneType = PhoneType.IOS
+	
 	var appType: String = "iOS"
 	
 	var appVersion: String = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""

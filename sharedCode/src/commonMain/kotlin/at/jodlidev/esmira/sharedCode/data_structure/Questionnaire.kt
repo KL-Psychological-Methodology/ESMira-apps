@@ -295,7 +295,7 @@ class Questionnaire {
 		
 		for(alarm in alarms) {
 			ErrorBox.log("Questionnaire", "Alarm \"${alarm.label}\" (${alarm.id}) for questionnaire \"$title\" was not executed. Executing now")
-			alarm.exec(fireNotifications = !isIOS())
+			alarm.exec(fireNotifications = NativeLink.smartphoneData.phoneType != PhoneType.IOS)
 		}
 	}
 	
@@ -383,9 +383,9 @@ class Questionnaire {
 		
 		return when {
 			durationValue <= 0 ->
-				startingAfterDaysValue.coerceAtLeast(0)
+				startingAfterDaysValue.coerceAtLeast(0) // durationValue is negative, so we ignore it
 			startingAfterDaysValue <= 0 ->
-				durationValue.coerceAtLeast(0)
+				durationValue.coerceAtLeast(0) // startingAfterDaysValue is negative, so we ignore it
 			else ->
 				durationValue.coerceAtMost(startingAfterDaysValue)
 		}
@@ -421,8 +421,8 @@ class Questionnaire {
 				oncePerNotification &&
 				completionFrequency &&
 				specificTime &&
-				(!isIOS() || publishedIOS) &&
-				(!isAndroid() || publishedAndroid)
+				(NativeLink.smartphoneData.phoneType != PhoneType.IOS || publishedIOS) &&
+				(NativeLink.smartphoneData.phoneType != PhoneType.Android || publishedAndroid)
 	}
 	@Suppress("unused") fun questionnairePageHasRequired(index: Int): Boolean {
 		if(index >= pages.size)

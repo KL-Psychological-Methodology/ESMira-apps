@@ -54,7 +54,7 @@ object Scheduler {
 		
 		var openDialog = false
 		
-		if(isAndroid()) {
+		if(NativeLink.smartphoneData.phoneType == PhoneType.Android) {
 			val missedSchedules = HashMap<Long, Alarm>()
 			
 			for(alarm in alarms) {
@@ -62,7 +62,7 @@ object Scheduler {
 				openDialog = true
 				
 				NativeLink.postponedActions.cancel(alarm)
-				alarm.exec(fireNotifications = !isIOS())
+				alarm.exec(fireNotifications = NativeLink.smartphoneData.phoneType != PhoneType.IOS)
 				if(alarm.type == Alarm.TYPES.SignalTime) {
 					if(!missedSchedules.containsKey(alarm.scheduleId) || alarm.timestamp > missedSchedules[alarm.scheduleId]!!.timestamp)
 						missedSchedules[alarm.scheduleId] = alarm
@@ -104,7 +104,7 @@ object Scheduler {
 				}
 			}
 		}
-		else if(isIOS()) {
+		else if(NativeLink.smartphoneData.phoneType == PhoneType.IOS) {
 			val ignoredAlarms = HashMap<Long, Alarm>()
 			for(alarm in alarms.asReversed()) { //we want to execute the last alarm and ignore the others. So we iterate from the back
 				if(ignoredAlarms.containsKey(alarm.actionTriggerId)) {
@@ -174,7 +174,7 @@ object Scheduler {
 	internal fun rescheduleSignalTimeFromAlarm(alarm: Alarm) {
 //		rescheduleSignalTime(alarm.signalTime ?: return, alarm.actionTriggerId, alarm.timestamp)
 		val signalTime = alarm.signalTime ?: return
-		//Note: We use getLastSignalTimeAlarm() for iOS. On Android no other alarms schould exist at this point (the original is deleted in Alarm.exec() )
+		//Note: We use getLastSignalTimeAlarm() for iOS. On Android no other alarms should exist at this point (the original is deleted in Alarm.exec() )
 		val lastAlarm = DbLogic.getLastSignalTimeAlarm(signalTime) ?: alarm
 		rescheduleSignalTime(signalTime, lastAlarm.actionTriggerId, lastAlarm.timestamp)
 	}

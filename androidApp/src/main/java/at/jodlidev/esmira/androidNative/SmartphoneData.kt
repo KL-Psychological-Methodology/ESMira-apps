@@ -2,6 +2,7 @@ package at.jodlidev.esmira.androidNative
 
 import android.os.Build
 import at.jodlidev.esmira.BuildConfig
+import at.jodlidev.esmira.sharedCode.PhoneType
 import at.jodlidev.esmira.sharedCode.SmartphoneDataInterface
 import java.util.*
 
@@ -9,6 +10,7 @@ import java.util.*
  * Created by JodliDev on 18.05.2020.
  */
 object SmartphoneData: SmartphoneDataInterface {
+	override val phoneType: PhoneType = PhoneType.Android
 	override val model: String = Build.MODEL
 	override val osVersion: String = Build.VERSION.RELEASE
 	override val manufacturer: String = Build.MANUFACTURER

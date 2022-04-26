@@ -66,9 +66,19 @@ kotlin {
             }
         }
         val androidTest by getting {
+            //this is for unit tests - used by commonTest
             dependencies {
                 implementation(kotlin("test-junit"))
                 implementation("junit:junit:4.13.2")
+            }
+        }
+        val androidAndroidTest by getting {
+            //this is for instrumented testing (sqlite on android using an emulator)
+            //see: https://touchlab.co/understanding-and-configuring-your-kmm-test-suite/
+            dependencies {
+                implementation("androidx.test.ext:junit:1.1.3")
+                implementation("androidx.test.ext:junit-ktx:1.1.3")
+                implementation("androidx.test.espresso:espresso-core:3.4.0")
             }
         }
         val iosMain by getting {
@@ -89,6 +99,7 @@ android {
     defaultConfig {
         minSdkVersion(16)
         targetSdkVersion(30)
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     
     
