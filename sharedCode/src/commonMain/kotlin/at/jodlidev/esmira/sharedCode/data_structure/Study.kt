@@ -277,7 +277,16 @@ class Study internal constructor(
 		publicChartsJsonString = publicStatistics.charts
 		personalChartsJsonString = personalStatistics.charts
 		
-		publicStatisticsNeeded = publicChartsJsonString.length > 2
+		var publicStatisticsNeeded = publicChartsJsonString.length > 2
+		if(!publicStatisticsNeeded) {
+			for(chart in personalCharts) {
+				if(chart.displayPublicVariable) {
+					publicStatisticsNeeded = true
+					break;
+				}
+			}
+		}
+		this.publicStatisticsNeeded = publicStatisticsNeeded
 	}
 	
 	@Suppress("unused")

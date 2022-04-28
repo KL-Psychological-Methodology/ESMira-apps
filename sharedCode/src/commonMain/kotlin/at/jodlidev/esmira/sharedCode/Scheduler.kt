@@ -28,7 +28,6 @@ import kotlin.math.max
  */
 object Scheduler {
 	internal const val ONE_DAY_MS: Long = 86400000 //1000*60*60*24
-	private const val TREAT_AS_MISSED_AFTER = 3600000 // 1000*60*60 = 1 hour
 	const val MIN_SCHEDULE_DISTANCE = 60000 //1000*60 = 1 min
 	internal const val IOS_DAYS_TO_SCHEDULE_AHEAD_MS = 4 * ONE_DAY_MS
 	
@@ -47,10 +46,16 @@ object Scheduler {
 	@Suppress("unused") fun checkMissedAlarms(missedAlarmsAsBroken: Boolean = false) {
 		//on IOS we can assume that all notifications have been issued or noticed by reactToBootOrTimeChange()
 		//so actions have to be issued, but notifications can be ignored
-		//on IOS when the user hasnt pressed the notification it is not unlikely that this function will find missed alarms
-		//on Android this should never find alarms unless something went wrong or the app was killed
-		val now = NativeLink.getNowMillis() - TREAT_AS_MISSED_AFTER
+		//on IOS when the user hasnt pressed the notification, it is not unlikely that this function will find missed alarms
+		//on Android this should never find alarms, because they are dealt with the moment a notification is issued,
+		// unless something went wrong or the app was killed
+
+		//on Android, notifications can be a couple minutes late when the phone was in Doze mode.
+		//But this function is only called when the app is started. So no Doze.
+		//We still make sure that there are a few ms leeway, just in case the user opens the app exactly when a notification is issued
+		val now = NativeLink.getNowMillis() - 500
 		val alarms = DbLogic.getAlarmsBefore(now)
+		ErrorBox.log("Scheduler", "Found ${alarms.size} missed alarms")
 		
 		var openDialog = false
 		
