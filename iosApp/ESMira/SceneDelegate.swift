@@ -62,10 +62,29 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	}
 	
 	func sceneDidBecomeActive(_ scene: UIScene) {
+        UIScrollView.appearance().keyboardDismissMode = .onDrag
+		
+		//in case app was sleeping in background
 		let appDelegate = UIApplication.shared.delegate as! AppDelegate
 		let appState = appDelegate.appState
+		appState.updateLists.toggle()
+	}
+	
+	func sceneWillResignActive(_ scene: UIScene) {
+		// Called when the scene will move from an active state to an inactive state.
+		// This may occur due to temporary interruptions (ex. an incoming phone call).
+	}
+	
+	func sceneWillEnterForeground(_ scene: UIScene) {
+		// Called as the scene transitions from the background to the foreground.
+		// Use this method to undo the changes made on entering the background.
 		
+		
+		
+		let appDelegate = UIApplication.shared.delegate as! AppDelegate
+		let appState = appDelegate.appState
 		let defaults = UserDefaults.standard
+		
 		var timeChanged = false
 		var bootHappened = false
 		
@@ -135,18 +154,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 			defaults.set(false, forKey: DialogOpener.KEY_HAS_DIALOG)
 			appState.showDialog(title: defaults.string(forKey: DialogOpener.KEY_DIALOG_TITLE) ?? "", msg: defaults.string(forKey: DialogOpener.KEY_DIALOG_MSG) ?? "")
 		}
-        
-        UIScrollView.appearance().keyboardDismissMode = .onDrag
-	}
-	
-	func sceneWillResignActive(_ scene: UIScene) {
-		// Called when the scene will move from an active state to an inactive state.
-		// This may occur due to temporary interruptions (ex. an incoming phone call).
-	}
-	
-	func sceneWillEnterForeground(_ scene: UIScene) {
-		// Called as the scene transitions from the background to the foreground.
-		// Use this method to undo the changes made on entering the background.
 	}
 	
 	func sceneDidEnterBackground(_ scene: UIScene) {

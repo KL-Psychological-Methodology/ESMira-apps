@@ -9,13 +9,18 @@ import Foundation
 
 struct ListQuestionnairesView: View {
 	@EnvironmentObject var appState: AppState
-//	@State var studies: [Study] = DbLogic().getJoinedStudies()
 	@Binding var studies: [Study]
+	
 	@State private var showInformedConsent = false
 	@State private var showStudyOptions = false
 	@State private var showLeaveAlert = false
 	@State private var currentStudy: Study? = nil
 	
+	let updateTimer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
+	
+	private func reloadStudies() {
+		self.studies = DbLogic().getJoinedStudies()
+	}
 	
 	var body: some View {
 		VStack(alignment: .leading) {
@@ -42,7 +47,7 @@ struct ListQuestionnairesView: View {
 								Text("info_no_questionnaires")
 							}
 							else {
-								ForEach(study.availableQuestionnaires, id: \.self) { questionnaire in
+								ForEach(study.availableQuestionnaires, id: \.internalId) { questionnaire in
 									Button(action: {
 										self.appState.openQuestionnaire(questionnaire.id)
 									}) {
@@ -63,15 +68,18 @@ struct ListQuestionnairesView: View {
 					Text("add_a_study")
 				}.padding()
 			}
-//			NavigationLink(destination: AddStudyView(), isActive: self.$appState.openedAddStudy) {
-//				HStack {
-//					Image(systemName: "plus")
-//					Text("add_a_study")
-//				}.padding()
-//			}
 		}
 			.onAppear {
-				self.studies = DbLogic().getJoinedStudies() //update studies in case we joined to a study
+				print("onAppear")
+				reloadStudies()
+			}
+			.onReceive(appState.$updateLists) { _ in
+				print("$updateLists")
+				reloadStudies()
+			}
+			.onReceive(updateTimer) { _ in
+				print("updateTimer")
+				reloadStudies()
 			}
 			.actionSheet(isPresented: self.$showStudyOptions) {
 				ActionSheet(title: Text(self.currentStudy!.title), buttons: [
