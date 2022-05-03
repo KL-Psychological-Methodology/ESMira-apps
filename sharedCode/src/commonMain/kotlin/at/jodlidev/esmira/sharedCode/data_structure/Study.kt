@@ -393,6 +393,11 @@ class Study internal constructor(
 		return postInstallInstructions.isNotEmpty() || hasSchedules()
 	}
 	
+	fun statisticWasViewed() {
+		if(state == STATES.Joined)
+			DataSet.createShortDataSet(DataSet.TYPE_STATISTIC_VIEWED, this)
+	}
+	
 	private fun getOldLeftStudy(): Study? {
 		val c = NativeLink.sql.select(
 			TABLE,
