@@ -138,8 +138,11 @@ class ActionTrigger {
 		}
 		return if(NativeLink.smartphoneData.phoneType == PhoneType.Android) false else usesPostponedActions()
 	}
-	fun hasInvitation(): Boolean {
+	fun hasInvitation(nothingElse: Boolean = false): Boolean {
 		val actions = getActionArray()
+		if(nothingElse && actions.size != 1)
+			return false
+		
 		for(actionJson in actions) {
 			val action = Action(actionJson.jsonObject)
 			when(action.type) {

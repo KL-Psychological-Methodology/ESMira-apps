@@ -687,8 +687,8 @@ object DbLogic {
 	fun countUnreadMessages(id: Long): Int {
 		val c = NativeLink.sql.select(
 			Message.TABLE,
-			arrayOf("COUNT(${Message.KEY_ID})"),
-			"${Message.KEY_STUDY_ID} = ? AND ${Message.KEY_IS_NEW} == 1", arrayOf(id.toString()),
+			arrayOf("COUNT(*)"),
+			"${Message.KEY_STUDY_ID} = ? AND ${Message.KEY_IS_NEW} = 1", arrayOf(id.toString()),
 			null,
 			null,
 			null,
@@ -704,8 +704,8 @@ object DbLogic {
 	fun countUnreadMessages(): Int {
 		val c = NativeLink.sql.select(
 			Message.TABLE,
-			arrayOf("COUNT(${Message.KEY_ID})"),
-			"${Message.KEY_IS_NEW} == 1", null,
+			arrayOf("COUNT(*)"),
+			"${Message.KEY_IS_NEW} = 1", null,
 			null,
 			null,
 			null,
@@ -793,7 +793,7 @@ object DbLogic {
 		return r
 	}
 	
-	private fun deleteCheckedRandomTexts(qId: Long, name: String) {
+	internal fun deleteCheckedRandomTexts(qId: Long, name: String) {
 		NativeLink.sql.delete(
 			DynamicInputData.TABLE,
 			"${DynamicInputData.KEY_QUESTIONNAIRE_ID}=? AND ${DynamicInputData.KEY_VARIABLE}=?",
@@ -1058,23 +1058,6 @@ object DbLogic {
 		c.close()
 		return alarms
 	}
-	fun getAlarms(timestamp: Long, questionnaireId: Long): List<Alarm> {
-		val c = NativeLink.sql.select(
-			Alarm.TABLE,
-			Alarm.COLUMNS,
-			"${Alarm.KEY_TIMESTAMP} <= ? AND ${Alarm.KEY_QUESTIONNAIRE_ID} = ?", arrayOf(timestamp.toString(), questionnaireId.toString()),
-			null,
-			null,
-			"${Alarm.KEY_TIMESTAMP} ASC",
-			null
-		)
-		val alarms = ArrayList<Alarm>()
-		while(c.moveToNext()) {
-			alarms.add(Alarm(c))
-		}
-		c.close()
-		return alarms
-	}
 	fun getAlarms(schedule: Schedule): List<Alarm> {
 		val c = NativeLink.sql.select(
 			Alarm.TABLE,
@@ -1196,11 +1179,6 @@ object DbLogic {
 		else
 			Alarm.COLUMNS
 		
-//		val columns = if(groupByQuestionnaires)
-//			Array(Alarm.COLUMNS.size) { i: Int -> "MIN(${Alarm.COLUMNS[i]})" }
-//		else
-//			Alarm.COLUMNS
-		
 		val c = NativeLink.sql.select(
 			Alarm.TABLE,
 			columns,
@@ -1274,11 +1252,11 @@ object DbLogic {
 		return alarms
 	}
 
-	fun getAlarmsFrom(questionnaireId: Long): List<Alarm> {
+	fun getAlarmsFrom(questionnaire: Questionnaire): List<Alarm> {
 		val c = NativeLink.sql.select(
 			Alarm.TABLE,
 			Alarm.COLUMNS,
-			"${Alarm.KEY_QUESTIONNAIRE_ID}=?", arrayOf(questionnaireId.toString()),
+			"${Alarm.KEY_QUESTIONNAIRE_ID}=?", arrayOf(questionnaire.id.toString()),
 			null,
 			null,
 			"${Alarm.KEY_TIMESTAMP} ASC",

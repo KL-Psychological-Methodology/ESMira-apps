@@ -223,7 +223,7 @@ class Alarm {
 							NativeLink.formatDateTime(timestampAnchor)
 						})"
 					)
-					Scheduler.rescheduleSignalTime(signalTime, actionTriggerId, timestampAnchor)
+					Scheduler.rescheduleFromSignalTime(signalTime, actionTriggerId, timestampAnchor)
 				}
 			}
 		}
@@ -251,7 +251,7 @@ class Alarm {
 						"Alarm",
 						"Questionnaire \"${q.title}\" is not active yet. Postponing alarm (id=$id, type=$type)."
 					)
-					Scheduler.rescheduleSignalTimeFromAlarm(this)
+					Scheduler.rescheduleFromAlarm(this)
 				}
 				else {
 					ErrorBox.log(
@@ -268,22 +268,9 @@ class Alarm {
 			TYPES.SignalTime -> {
 				studyId = q.studyId
 				
-				//on Android Alarms are executed immediately and THEN rescheduled. But on iOS Alarms are scheduled beforehand for the next Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS days
-				if(NativeLink.smartphoneData.phoneType == PhoneType.Android) {
-					val nextAlarm = getLastAlarm()
-					if(nextAlarm != null) {
-						ErrorBox.log(
-							"Alarm",
-							"A newer version (id=${nextAlarm.id}) of this alarm (id=$id, type=$type) already exists and should be executed momentarily - skipping"
-						)
-						if(actionTrigger.hasInvitation())
-							DbLogic.reportMissedInvitation(q, timestamp)
-						return //a newer alarm already exists and will be run momentarily. There is no reason to run it multiple times and it should also be scheduled only once
-					}
-				}
 				actionTrigger.execActions(label, timestamp, fireNotifications)
 				
-				Scheduler.rescheduleSignalTimeFromAlarm(this)
+				Scheduler.rescheduleFromAlarm(this)
 			}
 			TYPES.EventTrigger -> {
 				val eventTrigger: EventTrigger? = DbLogic.getEventTrigger(eventTriggerId)

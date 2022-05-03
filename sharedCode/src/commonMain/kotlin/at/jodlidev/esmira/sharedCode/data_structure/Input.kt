@@ -88,8 +88,9 @@ class Input internal constructor( ) {
 		val dynamicIndex: Int
 		val variable = name
 		val length = subInputs.size
-		var lastIndexBox = DbLogic.getLastDynamicTextIndex(questionnaire.id, variable)
+		var lastIndexBox = DbLogic.getLastDynamicTextIndex(questionnaire.id, variable) //get current input
 		if(lastIndexBox == null || lastIndexBox.createdTime < questionnaire.lastCompleted || lastIndexBox.index >= length) { //lastIndexBox.index can be bigger than length when the study was updated
+			//either there is no current input, or we need a new one
 			if(random) {
 				val checkedChoices = DbLogic.getAvailableListForDynamicText(questionnaire.id, variable, length)
 				val index = checkedChoices.indices.random()

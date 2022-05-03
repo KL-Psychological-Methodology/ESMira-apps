@@ -143,6 +143,8 @@ class Study internal constructor(
 	private lateinit var personalChartsJsonString: String //will be set in finishJSON() or from db
 	val personalCharts: List<ChartInfo> get() {
 		return try {
+			if(personalChartsJsonString.length <= 2)
+				return ArrayList()
 			DbLogic.getJsonConfig().decodeFromString(personalChartsJsonString)
 		}
 		catch(e: Exception) {

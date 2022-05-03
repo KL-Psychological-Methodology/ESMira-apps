@@ -173,11 +173,11 @@ class DataSet {
 		save()
 	}
 	
-	private fun save(study: Study? = null): Boolean {
+	private fun save(study: Study? = DbLogic.getStudy(studyId)): Boolean {
 		if(id != 0L)
 			throw RuntimeException("Trying to save an already created DataSet")
 		
-		if((study ?: DbLogic.getStudy(studyId))?.isEventUploaded(eventType) != false) {
+		if(study?.isEventUploaded(eventType) != false) {
 			addResponseData("osVersion", NativeLink.smartphoneData.osVersion)
 			addResponseData("model", NativeLink.smartphoneData.model)
 			addResponseData("manufacturer", NativeLink.smartphoneData.manufacturer)
@@ -205,7 +205,7 @@ class DataSet {
 			NativeLink.postponedActions.syncDataSets()
 			ErrorBox.log(
 				"Send DataSet",
-				"Sending \"$eventType\" to $serverUrl:$studyWebId (Questionnaire: $questionnaireName)"
+				"Sending \"$eventType\" to $serverUrl($studyWebId) (Questionnaire: $questionnaireName)"
 			)
 		}
 		return DbLogic.triggerEventTrigger(studyId, eventType, questionnaireId)

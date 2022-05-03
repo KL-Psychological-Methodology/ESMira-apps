@@ -10,8 +10,6 @@ import io.ktor.client.request.forms.*
 import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.http.*
-import io.ktor.http.ContentDisposition.Companion.File
-import io.ktor.utils.io.core.*
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
@@ -23,7 +21,7 @@ import kotlin.jvm.Synchronized
  */
 class Web {
 	var error = false
-	private var client = HttpClient {
+	private val client = HttpClient {
 		install(JsonFeature) {
 			serializer = KotlinxSerializer(Json { encodeDefaults = true; ignoreUnknownKeys = true })
 		}
@@ -75,28 +73,7 @@ class Web {
 				})
 			}
 		)
-
-//		val interpreter: GetStructure = client.post(url) {
-//			body = MultiPartFormDataContent(
-//				formData {
-//					this.append(FormPart("userId", DbLogic.getUid()))
-//					this.append(FormPart("studyId", fileUpload.webId))
-//					this.append(FormPart("dataType", fileUpload.type.toString()))
-//					this.append(FormPart("appVersion", NativeLink.smartphoneData.appVersion))
-//					this.append(FormPart("appType", DbLogic.getAdminAppType()))
-//					this.append(FormPart("serverVersion", Updater.EXPECTED_SERVER_VERSION))
-//
-//					this.appendInput(
-//						key = "upload",
-//						headers = Headers.build {
-//							append(HttpHeaders.ContentDisposition, "filename=${fileUpload.identifier}")
-//						},
-//						//size = fileUpload.getFileSize()
-//						size = fileUpload.getFileSize()
-//					) { buildPacket { writeFully(file) } }
-//				}
-//			)
-//		}
+		
 		checkResponse(interpreter)
 		return interpreter.dataset
 	}
@@ -110,16 +87,15 @@ class Web {
 			throw SuccessFailedException(interpreter.error)
 	}
 	
-//	fun cancel() = client.cancel()
 	fun cancel() {
 		client.cancel()
 		close()
 	}
 	private fun close() = client.close()
 	
-	private suspend fun updateStudies(forceStudyUpdate: Boolean): Int {
+	//internal for testing:
+	internal fun getStudyInfoMapForUpdates(forceStudyUpdate: Boolean): Map<String, Map<String, StudyInfo>> {
 		ErrorBox.log("Web", "Searching for updated studies...")
-		var updatedCount = 0
 		val studies = DbLogic.getJoinedStudies()
 		val container: MutableMap<String, MutableMap<String, StudyInfo>> = HashMap()
 		
@@ -150,9 +126,88 @@ class Web {
 			)
 		}
 		
+		return container
+	}
+	internal fun processStudyUpdateResponse(url: String, response: String): Int {
+		var updatedCount = 0
+		println("Decoding update response: $response")
+		val updateInfoList = DbLogic.getJsonConfig().decodeFromString<Map<String, UpdateInfo>>(response)
+		
+		for((idString, updateInfo) in updateInfoList) {
+			ErrorBox.log("Updating studies", "Got reply for $idString")
+			
+			val study: Study? = DbLogic.getStudy(url, idString.toLong())
+			if(study == null) {
+				ErrorBox.error("update_studies", "Server ($url) answered with an unknown study id: $idString")
+				error = true
+				continue
+			}
+			
+			val newStudyJson = updateInfo.study
+			if(newStudyJson != null) {
+				ErrorBox.log("Updating studies", "Found study update")
+				val newStudy: Study
+				try {
+					newStudy = Study.newInstance(study.serverUrl, study.accessKey, newStudyJson)
+				}
+				catch(e: Throwable) {
+					ErrorBox.warn("Study Update", "New JSON is faulty: $newStudyJson", e)
+					println(newStudyJson)
+					continue
+				}
+				study.updateWith(newStudy)
+				++updatedCount
+			}
+			
+			if(updateInfo.msgs.isNotEmpty()) {
+				var latest = -1L
+				for(msg in updateInfo.msgs) {
+					Message.addMessage(study.id, msg.content, msg.sent, true)
+					if(msg.sent > latest)
+						latest = msg.sent
+				}
+				ErrorBox.log("Message", "Found ${updateInfo.msgs.size} messages for study ${study.id}")
+				DataSet.createShortDataSet(DataSet.TYPE_STUDY_MSG, study)
+				if(latest != -1L)
+					study.saveMsgTimestamp(latest)
+				NativeLink.notifications.fireMessageNotification(study)
+			}
+		}
+		
+		return updatedCount
+	}
+	internal fun processSyncData(url: String, response: String) {
+		println("Decoding response: $response")
+		try {
+			val syncInfo = DbLogic.getJsonConfig().decodeFromString<SyncDataSetResponse>(response)
+			
+			for(syncState in syncInfo.states) {
+				val dataSet = DbLogic.getDataSet(syncState.dataSetId)
+				
+				if(syncState.success && dataSet != null)
+					dataSet.synced = DataSet.STATES.SYNCED
+				else {
+					error = true
+					dataSet?.synced = DataSet.STATES.NOT_SYNCED_ERROR
+					ErrorBox.warn("Sync failed", "Syncing DataSet(server_url:${url}, id:${syncState.dataSetId}) was not successful:\n${if(syncState.error.isNotEmpty()) syncState.error else "No server message"}")
+				}
+			}
+			
+			for((studyId, token) in syncInfo.tokens) {
+				StudyToken(studyId, token).save()
+			}
+		}
+		catch(e: Throwable) {
+			ErrorBox.warn("Sync failed", "JSON structure is faulty: $response", e)
+		}
+	}
+	
+	private suspend fun updateStudies(forceStudyUpdate: Boolean): Int {
+		val map = getStudyInfoMapForUpdates(forceStudyUpdate)
+		var updatedCount = 0
 		
 		//do updates:
-		for((url, studyInfo) in container) {
+		for((url, studyInfo) in map) {
 			ErrorBox.log("Updating studies", "Updating $url (${studyInfo.size} studies)")
 			val response: String
 			try {
@@ -166,50 +221,8 @@ class Web {
 				error = true
 				continue
 			}
-
-			println("Decoding response: $response")
-			val updateInfoList = DbLogic.getJsonConfig().decodeFromString<Map<String, UpdateInfo>>(response)
-
-			for((idString, updateInfo) in updateInfoList) {
-				ErrorBox.log("Updating studies", "Got reply for $idString")
-				
-				val study: Study? = DbLogic.getStudy(url, idString.toLong())
-				if(study == null) {
-					ErrorBox.error("update_studies", "Server ($url) answered with an unknown study id: $idString")
-					error = true
-					continue
-				}
-
-				val newStudyJson = updateInfo.study
-				if(newStudyJson != null) {
-					ErrorBox.log("Updating studies", "Found study update")
-					val newStudy: Study
-					try {
-						newStudy = Study.newInstance(study.serverUrl, study.accessKey, newStudyJson)
-					}
-					catch(e: Throwable) {
-						ErrorBox.warn("Study Update", "New JSON is faulty: $newStudyJson", e)
-						println(newStudyJson)
-						continue
-					}
-					study.updateWith(newStudy)
-					++updatedCount
-				}
-				
-				if(updateInfo.msgs.isNotEmpty()) {
-					var latest = -1L
-					for(msg in updateInfo.msgs) {
-						Message.addMessage(study.id, msg.content, msg.sent, true)
-						if(msg.sent > latest)
-							latest = msg.sent
-					}
-					ErrorBox.log("Message", "Found ${updateInfo.msgs.size} messages for study ${study.id}")
-					DataSet.createShortDataSet(DataSet.TYPE_STUDY_MSG, study)
-					if(latest != -1L)
-						study.saveMsgTimestamp(latest)
-					NativeLink.notifications.fireMessageNotification(study)
-				}
-			}
+			
+			updatedCount += processStudyUpdateResponse(url, response)
 		}
 		
 		close()
@@ -234,29 +247,7 @@ class Web {
 				continue
 			}
 			
-			println("Decoding response: $response")
-			try {
-				val syncInfo = DbLogic.getJsonConfig().decodeFromString<SyncDataSetResponse>(response)
-				
-				for(syncState in syncInfo.states) {
-					val dataSet = DbLogic.getDataSet(syncState.dataSetId)
-					
-					if(syncState.success && dataSet != null)
-						dataSet.synced = DataSet.STATES.SYNCED
-					else {
-						error = true
-						dataSet?.synced = DataSet.STATES.NOT_SYNCED_ERROR
-						ErrorBox.warn("Sync failed", "Syncing DataSet(server_url:${url}, id:${syncState.dataSetId}) was not successful:\n${if(syncState.error.isNotEmpty()) syncState.error else "No server message"}")
-					}
-				}
-				
-				for((studyId, token) in syncInfo.tokens) {
-					StudyToken(studyId, token).save()
-				}
-			}
-			catch(e: Throwable) {
-				ErrorBox.warn("Sync failed", "JSON structure is faulty: $response", e)
-			}
+			processSyncData(url, response)
 		}
 		
 		error = syncFiles() || error

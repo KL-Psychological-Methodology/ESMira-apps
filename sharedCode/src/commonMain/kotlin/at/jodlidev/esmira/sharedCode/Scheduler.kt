@@ -5,6 +5,7 @@ import io.ktor.util.date.GMTDate
 import io.ktor.util.date.Month
 import io.ktor.util.date.plus
 import kotlin.math.max
+import kotlin.random.Random
 
 /**
  * Created by JodliDev on 12.06.2020.
@@ -27,6 +28,7 @@ import kotlin.math.max
  * Apart from that, we assume that notifications are never missed by the system. So we dont issue notifications from checkMissedAlarms()
  */
 object Scheduler {
+	internal const val TREAT_AS_MISSED_LEEWAY_MS = 200
 	internal const val ONE_DAY_MS: Long = 86400000 //1000*60*60*24
 	const val MIN_SCHEDULE_DISTANCE = 60000 //1000*60 = 1 min
 	internal const val IOS_DAYS_TO_SCHEDULE_AHEAD_MS = 4 * ONE_DAY_MS
@@ -53,7 +55,7 @@ object Scheduler {
 		//on Android, notifications can be a couple minutes late when the phone was in Doze mode.
 		//But this function is only called when the app is started. So no Doze.
 		//We still make sure that there are a few ms leeway, just in case the user opens the app exactly when a notification is issued
-		val now = NativeLink.getNowMillis() - 500
+		val now = NativeLink.getNowMillis() - TREAT_AS_MISSED_LEEWAY_MS
 		val alarms = DbLogic.getAlarmsBefore(now)
 		ErrorBox.log("Scheduler", "Found ${alarms.size} missed alarms")
 		
@@ -66,7 +68,7 @@ object Scheduler {
 				ErrorBox.warn("Scheduler", "Action \"${alarm.label}\" (Alarm: ${alarm.id}) did not fire! Rescheduling alarm")
 				openDialog = true
 				
-				NativeLink.postponedActions.cancel(alarm)
+				//We dont need to cancel the alarm in here because alarm.exec() calls delete()
 				alarm.exec(fireNotifications = NativeLink.smartphoneData.phoneType != PhoneType.IOS)
 				if(alarm.type == Alarm.TYPES.SignalTime) {
 					if(!missedSchedules.containsKey(alarm.scheduleId) || alarm.timestamp > missedSchedules[alarm.scheduleId]!!.timestamp)
@@ -74,38 +76,23 @@ object Scheduler {
 				}
 			}
 			
-			//estimate and report alarms that were not even scheduled:
+			//report alarms that were not even scheduled:
 			for((scheduleId, alarm) in missedSchedules) {
 				val schedule = DbLogic.getSchedule(scheduleId) ?: continue
 				
-				val rate: Int
-				rate = when {
-					schedule.dayOfMonth != 0 ->
-						max(30, schedule.dailyRepeatRate) //Note: 30 days per month is not exact but we can ignore that
-					schedule.weekdays != 0 -> {
-						var days = 0
-						for(dayNum in WEEKDAY_CODES) {
-							if(schedule.weekdays or dayNum != schedule.weekdays)
-								++days
-						}
-						max(7 / days, schedule.dailyRepeatRate)
-					}
-					else ->
-						schedule.dailyRepeatRate
-				}
-				
-				var num = (alarm.timestamp - now) / rate
-				
-				while(num > 0) {
+				var timestamp = alarm.timestamp + schedule.dailyRepeatRate*ONE_DAY_MS
+				while(timestamp < now) {
+					timestamp = considerScheduleOptions(timestamp, schedule)
+					
 					val signalTimes = DbLogic.getSignalTimes(schedule)
 					val q = DbLogic.getQuestionnaire(alarm.questionnaireId) ?: continue
 					
 					for(signalTime in signalTimes) {
 						for(i in 0 until signalTime.frequency) {
-							DbLogic.reportMissedInvitation(q, alarm.timestamp + num*rate) //TODO: untested
+							DbLogic.reportMissedInvitation(q, timestamp)
 						}
 					}
-					num -= 1
+					timestamp += schedule.dailyRepeatRate*ONE_DAY_MS
 				}
 			}
 		}
@@ -117,14 +104,16 @@ object Scheduler {
 					val q = DbLogic.getQuestionnaire(alarm.questionnaireId) ?: continue
 					if(alarm.type != Alarm.TYPES.Reminder)
 						DbLogic.reportMissedInvitation(q, alarm.timestamp)
-//					NativeLink.postponedActions.cancel(alarm) //not needed because we have NativeLink.notifications.remove()
 					alarm.delete()
 				}
 				else {
 					//Rationale:
-					//If an alarm has a questionnaire, we wait for the user to do the questionnaire (which will execute untriggered alarms as well)
-					//If not, we execute it now and remove the notification
-					if(alarm.actionTrigger.hasInvitation()) {
+					//If an alarm has a questionnaire, we wait for the user to do the questionnaire (which will execute not triggered alarms as well)
+					//This way its connected notification will not be removed when the alarm is executed (and deleted)
+					//If not, we execute it now (which removes the notification)
+					//If the user does not fill out the questionnaire, this alarm will be executed
+					// next time we call checkMissedAlarms() and there is another notification by the same actionTrigger
+					if(alarm.actionTrigger.hasInvitation(true)) {
 						ErrorBox.log(
 							"Scheduler",
 							"Notification for Alarm \"${alarm.label}\" (id=${alarm.id}, type=${alarm.type}) was not pressed yet but has an invitation. Ignoring for now."
@@ -133,15 +122,14 @@ object Scheduler {
 					}
 					else {
 						ErrorBox.log("Scheduler", "Notification for Alarm \"${alarm.label}\" (id=${alarm.id}, type=${alarm.type}) was not pressed. Executing now.")
+						//alarm.exec() also calls alarm.delete()
 						alarm.exec(fireNotifications = false) //also deletes alarm
-//						NativeLink.postponedActions.cancel(alarm) //not needed because we have NativeLink.notifications.remove()
-						NativeLink.notifications.remove(alarm.id.toInt())
 					}
 					
 					ignoredAlarms[alarm.actionTriggerId] = alarm
-					openDialog = true
 				}
 			}
+			openDialog = false
 		}
 		
 		
@@ -156,15 +144,15 @@ object Scheduler {
 		
 		for(alarm: Alarm in alarms) {
 			ErrorBox.log("BootOrTimeChange", "Recalculating \"${alarm.label}\" (id=${alarm.id}, type=${alarm.type})")
-			if(timeChanged) {
-				NativeLink.postponedActions.cancel(alarm)
-				//TODO: recalculate timestamp (is wrong when there is a timezone-change)
-			}
 			
 			if(alarm.timestamp <= now)
 				alarm.exec()
-			else
+			else {
+				if(timeChanged) {
+					NativeLink.postponedActions.cancel(alarm)
+				}
 				alarm.schedule()
+			}
 		}
 	}
 	@Suppress("unused") fun scheduleAhead() { //used in IOS so a separate service can schedule ahead
@@ -176,14 +164,14 @@ object Scheduler {
 	
 	//takes an Alarm from the past and recreates it for the future
 	//on Android, if alarms where issued properly, anchorTimestamp should be equal to NativeLink.getTimeMillis()
-	internal fun rescheduleSignalTimeFromAlarm(alarm: Alarm) {
+	internal fun rescheduleFromAlarm(alarm: Alarm) {
 //		rescheduleSignalTime(alarm.signalTime ?: return, alarm.actionTriggerId, alarm.timestamp)
 		val signalTime = alarm.signalTime ?: return
 		//Note: We use getLastSignalTimeAlarm() for iOS. On Android no other alarms should exist at this point (the original is deleted in Alarm.exec() )
 		val lastAlarm = DbLogic.getLastSignalTimeAlarm(signalTime) ?: alarm
-		rescheduleSignalTime(signalTime, lastAlarm.actionTriggerId, lastAlarm.timestamp)
+		rescheduleFromSignalTime(signalTime, lastAlarm.actionTriggerId, lastAlarm.timestamp)
 	}
-	internal fun rescheduleSignalTime(signalTime: SignalTime, actionTriggerId: Long, timestampAnchor: Long) {
+	internal fun rescheduleFromSignalTime(signalTime: SignalTime, actionTriggerId: Long, timestampAnchor: Long) {
 		if(signalTime.randomFixed) { //TODO: UNTESTED
 			//this does the same as scheduleSignalTime() but it ignores frequency and reuses the time from the alarm.
 			
@@ -191,8 +179,7 @@ object Scheduler {
 			val loopMs = ONE_DAY_MS * signalTime.schedule.dailyRepeatRate.toLong()
 			
 			val now = NativeLink.getNowMillis()
-			val timestamp: Long
-			timestamp = if(timestampAnchor < now) {
+			val timestamp = if(timestampAnchor < now) {
 				val calNow = GMTDate(now)
 				val calAlarm = GMTDate(timestampAnchor)
 				
@@ -210,7 +197,6 @@ object Scheduler {
 			val baseTimestamp = considerScheduleOptions(timestamp + loopMs, signalTime)
 			
 			Alarm.createFromSignalTime(signalTime, actionTriggerId, baseTimestamp)
-			
 		}
 		else
 			scheduleSignalTime(signalTime, actionTriggerId, max(timestampAnchor, NativeLink.getNowMillis()))
@@ -219,11 +205,8 @@ object Scheduler {
 	// * We can use this function for single time schedules as well. We can just set frequency=1 and it will fire at startTime_minutes
 	// * This function can also deal with random == false and frequency > 1 - but will we ever use it this way..?
 	// * randomFixed will be considered in rescheduleSignalTimeFromAlarm() after Alarm was issued for the first time
-	//current_day_repeat_rate is either:
-	//	1 day when alarm is just set (from Schedule)
-	//	day_repeat_rate + "days until next alarm when reading Alarms (from RescheduleReceiver)
-	//	day_repeat_rate when normal repeating (from AlarmBox)
-	internal fun scheduleSignalTime(signalTime: SignalTime, actionTriggerId: Long, anchorTimestamp: Long, manualDelay: Int = -1) {
+	//if manualDelay is disabled (-1) then dailyRepeatRate is added to anchorTimestamp
+	internal fun scheduleSignalTime(signalTime: SignalTime, actionTriggerId: Long, anchorTimestamp: Long, manualDelayDays: Int = -1) {
 		ErrorBox.log("Scheduler", "Creating repeating Alarm")
 		val frequency = signalTime.frequency
 		val msBetween = signalTime.minutesBetween * 60000
@@ -235,20 +218,25 @@ object Scheduler {
 		}
 		
 		//
-		//Consider options:
+		//correct timestamp:
 		//
 		val midnight = NativeLink.getMidnightMillis(anchorTimestamp)
-		
+
 		//set beginning time:
 		var baseTimestamp = midnight + signalTime.startTimeOfDay
-		if(manualDelay != -1) { //is only set when schedules are freshly created
-			baseTimestamp += ONE_DAY_MS * manualDelay
-			while(baseTimestamp - MIN_SCHEDULE_DISTANCE < anchorTimestamp)
+		if(manualDelayDays != -1) { //is only set when schedules are freshly created
+			baseTimestamp += ONE_DAY_MS * manualDelayDays
+			
+			//assumed that anchorTimestamp is 23:59 and manualDelayDays = 5 (anything greater than 1)
+			//when we used getMidnightMillis(), we calculated backwards a whole day, so baseTimestamp is one day short.
+			//That means, when we just added ONE_DAY_MS * manualDelayDays, we effectively only added 4 days instead of 5
+			//this  loop takes care of that:
+			while(baseTimestamp - MIN_SCHEDULE_DISTANCE < anchorTimestamp + ONE_DAY_MS * manualDelayDays)
 				baseTimestamp += ONE_DAY_MS
 		}
 		else {
 			baseTimestamp += ONE_DAY_MS * signalTime.schedule.dailyRepeatRate
-			
+
 			while(baseTimestamp - MIN_SCHEDULE_DISTANCE < anchorTimestamp) //we have added a dailyRepeatRate. So this should never be true
 				baseTimestamp += ONE_DAY_MS * signalTime.schedule.dailyRepeatRate
 		}
@@ -300,7 +288,7 @@ object Scheduler {
 		return Alarm.createAsReminder(timestamp, questionnaireId, actionTriggerId, label, index, count, evenTriggerId, signalTimeId)
 	}
 	
-	internal fun scheduleEventTrigger(eventTrigger: EventTrigger) {
+	internal fun scheduleEventTrigger(eventTrigger: EventTrigger, now: Long = NativeLink.getNowMillis()) {
 		ErrorBox.log("Scheduler", "Creating postponed EventTrigger Alarm")
 		val add: Long = if(eventTrigger.randomDelay) {
 			eventTrigger.delayMinimumSec*1000 + (getRandom() * (eventTrigger.delaySec*1000 - eventTrigger.delayMinimumSec*1000)).toLong()
@@ -308,22 +296,26 @@ object Scheduler {
 		else
 			eventTrigger.delaySec.toLong()*1000
 		
-		Alarm.createFromEventTrigger(eventTrigger, NativeLink.getNowMillis() + add)
+		Alarm.createFromEventTrigger(eventTrigger, now + add)
 	}
 	
 	private fun getRandom(): Double {
-		return (RANGE_FOR_RANDOM.random()/100.0)
+		return Random.nextDouble(1.0)
 	}
 	
 	private fun considerScheduleOptions(timestamp: Long, signalTime: SignalTime): Long { //consider day_of_month:
+		return considerScheduleOptions(timestamp, signalTime.schedule)
+	}
+	//internal for testing
+	internal fun considerScheduleOptions(timestamp: Long, schedule: Schedule): Long { //consider day_of_month:
 		var cal = GMTDate(timestamp)
-		if(signalTime.schedule.dayOfMonth != 0) { //TODO: untested
-			cal = if(cal.dayOfMonth < signalTime.schedule.dayOfMonth)
+		if(schedule.dayOfMonth != 0) {
+			cal = if(cal.dayOfMonth <= schedule.dayOfMonth)
 				GMTDate(
 					seconds = cal.seconds,
 					minutes = cal.minutes,
 					hours = cal.hours,
-					dayOfMonth = signalTime.schedule.dayOfMonth,
+					dayOfMonth = schedule.dayOfMonth,
 					month = cal.month,
 					year = cal.year
 				)
@@ -333,7 +325,7 @@ object Scheduler {
 						seconds = cal.seconds,
 						minutes = cal.minutes,
 						hours = cal.hours,
-						dayOfMonth = signalTime.schedule.dayOfMonth,
+						dayOfMonth = schedule.dayOfMonth,
 						month = Month.from(cal.month.ordinal+1),
 						year = cal.year
 					)
@@ -342,7 +334,7 @@ object Scheduler {
 						seconds = cal.seconds,
 						minutes = cal.minutes,
 						hours = cal.hours,
-						dayOfMonth = signalTime.schedule.dayOfMonth,
+						dayOfMonth = schedule.dayOfMonth,
 						month = Month.JANUARY,
 						year = cal.year+1
 					)
@@ -350,13 +342,12 @@ object Scheduler {
 		}
 		
 		//consider weekdays:
-		val schedule = signalTime.schedule
 		if(schedule.weekdays != 0) {
 			var i = 365
 			while(schedule.weekdays or WEEKDAY_CODES[cal.dayOfWeek.ordinal] != schedule.weekdays) {
 				cal = cal.plus(ONE_DAY_MS)
 				if(--i==0) {
-					ErrorBox.error("Scheduler", "Could not find appropriate weekday for ${signalTime.label} (weekdaycode=${schedule.weekdays}!")
+					ErrorBox.error("Scheduler", "Could not find appropriate weekday for ${schedule.id} (weekdaycode=${schedule.weekdays}!")
 					break
 				}
 			}
@@ -372,10 +363,8 @@ object Scheduler {
 	}
 	
 	internal fun remove(questionnaire: Questionnaire) {
-		for(trigger in questionnaire.actionTriggers) {
-			for(alarm in DbLogic.getAlarmsFrom(trigger)) {
-				alarm.delete()
-			}
+		for(alarm in DbLogic.getAlarmsFrom(questionnaire)) {
+			alarm.delete()
 		}
 		removeReminder(questionnaire.id)
 	}

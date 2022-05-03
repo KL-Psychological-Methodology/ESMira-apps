@@ -275,7 +275,7 @@ class Questionnaire {
 
 		//remove notifications:
 		NativeLink.notifications.removeQuestionnaireBing(this)
-		for(alarm in DbLogic.getAlarmsFrom(id)) {
+		for(alarm in DbLogic.getAlarmsFrom(this)) {
 			alarm.delete()
 		}
 	}

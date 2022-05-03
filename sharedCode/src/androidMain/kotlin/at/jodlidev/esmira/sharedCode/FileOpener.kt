@@ -9,7 +9,10 @@ import java.io.*
 actual object FileOpener {
 	actual fun deleteFile(path: String): Boolean {
 		val file = File(path)
-		return file.delete()
+		return if(!file.delete())
+			!file.exists()
+		else
+			true
 	}
 	
 	actual fun getFile(path: String): ByteArray {
