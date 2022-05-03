@@ -430,11 +430,14 @@ class Questionnaire internal constructor() {
 //		return hasQuestionnaire() && isActive() && completedCheck && timeConstraintCheck && (!isIOS() || publishedIOS) && (!isAndroid() || publishedAndroid)
 		
 		
+		val lastNotification = (DbLogic.getLastAlarmBefore(now, id)?.timestamp ?: 0).coerceAtLeast(lastNotificationUtc)
 		val oncePerNotification = (!completableOncePerNotification ||
-				(lastNotificationUtc != 0L && lastNotificationUtc >= lastCompletedUtc &&
-						(completableMinutesAfterNotification == 0 || now - lastNotificationUtc <= completableMinutesAfterNotification * 60 * 1000)
+				
+				(lastNotification != 0L && lastNotification >= lastCompletedUtc &&
+						(completableMinutesAfterNotification == 0 || now - lastNotification <= completableMinutesAfterNotification * 60 * 1000)
 						)
 				)
+		
 		val specificTime = !completableAtSpecificTime ||
 				if(completableAtSpecificTimeStart != -1 && completableAtSpecificTimeEnd != -1) {
 					if(completableAtSpecificTimeStart > completableAtSpecificTimeEnd)
