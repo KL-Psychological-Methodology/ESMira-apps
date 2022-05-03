@@ -2,15 +2,76 @@ package tests.data_structure
 
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.data_structure.*
+import BaseCommonTest
 import kotlin.test.*
 
 /**
  * Created by JodliDev on 31.03.2022.
  */
 
-class StudyTest : BaseDataStructureTest() {
+class StudyTest : BaseCommonTest() {
 	private val timestamp = 626637180000
 	private val testId = 5L
+	
+	@Test
+	fun create_and_delete() {
+		val study = createStudy("""{
+				"id":$studyWebId,
+				"questionnaires": [
+					{"actionTriggers": [
+						{"schedules": [
+							{"signalTimes": [{}, {}]},
+							{"signalTimes": [{}, {}, {}]}
+						]},
+						{}
+					]},
+					{"actionTriggers": [
+						{"eventTriggers": [{}]},
+						{"eventTriggers": [{}, {}]}
+					]}
+				],
+				"personalStatistics": {"charts": [], "observedVariables": {"test1": [{}], "test2":[{}, {}]}}
+			}""")
+		val oldId = study.id
+		study.save()
+		
+		val dbStudy = DbLogic.getStudy(study.id)
+		assertNotEquals(oldId, study.id)
+		assertNotEquals(null, dbStudy)
+		
+		assertEquals(2, dbStudy!!.questionnaires.size)
+		assertEquals(2, dbStudy.questionnaires[0].actionTriggers.size)
+		assertEquals(2, dbStudy.questionnaires[0].actionTriggers[0].schedules.size)
+		assertEquals(2, dbStudy.questionnaires[0].actionTriggers[0].schedules[0].signalTimes.size)
+		assertEquals(3, dbStudy.questionnaires[0].actionTriggers[0].schedules[1].signalTimes.size)
+		
+		assertEquals(2, dbStudy.questionnaires[1].actionTriggers.size)
+		assertEquals(1, dbStudy.questionnaires[1].actionTriggers[0].eventTriggers.size)
+		assertEquals(2, dbStudy.questionnaires[1].actionTriggers[1].eventTriggers.size)
+		assertEquals(3, dbStudy.observedVariables.size)
+		
+		
+		study.delete()
+		assertEquals(null, DbLogic.getStudy(study.id))
+		for(questionnaire in dbStudy.questionnaires) {
+			assertEquals(null, DbLogic.getQuestionnaire(questionnaire.id))
+			
+			for(actionTrigger in questionnaire.actionTriggers) {
+				assertEquals(null, DbLogic.getActionTrigger(actionTrigger.id))
+				
+				for(schedule in actionTrigger.schedules) {
+					assertEquals(null, DbLogic.getSchedule(schedule.id))
+					
+					for(signalTime in schedule.signalTimes) {
+						assertEquals(null, DbLogic.getSignalTime(signalTime.id))
+					}
+				}
+				for(eventTrigger in actionTrigger.eventTriggers) {
+					assertEquals(null, DbLogic.getEventTrigger(eventTrigger.id))
+				}
+			}
+		}
+	}
 	
 	@Test
 	fun isEventUploaded() {
@@ -79,17 +140,25 @@ class StudyTest : BaseDataStructureTest() {
 		newStudy.id = testId
 		assertEquals(0, newStudy.enabledActionTriggers.size)
 		
-		mockTools.assertSqlWasSelected(ActionTrigger.TABLE, 0, testId.toString())
+		assertSqlWasSelected(ActionTrigger.TABLE, 0, testId.toString())
 	}
 	
-	//editableSignalTimes() is tested in DataStructureSharedTests.study_do_editableSignalTimes()
+	@Test
+	fun editableSignalTimes() {
+		assertEquals(0, createStudy().editableSignalTimes.size)
+		val study = createStudy(
+			"""{"id":$studyWebId, "questionnaires": [{"actionTriggers": [{"schedules": [{"signalTimes":[{},{},{}]}, {"signalTimes": [{},{}], "userEditable": false}]}]}]}"""
+		)
+		study.join()
+		assertEquals(3, study.editableSignalTimes.size)
+	}
 	
 	@Test
 	fun saveSchedules() {
 		val study = createStudy(
 			"""{"id":$studyWebId, "questionnaires": [{"actionTriggers":[{"schedules": [{"signalTimes": [{"startTimeOfDay": 3600000, "endTimeOfDay": 10800000, "random": true}]}]}]}]}"""
 		)
-		study.save() //enabledActionTriggers is needed in saveSchedules and is only loaded from db so we need to save first
+		study.join() //enabledActionTriggers is needed in saveSchedules and is only loaded from db so we need to save first
 		val signalTime = study.enabledActionTriggers[0].schedules[0].signalTimes[0]
 		
 		signalTime.timeHasChanged = true
@@ -98,9 +167,9 @@ class StudyTest : BaseDataStructureTest() {
 		
 		assertEquals(true, study.saveSchedules(true))
 		
-		val selectData = mockTools.getSqlSelectMap()
-		val savedData = mockTools.getSqlSavedMap()
-		val updateData = mockTools.getSqlUpdateMap()
+		val selectData = getSqlSelectMap()
+		val savedData = getSqlSavedMap()
+		val updateData = getSqlUpdateMap()
 		
 		assertEquals(true, selectData.containsKey(Alarm.TABLE)) //because rescheduleNow was true
 		assertEquals(true, savedData.containsKey(Alarm.TABLE)) //because rescheduleNow was true
@@ -122,7 +191,15 @@ class StudyTest : BaseDataStructureTest() {
 		
 	}
 	
-	//hasEditableSchedules() is tested in DataStructureSharedTests.study_do_editableSchedules()
+	@Test
+	fun hasEditableSchedules() {
+		assertFalse(createStudy().hasEditableSchedules())
+		val study = createStudy(
+			"""{"id":$studyWebId, "questionnaires": [{"actionTriggers": [{"schedules": [{"signalTimes": [{},{}], "userEditable": false}, {"signalTimes":[{},{},{}]}]}]}]}"""
+		)
+		study.join()
+		assertTrue(study.hasEditableSchedules())
+	}
 	
 	@Test
 	fun hasEvents() {
@@ -224,13 +301,21 @@ class StudyTest : BaseDataStructureTest() {
 		).needsJoinedScreen())
 	}
 	
-	//getOldLeftStudy() is tested in DataStructureSharedTests.study_do_getOldLeftStudy()
+	@Test
+	fun study_do_getOldLeftStudy() {
+		val newStudy = createStudy()
+		
+		assertEquals(null, newStudy.getOldLeftStudy())
+		val study = createStudy("""{"id":$studyWebId, "personalStatistics": {"charts": [], "observedVariables": {"test1": [{}]}}}""")
+		study.save()
+		newStudy.id = study.id
+		study.leave()
+		
+		assertNotEquals(null, newStudy.getOldLeftStudy())
+	}
 	
 	@Test
 	fun updateWith() {
-		val dialogOpener = mockTools.getDialogOpener()
-		val notifications = mockTools.getNotifications()
-		
 		val oldStudy = createStudy(
 			"""{"id":$studyWebId, "questionnaires": [{"actionTriggers": [{"schedules": [{"signalTimes": [{"startTimeOfDay": 1000}]}]}]}]}"""
 		)
@@ -267,13 +352,10 @@ class StudyTest : BaseDataStructureTest() {
 		val study = createStudy()
 		study.join()
 		
-		val postponedActions = mockTools.getPostponedActions()
 		assertEquals(1, postponedActions.updateStudiesRegularlyCount)
 		
-		mockTools.assertSqlWasSaved(DataSet.TABLE, DataSet.KEY_TYPE, DataSet.TYPE_JOIN)
+		assertSqlWasSaved(DataSet.TABLE, DataSet.KEY_TYPE, DataSet.TYPE_JOIN)
 	}
-	
-	//save() is tested in DataStructureSharedTests.study_create_and_delete()
 	
 	@Test
 	fun saveMsgTimestamp() {
@@ -281,10 +363,8 @@ class StudyTest : BaseDataStructureTest() {
 		study.exists = true
 		study.saveMsgTimestamp(timestamp)
 		
-		mockTools.assertSqlWasUpdated(Study.TABLE, Study.KEY_LAST_MSG_TIMESTAMP, timestamp)
+		assertSqlWasUpdated(Study.TABLE, Study.KEY_LAST_MSG_TIMESTAMP, timestamp)
 	}
-	
-	//delete() is tested in DataStructureSharedTests.study_create_and_delete()
 	
 	@Test
 	fun leaveAfterCheck() {
@@ -300,7 +380,7 @@ class StudyTest : BaseDataStructureTest() {
 	@Test
 	fun leave() {
 		createStudy().leave()
-		mockTools.assertSqlWasUpdated(Study.TABLE, Study.KEY_STATE, Study.STATES.HasLeft.ordinal)
+		assertSqlWasUpdated(Study.TABLE, Study.KEY_STATE, Study.STATES.HasLeft.ordinal)
 	}
 	
 	@Test
@@ -308,15 +388,24 @@ class StudyTest : BaseDataStructureTest() {
 		val study1 = createStudy()
 		study1.id = 5
 		study1.execLeave()
-		mockTools.assertSqlWasDeleted(Study.TABLE, 0, study1.id.toString())
+		assertSqlWasDeleted(Study.TABLE, 0, study1.id.toString())
 		
 		val study2 = createStudy("""{"id":$studyWebId, "personalStatistics": {"charts": [], "observedVariables": {"test1":[{}]}}}""")
 		study2.id = 6
 		study2.execLeave()
 		assertFails {
-			mockTools.assertSqlWasDeleted(Study.TABLE, 0, study2.id.toString())
+			assertSqlWasDeleted(Study.TABLE, 0, study2.id.toString())
 		}
 	}
 	
-	//alreadyExists() is tested in DataStructureSharedTests.study_do_alreadyExists()
+	@Test
+	fun alreadyExists() {
+		val study = createStudy()
+		val newStudy = createStudy()
+		
+		assertFalse(newStudy.alreadyExists())
+		study.join()
+		
+		assertTrue(newStudy.alreadyExists())
+	}
 }

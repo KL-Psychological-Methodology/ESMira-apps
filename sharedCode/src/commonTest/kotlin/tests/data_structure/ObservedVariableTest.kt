@@ -6,13 +6,34 @@ import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_per
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_timed
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonPrimitive
+import BaseCommonTest
 import kotlin.test.*
 
 /**
  * Created by JodliDev on 31.03.2022.
  */
-class ObservedVariableTest : BaseDataStructureTest() {
-	//finishJSON() is tested in DatabaseTestLogic.observedVariable_finishJSON()
+class ObservedVariableTest : BaseCommonTest() {
+	@Test
+	fun finishJSON() {
+		val variableName = "Katara"
+		
+		val study = createStudy()
+		val observedVariable1 = createObservedVariable(variableName)
+		val firstId = observedVariable1.id
+		
+		observedVariable1.finishJSON(study, 0, variableName)
+		assertEquals(firstId, observedVariable1.id)
+		observedVariable1.save()
+		assertNotEquals(firstId, observedVariable1.id)
+		
+		val observedVariable2 = createObservedVariable(variableName)
+		observedVariable2.finishJSON(study, 0, variableName)
+		assertEquals(observedVariable1.id, observedVariable2.id)
+		
+		val observedVariable3 = createObservedVariable(variableName)
+		observedVariable3.finishJSON(study, 0, "Zuko")
+		assertEquals(firstId, observedVariable3.id)
+	}
 	
 	@Test
 	fun save() {
@@ -20,10 +41,10 @@ class ObservedVariableTest : BaseDataStructureTest() {
 		
 		val observedVariable = createObservedVariable(variableName)
 		observedVariable.save()
-		mockTools.assertSqlWasSaved(ObservedVariable.TABLE, ObservedVariable.KEY_VARIABLE_NAME, variableName)
+		assertSqlWasSaved(ObservedVariable.TABLE, ObservedVariable.KEY_VARIABLE_NAME, variableName)
 		
 		observedVariable.save()
-		mockTools.assertSqlWasUpdated(ObservedVariable.TABLE, ObservedVariable.KEY_VARIABLE_NAME, variableName)
+		assertSqlWasUpdated(ObservedVariable.TABLE, ObservedVariable.KEY_VARIABLE_NAME, variableName)
 		
 	}
 	
@@ -141,20 +162,20 @@ class ObservedVariableTest : BaseDataStructureTest() {
 		createObservedVariable(variableName,
 			"""{"storageType": ${ObservedVariable.STORAGE_TYPE_TIMED}}"""
 		).createStatistic(responses)
-		mockTools.assertSqlWasSaved(StatisticData_timed.TABLE, StatisticData_timed.KEY_SUM, testValue)
+		assertSqlWasSaved(StatisticData_timed.TABLE, StatisticData_timed.KEY_SUM, testValue)
 		
 		//test STORAGE_TYPE_FREQ_DISTR
 		responses[variableName] = JsonPrimitive(testValue)
 		createObservedVariable(variableName,
 			"""{"storageType": ${ObservedVariable.STORAGE_TYPE_FREQ_DISTR}}"""
 		).createStatistic(responses)
-		mockTools.assertSqlWasSaved(StatisticData_perValue.TABLE, StatisticData_perValue.KEY_VALUE, testValue.toString())
+		assertSqlWasSaved(StatisticData_perValue.TABLE, StatisticData_perValue.KEY_VALUE, testValue.toString())
 		
 		//test not valid value
 		responses[variableName] = JsonPrimitive("not valid")
 		createObservedVariable(variableName,
 			"""{"storageType": ${ObservedVariable.STORAGE_TYPE_TIMED}}"""
 		).createStatistic(responses)
-		mockTools.assertSqlWasUpdated(StatisticData_timed.TABLE, StatisticData_timed.KEY_SUM, testValue)
+		assertSqlWasUpdated(StatisticData_timed.TABLE, StatisticData_timed.KEY_SUM, testValue)
 	}
 }

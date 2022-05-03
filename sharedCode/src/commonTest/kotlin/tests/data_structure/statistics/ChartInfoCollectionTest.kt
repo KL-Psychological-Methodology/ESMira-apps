@@ -1,19 +1,15 @@
 package tests.data_structure.statistics
 
-import BaseTest
-import MockTools
-import at.jodlidev.esmira.sharedCode.NativeLink
-import at.jodlidev.esmira.sharedCode.data_structure.*
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.ChartInfoCollection
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_perValue
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_timed
-import tests.data_structure.BaseDataStructureTest
+import BaseCommonTest
 import kotlin.test.*
 
 /**
  * Created by JodliDev on 31.03.2022.
  */
-class ChartInfoCollectionTest : BaseDataStructureTest() {
+class ChartInfoCollectionTest : BaseCommonTest() {
 	
 	@Test
 	fun constructorDb() {

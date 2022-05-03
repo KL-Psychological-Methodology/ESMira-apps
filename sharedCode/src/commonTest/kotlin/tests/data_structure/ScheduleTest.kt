@@ -2,68 +2,69 @@ package tests.data_structure
 
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.*
+import BaseCommonTest
 import kotlin.test.*
 
 /**
  * Created by JodliDev on 31.03.2022.
  */
-class ScheduleTest : BaseDataStructureTest() {
+class ScheduleTest : BaseCommonTest() {
 	
 	@Test
 	fun signalTimes() {
-		assertEquals(0, createObj<Schedule>().signalTimes.size)
-		assertEquals(3, createObj<Schedule>("""{"signalTimes":[{},{},{}]}""").signalTimes.size)
+		assertEquals(0, createJsonObj<Schedule>().signalTimes.size)
+		assertEquals(3, createJsonObj<Schedule>("""{"signalTimes":[{},{},{}]}""").signalTimes.size)
 		
-		val schedule = createObj<Schedule>()
+		val schedule = createJsonObj<Schedule>()
 		schedule.fromJson = false
 		schedule.id = 123
 		assertEquals(0, schedule.signalTimes.size)
-		mockTools.assertSqlWasSelected(SignalTime.TABLE, 0, schedule.id.toString())
+		assertSqlWasSelected(SignalTime.TABLE, 0, schedule.id.toString())
 	}
 	
 	@Test
 	fun isDifferent() {
-		val schedule = createObj<Schedule>(
+		val schedule = createJsonObj<Schedule>(
 			"""{"userEditable": true, "dailyRepeatRate": 1, "weekdays": 0, "dayOfMonth": 0, "skipFirstInLoop": false}"""
 		)
-		assertFalse(schedule.isDifferent(createObj<Schedule>(
+		assertFalse(schedule.isDifferent(createJsonObj<Schedule>(
 			"""{"userEditable": true, "dailyRepeatRate": 1, "weekdays": 0, "dayOfMonth": 0, "skipFirstInLoop": false}"""
 		)))
-		assertTrue(schedule.isDifferent(createObj<Schedule>(
+		assertTrue(schedule.isDifferent(createJsonObj<Schedule>(
 			"""{"userEditable": false, "dailyRepeatRate": 1, "weekdays": 0, "dayOfMonth": 0, "skipFirstInLoop": false}"""
 		)))
-		assertTrue(schedule.isDifferent(createObj<Schedule>(
+		assertTrue(schedule.isDifferent(createJsonObj<Schedule>(
 			"""{"userEditable": false, "dailyRepeatRate": 2, "weekdays": 0, "dayOfMonth": 0, "skipFirstInLoop": false}"""
 		)))
-		assertTrue(schedule.isDifferent(createObj<Schedule>(
+		assertTrue(schedule.isDifferent(createJsonObj<Schedule>(
 			"""{"userEditable": false, "dailyRepeatRate": 2, "weekdays": 2, "dayOfMonth": 0, "skipFirstInLoop": false}"""
 		)))
-		assertTrue(schedule.isDifferent(createObj<Schedule>(
+		assertTrue(schedule.isDifferent(createJsonObj<Schedule>(
 			"""{"userEditable": false, "dailyRepeatRate": 2, "weekdays": 2, "dayOfMonth": 12, "skipFirstInLoop": false}"""
 		)))
-		assertTrue(schedule.isDifferent(createObj<Schedule>(
+		assertTrue(schedule.isDifferent(createJsonObj<Schedule>(
 			"""{"userEditable": false, "dailyRepeatRate": 2, "weekdays": 2, "dayOfMonth": 12, "skipFirstInLoop": true}"""
 		)))
 		
-		assertTrue(schedule.isDifferent(createObj<Schedule>(
+		assertTrue(schedule.isDifferent(createJsonObj<Schedule>(
 			"""{"signalTimes": [{}, {}]}"""
 		)))
 		
-		assertFalse(createObj<Schedule>(
+		assertFalse(createJsonObj<Schedule>(
 			"""{"signalTimes": [{}, {}]}"""
-		).isDifferent(createObj<Schedule>(
+		).isDifferent(createJsonObj<Schedule>(
 			"""{"signalTimes": [{}, {}]}"""
 		)))
 		
-		assertTrue(createObj<Schedule>(
+		assertTrue(createJsonObj<Schedule>(
 			"""{"signalTimes": [{}, {}]}"""
-		).isDifferent(createObj<Schedule>(
+		).isDifferent(createJsonObj<Schedule>(
 			"""{"signalTimes": [{}, {},{}]}"""
 		)))
 		
-		assertTrue(createObj<Schedule>(
+		assertTrue(createJsonObj<Schedule>(
 			"""{"signalTimes": [{}, {}, {}]}"""
-		).isDifferent(createObj<Schedule>(
+		).isDifferent(createJsonObj<Schedule>(
 			"""{"signalTimes": [{}, {}]}"""
 		)))
 	}
@@ -71,22 +72,22 @@ class ScheduleTest : BaseDataStructureTest() {
 	@Test
 	fun isFaulty() {
 		val onHour = 1000*60*60
-		assertFalse(createObj<Schedule>(
+		assertFalse(createJsonObj<Schedule>(
 			"""{"signalTimes": [{}, {}, {}]}"""
 		).isFaulty())
 		
-		assertTrue(createObj<Schedule>(
+		assertTrue(createJsonObj<Schedule>(
 			"""{"signalTimes": [{}, {"random":true, "startTimeOfDay":${onHour}, "endTimeOfDay":${onHour*2}, "minutesBetween":61}, {}]}"""
 		).isFaulty())
 	}
 	
 	@Test
 	fun saveAndScheduleIfExists() {
-		val schedule = createObj<Schedule>()
+		val schedule = createJsonObj<Schedule>()
 		schedule.bindParent(createActionTrigger())
 		schedule.saveAndScheduleIfExists()
 		
-		mockTools.assertSqlWasSaved(Schedule.TABLE, Schedule.KEY_ID, schedule.id)
+		assertSqlWasSaved(Schedule.TABLE, Schedule.KEY_ID, schedule.id)
 	}
 	
 	@Test
@@ -95,7 +96,7 @@ class ScheduleTest : BaseDataStructureTest() {
 		val later = NativeLink.getNowMillis() + oneDay + 1000*60
 		val soon = NativeLink.getNowMillis()
 		
-		val schedule = createObj<Schedule>("""{"signalTimes":[{}]}""")
+		val schedule = createJsonObj<Schedule>("""{"signalTimes":[{}]}""")
 		schedule.bindParent(createActionTrigger())
 		val signalTime = schedule.signalTimes[0]
 		signalTime.bindParent(-1, schedule)
@@ -106,7 +107,7 @@ class ScheduleTest : BaseDataStructureTest() {
 		//without rescheduleNow
 		Alarm.createFromSignalTime(signalTime, schedule.getActionTriggerId(), soon)
 		schedule.saveTimeFrames()
-		assertEquals(0, mockTools.getPostponedActions().cancelList.size)
+		assertEquals(0, postponedActions.cancelList.size)
 		
 		
 		//with automatic rescheduleNow
@@ -114,7 +115,7 @@ class ScheduleTest : BaseDataStructureTest() {
 		Alarm.createFromSignalTime(signalTime, schedule.getActionTriggerId(), later)
 		schedule.bindParent(createActionTrigger()) //add questionnaire and study to db again
 		schedule.saveTimeFrames()
-		assertNotEquals(0, mockTools.getPostponedActions().cancelList.size)
+		assertNotEquals(0, postponedActions.cancelList.size)
 	}
 	
 	@Test
@@ -122,7 +123,7 @@ class ScheduleTest : BaseDataStructureTest() {
 		val oneDay = 1000*60*60*24
 		val now = NativeLink.getNowMillis()
 		val actionTrigger = createActionTrigger(questionnaireJson = """{"durationStart": ${now + oneDay*2}}""")
-		val schedule = createObj<Schedule>()
+		val schedule = createJsonObj<Schedule>()
 		schedule.bindParent(actionTrigger)
 		
 		schedule.skipFirstInLoop = false
@@ -144,6 +145,6 @@ class ScheduleTest : BaseDataStructureTest() {
 	@Test
 	fun updateLastScheduled() {
 		Schedule.updateLastScheduled(123, 1001)
-		mockTools.assertSqlWasUpdated(Schedule.TABLE, Schedule.KEY_LAST_SCHEDULED, 1001L)
+		assertSqlWasUpdated(Schedule.TABLE, Schedule.KEY_LAST_SCHEDULED, 1001L)
 	}
 }

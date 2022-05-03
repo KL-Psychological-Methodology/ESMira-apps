@@ -1,16 +1,15 @@
 package tests.data_structure
 
-import BaseTest
-import MockTools
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.*
+import BaseCommonTest
 import kotlin.test.*
 
 /**
  * Created by JodliDev on 31.03.2022.
  */
-class ErrorBoxTest : BaseDataStructureTest() {
+class ErrorBoxTest : BaseCommonTest() {
 	
 	@Test
 	fun export() {
@@ -40,26 +39,26 @@ class ErrorBoxTest : BaseDataStructureTest() {
 	fun log() {
 		ErrorBox.log("title123", "msg123")
 		
-		mockTools.assertSqlWasSaved(ErrorBox.TABLE, ErrorBox.KEY_SEVERITY, ErrorBox.SEVERITY_LOG)
-		mockTools.assertSqlWasSaved(ErrorBox.TABLE, ErrorBox.KEY_TITLE, "title123 (${NativeLink.smartphoneData.appVersion})")
-		mockTools.assertSqlWasSaved(ErrorBox.TABLE, ErrorBox.KEY_MSG, "msg123")
+		assertSqlWasSaved(ErrorBox.TABLE, ErrorBox.KEY_SEVERITY, ErrorBox.SEVERITY_LOG)
+		assertSqlWasSaved(ErrorBox.TABLE, ErrorBox.KEY_TITLE, "title123 (${NativeLink.smartphoneData.appVersion})")
+		assertSqlWasSaved(ErrorBox.TABLE, ErrorBox.KEY_MSG, "msg123")
 	}
 	
 	@Test
 	fun warn() {
 		ErrorBox.warn("title123", "msg123")
 		
-		mockTools.assertSqlWasSaved(ErrorBox.TABLE, ErrorBox.KEY_SEVERITY, ErrorBox.SEVERITY_WARN)
-		mockTools.assertSqlWasSaved(ErrorBox.TABLE, ErrorBox.KEY_TITLE, "title123 (${NativeLink.smartphoneData.appVersion})")
-		mockTools.assertSqlWasSaved(ErrorBox.TABLE, ErrorBox.KEY_MSG, "msg123")
+		assertSqlWasSaved(ErrorBox.TABLE, ErrorBox.KEY_SEVERITY, ErrorBox.SEVERITY_WARN)
+		assertSqlWasSaved(ErrorBox.TABLE, ErrorBox.KEY_TITLE, "title123 (${NativeLink.smartphoneData.appVersion})")
+		assertSqlWasSaved(ErrorBox.TABLE, ErrorBox.KEY_MSG, "msg123")
 	}
 	
 	@Test
 	fun error() {
 		ErrorBox.error("title123", "msg123")
 		
-		mockTools.assertSqlWasSaved(ErrorBox.TABLE, ErrorBox.KEY_SEVERITY, ErrorBox.SEVERITY_ERROR)
-		mockTools.assertSqlWasSaved(ErrorBox.TABLE, ErrorBox.KEY_TITLE, "title123 (${NativeLink.smartphoneData.appVersion})")
-		mockTools.assertSqlWasSaved(ErrorBox.TABLE, ErrorBox.KEY_MSG, "msg123")
+		assertSqlWasSaved(ErrorBox.TABLE, ErrorBox.KEY_SEVERITY, ErrorBox.SEVERITY_ERROR)
+		assertSqlWasSaved(ErrorBox.TABLE, ErrorBox.KEY_TITLE, "title123 (${NativeLink.smartphoneData.appVersion})")
+		assertSqlWasSaved(ErrorBox.TABLE, ErrorBox.KEY_MSG, "msg123")
 	}
 }

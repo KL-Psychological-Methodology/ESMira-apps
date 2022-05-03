@@ -1,7 +1,12 @@
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
+import at.jodlidev.esmira.sharedCode.PhoneType
 import at.jodlidev.esmira.sharedCode.data_structure.*
 import kotlinx.serialization.decodeFromString
+import mock.MockDialogOpener
+import mock.MockNotifications
+import mock.MockPostponedActions
+import mock.MockSmartphoneData
 
 /**
  * Created by JodliDev on 13.04.2022.
@@ -12,6 +17,11 @@ abstract class BaseTest {
 	internal val testAccessKey = "accessKey"
 	private var baseStudy: Study? = null
 	
+	internal val smartphoneData = MockSmartphoneData()
+	internal val dialogOpener = MockDialogOpener()
+	internal val notifications = MockNotifications()
+	internal val postponedActions = MockPostponedActions()
+	
 	fun getBaseStudyId(): Long {
 		if(baseStudy == null) {
 			baseStudy = createStudy()
@@ -20,30 +30,41 @@ abstract class BaseTest {
 		return baseStudy!!.id
 	}
 	
+	
+	fun setPhoneType(phoneType: PhoneType) {
+		smartphoneData.currentPhoneType = phoneType
+	}
+	
+	fun setLang(lang: String) {
+		smartphoneData.currentLang = lang
+	}
+	
 	open fun reset() {
 		baseStudy = null
+		dialogOpener.reset()
+		notifications.reset()
+		postponedActions.reset()
 	}
 	
 	
-	inline fun <reified T>createObj(json: String = "{}"): T {
+	inline fun <reified T>createJsonObj(json: String = "{}"): T {
 		return DbLogic.getJsonConfig().decodeFromString(json)
 	}
 	
-	
-//	fun createAlarmFromSignalTime(signalTimeJson: String = "{}", actionTriggerId: Long = -1): Alarm {
-//		val signalTime = createObj<SignalTime>(signalTimeJson)
-//		return Alarm.createFromSignalTime(signalTime, actionTriggerId, NativeLink.getNowMillis())
-//	}
-	fun createAlarmFromSignalTime(signalTimeJson: String = "{}", actionTriggerId: Long = -1): Alarm {
-		val signalTime = createObj<SignalTime>(signalTimeJson)
-		return Alarm(signalTime, actionTriggerId, NativeLink.getNowMillis(), 1)
+	fun createAlarmFromSignalTime(
+		signalTimeJson: String = "{}",
+		actionTriggerId: Long = -1,
+		timestamp: Long = NativeLink.getNowMillis()
+	): Alarm {
+		val signalTime = createJsonObj<SignalTime>(signalTimeJson)
+		return Alarm(signalTime, actionTriggerId, timestamp, 1)
 	}
 	
 	fun createActionTrigger(actionTriggerJson: String = "{}", questionnaireJson: String = "{}"): ActionTrigger {
-		val questionnaire = createObj<Questionnaire>(questionnaireJson)
+		val questionnaire = createJsonObj<Questionnaire>(questionnaireJson)
 		questionnaire.studyId = getBaseStudyId() //because execActions() and issueReminder() need its study
 		questionnaire.save(true)
-		val a = createObj<ActionTrigger>(actionTriggerJson)
+		val a = createJsonObj<ActionTrigger>(actionTriggerJson)
 		a.questionnaireId = questionnaire.id
 		a.studyId = getBaseStudyId()
 		return a
@@ -64,13 +85,13 @@ abstract class BaseTest {
 	}
 	
 	fun createObservedVariable(variableName: String, json: String = "{}"): ObservedVariable {
-		val ov = createObj<ObservedVariable>(json)
+		val ov = createJsonObj<ObservedVariable>(json)
 		ov.variableName = variableName
 		return ov
 	}
 	
 	fun createScheduleForSaving(json: String = "{}"): Schedule {
-		val schedule = createObj<Schedule>(json)
+		val schedule = createJsonObj<Schedule>(json)
 		schedule.bindParent(createActionTrigger())
 		return schedule
 	}

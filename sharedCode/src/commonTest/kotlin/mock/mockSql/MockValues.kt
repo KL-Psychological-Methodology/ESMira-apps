@@ -5,10 +5,16 @@ import at.jodlidev.esmira.sharedCode.SQLiteValues
 /**
  * Created by JodliDev on 31.03.2022.
  */
-class MockValues: SQLiteValues {
-	private val data = HashMap<String, Any?>()
+class MockValues(): SQLiteValues {
+	private val data = HashMap<String, Comparable<*>?>()
+	constructor(oldValues: MockValues): this() {
+		for((key, value) in oldValues.getValues()) {
+			data[key] = value
+		}
+	}
+	
 	override fun putBoolean(key: String, value: Boolean) {
-		data[key] = value
+		data[key] = if(value) 1 else 0
 	}
 	
 	override fun putInt(key: String, value: Int) {
@@ -31,7 +37,7 @@ class MockValues: SQLiteValues {
 		return data
 	}
 	
-	fun getValues(): HashMap<String, Any?> {
+	fun getValues(): HashMap<String, Comparable<*>?> {
 		return data
 	}
 }

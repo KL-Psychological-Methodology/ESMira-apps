@@ -61,4 +61,16 @@ class MockNotifications: NotificationsInterface {
 	override fun remove(id: Int) {
 		removeList.add(id)
 	}
+	
+	fun reset() {
+		firePostponedList.clear()
+		fireCount = 0
+		fireSchedulesChangedList.clear()
+		fireQuestionnaireBingList.clear()
+		fireStudyNotificationList.clear()
+		fireMessageNotificationList.clear()
+		removeQuestionnaireBingList.clear()
+		removeList.clear()
+		
+	}
 }

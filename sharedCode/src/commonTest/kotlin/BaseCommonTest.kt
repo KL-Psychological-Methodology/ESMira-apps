@@ -1,51 +1,24 @@
+import BaseTest
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.PhoneType
 import at.jodlidev.esmira.sharedCode.SQLiteValues
-import mock.MockDialogOpener
-import mock.MockNotifications
-import mock.MockPostponedActions
-import mock.MockSmartphoneData
 import mock.mockSql.MockDatabase
 import mock.mockSql.MockValues
+import kotlin.test.BeforeTest
 import kotlin.test.assertEquals
 import kotlin.test.assertNotEquals
 import kotlin.test.assertTrue
 
 /**
- * Created by JodliDev on 31.03.2022.
+ * Created by JodliDev on 26.04.2022.
  */
-class MockTools {
+abstract class BaseCommonTest : BaseTest() {
 	private var sql = MockDatabase()
-	private var smartphoneData = MockSmartphoneData()
-	private var dialogOpener = MockDialogOpener()
-	private var notifications = MockNotifications()
-	private var postponedActions = MockPostponedActions()
 	
-	init {
-		initMockNativeLink(sql, smartphoneData, dialogOpener, notifications, postponedActions)
+	@BeforeTest
+	fun resetMock() {
+		reset()
 	}
-	
-	fun reset() {
-		sql = MockDatabase()
-		dialogOpener.reset()
-		notifications.reset()
-		postponedActions.reset()
-		
-		initMockNativeLink(sql, smartphoneData, dialogOpener, notifications, postponedActions)
-		NativeLink.resetSql(sql)
-	}
-	
-	
-	fun getDialogOpener(): MockDialogOpener {
-		return dialogOpener
-	}
-	fun getNotifications(): MockNotifications {
-		return notifications
-	}
-	fun getPostponedActions(): MockPostponedActions {
-		return postponedActions
-	}
-	
 	
 	fun getSqlSelectMap(): HashMap<String, MutableList<MockDatabase.SelectStatement>> {
 		return sql.selectData
@@ -111,11 +84,11 @@ class MockTools {
 		assertEquals(expectedCount, count, "\"$searchQuery\" ran $count times instead of $expectedCount")
 	}
 	
-	
-	fun setPhoneType(phoneType: PhoneType) {
-		smartphoneData.currentPhoneType = phoneType
-	}
-	fun setLang(lang: String) {
-		smartphoneData.currentLang = lang
+	override fun reset() {
+		super.reset()
+		
+		sql = MockDatabase()
+		initMockNativeLink(sql, smartphoneData, dialogOpener, notifications, postponedActions)
+		NativeLink.resetSql(sql)
 	}
 }

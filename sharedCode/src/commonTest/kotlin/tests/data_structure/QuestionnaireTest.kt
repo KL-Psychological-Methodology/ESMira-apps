@@ -2,44 +2,45 @@ package tests.data_structure
 
 import at.jodlidev.esmira.sharedCode.*
 import at.jodlidev.esmira.sharedCode.data_structure.*
+import BaseCommonTest
 import kotlin.test.*
 
 /**
  * Created by JodliDev on 31.03.2022.
  */
-class QuestionnaireTest : BaseDataStructureTest() {
+class QuestionnaireTest : BaseCommonTest() {
 	
 	@Test
 	fun actionTriggers() {
-		val questionnaire = createObj<Questionnaire>()
+		val questionnaire = createJsonObj<Questionnaire>()
 		assertEquals(0, questionnaire.actionTriggers.size)
 		
-		val questionnaireDb = createObj<Questionnaire>()
+		val questionnaireDb = createJsonObj<Questionnaire>()
 		questionnaireDb.fromJson = false
 		assertEquals(0, questionnaireDb.actionTriggers.size)
-		mockTools.assertSqlWasSelected(ActionTrigger.TABLE, 0, questionnaire.id.toString())
+		assertSqlWasSelected(ActionTrigger.TABLE, 0, questionnaire.id.toString())
 	}
 	
 	@Test
 	fun pages() {
-		val questionnaire = createObj<Questionnaire>("""{"pages":[{},{},{},{}]}""")
+		val questionnaire = createJsonObj<Questionnaire>("""{"pages":[{},{},{},{}]}""")
 		assertEquals(4, questionnaire.pages.size)
 	}
 	
 	@Test
 	fun sumScores() {
-		val questionnaire = createObj<Questionnaire>("""{"sumScores":[{},{}]}""")
+		val questionnaire = createJsonObj<Questionnaire>("""{"sumScores":[{},{}]}""")
 		assertEquals(2, questionnaire.sumScores.size)
 	}
 	
 	@Test
 	fun getQuestionnaireTitle() {
 		val title = "Katara"
-		val questionnaire = createObj<Questionnaire>()
+		val questionnaire = createJsonObj<Questionnaire>()
 		questionnaire.title = title
 		assertEquals(title, questionnaire.getQuestionnaireTitle(0))
 		
-		val questionnaireWithPages = createObj<Questionnaire>("""{"pages":[{},{},{}]}""")
+		val questionnaireWithPages = createJsonObj<Questionnaire>("""{"pages":[{},{},{}]}""")
 		questionnaireWithPages.title = title
 		val pagesNum = questionnaireWithPages.pages.size
 		assertEquals("${title} 1/$pagesNum", questionnaireWithPages.getQuestionnaireTitle(0))
@@ -47,13 +48,33 @@ class QuestionnaireTest : BaseDataStructureTest() {
 		assertEquals("${title} 3/$pagesNum", questionnaireWithPages.getQuestionnaireTitle(2))
 	}
 	
-	//save() ist tested in DatabaseSharedTestLogic.questionnaire_save()
+	@Test
+	fun save() {
+		val questionnaire = createJsonObj<Questionnaire>("""{"title": "Azula", "actionTriggers":[{},{}]}""")
+		questionnaire.save(true)
+		assertEquals(questionnaire.title, DbLogic.getQuestionnaire(questionnaire.id)?.title)
+		assertEquals(2, DbLogic.getActionTriggers(questionnaire.studyId).size)
+		assertEquals(0, notifications.fireSchedulesChangedList.size)
+		
+		questionnaire.title = "new"
+		questionnaire.save(true)
+		assertEquals("new", DbLogic.getQuestionnaire(questionnaire.id)?.title)
+		assertEquals(0, notifications.fireSchedulesChangedList.size)
+		
+		val questionnaireDifferent = createJsonObj<Questionnaire>("""{"actionTriggers":[{},{},{}]}""")
+		questionnaireDifferent.studyId = getBaseStudyId()
+		questionnaireDifferent.fromJson = true
+		questionnaireDifferent.exists = true
+		questionnaireDifferent.id = questionnaire.id
+		questionnaireDifferent.save(true)
+		assertEquals(1, notifications.fireSchedulesChangedList.size)
+		assertEquals(3, DbLogic.getActionTriggers(questionnaireDifferent.studyId).size)
+	}
 	
 	@Test
 	fun saveQuestionnaire() {
-		val notifications = mockTools.getNotifications()
 		val testValue = "You can't handle the truth!"
-		val questionnaire = createObj<Questionnaire>("""{"pages": [{"inputs": [{}]}]}""")
+		val questionnaire = createJsonObj<Questionnaire>("""{"pages": [{"inputs": [{}]}]}""")
 		questionnaire.studyId = getBaseStudyId()
 		val input = questionnaire.pages[0].inputs[0]
 		input.value = testValue
@@ -63,12 +84,12 @@ class QuestionnaireTest : BaseDataStructureTest() {
 		questionnaire.saveQuestionnaire(0)
 		
 		//check if inputs are saved:
-		val value = mockTools.getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
+		val value = getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
 		assertNotEquals(-1, value.indexOf(testValue))
 		
 		//check if lastCompleted was updated:
 		assertNotEquals(lastCompleted, questionnaire.lastCompleted)
-		mockTools.assertSqlWasUpdated(Questionnaire.TABLE, Questionnaire.KEY_LAST_COMPLETED, questionnaire.lastCompleted)
+		assertSqlWasUpdated(Questionnaire.TABLE, Questionnaire.KEY_LAST_COMPLETED, questionnaire.lastCompleted)
 		
 		//check if notifications were removed:
 		assertEquals(1, notifications.removeQuestionnaireBingList.size)
@@ -76,7 +97,7 @@ class QuestionnaireTest : BaseDataStructureTest() {
 	
 	@Test
 	fun checkQuestionnaire() {
-		var questionnaire = createObj<Questionnaire>(
+		var questionnaire = createJsonObj<Questionnaire>(
 			"""{"pages": [{"inputs": [{}, {}, {}]}, {}, {"inputs": [{}, {}]}]}"""
 		)
 		
@@ -84,7 +105,7 @@ class QuestionnaireTest : BaseDataStructureTest() {
 			assertEquals(-1, questionnaire.checkQuestionnaire(i), "Failed on page ${i+1}")
 		}
 		
-		questionnaire = createObj<Questionnaire>(
+		questionnaire = createJsonObj<Questionnaire>(
 			"""{"pages": [
 				{"inputs": [{}, {"required": true}, {}]},
 				{"inputs": [{"required": true}, {}, {"required": true}]},
@@ -117,90 +138,141 @@ class QuestionnaireTest : BaseDataStructureTest() {
 	@Test
 	fun updateLastNotification() {
 		val timestamp = 1001L
-		val questionnaire = createObj<Questionnaire>()
+		val questionnaire = createJsonObj<Questionnaire>()
 		questionnaire.exists = true
 		
 		questionnaire.updateLastNotification(timestamp)
 		assertEquals(timestamp, questionnaire.lastNotification)
-		mockTools.assertSqlWasUpdated(Questionnaire.TABLE, Questionnaire.KEY_LAST_NOTIFICATION, timestamp)
+		assertSqlWasUpdated(Questionnaire.TABLE, Questionnaire.KEY_LAST_NOTIFICATION, timestamp)
 	}
 	
 	@Test
 	fun updateLastCompleted() {
 		val timestamp = 1001L
-		val questionnaire = createObj<Questionnaire>()
+		val questionnaire = createJsonObj<Questionnaire>()
 		questionnaire.lastCompleted = timestamp
 		questionnaire.exists = true
 		
 		questionnaire.updateLastCompleted(false)
 		assertNotEquals(timestamp, questionnaire.lastCompleted)
-		mockTools.assertSqlWasUpdated(Questionnaire.TABLE, Questionnaire.KEY_LAST_COMPLETED, questionnaire.lastCompleted)
+		assertSqlWasUpdated(Questionnaire.TABLE, Questionnaire.KEY_LAST_COMPLETED, questionnaire.lastCompleted)
 		
 		
 		questionnaire.updateLastCompleted(true)
 		assertEquals(0, questionnaire.lastNotification)
-		mockTools.assertSqlWasUpdated(Questionnaire.TABLE, Questionnaire.KEY_LAST_NOTIFICATION, 0)
+		assertSqlWasUpdated(Questionnaire.TABLE, Questionnaire.KEY_LAST_NOTIFICATION, 0)
 	}
 	
 	@Test
 	fun delete() {
-		val notifications = mockTools.getNotifications()
-		val questionnaire = createObj<Questionnaire>()
+		val questionnaire = createJsonObj<Questionnaire>()
 		questionnaire.delete()
-		mockTools.assertSqlWasDeleted(Questionnaire.TABLE, 0, questionnaire.id.toString())
+		assertSqlWasDeleted(Questionnaire.TABLE, 0, questionnaire.id.toString())
 		assertEquals(1, notifications.removeQuestionnaireBingList.size)
 	}
 	
 	@Test
 	fun hasSchedules() {
-		assertFalse(createObj<Questionnaire>().hasSchedules())
-		assertTrue(createObj<Questionnaire>("""{"actionTriggers":[{},{"schedules":[{}]}]}""").hasSchedules())
-		assertFalse(createObj<Questionnaire>("""{"actionTriggers":[{},{}]}""").hasSchedules())
+		assertFalse(createJsonObj<Questionnaire>().hasSchedules())
+		assertTrue(createJsonObj<Questionnaire>("""{"actionTriggers":[{},{"schedules":[{}]}]}""").hasSchedules())
+		assertFalse(createJsonObj<Questionnaire>("""{"actionTriggers":[{},{}]}""").hasSchedules())
 	}
 	
 	@Test
 	fun hasEvents() {
-		assertFalse(createObj<Questionnaire>().hasEvents())
-		assertFalse(createObj<Questionnaire>("""{"actionTriggers":[{},{}]}""").hasEvents())
-		assertTrue(createObj<Questionnaire>("""{"actionTriggers":[{},{"eventTriggers":[{}]}]}""").hasEvents())
+		assertFalse(createJsonObj<Questionnaire>().hasEvents())
+		assertFalse(createJsonObj<Questionnaire>("""{"actionTriggers":[{},{}]}""").hasEvents())
+		assertTrue(createJsonObj<Questionnaire>("""{"actionTriggers":[{},{"eventTriggers":[{}]}]}""").hasEvents())
 	}
 	
 	@Test
 	fun hasDelayedEvents() {
-		assertFalse(createObj<Questionnaire>().hasDelayedEvents())
-		assertFalse(createObj<Questionnaire>("""{"actionTriggers":[{},{"eventTriggers":[{}]}]}""").hasDelayedEvents())
-		assertTrue(createObj<Questionnaire>("""{"actionTriggers":[{},{"eventTriggers": [{"delaySec":10}]}]}""").hasDelayedEvents())
+		assertFalse(createJsonObj<Questionnaire>().hasDelayedEvents())
+		assertFalse(createJsonObj<Questionnaire>("""{"actionTriggers":[{},{"eventTriggers":[{}]}]}""").hasDelayedEvents())
+		assertTrue(createJsonObj<Questionnaire>("""{"actionTriggers":[{},{"eventTriggers": [{"delaySec":10}]}]}""").hasDelayedEvents())
 	}
 	
 	@Test
 	fun hasNotifications() {
-		assertFalse(createObj<Questionnaire>().hasNotifications())
-		assertTrue(createObj<Questionnaire>("""{"actionTriggers":[{},{"actions": [{"type": 3}]}]}""").hasNotifications())
+		assertFalse(createJsonObj<Questionnaire>().hasNotifications())
+		assertTrue(createJsonObj<Questionnaire>("""{"actionTriggers":[{},{"actions": [{"type": 3}]}]}""").hasNotifications())
 	}
 	
 	@Test
 	fun usesPostponedActions() {
-		assertFalse(createObj<Questionnaire>().usesPostponedActions())
-		assertTrue(createObj<Questionnaire>("""{"actionTriggers":[{},{"eventTriggers":[{"delaySec": 10}]}]}""").usesPostponedActions())
-		assertTrue(createObj<Questionnaire>("""{"actionTriggers":[{},{"schedules":[{}]}]}""").usesPostponedActions())
+		assertFalse(createJsonObj<Questionnaire>().usesPostponedActions())
+		assertTrue(createJsonObj<Questionnaire>("""{"actionTriggers":[{},{"eventTriggers":[{"delaySec": 10}]}]}""").usesPostponedActions())
+		assertTrue(createJsonObj<Questionnaire>("""{"actionTriggers":[{},{"schedules":[{}]}]}""").usesPostponedActions())
 	}
 	
 	@Test
 	fun hasScreenTracking() {
-		assertFalse(createObj<Questionnaire>().hasScreenTracking())
-		assertTrue(createObj<Questionnaire>(
+		assertFalse(createJsonObj<Questionnaire>().hasScreenTracking())
+		assertTrue(createJsonObj<Questionnaire>(
 			"""{"pages": [{"inputs": [{}, {}, {}]}, {}, {"inputs": [{}, {"responseType": "app_usage"}]}]}"""
 		).hasScreenTracking())
 	}
 	
 	@Test
 	fun hasEditableSchedules() {
-		assertFalse(createObj<Questionnaire>().hasEditableSchedules())
-		assertTrue(createObj<Questionnaire>("""{"actionTriggers":[{},{"schedules":[{"userEditable": true}]}]}""").hasEditableSchedules())
-		assertFalse(createObj<Questionnaire>("""{"actionTriggers":[{},{"schedules":[{"userEditable": false}]}]}""").hasEditableSchedules())
+		assertFalse(createJsonObj<Questionnaire>().hasEditableSchedules())
+		assertTrue(createJsonObj<Questionnaire>("""{"actionTriggers":[{},{"schedules":[{"userEditable": true}]}]}""").hasEditableSchedules())
+		assertFalse(createJsonObj<Questionnaire>("""{"actionTriggers":[{},{"schedules":[{"userEditable": false}]}]}""").hasEditableSchedules())
 	}
 	
-	//isActive is tested in DatabaseSharedTestLogic.questionnaire_isActive()
+	@Test
+	fun isActive() {
+		val now = NativeLink.getNowMillis()
+		val study = createStudy()
+		study.joined = now
+		study.save()
+		val db = NativeLink.sql
+		
+		//test durationPeriodDays:
+		var questionnaire = createJsonObj<Questionnaire>("{\"durationPeriodDays\": 2}")
+		questionnaire.studyId = study.id
+		assertTrue(questionnaire.isActive())
+		
+		study.joined = now - 1000*60*60*24*2 + 1
+		study.save()
+		assertFalse(questionnaire.isActive())
+		
+		
+		//test durationStartingAfterDays:
+		questionnaire = createJsonObj<Questionnaire>("{\"durationStartingAfterDays\": 2}")
+		questionnaire.studyId = study.id
+		study.joined = now - 1000*60*60*24*1
+		study.save()
+		assertFalse(questionnaire.isActive())
+		
+		study.joined = now - 1000*60*60*24*2 + 1
+		study.save()
+		assertTrue(questionnaire.isActive())
+		
+		
+		//test durationStart
+		questionnaire = createJsonObj<Questionnaire>("{\"durationStart\": ${now}}")
+		assertTrue(questionnaire.isActive())
+		
+		questionnaire = createJsonObj<Questionnaire>("{\"durationStart\": ${now + 1000 * 60}}")
+		assertFalse(questionnaire.isActive())
+		
+		
+		//test durationEnd
+		questionnaire = createJsonObj<Questionnaire>("{\"durationEnd\": ${now + 1000 * 60}}")
+		assertTrue(questionnaire.isActive())
+		
+		questionnaire = createJsonObj<Questionnaire>("{\"durationEnd\": ${now - 1}}")
+		assertFalse(questionnaire.isActive())
+		
+		
+		//test completableOnce
+		questionnaire = createJsonObj<Questionnaire>("{\"completableOnce\": true}")
+		assertTrue(questionnaire.isActive())
+		questionnaire.lastCompleted = now
+		assertFalse(questionnaire.isActive())
+	}
+	
 	
 	@Test
 	fun willBeActiveIn() {
@@ -210,7 +282,7 @@ class QuestionnaireTest : BaseDataStructureTest() {
 		val now = NativeLink.getNowMillis()
 		val study = DbLogic.getStudy(getBaseStudyId())!!
 		
-		var questionnaire = createObj<Questionnaire>(
+		var questionnaire = createJsonObj<Questionnaire>(
 			"{\"durationStart\": ${now + oneDay*2}, \"durationStartingAfterDays\": 3}"
 		)
 		
@@ -232,7 +304,7 @@ class QuestionnaireTest : BaseDataStructureTest() {
 		
 		//test completableOncePerNotification:
 		
-		var questionnaire = createObj<Questionnaire>(
+		var questionnaire = createJsonObj<Questionnaire>(
 			"{\"completableOncePerNotification\": true, \"pages\":[{\"items\":[{}]}]}"
 		)
 		assertFalse(questionnaire.canBeFilledOut(now)) //no notification
@@ -246,7 +318,7 @@ class QuestionnaireTest : BaseDataStructureTest() {
 		//test completableOncePerNotification and completableMinutesAfterNotification:
 		//
 		
-		questionnaire = createObj<Questionnaire>(
+		questionnaire = createJsonObj<Questionnaire>(
 			"{\"completableOncePerNotification\": true, \"completableMinutesAfterNotification\": 2, \"pages\":[{\"items\":[{}]}]}"
 		)
 		assertFalse(questionnaire.canBeFilledOut(now)) //no notification
@@ -261,38 +333,38 @@ class QuestionnaireTest : BaseDataStructureTest() {
 		//
 		
 		//timeframe from 18:00 - 03:00
-		questionnaire = createObj<Questionnaire>(
+		questionnaire = createJsonObj<Questionnaire>(
 			"{\"completableAtSpecificTime\": true, \"completableAtSpecificTimeStart\": ${oneHour*18}, \"completableAtSpecificTimeEnd\": ${oneHour*3}, \"pages\":[{\"items\":[{}]}]}"
 		)
 		assertTrue(questionnaire.canBeFilledOut(626637180000)) // 1989-11-9 18:53:00
-		assertFalse(questionnaire.canBeFilledOut(1114306312000)) // 2005-04-24 03:31:52
+		assertFalse(questionnaire.canBeFilledOut(1114313512000)) // 2005-04-24 03:31:52
 		
 		//timeframe from 03:00 - 17:00
-		questionnaire = createObj<Questionnaire>(
+		questionnaire = createJsonObj<Questionnaire>(
 			"{\"completableAtSpecificTime\": true, \"completableAtSpecificTimeStart\": ${oneHour*3}, \"completableAtSpecificTimeEnd\": ${oneHour*17}, \"pages\":[{\"items\":[{}]}]}"
 		)
 		assertFalse(questionnaire.canBeFilledOut(626637180000)) // 1989-11-9 18:53:00
-		assertTrue(questionnaire.canBeFilledOut(1114306312000)) // 2005-04-24 03:31:52
+		assertTrue(questionnaire.canBeFilledOut(1114313512000)) // 2005-04-24 03:31:52
 		
 		//timeframe after 04:00
-		questionnaire = createObj<Questionnaire>(
+		questionnaire = createJsonObj<Questionnaire>(
 			"{\"completableAtSpecificTime\": true, \"completableAtSpecificTimeStart\": ${oneHour*4}, \"pages\":[{\"items\":[{}]}]}"
 		)
 		assertTrue(questionnaire.canBeFilledOut(626637180000)) // 1989-11-9 18:53:00
-		assertFalse(questionnaire.canBeFilledOut(1114306312000)) // 2005-04-24 03:31:52
+		assertFalse(questionnaire.canBeFilledOut(1114313512000)) // 2005-04-24 03:31:52
 		
 		//timeframe before 18:00
-		questionnaire = createObj<Questionnaire>(
+		questionnaire = createJsonObj<Questionnaire>(
 			"{\"completableAtSpecificTime\": true, \"completableAtSpecificTimeEnd\": ${oneHour*18}, \"pages\":[{\"items\":[{}]}]}"
 		)
 		assertFalse(questionnaire.canBeFilledOut(626637180000)) // 1989-11-9 18:53:00
-		assertTrue(questionnaire.canBeFilledOut(1114306312000)) // 2005-04-24 03:31:52
+		assertTrue(questionnaire.canBeFilledOut(1114313512000)) // 2005-04-24 03:31:52
 		
 		//
 		//test limitCompletionFrequency
 		//
 		
-		questionnaire = createObj<Questionnaire>(
+		questionnaire = createJsonObj<Questionnaire>(
 			"{\"limitCompletionFrequency\": true, \"completionFrequencyMinutes\": 60, \"pages\":[{\"items\":[{}]}]}"
 		)
 		assertTrue(questionnaire.canBeFilledOut(now))
@@ -305,7 +377,7 @@ class QuestionnaireTest : BaseDataStructureTest() {
 		//test publishedAndroid or publishedIOS
 		//
 		
-		questionnaire = createObj<Questionnaire>(
+		questionnaire = createJsonObj<Questionnaire>(
 			"{\"pages\":[{\"items\":[{}]}]}"
 		)
 		if(NativeLink.smartphoneData.phoneType == PhoneType.Android) {
@@ -323,7 +395,7 @@ class QuestionnaireTest : BaseDataStructureTest() {
 	
 	@Test
 	fun questionnairePageHasRequired() {
-		val questionnaire = createObj<Questionnaire>("""
+		val questionnaire = createJsonObj<Questionnaire>("""
 			{"pages":[
 				{"inputs":[{},{"required":true}]},
 				{"inputs":[{},{}]},

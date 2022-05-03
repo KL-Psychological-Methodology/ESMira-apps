@@ -1,28 +1,28 @@
 package tests.data_structure
 
-import BaseTest
 import at.jodlidev.esmira.sharedCode.data_structure.Input
 import at.jodlidev.esmira.sharedCode.data_structure.Page
+import BaseCommonTest
 import kotlin.test.*
 
 /**
  * Created by JodliDev on 31.03.2022.
  */
-class PageTest : BaseDataStructureTest() {
+class PageTest : BaseCommonTest() {
 	
 	@Test
 	fun inputs() {
-		val input1 = createObj<Input>()
-		val input2 = createObj<Input>()
-		val input3 = createObj<Input>()
-		val input4 = createObj<Input>()
+		val input1 = createJsonObj<Input>()
+		val input2 = createJsonObj<Input>()
+		val input3 = createJsonObj<Input>()
+		val input4 = createJsonObj<Input>()
 		val orderedInputs = arrayListOf(input1, input2, input3, input4)
 		
-		val page = createObj<Page>()
+		val page = createJsonObj<Page>()
 		page.orderedInputs = orderedInputs
 		assertSame(orderedInputs, page.inputs)
 		
-		val pageRandom = createObj<Page>()
+		val pageRandom = createJsonObj<Page>()
 		pageRandom.randomized = true
 		pageRandom.orderedInputs = orderedInputs
 		assertNotSame(orderedInputs, pageRandom.inputs)
@@ -30,16 +30,16 @@ class PageTest : BaseDataStructureTest() {
 	
 	@Test
 	fun hasScreenTracking() {
-		val input1 = createObj<Input>()
-		val input2 = createObj<Input>()
-		val input3 = createObj<Input>("""{"responseType": "app_usage"}""")
-		val input4 = createObj<Input>()
+		val input1 = createJsonObj<Input>()
+		val input2 = createJsonObj<Input>()
+		val input3 = createJsonObj<Input>("""{"responseType": "app_usage"}""")
+		val input4 = createJsonObj<Input>()
 		
-		val page = createObj<Page>()
+		val page = createJsonObj<Page>()
 		page.orderedInputs = arrayListOf(input1, input2, input3, input4)
 		assertTrue(page.hasScreenTracking())
 		
-		val pageNoScreenTracking = createObj<Page>()
+		val pageNoScreenTracking = createJsonObj<Page>()
 		pageNoScreenTracking.orderedInputs = arrayListOf(input1, input2, input4)
 		assertFalse(pageNoScreenTracking.hasScreenTracking())
 	}

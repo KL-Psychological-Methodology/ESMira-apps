@@ -2,12 +2,13 @@ package tests.data_structure
 
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.*
+import BaseCommonTest
 import kotlin.test.*
 
 /**
  * Created by JodliDev on 31.03.2022.
  */
-class DataSetTest : BaseDataStructureTest() {
+class DataSetTest : BaseCommonTest() {
 	
 	@Test
 	fun synced() {
@@ -15,7 +16,7 @@ class DataSetTest : BaseDataStructureTest() {
 		dataSet.id = 123
 		dataSet.synced = DataSet.STATES.SYNCED
 		
-		mockTools.assertSqlWasUpdated(DataSet.TABLE, DataSet.KEY_SYNCED, DataSet.STATES.SYNCED.ordinal)
+		assertSqlWasUpdated(DataSet.TABLE, DataSet.KEY_SYNCED, DataSet.STATES.SYNCED.ordinal)
 	}
 	
 	@Test
@@ -29,7 +30,7 @@ class DataSetTest : BaseDataStructureTest() {
 	
 	@Test
 	fun addResponseData() {
-		val questionnaire = createObj<Questionnaire>()
+		val questionnaire = createJsonObj<Questionnaire>()
 		val dataSet = createDataSet()
 		dataSet.studyId = getBaseStudyId()
 		
@@ -39,7 +40,7 @@ class DataSetTest : BaseDataStructureTest() {
 		dataSet.addResponseData("long123", 5L)
 		dataSet.saveQuestionnaire(questionnaire, NativeLink.getNowMillis())
 		
-		val value = mockTools.getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
+		val value = getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
 		assertNotEquals(-1, value.indexOf("boolean123"))
 		assertNotEquals(-1, value.indexOf("string123"))
 		assertNotEquals(-1, value.indexOf("integer123"))
@@ -48,7 +49,7 @@ class DataSetTest : BaseDataStructureTest() {
 	
 	@Test
 	fun saveQuestionnaire() {
-		val questionnaire = createObj<Questionnaire>(
+		val questionnaire = createJsonObj<Questionnaire>(
 			"""{"sumScores": [{"addList": ["test1", "test2"], "subtractList": ["test3", "test4"]}]}"""
 		)
 		val dataSet = createDataSet()
@@ -67,27 +68,27 @@ class DataSetTest : BaseDataStructureTest() {
 		
 		dataSet.saveQuestionnaire(questionnaire, NativeLink.getNowMillis())
 		
-		val value = mockTools.getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
+		val value = getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
 		assertEquals(-1, value.indexOf("\"sumScore\":$sumScoreValue"))
 		
-		mockTools.assertSqlWasSelected(EventTrigger.TABLE_JOINED, 1, DataSet.TYPE_QUESTIONNAIRE)
-		assertEquals(1, mockTools.getPostponedActions().syncDataSetsCount)
+		assertSqlWasSelected(EventTrigger.TABLE_JOINED, 1, DataSet.TYPE_QUESTIONNAIRE)
+		assertEquals(1, postponedActions.syncDataSetsCount)
 	}
 	
 	@Test
 	fun createShortDataSet() {
 		val study = createStudy("""{"id":$studyWebId, "eventUploadSettings": {"${DataSet.TYPE_ALARM_EXECUTED}": true}}""")
 		DataSet.createShortDataSet(DataSet.TYPE_ALARM_EXECUTED, study)
-		mockTools.assertSqlWasSaved(DataSet.TABLE, DataSet.KEY_TYPE, DataSet.TYPE_ALARM_EXECUTED)
+		assertSqlWasSaved(DataSet.TABLE, DataSet.KEY_TYPE, DataSet.TYPE_ALARM_EXECUTED)
 	}
 	
 	@Test
 	fun createScheduleChangedDataSet() {
-		val schedule = createObj<Schedule>()
+		val schedule = createJsonObj<Schedule>()
 		schedule.bindParent(createActionTrigger())
 		DataSet.createScheduleChangedDataSet(schedule)
 		
-		val value = mockTools.getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
+		val value = getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
 		assertNotEquals(-1, value.indexOf("newSchedule"))
 	}
 	
@@ -96,12 +97,12 @@ class DataSetTest : BaseDataStructureTest() {
 		val study = createStudy("""{"id":$studyWebId, "eventUploadSettings": {"${DataSet.TYPE_NOTIFICATION}": true}}""")
 		study.save()
 		
-		val questionnaire = createObj<Questionnaire>()
+		val questionnaire = createJsonObj<Questionnaire>()
 		questionnaire.studyId = study.id
 		val now = NativeLink.getNowMillis()
 		DataSet.createActionSentDataSet(DataSet.TYPE_NOTIFICATION, questionnaire, now)
 		
-		val value = mockTools.getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
+		val value = getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
 		assertNotEquals(-1, value.indexOf("\"actionScheduledTo\":\"$now\""))
 	}
 	
@@ -111,17 +112,17 @@ class DataSetTest : BaseDataStructureTest() {
 		study.save()
 		
 		val now = NativeLink.getNowMillis()
-		val questionnaire = createObj<Questionnaire>()
+		val questionnaire = createJsonObj<Questionnaire>()
 		questionnaire.title = "test123"
 		questionnaire.studyId = study.id
 		
 		//without questionnaire:
 		DataSet.createAlarmExecuted(null, questionnaire.studyId, now)
-		val value = mockTools.getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
+		val value = getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
 		assertNotEquals(-1, value.indexOf("\"actionScheduledTo\":\"$now\""))
 		
 		//with questionnaire:
 		DataSet.createAlarmExecuted(questionnaire, questionnaire.studyId, now)
-		mockTools.assertSqlWasSaved(DataSet.TABLE, DataSet.KEY_QUESTIONNAIRE_NAME, "test123")
+		assertSqlWasSaved(DataSet.TABLE, DataSet.KEY_QUESTIONNAIRE_NAME, "test123")
 	}
 }

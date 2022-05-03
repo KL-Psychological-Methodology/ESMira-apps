@@ -1,4 +1,4 @@
-package tests.database
+package tests
 
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
@@ -6,14 +6,16 @@ import at.jodlidev.esmira.sharedCode.Scheduler
 import at.jodlidev.esmira.sharedCode.data_structure.*
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_perValue
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_timed
+import BaseCommonTest
 import kotlin.test.*
 
 
 /**
  * Created by JodliDev on 20.04.2022.
  */
-abstract class DbLogicSharedTests : BaseDatabaseTests() {
-	open fun getUid() {
+class DbLogicTests : BaseCommonTest() {
+	@Test
+	fun getUid() {
 		val firstUid = DbLogic.getUid()
 		assertEquals(firstUid, DbLogic.getUid())
 		
@@ -21,7 +23,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertNotEquals(firstUid, DbLogic.getUid())
 	}
 	
-	open fun setDev_isDev_getAdminAppType() {
+	@Test
+	fun setDev_isDev_getAdminAppType() {
 		assertEquals(NativeLink.smartphoneData.appType, DbLogic.getAdminAppType()) //no user
 		DbLogic.getUid() //create user
 		assertEquals(NativeLink.smartphoneData.appType, DbLogic.getAdminAppType())
@@ -39,7 +42,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals("${NativeLink.smartphoneData.appType}_wasDev", DbLogic.getAdminAppType())
 	}
 	
-	open fun setLang_getLang() {
+	@Test
+	fun setLang_getLang() {
 		DbLogic.getUid() //create user
 		DbLogic.setLang("de")
 		assertEquals("de", DbLogic.getLang())
@@ -47,58 +51,38 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals("en", DbLogic.getLang())
 	}
 	
-	open fun startupApp() {
+	@Test
+	fun startupApp() {
+		
+		//open error report:
 		ErrorBox.error("", "")
 		DbLogic.startupApp()
 		assertNotEquals(0, dialogOpener.errorReportCount) //ErrorBox.error potentially also opens an errorReport
 		
-		reset()
-		DbLogic.startupApp()
-		assertEquals(1, postponedActions.syncDataSetsCount)
-		assertEquals(0, postponedActions.updateStudiesRegularlyCount)
-		
-		reset()
-		DbLogic.startupApp()
-		DbLogic.getStudy(getBaseStudyId())?.join()
-		assertEquals(1, postponedActions.updateStudiesRegularlyCount)
+		//TODO: DbLogic.startupApp() uses Web directly which creates problems with testing
 	}
 	
-	open fun setNotificationsToSetup_notificationsAreSetup() {
+	@Test
+	fun setNotificationsToSetup_notificationsAreSetup() {
 		DbLogic.getUid() //create user
 		assertFalse(DbLogic.notificationsAreSetup())
 		DbLogic.setNotificationsToSetup()
 		assertTrue(DbLogic.notificationsAreSetup())
 	}
 	
+	//reportMissedInvitation(), getMissedInvitations and resetMissedInvitations() are tested in reportMissedInvitation_getMissedInvitations_resetMissedInvitations()
 	
-	open fun reportMissedInvitation_getMissedInvitations_resetMissedInvitations() {
-		DbLogic.getUid() //create user
-		assertEquals(0, DbLogic.getMissedInvitations())
-		
-		DbLogic.reportMissedInvitation(createObj<Questionnaire>(), 0)
-		assertEquals(1, DbLogic.getMissedInvitations())
-		
-		DbLogic.reportMissedInvitation(createObj<Questionnaire>(), 0)
-		assertEquals(2, DbLogic.getMissedInvitations())
-		
-		DbLogic.resetMissedInvitations()
-		assertEquals(0, DbLogic.getMissedInvitations())
-	}
-	
-	open fun checkLeaveStudies() {
-	
-	}
-	
-	open fun hasNoStudies() {
-		assertFalse(DbLogic.hasNoStudies()) //reset() creates one study
+	@Test
+	fun hasNoStudies() {
+		assertTrue(DbLogic.hasNoStudies())
 		assertTrue(DbLogic.hasNoJoinedStudies())
 		
-		val study = DbLogic.getStudy(getBaseStudyId())!!
-		study.delete()
-		assertTrue(DbLogic.hasNoStudies())
+		createStudy().save()
+		assertFalse(DbLogic.hasNoStudies())
 	}
 	
-	open fun hasNoJoinedStudies() {
+	@Test
+	fun hasNoJoinedStudies() {
 		assertTrue(DbLogic.hasNoJoinedStudies())
 		
 		val study = DbLogic.getStudy(getBaseStudyId())!!
@@ -106,7 +90,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertFalse(DbLogic.hasNoJoinedStudies())
 	}
 	
-	open fun hasStudiesWithStatistics() {
+	@Test
+	fun hasStudiesWithStatistics() {
 		assertFalse(DbLogic.hasStudiesWithStatistics())
 		
 		createStudy("""{
@@ -128,7 +113,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertTrue(DbLogic.hasStudiesWithStatistics())
 	}
 	
-	open fun hasStudiesForMessages() {
+	@Test
+	fun hasStudiesForMessages() {
 		assertFalse(DbLogic.hasStudiesForMessages())
 		
 		val study = DbLogic.getStudy(getBaseStudyId())!!
@@ -137,7 +123,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertTrue(DbLogic.hasStudiesForMessages())
 	}
 	
-	open fun getStudy() {
+	@Test
+	fun getStudy() {
 		val study1 = createStudy()
 		study1.title = "study1"
 		val study2 = createStudy()
@@ -158,7 +145,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals("study4", DbLogic.getStudy(study4.id)?.title)
 	}
 	
-	open fun getJoinedStudies() {
+	@Test
+	fun getJoinedStudies() {
 		assertEquals(0, DbLogic.getJoinedStudies().size)
 		
 		createStudy().join()
@@ -171,7 +159,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(3, DbLogic.getJoinedStudies().size)
 	}
 	
-	open fun getStudiesWithEditableSchedules() {
+	@Test
+	fun getStudiesWithEditableSchedules() {
 		assertEquals(0, DbLogic.getStudiesWithEditableSchedules().size)
 		
 		createStudy("""{
@@ -205,7 +194,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(2, DbLogic.getStudiesWithEditableSchedules().size)
 	}
 	
-	open fun getStudiesWithStatistics() {
+	@Test
+	fun getStudiesWithStatistics() {
 		assertEquals(0, DbLogic.getStudiesWithStatistics().size)
 		
 		createStudy("""{
@@ -225,7 +215,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(2, DbLogic.getStudiesWithStatistics().size)
 	}
 	
-	open fun getStudiesForMessages() {
+	@Test
+	fun getStudiesForMessages() {
 		assertEquals(0, DbLogic.getStudiesForMessages().size)
 		
 		val study = DbLogic.getStudy(getBaseStudyId())!!
@@ -234,17 +225,19 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(1, DbLogic.getStudiesForMessages().size)
 	}
 	
-	open fun getAllStudies() {
-		assertEquals(1, DbLogic.getAllStudies().size) //reset() creates one default study
+	@Test
+	fun getAllStudies() {
+		assertEquals(0, DbLogic.getAllStudies().size)
+		createStudy().save()
+		assertEquals(1, DbLogic.getAllStudies().size)
 		createStudy().save()
 		assertEquals(2, DbLogic.getAllStudies().size)
 		createStudy().save()
 		assertEquals(3, DbLogic.getAllStudies().size)
-		createStudy().save()
-		assertEquals(4, DbLogic.getAllStudies().size)
 	}
 	
-	open fun getMessages() {
+	@Test
+	fun getMessages() {
 		assertEquals(0, DbLogic.getMessages(getBaseStudyId()).size)
 		
 		Message.addMessage(getBaseStudyId(), "My first girlfriend turned into the moon", 10000)
@@ -256,25 +249,31 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(0, DbLogic.getMessages(456).size)
 	}
 	
-	open fun countUnreadMessages() {
+	@Test
+	fun countUnreadMessages() {
+		val studyId = 5L
 		assertEquals(0, DbLogic.countUnreadMessages())
-		assertEquals(0, DbLogic.countUnreadMessages(getBaseStudyId()))
-		Message.addMessage(getBaseStudyId(), "My first girlfriend turned into the moon", 10000, true)
-		Message.addMessage(getBaseStudyId(), "My first girlfriend turned into the moon", 10000, true)
+		assertEquals(0, DbLogic.countUnreadMessages(studyId))
+		
+		Message.addMessage(studyId, "My first girlfriend turned into the moon", 10000, true)
+		Message.addMessage(studyId, "My first girlfriend turned into the moon", 10000, true)
+		Message.addMessage(-2, "My first girlfriend turned into the moon", 10000, true)
 		Message.addMessage(getBaseStudyId(), "My first girlfriend turned into the moon", 10000)
-		assertEquals(2, DbLogic.countUnreadMessages(getBaseStudyId()))
+		assertEquals(2, DbLogic.countUnreadMessages(studyId))
 		assertEquals(3, DbLogic.countUnreadMessages())
 	}
 	
-	open fun getQuestionnaire() {
-		val questionnaire = createObj<Questionnaire>()
+	@Test
+	fun getQuestionnaire() {
+		val questionnaire = createJsonObj<Questionnaire>()
 		questionnaire.title = "q1"
 		questionnaire.save(true)
 		assertEquals("q1", DbLogic.getQuestionnaire(questionnaire.id)?.title)
 		assertNull(DbLogic.getQuestionnaire(-1))
 	}
 	
-	open fun getLastDynamicTextIndex() {
+	@Test
+	fun getLastDynamicTextIndex() {
 		val dynamicInputData1 = DynamicInputData(5, "v1", 0)
 		dynamicInputData1.createdTime = 1000
 		dynamicInputData1.save()
@@ -296,27 +295,34 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(1001, DbLogic.getLastDynamicTextIndex(5, "v1")?.createdTime)
 	}
 	
-	open fun getAvailableListForDynamicText() {
+	@Test
+	fun getAvailableListForDynamicText() {
 		val qId = 5L
 		val name = "v1"
 		val wrongName = "v2"
-		val compare = arrayListOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
-		val size = compare.size
-		
-		while(compare.size != 0) {
-			val list = DbLogic.getAvailableListForDynamicText(qId, name, size)
-			assertEquals(compare.size, list.size)
-			for((i, index) in compare.withIndex()) {
-				assertEquals(index, list[i], "list[$i] is not $index but ${list[i]}")
+		for(tryI in 0 until 100) {
+			val compare = arrayListOf(0, 1, 2, 3, 4, 5, 6, 7, 8, 9)
+			val size = compare.size
+			
+			while(compare.size != 0) {
+				val list = DbLogic.getAvailableListForDynamicText(qId, name, size)
+				assertEquals(compare.size, list.size)
+				for((i, index) in compare.withIndex()) {
+					assertEquals(index, list[i], "list[$i] is not $index but ${list[i]}")
+				}
+				val rand = compare.random()
+				compare.remove(rand)
+				DynamicInputData(qId, name, rand).save()
+				DynamicInputData(qId, wrongName, rand).save()
 			}
-			val rand = compare.random()
-			compare.remove(rand)
-			DynamicInputData(qId, name, rand).save()
-			DynamicInputData(qId, wrongName, rand).save()
+			//cleanup
+			DbLogic.deleteCheckedRandomTexts(qId, name)
+			DbLogic.deleteCheckedRandomTexts(qId, wrongName)
 		}
 	}
 	
-	open fun hasUnsyncedDataSetsAfterQuit() {
+	@Test
+	fun hasUnsyncedDataSetsAfterQuit() {
 		val db = NativeLink.sql
 		val study = DbLogic.getStudy(getBaseStudyId())!!
 		
@@ -338,7 +344,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertFalse(DbLogic.hasUnsyncedDataSetsAfterQuit(getBaseStudyId()))
 	}
 	
-	open fun getUnSyncedDataSetCount() {
+	@Test
+	fun getUnSyncedDataSetCount() {
 		val study = DbLogic.getStudy(getBaseStudyId())!!
 		assertEquals(0, DbLogic.getUnSyncedDataSetCount())
 		
@@ -372,7 +379,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(4, DbLogic.getUnSyncedDataSetCount())
 	}
 	
-	open fun getUnSyncedDataSets() {
+	@Test
+	fun getUnSyncedDataSets() {
 		val db = NativeLink.sql
 		val study = DbLogic.getStudy(getBaseStudyId())!!
 		
@@ -398,7 +406,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(1, DbLogic.getUnSyncedDataSets()[testUrl]?.size)
 	}
 	
-	open fun getPendingFileUploads_getTemporaryFileUploads_cleanupFiles() {
+	@Test
+	fun getPendingFileUploads_getTemporaryFileUploads_cleanupFiles() {
 		//create fileUpload, change state, cleanup
 		val fileUpload = FileUpload(createStudy(), "path/to/file", FileUpload.TYPES.Image)
 		fileUpload.save()
@@ -417,7 +426,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(0, DbLogic.getPendingFileUploads().size)
 	}
 	
-	open fun getErrorCount() {
+	@Test
+	fun getErrorCount() {
 		assertEquals(0, DbLogic.getErrorCount())
 		
 		ErrorBox.error("Error", "Error")
@@ -433,7 +443,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(2, DbLogic.getErrorCount())
 	}
 	
-	open fun getWarnCount() {
+	@Test
+	fun getWarnCount() {
 		assertEquals(0, DbLogic.getWarnCount())
 		
 		ErrorBox.error("Error", "Error")
@@ -449,7 +460,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(2, DbLogic.getWarnCount())
 	}
 	
-	open fun hasNewErrors_setErrorsAsReviewed() {
+	@Test
+	fun hasNewErrors_setErrorsAsReviewed() {
 		assertFalse(DbLogic.hasNewErrors())
 		
 		ErrorBox.warn("Warning", "Warning")
@@ -465,7 +477,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertFalse(DbLogic.hasNewErrors())
 	}
 	
-	open fun getErrors() {
+	@Test
+	fun getErrors() {
 		assertEquals(0, DbLogic.getErrors().size)
 		
 		ErrorBox.error("Error", "Error")
@@ -478,69 +491,56 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(3, DbLogic.getErrors().size)
 	}
 	
-	open fun getAlarms_getAlarm() {
+	@Test
+	fun getAlarms_getAlarm() {
 		val qId = 5L
-		val timestamp = 1114306312000L
+		val timestamp = 1114313512000
 		
-		val schedule = createObj<Schedule>()
+		val schedule = createJsonObj<Schedule>()
 		schedule.id = 7
-		val signalTime = createObj<SignalTime>()
+		val signalTime = createJsonObj<SignalTime>()
+		signalTime.label = "test1"
 		signalTime.bindParent(qId, schedule)
 		
 		assertEquals(0, DbLogic.getAlarms().size)
 		
 		//
-		//getAlarms(timestamp: Long, questionnaireId: Long)
-		//
-		Alarm.createFromSignalTime(signalTime, -1, timestamp)
-		assertEquals(0, DbLogic.getAlarms(timestamp-1, qId).size)
-		assertEquals(1, DbLogic.getAlarms(timestamp, qId).size)
-		
-		Alarm.createFromSignalTime(createObj(), -1, timestamp-1)
-		assertEquals(0, DbLogic.getAlarms(timestamp-1, qId).size)
-		
-		
-		//
 		//getAlarms(schedule: Schedule)
 		//
-		assertEquals(0, DbLogic.getAlarms(createObj()).size)
+		Alarm.createFromSignalTime(signalTime, -1, timestamp)
+		assertEquals(0, DbLogic.getAlarms(createJsonObj()).size)
 		assertEquals(1, DbLogic.getAlarms(schedule).size)
 		
 		//
 		//getAlarms()
 		//
-		assertEquals(2, DbLogic.getAlarms().size)
-		createAlarmFromSignalTime("""{"label": "test1"}""")
+		createAlarmFromSignalTime("""{"label": "test2"}""").save()
 		val alarms = DbLogic.getAlarms()
-		assertEquals(3, alarms.size)
+		assertEquals(2, alarms.size)
 		assertEquals(alarms[0].label, DbLogic.getAlarm(alarms[0].id)?.label)
-		assertNotEquals("test1", DbLogic.getAlarm(alarms[0].id)?.label)
-		
 		assertEquals(alarms[1].label, DbLogic.getAlarm(alarms[1].id)?.label)
-		assertNotEquals("test1", DbLogic.getAlarm(alarms[1].id)?.label)
-		
-		assertEquals(alarms[2].label, DbLogic.getAlarm(alarms[2].id)?.label)
-		assertEquals("test1", DbLogic.getAlarm(alarms[2].id)?.label)
 	}
 	
-	open fun getAlarmsBefore() {
-		val timestamp = 1114306312000L
+	@Test
+	fun getAlarmsBefore() {
+		val timestamp = 1114313512000
 		
 		assertEquals(0, DbLogic.getAlarmsBefore(timestamp).size)
 		
-		Alarm.createFromSignalTime(createObj(), -1, timestamp)
+		Alarm.createFromSignalTime(createJsonObj(), -1, timestamp)
 		assertEquals(0, DbLogic.getAlarmsBefore(timestamp-1).size)
 		assertEquals(1, DbLogic.getAlarmsBefore(timestamp).size)
 		
-		Alarm.createFromSignalTime(createObj(), -1, timestamp-1)
+		Alarm.createFromSignalTime(createJsonObj(), -1, timestamp-1)
 		assertEquals(0, DbLogic.getAlarmsBefore(timestamp-2).size)
 		assertEquals(1, DbLogic.getAlarmsBefore(timestamp-1).size)
 		assertEquals(2, DbLogic.getAlarmsBefore(timestamp).size)
 	
 	}
 	
-	open fun getAlarmsAfterToday() {
-		val signalTime = createObj<SignalTime>()
+	@Test
+	fun getAlarmsAfterToday() {
+		val signalTime = createJsonObj<SignalTime>()
 		signalTime.id = 54
 		val todayMidnight = NativeLink.getMidnightMillis()
 		
@@ -556,8 +556,9 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(1, DbLogic.getAlarmsAfterToday(signalTime).size)
 	}
 	
-	open fun getLastSignalTimeAlarm() {
-		val signalTime = createObj<SignalTime>()
+	@Test
+	fun getLastSignalTimeAlarm() {
+		val signalTime = createJsonObj<SignalTime>()
 		signalTime.id = 54
 		val timestamp = NativeLink.getNowMillis()
 		
@@ -572,13 +573,14 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		val alarm3 = Alarm.createFromSignalTime(signalTime, -1, timestamp+1)
 		assertEquals(alarm3.id, DbLogic.getLastSignalTimeAlarm(signalTime)?.id)
 		
-		val alarm4 = Alarm.createFromSignalTime(createObj(), -1, timestamp+2)
+		val alarm4 = Alarm.createFromSignalTime(createJsonObj(), -1, timestamp+2)
 		assertEquals(alarm3.id, DbLogic.getLastSignalTimeAlarm(signalTime)?.id)
 	}
 	
-	open fun getLastAlarmsPerSignalTime() {
-		val timestamp = 1114306312000L
-		val signalTime = createObj<SignalTime>()
+	@Test
+	fun getLastAlarmsPerSignalTime() {
+		val timestamp = 1114313512000
+		val signalTime = createJsonObj<SignalTime>()
 		signalTime.id = 54
 		
 		assertEquals(0, DbLogic.getLastAlarmPerSignalTime().size)
@@ -595,32 +597,24 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(1, DbLogic.getLastAlarmPerSignalTime().size)
 		assertEquals(timestamp+1, DbLogic.getLastAlarmPerSignalTime()[0].timestamp)
 		
-		Alarm.createFromSignalTime(createObj(), -1, timestamp+2)
+		Alarm.createFromSignalTime(createJsonObj(), -1, timestamp+2)
 		assertEquals(2, DbLogic.getLastAlarmPerSignalTime().size)
 	
 	}
 	
-	open fun getNextAlarms() {
-		val timestamp = 1114306312000L
-		val questionnaire1 = createObj<Questionnaire>()
-		questionnaire1.save(true)
-		val signalTime1 = createObj<SignalTime>()
-		signalTime1.questionnaireId = questionnaire1.id
-		
-		val questionnaire2 = createObj<Questionnaire>()
-		questionnaire2.save(true)
-		val signalTime2 = createObj<SignalTime>()
-		signalTime2.questionnaireId = questionnaire2.id
-		
-		val questionnaire3 = createObj<Questionnaire>()
-		questionnaire3.studyId = 5654
-		questionnaire3.save(true)
-		val signalTime3 = createObj<SignalTime>()
-		signalTime3.questionnaireId = questionnaire3.id
+	@Test
+	fun getNextAlarms() {
+		val timestamp = 1114313512000
 		
 		assertEquals(0, DbLogic.getNextAlarms().size)
 		
 		//first entry:
+		val questionnaire1 = createJsonObj<Questionnaire>()
+		questionnaire1.studyId = getBaseStudyId()
+		questionnaire1.save(true)
+		val signalTime1 = createJsonObj<SignalTime>()
+		signalTime1.questionnaireId = questionnaire1.id
+		
 		Alarm.createFromSignalTime(signalTime1, -1, timestamp)
 		val nextAlarms1 = DbLogic.getNextAlarms()
 		val nextAlarmsPerQuestionnaire1 = DbLogic.getNextAlarms(getBaseStudyId())
@@ -648,6 +642,12 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(timestamp-1, nextAlarmsPerQuestionnaire3[0].timestamp)
 		
 		//sooner but different questionnaire:
+		val questionnaire2 = createJsonObj<Questionnaire>()
+		questionnaire2.studyId = getBaseStudyId()
+		questionnaire2.save(true)
+		val signalTime2 = createJsonObj<SignalTime>()
+		signalTime2.questionnaireId = questionnaire2.id
+		
 		Alarm.createFromSignalTime(signalTime2, -1, timestamp-2)
 		val nextAlarms4 = DbLogic.getNextAlarms()
 		val nextAlarmsPerQuestionnaire4 = DbLogic.getNextAlarms(getBaseStudyId())
@@ -658,6 +658,12 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(timestamp-1, nextAlarmsPerQuestionnaire4[1].timestamp)
 		
 		//sooner but different study:
+		val questionnaire3 = createJsonObj<Questionnaire>()
+		questionnaire3.studyId = 5654
+		questionnaire3.save(true)
+		val signalTime3 = createJsonObj<SignalTime>()
+		signalTime3.questionnaireId = questionnaire3.id
+		
 		Alarm.createFromSignalTime(signalTime3, -1, timestamp-3)
 		val nextAlarms5 = DbLogic.getNextAlarms()
 		val nextAlarmsPerQuestionnaire5 = DbLogic.getNextAlarms(getBaseStudyId())
@@ -668,17 +674,18 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(timestamp-1, nextAlarmsPerQuestionnaire5[1].timestamp)
 	}
 	
-	open fun getNextAlarm() {
-		val timestamp = 1114306312000L
-		val questionnaire = createObj<Questionnaire>()
+	@Test
+	fun getNextAlarm() {
+		val timestamp = 1114313512000
+		val questionnaire = createJsonObj<Questionnaire>()
 		questionnaire.id = 5
-		val schedule = createObj<Schedule>()
+		val schedule = createJsonObj<Schedule>()
 		schedule.id = 6
-		val signalTimeSchedule = createObj<SignalTime>()
+		val signalTimeSchedule = createJsonObj<SignalTime>()
 		signalTimeSchedule.bindParent(7, schedule)
 		
-		val signalTimeQuestionnaire = createObj<SignalTime>()
-		signalTimeQuestionnaire.bindParent(questionnaire.id, createObj())
+		val signalTimeQuestionnaire = createJsonObj<SignalTime>()
+		signalTimeQuestionnaire.bindParent(questionnaire.id, createJsonObj())
 		
 		assertNull(DbLogic.getNextAlarm(questionnaire))
 		assertNull(DbLogic.getNextAlarm(schedule))
@@ -714,10 +721,11 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(timestamp-3, DbLogic.getNextAlarm(schedule)?.timestamp)
 	}
 	
-	open fun getReminderAlarmsFrom() {
-		val timestamp = 1114306312000L
+	@Test
+	fun getReminderAlarmsFrom() {
+		val timestamp = 1114313512000
 		val qId = 5L
-		val signalTime = createObj<SignalTime>()
+		val signalTime = createJsonObj<SignalTime>()
 		signalTime.questionnaireId = qId
 		
 		assertEquals(0, DbLogic.getReminderAlarmsFrom(qId).size)
@@ -728,7 +736,7 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		Alarm.createAsReminder(timestamp, -1, -1, "test", 0, 2)
 		assertEquals(1, DbLogic.getReminderAlarmsFrom(qId).size)
 		
-		Alarm.createFromSignalTime(createObj(), -1, timestamp+1)
+		Alarm.createFromSignalTime(createJsonObj(), -1, timestamp+1)
 		assertEquals(1, DbLogic.getReminderAlarmsFrom(qId).size)
 		
 		Alarm.createAsReminder(timestamp, qId, -1, "test", 0, 2)
@@ -736,75 +744,79 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		
 	}
 	
-	open fun getAlarmsFrom() {
-		val timestamp = 1114306312000L
-		val qId = 5L
+	@Test
+	fun getAlarmsFrom() {
+		val timestamp = 1114313512000
+		
+		val questionnaire = createJsonObj<Questionnaire>()
+		questionnaire.id = 5
 		
 		val actionTrigger = createActionTrigger()
 		actionTrigger.id = 6
 		
-		val eventTrigger = createObj<EventTrigger>()
+		val eventTrigger = createJsonObj<EventTrigger>()
 		eventTrigger.id = 7
 		
-		val schedule = createObj<Schedule>()
+		val schedule = createJsonObj<Schedule>()
 		schedule.id = 8
 		
-		val signalTimeSingle = createObj<SignalTime>()
+		val signalTimeSingle = createJsonObj<SignalTime>()
 		signalTimeSingle.id = 9
 		
-		val signalTimeQuestionnaire = createObj<SignalTime>()
-		signalTimeQuestionnaire.bindParent(qId, createObj())
+		val signalTimeQuestionnaire = createJsonObj<SignalTime>()
+		signalTimeQuestionnaire.bindParent(questionnaire.id, createJsonObj())
 		
-		val signalTimeSchedule = createObj<SignalTime>()
+		val signalTimeSchedule = createJsonObj<SignalTime>()
 		signalTimeSchedule.bindParent(-1, schedule)
 		
 		
-		assertEquals(0, DbLogic.getAlarmsFrom(qId).size)
+		assertEquals(0, DbLogic.getAlarmsFrom(questionnaire).size)
 		
-		Alarm.createFromSignalTime(createObj(), -1, timestamp)
-		assertEquals(0, DbLogic.getAlarmsFrom(qId).size)
+		Alarm.createFromSignalTime(createJsonObj(), -1, timestamp)
+		assertEquals(0, DbLogic.getAlarmsFrom(questionnaire).size)
 		assertEquals(0, DbLogic.getAlarmsFrom(actionTrigger).size)
 		assertEquals(0, DbLogic.getAlarmsFrom(eventTrigger).size)
 		assertEquals(0, DbLogic.getAlarmsFrom(schedule).size)
 		assertEquals(0, DbLogic.getAlarmsFrom(signalTimeSingle).size)
 		
 		Alarm.createFromSignalTime(signalTimeQuestionnaire, -1, timestamp)
-		assertEquals(1, DbLogic.getAlarmsFrom(qId).size)
+		assertEquals(1, DbLogic.getAlarmsFrom(questionnaire).size)
 		assertEquals(0, DbLogic.getAlarmsFrom(actionTrigger).size)
 		assertEquals(0, DbLogic.getAlarmsFrom(eventTrigger).size)
 		assertEquals(0, DbLogic.getAlarmsFrom(schedule).size)
 		assertEquals(0, DbLogic.getAlarmsFrom(signalTimeSingle).size)
 		
-		Alarm.createFromSignalTime(createObj(), actionTrigger.id, timestamp)
-		assertEquals(1, DbLogic.getAlarmsFrom(qId).size)
+		Alarm.createFromSignalTime(createJsonObj(), actionTrigger.id, timestamp)
+		assertEquals(1, DbLogic.getAlarmsFrom(questionnaire).size)
 		assertEquals(1, DbLogic.getAlarmsFrom(actionTrigger).size)
 		assertEquals(0, DbLogic.getAlarmsFrom(eventTrigger).size)
 		assertEquals(0, DbLogic.getAlarmsFrom(schedule).size)
 		assertEquals(0, DbLogic.getAlarmsFrom(signalTimeSingle).size)
 		
 		Alarm.createFromEventTrigger(eventTrigger, timestamp)
-		assertEquals(1, DbLogic.getAlarmsFrom(qId).size)
+		assertEquals(1, DbLogic.getAlarmsFrom(questionnaire).size)
 		assertEquals(1, DbLogic.getAlarmsFrom(actionTrigger).size)
 		assertEquals(1, DbLogic.getAlarmsFrom(eventTrigger).size)
 		assertEquals(0, DbLogic.getAlarmsFrom(schedule).size)
 		assertEquals(0, DbLogic.getAlarmsFrom(signalTimeSingle).size)
 		
 		Alarm.createFromSignalTime(signalTimeSchedule, -1, timestamp)
-		assertEquals(1, DbLogic.getAlarmsFrom(qId).size)
+		assertEquals(1, DbLogic.getAlarmsFrom(questionnaire).size)
 		assertEquals(1, DbLogic.getAlarmsFrom(actionTrigger).size)
 		assertEquals(1, DbLogic.getAlarmsFrom(eventTrigger).size)
 		assertEquals(1, DbLogic.getAlarmsFrom(schedule).size)
 		assertEquals(0, DbLogic.getAlarmsFrom(signalTimeSingle).size)
 		
 		Alarm.createFromSignalTime(signalTimeSingle, -1, timestamp)
-		assertEquals(1, DbLogic.getAlarmsFrom(qId).size)
+		assertEquals(1, DbLogic.getAlarmsFrom(questionnaire).size)
 		assertEquals(1, DbLogic.getAlarmsFrom(actionTrigger).size)
 		assertEquals(1, DbLogic.getAlarmsFrom(eventTrigger).size)
 		assertEquals(1, DbLogic.getAlarmsFrom(schedule).size)
 		assertEquals(1, DbLogic.getAlarmsFrom(signalTimeSingle).size)
 	}
 	
-	open fun getActionTrigger() {
+	@Test
+	fun getActionTrigger() {
 		val json = """[{"test":123}]"""
 		val actionTrigger = createActionTrigger("""{"actions": $json}""")
 		actionTrigger.save(true)
@@ -812,7 +824,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(json, DbLogic.getActionTrigger(actionTrigger.id)?.actionsString)
 	}
 	
-	open fun getActionTriggers() {
+	@Test
+	fun getActionTriggers() {
 		assertEquals(0, DbLogic.getActionTriggers(getBaseStudyId()).size)
 		
 		createActionTrigger().save(true)
@@ -828,66 +841,69 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(2, DbLogic.getActionTriggers(getBaseStudyId()).size)
 	}
 	
-	open fun getEventTrigger() {
-		val eventTrigger = createObj<EventTrigger>("""{"cueCode": "test"}""")
+	@Test
+	fun getEventTrigger() {
+		val eventTrigger = createJsonObj<EventTrigger>("""{"cueCode": "test"}""")
 		eventTrigger.save()
 		
 		assertNull(DbLogic.getEventTrigger(6))
 		assertEquals("test", DbLogic.getEventTrigger(eventTrigger.id)?.cueCode)
 	}
 	
-	open fun getEventTriggers() {
+	@Test
+	fun getEventTriggers() {
 		val cue = "test"
 		val other = "other"
 		
 		assertEquals(0, DbLogic.getEventTriggers(getBaseStudyId(), cue).size)
 		
-		val eventTrigger1 = createObj<EventTrigger>()
+		val eventTrigger1 = createJsonObj<EventTrigger>()
 		eventTrigger1.cueCode = cue
 		eventTrigger1.studyId = getBaseStudyId()
 		eventTrigger1.save()
 		assertEquals(1, DbLogic.getEventTriggers(getBaseStudyId(), cue).size)
 		
-		val eventTrigger2 = createObj<EventTrigger>()
+		val eventTrigger2 = createJsonObj<EventTrigger>()
 		eventTrigger2.cueCode = other
 		eventTrigger1.studyId = getBaseStudyId()
 		eventTrigger2.save()
 		assertEquals(1, DbLogic.getEventTriggers(getBaseStudyId(), cue).size)
 		
-		val eventTrigger3 = createObj<EventTrigger>()
+		val eventTrigger3 = createJsonObj<EventTrigger>()
 		eventTrigger3.cueCode = cue
 		eventTrigger1.studyId = 5
 		eventTrigger3.save()
 		assertEquals(1, DbLogic.getEventTriggers(getBaseStudyId(), cue).size)
 	}
 	
-	open fun getLatestEventTrigger() {
+	@Test
+	fun getLatestEventTrigger() {
 		val cue = "test"
 		
 		assertNull(DbLogic.getLatestEventTrigger(getBaseStudyId(), cue))
 		
-		val eventTrigger1 = createObj<EventTrigger>()
+		val eventTrigger1 = createJsonObj<EventTrigger>()
 		eventTrigger1.cueCode = cue
 		eventTrigger1.studyId = getBaseStudyId()
 		eventTrigger1.delaySec = 1
 		eventTrigger1.save()
 		assertEquals(eventTrigger1.id, DbLogic.getLatestEventTrigger(getBaseStudyId(), cue)?.id)
 		
-		val eventTrigger2 = createObj<EventTrigger>()
+		val eventTrigger2 = createJsonObj<EventTrigger>()
 		eventTrigger2.cueCode = cue
 		eventTrigger2.studyId = getBaseStudyId()
 		eventTrigger2.delaySec = 2
 		eventTrigger2.save()
 		assertEquals(eventTrigger2.id, DbLogic.getLatestEventTrigger(getBaseStudyId(), cue)?.id)
 		
-		val eventTrigger3 = createObj<EventTrigger>()
+		val eventTrigger3 = createJsonObj<EventTrigger>()
 		eventTrigger3.cueCode = cue
 		eventTrigger3.studyId = getBaseStudyId()
 		eventTrigger3.delaySec = 1
 		eventTrigger3.save()
 		assertEquals(eventTrigger2.id, DbLogic.getLatestEventTrigger(getBaseStudyId(), cue)?.id)
 		
-		val eventTrigger4 = createObj<EventTrigger>()
+		val eventTrigger4 = createJsonObj<EventTrigger>()
 		eventTrigger4.cueCode = cue
 		eventTrigger4.studyId = 5
 		eventTrigger4.delaySec = 3
@@ -895,11 +911,17 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(eventTrigger2.id, DbLogic.getLatestEventTrigger(getBaseStudyId(), cue)?.id)
 	}
 	
-	open fun triggerEventTrigger() {
-		val eventTrigger1 = createObj<EventTrigger>("""{"cueCode": "test1"}""")
+	@Test
+	fun triggerEventTrigger() {
+		val actionTrigger = createActionTrigger("""{"actions": [{"type": ${ActionTrigger.JSON_ACTION_TYPE_MSG}}]}""")
+		actionTrigger.save(true) //eventTrigger.exec() called in eventTrigger.triggerCheck() needs ac actionTrigger
+		
+		val eventTrigger1 = createJsonObj<EventTrigger>("""{"cueCode": "test1"}""")
+		eventTrigger1.actionTriggerId = actionTrigger.id
 		eventTrigger1.studyId = 5
 		eventTrigger1.save()
-		val eventTrigger2 = createObj<EventTrigger>("""{"cueCode": "test2"}""")
+		val eventTrigger2 = createJsonObj<EventTrigger>("""{"cueCode": "test2"}""")
+		eventTrigger2.actionTriggerId = actionTrigger.id
 		eventTrigger2.studyId = 6
 		eventTrigger2.save()
 		
@@ -912,19 +934,21 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(1, notifications.fireMessageNotificationList.size)
 	}
 	
-	open fun getSchedule() {
+	@Test
+	fun getSchedule() {
 		val schedule = createScheduleForSaving()
 		schedule.dailyRepeatRate = 7
 		schedule.saveAndScheduleIfExists()
 		
 		createScheduleForSaving().saveAndScheduleIfExists()
 		
-		assertNull(DbLogic.getSchedule(6))
+		assertNull(DbLogic.getSchedule(-2))
 		assertEquals(7, DbLogic.getSchedule(schedule.id)?.dailyRepeatRate)
 	
 	}
 	
-	open fun hasEditableSchedules() {
+	@Test
+	fun hasEditableSchedules() {
 		assertFalse(DbLogic.hasEditableSchedules())
 		
 		val schedule1 = createScheduleForSaving()
@@ -938,34 +962,37 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertTrue(DbLogic.hasEditableSchedules())
 	}
 	
-	open fun getSignalTime() {
-		val signalTime = createObj<SignalTime>()
+	@Test
+	fun getSignalTime() {
+		val signalTime = createJsonObj<SignalTime>()
 		signalTime.label = "test"
 		signalTime.save()
 		
-		createObj<SignalTime>().save()
+		createJsonObj<SignalTime>().save()
 		
 		assertNull(DbLogic.getSignalTime(6))
 		assertEquals("test", DbLogic.getSignalTime(signalTime.id)?.label)
 	}
 	
-	open fun getSignalTimes() {
-		val schedule = createObj<Schedule>()
+	@Test
+	fun getSignalTimes() {
+		val schedule = createJsonObj<Schedule>()
 		schedule.id = 5
 		
 		assertEquals(0, DbLogic.getSignalTimes(schedule).size)
 		
-		createObj<SignalTime>().save()
+		createJsonObj<SignalTime>().save()
 		assertEquals(0, DbLogic.getSignalTimes(schedule).size)
 		
-		val signalTime = createObj<SignalTime>()
+		val signalTime = createJsonObj<SignalTime>()
 		signalTime.scheduleId = schedule.id
 		signalTime.save()
 		assertEquals(1, DbLogic.getSignalTimes(schedule).size)
 	}
 	
-	open fun signalTimeHasAlarms() {
-		val signalTime = createObj<SignalTime>()
+	@Test
+	fun signalTimeHasAlarms() {
+		val signalTime = createJsonObj<SignalTime>()
 		signalTime.id = 5
 		
 		assertFalse(DbLogic.signalTimeHasAlarms(signalTime.id))
@@ -974,7 +1001,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertTrue(DbLogic.signalTimeHasAlarms(signalTime.id))
 	}
 	
-	open fun getObservedVariables() {
+	@Test
+	fun getObservedVariables() {
 		val variableName = "test"
 		val variableNameOther = "other"
 		val variableNameOtherOther = "otherOtter"
@@ -1001,7 +1029,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(0, DbLogic.getObservedVariables(6L, variableName).size)
 	}
 	
-	open fun getPersonalStatisticsTimed() {
+	@Test
+	fun getPersonalStatisticsTimed() {
 		val timestamp = 1114306312L
 		val firstDay = timestamp - StatisticData_timed.ONE_DAY
 		val key1 = "test1"
@@ -1079,7 +1108,9 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals(2, statistics.second[keyIndex3]?.size) // actual entry plus first day
 		assertEquals(7.0, statistics.second[keyIndex3]?.get(1)?.sum)
 	}
-	open fun getPersonalStatisticsPerValue() {
+	
+	@Test
+	fun getPersonalStatisticsPerValue() {
 		val timestamp = 1114306312L
 		val firstDay = timestamp - StatisticData_timed.ONE_DAY
 		val key1 = "test1"
@@ -1133,7 +1164,8 @@ abstract class DbLogicSharedTests : BaseDatabaseTests() {
 		assertEquals("4", (statistics.second[keyIndex3]?.get(0) as StatisticData_perValue).value)
 	}
 	
-	open fun getStudyServerUrls() {
+	@Test
+	fun getStudyServerUrls() {
 		val title1 = "title1"
 		val title2 = "title2"
 		

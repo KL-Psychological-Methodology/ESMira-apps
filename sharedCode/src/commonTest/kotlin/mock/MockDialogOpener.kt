@@ -26,4 +26,11 @@ class MockDialogOpener: DialogOpenerInterface {
 	override fun dialog(title: String, msg: String) {
 		++dialogCount
 	}
+	
+	fun reset() {
+		errorReportCount = 0
+		updateNeededCount = 0
+		notificationsBrokenCount = 0
+		dialogCount = 0
+	}
 }

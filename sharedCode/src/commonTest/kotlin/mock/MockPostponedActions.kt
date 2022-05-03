@@ -35,4 +35,13 @@ class MockPostponedActions: PostponedActionsInterface {
 	override fun cancelUpdateStudiesRegularly() {
 		++cancelUpdateStudiesRegularlyCount
 	}
+	
+	fun reset() {
+		scheduleAlarmList.clear()
+		cancelList.clear()
+		
+		syncDataSetsCount = 0
+		updateStudiesRegularlyCount = 0
+		cancelUpdateStudiesRegularlyCount = 0
+	}
 }

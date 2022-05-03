@@ -3,14 +3,39 @@ package tests.data_structure
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.*
+import BaseCommonTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 /**
  * Created by JodliDev on 31.03.2022.
  */
-class ActionTriggerTest : BaseDataStructureTest() {
+class ActionTriggerTest : BaseCommonTest() {
 	private val testId = 6L
+	
+	@Test
+	fun trigger_scheduleChanged_notifications() {
+		var fireScheduleChangedCount = notifications.fireSchedulesChangedList.size
+		
+		val emptyActionTrigger = createActionTrigger("""{"schedules": [{}]}""")
+		emptyActionTrigger.save(true)
+		assertEquals(fireScheduleChangedCount, notifications.fireSchedulesChangedList.size)
+		val id = emptyActionTrigger.id
+		
+		//new schedules:
+		val actionTriggerWithSchedules1 = createActionTrigger("""{"schedules": [{},{}]}""")
+		actionTriggerWithSchedules1.id = id
+		actionTriggerWithSchedules1.exists = true
+		actionTriggerWithSchedules1.save(true)
+		assertEquals(++fireScheduleChangedCount, notifications.fireSchedulesChangedList.size)
+		
+		//no change:
+		val actionTriggerWithSchedules2 = createActionTrigger("""{"schedules": [{},{}]}""")
+		actionTriggerWithSchedules2.id = id
+		actionTriggerWithSchedules2.exists = true
+		actionTriggerWithSchedules2.save(true)
+		assertEquals(fireScheduleChangedCount, notifications.fireSchedulesChangedList.size)
+	}
 	
 	@Test
 	fun eventTriggers() {
@@ -21,7 +46,7 @@ class ActionTriggerTest : BaseDataStructureTest() {
 		empty.id = testId
 		empty.fromJson = false
 		assertEquals(0, empty.eventTriggers.size)
-		mockTools.assertSqlWasSelected(EventTrigger.TABLE, 0, testId.toString())
+		assertSqlWasSelected(EventTrigger.TABLE, 0, testId.toString())
 	}
 	
 	@Test
@@ -33,7 +58,7 @@ class ActionTriggerTest : BaseDataStructureTest() {
 		empty.id = testId
 		empty.fromJson = false
 		assertEquals(0, empty.schedules.size)
-		mockTools.assertSqlWasSelected(Schedule.TABLE, 0, testId.toString())
+		assertSqlWasSelected(Schedule.TABLE, 0, testId.toString())
 	}
 	
 	@Test
@@ -102,7 +127,7 @@ class ActionTriggerTest : BaseDataStructureTest() {
 			"""{"schedules": [{"signalTimes":[{}]}], "eventTriggers": [{},{}]}"""
 		).save(true)
 		
-		val savedData = mockTools.getSqlSavedMap()
+		val savedData = getSqlSavedMap()
 		assertEquals(1, savedData[ActionTrigger.TABLE]?.size)
 		assertEquals(1, savedData[Schedule.TABLE]?.size)
 		assertEquals(1, savedData[SignalTime.TABLE]?.size)
@@ -111,8 +136,6 @@ class ActionTriggerTest : BaseDataStructureTest() {
 	
 	@Test
 	fun execActions() {
-		val notifications = mockTools.getNotifications()
-		
 		createActionTrigger().execActions("test", NativeLink.getNowMillis())
 		assertEquals(0, notifications.fireQuestionnaireBingList.size)
 		assertEquals(0, notifications.fireStudyNotificationList.size)
@@ -142,8 +165,6 @@ class ActionTriggerTest : BaseDataStructureTest() {
 	
 	@Test
 	fun execAsPostponedNotifications() {
-		val notifications = mockTools.getNotifications()
-		
 		val actionTriggerEventTrigger = createActionTrigger(
 			"""{"eventTriggers":[{}], "actions": [{"type": 2}]}"""
 		)
@@ -164,34 +185,37 @@ class ActionTriggerTest : BaseDataStructureTest() {
 	
 	@Test
 	fun iteratePostponedReminder() {
-		val postPostponedActions = mockTools.getPostponedActions()
-		
 		val actionTrigger = createActionTrigger(
 			"""{"eventTriggers":[{}], "actions": [{"type": 3}, {"type": 2}, {"type": 1}]}"""
 		)
 		actionTrigger.iteratePostponedReminder(
 			Alarm.createFromEventTrigger(actionTrigger.eventTriggers[0], NativeLink.getNowMillis())
 		)
-		assertEquals(1, postPostponedActions.scheduleAlarmList.size) //1 for alarm
+		assertEquals(1, postponedActions.scheduleAlarmList.size) //1 for alarm
 	}
 	
 	@Test
 	fun issueReminder() {
-		val notifications = mockTools.getNotifications()
-		val postPostponedActions = mockTools.getPostponedActions()
-		
 		val actionTrigger = createActionTrigger(
 			"""{"schedules": [{"signalTimes":[{}]}], "actions": [{"type": 2, "timeout": 3}]}""",
 			"""{"pages": [{"inputs":[{}]}]}"""
 		)
-		
-		actionTrigger.issueReminder("test", NativeLink.getNowMillis(), 0, 5)
+		countQueries(
+			0,
+			"UPDATE ${DbLogic.User.TABLE} SET ${DbLogic.User.KEY_NOTIFICATIONS_MISSED} = ${DbLogic.User.KEY_NOTIFICATIONS_MISSED} + 1"
+		) {
+			actionTrigger.issueReminder("test", NativeLink.getNowMillis(), 0, 5)
+		}
 		assertEquals(1, notifications.fireQuestionnaireBingList.size)
-		assertEquals(1, postPostponedActions.scheduleAlarmList.size)
+		assertEquals(1, postponedActions.scheduleAlarmList.size)
 		
-		actionTrigger.issueReminder("test", NativeLink.getNowMillis() - 1000*60*60*24, 0, 5)
-		mockTools.assertSqlDidQuery("UPDATE ${DbLogic.User.TABLE} SET ${DbLogic.User.KEY_NOTIFICATIONS_MISSED} = ${DbLogic.User.KEY_NOTIFICATIONS_MISSED} + 1")
+		countQueries(
+			1,
+			"UPDATE ${DbLogic.User.TABLE} SET ${DbLogic.User.KEY_NOTIFICATIONS_MISSED} = ${DbLogic.User.KEY_NOTIFICATIONS_MISSED} + 1"
+		) {
+			actionTrigger.issueReminder("test", NativeLink.getNowMillis() - 1000*60*60*24, 0, 5)
+		}
 		assertEquals(1, notifications.fireQuestionnaireBingList.size)
-		assertEquals(1, postPostponedActions.scheduleAlarmList.size)
+		assertEquals(1, postponedActions.scheduleAlarmList.size)
 	}
 }
