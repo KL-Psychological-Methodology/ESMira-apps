@@ -396,11 +396,13 @@ class Questionnaire {
 	fun canBeFilledOut(now: Long = NativeLink.getNowMillis()): Boolean { //if there are any questionnaires at the current time
 		val fromMidnight = now - NativeLink.getMidnightMillis(now)
 		
+		val lastNotification = (DbLogic.getLastAlarmBefore(now, id)?.timestamp ?: 0).coerceAtLeast(lastNotification)
 		val oncePerNotification = (!completableOncePerNotification ||
 				(lastNotification != 0L && lastNotification >= lastCompleted &&
 						(completableMinutesAfterNotification == 0 || now - lastNotification <= completableMinutesAfterNotification * 60 * 1000)
 						)
 				)
+		
 		val specificTime = !completableAtSpecificTime ||
 				if(completableAtSpecificTimeStart != -1 && completableAtSpecificTimeEnd != -1) {
 					if(completableAtSpecificTimeStart > completableAtSpecificTimeEnd)

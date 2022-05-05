@@ -1024,6 +1024,25 @@ object DbLogic {
 	//Alarms
 	// in alarm.exec() alarms are skipped when a newer one is pending. This means that lists that are executed need to be ordered!
 	//
+	
+	//TODO: needs test
+	fun getLastAlarmBefore(timestamp: Long, questionnaireId: Long): Alarm? {
+		val c = NativeLink.sql.select(
+			Alarm.TABLE,
+			Alarm.COLUMNS,
+			"${Alarm.KEY_TIMESTAMP} <= ? AND ${Alarm.KEY_QUESTIONNAIRE_ID} = ?", arrayOf(timestamp.toString(), questionnaireId.toString()),
+			null,
+			null,
+			"${Alarm.KEY_TIMESTAMP} DESC",
+			"1"
+		)
+		var r: Alarm? = null
+		if(c.moveToFirst())
+			r = Alarm(c)
+		c.close()
+		return r
+	}
+	
 	fun getAlarm(id: Long): Alarm? {
 		val c = NativeLink.sql.select(
 			Alarm.TABLE,

@@ -356,6 +356,7 @@ struct StatisticsView: View {
 						self.showPublicStatistics = true
 					}
 				}
+				self.study.statisticWasViewed()
 			}
 	}
 }

@@ -18,6 +18,7 @@ class AppState: ObservableObject {
 		case addStudy
 	}
 	
+	@Published var updateLists: Bool = false
 	@Published var startScreen: Screens = .main
 	@Published var disableLandscape: Bool = false
 	

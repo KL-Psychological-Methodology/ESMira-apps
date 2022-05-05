@@ -109,8 +109,8 @@ class Fragment_listStatistics constructor() : Base_fragment() {
 	}
 	
 	private fun openStatistic(s: Study, skip: Boolean) {
-		if(s.state == Study.STATES.Joined)
-			DataSet.createShortDataSet(DataSet.TYPE_STATISTIC_VIEWED, s)
+		s.statisticWasViewed()
+		
 		val b = Bundle()
 		b.putLong(Fragment_statisticsRoot.KEY_STUDY_ID, s.id)
 		if(skip)

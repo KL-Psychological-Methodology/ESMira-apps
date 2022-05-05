@@ -13,8 +13,13 @@ struct FlipEffect: GeometryEffect {
 }
 
 struct MessagesView: View {
+	@EnvironmentObject var appState: AppState
 	let study: Study?
 	@State private var messages: [Message] = []
+	
+	private func reloadMessages() {
+		self.messages = DbLogic().getMessages(id: self.study?.id ?? -1)
+	}
 	
 	var body: some View {
 		ScrollView {
@@ -44,7 +49,10 @@ struct MessagesView: View {
 		}
 		.modifier(FlipEffect())
 		.onAppear {
-			self.messages = DbLogic().getMessages(id: self.study?.id ?? -1)
+			reloadMessages()
+		}
+		.onReceive(appState.$updateLists) { _ in
+			reloadMessages()
 		}
 	}
 	

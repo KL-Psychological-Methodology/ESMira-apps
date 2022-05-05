@@ -103,7 +103,8 @@ struct StudyLoader: View {
 					CodeScannerView(codeTypes: [.qr]) { result in
 						switch result {
 						case .success(let code):
-							let r = self.interpreter.check(s: code)
+							print("Found code: \(code)")
+							let r = self.interpreter.check(s: code.string)
 							if(r != nil) {
 								self.gotoStudyList(
 									serverUrl: r!.url,
@@ -111,12 +112,15 @@ struct StudyLoader: View {
 									studyWebId: r!.studyId,
 									qId: r!.qId
 								)
-								self.openQrScanner = false
 							}
+							else {
+								self.appState.showTranslatedToast("error_qr_faulty")
+							}
+							self.openQrScanner = false
 							
-							print("Found code: \(code)")
 						case .failure(let error):
 							self.appState.showToast(error.localizedDescription)
+							self.openQrScanner = false
 						}
 					}
 				}
