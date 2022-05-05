@@ -70,15 +70,12 @@ struct ListQuestionnairesView: View {
 			}
 		}
 			.onAppear {
-				print("onAppear")
 				reloadStudies()
 			}
 			.onReceive(appState.$updateLists) { _ in
-				print("$updateLists")
 				reloadStudies()
 			}
 			.onReceive(updateTimer) { _ in
-				print("updateTimer")
 				reloadStudies()
 			}
 			.actionSheet(isPresented: self.$showStudyOptions) {
