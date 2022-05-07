@@ -126,39 +126,38 @@ open class Element_DateTimeInput : LinearLayout {
 		timeInfo = findViewById(R.id.timeInfo)
 		timeInfo.setOnClickListener {
 			val cal = calendar ?: getCurrentTimeCalendar()
-			//TODO: update MaterialTimePicker to 1.3.1
-//			MaterialTimePicker.Builder()
-//				.setTimeFormat(if(DateFormat.is24HourFormat(getContext())) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H)
-//				.setHour(cal[Calendar.HOUR_OF_DAY])
-//				.setMinute(cal[Calendar.MINUTE])
-//				.build()
-//				.apply {
-//					addOnPositiveButtonClickListener {
-//						val newCal = calendar ?: getCurrentTimeCalendar()
+			MaterialTimePicker.Builder()
+				.setTimeFormat(if(DateFormat.is24HourFormat(getContext())) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H)
+				.setHour(cal[Calendar.HOUR_OF_DAY])
+				.setMinute(cal[Calendar.MINUTE])
+				.build()
+				.apply {
+					addOnPositiveButtonClickListener {
+						val newCal = calendar ?: getCurrentTimeCalendar()
+
+						newCal[Calendar.HOUR_OF_DAY] = hour
+						newCal[Calendar.MINUTE] = minute
+						calendar = newCal
+						showTime()
+						listener?.onChanged(newCal)
+					}
+				}
+				.show((context as AppCompatActivity).supportFragmentManager, "time_dialog")
+
+//			val timeDialog = MaterialTimePicker.newInstance()
+//			timeDialog.setTimeFormat(if(DateFormat.is24HourFormat(getContext())) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H)
+//			timeDialog.hour = cal[Calendar.HOUR_OF_DAY]
+//			timeDialog.minute = cal[Calendar.MINUTE]
+//			timeDialog.setListener { dialog ->
+//				val newCal = calendar ?: getCurrentTimeCalendar()
 //
-//						newCal[Calendar.HOUR_OF_DAY] = hour
-//						newCal[Calendar.MINUTE] = minute
-//						calendar = newCal
-//						showTime()
-//						listener?.onChanged(newCal)
-//					}
-//				}
-//				.show((context as AppCompatActivity).supportFragmentManager, "time_dialog")
-
-			val timeDialog = MaterialTimePicker.newInstance()
-			timeDialog.setTimeFormat(if(DateFormat.is24HourFormat(getContext())) TimeFormat.CLOCK_24H else TimeFormat.CLOCK_12H)
-			timeDialog.hour = cal[Calendar.HOUR_OF_DAY]
-			timeDialog.minute = cal[Calendar.MINUTE]
-			timeDialog.setListener { dialog ->
-				val newCal = calendar ?: getCurrentTimeCalendar()
-
-				newCal[Calendar.HOUR_OF_DAY] = dialog.hour
-				newCal[Calendar.MINUTE] = dialog.minute
-				calendar = newCal
-				showTime()
-				listener?.onChanged(newCal)
-			}
-			timeDialog.show((context as AppCompatActivity).supportFragmentManager, "time_dialog")
+//				newCal[Calendar.HOUR_OF_DAY] = dialog.hour
+//				newCal[Calendar.MINUTE] = dialog.minute
+//				calendar = newCal
+//				showTime()
+//				listener?.onChanged(newCal)
+//			}
+//			timeDialog.show((context as AppCompatActivity).supportFragmentManager, "time_dialog")
 			
 			
 //			val timeDialog = TimePickerDialog(context, OnTimeSetListener { _, hour, min ->

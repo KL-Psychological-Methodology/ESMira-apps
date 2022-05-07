@@ -6,7 +6,7 @@ import Foundation
 import sharedCode
 
 class SmartphoneData: SmartphoneDataInterface {
-	var phoneType: PhoneType = PhoneType.IOS
+	var phoneType: PhoneType = PhoneType.ios
 	
 	var appType: String = "iOS"
 	

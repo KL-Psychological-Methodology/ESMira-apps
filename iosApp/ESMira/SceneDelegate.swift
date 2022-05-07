@@ -80,7 +80,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// Use this method to undo the changes made on entering the background.
 		
 		
-		
 		let appDelegate = UIApplication.shared.delegate as! AppDelegate
 		let appState = appDelegate.appState
 		let defaults = UserDefaults.standard

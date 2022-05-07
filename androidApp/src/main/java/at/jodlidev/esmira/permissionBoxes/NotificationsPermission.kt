@@ -18,7 +18,6 @@ import android.view.animation.AnimationUtils
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.view.children
 import at.jodlidev.esmira.permissionBoxes.APermissionBox
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.ErrorBox
@@ -132,7 +131,8 @@ class NotificationsPermission(context: Context, attrs: AttributeSet?, num: Int) 
 		}
 	}
 	private fun skipToProgress(pos: ProgressPos, newAnimRes: Int = -1) {
-		for(view in container.children) {
+		for(i in 0 until container.childCount) {
+			val view = container.getChildAt(i)
 			if(view.tag != "animation")
 				container.removeView(view)
 		}

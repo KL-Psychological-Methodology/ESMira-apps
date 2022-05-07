@@ -28,9 +28,8 @@ struct ImageStruct: View {
 	var body: some View {
 		VStack {
 			TextStruct(viewModel: self.viewModel)
-			URLImage(url: URL(string: self.viewModel.input.url)!) { image in
-				image
-					.aspectRatio(contentMode: .fit)
+			URLImage(URL(string: self.viewModel.input.url)!) { image in
+				image.aspectRatio(contentMode: .fit)
 			}
 		}
 	}

@@ -2,13 +2,13 @@ package at.jodlidev.esmira.sharedCode
 
 import at.jodlidev.esmira.sharedCode.data_structure.*
 import io.ktor.client.HttpClient
+import io.ktor.client.call.*
 import io.ktor.client.engine.ClientEngineClosedException
-import io.ktor.client.features.HttpTimeout
-import io.ktor.client.features.json.JsonFeature
-import io.ktor.client.features.json.serializer.KotlinxSerializer
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.request.*
+import io.ktor.serialization.kotlinx.json.*
 import io.ktor.client.request.forms.*
-import io.ktor.client.request.get
-import io.ktor.client.request.post
 import io.ktor.http.*
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.decodeFromString
@@ -22,8 +22,11 @@ import kotlin.jvm.Synchronized
 class Web {
 	var error = false
 	private val client = HttpClient {
-		install(JsonFeature) {
-			serializer = KotlinxSerializer(Json { encodeDefaults = true; ignoreUnknownKeys = true })
+		install(ContentNegotiation) {
+			json(Json {
+				encodeDefaults = true
+				ignoreUnknownKeys = true
+			})
 		}
 		install(HttpTimeout) {
 			requestTimeoutMillis = 30000
@@ -32,7 +35,7 @@ class Web {
 		}
 	}
 	private suspend fun get(url: String): String {
-		val interpreter: GetStructure = client.get(url)
+		val interpreter: GetStructure = client.get(url).body()
 		checkResponse(interpreter)
 		return interpreter.dataset
 	}
@@ -40,16 +43,16 @@ class Web {
 		println("postJson to: $url")
 		val interpreter: GetStructure = client.post(url) {
 			contentType(ContentType.Application.Json)
-			body = data
-		}
+			setBody(data)
+		}.body()
 		checkResponse(interpreter)
 		return interpreter.dataset
 	}
 	private suspend fun postString(url: String, data: String): String {
 		println("postString to: $url")
 		val interpreter: GetStructure = client.post(url) {
-			body = data
-		}
+			setBody(body)
+		}.body()
 		checkResponse(interpreter)
 		return interpreter.dataset
 	}
@@ -72,7 +75,7 @@ class Web {
 					append(HttpHeaders.ContentDisposition, "filename=${fileUpload.identifier}")
 				})
 			}
-		)
+		).body()
 		
 		checkResponse(interpreter)
 		return interpreter.dataset

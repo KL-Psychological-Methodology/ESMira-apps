@@ -6,6 +6,6 @@ pluginManagement {
     }
 }
 
-rootProject.name = "ESMira-apps"
+rootProject.name = "ESMira"
 include(":androidApp")
 include(":sharedCode")

@@ -59,7 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 				let alarm = DbLogic().getAlarm(id: Int64(id[1]) ?? -1)
 				if(alarm != nil) {
 					alarm?.exec(fireNotifications: false)
-					if(alarm!.actionTrigger.hasInvitation()) {
+					if(alarm!.actionTrigger.hasInvitation(nothingElse: false)) {
 						let questionnaire = DbLogic().getQuestionnaire(id: alarm?.questionnaireId ?? 0)
 						if(questionnaire != nil) {
 							(NativeLink().dialogOpener as! DialogOpener).openQuestionnaire(questionnaireId: questionnaire!.id)

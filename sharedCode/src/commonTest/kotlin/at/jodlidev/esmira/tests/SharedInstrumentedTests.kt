@@ -48,7 +48,7 @@ abstract class SharedInstrumentedTests : BaseInstrumentedTests() {
 		
 		fileUploadDoesNotExist.delete()
 		assertEquals(0, DbLogic.getPendingFileUploads().size)
-		assertEquals(1, DbLogic.getTemporaryFileUploads().size)
+		assertEquals(0, DbLogic.getTemporaryFileUploads().size) //because file does not exist, entry is deleted instead of temporary
 	}
 	
 	open fun reportMissedInvitation_getMissedInvitations_resetMissedInvitations() {

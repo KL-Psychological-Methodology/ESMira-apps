@@ -119,7 +119,7 @@ struct ChangeSchedulesView: View {
 //			SignalTimeView(self.currentStudy, i)
 ////			SignalTimeView(&signalTimes[i])
 //		}.fixButtons()
-		return List(self.currentStudy.editableSignalTimes, id: \.id) { signalTime in
+		return List(self.currentStudy.editableSignalTimes, id: \.self) { signalTime in
 			SignalTimeView(signalTime)
 //			SignalTimeView(&signalTimes[i])
 		}.fixButtons()

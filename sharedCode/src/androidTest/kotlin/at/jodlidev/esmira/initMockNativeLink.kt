@@ -1,13 +1,14 @@
-import androidx.test.core.app.ApplicationProvider
 import at.jodlidev.esmira.sharedCode.NativeLink
-import at.jodlidev.esmira.sharedCode.SQLite
 import mock.MockDialogOpener
 import mock.MockNotifications
 import mock.MockPostponedActions
 import mock.MockSmartphoneData
 import mock.mockSql.MockDatabase
 
-actual fun initMockNativeLink (
+/**
+ * Created by JodliDev on 31.03.2022.
+ */
+actual fun initMockNativeLink(
 	sql: MockDatabase,
 	smartphoneData: MockSmartphoneData,
 	dialogOpener: MockDialogOpener,

@@ -1,26 +1,20 @@
-//
-//  Created by JodliDev on 30.04.20.
-//
-
-import Foundation
-import Combine
 import SwiftUI
 import sharedCode
-
-
-
-
 
 struct ContentView: View {
 	@EnvironmentObject var appState: AppState
 	
 	init() {
-		let appearance = UINavigationBarAppearance()
-		appearance.configureWithTransparentBackground()
-		appearance.backgroundColor = UIColor(named: "PrimaryLight")
-		appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-		UINavigationBar.appearance().standardAppearance = appearance
-		UINavigationBar.appearance().tintColor = .white
+		let appearence = UINavigationBarAppearance()
+		appearence.configureWithOpaqueBackground()
+		appearence.backgroundColor = UIColor(named: "PrimaryLight")
+		appearence.titleTextAttributes = [.foregroundColor: UIColor.white]
+		appearence.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+			
+		UINavigationBar.appearance().standardAppearance = appearence
+		UINavigationBar.appearance().scrollEdgeAppearance = appearence
+		UINavigationBar.appearance().compactAppearance = appearence
+		UINavigationBar.appearance().tintColor = UIColor.white
 	}
 	
 	func getScreenDialogView() -> some View {

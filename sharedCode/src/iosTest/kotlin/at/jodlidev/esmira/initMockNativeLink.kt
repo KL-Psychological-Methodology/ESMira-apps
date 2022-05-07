@@ -4,14 +4,15 @@ import mock.MockPostponedActions
 import mock.MockSmartphoneData
 import mock.mockSql.MockDatabase
 
-actual fun initMockNativeLink (
+/**
+ * Created by JodliDev on 31.03.2022.
+ */
+actual fun initMockNativeLink(
 	sql: MockDatabase,
 	smartphoneData: MockSmartphoneData,
 	dialogOpener: MockDialogOpener,
 	notifications: MockNotifications,
 	postponedActions: MockPostponedActions
 ) {
-	//not needed
-//	val sql = SQLite(ApplicationProvider.getApplicationContext(), null)
-//	NativeLink.init(sql, smartphoneData, dialogOpener, notifications, postponedActions)
+	TODO("Not yet implemented")
 }
