@@ -97,32 +97,38 @@ class SignalTimeTest : BaseCommonTest() {
 	
 	@Test
 	fun setStart() {
+		//we have to be careful because of the users timezone:
+		val targetDate = NativeLink.getMidnightMillis(1114313512000) + 12712000 // 2005-04-24 03:31:52
+		
 		val oneDay = 1000*60*60*24
-		val signalTime1 = createJsonObj<SignalTime>("""{"random": true, "endTimeOfDay": 12711999}""")
-		signalTime1.setStart(1114313512000) // 2005-04-24 03:31:52
+		val signalTime1 = createJsonObj<SignalTime>("""{"random": true, "endTimeOfDay": 12711999}""") //03:51:51:0999
+		signalTime1.setStart(targetDate)
 		
 		assertTrue(signalTime1.timeHasChanged)
 		assertEquals(12712000, signalTime1.startTimeOfDay) //03:31:52
 		assertEquals(12711999 + oneDay, signalTime1.endTimeOfDay)
 		
 		
-		val signalTime2 = createJsonObj<SignalTime>("""{"random": true, "endTimeOfDay": 12712001}""")
-		signalTime2.setStart(1114313512000) // 2005-04-24 03:31:52
+		val signalTime2 = createJsonObj<SignalTime>("""{"random": true, "endTimeOfDay": 12712001}""") //03:51:52:0001
+		signalTime2.setStart(targetDate)
 		assertEquals(12712001, signalTime2.endTimeOfDay)
 	}
 	
 	@Test
 	fun setEnd() {
+		//we have to be careful because of the users timezone:
+		val targetDate = NativeLink.getMidnightMillis(1114313512000) + 12712000 // 2005-04-24 03:31:52
+		
 		val oneDay = 1000*60*60*24
-		val signalTime1 = createJsonObj<SignalTime>("""{"random": true, "startTimeOfDay": 12711999}""")
-		signalTime1.setEnd(1114313512000) // 2005-04-24 03:31:52
+		val signalTime1 = createJsonObj<SignalTime>("""{"random": true, "startTimeOfDay": 12711999}""") //03:51:51:0999
+		signalTime1.setEnd(targetDate)
 		
 		assertTrue(signalTime1.timeHasChanged)
 		assertEquals(12712000, signalTime1.endTimeOfDay) //03:31:52
 		
 		
-		val signalTime2 = createJsonObj<SignalTime>("""{"random": true, "startTimeOfDay": 12712001}""")
-		signalTime2.setEnd(1114313512000) // 2005-04-24 03:31:52
+		val signalTime2 = createJsonObj<SignalTime>("""{"random": true, "startTimeOfDay": 12712001}""") //03:51:52:0001
+		signalTime2.setEnd(targetDate)
 		assertEquals(12712000 + oneDay, signalTime2.endTimeOfDay) //03:31:52 + one day
 	}
 	
@@ -140,14 +146,20 @@ class SignalTimeTest : BaseCommonTest() {
 	
 	@Test
 	fun getFormattedStart() {
+		//we have to be careful because of the users timezone:
+		val targetDate = NativeLink.getMidnightMillis(1114313512000) + 12712000 // 2005-04-24 03:31:52
+		
 		val signalTime = createJsonObj<SignalTime>("""{"random": true, "startTimeOfDay": 12712000}""") // 03:31:52
-		assertEquals(NativeLink.formatTime(1114313512000), signalTime.getFormattedStart()) // 2005-04-24 03:31:52
+		assertEquals(NativeLink.formatTime(targetDate), signalTime.getFormattedStart()) // 2005-04-24 03:31:52
 	}
 	
 	@Test
 	fun getFormattedEnd() {
+		//we have to be careful because of the users timezone:
+		val targetDate = NativeLink.getMidnightMillis(1114313512000) + 12712000 // 2005-04-24 03:31:52
+		
 		val signalTime = createJsonObj<SignalTime>("""{"random": true, "endTimeOfDay": 12712000}""") // 03:31:52
-		assertEquals(NativeLink.formatTime(1114313512000), signalTime.getFormattedEnd()) // 2005-04-24 03:31:52
+		assertEquals(NativeLink.formatTime(targetDate), signalTime.getFormattedEnd()) // 2005-04-24 03:31:52
 	}
 	
 	@Test

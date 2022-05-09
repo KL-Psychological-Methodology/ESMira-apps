@@ -208,6 +208,8 @@ class SchedulerTest : BaseCommonTest() {
 					Scheduler.scheduleSignalTime(signalTime, -1, timestampNow, manualDelayDays)
 					
 					
+					//check alarm:
+					
 					val alarms = DbLogic.getAlarms(schedule) //only get alarms from this loop (schedule.id)
 					val errorInfo = "\nnow: $timestampNow,\n" +
 						"midnight: $timestampMidnight,\n" +

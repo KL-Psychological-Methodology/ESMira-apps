@@ -100,22 +100,25 @@ class ScheduleTest : BaseCommonTest() {
 		schedule.bindParent(createActionTrigger())
 		val signalTime = schedule.signalTimes[0]
 		signalTime.bindParent(-1, schedule)
-		signalTime.exists = true // signalTimes.saveTimeFrames() will be called which only calls postponedActions.cancel() if it exists
+		signalTime.save()
 		signalTime.timeHasChanged = true
 		
 		
-		//without rescheduleNow
-		Alarm.createFromSignalTime(signalTime, schedule.getActionTriggerId(), soon)
-		schedule.saveTimeFrames()
-		assertEquals(0, postponedActions.cancelList.size)
-		
-		
-		//with automatic rescheduleNow
-		reset() // mockDatabase does not order selects. So saveTimeFrames() would get the wrong alarm
-		Alarm.createFromSignalTime(signalTime, schedule.getActionTriggerId(), later)
+		//with automatic rescheduleNow (next alarm is later than 24 hours)
+		//this has to happen
+//		reset() // mockDatabase does not order selects. So saveTimeFrames() would get the wrong alarm
+		Alarm.createFromSignalTime(signalTime, schedule.getActionTriggerId(), later).save()
 		schedule.bindParent(createActionTrigger()) //add questionnaire and study to db again
 		schedule.saveTimeFrames()
 		assertNotEquals(0, postponedActions.cancelList.size)
+		
+		
+		//without rescheduleNow (next alarm is sooner than 24 hours)
+		postponedActions.reset()
+		Alarm.createFromSignalTime(signalTime, schedule.getActionTriggerId(), soon).save()
+		schedule.saveTimeFrames()
+		assertEquals(0, postponedActions.cancelList.size)
+		
 	}
 	
 	@Test

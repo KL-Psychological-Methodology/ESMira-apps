@@ -24,7 +24,7 @@ class FileUploadTest : BaseCommonTest() {
 		fileUpload.save()
 		fileUpload.setReadyForUpload()
 		
-		assertSqlWasUpdated(FileUpload.TABLE, FileUpload.KEY_IS_TEMPORARY, false)
+		assertSqlWasUpdated(FileUpload.TABLE, FileUpload.KEY_IS_TEMPORARY, 0)
 	}
 	
 	@Test
@@ -34,7 +34,7 @@ class FileUploadTest : BaseCommonTest() {
 		fileUpload.save()
 		fileUpload.setTemporary()
 		
-		assertSqlWasUpdated(FileUpload.TABLE, FileUpload.KEY_IS_TEMPORARY, true)
+		assertSqlWasUpdated(FileUpload.TABLE, FileUpload.KEY_IS_TEMPORARY, 1)
 	}
 	
 	// delete() and getFile() are tested in DatabaseSharedTestLogic.fileUpload_createAndDeleteFile()

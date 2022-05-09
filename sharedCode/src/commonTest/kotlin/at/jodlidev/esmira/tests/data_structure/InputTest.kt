@@ -146,8 +146,8 @@ class InputTest : BaseCommonTest() {
 		
 		input.fillIntoDataSet(dataSet)
 		
-		assertSqlWasUpdated(FileUpload.TABLE, FileUpload.KEY_IS_TEMPORARY, false, 0)
-		assertSqlWasUpdated(FileUpload.TABLE, FileUpload.KEY_IS_TEMPORARY, false, 1)
+		assertSqlWasUpdated(FileUpload.TABLE, FileUpload.KEY_IS_TEMPORARY, 0, 0)
+		assertSqlWasUpdated(FileUpload.TABLE, FileUpload.KEY_IS_TEMPORARY, 0, 1)
 		
 		dataSet.saveQuestionnaire(questionnaire, NativeLink.getNowMillis())
 		val value = getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String

@@ -226,14 +226,13 @@ class QuestionnaireTest : BaseCommonTest() {
 		val study = createStudy()
 		study.joined = now
 		study.save()
-		val db = NativeLink.sql
 		
 		//test durationPeriodDays:
 		var questionnaire = createJsonObj<Questionnaire>("{\"durationPeriodDays\": 2}")
 		questionnaire.studyId = study.id
 		assertTrue(questionnaire.isActive())
 		
-		study.joined = now - 1000*60*60*24*2 + 1
+		study.joined = now - (1000*60*60*24*2 + 1)
 		study.save()
 		assertFalse(questionnaire.isActive())
 		
@@ -245,7 +244,7 @@ class QuestionnaireTest : BaseCommonTest() {
 		study.save()
 		assertFalse(questionnaire.isActive())
 		
-		study.joined = now - 1000*60*60*24*2 + 1
+		study.joined = now - (1000*60*60*24*2 + 1)
 		study.save()
 		assertTrue(questionnaire.isActive())
 		
@@ -282,7 +281,7 @@ class QuestionnaireTest : BaseCommonTest() {
 		val now = NativeLink.getNowMillis()
 		val study = DbLogic.getStudy(getBaseStudyId())!!
 		
-		var questionnaire = createJsonObj<Questionnaire>(
+		val questionnaire = createJsonObj<Questionnaire>(
 			"{\"durationStart\": ${now + oneDay*2}, \"durationStartingAfterDays\": 3}"
 		)
 		
@@ -297,6 +296,10 @@ class QuestionnaireTest : BaseCommonTest() {
 	
 	@Test
 	fun canBeFilledOut() {
+		//we have to be careful because of the users timezone:
+//		val targetDate = NativeLink.getMidnightMillis(1114313512000) + 12712000 // 2005-04-24 03:31:52
+		val targetDate1 = NativeLink.getMidnightMillis(1114313512000) + 12712000 // 2005-04-24 03:31:52
+		val targetDate2 = NativeLink.getMidnightMillis(626637180000) + 67980000 // 1989-11-9 18:53:00
 		val now = NativeLink.getNowMillis()
 		val fromMidnight = now - NativeLink.getMidnightMillis(now)
 		val oneHour = 1000*60*60
@@ -336,29 +339,29 @@ class QuestionnaireTest : BaseCommonTest() {
 		questionnaire = createJsonObj<Questionnaire>(
 			"{\"completableAtSpecificTime\": true, \"completableAtSpecificTimeStart\": ${oneHour*18}, \"completableAtSpecificTimeEnd\": ${oneHour*3}, \"pages\":[{\"items\":[{}]}]}"
 		)
-		assertTrue(questionnaire.canBeFilledOut(626637180000)) // 1989-11-9 18:53:00
-		assertFalse(questionnaire.canBeFilledOut(1114313512000)) // 2005-04-24 03:31:52
+		assertTrue(questionnaire.canBeFilledOut(targetDate2)) // 1989-11-9 18:53:00
+		assertFalse(questionnaire.canBeFilledOut(targetDate1)) // 2005-04-24 03:31:52
 		
 		//timeframe from 03:00 - 17:00
 		questionnaire = createJsonObj<Questionnaire>(
 			"{\"completableAtSpecificTime\": true, \"completableAtSpecificTimeStart\": ${oneHour*3}, \"completableAtSpecificTimeEnd\": ${oneHour*17}, \"pages\":[{\"items\":[{}]}]}"
 		)
-		assertFalse(questionnaire.canBeFilledOut(626637180000)) // 1989-11-9 18:53:00
-		assertTrue(questionnaire.canBeFilledOut(1114313512000)) // 2005-04-24 03:31:52
+		assertFalse(questionnaire.canBeFilledOut(targetDate2)) // 1989-11-9 18:53:00
+		assertTrue(questionnaire.canBeFilledOut(targetDate1)) // 2005-04-24 03:31:52
 		
 		//timeframe after 04:00
 		questionnaire = createJsonObj<Questionnaire>(
 			"{\"completableAtSpecificTime\": true, \"completableAtSpecificTimeStart\": ${oneHour*4}, \"pages\":[{\"items\":[{}]}]}"
 		)
-		assertTrue(questionnaire.canBeFilledOut(626637180000)) // 1989-11-9 18:53:00
-		assertFalse(questionnaire.canBeFilledOut(1114313512000)) // 2005-04-24 03:31:52
+		assertTrue(questionnaire.canBeFilledOut(targetDate2)) // 1989-11-9 18:53:00
+		assertFalse(questionnaire.canBeFilledOut(targetDate1)) // 2005-04-24 03:31:52
 		
 		//timeframe before 18:00
 		questionnaire = createJsonObj<Questionnaire>(
 			"{\"completableAtSpecificTime\": true, \"completableAtSpecificTimeEnd\": ${oneHour*18}, \"pages\":[{\"items\":[{}]}]}"
 		)
-		assertFalse(questionnaire.canBeFilledOut(626637180000)) // 1989-11-9 18:53:00
-		assertTrue(questionnaire.canBeFilledOut(1114313512000)) // 2005-04-24 03:31:52
+		assertFalse(questionnaire.canBeFilledOut(targetDate2)) // 1989-11-9 18:53:00
+		assertTrue(questionnaire.canBeFilledOut(targetDate1)) // 2005-04-24 03:31:52
 		
 		//
 		//test limitCompletionFrequency

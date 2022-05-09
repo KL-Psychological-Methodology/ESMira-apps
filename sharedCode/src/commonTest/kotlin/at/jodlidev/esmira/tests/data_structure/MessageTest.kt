@@ -22,19 +22,19 @@ class MessageTest : BaseCommonTest() {
 	fun markAsRead() {
 		val message = createMessage()
 		message.markAsRead()
-		assertSqlWasUpdated(Message.TABLE, Message.KEY_IS_NEW, false)
+		assertSqlWasUpdated(Message.TABLE, Message.KEY_IS_NEW, 0)
 	}
 	
 	@Test
 	fun addMessage() {
 		Message.addMessage(getBaseStudyId(), testMessage, NativeLink.getNowMillis(), true)
 		assertSqlWasSaved(Message.TABLE, Message.KEY_CONTENT, testMessage)
-		assertSqlWasSaved(Message.TABLE, Message.KEY_FROM_SERVER, true)
-		assertSqlWasSaved(Message.TABLE, Message.KEY_IS_NEW, true)
+		assertSqlWasSaved(Message.TABLE, Message.KEY_FROM_SERVER, 1)
+		assertSqlWasSaved(Message.TABLE, Message.KEY_IS_NEW, 1)
 		
 		Message.addMessage(getBaseStudyId(), testMessage, NativeLink.getNowMillis(), false)
 		assertSqlWasSaved(Message.TABLE, Message.KEY_CONTENT, testMessage)
-		assertSqlWasSaved(Message.TABLE, Message.KEY_FROM_SERVER, false)
-		assertSqlWasSaved(Message.TABLE, Message.KEY_IS_NEW, false)
+		assertSqlWasSaved(Message.TABLE, Message.KEY_FROM_SERVER, 0)
+		assertSqlWasSaved(Message.TABLE, Message.KEY_IS_NEW, 0)
 	}
 }
