@@ -224,21 +224,22 @@ object Scheduler {
 
 		//set beginning time:
 		var baseTimestamp = midnight + signalTime.startTimeOfDay
+		val minDate: Long
 		if(manualDelayDays != -1) { //is only set when schedules are freshly created
 			baseTimestamp += ONE_DAY_MS * manualDelayDays
-			
-			//assumed that anchorTimestamp is 23:59 and manualDelayDays = 5 (anything greater than 1)
-			//when we used getMidnightMillis(), we calculated backwards a whole day, so baseTimestamp is one day short.
-			//That means, when we just added ONE_DAY_MS * manualDelayDays, we effectively only added 4 days instead of 5
-			//this  loop takes care of that:
-			while(baseTimestamp - MIN_SCHEDULE_DISTANCE < anchorTimestamp + ONE_DAY_MS * manualDelayDays)
-				baseTimestamp += ONE_DAY_MS
+			minDate = anchorTimestamp + ONE_DAY_MS * manualDelayDays
 		}
 		else {
 			baseTimestamp += ONE_DAY_MS * signalTime.schedule.dailyRepeatRate
-
-			while(baseTimestamp - MIN_SCHEDULE_DISTANCE < anchorTimestamp) //we have added a dailyRepeatRate. So this should never be true
-				baseTimestamp += ONE_DAY_MS * signalTime.schedule.dailyRepeatRate
+			minDate = anchorTimestamp + ONE_DAY_MS * signalTime.schedule.dailyRepeatRate
+		}
+		//Assumed that anchorTimestamp = 23:58 and dailyRepeatRate = 5 (anything greater than 1)
+		//when we used getMidnightMillis(), we calculated backwards a whole day, so baseTimestamp is one day short.
+		//That means, when we just added ONE_DAY_MS * dailyRepeatRate, we effectively only added 4 days instead of 5.
+		//This would not be true if startTimeOfDay = 23:59, so we cant just blindly add a day.
+		//this loop fixes it:
+		while(baseTimestamp - MIN_SCHEDULE_DISTANCE < minDate) {
+			baseTimestamp += ONE_DAY_MS
 		}
 		
 		//options:
