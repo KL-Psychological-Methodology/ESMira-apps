@@ -42,7 +42,6 @@ object Scheduler {
 		64, //Saturday
 		1  //Sunday
 	)
-	private val RANGE_FOR_RANDOM = 0..100
 	
 	
 	@Suppress("unused") fun checkMissedAlarms(missedAlarmsAsBroken: Boolean = false) {
@@ -128,6 +127,7 @@ object Scheduler {
 					
 					ignoredAlarms[alarm.actionTriggerId] = alarm
 				}
+				alarm.scheduleAhead()
 			}
 			openDialog = false
 		}

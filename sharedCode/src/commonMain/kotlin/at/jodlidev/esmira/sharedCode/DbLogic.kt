@@ -396,6 +396,8 @@ object DbLogic {
 			NativeLink.dialogOpener.errorReport()
 		else {
 			Scheduler.checkMissedAlarms(true)
+			if(NativeLink.smartphoneData.phoneType == PhoneType.IOS)
+				Scheduler.scheduleAhead() //checkMissedAlarms() should have rescheduled everything - but just to make sure
 			NativeLink.postponedActions.syncDataSets()
 			cleanupFiles();
 			
