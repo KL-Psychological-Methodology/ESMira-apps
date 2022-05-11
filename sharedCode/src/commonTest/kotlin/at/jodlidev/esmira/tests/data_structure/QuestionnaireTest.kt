@@ -224,12 +224,12 @@ class QuestionnaireTest : BaseCommonTest() {
 	fun isActive() {
 		val now = NativeLink.getNowMillis()
 		val study = createStudy()
+		study.group = 2
 		study.joined = now
 		study.save()
 		
 		//test durationPeriodDays:
-		var questionnaire = createJsonObj<Questionnaire>("{\"durationPeriodDays\": 2}")
-		questionnaire.studyId = study.id
+		var questionnaire = createJsonObj<Questionnaire>("{\"durationPeriodDays\": 2}") {it.studyId = study.id}
 		assertTrue(questionnaire.isActive())
 		
 		study.joined = now - (1000*60*60*24*2 + 1)
@@ -238,8 +238,7 @@ class QuestionnaireTest : BaseCommonTest() {
 		
 		
 		//test durationStartingAfterDays:
-		questionnaire = createJsonObj<Questionnaire>("{\"durationStartingAfterDays\": 2}")
-		questionnaire.studyId = study.id
+		questionnaire = createJsonObj<Questionnaire>("{\"durationStartingAfterDays\": 2}") {it.studyId = study.id}
 		study.joined = now - 1000*60*60*24*1
 		study.save()
 		assertFalse(questionnaire.isActive())
@@ -249,20 +248,26 @@ class QuestionnaireTest : BaseCommonTest() {
 		assertTrue(questionnaire.isActive())
 		
 		
-		//test durationStart
-		questionnaire = createJsonObj<Questionnaire>("{\"durationStart\": ${now}}")
-		assertTrue(questionnaire.isActive())
+		//test limitToGroup
+		assertTrue(
+			createJsonObj<Questionnaire>("{\"limitToGroup\": 0}") {it.studyId = study.id}.isActive()
+		)
+		assertFalse(
+			createJsonObj<Questionnaire>("{\"limitToGroup\": 1}") {it.studyId = study.id}.isActive()
+		)
+		assertTrue(
+			createJsonObj<Questionnaire>("{\"limitToGroup\": 2}") {it.studyId = study.id}.isActive()
+		)
 		
-		questionnaire = createJsonObj<Questionnaire>("{\"durationStart\": ${now + 1000 * 60}}")
-		assertFalse(questionnaire.isActive())
+		
+		//test durationStart
+		assertTrue(createJsonObj<Questionnaire>("{\"durationStart\": $now}").isActive())
+		assertFalse(createJsonObj<Questionnaire>("{\"durationStart\": ${now + 1000 * 60}}").isActive())
 		
 		
 		//test durationEnd
-		questionnaire = createJsonObj<Questionnaire>("{\"durationEnd\": ${now + 1000 * 60}}")
-		assertTrue(questionnaire.isActive())
-		
-		questionnaire = createJsonObj<Questionnaire>("{\"durationEnd\": ${now - 1}}")
-		assertFalse(questionnaire.isActive())
+		assertTrue(createJsonObj<Questionnaire>("{\"durationEnd\": ${now + 1000 * 60}}").isActive())
+		assertFalse(createJsonObj<Questionnaire>("{\"durationEnd\": ${now - 1}}").isActive())
 		
 		
 		//test completableOnce

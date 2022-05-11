@@ -22,6 +22,10 @@ interface SQLiteInterface {
 	fun delete(table: String, selection: String?, selectionArgs: Array<String>?)
 	fun execSQL(query: String)
 	
+	fun beginTransaction()
+	fun setTransactionSuccessful()
+	fun endTransaction()
+	
 	fun getValueBox(): SQLiteValues
 	
 	fun close()

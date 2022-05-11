@@ -442,6 +442,16 @@ class MockDatabase: SQLiteInterface {
 		queryCallBack?.let { it(query) }
 	}
 	
+	override fun beginTransaction() {
+		//not implemented
+	}
+	override fun setTransactionSuccessful() {
+		//not implemented
+	}
+	override fun endTransaction() {
+		//not implemented
+	}
+	
 	override fun getValueBox(): SQLiteValues {
 		return MockValues()
 	}

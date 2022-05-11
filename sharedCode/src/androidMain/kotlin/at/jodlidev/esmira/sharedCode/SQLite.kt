@@ -31,6 +31,16 @@ class SQLite constructor(context: Context?, name: String? = DbLogic.DATABASE_NAM
 		
 		override fun execSQL(query: String) = db.execSQL(query)
 		
+		override fun beginTransaction() {
+			db.beginTransaction()
+		}
+		override fun setTransactionSuccessful() {
+			db.setTransactionSuccessful()
+		}
+		override fun endTransaction() {
+			db.endTransaction()
+		}
+		
 		override fun insert(table: String, values: SQLiteValues): Long = db.insert(table, null, values.getContent() as ContentValues)
 		
 		override fun update(table: String, values: SQLiteValues, selection: String?, selectionArgs: Array<String>?) {
@@ -70,6 +80,16 @@ class SQLite constructor(context: Context?, name: String? = DbLogic.DATABASE_NAM
 	): SQLiteCursor = AndroidCursorWrapper(readableDatabase.query(table, values, selection, selectionArgs, groupBy, having, orderBy, limit))
 	
 	override fun execSQL(query: String) = writableDatabase.execSQL(query)
+	
+	override fun beginTransaction() {
+		writableDatabase.beginTransaction()
+	}
+	override fun setTransactionSuccessful() {
+		writableDatabase.setTransactionSuccessful()
+	}
+	override fun endTransaction() {
+		writableDatabase.endTransaction()
+	}
 	
 	override fun insert(table: String, values: SQLiteValues): Long = writableDatabase.insert(table, null, values.getContent() as ContentValues)
 	

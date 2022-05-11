@@ -154,6 +154,33 @@ class StudyTest : BaseCommonTest() {
 	}
 	
 	@Test
+	fun finishJSON() {
+		var study: Study = createStudy { it.finishJSON(testUrl, testAccessKey) }
+		assertFalse(study.publicStatisticsNeeded)
+		assertEquals(0, study.group)
+		
+		//test publicStatisticsNeeded:
+		study = createStudy("""{"id":$studyWebId, "publicStatistics": {"charts": [{}]}}""") {
+			it.finishJSON(testUrl, testAccessKey)
+		}
+		assertTrue(study.publicStatisticsNeeded)
+		
+		study = createStudy("""{"id":$studyWebId, "personalStatistics": {"charts": [{"displayPublicVariable": true}]}}""") {
+			it.finishJSON(testUrl, testAccessKey)
+		}
+		assertTrue(study.publicStatisticsNeeded)
+		
+		
+		//test randomGroup:
+		for(i in 1 until 10) {
+			study = createStudy("""{"id":$studyWebId, "randomGroups": $i}""") {
+				it.finishJSON(testUrl, testAccessKey)
+			}
+			assertTrue(study.group in 1 .. i, "Group (${study.group}) is not between 1 and $i")
+		}
+	}
+	
+	@Test
 	fun saveSchedules() {
 		val study = createStudy(
 			"""{"id":$studyWebId, "questionnaires": [{"actionTriggers":[{"schedules": [{"signalTimes": [{"startTimeOfDay": 3600000, "endTimeOfDay": 10800000, "random": true}]}]}]}]}"""
@@ -345,6 +372,24 @@ class StudyTest : BaseCommonTest() {
 		))
 		assertEquals(0, dialogOpener.errorReportCount)
 		assertNotEquals(oldChangedEvents, notifications.fireSchedulesChangedList.size)
+		
+		
+		//randomGroups changed:
+		oldStudy.group = 5
+		oldStudy.updateWith(createStudy(
+			"""{"id":$studyWebId, "randomGroups": 8}"""
+		))
+		assertEquals(5, oldStudy.group)
+		
+		oldStudy.updateWith(createStudy(
+			"""{"id":$studyWebId, "randomGroups": 3}"""
+		))
+		assertNotEquals(5, oldStudy.group)
+		
+		oldStudy.updateWith(createStudy(
+			"""{"id":$studyWebId, "randomGroups": 0}"""
+		))
+		assertEquals(0, oldStudy.group)
 	}
 	
 	@Test

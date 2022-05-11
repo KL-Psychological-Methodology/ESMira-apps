@@ -56,7 +56,7 @@ class DynamicInputData {
 	
 	companion object {
 		const val TABLE = "dynamicInput_store"
-		const val KEY_QUESTIONNAIRE_ID = "group_id"
+		const val KEY_QUESTIONNAIRE_ID = "questionnaire_id"
 		const val KEY_VARIABLE = "variable_name"
 		const val KEY_ITEM_INDEX = "item_index"
 		const val KEY_CREATED_TIME = "created_time"
