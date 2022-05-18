@@ -25,7 +25,9 @@ struct ListQuestionnairesView: View {
 	var body: some View {
 		VStack(alignment: .leading) {
 			if(studies.count == 0) {
-				Text("info_no_studies_joined").padding()
+				List() {
+					Text("info_no_studies_joined").padding()
+				}
 			}
 			else {
 				//Workaround for https://stackoverflow.com/questions/56690310/swiftui-dynamic-list-with-sections-does-not-layout-correctly
