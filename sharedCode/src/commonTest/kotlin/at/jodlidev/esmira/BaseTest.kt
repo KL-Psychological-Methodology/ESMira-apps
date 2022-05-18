@@ -7,6 +7,7 @@ import mock.MockDialogOpener
 import mock.MockNotifications
 import mock.MockPostponedActions
 import mock.MockSmartphoneData
+import kotlin.test.assertEquals
 
 /**
  * Created by JodliDev on 13.04.2022.
@@ -54,19 +55,25 @@ abstract class BaseTest {
 	fun createAlarmFromSignalTime(
 		signalTimeJson: String = "{}",
 		actionTriggerId: Long = -1,
-		timestamp: Long = NativeLink.getNowMillis()
+		timestamp: Long = NativeLink.getNowMillis(),
+		execAfter: ((Alarm) -> Unit)? = null
 	): Alarm {
 		val signalTime = createJsonObj<SignalTime>(signalTimeJson)
-		return Alarm(signalTime, actionTriggerId, timestamp, 1)
+		val alarm = Alarm(signalTime, actionTriggerId, timestamp, 1)
+		if(execAfter != null)
+			execAfter(alarm)
+		return alarm
 	}
 	
-	fun createActionTrigger(actionTriggerJson: String = "{}", questionnaireJson: String = "{}"): ActionTrigger {
+	fun createActionTrigger(actionTriggerJson: String = "{}", questionnaireJson: String = "{}", execAfter: ((ActionTrigger) -> Unit)? = null): ActionTrigger {
 		val questionnaire = createJsonObj<Questionnaire>(questionnaireJson)
 		questionnaire.studyId = getBaseStudyId() //because execActions() and issueReminder() need its study
 		questionnaire.save(true)
 		val a = createJsonObj<ActionTrigger>(actionTriggerJson)
 		a.questionnaireId = questionnaire.id
 		a.studyId = getBaseStudyId()
+		if(execAfter != null)
+			execAfter(a)
 		return a
 	}
 	

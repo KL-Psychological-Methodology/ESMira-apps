@@ -259,6 +259,11 @@ class ActionTrigger {
 		return true
 	}
 	
+	internal fun scheduleIfNeeded() {
+		for(schedule in schedules) {
+			schedule.scheduleIfNeeded()
+		}
+	}
 	
 	private fun getActionArray(): JsonArray {
 		return DbLogic.getJsonConfig().decodeFromString(actionsString)

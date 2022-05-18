@@ -3,6 +3,8 @@ package tests.data_structure
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.*
 import BaseCommonTest
+import at.jodlidev.esmira.sharedCode.DbLogic
+import at.jodlidev.esmira.sharedCode.PhoneType
 import kotlin.test.*
 
 /**
@@ -91,6 +93,32 @@ class ScheduleTest : BaseCommonTest() {
 	}
 	
 	@Test
+	fun scheduleIfNeeded() {
+		val questionnaire = createJsonObj<Questionnaire>()
+		questionnaire.save(true)
+		val schedule = createJsonObj<Schedule>("""{"signalTimes": [{}, {}, {}]}""")
+		for((i, signalTime) in schedule.signalTimes.withIndex()) {
+			signalTime.bindParent(questionnaire.id, schedule)
+			signalTime.id = i+1L
+		}
+		schedule.bindParent(createActionTrigger {it.enabled = true})
+		
+		//initial schedule:
+		schedule.scheduleIfNeeded()
+		assertEquals(3, DbLogic.getAlarmsFrom(schedule).size, "not every Alarm was scheduled")
+		
+		//no change:
+		schedule.scheduleIfNeeded()
+		assertEquals(3, DbLogic.getAlarmsFrom(schedule).size, "no new Alarm should have been scheduled")
+		
+		//delete one alarm and schedule it again:
+		DbLogic.getAlarmsFrom(schedule)[0].delete()
+		assertEquals(2, DbLogic.getAlarmsFrom(schedule).size, "one Alarm should have been deleted")
+		schedule.scheduleIfNeeded()
+		assertEquals(3, DbLogic.getAlarmsFrom(schedule).size, "one Alarm should have been scheduled again")
+	}
+	
+	@Test
 	fun saveTimeFrames() {
 		val oneDay = 1000*60*60*24
 		val later = NativeLink.getNowMillis() + oneDay + 1000*60
@@ -122,21 +150,10 @@ class ScheduleTest : BaseCommonTest() {
 	}
 	
 	@Test
-	fun getInitialDelay() {
-		val oneDay = 1000*60*60*24
-		val now = NativeLink.getNowMillis()
-		val actionTrigger = createActionTrigger(questionnaireJson = """{"durationStart": ${now + oneDay*2}}""")
-		val schedule = createJsonObj<Schedule>()
-		schedule.bindParent(actionTrigger)
-		
-		schedule.skipFirstInLoop = false
-		assertEquals(2, schedule.getInitialDelayDays())
-		
-		schedule.skipFirstInLoop = true
-		schedule.dailyRepeatRate = 1
-		assertEquals(2, schedule.getInitialDelayDays())
-		schedule.dailyRepeatRate = 3
-		assertEquals(3, schedule.getInitialDelayDays())
+	fun getInitialDelayDays() {
+		assertEquals(0, createJsonObj<Schedule>("""{"skipFirstInLoop": false}""").getInitialDelayDays())
+		assertEquals(1, createJsonObj<Schedule>("""{"skipFirstInLoop": true, "dailyRepeatRate": 1}""").getInitialDelayDays())
+		assertEquals(3, createJsonObj<Schedule>("""{"skipFirstInLoop": true, "dailyRepeatRate": 3}""").getInitialDelayDays())
 	}
 	
 	

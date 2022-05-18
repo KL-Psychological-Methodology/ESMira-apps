@@ -396,8 +396,9 @@ object DbLogic {
 			NativeLink.dialogOpener.errorReport()
 		else {
 			Scheduler.checkMissedAlarms(true)
+			Scheduler.scheduleIfNeeded()
 			if(NativeLink.smartphoneData.phoneType == PhoneType.IOS)
-				Scheduler.scheduleAhead() //checkMissedAlarms() should have rescheduled everything - but just to make sure
+				Scheduler.scheduleAhead()
 			NativeLink.postponedActions.syncDataSets()
 			cleanupFiles();
 			
@@ -1027,7 +1028,6 @@ object DbLogic {
 	// in alarm.exec() alarms are skipped when a newer one is pending. This means that lists that are executed need to be ordered!
 	//
 	
-	//TODO: needs test
 	fun getLastAlarmBefore(timestamp: Long, questionnaireId: Long): Alarm? {
 		val c = NativeLink.sql.select(
 			Alarm.TABLE,
@@ -1175,7 +1175,7 @@ object DbLogic {
 		val c = NativeLink.sql.select(
 			Alarm.TABLE,
 			columns,
-			null, null,
+			"${Alarm.KEY_TYPE} = ${Alarm.TYPES.SignalTime.ordinal}", null,
 			Alarm.KEY_SIGNAL_TIME_ID,
 			null,
 			null,
@@ -1359,6 +1359,21 @@ object DbLogic {
 		return alarms
 	}
 	
+	fun countAlarmsFrom(signalTimeId: Long): Int {
+		val c = NativeLink.sql.select(
+			Alarm.TABLE,
+			arrayOf("COUNT(*)"),
+			"${Alarm.KEY_SIGNAL_TIME_ID}=? AND ${Alarm.KEY_TYPE} = ${Alarm.TYPES.SignalTime.ordinal}", arrayOf(signalTimeId.toString()),
+			null,
+			null,
+			"${Alarm.KEY_TIMESTAMP} ASC",
+			null
+		)
+		val r = if(c.moveToFirst()) c.getInt(0) else 0
+		c.close()
+		return r
+	}
+	
 	//
 	//ActionTrigger
 	//
@@ -1479,6 +1494,23 @@ object DbLogic {
 		c.close()
 		return r
 		
+	}
+	fun getAllSchedules(): List<Schedule> {
+		val c = NativeLink.sql.select(
+			Schedule.TABLE,
+			Schedule.COLUMNS,
+			null, null,
+			null,
+			null,
+			null,
+			null
+		)
+		val r = ArrayList<Schedule>()
+		while(c.moveToNext()) {
+			r.add(Schedule(c))
+		}
+		c.close()
+		return r
 	}
 	fun hasEditableSchedules(): Boolean {
 		val c = NativeLink.sql.select(

@@ -200,31 +200,22 @@ class Alarm {
 	}
 	
 	fun scheduleAhead() { //for IOS
-		// this function will only schedule one Alarm. But it will be called again in createFromSignalTime() (which is called by rescheduleSignalTime().
-		// So it will create a loop until this function does not call rescheduleSignalTime() anymore
-		if(type != TYPES.SignalTime) {
-			return
-		}
+		// this function will only schedule one Alarm
 		
 		if(canBeRescheduled) {
 			val signalTime = this.signalTime
-			if(signalTime != null) {
+			val questionnaire = DbLogic.getQuestionnaire(questionnaireId)
+			if(signalTime != null && questionnaire != null) {
 				val alarm = DbLogic.getLastSignalTimeAlarm(signalTime) ?: this
 				val timestampAnchor = alarm.timestamp
 				
-				//if the dailyRepeatRate is greater than IOS_DAYS_TO_SCHEDULE_AHEAD_MS we make sure that alarm is repeated at least once:
-				val daysToScheduleAhead = Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS.coerceAtLeast((alarm.signalTime?.schedule?.dailyRepeatRate?.toLong() ?: 1 + 1) * Scheduler.ONE_DAY_MS)
-				
-				
-				if(timestampAnchor < NativeLink.getNowMillis() + daysToScheduleAhead) {
-					ErrorBox.log(
-						"Alarm",
-						"Scheduling \"$label\" (id=$id) ahead. Anchor in ${(timestampAnchor - NativeLink.getNowMillis()) / 60000} min (${
-							NativeLink.formatDateTime(timestampAnchor)
-						})"
-					)
-					Scheduler.rescheduleFromSignalTime(signalTime, actionTriggerId, timestampAnchor)
-				}
+				ErrorBox.log(
+					"Alarm",
+					"Scheduling \"$label\" (id=$id) ahead. Anchor in ${(timestampAnchor - NativeLink.getNowMillis()) / 60000} min (${
+						NativeLink.formatDateTime(timestampAnchor)
+					})"
+				)
+				Scheduler.rescheduleFromSignalTime(signalTime, actionTriggerId, timestampAnchor)
 			}
 		}
 	}
@@ -336,8 +327,6 @@ class Alarm {
 		internal fun createFromSignalTime(signalTime: SignalTime, actionTriggerId: Long, timestamp: Long, indexNum: Int=1): Alarm {
 			val alarm = Alarm(signalTime, actionTriggerId, timestamp, indexNum)
 			alarm.save()
-			if(NativeLink.smartphoneData.phoneType == PhoneType.IOS)
-				alarm.scheduleAhead()
 			return alarm
 		}
 		

@@ -4,6 +4,7 @@ import at.jodlidev.esmira.sharedCode.data_structure.*
 import io.ktor.util.date.GMTDate
 import io.ktor.util.date.Month
 import io.ktor.util.date.plus
+import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.random.Random
 
@@ -30,8 +31,10 @@ import kotlin.random.Random
 object Scheduler {
 	internal const val TREAT_AS_MISSED_LEEWAY_MS = 200
 	internal const val ONE_DAY_MS: Long = 86400000 //1000*60*60*24
-	const val MIN_SCHEDULE_DISTANCE = 60000 //1000*60 = 1 min
+	const val MIN_SCHEDULE_DISTANCE = 60000L //1000*60 = 1 min
 	internal const val IOS_DAYS_TO_SCHEDULE_AHEAD_MS = 4 * ONE_DAY_MS
+	internal const val IOS_MAX_TIMES_TO_SCHEDULE_AHEAD = 4
+	private const val IOS_MAX_ALARM_COUNT = 50 //on iOS alarms are limited to 64 and we need a few free slots for possible eventTrigger with timers
 	
 	private val WEEKDAY_CODES = intArrayOf( //to comply with WeekDay-enum in io.ktor.util.date.WeekDay
 		2,  //Monday
@@ -127,7 +130,6 @@ object Scheduler {
 					
 					ignoredAlarms[alarm.actionTriggerId] = alarm
 				}
-				alarm.scheduleAhead()
 			}
 			openDialog = false
 		}
@@ -138,7 +140,15 @@ object Scheduler {
 			NativeLink.dialogOpener.notificationsBroken()
 		}
 	}
-	@Suppress("unused") fun reactToBootOrTimeChange(timeChanged: Boolean) {
+	
+	fun scheduleIfNeeded() {
+		for(schedule in DbLogic.getAllSchedules()) {
+			schedule.scheduleIfNeeded()
+		}
+	}
+	
+	@Suppress("unused")
+	fun reactToBootOrTimeChange(timeChanged: Boolean) {
 		val now: Long = NativeLink.getNowMillis() + MIN_SCHEDULE_DISTANCE
 		val alarms: List<Alarm> = DbLogic.getAlarms()
 		
@@ -155,9 +165,22 @@ object Scheduler {
 			}
 		}
 	}
-	@Suppress("unused") fun scheduleAhead() { //used in IOS so a separate service can schedule ahead
-		for(alarm in DbLogic.getLastAlarmPerSignalTime()) {
-			alarm.scheduleAhead()
+
+	fun scheduleAhead() { //used in IOS
+		val alarms = DbLogic.getLastAlarmPerSignalTime()
+		if(alarms.isEmpty())
+			return
+		val reschedulesPerAlarm = IOS_MAX_TIMES_TO_SCHEDULE_AHEAD.coerceAtMost(IOS_MAX_ALARM_COUNT / alarms.size)
+		
+		ErrorBox.log("Scheduler", "Found ${alarms.size} different alarms that can be rescheduled. Trying to reschedule $reschedulesPerAlarm times")
+		//this loop has a lot of empty runs, but it makes sure that all alarms are scheduled equally even if we hit the max notification limit on iOS
+		// overhead should be ok because IOS_MAX_ALARM_COUNT or IOS_MAX_TIMES_TO_SCHEDULE_AHEAD are expected to be small
+		for(max in 1 .. reschedulesPerAlarm) {
+			for(alarm in alarms) {
+				val count = DbLogic.countAlarmsFrom(alarm.signalTimeId)
+				if(count < max)
+					alarm.scheduleAhead()
+			}
 		}
 	}
 	
@@ -169,10 +192,11 @@ object Scheduler {
 		val signalTime = alarm.signalTime ?: return
 		//Note: We use getLastSignalTimeAlarm() for iOS. On Android no other alarms should exist at this point (the original is deleted in Alarm.exec() )
 		val lastAlarm = DbLogic.getLastSignalTimeAlarm(signalTime) ?: alarm
+		//we have to use lastAlarm.timestamp to make sure we dont skip a day if this function was executed late:
 		rescheduleFromSignalTime(signalTime, lastAlarm.actionTriggerId, lastAlarm.timestamp)
 	}
 	internal fun rescheduleFromSignalTime(signalTime: SignalTime, actionTriggerId: Long, timestampAnchor: Long) {
-		if(signalTime.randomFixed) { //TODO: UNTESTED
+		if(signalTime.randomFixed) {
 			//this does the same as scheduleSignalTime() but it ignores frequency and reuses the time from the alarm.
 			
 			ErrorBox.log("Scheduler", "Creating fixed repeating Alarm")
@@ -195,6 +219,8 @@ object Scheduler {
 			else
 				timestampAnchor
 			val baseTimestamp = considerScheduleOptions(timestamp + loopMs, signalTime)
+			if(baseTimestamp == -1L)
+				return
 			
 			Alarm.createFromSignalTime(signalTime, actionTriggerId, baseTimestamp)
 		}
@@ -227,23 +253,28 @@ object Scheduler {
 		val minDate: Long
 		if(manualDelayDays != -1) { //is only set when schedules are freshly created
 			baseTimestamp += ONE_DAY_MS * manualDelayDays
-			minDate = anchorTimestamp + ONE_DAY_MS * manualDelayDays
+			minDate = anchorTimestamp + (ONE_DAY_MS * manualDelayDays).coerceAtLeast(MIN_SCHEDULE_DISTANCE)
 		}
 		else {
 			baseTimestamp += ONE_DAY_MS * signalTime.schedule.dailyRepeatRate
 			minDate = anchorTimestamp + ONE_DAY_MS * signalTime.schedule.dailyRepeatRate
 		}
-		//Assumed that anchorTimestamp = 23:58 and dailyRepeatRate = 5 (anything greater than 1)
+		//Assumed that anchorTimestamp = 23:58, startTimeOfDay = 00:00 and dailyRepeatRate = 5 (anything greater than 1)
 		//when we used getMidnightMillis(), we calculated backwards a whole day, so baseTimestamp is one day short.
 		//That means, when we just added ONE_DAY_MS * dailyRepeatRate, we effectively only added 4 days instead of 5.
 		//This would not be true if startTimeOfDay = 23:59, so we cant just blindly add a day.
 		//this loop fixes it:
-		while(baseTimestamp - MIN_SCHEDULE_DISTANCE < minDate) {
+		while(baseTimestamp < minDate) {
 			baseTimestamp += ONE_DAY_MS
 		}
 		
 		//options:
 		baseTimestamp = considerScheduleOptions(baseTimestamp, signalTime)
+		if(baseTimestamp == -1L) {
+			ErrorBox.log("Scheduler", "${signalTime.label} will never become active. Canceling")
+			return
+		}
+		
 		
 		//
 		//Create alarms for each frequency:
@@ -304,8 +335,17 @@ object Scheduler {
 		return Random.nextDouble(1.0)
 	}
 	
-	private fun considerScheduleOptions(timestamp: Long, signalTime: SignalTime): Long { //consider day_of_month:
-		return considerScheduleOptions(timestamp, signalTime.schedule)
+	internal fun considerScheduleOptions(timestamp: Long, signalTime: SignalTime): Long { //consider day_of_month:
+		val questionnaire = DbLogic.getQuestionnaire(signalTime.questionnaireId) ?: return -1
+		return if(!questionnaire.isActive(timestamp)) {
+			val activeInDays = ceil(questionnaire.willBeActiveIn(now = timestamp).toDouble() / ONE_DAY_MS).toInt()
+			if(activeInDays > 0)
+				considerScheduleOptions(timestamp + activeInDays * ONE_DAY_MS, signalTime.schedule)
+			else
+				-1
+		}
+		else
+			considerScheduleOptions(timestamp, signalTime.schedule)
 	}
 	//internal for testing
 	internal fun considerScheduleOptions(timestamp: Long, schedule: Schedule): Long { //consider day_of_month:

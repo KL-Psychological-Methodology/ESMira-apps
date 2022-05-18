@@ -210,10 +210,9 @@ class SignalTime {
 			val alarm = DbLogic.getLastSignalTimeAlarm(this)
 			if(alarm == null)
 				Scheduler.scheduleSignalTime(this, schedule.getActionTriggerId(), NativeLink.getNowMillis(), schedule.getInitialDelayDays())
-			else
-				alarm.scheduleAhead()
 		}
 		DataSet.createScheduleChangedDataSet(schedule)
+		Scheduler.scheduleAhead()
 	}
 	
 	companion object {

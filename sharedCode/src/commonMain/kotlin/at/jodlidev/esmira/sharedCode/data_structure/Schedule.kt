@@ -138,15 +138,19 @@ class Schedule {
 		}
 		
 		//create alarms:
-		if(!exists) {
-			if(actionTrigger.enabled) {
-				val initialDelay = getInitialDelayDays()
-				for(signalTime in signalTimes) {
+		scheduleIfNeeded()
+	}
+	
+	internal fun scheduleIfNeeded() {
+		if(actionTrigger.enabled) {
+			val initialDelay = getInitialDelayDays()
+			for(signalTime in signalTimes) {
+				if(DbLogic.getAlarmsFrom(signalTime).isEmpty())
 					Scheduler.scheduleSignalTime(signalTime, actionTrigger.id, NativeLink.getNowMillis(), initialDelay)
-				}
 			}
 		}
 	}
+	
 	internal fun saveTimeFrames(db: SQLiteInterface = NativeLink.sql, _rescheduleNow: Boolean = false) {
 		val rescheduleNow = if(!_rescheduleNow) {
 			val nextAlarm = DbLogic.getNextAlarm(this)
@@ -169,12 +173,7 @@ class Schedule {
 	}
 	
 	internal fun getInitialDelayDays():Int { //in days
-		var initialDelay = if(skipFirstInLoop) dailyRepeatRate else 0
-		val willBeActiveIn = ceil(getQuestionnaire().willBeActiveIn().toDouble() / Scheduler.ONE_DAY_MS).toInt() //transform into days
-		if(willBeActiveIn > initialDelay)
-			initialDelay = willBeActiveIn
-		
-		return initialDelay
+		return if(skipFirstInLoop) dailyRepeatRate else 0
 	}
 	
 	internal fun getQuestionnaire(): Questionnaire {

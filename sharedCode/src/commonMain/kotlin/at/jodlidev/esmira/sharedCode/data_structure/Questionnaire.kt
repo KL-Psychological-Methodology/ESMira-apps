@@ -223,11 +223,16 @@ class Questionnaire {
 
 
 		NativeLink.notifications.removeQuestionnaireBing(this)
-
-		var nextAlarm = DbLogic.getNextAlarm(this)
-
+		
+		
+		//re adding alarms in case filling out the questionnaire changed things:
+		Scheduler.remove(this)
+		scheduleIfNeeded()
+		Scheduler.scheduleAhead()
+		
 		//remove all reminder for this questionnaire until the next Bing
 		//Note: we have to be careful because on iOS all reminders are prescheduled.
+		var nextAlarm = DbLogic.getNextAlarm(this)
 		while(nextAlarm?.type == Alarm.TYPES.Reminder) {
 			nextAlarm.delete()
 			nextAlarm = DbLogic.getNextAlarm(this)
@@ -299,6 +304,12 @@ class Questionnaire {
 		}
 	}
 	
+	private fun scheduleIfNeeded() {
+		for(actionTrigger in actionTriggers) {
+			actionTrigger.scheduleIfNeeded()
+		}
+	}
+	
 	fun hasSchedules(): Boolean {
 		for(trigger in actionTriggers) {
 			if(trigger.hasSchedules())
@@ -354,8 +365,7 @@ class Questionnaire {
 		return pages.isNotEmpty()
 	}
 	
-	fun isActive(): Boolean { //if study is active in general
-		val now = NativeLink.getNowMillis()
+	fun isActive(now: Long = NativeLink.getNowMillis()): Boolean { //if study is active in general
 		val durationCheck = if(durationPeriodDays != 0 || durationStartingAfterDays != 0) {
 			val study: Study? = DbLogic.getStudy(studyId)
 			if(study == null) //happens when we test for a study that we have not joined yet
@@ -374,9 +384,8 @@ class Questionnaire {
 				&& (!completableOnce || lastCompleted == 0L))
 	}
 	
-	fun willBeActiveIn(study: Study? = DbLogic.getStudy(studyId)): Long {
+	fun willBeActiveIn(study: Study? = DbLogic.getStudy(studyId), now: Long = NativeLink.getNowMillis()): Long {
 		val joined = study?.joined ?: 0
-		val now = NativeLink.getNowMillis()
 		
 		val durationValue = durationStart - now
 		val startingAfterDaysValue = joined + durationStartingAfterDays.toLong() * (1000*60*60*24) - now
@@ -388,9 +397,7 @@ class Questionnaire {
 				durationValue.coerceAtLeast(0) // startingAfterDaysValue is negative, so we ignore it
 			else ->
 				durationValue.coerceAtMost(startingAfterDaysValue)
-		}
-		
-//		return (durationStart - now).coerceAtLeast(joined + durationStartingAfterDays.toLong() * (1000*60*60*24) - now).coerceAtLeast(0)
+		}.coerceAtLeast(0)
 	}
 	
 	fun canBeFilledOut(now: Long = NativeLink.getNowMillis()): Boolean { //if there are any questionnaires at the current time

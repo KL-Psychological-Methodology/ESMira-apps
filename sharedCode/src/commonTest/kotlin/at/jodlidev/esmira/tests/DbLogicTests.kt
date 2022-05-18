@@ -491,6 +491,26 @@ class DbLogicTests : BaseCommonTest() {
 		assertEquals(3, DbLogic.getErrors().size)
 	}
 	
+	//
+	//Alarms
+	//
+	
+	@Test
+	fun getLastAlarmBefore() {
+		val timestamp = 1114313512000
+		val signalTime = createJsonObj<SignalTime>()
+		signalTime.questionnaireId = 5
+		
+		Alarm.createFromSignalTime(signalTime, -1, timestamp-4)
+		Alarm.createFromSignalTime(signalTime, -1, timestamp-3)
+		Alarm.createFromSignalTime(signalTime, -1, timestamp)
+		Alarm.createFromSignalTime(signalTime, -1, timestamp-2)
+		Alarm.createFromSignalTime(signalTime, -1, timestamp-1)
+		
+		assertEquals(timestamp, DbLogic.getLastAlarmBefore(timestamp, signalTime.questionnaireId)?.timestamp)
+		assertNull(DbLogic.getLastAlarmBefore(timestamp, 6)?.timestamp)
+	}
+	
 	@Test
 	fun getAlarms_getAlarm() {
 		val qId = 5L
@@ -816,6 +836,25 @@ class DbLogicTests : BaseCommonTest() {
 	}
 	
 	@Test
+	fun countAlarmsFrom() {
+		val signalTime = createJsonObj<SignalTime>()
+		signalTime.id = 5
+		
+		assertEquals(0, DbLogic.countAlarmsFrom(signalTime.id))
+		Alarm.createFromSignalTime(signalTime, -1, 1000)
+		assertEquals(1, DbLogic.countAlarmsFrom(signalTime.id))
+		Alarm.createFromSignalTime(signalTime, -1, 2000)
+		assertEquals(2, DbLogic.countAlarmsFrom(signalTime.id))
+		Alarm.createFromSignalTime(signalTime, -1, 3000)
+		assertEquals(3, DbLogic.countAlarmsFrom(signalTime.id))
+		assertEquals(0, DbLogic.countAlarmsFrom(6))
+	}
+	
+	//
+	//ActionTrigger
+	//
+	
+	@Test
 	fun getActionTrigger() {
 		val json = """[{"test":123}]"""
 		val actionTrigger = createActionTrigger("""{"actions": $json}""")
@@ -840,6 +879,10 @@ class DbLogicTests : BaseCommonTest() {
 		createActionTrigger().save(true)
 		assertEquals(2, DbLogic.getActionTriggers(getBaseStudyId()).size)
 	}
+	
+	//
+	//EventTrigger
+	//
 	
 	@Test
 	fun getEventTrigger() {
@@ -934,6 +977,10 @@ class DbLogicTests : BaseCommonTest() {
 		assertEquals(1, notifications.fireMessageNotificationList.size)
 	}
 	
+	//
+	//Schedule
+	//
+	
 	@Test
 	fun getSchedule() {
 		val schedule = createScheduleForSaving()
@@ -945,6 +992,20 @@ class DbLogicTests : BaseCommonTest() {
 		assertNull(DbLogic.getSchedule(-2))
 		assertEquals(7, DbLogic.getSchedule(schedule.id)?.dailyRepeatRate)
 	
+	}
+	
+	@Test
+	fun getAllSchedules() {
+		assertEquals(0, DbLogic.getAllSchedules().size)
+		
+		createScheduleForSaving().saveAndScheduleIfExists()
+		assertEquals(1, DbLogic.getAllSchedules().size)
+		
+		createScheduleForSaving().saveAndScheduleIfExists()
+		assertEquals(2, DbLogic.getAllSchedules().size)
+		
+		createScheduleForSaving().saveAndScheduleIfExists()
+		assertEquals(3, DbLogic.getAllSchedules().size)
 	}
 	
 	@Test

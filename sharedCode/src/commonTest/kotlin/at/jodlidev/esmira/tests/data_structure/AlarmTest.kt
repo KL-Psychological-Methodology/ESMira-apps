@@ -75,34 +75,71 @@ class AlarmTest : BaseCommonTest() {
 	@Test
 	fun scheduleAhead() {
 		setPhoneType(PhoneType.IOS)
-		val scheduleAheadDays = Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS/ Scheduler.ONE_DAY_MS
+		val scheduleAheadDays = Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS / Scheduler.ONE_DAY_MS
 		
 		val actionTrigger = createActionTrigger()
 		actionTrigger.save(true)
 		
+		val questionnaire = actionTrigger.questionnaire
+		
+		//schedule ahead from now
+		postponedActions.reset()
+		createAlarmFromSignalTime(actionTriggerId = actionTrigger.id) {
+			it.questionnaireId = questionnaire.id
+			it.signalTime!!.bindParent(questionnaire.id, createJsonObj())
+			it.timestamp = NativeLink.getNowMillis()
+			it.scheduleAhead()
+		}
+		assertEquals(scheduleAheadDays.toInt()-1, postponedActions.scheduleAlarmList.size)
+		
+		
+		//schedule ahead from now with inactive questionnaire
+		postponedActions.reset()
+		createAlarmFromSignalTime(actionTriggerId = actionTrigger.id) {
+			val study = createStudy()
+			study.join()
+			
+			val questionnaireInactive = createJsonObj<Questionnaire>("""{"durationPeriodDays": 2}""")
+			questionnaireInactive.studyId = study.id
+			questionnaireInactive.save(true)
+			it.questionnaireId = questionnaireInactive.id
+			it.signalTime!!.bindParent(questionnaireInactive.id, createJsonObj())
+			it.timestamp = NativeLink.getNowMillis()
+			it.scheduleAhead()
+		}
+		assertEquals(2, postponedActions.scheduleAlarmList.size)
+		
+		
 		//schedule ahead from an alarm before threshold (Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS)
-		val alarm1 = createAlarmFromSignalTime(actionTriggerId = actionTrigger.id)
-		alarm1.signalTime!!.bindParent(-1, createJsonObj())
-		alarm1.timestamp = NativeLink.getNowMillis() + Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS - 1
-		alarm1.scheduleAhead()
+		postponedActions.reset()
+		createAlarmFromSignalTime(actionTriggerId = actionTrigger.id) {
+			it.questionnaireId = questionnaire.id
+			it.signalTime!!.bindParent(questionnaire.id, createJsonObj())
+			it.timestamp = NativeLink.getNowMillis() + Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS - 1
+			it.scheduleAhead()
+		}
 		assertEquals(1, postponedActions.scheduleAlarmList.size)
 		
 		
 		//schedule ahead from an alarm after threshold (Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS)
-		val alarm2 = createAlarmFromSignalTime(actionTriggerId = actionTrigger.id)
-		alarm2.signalTime!!.bindParent(-1, createJsonObj())
-		alarm2.timestamp = NativeLink.getNowMillis() + Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS + 1000
-		alarm2.scheduleAhead()
-		assertEquals(1, postponedActions.scheduleAlarmList.size) //nothing changed
+		postponedActions.reset()
+		createAlarmFromSignalTime(actionTriggerId = actionTrigger.id) {
+			it.questionnaireId = questionnaire.id
+			it.signalTime!!.bindParent(questionnaire.id, createJsonObj())
+			it.timestamp = NativeLink.getNowMillis() + Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS + 1000
+			it.scheduleAhead()
+		}
+		assertEquals(0, postponedActions.scheduleAlarmList.size)
 		
-		//schedule ahead from an alarm after threshold (Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS)
-		val alarm3 = createAlarmFromSignalTime(actionTriggerId = actionTrigger.id)
-		alarm3.signalTime!!.bindParent(-1, createJsonObj(
-			"""{"dailyRepeatRate": ${scheduleAheadDays+1}}"""
-		))
-		alarm3.timestamp = NativeLink.getNowMillis() + Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS // will be ignored because dailyRepeatRate is greater
-		alarm3.scheduleAhead()
-		assertEquals(2, postponedActions.scheduleAlarmList.size)
+		
+		//schedule ahead from an alarm after threshold (Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS) with greater dailyRepeatRate
+		postponedActions.reset()
+		createAlarmFromSignalTime(actionTriggerId = actionTrigger.id) {
+			it.signalTime!!.bindParent(questionnaire.id, createJsonObj("""{"dailyRepeatRate": ${scheduleAheadDays + 1}}"""))
+			it.timestamp = NativeLink.getNowMillis() + Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS // will be ignored because dailyRepeatRate is greater
+			it.scheduleAhead()
+		}
+		assertEquals(1, postponedActions.scheduleAlarmList.size)
 	}
 	
 	@Test
