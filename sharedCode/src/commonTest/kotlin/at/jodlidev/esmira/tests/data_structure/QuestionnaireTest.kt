@@ -16,7 +16,7 @@ class QuestionnaireTest : BaseCommonTest() {
 		assertEquals(0, questionnaire.actionTriggers.size)
 		
 		val questionnaireDb = createJsonObj<Questionnaire>()
-		questionnaireDb.fromJson = false
+		questionnaireDb.fromJsonOrUpdated = false
 		assertEquals(0, questionnaireDb.actionTriggers.size)
 		assertSqlWasSelected(ActionTrigger.TABLE, 0, questionnaire.id.toString())
 	}
@@ -63,7 +63,7 @@ class QuestionnaireTest : BaseCommonTest() {
 		
 		val questionnaireDifferent = createJsonObj<Questionnaire>("""{"actionTriggers":[{},{},{}]}""")
 		questionnaireDifferent.studyId = getBaseStudyId()
-		questionnaireDifferent.fromJson = true
+		questionnaireDifferent.fromJsonOrUpdated = true
 		questionnaireDifferent.exists = true
 		questionnaireDifferent.id = questionnaire.id
 		questionnaireDifferent.save(true)

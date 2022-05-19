@@ -345,6 +345,56 @@ class StudyTest : BaseCommonTest() {
 		))
 		assertEquals(0, dialogOpener.errorReportCount)
 		assertNotEquals(oldChangedEvents, notifications.fireSchedulesChangedList.size)
+		
+		
+		//questionnaire has more elements
+		oldStudy.updateWith(createStudy(
+			"""{
+				"id":$studyWebId,
+				"questionnaires": [
+					{},
+					{
+						"actionTriggers": [
+							{},
+							{},
+							{
+								"schedules": [
+									{},
+									{"signalTimes": [{}, {}, {}, {}, {}]}
+								],
+								"eventTriggers": [{"cueCode": "test"}, {"cueCode": "test"}, {"cueCode": "test"}, {"cueCode": "test"}]
+							}
+						]
+					}
+				]}"""
+		))
+		assertEquals(3, DbLogic.getActionTriggers(oldStudy.id).size)
+		assertEquals(2, DbLogic.getAllSchedules().size)
+		assertEquals(4, DbLogic.getEventTriggers(oldStudy.id, "test").size)
+		
+		
+		//questionnaire has less elements
+		oldStudy.updateWith(createStudy(
+			"""{
+				"id":$studyWebId,
+				"questionnaires": [
+					{},
+					{
+						"actionTriggers": [
+							{},
+							{
+								"schedules": [
+									{"signalTimes": [{}, {}, {}, {}]}
+								],
+								"eventTriggers": [{"cueCode": "test"}, {"cueCode": "test"}, {"cueCode": "test"}]
+							}
+						]
+					}
+				]}"""
+		))
+		assertEquals(2, DbLogic.getActionTriggers(oldStudy.id).size)
+		assertEquals(1, DbLogic.getAllSchedules().size)
+		assertEquals(3, DbLogic.getEventTriggers(oldStudy.id, "test").size)
 	}
 	
 	@Test

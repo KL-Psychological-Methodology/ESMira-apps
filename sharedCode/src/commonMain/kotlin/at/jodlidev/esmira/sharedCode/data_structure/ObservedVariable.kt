@@ -41,7 +41,7 @@ class ObservedVariable internal constructor() {
 		exists = true
 	}
 	
-	fun finishJSON(study: Study, index: Int, variableName: String) {
+	internal fun finishJSON(study: Study, index: Int, variableName: String) {
 		this.studyId = study.id
 		this.index = index
 		this.variableName = variableName

@@ -25,7 +25,7 @@ class Study internal constructor(
 	
 	internal constructor(c: SQLiteCursor) : this(webId = c.getLong(1)) {
 		exists = true
-		fromJson = false
+		fromJsonOrUpdated = false
 		
 		id = c.getLong(0)
 		state = STATES.values()[c.getInt(2)]
@@ -51,7 +51,7 @@ class Study internal constructor(
 	@Transient
 	var exists = false
 	@Transient
-	var fromJson = true
+	var fromJsonOrUpdated = true
 	@Transient
 	var json: String = "" //only used to keep the original json-code between instances
 	
@@ -110,7 +110,7 @@ class Study internal constructor(
 	
 	val questionnaires: List<Questionnaire> get() {
 		if(!this::_questionnaires.isInitialized) {
-			_questionnaires = if(fromJson) _jsonQuestionnaires else loadQuestionnairesDB()
+			_questionnaires = if(fromJsonOrUpdated) _jsonQuestionnaires else loadQuestionnairesDB()
 		}
 		return _questionnaires
 	}
@@ -159,7 +159,7 @@ class Study internal constructor(
 	@Suppress("unused")
 	val observedVariables: List<ObservedVariable> get() {
 		if(!this::_observedVariables.isInitialized) {
-			if(fromJson) {
+			if(fromJsonOrUpdated) {
 				val list = ArrayList<ObservedVariable>()
 				for((key, subList) in personalStatistics.observedVariables) {
 					for((i, ov) in subList.withIndex()) {
@@ -272,7 +272,7 @@ class Study internal constructor(
 	}
 	
 	internal fun finishJSON(serverUrl: String, accessKey: String) {
-		fromJson = true
+		fromJsonOrUpdated = true
 		this.serverUrl = serverUrl
 		this.accessKey = accessKey
 		
@@ -407,9 +407,9 @@ class Study internal constructor(
 		return r
 	}
 	fun updateWith(newStudy: Study) {
-		if(newStudy.fromJson)
+		this.fromJsonOrUpdated = true
+		if(newStudy.fromJsonOrUpdated)
 			newStudy.finishJSON(serverUrl, accessKey)
-//		val newStudy = checkUpdate(study)
 		
 		if(newStudy.id == -1L) //ObservableVariable.finishJSON() needs a studyId and will be called when getting study.observedVariables
 			newStudy.id = id
@@ -422,22 +422,20 @@ class Study internal constructor(
 			this.contactEmail = newStudy.contactEmail
 			this.informedConsentForm = newStudy.informedConsentForm
 			this.postInstallInstructions = newStudy.postInstallInstructions
-			this.personalChartsJsonString = newStudy.personalChartsJsonString
+			this.personalChartsJsonString = newStudy.personalChartsJsonString //also holds observedVariables because fromJsonOrUpdated = true
 			this.publicChartsJsonString = newStudy.publicChartsJsonString
 			this.publicStatisticsNeeded = newStudy.publicStatisticsNeeded
 			this.sendMessagesAllowed = newStudy.sendMessagesAllowed
 			this.eventUploadSettingsString = newStudy.eventUploadSettingsString
 			this._jsonQuestionnaires = newStudy.questionnaires
-			if(this::_questionnaires.isInitialized)
-				this._questionnaires = newStudy.questionnaires
-			this._observedVariables = newStudy.observedVariables
+			
+			save()
+			DataSet.createShortDataSet(DataSet.TYPE_STUDY_UPDATED, this)
 		}
 		catch(e: Throwable) {
 			ErrorBox.error("Updating study", "Could not update study!", e)
 			return
 		}
-		save()
-		DataSet.createShortDataSet(DataSet.TYPE_STUDY_UPDATED, this)
 	}
 	
 	@Suppress("unused")
@@ -476,7 +474,7 @@ class Study internal constructor(
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
 			
-			if(fromJson) { //Meaning that we want to override it
+			if(fromJsonOrUpdated) { //Meaning that we want to override it
 				val dbQuestionnaires = loadQuestionnairesDB()
 				if(dbQuestionnaires.size != _jsonQuestionnaires.size) { //if true, too much has changed. We just recreate everything
 					for(q in dbQuestionnaires) {
@@ -484,7 +482,7 @@ class Study internal constructor(
 					}
 					NativeLink.notifications.fireSchedulesChanged(this)
 				}
-				else { //make sure that new questionnaires will be saved with same internal id:
+				else { //enable update check for triggers (and copy id over):
 					for(i in _jsonQuestionnaires.indices) {
 						val newQuestionnaires = _jsonQuestionnaires[i]
 						newQuestionnaires.id = dbQuestionnaires[i].id
@@ -518,6 +516,7 @@ class Study internal constructor(
 			observedVariable.save()
 		}
 		
+		Scheduler.scheduleAhead()
 		exists = true
 	}
 

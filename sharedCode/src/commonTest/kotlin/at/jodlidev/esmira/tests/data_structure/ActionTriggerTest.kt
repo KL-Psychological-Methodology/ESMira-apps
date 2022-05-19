@@ -44,7 +44,7 @@ class ActionTriggerTest : BaseCommonTest() {
 		
 		val empty = createActionTrigger()
 		empty.id = testId
-		empty.fromJson = false
+		empty.fromJsonOrUpdated = false
 		assertEquals(0, empty.eventTriggers.size)
 		assertSqlWasSelected(EventTrigger.TABLE, 0, testId.toString())
 	}
@@ -56,7 +56,7 @@ class ActionTriggerTest : BaseCommonTest() {
 		
 		val empty = createActionTrigger()
 		empty.id = testId
-		empty.fromJson = false
+		empty.fromJsonOrUpdated = false
 		assertEquals(0, empty.schedules.size)
 		assertSqlWasSelected(Schedule.TABLE, 0, testId.toString())
 	}

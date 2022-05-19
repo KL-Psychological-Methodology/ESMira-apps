@@ -1396,7 +1396,7 @@ object DbLogic {
 		val c = NativeLink.sql.select(
 			ActionTrigger.TABLE,
 			ActionTrigger.COLUMNS,
-			"${ActionTrigger.KEY_STUDY_ID} = ? AND ${ActionTrigger.KEY_ENABLED} = 1", arrayOf(study_id.toString()),
+			"${ActionTrigger.KEY_STUDY_ID} = ?", arrayOf(study_id.toString()),
 			null,
 			null,
 			ActionTrigger.KEY_QUESTIONNAIRE_ID,

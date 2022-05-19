@@ -17,7 +17,7 @@ class ActionTrigger {
 	@SerialName("actions") @Serializable(with = JsonToStringSerializer::class) var actionsString: String = "[]"
 	
 	@Transient var exists = false
-	@Transient var fromJson = true
+	@Transient var fromJsonOrUpdated = true
 	@Transient var id: Long = -1
 	@Transient var enabled = false
 	@Transient var studyId: Long = -1
@@ -36,7 +36,7 @@ class ActionTrigger {
 	@Transient private lateinit var _eventTriggers: List<EventTrigger>
 	val eventTriggers: List<EventTrigger> get() {
 		if(!this::_eventTriggers.isInitialized) {
-			_eventTriggers = if(fromJson)
+			_eventTriggers = if(fromJsonOrUpdated)
 				jsonEventTriggers
 			else
 				loadEventTriggersDB()
@@ -48,7 +48,7 @@ class ActionTrigger {
 	@Transient private lateinit var _schedules: List<Schedule>
 	val schedules: List<Schedule> get() {
 		if(!this::_schedules.isInitialized) {
-			_schedules = if(fromJson)
+			_schedules = if(fromJsonOrUpdated)
 				jsonSchedules
 			else
 				loadSchedulesDB()
@@ -64,7 +64,7 @@ class ActionTrigger {
 		studyId = c.getLong(3)
 		questionnaireId = c.getLong(4)
 		exists = true
-		fromJson = false
+		fromJsonOrUpdated = false
 	}
 	constructor(questionnaire: Questionnaire, c: SQLiteCursor): this(c) {
 		this._questionnaire = questionnaire
@@ -177,13 +177,14 @@ class ActionTrigger {
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
-			val dbEventTriggers: List<EventTrigger> = loadEventTriggersDB()
-			val dbEventTriggersLength = dbEventTriggers.size
 			
-			//we dont check for difference and just overwrite existing events:
-			//Note: this could trigger an already pending event with different conditions with the new data
-			//but that is very unlikely so we don't care
-			if(fromJson) {
+			if(fromJsonOrUpdated) {
+				//we dont check for difference and just overwrite existing eventTriggers:
+				//Note: this could trigger an already pending event with different conditions with the new data
+				//but that is very unlikely so we don't care
+				val dbEventTriggers: List<EventTrigger> = loadEventTriggersDB()
+				val dbEventTriggersLength = dbEventTriggers.size
+				
 				for(i in jsonEventTriggers.indices) {
 					val jsonEventTrigger = jsonEventTriggers[i]
 					if(i < dbEventTriggersLength) {
@@ -195,7 +196,7 @@ class ActionTrigger {
 				
 				//remove not needed events:
 				if(dbEventTriggersLength > jsonEventTriggers.size) {
-					for(i in jsonEventTriggers.size until dbEventTriggersLength - 1) {
+					for(i in jsonEventTriggers.size .. dbEventTriggersLength) {
 						dbEventTriggers[i].delete(db)
 					}
 				}
@@ -205,10 +206,8 @@ class ActionTrigger {
 				
 				var isDifferent = false
 				val dbSchedules = loadSchedulesDB()
-				if(dbSchedules.size != jsonSchedules.size) {
+				if(dbSchedules.size != jsonSchedules.size)
 					isDifferent = true
-					println("Schedule size ${dbSchedules.size} / ${jsonSchedules.size} is different")
-				}
 				else {
 					for(i in dbSchedules.indices) {
 						if(dbSchedules[i].isDifferent(jsonSchedules[i])) {

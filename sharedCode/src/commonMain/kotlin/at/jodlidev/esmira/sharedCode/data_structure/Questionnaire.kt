@@ -12,7 +12,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class Questionnaire {
 	@Transient var exists = false
-	@Transient var fromJson = true
+	@Transient var fromJsonOrUpdated = true
 	
 	@Transient var id: Long = 0
 	@Transient var studyId: Long = -1
@@ -44,7 +44,7 @@ class Questionnaire {
 	@Transient private lateinit var _actionTriggers: List<ActionTrigger>
 	val actionTriggers: List<ActionTrigger> get() {
 		if(!this::_actionTriggers.isInitialized) {
-			_actionTriggers = if(fromJson)
+			_actionTriggers = if(fromJsonOrUpdated)
 				jsonActionTriggers
 			else
 				loadActionTriggerDB()
@@ -111,7 +111,7 @@ class Questionnaire {
 		publishedAndroid = c.getBoolean(22)
 		publishedIOS = c.getBoolean(23)
 		exists = true
-		fromJson = false
+		fromJsonOrUpdated = false
 	}
 	
 	fun bindParent(study: Study) {
@@ -176,7 +176,7 @@ class Questionnaire {
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
 			
-			if(fromJson) {
+			if(fromJsonOrUpdated) {
 				val dbActionTrigger = loadActionTriggerDB()
 				if(dbActionTrigger.size != jsonActionTriggers.size) {
 					for(trigger in actionTriggers) { //empty will iterate through its schedules - so we need to finish initializing them before
@@ -188,7 +188,7 @@ class Questionnaire {
 					empty(db)
 					NativeLink.notifications.fireSchedulesChanged(DbLogic.getStudy(studyId)!!)
 				}
-				else { //make sure that new triggers will be saved with same internal id:
+				else { //enable update check for triggers (and copy id over):
 					for(i in jsonActionTriggers.indices) {
 						val newTrigger = jsonActionTriggers[i]
 						newTrigger.id = dbActionTrigger[i].id
