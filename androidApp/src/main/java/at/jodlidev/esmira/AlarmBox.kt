@@ -3,6 +3,7 @@ package at.jodlidev.esmira
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import at.jodlidev.esmira.androidNative.PostponedActions
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.data_structure.ErrorBox
@@ -26,5 +27,19 @@ class AlarmBox : BroadcastReceiver() {
 			return
 		}
 		alarm.exec()
+		
+		context.sendBroadcast(Intent(NOTIFICATION_RECEIVED))
+	}
+	
+	companion object {
+		const val NOTIFICATION_RECEIVED = "at.jodlidev.notification.received"
+		
+		fun registerReceiver(context: Context, callback: () -> Unit) {
+			context.registerReceiver(object : BroadcastReceiver() {
+				override fun onReceive(context: Context?, intent: Intent?) {
+					callback()
+				}
+			}, IntentFilter(NOTIFICATION_RECEIVED))
+		}
 	}
 }

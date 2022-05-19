@@ -219,6 +219,7 @@ class Fragment_listQuestionnaires : Base_fragment() {
 		}
 	}
 	
+	private val timer = Timer()
 	private lateinit var adapter: ListAdapter
 	private lateinit var infoEmptyList: TextView
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -241,6 +242,17 @@ class Fragment_listQuestionnaires : Base_fragment() {
 		}
 		
 		setTitle(R.string.questionnaires)
+		
+		AlarmBox.registerReceiver(requireContext()) {
+			adapter.reload()
+		}
+		timer.scheduleAtFixedRate(object : TimerTask() {
+			override fun run() {
+				activity?.runOnUiThread {
+					adapter.reload()
+				}
+			}
+		}, 10000, 10000)
 	}
 	
 	override fun onResume() {
