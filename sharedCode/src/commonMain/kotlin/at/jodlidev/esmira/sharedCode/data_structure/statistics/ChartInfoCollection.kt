@@ -24,6 +24,7 @@ class ChartInfoCollection {
 	internal var lastDay: Long = 0L
 	val charts: List<ChartInfo>
 	var hasPublicData = false
+	val studyIsJoined: Boolean
 	
 	constructor(study: Study) {
 		val container = HashMap<String, MutableMap<String, StatisticData>>()
@@ -32,11 +33,13 @@ class ChartInfoCollection {
 		
 		this.charts = study.personalCharts
 		this.dataListContainer = container
+		this.studyIsJoined = study.isJoined()
 	}
 	
 	constructor(json: String, study: Study) {
 		this.charts = study.publicCharts
 		this.dataListContainer = loadJson(json, study)
+		this.studyIsJoined = study.isJoined()
 	}
 	
 	private fun finishDailyStatistics() {
@@ -173,7 +176,8 @@ class ChartInfoCollection {
 	fun addPublicData(publicChartCollection: ChartInfoCollection) {
 		hasPublicData = true
 		for(chart in charts) {
-			chart.builder.addPublicData(publicChartCollection)
+			if(!studyIsJoined || !chart.hideUntilCompletion)
+				chart.builder.addPublicData(publicChartCollection)
 		}
 	}
 }

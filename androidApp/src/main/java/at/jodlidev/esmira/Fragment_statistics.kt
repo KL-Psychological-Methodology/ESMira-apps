@@ -52,7 +52,7 @@ class Fragment_statistics : Base_fragment() {
 		else
 			noStatisticsEl.visibility = View.GONE
 		
-		val studyStateIsJoined = study.state == Study.STATES.Joined && study.isActive()
+		val studyStateIsJoined = study.isJoined()
 		
 		for(chartInfo in chartCollection.charts) {
 			val parent = FrameLayout(requireContext())

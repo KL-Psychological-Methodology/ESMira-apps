@@ -361,6 +361,10 @@ class Study internal constructor(
 		return false
 	}
 	
+	fun isJoined(): Boolean {
+		return state == STATES.Joined && isActive()
+	}
+	
 	@Suppress("unused")
 	fun hasNotYetActiveQuestionnaires(): Boolean {
 		for(q in questionnaires) {
