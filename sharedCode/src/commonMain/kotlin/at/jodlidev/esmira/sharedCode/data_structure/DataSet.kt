@@ -25,7 +25,7 @@ class DataSet {
 	private val studyVersion: Int
 	private val studySubVersion: Int
 	private val studyLang: String
-	private val studyGroup: Int
+	private val group: Int
 	private val accessKey: String
 	private val questionnaireName: String
 	private val questionnaireInternalId: Long
@@ -65,7 +65,7 @@ class DataSet {
 		studyVersion = c.getInt(7)
 		studySubVersion = c.getInt(8)
 		studyLang = c.getString(9)
-		studyGroup = c.getInt(10)
+		group = c.getInt(10)
 		timezone = c.getString(11)
 		responseTime = c.getLong(12)
 		eventType = c.getString(13)
@@ -94,7 +94,7 @@ class DataSet {
 		this.serverUrl = study.serverUrl
 		this.accessKey = study.accessKey
 		this.studyLang = study.lang
-		this.studyGroup = study.group
+		this.group = study.group
 		this.responseTime = NativeLink.getNowMillis()
 		this.timezone = NativeLink.getTimezone()
 	}
@@ -198,7 +198,7 @@ class DataSet {
 			values.putInt(KEY_STUDY_VERSION, studyVersion)
 			values.putInt(KEY_STUDY_SUB_VERSION, studySubVersion)
 			values.putString(KEY_STUDY_LANG, studyLang)
-			values.putInt(KEY_STUDY_GROUP, studyGroup)
+			values.putInt(KEY_STUDY_GROUP, group)
 			values.putString(KEY_TIMEZONE, timezone)
 			values.putLong(KEY_RESPONSE_TIME, responseTime)
 			values.putString(KEY_TYPE, eventType)
