@@ -38,6 +38,7 @@ class Questionnaire {
 	var completableAtSpecificTime = false
 	var completableAtSpecificTimeStart = -1
 	var completableAtSpecificTimeEnd = -1
+	var limitToGroup = 0
 
 	
 	@SerialName("actionTriggers") private var jsonActionTriggers: List<ActionTrigger> = ArrayList()
@@ -104,12 +105,13 @@ class Questionnaire {
 		completableAtSpecificTime = c.getBoolean(15)
 		completableAtSpecificTimeStart = c.getInt(16)
 		completableAtSpecificTimeEnd = c.getInt(17)
-		title = c.getString(18)
-		internalId = c.getLong(19)
-		pagesString = c.getString(20)
-		sumScoresString = c.getString(21)
-		publishedAndroid = c.getBoolean(22)
-		publishedIOS = c.getBoolean(23)
+		limitToGroup = c.getInt(18)
+		title = c.getString(19)
+		internalId = c.getLong(20)
+		pagesString = c.getString(21)
+		sumScoresString = c.getString(22)
+		publishedAndroid = c.getBoolean(23)
+		publishedIOS = c.getBoolean(24)
 		exists = true
 		fromJsonOrUpdated = false
 	}
@@ -166,6 +168,7 @@ class Questionnaire {
 		values.putBoolean(KEY_COMPLETABLE_AT_SPECIFIC_TIME, completableAtSpecificTime)
 		values.putInt(KEY_COMPLETABLE_AT_SPECIFIC_TIME_START, completableAtSpecificTimeStart)
 		values.putInt(KEY_COMPLETABLE_AT_SPECIFIC_TIME_END, completableAtSpecificTimeEnd)
+		values.putInt(KEY_LIMIT_TO_GROUP, limitToGroup)
 		values.putString(KEY_TITLE, title)
 		values.putLong(KEY_INTERNAL_ID, internalId)
 		values.putString(KEY_PAGES, pagesString)
@@ -366,22 +369,19 @@ class Questionnaire {
 	}
 	
 	fun isActive(now: Long = NativeLink.getNowMillis()): Boolean { //if study is active in general
-		val durationCheck = if(durationPeriodDays != 0 || durationStartingAfterDays != 0) {
-			val study: Study? = DbLogic.getStudy(studyId)
-			if(study == null) //happens when we test for a study that we have not joined yet
-				true
-			else {
-				val joined = study.joined
-				(durationPeriodDays == 0 || now <= joined + durationPeriodDays * (1000*60*60*24))
-					&& (durationStartingAfterDays == 0 || now >= joined + durationStartingAfterDays * (1000*60*60*24))
-			}
-		}
-		else true
-
-		return (durationCheck
-				&& ((durationStart == 0L || now >= durationStart)
-				&& (durationEnd == 0L || now <= durationEnd))
-				&& (!completableOnce || lastCompleted == 0L))
+		val study: Study? = DbLogic.getStudy(studyId) //study can be null when we test for a study that we have not joined yet
+		
+		val durationCheck = study == null || (
+			(durationPeriodDays == 0 || now <= study.joined + durationPeriodDays * (1000*60*60*24))
+				&& (durationStartingAfterDays == 0 || now >= study.joined + durationStartingAfterDays * (1000*60*60*24))
+			)
+			
+		
+		return durationCheck
+			&& (limitToGroup == 0 || study == null || limitToGroup == study.group)
+			&& ((durationStart == 0L || now >= durationStart)
+			&& (durationEnd == 0L || now <= durationEnd))
+			&& (!completableOnce || lastCompleted == 0L)
 	}
 	
 	fun willBeActiveIn(study: Study? = DbLogic.getStudy(studyId), now: Long = NativeLink.getNowMillis()): Long {
@@ -444,7 +444,7 @@ class Questionnaire {
 	}
 	
 	companion object {
-		const val TABLE = "groups"
+		const val TABLE = "questionnaires"
 		const val KEY_ID = "_id"
 		const val KEY_STUDY_ID = "study_id"
 		const val KEY_STUDY_WEB_ID = "study_webid"
@@ -470,6 +470,7 @@ class Questionnaire {
 		const val KEY_COMPLETABLE_AT_SPECIFIC_TIME = "completableAtSpecificTime"
 		const val KEY_COMPLETABLE_AT_SPECIFIC_TIME_START = "completableAtSpecificTimeStart"
 		const val KEY_COMPLETABLE_AT_SPECIFIC_TIME_END = "completableAtSpecificTimeEnd"
+		const val KEY_LIMIT_TO_GROUP = "limitToGroup"
 
 		const val KEY_TITLE = "title"
 		const val KEY_INTERNAL_ID = "internal_id"
@@ -477,15 +478,6 @@ class Questionnaire {
 		const val KEY_SUMSCORES = "sumScores"
 		const val KEY_PUBLISHEDANDROID = "publishedAndroid"
 		const val KEY_PUBLISHEDIOS = "publishedIOS"
-		
-		private const val TIME_CONSTRAINT_TYPE_NONE = 0
-		private const val TIME_CONSTRAINT_TYPE_TIMEPERIOD = 1
-		const val TIME_CONSTRAINT_TYPE_AFTER_NOTIFICATION = 2
-		
-		private const val COMPLETE_REPEAT_TYPE_ALWAYS = 0
-		private const val COMPLETE_REPEAT_TYPE_NO_REPEAT = 1
-		const val COMPLETE_REPEAT_TYPE_ONCE_PER_NOTIFICATION = 2
-		private const val COMPLETE_REPEAT_TYPE_MINUTES = 3
 		
 		val COLUMNS = arrayOf(
 			KEY_ID,
@@ -506,6 +498,7 @@ class Questionnaire {
 			KEY_COMPLETABLE_AT_SPECIFIC_TIME,
 			KEY_COMPLETABLE_AT_SPECIFIC_TIME_START,
 			KEY_COMPLETABLE_AT_SPECIFIC_TIME_END,
+			KEY_LIMIT_TO_GROUP,
 			KEY_TITLE,
 			KEY_INTERNAL_ID,
 			KEY_PAGES,

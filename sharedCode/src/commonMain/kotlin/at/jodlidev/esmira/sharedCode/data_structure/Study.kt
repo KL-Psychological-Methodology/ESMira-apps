@@ -9,6 +9,7 @@ import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_per
 import kotlinx.serialization.*
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.Serializable
+import kotlin.random.Random
 
 /**
  * Created by JodliDev on 04.05.2020.
@@ -34,18 +35,19 @@ class Study internal constructor(
 		version = c.getInt(5)
 		subVersion = c.getInt(6)
 		lang = c.getString(7)
-		joined = c.getLong(8)
-		title = c.getString(9)
-		studyDescription = c.getString(10)
-		contactEmail = c.getString(11)
-		informedConsentForm = c.getString(12)
-		postInstallInstructions = c.getString(13)
-		publicChartsJsonString = c.getString(14)
-		personalChartsJsonString = c.getString(15)
-		msgTimestamp = c.getLong(16)
-		publicStatisticsNeeded = c.getBoolean(17)
-		sendMessagesAllowed = c.getBoolean(18)
-		eventUploadSettingsString = c.getString(19)
+		group = c.getInt(8)
+		joined = c.getLong(9)
+		title = c.getString(10)
+		studyDescription = c.getString(11)
+		contactEmail = c.getString(12)
+		informedConsentForm = c.getString(13)
+		postInstallInstructions = c.getString(14)
+		publicChartsJsonString = c.getString(15)
+		personalChartsJsonString = c.getString(16)
+		msgTimestamp = c.getLong(17)
+		publicStatisticsNeeded = c.getBoolean(18)
+		sendMessagesAllowed = c.getBoolean(19)
+		eventUploadSettingsString = c.getString(20)
 	}
 	
 	@Transient
@@ -83,6 +85,10 @@ class Study internal constructor(
 	var informedConsentForm: String = "" //can be empty
 	@Suppress("unused")
 	var postInstallInstructions: String = "" //can be empty
+	var randomGroups: Int = 0 // will not be saved in deb, but Instead used to select group
+	@Transient
+	var group: Int = 0 // will be calculated from randomGroups
+	
 	
 	@Transient
 	var msgTimestamp: Long = 0
@@ -94,12 +100,6 @@ class Study internal constructor(
 	@SerialName("eventUploadSettings")
 	@Serializable(with = JsonToStringSerializer::class)
 	private var eventUploadSettingsString = "{}"
-	
-	fun isEventUploaded(name: String): Boolean {
-		val settings: Map<String, Boolean> = DbLogic.getJsonConfig().decodeFromString(eventUploadSettingsString)
-		
-		return settings[name] ?: defaultSettings[name] ?: true
-	}
 	
 	@SerialName("questionnaires")
 	private var _jsonQuestionnaires: List<Questionnaire> = ArrayList()
@@ -237,22 +237,6 @@ class Study internal constructor(
 	}
 	
 	
-	@Suppress("unused")
-	fun saveSchedules(rescheduleNow: Boolean): Boolean {
-		//make sure that there are no errors:
-		for(trigger in enabledActionTriggers) {
-			if(trigger.schedulesAreFaulty())
-				return false
-		}
-		
-		//now we can save stuff:
-		for(trigger in enabledActionTriggers) {
-			trigger.saveScheduleTimeFrames(rescheduleNow)
-		}
-		
-		return true
-	}
-	
 	private fun loadQuestionnairesDB(): List<Questionnaire> {
 		val c = NativeLink.sql.select(
 			Questionnaire.TABLE,
@@ -279,7 +263,7 @@ class Study internal constructor(
 		publicChartsJsonString = publicStatistics.charts
 		personalChartsJsonString = personalStatistics.charts
 		
-		var publicStatisticsNeeded = publicChartsJsonString.length > 2
+		var publicStatisticsNeeded = publicChartsJsonString.length >= 2
 		if(!publicStatisticsNeeded) {
 			for(chart in personalCharts) {
 				if(chart.displayPublicVariable) {
@@ -289,6 +273,20 @@ class Study internal constructor(
 			}
 		}
 		this.publicStatisticsNeeded = publicStatisticsNeeded
+		
+		for(questionnaire in questionnaires) {
+			if(questionnaire.limitToGroup >= randomGroups)
+				questionnaire.limitToGroup = 0
+		}
+		if(group == 0 && randomGroups != 0) {
+			group = Random.nextInt(1, randomGroups+1)
+		}
+	}
+	
+	fun isEventUploaded(name: String): Boolean {
+		val settings: Map<String, Boolean> = DbLogic.getJsonConfig().decodeFromString(eventUploadSettingsString)
+		
+		return settings[name] ?: defaultSettings[name] ?: true
 	}
 	
 	@Suppress("unused")
@@ -432,7 +430,10 @@ class Study internal constructor(
 			this.sendMessagesAllowed = newStudy.sendMessagesAllowed
 			this.eventUploadSettingsString = newStudy.eventUploadSettingsString
 			this._jsonQuestionnaires = newStudy.questionnaires
-			
+			if(this.group > newStudy.randomGroups) {
+				this.randomGroups = newStudy.randomGroups
+				this.group = if(newStudy.randomGroups == 0) 0 else Random.nextInt(1, randomGroups + 1)
+			}
 			save()
 			DataSet.createShortDataSet(DataSet.TYPE_STUDY_UPDATED, this)
 		}
@@ -461,6 +462,7 @@ class Study internal constructor(
 		values.putInt(KEY_VERSION, version)
 		values.putInt(KEY_SUB_VERSION, subVersion)
 		values.putString(KEY_LANG, lang)
+		values.putInt(KEY_GROUP, group)
 		values.putInt(KEY_STATE, state.ordinal)
 		values.putLong(KEY_JOINED, joined)
 		values.putLong(KEY_LAST_MSG_TIMESTAMP, msgTimestamp)
@@ -523,7 +525,22 @@ class Study internal constructor(
 		Scheduler.scheduleAhead()
 		exists = true
 	}
-
+	
+	fun saveSchedules(rescheduleNow: Boolean): Boolean {
+		//make sure that there are no errors:
+		for(trigger in enabledActionTriggers) {
+			if(trigger.schedulesAreFaulty())
+				return false
+		}
+		
+		//now we can save stuff:
+		for(trigger in enabledActionTriggers) {
+			trigger.saveScheduleTimeFrames(rescheduleNow)
+		}
+		
+		return true
+	}
+	
 	fun saveMsgTimestamp(t: Long) {
 		msgTimestamp = t
 		if(exists) {
@@ -605,6 +622,7 @@ class Study internal constructor(
 		const val KEY_VERSION = "version"
 		const val KEY_SUB_VERSION = "subVersion"
 		const val KEY_LANG = "study_lang"
+		const val KEY_GROUP = "randomGroup"
 		const val KEY_JOINED = "joinedTimestamp"
 		const val KEY_STATE = "state"
 		const val KEY_LAST_MSG_TIMESTAMP = "msgTimestamp"
@@ -628,6 +646,7 @@ class Study internal constructor(
 			KEY_VERSION,
 			KEY_SUB_VERSION,
 			KEY_LANG,
+			KEY_GROUP,
 			KEY_JOINED,
 			KEY_TITLE,
 			KEY_DESC,

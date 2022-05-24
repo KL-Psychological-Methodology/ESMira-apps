@@ -512,6 +512,23 @@ class DbLogicTests : BaseCommonTest() {
 	}
 	
 	@Test
+	fun getLastAlarmBefore() {
+		val timestamp = 1114313512000
+		val qId = 5L
+		val signalTime = createJsonObj<SignalTime>()
+		signalTime.bindParent(qId, createJsonObj())
+		Alarm.createFromSignalTime(signalTime, -1, timestamp -1)
+		Alarm.createFromSignalTime(signalTime, -1, timestamp -2)
+		Alarm.createFromSignalTime(signalTime, -1, timestamp -3)
+		Alarm.createFromSignalTime(signalTime, -1, timestamp +1)
+		Alarm.createFromSignalTime(signalTime, -1, timestamp +2)
+		Alarm.createFromSignalTime(signalTime, -1, timestamp +3)
+		
+		val alarm = DbLogic.getLastAlarmBefore(timestamp, qId)
+		assertEquals(timestamp-1, alarm?.timestamp)
+	}
+	
+	@Test
 	fun getAlarms_getAlarm() {
 		val qId = 5L
 		val timestamp = 1114313512000

@@ -48,6 +48,11 @@ abstract class BaseTest {
 	}
 	
 	
+	inline fun <reified T>createJsonObj(json: String = "{}", execAfter: (T) -> Unit): T {
+		val t = createJsonObj<T>(json)
+		execAfter(t)
+		return t
+	}
 	inline fun <reified T>createJsonObj(json: String = "{}"): T {
 		return DbLogic.getJsonConfig().decodeFromString(json)
 	}
@@ -103,6 +108,11 @@ abstract class BaseTest {
 		return schedule
 	}
 	
+	fun createStudy(json: String = """{"id":$studyWebId}""", execAfter: (Study) -> Unit): Study {
+		val study = createStudy(json)
+		execAfter(study)
+		return study
+	}
 	fun createStudy(json: String = """{"id":$studyWebId}"""): Study {
 		return Study.newInstance(testUrl, testAccessKey, json)
 	}

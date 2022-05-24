@@ -203,7 +203,7 @@ class Schedule {
 		const val TABLE = "schedules"
 		const val KEY_ID = "_id"
 		const val KEY_ACTION_TRIGGER = "action_trigger"
-		const val KEY_QUESTIONNAIRE_ID = "group_id"
+		const val KEY_QUESTIONNAIRE_ID = "questionnaire_id"
 		const val KEY_LAST_SCHEDULED = "last_scheduled"
 		const val KEY_EDITABLE = "editable"
 		const val KEY_REPEAT_RATE = "repeat_rate"

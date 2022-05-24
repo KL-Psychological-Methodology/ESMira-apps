@@ -492,7 +492,7 @@ class ActionTrigger {
 		const val KEY_ENABLED = "enabled"
 		const val KEY_ACTIONS = "actions"
 		const val KEY_STUDY_ID = "study_id"
-		const val KEY_QUESTIONNAIRE_ID = "group_id"
+		const val KEY_QUESTIONNAIRE_ID = "questionnaire_id"
 		private const val JSON_MSG = "msgText"
 		private const val JSON_TYPE = "type"
 		private const val JSON_TIMEOUT_MINUTES = "timeout"

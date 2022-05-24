@@ -11,7 +11,7 @@ import kotlinx.serialization.json.*
  */
 internal object Updater {
 	const val EXPECTED_SERVER_VERSION: Int = 10
-	const val DATABASE_VERSION = 35
+	const val DATABASE_VERSION = 36
 	const val LIBRARY_VERSION = 18 //this is mainly used for iOS so we can check that changes in the library have been used in the C library
 	
 	fun updateSQL(db: SQLiteInterface, oldVersion: Int) {
@@ -450,6 +450,46 @@ internal object Updater {
 				
 				db.update("studies", values, "_id = ?", arrayOf(id.toString()))
 			}
+		}
+		if(oldVersion <= 35) {
+			db.beginTransaction()
+			db.execSQL("ALTER TABLE groups RENAME TO questionnaires;")
+			
+			db.execSQL("ALTER TABLE action_trigger ADD COLUMN questionnaire_id INTEGER;")
+			db.execSQL("UPDATE action_trigger SET questionnaire_id = group_id;")
+			
+			db.execSQL("ALTER TABLE eventTriggers ADD COLUMN questionnaire_id INTEGER;")
+			db.execSQL("UPDATE eventTriggers SET questionnaire_id = group_id;")
+			
+			db.execSQL("ALTER TABLE eventTriggers ADD COLUMN skip_this_questionnaire INTEGER;")
+			db.execSQL("UPDATE eventTriggers SET skip_this_questionnaire = skip_this_group;")
+			
+			db.execSQL("ALTER TABLE eventTriggers ADD COLUMN specific_questionnaire_internalId INTEGER DEFAULT NULL;")
+			db.execSQL("UPDATE eventTriggers SET specific_questionnaire_internalId = specific_group_internalId;")
+			
+			db.execSQL("ALTER TABLE schedules ADD COLUMN questionnaire_id INTEGER;")
+			db.execSQL("UPDATE schedules SET questionnaire_id = group_id;")
+			
+			db.execSQL("ALTER TABLE signalTimes ADD COLUMN questionnaire_id INTEGER;")
+			db.execSQL("UPDATE signalTimes SET questionnaire_id = group_id;")
+			
+			db.execSQL("ALTER TABLE alarms ADD COLUMN questionnaire_id INTEGER;")
+			db.execSQL("UPDATE alarms SET questionnaire_id = group_id;")
+			
+			db.execSQL("ALTER TABLE dataSets ADD COLUMN questionnaire_internal_id INTEGER;")
+			db.execSQL("UPDATE dataSets SET questionnaire_internal_id = group_internal_id;")
+			
+			db.execSQL("ALTER TABLE dataSets ADD COLUMN questionnaire_name TEXT;")
+			db.execSQL("UPDATE dataSets SET questionnaire_name = group_name;")
+			
+			db.execSQL("ALTER TABLE dynamicInput_store ADD COLUMN questionnaire_id INTEGER;")
+			db.execSQL("UPDATE dynamicInput_store SET questionnaire_id = group_id;")
+			
+			db.execSQL("ALTER TABLE studies ADD COLUMN randomGroup INTEGER DEFAULT 0;")
+			db.execSQL("ALTER TABLE questionnaires ADD COLUMN limitToGroup INTEGER DEFAULT 0;")
+			db.execSQL("ALTER TABLE dataSets ADD COLUMN study_group INTEGER DEFAULT 0;")
+			db.setTransactionSuccessful()
+			db.endTransaction()
 		}
 	}
 	

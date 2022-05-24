@@ -25,6 +25,7 @@ class DataSet {
 	private val studyVersion: Int
 	private val studySubVersion: Int
 	private val studyLang: String
+	private val group: Int
 	private val accessKey: String
 	private val questionnaireName: String
 	private val questionnaireInternalId: Long
@@ -64,12 +65,13 @@ class DataSet {
 		studyVersion = c.getInt(7)
 		studySubVersion = c.getInt(8)
 		studyLang = c.getString(9)
-		timezone = c.getString(10)
-		responseTime = c.getLong(11)
-		eventType = c.getString(12)
-		setResponses(c.getString(13))
-		_synced = STATES.values()[c.getInt(14)]
-		token = c.getLong(15)
+		group = c.getInt(10)
+		timezone = c.getString(11)
+		responseTime = c.getLong(12)
+		eventType = c.getString(13)
+		setResponses(c.getString(14))
+		_synced = STATES.values()[c.getInt(15)]
+		token = c.getLong(16)
 		reupload = _synced == STATES.NOT_SYNCED_SERVER_ERROR
 	}
 	
@@ -92,6 +94,7 @@ class DataSet {
 		this.serverUrl = study.serverUrl
 		this.accessKey = study.accessKey
 		this.studyLang = study.lang
+		this.group = study.group
 		this.responseTime = NativeLink.getNowMillis()
 		this.timezone = NativeLink.getTimezone()
 	}
@@ -195,6 +198,7 @@ class DataSet {
 			values.putInt(KEY_STUDY_VERSION, studyVersion)
 			values.putInt(KEY_STUDY_SUB_VERSION, studySubVersion)
 			values.putString(KEY_STUDY_LANG, studyLang)
+			values.putInt(KEY_STUDY_GROUP, group)
 			values.putString(KEY_TIMEZONE, timezone)
 			values.putLong(KEY_RESPONSE_TIME, responseTime)
 			values.putString(KEY_TYPE, eventType)
@@ -220,10 +224,11 @@ class DataSet {
 		const val KEY_SERVER_URL = "server_url"
 		const val KEY_ACCESS_KEY = "accessKey"
 		const val KEY_QUESTIONNAIRE_NAME = "group_name"
-		const val KEY_QUESTIONNAIRE_INTERNAL_ID = "group_internal_id"
+		const val KEY_QUESTIONNAIRE_INTERNAL_ID = "questionnaire_internal_id"
 		const val KEY_STUDY_VERSION = "study_version"
 		const val KEY_STUDY_SUB_VERSION = "study_subVersion"
 		const val KEY_STUDY_LANG = "study_lang"
+		const val KEY_STUDY_GROUP = "study_group"
 		const val KEY_TIMEZONE = "timezone"
 		const val KEY_RESPONSE_TIME = "response_time"
 		const val KEY_TYPE = "event_type"
@@ -231,9 +236,6 @@ class DataSet {
 		const val KEY_SYNCED = "is_synced"
 		
 		const val TABLE_JOINED = "$TABLE LEFT JOIN ${StudyToken.TABLE} ON $TABLE.$KEY_STUDY_ID=${StudyToken.TABLE}.${StudyToken.KEY_STUDY_ID}"
-		
-		const val STATE_SYNCED: Int = 1
-		const val STATE_NOT_SYNCED_ERROR: Int = 2
 		
 		const val TYPE_JOIN = "joined"
 		const val TYPE_QUESTIONNAIRE = "questionnaire"
@@ -261,6 +263,7 @@ class DataSet {
 			"$TABLE.$KEY_STUDY_VERSION",
 			"$TABLE.$KEY_STUDY_SUB_VERSION",
 			"$TABLE.$KEY_STUDY_LANG",
+			"$TABLE.$KEY_STUDY_GROUP",
 			"$TABLE.$KEY_TIMEZONE",
 			"$TABLE.$KEY_RESPONSE_TIME",
 			"$TABLE.$KEY_TYPE",

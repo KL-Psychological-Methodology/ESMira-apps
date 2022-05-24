@@ -297,7 +297,7 @@ class Alarm {
 	companion object {
 		const val TABLE = "alarms"
 		const val KEY_ID = "_id"
-		const val KEY_QUESTIONNAIRE_ID = "group_id"
+		const val KEY_QUESTIONNAIRE_ID = "questionnaire_id"
 		const val KEY_ACTION_TRIGGER_ID = "actionTrigger_id"
 		const val KEY_SIGNAL_TIME_ID = "signal_time_id"
 		const val KEY_SCHEDULE_ID = "schedule_id"

@@ -219,7 +219,7 @@ class SignalTime {
 		const val TABLE = "signalTimes"
 		const val KEY_ID = "_id"
 		const val KEY_SCHEDULE_ID = "schedule_id"
-		const val KEY_QUESTIONNAIRE_ID = "group_id"
+		const val KEY_QUESTIONNAIRE_ID = "questionnaire_id"
 		const val KEY_LABEL = "label"
 		const val KEY_RANDOM = "random"
 		const val KEY_RANDOM_FIXED = "random_fixed"
