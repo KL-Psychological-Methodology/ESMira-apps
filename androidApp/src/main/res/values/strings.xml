@@ -122,7 +122,7 @@
     <string name="new_message">New Message</string>
     <string name="next_notifications">Next notifications</string>
     <string name="no">No</string>
-    <string name="no_chart_data">No data</string>
+    <string name="no_data">No data</string>
     <string name="no_dateTime_data">None</string>
     <string name="notification_setup_desc">Notifications are used to invite you to fill out questionnaires at set times. You will not receive any notifications anymore when the study has ended.</string>
     <string name="notification_permission_check">Please press \"Enable notifications\" to check if ESMira has the permission to send notifications.</string>
@@ -199,7 +199,7 @@
     <string name="app_usage_whatFor">Some questionnaires of this study track the usage times for specific apps (or the smartphone in general) over the course of the last day. This data will NOT be accessed in the background and is ONLY saved when you send the according questionnaire. Before sending the questionnaire you will be informed if and which data is sent.</string>
     <string name="failed">Failed</string>
     <string name="feature_is_not_supported">This feature is not supported on your phone</string>
-    <string name="time_format_android">%1$d:%2$d:%3$d</string>
+    <string name="time_format_android">%1$s:%2$s:%3$s</string>
     <string name="not_installed">Not installed</string>
     <string name="colon_total_screenTime">Total screen time</string>
     <string name="qrCodeInvalid">QR code is not valid</string>

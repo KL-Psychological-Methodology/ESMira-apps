@@ -126,7 +126,7 @@
     <string name="new_message">Neue Nachricht</string>
     <string name="next_notifications">Nächste Benachrichtigungen</string>
     <string name="no">Nein</string>
-    <string name="no_chart_data">Keine Daten</string>
+    <string name="no_data">Keine Daten</string>
     <string name="no_dateTime_data">Nichts angegeben</string>
     <string name="notification_setup_desc">Benachrichtigungen werden verwendet, um Sie zu vorbestimmten Zeiten zum Ausfüllen von Fragebögen aufzufordern. Sie erhalten keine Benachrichtigungen mehr, sobald die Studie abgeschlossen ist oder Sie sich aus der Studie austragen.</string>
     <string name="notification_permission_check">Bitte klicken Sie \"Benachrichtigungen aktivieren\" um zu überprüfen ob ESMira die Berechtigung hat Benachrichtigungen zu senden.</string>
@@ -203,7 +203,7 @@
     <string name="app_usage_whatFor">Manche Fragebögen dieser Studie ermitteln die Nutzungsdaten von bestimmten Apps (oder des Smartphones im Allgemeinen) über den letzten Tag. Diese Daten werden NICHT im Hintergrund erhoben und NUR DANN gespeichert wenn Sie den entsprechenden Fragebogen abschicken. Sie können vor dem Abschicken des Fragebogens einsehen ob und welche Daten gespeichert werden.</string>
     <string name="failed">Fehlgeschlagen</string>
     <string name="feature_is_not_supported">Dieses Feature wird auf Ihrem Smartphone nicht unterstützt</string>
-    <string name="time_format_android">%1$d:%2$d:%3$d</string>
+    <string name="time_format_android">%1$s:%2$s:%3$s</string>
     <string name="not_installed">Nicht installiert</string>
     <string name="colon_total_screenTime">Gesamte Bildschirmzeit</string>
     <string name="qrCodeInvalid">Der QR code ist fehlerhaft</string>

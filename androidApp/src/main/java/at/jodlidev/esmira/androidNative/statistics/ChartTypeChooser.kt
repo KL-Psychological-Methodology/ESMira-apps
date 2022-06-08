@@ -279,7 +279,7 @@ class ChartTypeChooser(private val context: Context) : ChartChooserInterface {
 			pieDataSet.valueTextColor = ContextCompat.getColor(context, R.color.textDefault) //make dark mode ready
 			
 			if(entries.size == 0) {
-				entries.add(PieEntry(1f, context.getString(R.string.no_chart_data)))
+				entries.add(PieEntry(1f, context.getString(R.string.no_data)))
 				pieDataSet.setDrawValues(false)
 			}
 
