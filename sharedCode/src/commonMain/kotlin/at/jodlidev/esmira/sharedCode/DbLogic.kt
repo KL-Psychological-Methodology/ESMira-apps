@@ -400,8 +400,7 @@ object DbLogic {
 		else {
 			Scheduler.checkMissedAlarms(true)
 			Scheduler.scheduleIfNeeded()
-			if(NativeLink.smartphoneData.phoneType == PhoneType.IOS)
-				Scheduler.scheduleAhead()
+			Scheduler.scheduleAhead()
 			NativeLink.postponedActions.syncDataSets()
 			cleanupFiles();
 			

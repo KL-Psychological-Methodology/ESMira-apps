@@ -167,6 +167,8 @@ object Scheduler {
 	}
 
 	fun scheduleAhead() { //used in IOS
+		if(NativeLink.smartphoneData.phoneType != PhoneType.IOS)
+			return
 		val alarms = DbLogic.getLastAlarmPerSignalTime()
 		if(alarms.isEmpty())
 			return
