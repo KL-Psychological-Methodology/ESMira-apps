@@ -10,6 +10,8 @@ struct QuestionnaireView: View {
 	
 	let questionnaire: sharedCode.Questionnaire?
 	let pageIndex: Int
+	private let page: Page?
+	private let inputs: [Input]
 	@State var formStarted: Int64
 	
 	@State var nextPage = false
@@ -30,7 +32,24 @@ struct QuestionnaireView: View {
 		self.questionnaire = questionnaire
 		self.pageIndex = pageIndex
 		self._formStarted = State(initialValue: formStarted)
-		self.waitCounter = (questionnaire != nil) ? self.questionnaire!.pages[self.pageIndex].inputs.count : 0
+//		self.waitCounter = (questionnaire != nil) ? self.questionnaire!.pages[self.pageIndex].inputs.count : 0
+		if(questionnaire == nil || questionnaire?.pages.count == 0) {
+			self.waitCounter = 0
+			self.inputs = []
+			self.page = nil
+		}
+		else {
+			self.page = self.questionnaire!.pages[self.pageIndex]
+			let preInputs = self.page!.inputs
+			var inputs: [Input] = []
+			for input in preInputs {
+				if(input.type !== Input.TYPES.appUsage) {
+					inputs.append(input)
+				}
+			}
+			self.inputs = inputs
+			self.waitCounter = inputs.count
+		}
 	}
 	
 	private func noMissings() -> Bool {
@@ -45,33 +64,33 @@ struct QuestionnaireView: View {
 		return false
 	}
 	
-	private func drawQuestionnaire(page: Page, inputs: [Input], width: CGFloat) -> some View {
+	private func drawInnerQuestionnaire(width: CGFloat) -> some View {
 		
 		return VStack {
-			if(!page.header.isEmpty) {
-				HtmlTextView(html: page.header, isReady: self.$headerIsReady)
+			if(!self.page!.header.isEmpty) {
+				HtmlTextView(html: self.page!.header, isReady: self.$headerIsReady)
 					.padding()
 					.frame(width: width)
 					.background(Color(.white))
 			}
 
-			ForEach(0..<inputs.count, id: \.self) { i in
+			ForEach(0..<self.inputs.count, id: \.self) { i in
 				VStack {
-					InputView(input: inputs[i], questionnaire: self.questionnaire!, readyCounter: self.$readyCounter)
+					InputView(input: self.inputs[i], questionnaire: self.questionnaire!, readyCounter: self.$readyCounter)
 						.padding()
 						.frame(width: width)
 						.uiTag(i)
 						.foregroundColor(Color.black)
 				}
-					.background((i % 2 == 0) ? Color("LighterGray") : Color(.white))
+					.background((i % 2 != 0) ? Color("LighterGray") : Color(.white))
 
 			}
 
-			if(!page.footer.isEmpty) {
-				HtmlTextView(html: page.footer, isReady: self.$footerIsReady)
+			if(!self.page!.footer.isEmpty) {
+				HtmlTextView(html: self.page!.footer, isReady: self.$footerIsReady)
 					.padding()
 					.frame(width: width)
-					.background((inputs.count % 2 == 0) ? Color("LighterGray") : Color(.white))
+					.background((self.inputs.count % 2 != 0) ? Color("LighterGray") : Color(.white))
 			}
 			if(questionnaire!.questionnairePageHasRequired(index: Int32(pageIndex))) {
 				Text("info_required")
@@ -108,18 +127,26 @@ struct QuestionnaireView: View {
 		}.animation(.none)
 	}
 	
-	func getInputs() -> some View {
+	func drawQuestionnaire() -> some View {
 		let page = questionnaire!.pages[pageIndex]
-		let inputs = page.inputs
+		let preinputs = page.inputs
 		let isDisabled = self.readyCounter < self.waitCounter || (!page.header.isEmpty && !self.headerIsReady) || (!page.footer.isEmpty && !self.footerIsReady)
 		let isZero = self.waitCounter == 0 || self.readyCounter == 0
 //		let isDisabled = false
+		
+		var inputs: [Input] = []
+		for input in preinputs {
+			if(input.type !== Input.TYPES.appUsage) {
+				inputs.append(input)
+			}
+		}
+		
 		
         return GeometryReader { geometry in
 //			ScrollViewWrapper(action: self.$action) {
             ScrollView {
 				ZStack(alignment: .top) {
-					self.drawQuestionnaire(page: page, inputs: inputs, width: geometry.size.width).opacity(isDisabled ? 0 : 1).animation(.easeIn(duration: 0.8))
+					self.drawInnerQuestionnaire(width: geometry.size.width).opacity(isDisabled ? 0 : 1).animation(.easeIn(duration: 0.8))
 					if(isDisabled) {
 						VStack {
 							LoadingSpinner(isAnimating: .constant(true), style: .large).padding()
@@ -139,7 +166,7 @@ struct QuestionnaireView: View {
 	var body: some View {
 		VStack {
 			if(self.questionnaire != nil) {
-				self.getInputs()
+				self.drawQuestionnaire()
 			}
 			
 		}
@@ -155,49 +182,3 @@ struct QuestionnaireView: View {
 			}
 	}
 }
-
-
-
-//struct QuestionnaireView_Previews: PreviewProvider {
-//	static var previews: some View {
-//		QuestionnaireView(questionnaire: Study.Companion().doNewInstance(
-//			serverUrl: "test.at",
-//			accessKey: "",
-//			json: "{" +
-//				"  \"questionnaire\": [" +
-//				"    {" +
-//				"      \"actionTriggers\": []," +
-//				"      \"pages\": [" +
-//				"        {" +
-//				"          \"inputs\": [" +
-//				"            {" +
-//				"              \"name\": \"text\"," +
-//				"              \"text\": \"t\ne\nx\nt\"," +
-//				"              \"listChoices\": []" +
-//				"            }" +
-//				"          ]," +
-//				"          \"header\": \"Das <b>ist</b>\n\n<br/>ein<br/>hoh\ne\nr<br/>Text\"" +
-//				"        }" +
-//				"      ]," +
-//				"      \"sumScores\": []," +
-//				"      \"name\": \"Gruppe 1\"" +
-//				"    }" +
-//				"  ]," +
-//				"  \"publicStatistics\": {" +
-//				"    \"charts\": []," +
-//				"    \"observedVariables\": {}" +
-//				"  }," +
-//				"  \"personalStatistics\": {" +
-//				"    \"charts\": []," +
-//				"    \"observedVariables\": {}" +
-//				"  }," +
-//				"  \"id\": 1903," +
-//				"  \"version\": 0," +
-//				"  \"serverVersion\": 2," +
-//				"  \"title\": \"test\"," +
-//				"  \"accessKeys\": []" +
-//				"}",
-//			checkUpdate: false
-//		).questionnaire[0], pageIndex: 0).environmentObject(AppState())
-//	}
-//}
