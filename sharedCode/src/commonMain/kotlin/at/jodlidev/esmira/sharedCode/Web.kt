@@ -51,7 +51,7 @@ class Web {
 	private suspend fun postString(url: String, data: String): String {
 		println("postString to: $url")
 		val interpreter: GetStructure = client.post(url) {
-			setBody(body)
+			setBody(data)
 		}.body()
 		checkResponse(interpreter)
 		return interpreter.dataset
