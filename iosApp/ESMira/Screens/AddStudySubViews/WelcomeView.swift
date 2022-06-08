@@ -10,7 +10,6 @@ import sharedCode
 
 
 struct WelcomeView: View {
-	var studyState: StudyState
 	@Environment(\.presentationMode) var mode: Binding<PresentationMode>
 	@State var showAlert: Bool = false
 	
@@ -25,7 +24,7 @@ struct WelcomeView: View {
 			Divider()
 			HStack {
 				Spacer()
-				NavigationLink(destination: QrExistsView(studyState: self.studyState)) {
+				NavigationLink(destination: QrExistsView()) {
 					Text("continue_")
 					Image(systemName: "chevron.compact.right")
 				}.isDetailLink(false)

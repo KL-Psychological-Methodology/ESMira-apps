@@ -8,7 +8,7 @@
 import SwiftUI
 import sharedCode
 
-struct StudyPermissions: View, PermissionListProtocol {
+struct StudyPermissionsView: View, PermissionListProtocol {
 	
 	class LineData {
 		let header: String
@@ -31,14 +31,8 @@ struct StudyPermissions: View, PermissionListProtocol {
 	}
 	
 	@EnvironmentObject private var appState: AppState
-	var studyState: StudyState
 	let study: Study
 	
-	
-	init(studyState: StudyState, study: Study) {
-		self.studyState = studyState
-		self.study = study
-	}
 	
 	
 	@State private var progress = -1
@@ -74,9 +68,9 @@ struct StudyPermissions: View, PermissionListProtocol {
 						self.openStudyJoined = true
 					}
 					else {
+						appState.updateLists.toggle()
 						self.appState.addStudyOpened = false
 					}
-					self.studyState.updateStudyList()
 				}.disabled(!self.isDone)
 			}
 		}

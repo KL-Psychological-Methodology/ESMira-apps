@@ -9,8 +9,6 @@ import SwiftUI
 import sharedCode
 
 struct QrExistsView: View {
-	var studyState: StudyState
-	
 	var body: some View {
 		VStack {
 			HStack {
@@ -19,12 +17,10 @@ struct QrExistsView: View {
 			}
 			Text("welcome_qr_question").padding(.vertical)
 			HStack {
-				NavigationLink("no", destination: ServerQuestion(studyState: self.studyState).environmentObject(self.studyState))
-					.isDetailLink(false)
+				NavigationLink("no", destination: ServerQuestionView())
 					.padding()
 				Spacer()
-				NavigationLink("yes", destination: StudyLoader(studyState: self.studyState, type: .QrScanning))
-					.isDetailLink(false)
+				NavigationLink("yes", destination: QrStartView())
 					.padding()
 			}
 			Spacer()

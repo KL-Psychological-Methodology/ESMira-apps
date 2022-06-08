@@ -10,15 +10,9 @@ import sharedCode
 
 struct StudyDetailView: View {
 	@EnvironmentObject private var appState: AppState
-	var studyState: StudyState
+	var study: Study
 	
-	public let study: Study
 	@State private var openStudyJoined = false
-	
-	init(studyState: StudyState, study: Study) {
-		self.studyState = studyState
-		self.study = study
-	}
 	
 	var body: some View {
 		VStack(alignment: .leading) {
@@ -31,7 +25,7 @@ struct StudyDetailView: View {
 			HStack {
 				Spacer()
 				if(self.study.needsPermissionScreen()) {
-					NavigationLink("consent", destination: StudyPermissions(studyState: self.studyState, study: study)).isDetailLink(false)
+					NavigationLink("consent", destination: StudyPermissionsView(study: study)).isDetailLink(false)
 				}
 				else {
 					Button("participate") {

@@ -8,8 +8,7 @@
 import SwiftUI
 import sharedCode
 
-struct ServerQuestion: View {
-	var studyState: StudyState
+struct ServerQuestionView: View {
 	@State var serverUrl = ""
 	@State var manualUrl = ""
 	@State var askManualUrl = false
@@ -29,13 +28,8 @@ struct ServerQuestion: View {
 							RadioButtonView(state: self.$serverUrl, value: pair.second! as String, labelEl: VStack(alignment: .leading) {
 								Text(pair.first! as String).bold()
 								Text(pair.second! as String).padding(.leading).font(.system(size: 14)).opacity(0.8)
-							}) { _ in
-								self.studyState.serverUrl = self.serverUrl
-							}
+							})
 						}
-					}
-					.onAppear {
-						self.studyState.serverUrl = self.serverList[0].second! as String
 					}
 					HStack {
 						RadioButtonView(state: self.$serverUrl, value: self.manualUrl, labelEl: VStack(alignment: .leading) {
@@ -52,7 +46,7 @@ struct ServerQuestion: View {
 			Divider()
 			HStack {
 				Spacer()
-				NavigationLink(destination: StudyLoader(studyState: self.studyState, type: .AccessKey)) {
+				NavigationLink(destination: AccessKeyQuesionView(serverUrl: self.serverUrl)) {
 					Text("continue_")
 					Image(systemName: "chevron.compact.right")
 				}.isDetailLink(false)
@@ -64,7 +58,6 @@ struct ServerQuestion: View {
 		}
 		.textFieldAlert(isPresented: self.$askManualUrl, text: self.$manualUrl, title: "colon_enter_manually") {
 			self.serverUrl = self.manualUrl
-			self.studyState.serverUrl = self.serverUrl
 		}
 	}
 }

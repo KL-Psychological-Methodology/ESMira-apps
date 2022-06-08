@@ -10,7 +10,7 @@ import sharedCode
 
 struct StudyJoinedView: View {
 	@EnvironmentObject var appState: AppState
-	
+
 	let study: Study
 	var body: some View {
 		VStack {
@@ -30,6 +30,7 @@ struct StudyJoinedView: View {
 				}
 				Spacer()
 				Button(action: {
+					appState.updateLists.toggle()
 					self.appState.addStudyOpened = false
 				}) {
 					Text("complete")

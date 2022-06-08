@@ -27,7 +27,7 @@ struct MainView: View {
 	
 	var body: some View {
 		VStack {
-			NavigationLink(destination: AddStudyView(connectData: self.appState.connectData, studies: self.$studies).environmentObject(appState), isActive: self.$appState.addStudyOpened, label: { EmptyView() }).isDetailLink(false)
+			NavigationLink(destination: AddStudyView(connectData: self.appState.connectData).environmentObject(appState), isActive: self.$appState.addStudyOpened, label: { EmptyView() }).isDetailLink(false)
 			NavigationLink(destination: QuestionnaireView(questionnaire: self.appState.questionnaire, pageIndex: 0).environmentObject(appState), isActive: self.$appState.questionnaireOpened, label: { EmptyView() }).isDetailLink(false)
 			NavigationLink(destination: MessagesView(study: self.appState.messageStudy).environmentObject(appState), isActive: self.$appState.messageOpened, label: { EmptyView() })
 			
