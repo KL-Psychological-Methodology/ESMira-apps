@@ -5,15 +5,15 @@ struct ContentView: View {
 	@EnvironmentObject var appState: AppState
 	
 	init() {
-		let appearence = UINavigationBarAppearance()
-		appearence.configureWithOpaqueBackground()
-		appearence.backgroundColor = UIColor(named: "PrimaryLight")
-		appearence.titleTextAttributes = [.foregroundColor: UIColor.white]
-		appearence.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+		let appearance = UINavigationBarAppearance()
+		appearance.configureWithOpaqueBackground()
+		appearance.backgroundColor = UIColor(named: "PrimaryLight")
+		appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+		appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
 			
-		UINavigationBar.appearance().standardAppearance = appearence
-		UINavigationBar.appearance().scrollEdgeAppearance = appearence
-		UINavigationBar.appearance().compactAppearance = appearence
+		UINavigationBar.appearance().standardAppearance = appearance
+		UINavigationBar.appearance().scrollEdgeAppearance = appearance
+		UINavigationBar.appearance().compactAppearance = appearance
 		UINavigationBar.appearance().tintColor = UIColor.white
 	}
 	
@@ -64,6 +64,8 @@ struct ContentView: View {
 			}
 			
 			.accentColor(Color("Accent"))
+			.navigationViewStyle(.stack)
+			.navigationViewStyle(StackNavigationViewStyle())
 	}
 }
 
