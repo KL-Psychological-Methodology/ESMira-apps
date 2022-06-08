@@ -15,7 +15,6 @@
     <uses-permission android:name="oppo.permission.OPPO_COMPONENT_SAFE"/><!--To open Oppo settings-screen-->
     
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" /><!--for app_usage item in questionnaires-->
-    <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" tools:ignore="QueryAllPackagesPermission" /><!--for app_usage item in questionnaires-->
     
     <application
         android:name="at.jodlidev.esmira.Application_main"

@@ -15,17 +15,6 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintTop_toTopOf="parent"/>
 	
-	
-	<ImageView
-		android:id="@+id/appIcon"
-		android:layout_width="75dp"
-		android:layout_height="75dp"
-		android:adjustViewBounds="true"
-		android:layout_gravity="center"
-		app:layout_constraintTop_toBottomOf="@id/desc"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintLeft_toLeftOf="parent"/>
-	
 	<TextView
 		android:id="@+id/appName"
 		android:layout_width="0dp"
@@ -36,31 +25,23 @@
 		android:layout_marginStart="10dp"
 		android:textSize="18sp"
 		android:textStyle="bold"
-		app:layout_constraintStart_toEndOf="@id/appIcon"
+		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/desc"
 		tools:text="App name" />
 	
 	<TextView
-		android:id="@+id/packageId"
-		android:layout_width="0dp"
-		android:layout_height="wrap_content"
-		android:linksClickable="true"
-		android:textSize="12sp"
-		app:layout_constraintStart_toStartOf="@id/appName"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintTop_toBottomOf="@id/appName"
-		tools:text="at.jodlidesv.esmira" />
-	<TextView
 		android:id="@+id/appUsageTimeLabel"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
+		android:layout_marginLeft="10dp"
+		android:layout_marginStart="10dp"
 		android:layout_marginTop="10dp"
 		android:textSize="18sp"
 		android:linksClickable="true"
 		android:text="@string/colon_usageTime"
 		app:layout_constraintStart_toStartOf="@id/appName"
-		app:layout_constraintTop_toBottomOf="@id/packageId"/>
+		app:layout_constraintTop_toBottomOf="@id/appName"/>
 	<TextView
 		android:id="@+id/appUsageTime"
 		android:layout_width="0dp"
@@ -77,6 +58,8 @@
 		android:id="@+id/appUsageCountLabel"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
+		android:layout_marginLeft="10dp"
+		android:layout_marginStart="10dp"
 		android:layout_marginTop="5dp"
 		android:textSize="18sp"
 		android:linksClickable="true"

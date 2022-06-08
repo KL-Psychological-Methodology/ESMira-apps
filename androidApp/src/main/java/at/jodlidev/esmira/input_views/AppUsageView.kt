@@ -10,22 +10,75 @@ import at.jodlidev.esmira.sharedCode.data_structure.Input
 
 import android.app.usage.UsageStatsManager
 import android.os.Build
-import android.widget.ImageView
 import android.widget.TextView
 import java.util.concurrent.TimeUnit
-import android.app.usage.UsageStats
+import androidx.annotation.RequiresApi
 import java.util.*
+import kotlin.collections.HashMap
 
 
 /**
  * Created by JodliDev on 16.12.2021.
  */
 class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_app_usage) {
+	private class UsageStatsInfo(
+		val count: Int,
+		val totalTime: Long
+	)
+	private class AppUsageCounter(
+		val from: Long,
+		val to: Long,
+		val startEventCode: Int,
+		val endEventCode: Int,
+		val unexpectedEndEventCode: Int
+	) {
+		private var count = 0
+		private var totalTime = 0L
+		
+		private var enableTimestamp = 0L
+		private var hasEvent = false
+		
+		@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+		fun addEvent(event: UsageEvents.Event) {
+			when(event.eventType) {
+				startEventCode -> {
+					++count
+					enableTimestamp = event.timeStamp
+					hasEvent = true
+				}
+				endEventCode -> {
+					if(enableTimestamp != 0L) {
+						totalTime += event.timeStamp - enableTimestamp
+						enableTimestamp = 0L
+						hasEvent = true
+					}
+					else if(!hasEvent)//measures the time from filling out the last questionnaire to turning of the screen
+						totalTime += event.timeStamp - from
+					
+				}
+				UsageEvents.Event.DEVICE_SHUTDOWN, unexpectedEndEventCode -> {
+					if(enableTimestamp != 0L) {
+						totalTime += event.timeStamp - enableTimestamp
+						enableTimestamp = 0L
+						hasEvent = true
+					}
+				}
+			}
+		}
+		
+		fun getResults(): UsageStatsInfo{
+			if(enableTimestamp != 0L)
+				totalTime += to - enableTimestamp
+			else if(!hasEvent) //screen has been on since last time questionnaire was filled out
+				totalTime = to - from
+			
+			return UsageStatsInfo(count, totalTime)
+		}
+	}
 	private var appUsageElement: TextView = findViewById(R.id.appUsageTime)
 	private var appUsageCountElement: TextView = findViewById(R.id.appUsageCount)
+	private var appUsageCountLabelElement: TextView = findViewById(R.id.appUsageCountLabel)
 	private var appNameElement: TextView = findViewById(R.id.appName)
-	private var packageIdElement: TextView = findViewById(R.id.packageId)
-	private var appIconElement: ImageView = findViewById(R.id.appIcon)
 	
 	init {
 		appUsageElement.addTextChangedListener(object : TextWatcher {
@@ -42,80 +95,76 @@ class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_a
 			return
 		}
 		
-		val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-		val lastQuestionnaireFrom = questionnaire.lastCompleted
-		val nowMs = System.currentTimeMillis()
-		
 		val cal = Calendar.getInstance()
-		cal.timeInMillis = nowMs
+		cal.timeInMillis = System.currentTimeMillis()
 		cal[Calendar.HOUR_OF_DAY] = 0
 		cal[Calendar.MINUTE] = 0
 		cal[Calendar.SECOND] = 0
 		cal[Calendar.MILLISECOND] = 0
-		val todayMs = cal.timeInMillis
-		val yesterdayMs = todayMs - 86400000
+		val to = cal.timeInMillis
+		val from = to - 86400000
 		
 		val yesterdayAppUsageTime: Long
-		var yesterdayAppUsageTimeVisible = -1L
-		var yesterdayAppUsageCount = 0
+		val yesterdayAppUsageCount: Int
 		
 		//general screen time:
 		if(input.packageId == "") {
-			val yesterdayPair = countTotalEvents(yesterdayMs, todayMs)
-			yesterdayAppUsageCount = yesterdayPair.first
-			yesterdayAppUsageTime = yesterdayPair.second
+			val yesterdayPair = countTotalEvents(from, to)
+			yesterdayAppUsageCount = yesterdayPair.count
+			yesterdayAppUsageTime = yesterdayPair.totalTime
 			
 			appNameElement.text = context.getString(R.string.colon_total_screenTime)
-			packageIdElement.visibility = GONE
-			appIconElement.visibility = GONE
 		}
 		//specific app usage time:
 		else {
 			val packageId = input.packageId
 			
-			val yesterdayTriple = countSpecificAppEvents(packageId, yesterdayMs, todayMs)
-			yesterdayAppUsageCount = yesterdayTriple.first
-			yesterdayAppUsageTime = yesterdayTriple.second
-			yesterdayAppUsageTimeVisible = yesterdayTriple.third
+			val packageUsages = getAllPackageUsages(from, to)
+			yesterdayAppUsageCount = packageUsages[packageId]?.count ?: -1
+			yesterdayAppUsageTime = packageUsages[packageId]?.totalTime ?: -1L
 			
-			
-			packageIdElement.visibility = VISIBLE
-			packageIdElement.text = packageId
-			
-			try {
-				val packageManager = context.packageManager
-				appIconElement.setImageDrawable(packageManager.getApplicationIcon(packageId))
-				val app = packageManager.getApplicationInfo(packageId, 0)
-				appNameElement.text = packageManager.getApplicationLabel(app)
-				appIconElement.visibility = VISIBLE
-			}
-			catch(e: Throwable) {
-				appNameElement.text = context.getString(R.string.not_installed)
-				appIconElement.visibility = INVISIBLE
-			}
+			appNameElement.text = packageId
 		}
 		input.value = yesterdayAppUsageTime.toString()
-		input.additionalValues["visibleTime"] = yesterdayAppUsageTimeVisible.toString()
 		input.additionalValues["usageCount"] = yesterdayAppUsageCount.toString()
 		
-		val hours = TimeUnit.MILLISECONDS.toHours(yesterdayAppUsageTime)
-		val minutes = TimeUnit.MILLISECONDS.toMinutes(yesterdayAppUsageTime) % 60
-		val seconds = TimeUnit.MILLISECONDS.toSeconds(yesterdayAppUsageTime) % 60
 		
+		if(yesterdayAppUsageTime == 0L || yesterdayAppUsageTime == -1L) {
+			appUsageElement.text = context.getString(R.string.no_data)
+		}
+		else {
+			val hours = TimeUnit.MILLISECONDS.toHours(yesterdayAppUsageTime)
+			val minutes = TimeUnit.MILLISECONDS.toMinutes(yesterdayAppUsageTime) % 60
+			val seconds = TimeUnit.MILLISECONDS.toSeconds(yesterdayAppUsageTime) % 60
+			
+			
+			appUsageElement.text = context.getString(
+				R.string.time_format_android,
+				hours.toString().padStart(2, '0'),
+				minutes.toString().padStart(2, '0'),
+				seconds.toString().padStart(2, '0')
+			)
+		}
 		
-		appUsageElement.text = context.getString(R.string.time_format_android, hours, minutes, seconds)
-		appUsageCountElement.text = yesterdayAppUsageCount.toString()
+		if(yesterdayAppUsageCount == -1 || yesterdayAppUsageCount == 0) {
+			appUsageCountElement.visibility = GONE
+			appUsageCountLabelElement.visibility = GONE
+		}
+		else {
+			appUsageCountElement.visibility = VISIBLE
+			appUsageCountLabelElement.visibility = VISIBLE
+			appUsageCountElement.text = yesterdayAppUsageCount.toString()
+		}
 		
 		
 		
 		//TODO: For testing-->
-		val usageStatsMap = usageStatsManager.queryAndAggregateUsageStats(lastQuestionnaireFrom, nowMs)
-		
+		val packageUsages = getAllPackageUsages(from, to)
 		var totalTime = 0L
-		for(entry in usageStatsMap) {
-			totalTime += entry.value.totalTimeInForeground
+		for(entry in packageUsages) {
+			if(entry.value.totalTime != -1L)
+				totalTime += entry.value.totalTime
 		}
-		
 		input.additionalValues["usageTimeFromApps"] = totalTime.toString()
 		//TODO: <--for testing
 		
@@ -126,107 +175,77 @@ class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_a
 		super.bindData(input, questionnaire)
 	}
 	
-	private fun countSpecificAppEvents(packageId: String, from: Long, to: Long): Triple<Int, Long, Long> {
-		if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
-			return Triple(-1, -1, -1)
-		}
-		val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-		val usageStatsMap = usageStatsManager.queryAndAggregateUsageStats(from, to)
-		
-		
-		return if(usageStatsMap.containsKey(packageId)) {
-			val usageStats = usageStatsMap[packageId]!!
-			Triple(
-				getAppUsageCount(usageStats),
-				usageStats.totalTimeInForeground,
-				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R)
-					usageStats.totalTimeVisible
-				else
-					-1
-			)
-		}
-		else {
-			Triple(-1, -1, -1)
-		}
+	@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+	private fun getUsageStatsManager(): UsageStatsManager {
+		val systemService = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) Context.USAGE_STATS_SERVICE else "usagestats"
+		return context.getSystemService(systemService) as UsageStatsManager
 	}
-	
-	
-	private fun getAppUsageCount(usageStats: UsageStats) : Int {
-		if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
-			return -1
-		}
+	private fun countTotalEvents(from: Long, to: Long): UsageStatsInfo {
+		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+			return UsageStatsInfo(-1, -1L)
 		
-		return try {
-			val mLaunchCount = UsageStats::class.java.getDeclaredField("mLaunchCount")
-			mLaunchCount.get(usageStats) as Int
-		}
-		catch(e: NoSuchFieldException) {
-			-1
-		}
-		catch(e: SecurityException) {
-			-1
-		}
-	}
-	
-	private fun countTotalEvents(from: Long, to: Long): Pair<Int, Long> {
-		if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
-			return Pair(-1, -1L)
-		}
-		
-		val usageStatsManager = context.getSystemService(Context.USAGE_STATS_SERVICE) as UsageStatsManager
-		
+		val usageStatsManager = getUsageStatsManager()
 		var count = 0
 		var totalTime = 0L
 		
 		//actual screen time:
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+			val counter = AppUsageCounter(from, to, UsageEvents.Event.SCREEN_INTERACTIVE, UsageEvents.Event.SCREEN_NON_INTERACTIVE, UsageEvents.Event.DEVICE_SHUTDOWN)
 			val events = usageStatsManager.queryEvents(from, to)
 			val event: UsageEvents.Event = UsageEvents.Event()
 			
-			var enableTimestamp = 0L
-			var hasEvent = false
-			
-			
 			while(events.getNextEvent(event)) {
-				when(event.eventType) {
-					UsageEvents.Event.SCREEN_INTERACTIVE -> {
-						++count
-						enableTimestamp = event.timeStamp
-						hasEvent = true
-					}
-					UsageEvents.Event.SCREEN_NON_INTERACTIVE -> {
-						if(enableTimestamp != 0L) {
-							totalTime += event.timeStamp - enableTimestamp
-							enableTimestamp = 0L
-							hasEvent = true
-						} else if(!hasEvent)//measures the time from filling out the last questionnaire to turning of the screen
-							totalTime += event.timeStamp - from
-						
-					}
-					UsageEvents.Event.DEVICE_SHUTDOWN -> {
-						if(enableTimestamp != 0L) {
-							totalTime += event.timeStamp - enableTimestamp
-							enableTimestamp = 0L
-							hasEvent = true
-						}
-					}
-				}
+				counter.addEvent(event)
 			}
-			if(enableTimestamp != 0L)
-				totalTime += to - enableTimestamp
-			else if(!hasEvent) //screen has been on since last time questionnaire was filled out
-				totalTime = to - from
-			
+			return counter.getResults()
 		}
 		//combined app usage time:
 		else {
-			val usageStatsMap = usageStatsManager.queryAndAggregateUsageStats(from, to)
-			
-			for(entry in usageStatsMap) {
-				totalTime += entry.value.totalTimeInForeground
-				count += getAppUsageCount(entry.value)
+			val packageUsages = getAllPackageUsages(from, to)
+			for(entry in packageUsages) {
+				if(entry.value.totalTime != -1L)
+					totalTime += entry.value.totalTime
+				if(entry.value.count != -1)
+					count += entry.value.count
 			}
 		}
-		return Pair(count, totalTime)
+		return UsageStatsInfo(count, totalTime)
+	}
+	
+	
+	
+	//usageStatsManager.queryAndAggregateUsageStats() seems to be very unreliable. Counting events manually works better
+	// Thanks to: https://stackoverflow.com/a/50647945/10423612
+	@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+	private fun getAllPackageUsages(from: Long, to: Long): Map<String, UsageStatsInfo> {
+		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+			return HashMap()
+		val usageStatsManager = getUsageStatsManager()
+		val counterList = HashMap<String, AppUsageCounter>()
+		
+		// Query the list of events that has happened within that time frame
+		val systemEvents = usageStatsManager.queryEvents(from, to)
+		while(systemEvents.hasNextEvent()) {
+			val event = UsageEvents.Event()
+			systemEvents.getNextEvent(event)
+			
+			if(!counterList.containsKey(event.packageName)) {
+				counterList[event.packageName] = AppUsageCounter(
+					from,
+					to,
+					UsageEvents.Event.MOVE_TO_FOREGROUND,
+					UsageEvents.Event.MOVE_TO_BACKGROUND,
+					if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) UsageEvents.Event.ACTIVITY_STOPPED else 23
+				)
+			}
+			
+			counterList[event.packageName]?.addEvent(event)
+		}
+		
+		val returnList = HashMap<String, UsageStatsInfo>()
+		for((packageName, counter) in counterList) {
+			returnList[packageName] = counter.getResults()
+		}
+		return returnList
 	}
 }
