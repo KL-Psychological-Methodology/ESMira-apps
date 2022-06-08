@@ -19,7 +19,9 @@ struct ListQuestionnairesView: View {
 	let updateTimer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
 	
 	private func reloadStudies() {
-		self.studies = DbLogic().getJoinedStudies()
+		DispatchQueue.main.async {
+			self.studies = DbLogic().getJoinedStudies()
+		}
 	}
 	
 	var body: some View {
@@ -104,7 +106,7 @@ struct ListQuestionnairesView: View {
 				Alert(title: Text("dialogTitle_leave_study"), message: Text("dialogDesc_leave_study"),
 					primaryButton: .destructive(Text("leave")) {
 						self.currentStudy!.leave()
-						self.studies = DbLogic().getJoinedStudies()
+						reloadStudies()
 					}, secondaryButton: .cancel())
 			}
 			.sheet(isPresented: self.$showInformedConsent) {
