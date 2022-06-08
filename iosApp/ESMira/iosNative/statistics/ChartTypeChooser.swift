@@ -195,7 +195,7 @@ class ChartTypeChooser : ChartChooserInterface {
 		override func createChart() -> Any {
 			let pieDataSet = PieChartDataSet(entries: entries, label: "")
 			if(entries.count == 0) {
-				entries.append(PieChartDataEntry(value: 1, label: NSLocalizedString("no_chart_data", comment: "")))
+				entries.append(PieChartDataEntry(value: 1, label: NSLocalizedString("no_data", comment: "")))
                 pieDataSet.drawValuesEnabled = false
 			}
 			let chartView = PieChartView()

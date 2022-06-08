@@ -103,7 +103,6 @@ struct InputView: View {
 				return AnyView(VaScaleStruct(viewModel: self.viewModel))
 			case Input.TYPES.video:
 				return AnyView(VideoStruct(viewModel: self.viewModel))
-
 			default:
 				return AnyView(ErrorStruct(viewModel: self.viewModel))
 		}
