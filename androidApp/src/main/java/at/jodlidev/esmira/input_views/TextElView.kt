@@ -36,6 +36,7 @@ open class TextElView : ConstraintLayout, AndroidInputViewInterface {
 	override fun bindData(input: Input, questionnaire: Questionnaire) {
 		this.input = input
 		this.isBound = true
+		descEl.visibility = if(input.desc.isEmpty()) GONE else VISIBLE
 		HtmlHandler.setHtml(input.desc, descEl)
 	}
 }
