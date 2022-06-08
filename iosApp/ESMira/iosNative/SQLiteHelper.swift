@@ -222,6 +222,29 @@ class SQLiteHelper: SQLiteInterface {
 		sqlite3_finalize(pointer)
 	}
 	
+	
+	func beginTransaction() {
+		var pointer: OpaquePointer?
+		sqlite3_prepare(db, "BEGIN", -1, &pointer, nil)
+		
+		if(sqlite3_step(pointer) != SQLITE_DONE) {
+			print("BEGIN failed")
+		}
+		sqlite3_finalize(pointer)
+	}
+	func setTransactionSuccessful() {
+		
+	}
+	func endTransaction() {
+		var pointer: OpaquePointer?
+		sqlite3_prepare(db, "COMMIT", -1, &pointer, nil)
+		
+		if(sqlite3_step(pointer) != SQLITE_DONE) {
+			print("COMMIT failed")
+		}
+		sqlite3_finalize(pointer)
+	}
+	
 	func getValueBox() -> SQLiteValues {
 		IosValuesWrapper()
 	}
