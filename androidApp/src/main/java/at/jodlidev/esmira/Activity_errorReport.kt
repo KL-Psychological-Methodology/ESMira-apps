@@ -58,7 +58,7 @@ public class Activity_errorReport : AppCompatActivity(), View.OnClickListener {
 				else -> {
 					val mainHolder = holder as MainHolder
 					val context = mainHolder.title.context
-					val error = errors[position]
+					val error = errors[position-1] //-1: because of HEADER
 					mainHolder.root.setBackgroundColor(ContextCompat.getColor(context, if(position % 2 == 0) R.color.questionnaire1 else R.color.questionnaire2))
 					mainHolder.dateTime.text = error.getFormattedDateTime()
 					mainHolder.title.text = error.title
@@ -77,7 +77,7 @@ public class Activity_errorReport : AppCompatActivity(), View.OnClickListener {
 		}
 		
 		override fun getItemCount(): Int {
-			return errors.size
+			return errors.size + 1 //+1: because of HEADER
 		}
 		
 		companion object {
