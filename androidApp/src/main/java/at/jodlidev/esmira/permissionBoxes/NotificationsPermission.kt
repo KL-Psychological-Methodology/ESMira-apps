@@ -18,6 +18,7 @@ import android.view.animation.AnimationUtils
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import at.jodlidev.esmira.androidNative.Notifications
 import at.jodlidev.esmira.permissionBoxes.APermissionBox
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.ErrorBox
@@ -226,11 +227,11 @@ class NotificationsPermission(context: Context, attrs: AttributeSet?, num: Int) 
 				view = createView(R.layout.view_notifications_send_notification)
 				
 				setupOnClick(view, R.id.btn_test_notification, OnClickListener {
-					NativeLink.notifications.remove(8675309)
+					NativeLink.notifications.remove(Notifications.TEST_ID)
 					NativeLink.notifications.fire(
 						context.getString(R.string.notification_test_name),
 						context.getString(R.string.notification_test_desc),
-						8675309
+						Notifications.TEST_ID
 					)
 					animateProgress(ProgressPos.AskNotifications)
 				})

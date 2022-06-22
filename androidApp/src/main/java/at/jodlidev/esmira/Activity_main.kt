@@ -25,6 +25,7 @@ class Activity_main : AppCompatActivity(), ActivityTopInterface {
 		super.onCreate(savedInstanceState)
 		
 		DbLogic.startupApp()
+		ScreenTrackingService.startService(applicationContext)
 		
 		if(BuildConfig.DEBUG)
 			DbLogic.setDev(true, DbLogic.ADMIN_PASSWORD)

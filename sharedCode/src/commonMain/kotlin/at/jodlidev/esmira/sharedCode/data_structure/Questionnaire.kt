@@ -355,6 +355,13 @@ class Questionnaire {
 		}
 		return false
 	}
+	fun hasScreenOrAppTracking(): Boolean {
+		for(page in pages) {
+			if(page.hasScreenOrAppTracking())
+				return true
+		}
+		return false
+	}
 	fun hasEditableSchedules(): Boolean {
 		for(trigger in actionTriggers) {
 			for(schedule in trigger.schedules) {

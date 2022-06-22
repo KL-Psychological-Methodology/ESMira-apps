@@ -207,10 +207,10 @@ class QuestionnaireTest : BaseCommonTest() {
 	
 	@Test
 	fun hasScreenTracking() {
-		assertFalse(createJsonObj<Questionnaire>().hasScreenTracking())
+		assertFalse(createJsonObj<Questionnaire>().hasScreenOrAppTracking())
 		assertTrue(createJsonObj<Questionnaire>(
 			"""{"pages": [{"inputs": [{}, {}, {}]}, {}, {"inputs": [{}, {"responseType": "app_usage"}]}]}"""
-		).hasScreenTracking())
+		).hasScreenOrAppTracking())
 	}
 	
 	@Test

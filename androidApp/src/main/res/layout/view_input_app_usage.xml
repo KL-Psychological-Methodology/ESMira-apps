@@ -16,7 +16,7 @@
 		app:layout_constraintTop_toTopOf="parent"/>
 	
 	<TextView
-		android:id="@+id/appName"
+		android:id="@+id/header"
 		android:layout_width="0dp"
 		android:layout_height="wrap_content"
 		android:linksClickable="true"
@@ -28,7 +28,19 @@
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		app:layout_constraintTop_toBottomOf="@id/desc"
-		tools:text="App name" />
+		tools:text="App usage" />
+	
+	<TextView
+		android:id="@+id/packageName"
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:linksClickable="true"
+		android:layout_marginLeft="10dp"
+		android:layout_marginStart="10dp"
+		android:textSize="12sp"
+		app:layout_constraintStart_toStartOf="@id/header"
+		app:layout_constraintTop_toBottomOf="@id/header"
+		tools:text="at.jodlidev.esmira" />
 	
 	<TextView
 		android:id="@+id/appUsageTimeLabel"
@@ -40,8 +52,8 @@
 		android:textSize="18sp"
 		android:linksClickable="true"
 		android:text="@string/colon_usageTime"
-		app:layout_constraintStart_toStartOf="@id/appName"
-		app:layout_constraintTop_toBottomOf="@id/appName"/>
+		app:layout_constraintStart_toStartOf="@id/header"
+		app:layout_constraintTop_toBottomOf="@id/packageName"/>
 	<TextView
 		android:id="@+id/appUsageTime"
 		android:layout_width="0dp"
@@ -64,7 +76,7 @@
 		android:textSize="18sp"
 		android:linksClickable="true"
 		android:text="@string/colon_usageCount"
-		app:layout_constraintStart_toStartOf="@id/appName"
+		app:layout_constraintStart_toStartOf="@id/header"
 		app:layout_constraintTop_toBottomOf="@id/appUsageTimeLabel"/>
 	<TextView
 		android:id="@+id/appUsageCount"

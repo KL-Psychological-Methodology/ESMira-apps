@@ -118,6 +118,9 @@
                 <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
             </intent-filter>
         </receiver>
+    
+        <service android:name=".ScreenTrackingService" android:exported="false" />
+
     </application>
 
 </manifest>

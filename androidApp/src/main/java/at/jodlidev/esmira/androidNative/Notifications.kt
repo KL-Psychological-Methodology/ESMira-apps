@@ -1,5 +1,6 @@
 package at.jodlidev.esmira.androidNative
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -26,6 +27,14 @@ object Notifications: NotificationsInterface {
 	private const val CHANNEL_ID_STUDY_MESSAGES = "study_messages"
 	private const val CHANNEL_ID_GENERAL_NOTIFICATION = "general_notification"
 	private const val CHANNEL_ID_STUDY_UPDATED = "study_updated"
+	private const val CHANNEL_ID_SCREEN_TRACKING = "screen_tracking"
+	
+	private const val ID_RANGE_SIZE = 1000
+	private const val SCHEDULE_CHANGED_ID_RANGE = 1000
+	private const val QUESTIONNAIRE_BING_ID_RANGE = 3000
+	private const val MESSAGE_ID_RANGE = 5000
+	const val TEST_ID = 10
+	const val SCREEN_TRACKING_ID = 20
 	
 	lateinit var context: WeakReference<Context>
 	
@@ -79,6 +88,16 @@ object Notifications: NotificationsInterface {
 			channel.description = context.resources.getString(R.string.notificationChannel_studyUpdates_desc)
 			notificationManager.createNotificationChannel(channel)
 			
+			//screen_tracking:
+			if(Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+				channel = NotificationChannel(
+					CHANNEL_ID_SCREEN_TRACKING,
+					context.resources.getString(R.string.notificationChannel_screen_tracking),
+					NotificationManager.IMPORTANCE_LOW
+				)
+				channel.description = context.resources.getString(R.string.notificationChannel_screen_tracking_desc)
+				notificationManager.createNotificationChannel(channel)
+			}
 		}
 	}
 	
@@ -113,6 +132,9 @@ object Notifications: NotificationsInterface {
 			.setLights(Color.BLUE, 1000, 1000)
 			.setPriority(NotificationCompat.PRIORITY_HIGH)
 	}
+	private fun createId(value: Long, range: Int): Int {
+		return (value%ID_RANGE_SIZE + range).toInt()
+	}
 	
 	private fun notificationWasPosted(notification_id: Int): Boolean {
 		val context = context.get() ?: return false
@@ -142,12 +164,12 @@ object Notifications: NotificationsInterface {
 		val context = context.get() ?: return
 		ErrorBox.log("update_studies", "schedules have been reset")
 		val intent = Intent(context, Activity_editSchedules::class.java)
-		fire(context.getString(R.string.android_info_study_updated, study.title), context.getString(R.string.info_study_updated_desc), study.id.toInt(), CHANNEL_ID_STUDY_UPDATED, intent)
+		fire(context.getString(R.string.android_info_study_updated, study.title), context.getString(R.string.info_study_updated_desc), createId(study.id, SCHEDULE_CHANGED_ID_RANGE), CHANNEL_ID_STUDY_UPDATED, intent)
 	}
 	
 	override fun fireQuestionnaireBing(title: String, msg: String, questionnaire: Questionnaire, timeoutMin: Int, type: String, scheduledToTimestamp: Long) {
 		val context = context.get() ?: return
-		val notificationId: Int = questionnaire.id.toInt() //even if questionnaireId is too big, it will just overflow and still be unique. So we still can use questionnaireId to find its notification
+		val notificationId: Int = createId(questionnaire.id, QUESTIONNAIRE_BING_ID_RANGE)
 		val intent = Intent(context, Activity_main::class.java)
 		intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
 		intent.putExtra(Activity_main.EXTRA_OPEN_QUESTIONNAIRE, questionnaire.id)
@@ -174,7 +196,7 @@ object Notifications: NotificationsInterface {
 	
 	override fun fireMessageNotification(study: Study) {
 		val context = context.get() ?: return
-		val notificationId = study.id.toInt()
+		val notificationId = createId(study.id, MESSAGE_ID_RANGE)
 		val intent = Intent(context, Activity_main::class.java)
 		intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
 		intent.putExtra(Activity_main.EXTRA_OPEN_STUDY_MESSAGES, study.id)
@@ -185,7 +207,8 @@ object Notifications: NotificationsInterface {
 	}
 	
 	override fun removeQuestionnaireBing(questionnaire: Questionnaire) {
-		remove(questionnaire.id.toInt())
+		val notificationId = createId(questionnaire.id, QUESTIONNAIRE_BING_ID_RANGE)
+		remove(notificationId)
 		val context = context.get() ?: return
 		WorkerBox.cancelNotificationTimeout(context, questionnaire.id)
 	}
@@ -195,4 +218,14 @@ object Notifications: NotificationsInterface {
 		NotificationManagerCompat.from(context).cancel(id)
 	}
 	
+	
+	fun createScreenTrackingNotification(context: Context): Notification {
+		return NotificationCompat.Builder(context, CHANNEL_ID_SCREEN_TRACKING)
+			.setSmallIcon(R.drawable.ic_notification)
+			.setContentTitle(context.getString(R.string.app_name))
+			.setContentText(context.getString(R.string.info_screen_tracking_notification_content))
+			.setAutoCancel(false)
+			.setPriority(NotificationCompat.PRIORITY_LOW)
+			.build()
+	}
 }

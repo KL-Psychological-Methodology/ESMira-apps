@@ -22,6 +22,7 @@ class RescheduleReceiver : BroadcastReceiver() {
 			Intent.ACTION_BOOT_COMPLETED -> {
 				timeChanged = false
 				ErrorBox.log("RescheduleReceiver", "Detected Boot...")
+				ScreenTrackingService.startService(context, true)
 			}
 			Intent.ACTION_TIMEZONE_CHANGED -> {
 				timeChanged = true

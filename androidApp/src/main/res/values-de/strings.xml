@@ -205,10 +205,14 @@
     <string name="feature_is_not_supported">Dieses Feature wird auf Ihrem Smartphone nicht unterstützt</string>
     <string name="time_format_android">%1$s:%2$s:%3$s</string>
     <string name="not_installed">Nicht installiert</string>
-    <string name="colon_total_screenTime">Gesamte Bildschirmzeit</string>
+    <string name="colon_total_screenTime">Gesamte Bildschirmzeit:</string>
+    <string name="colon_app_usage">App Messung:</string>
     <string name="qrCodeInvalid">Der QR code ist fehlerhaft</string>
     <string name="colon_usageTime">Nutzungszeit:</string>
     <string name="colon_usageCount">Nutzungsanzahl:</string>
     <string name="take_picture">Foto aufnehmen</string>
     <string name="error_no_cameraApp">Es konnte keine Kamere-App gefunden werden!</string>
+    <string name="info_screen_tracking_notification_content">Messe Bildschirm-Zeit…</string>
+    <string name="notificationChannel_screen_tracking">Bildschirm-Zeit Service Benachrichtigung.</string>
+    <string name="notificationChannel_screen_tracking_desc">Manche Studien messen die Bildschirmzeit, wofür ein seperater Service benötigt wird.</string>
 </resources>

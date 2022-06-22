@@ -49,7 +49,7 @@ class Fragment_studyPermissions : Base_fragment() {
 		if(study.usesPostponedActions() || study.hasNotifications())
 			permissionBoxes.add(WeakReference(NotificationsPermission(requireContext(), ++headerCount)))
 		
-		if(study.hasScreenTracking())
+		if(study.hasScreenOrAppTracking())
 			permissionBoxes.add(WeakReference(AppUsagePermission(this, ++headerCount)))
 		
 		requestPermissions(arrayOf(Manifest.permission.PACKAGE_USAGE_STATS),
@@ -107,6 +107,7 @@ class Fragment_studyPermissions : Base_fragment() {
 //		val context = context ?: return
 
 		study.join()
+		ScreenTrackingService.startService(requireContext(), true)
 		val b = Bundle()
 		if(study.needsJoinedScreen()) {
 			b.putLong(Fragment_studyRegistered.KEY_STUDY_ID, study.id)

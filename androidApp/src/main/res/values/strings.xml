@@ -201,10 +201,14 @@
     <string name="feature_is_not_supported">This feature is not supported on your phone</string>
     <string name="time_format_android">%1$s:%2$s:%3$s</string>
     <string name="not_installed">Not installed</string>
-    <string name="colon_total_screenTime">Total screen time</string>
+    <string name="colon_total_screenTime">Total screen time:</string>
+    <string name="colon_app_usage">App usage:</string>
     <string name="qrCodeInvalid">QR code is not valid</string>
     <string name="colon_usageTime">Usage time:</string>
     <string name="colon_usageCount">Usage count:</string>
     <string name="take_picture">Take picture</string>
     <string name="error_no_cameraApp">Could not find a camera app!</string>
+    <string name="info_screen_tracking_notification_content">Measuring screen time…</string>
+    <string name="notificationChannel_screen_tracking">Screen time service notification</string>
+    <string name="notificationChannel_screen_tracking_desc">Some studies measure screen time which needs a background service.</string>
 </resources>

@@ -35,4 +35,11 @@ class Page internal constructor( ) {
 		}
 		return false
 	}
+	fun hasScreenOrAppTracking(): Boolean {
+		for(input in inputs) {
+			if(input.hasScreenOrAppTracking())
+				return true
+		}
+		return false
+	}
 }

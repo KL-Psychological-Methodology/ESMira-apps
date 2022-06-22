@@ -155,6 +155,9 @@ class Input internal constructor( ) {
 	}
 	
 	internal fun hasScreenTracking(): Boolean {
+		return type == TYPES.app_usage && packageId.isEmpty()
+	}
+	internal fun hasScreenOrAppTracking(): Boolean {
 		return type == TYPES.app_usage
 	}
 	

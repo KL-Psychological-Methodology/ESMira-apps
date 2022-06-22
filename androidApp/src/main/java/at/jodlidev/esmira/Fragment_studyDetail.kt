@@ -74,6 +74,7 @@ class Fragment_studyDetail : Base_fragment() {
 	}
 	private fun studyParticipate(study: Study) {
 		study.join()
+		ScreenTrackingService.startService(requireContext(), true)
 		val b = Bundle()
 		if(study.needsJoinedScreen()) {
 			activity?.let { Activity_main.start(it) }

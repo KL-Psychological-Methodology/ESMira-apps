@@ -13,7 +13,8 @@ import android.os.Build
 import android.widget.TextView
 import java.util.concurrent.TimeUnit
 import androidx.annotation.RequiresApi
-import java.util.*
+import at.jodlidev.esmira.ScreenTrackingReceiver
+import at.jodlidev.esmira.sharedCode.NativeLink
 import kotlin.collections.HashMap
 
 
@@ -21,7 +22,7 @@ import kotlin.collections.HashMap
  * Created by JodliDev on 16.12.2021.
  */
 class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_app_usage) {
-	private class UsageStatsInfo(
+	class UsageStatsInfo(
 		val count: Int,
 		val totalTime: Long
 	)
@@ -69,8 +70,6 @@ class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_a
 		fun getResults(): UsageStatsInfo{
 			if(enableTimestamp != 0L)
 				totalTime += to - enableTimestamp
-			else if(!hasEvent) //screen has been on since last time questionnaire was filled out
-				totalTime = to - from
 			
 			return UsageStatsInfo(count, totalTime)
 		}
@@ -78,7 +77,8 @@ class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_a
 	private var appUsageElement: TextView = findViewById(R.id.appUsageTime)
 	private var appUsageCountElement: TextView = findViewById(R.id.appUsageCount)
 	private var appUsageCountLabelElement: TextView = findViewById(R.id.appUsageCountLabel)
-	private var appNameElement: TextView = findViewById(R.id.appName)
+	private var headerElement: TextView = findViewById(R.id.header)
+	private var packageNameElement: TextView = findViewById(R.id.packageName)
 	
 	init {
 		appUsageElement.addTextChangedListener(object : TextWatcher {
@@ -95,13 +95,7 @@ class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_a
 			return
 		}
 		
-		val cal = Calendar.getInstance()
-		cal.timeInMillis = System.currentTimeMillis()
-		cal[Calendar.HOUR_OF_DAY] = 0
-		cal[Calendar.MINUTE] = 0
-		cal[Calendar.SECOND] = 0
-		cal[Calendar.MILLISECOND] = 0
-		val to = cal.timeInMillis
+		val to = NativeLink.getMidnightMillis()
 		val from = to - 86400000
 		
 		val yesterdayAppUsageTime: Long
@@ -113,7 +107,8 @@ class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_a
 			yesterdayAppUsageCount = yesterdayPair.count
 			yesterdayAppUsageTime = yesterdayPair.totalTime
 			
-			appNameElement.text = context.getString(R.string.colon_total_screenTime)
+			headerElement.text = context.getString(R.string.colon_total_screenTime)
+			packageNameElement.visibility = GONE
 		}
 		//specific app usage time:
 		else {
@@ -123,7 +118,9 @@ class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_a
 			yesterdayAppUsageCount = packageUsages[packageId]?.count ?: -1
 			yesterdayAppUsageTime = packageUsages[packageId]?.totalTime ?: -1L
 			
-			appNameElement.text = packageId
+			headerElement.text = context.getString(R.string.colon_app_usage)
+			packageNameElement.text = packageId
+			packageNameElement.visibility = VISIBLE
 		}
 		input.value = yesterdayAppUsageTime.toString()
 		input.additionalValues["usageCount"] = yesterdayAppUsageCount.toString()
@@ -157,21 +154,6 @@ class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_a
 		}
 		
 		
-		
-		//TODO: For testing-->
-		val packageUsages = getAllPackageUsages(from, to)
-		var totalTime = 0L
-		for(entry in packageUsages) {
-			if(entry.value.totalTime != -1L)
-				totalTime += entry.value.totalTime
-		}
-		input.additionalValues["usageTimeFromApps"] = totalTime.toString()
-		//TODO: <--for testing
-		
-		
-		
-		
-		
 		super.bindData(input, questionnaire)
 	}
 	
@@ -185,11 +167,8 @@ class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_a
 			return UsageStatsInfo(-1, -1L)
 		
 		val usageStatsManager = getUsageStatsManager()
-		var count = 0
-		var totalTime = 0L
 		
-		//actual screen time:
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 			val counter = AppUsageCounter(from, to, UsageEvents.Event.SCREEN_INTERACTIVE, UsageEvents.Event.SCREEN_NON_INTERACTIVE, UsageEvents.Event.DEVICE_SHUTDOWN)
 			val events = usageStatsManager.queryEvents(from, to)
 			val event: UsageEvents.Event = UsageEvents.Event()
@@ -197,19 +176,15 @@ class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_a
 			while(events.getNextEvent(event)) {
 				counter.addEvent(event)
 			}
-			return counter.getResults()
+			
+			val result = counter.getResults()
+			return if(result.count == 0) //screen has been on since last time questionnaire was filled out
+				UsageStatsInfo(1, to - from)
+			else
+				return result
 		}
-		//combined app usage time:
-		else {
-			val packageUsages = getAllPackageUsages(from, to)
-			for(entry in packageUsages) {
-				if(entry.value.totalTime != -1L)
-					totalTime += entry.value.totalTime
-				if(entry.value.count != -1)
-					count += entry.value.count
-			}
-		}
-		return UsageStatsInfo(count, totalTime)
+		else
+			return ScreenTrackingReceiver.getData(context)
 	}
 	
 	

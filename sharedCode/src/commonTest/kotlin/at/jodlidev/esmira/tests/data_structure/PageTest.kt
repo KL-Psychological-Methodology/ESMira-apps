@@ -37,10 +37,10 @@ class PageTest : BaseCommonTest() {
 		
 		val page = createJsonObj<Page>()
 		page.orderedInputs = arrayListOf(input1, input2, input3, input4)
-		assertTrue(page.hasScreenTracking())
+		assertTrue(page.hasScreenOrAppTracking())
 		
 		val pageNoScreenTracking = createJsonObj<Page>()
 		pageNoScreenTracking.orderedInputs = arrayListOf(input1, input2, input4)
-		assertFalse(pageNoScreenTracking.hasScreenTracking())
+		assertFalse(pageNoScreenTracking.hasScreenOrAppTracking())
 	}
 }

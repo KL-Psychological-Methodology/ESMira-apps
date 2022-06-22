@@ -259,10 +259,10 @@ class StudyTest : BaseCommonTest() {
 	
 	@Test
 	fun hasScreenTracking() {
-		assertEquals(false, createStudy().hasScreenTracking())
+		assertEquals(false, createStudy().hasScreenOrAppTracking())
 		assertEquals(true, createStudy(
 			"""{"id":$studyWebId, "questionnaires": [{"pages":[{"inputs": [{"responseType": "app_usage"}]}]}]}"""
-		).hasScreenTracking())
+		).hasScreenOrAppTracking())
 	}
 	
 	@Test

@@ -128,8 +128,8 @@ class InputTest : BaseCommonTest() {
 	
 	@Test
 	fun hasScreenTracking() {
-		assertFalse(createJsonObj<Input>().hasScreenTracking())
-		assertTrue(createJsonObj<Input>("""{"responseType": "app_usage"}""").hasScreenTracking())
+		assertFalse(createJsonObj<Input>().hasScreenOrAppTracking())
+		assertTrue(createJsonObj<Input>("""{"responseType": "app_usage"}""").hasScreenOrAppTracking())
 	}
 	
 	@Test
