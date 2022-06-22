@@ -101,6 +101,13 @@ object Notifications: NotificationsInterface {
 		}
 	}
 	
+	private fun getPendingIntentFlag(): Int {
+		return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+			PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+		else
+			PendingIntent.FLAG_UPDATE_CURRENT
+	}
+	
 	override fun firePostponed(alarm: Alarm, msg: String, subId: Int) {
 		ErrorBox.error("Notifications", "firePostponed() was used but is meant for IOS")
 	}
@@ -113,7 +120,7 @@ object Notifications: NotificationsInterface {
 			realIntent = intent
 			realIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
 		}
-		val pendingIntent: PendingIntent = PendingIntent.getActivity(context, id, realIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+		val pendingIntent: PendingIntent = PendingIntent.getActivity(context, id, realIntent, getPendingIntentFlag())
 		val builder: NotificationCompat.Builder = createNotification(context, title, msg, pendingIntent, channel)
 		NotificationManagerCompat.from(context).notify(id, builder.build())
 	}
@@ -174,7 +181,7 @@ object Notifications: NotificationsInterface {
 		intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
 		intent.putExtra(Activity_main.EXTRA_OPEN_QUESTIONNAIRE, questionnaire.id)
 		
-		val pendingIntent: PendingIntent = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+		val pendingIntent: PendingIntent = PendingIntent.getActivity(context, notificationId, intent, getPendingIntentFlag())
 		val builder: NotificationCompat.Builder = createNotification(context, title, msg, pendingIntent, CHANNEL_ID_QUESTIONNAIRE_INVITATION)
 		if(timeoutMin != 0) {
 			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -201,7 +208,7 @@ object Notifications: NotificationsInterface {
 		intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
 		intent.putExtra(Activity_main.EXTRA_OPEN_STUDY_MESSAGES, study.id)
 		
-		val pendingIntent: PendingIntent = PendingIntent.getActivity(context, notificationId, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+		val pendingIntent: PendingIntent = PendingIntent.getActivity(context, notificationId, intent, getPendingIntentFlag())
 		val builder: NotificationCompat.Builder = createNotification(context, study.title, context.getString(R.string.info_new_message), pendingIntent, CHANNEL_ID_STUDY_MESSAGES)
 		NotificationManagerCompat.from(context).notify(notificationId, builder.build())
 	}

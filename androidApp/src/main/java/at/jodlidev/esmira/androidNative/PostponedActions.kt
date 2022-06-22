@@ -4,6 +4,7 @@ import android.app.AlarmManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import androidx.core.app.AlarmManagerCompat
 import at.jodlidev.esmira.AlarmBox
 import at.jodlidev.esmira.sharedCode.PostponedActionsInterface
@@ -23,11 +24,17 @@ object PostponedActions : PostponedActionsInterface {
 	fun init(context: Context) {
 		this.context = WeakReference(context.applicationContext)
 	}
+	private fun getPendingIntentFlag(): Int {
+		return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+			PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+		else
+			PendingIntent.FLAG_UPDATE_CURRENT
+	}
 	private fun cancel(alarm: Alarm, intent: Intent, am: AlarmManager) {
 		val context = context.get() ?: return
 		
 		ErrorBox.log("Alarm lifespan", "Canceling alarm: ${alarm.id}")
-		val pendingIntent = PendingIntent.getBroadcast(context, alarm.id.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+		val pendingIntent = PendingIntent.getBroadcast(context, alarm.id.toInt(), intent, getPendingIntentFlag())
 		if(pendingIntent != null) {
 			am.cancel(pendingIntent)
 			pendingIntent.cancel()
@@ -43,7 +50,7 @@ object PostponedActions : PostponedActionsInterface {
 		intent.putExtra(DATA_ALARM_ID, alarm.id)
 		
 		val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-		val pendingIntent = PendingIntent.getBroadcast(context, alarm.id.toInt(), intent, PendingIntent.FLAG_UPDATE_CURRENT)
+		val pendingIntent = PendingIntent.getBroadcast(context, alarm.id.toInt(), intent, getPendingIntentFlag())
 		AlarmManagerCompat.setExactAndAllowWhileIdle(alarmManager, AlarmManager.RTC_WAKEUP, alarm.timestamp, pendingIntent)
 		return true
 	}

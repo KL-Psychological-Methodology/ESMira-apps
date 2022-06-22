@@ -320,7 +320,7 @@ class Fragment_settings : PreferenceFragmentCompat(), Preference.OnPreferenceCli
 		
 		
 		@SuppressLint("ApplySharedPref")
-		fun savePreference(context: Context?, key: String, value: String) {
+		fun savePreference(context: Context, key: String, value: String) {
 			val edit = PreferenceManager.getDefaultSharedPreferences(context).edit()
 			edit.putString(key, value)
 			edit.commit() //needs to happen immediately

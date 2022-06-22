@@ -32,9 +32,9 @@ android {
 
 dependencies {
     implementation(project(":sharedCode"))
-    implementation("com.google.android.material:material:1.4.0")
-    implementation("androidx.appcompat:appcompat:1.3.1")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.0")
+    implementation("com.google.android.material:material:1.6.1")
+    implementation("androidx.appcompat:appcompat:1.4.2")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     
     
 //    implementation("com.google.android.material:material:1.3.0-alpha02") //1.3.0 has this problem: https://github.com/material-components/material-components-android/issues/1955
@@ -48,9 +48,9 @@ dependencies {
     //command for windows: C:\Users\[USERNAME]\AppData\Local\Android\sdk\platform-tools\adb forward tcp:8080 tcp:8080
     debugImplementation("com.amitshekhar.android:debug-db:1.0.4") // https://github.com/amitshekhariitbhu/Android-Debug-Database
     
-    implementation("androidx.work:work-runtime:2.4.0") //WorkManager
+    implementation("androidx.work:work-runtime:2.7.1") //WorkManager
     implementation("me.dm7.barcodescanner:zxing:1.9.13") //qr scanner
-    implementation("androidx.preference:preference:1.1.1") //PreferenceFragment
+    implementation("androidx.preference:preference:1.2.0") //PreferenceFragment
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0") //https://github.com/PhilJay/MPAndroidChart
     
     implementation("com.github.NightWhistler:HtmlSpanner:0.4") //https://github.com/NightWhistler/HtmlSpanner
