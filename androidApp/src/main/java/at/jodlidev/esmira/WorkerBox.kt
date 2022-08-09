@@ -121,7 +121,7 @@ class WorkerBox constructor(context: Context, params: WorkerParameters) : Worker
 		}
 
 		fun cancelAllWork(context: Context, tag: String) {
-			WorkManager.getInstance(context).cancelAllWorkByTag(tag)
+			WorkManager.getInstance(context).cancelUniqueWork(tag)
 		}
 	}
 }
