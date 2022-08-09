@@ -498,22 +498,6 @@ class DbLogicTests : BaseCommonTest() {
 	@Test
 	fun getLastAlarmBefore() {
 		val timestamp = 1114313512000
-		val signalTime = createJsonObj<SignalTime>()
-		signalTime.questionnaireId = 5
-		
-		Alarm.createFromSignalTime(signalTime, -1, timestamp-4)
-		Alarm.createFromSignalTime(signalTime, -1, timestamp-3)
-		Alarm.createFromSignalTime(signalTime, -1, timestamp)
-		Alarm.createFromSignalTime(signalTime, -1, timestamp-2)
-		Alarm.createFromSignalTime(signalTime, -1, timestamp-1)
-		
-		assertEquals(timestamp, DbLogic.getLastAlarmBefore(timestamp, signalTime.questionnaireId)?.timestamp)
-		assertNull(DbLogic.getLastAlarmBefore(timestamp, 6)?.timestamp)
-	}
-	
-	@Test
-	fun getLastAlarmBefore() {
-		val timestamp = 1114313512000
 		val qId = 5L
 		val signalTime = createJsonObj<SignalTime>()
 		signalTime.bindParent(qId, createJsonObj())
