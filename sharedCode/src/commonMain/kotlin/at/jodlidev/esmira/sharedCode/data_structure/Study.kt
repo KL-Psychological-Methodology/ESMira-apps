@@ -275,7 +275,7 @@ class Study internal constructor(
 		this.publicStatisticsNeeded = publicStatisticsNeeded
 		
 		for(questionnaire in questionnaires) {
-			if(questionnaire.limitToGroup >= randomGroups)
+			if(questionnaire.limitToGroup > randomGroups)
 				questionnaire.limitToGroup = 0
 		}
 		if(group == 0 && randomGroups != 0) {
