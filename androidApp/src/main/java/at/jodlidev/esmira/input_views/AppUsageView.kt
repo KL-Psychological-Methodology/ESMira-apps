@@ -168,7 +168,7 @@ class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_a
 		
 		val usageStatsManager = getUsageStatsManager()
 		
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+		return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
 			val counter = AppUsageCounter(from, to, UsageEvents.Event.SCREEN_INTERACTIVE, UsageEvents.Event.SCREEN_NON_INTERACTIVE, UsageEvents.Event.DEVICE_SHUTDOWN)
 			val events = usageStatsManager.queryEvents(from, to)
 			val event: UsageEvents.Event = UsageEvents.Event()
@@ -177,14 +177,10 @@ class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_a
 				counter.addEvent(event)
 			}
 			
-			val result = counter.getResults()
-			return if(result.count == 0) //screen has been on since last time questionnaire was filled out
-				UsageStatsInfo(1, to - from)
-			else
-				return result
+			counter.getResults()
 		}
 		else
-			return ScreenTrackingReceiver.getData(context)
+			ScreenTrackingReceiver.getData(context)
 	}
 	
 	
