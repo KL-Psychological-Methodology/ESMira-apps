@@ -1,6 +1,18 @@
-val ktorVersion = "2.0.1" //for web requests (combined with JSON serialisation)
+//ktor, coroutines and serialization are a tricky combination:
+//https://youtrack.jetbrains.com/issue/KTOR-915
+//https://medium.com/@kpgalligan/ktor-and-kotlin-native-fb5c06cb920a
+
+//val ktorVersion = "1.5.2" //for web requests (combined with JSON serialisation)
+//val serializationVersion = "1.1.0" //for JSON; https://github.com/Kotlin/kotlinx.serialization
+//val coroutinesVersion = "1.4.3" //for multiple threads (used for web-requests)
+
+//val ktorVersion = "2.0.1" //for web requests (combined with JSON serialisation)
+//val serializationVersion = "1.3.2" //for JSON; https://github.com/Kotlin/kotlinx.serialization
+//val coroutinesVersion = "1.6.1" //for multiple threads (used for web-requests)
+
+val ktorVersion = "2.1.0" //for web requests (combined with JSON serialisation)
 val serializationVersion = "1.3.2" //for JSON; https://github.com/Kotlin/kotlinx.serialization
-val coroutinesVersion = "1.6.1" //for multiple threads (used for web-requests)
+val coroutinesVersion = "1.6.4" //for multiple threads (used for web-requests)
 
 plugins {
 	kotlin("multiplatform")
@@ -28,16 +40,7 @@ kotlin {
 		}
 	}
 	
-	//ktor, coroutines and serialization are a tricky combination:
-	//https://youtrack.jetbrains.com/issue/KTOR-915
-	//https://medium.com/@kpgalligan/ktor-and-kotlin-native-fb5c06cb920a
-
-//	val ktorVersion = "1.5.2" //for web requests (combined with JSON serialisation)
-//	val serializationVersion = "1.1.0" //for JSON; https://github.com/Kotlin/kotlinx.serialization
-//	val coroutinesVersion = "1.4.3" //for multiple threads (used for web-requests)
 	sourceSets {
-		
-		
 		val commonMain by getting {
 			dependencies {
 				implementation("io.ktor:ktor-client-core:$ktorVersion")
@@ -67,7 +70,7 @@ kotlin {
 		val androidMain by getting {
 			dependencies {
 				implementation("io.ktor:ktor-client-okhttp:$ktorVersion")
-//				implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
+				implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
 //				implementation("io.ktor:ktor-client-android:$ktorVersion")
 			}
 		}
