@@ -286,7 +286,7 @@ class Web {
 			)
 		}
 		catch(e: Throwable) {
-			ErrorBox.warn("Errorreport", "Could not send message", e)
+			ErrorBox.warn("Web", "Could not send message", e)
 			return e.message ?: "Error"
 		}
 		close()
@@ -375,7 +375,7 @@ class Web {
 		@Serializable
 		private class GetStructure(
 			val success: Boolean,
-			val serverVersion: Int, //TODO: Uncomment when all have version 8
+			val serverVersion: Int,
 			val error: String = "",
 			@Serializable(with = JsonToStringSerializer::class) val dataset: String = ""
 		)
