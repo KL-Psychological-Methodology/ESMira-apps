@@ -101,7 +101,7 @@
     <string name="info_notification_additional_settings">Please make sure that \n[1] your phone is not muted, \n[2] notifications for ESMira are enabled and \n[3] \"Do not disturb\"-mode (if available on your phone) is disabled:</string>
     <string name="info_notification_setup_failed">It is very likely that your phone will not be able to receive notifications for this study. Your phone may have special settings that we are not aware of. Please contact the researcher of the study or the app developer (and mention the phone model you are using) to find a solution for your problem.</string>
     <string name="info_number_to_sync">You have %1$d unsynced datasets</string>
-    <string name="info_questionnaire_success">Saved successfully!</string>
+    <string name="info_questionnaire_success">Your entries were saved successfully!</string>
     <string name="info_required">* input required</string>
     <string name="info_schedule_changed_after_one_day">Your changes will take effect after one day.</string>
     <string name="info_study_permissionSetup_ended">The configuration has been completed. You can now click on \"Participate\" to join the study.</string>
@@ -211,4 +211,5 @@
     <string name="info_screen_tracking_notification_content">Measuring screen time…</string>
     <string name="notificationChannel_screen_tracking">Screen time service notification</string>
     <string name="notificationChannel_screen_tracking_desc">Some studies measure screen time which needs a background service.</string>
+    <string name="just_finished">Just finished</string>
 </resources>

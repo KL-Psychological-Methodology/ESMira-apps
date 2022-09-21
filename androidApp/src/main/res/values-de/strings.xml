@@ -105,7 +105,7 @@
 \n[3] und der \"Bitte nicht stören\"-Modus (wenn auf Ihrem Smartphone verfügbar) deaktiviert ist:</string>
     <string name="info_notification_setup_failed">Höchst wahrscheinlich werden Sie keine Benachrichtigungen für diese Studie erhalten. Womöglich benötigt dieses Smartphone spezielle Einstellungen die in ESMira nicht berücksichtigt sind. Bitte kontaktieren Sie den Betreuer der Studie oder den App Entwickler (und geben Sie Ihr Smartphone Modell an) um eine Lösung für Ihr Problem zu finden.</string>
     <string name="info_number_to_sync">%1$d unsynchronisierte Datensätze</string>
-    <string name="info_questionnaire_success">Erfolgreich gespeichert!</string>
+    <string name="info_questionnaire_success">Ihre Einträge wurden erfolgreich gespeichert!</string>
     <string name="info_required">* Eingabe erforderlich</string>
     <string name="info_schedule_changed_after_one_day">Ihre Änderungen werden nach einem Tag wirksam.</string>
     <string name="info_study_permissionSetup_ended">Die Konfiguration wurde abgeschlossen. Sie können nun auf \"Teilnehmen\" klicken, um der Studie beizutreten.</string>
@@ -215,4 +215,5 @@
     <string name="info_screen_tracking_notification_content">Messe Bildschirm-Zeit…</string>
     <string name="notificationChannel_screen_tracking">Bildschirm-Zeit Service Benachrichtigung.</string>
     <string name="notificationChannel_screen_tracking_desc">Manche Studien messen die Bildschirmzeit, wofür ein seperater Service benötigt wird.</string>
+    <string name="just_finished">Gerade ausgefüllt</string>
 </resources>

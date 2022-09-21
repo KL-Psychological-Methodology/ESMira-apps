@@ -55,7 +55,23 @@ struct ListQuestionnairesView: View {
 									Button(action: {
 										self.appState.openQuestionnaire(questionnaire.id)
 									}) {
-										Text(questionnaire.title)
+										HStack {
+											Text(questionnaire.title)
+											if NativeLink().getNowMillis() - questionnaire.lastCompleted < 180000 { //3 min
+												Spacer()
+												ZStack {
+													Capsule()
+														.foregroundColor(Color("Accent"))
+													
+													Text("just_finished")
+														.foregroundColor(.white)
+														.font(Font.system(size: 12))
+												}
+												.aspectRatio(contentMode: .fit)
+												.fixedSize(horizontal: true, vertical: false)
+												.frame(height: 20)
+											}
+										}
 									}
 								}
 							}

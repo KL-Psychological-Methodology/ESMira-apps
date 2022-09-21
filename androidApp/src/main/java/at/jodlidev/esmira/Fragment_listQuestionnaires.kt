@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import at.jodlidev.esmira.sharedCode.DbLogic
+import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
 import at.jodlidev.esmira.sharedCode.data_structure.Study
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -76,8 +77,8 @@ class Fragment_listQuestionnaires : Base_fragment() {
 		}
 		
 		class ViewHolderQuestionnaire constructor(vG: View) : RecyclerView.ViewHolder(vG) {
-			var title: TextView = vG as TextView
-
+			var title: TextView = vG.findViewById(R.id.text1)
+			var badge: TextView = vG.findViewById(R.id.badge1)
 		}
 		
 		override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -146,7 +147,7 @@ class Fragment_listQuestionnaires : Base_fragment() {
 					})
 				}
 				TYPE_QUESTIONNAIRE -> {
-					vH = ViewHolderQuestionnaire(LayoutInflater.from(parent.context).inflate(R.layout.item_text, parent, false))
+					vH = ViewHolderQuestionnaire(LayoutInflater.from(parent.context).inflate(R.layout.item_text_badge, parent, false))
 					vH.itemView.setOnClickListener(object : View.OnClickListener {
 						override fun onClick(v: View) {
 							val item: Item = data[v.tag as Int]
@@ -174,8 +175,15 @@ class Fragment_listQuestionnaires : Base_fragment() {
 					holder.btnMore.tag = position
 				}
 				TYPE_QUESTIONNAIRE -> {
-					(holder as ViewHolderQuestionnaire).title.text = item.questionnaire.title
-					holder.itemView.tag = position
+					val questionnaireHolder = holder as ViewHolderQuestionnaire
+					questionnaireHolder.title.text = item.questionnaire.title
+					questionnaireHolder.itemView.tag = position
+					if(NativeLink.getNowMillis() - item.questionnaire.lastCompleted < 180000) {// 3 min
+						questionnaireHolder.badge.setText(R.string.just_finished)
+						questionnaireHolder.badge.visibility = View.VISIBLE
+					}
+					else
+						questionnaireHolder.badge.visibility = View.GONE
 				}
 				TYPE_EMPTY ->
 					(holder as ViewHolderQuestionnaire).title.setText(R.string.info_no_questionnaires)
