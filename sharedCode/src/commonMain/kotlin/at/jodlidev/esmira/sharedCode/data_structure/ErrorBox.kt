@@ -114,6 +114,8 @@ class ErrorBox {
 				output.append(study.joined)
 				output.append(", accessKey=")
 				output.append(study.accessKey)
+				output.append(", group=")
+				output.append(study.group)
 				output.append("): ")
 				output.append(study.serverUrl)
 				output.append('\n')
