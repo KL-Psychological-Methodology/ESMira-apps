@@ -393,6 +393,10 @@ class Questionnaire {
 	
 	fun willBeActiveIn(study: Study? = DbLogic.getStudy(studyId), now: Long = NativeLink.getNowMillis()): Long {
 		val joined = study?.joined ?: 0
+		val group = study?.group ?: 0
+		
+		if(limitToGroup != 0 && limitToGroup != group)
+			return 0
 		
 		val durationValue = durationStart - now
 		val startingAfterDaysValue = joined + durationStartingAfterDays.toLong() * (1000*60*60*24) - now
