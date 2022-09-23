@@ -308,7 +308,7 @@ class Web {
 			postString(DEV_SERVER + URL_UPLOAD_ERRORBOX, output.toString())
 		}
 		catch(e: Throwable) {
-			ErrorBox.warn("Errorreport", "Could not upload error report", e)
+			ErrorBox.warn("ErrorReport", "Could not upload error report", e)
 			return e.message ?: "Error"
 		}
 		close()
@@ -449,14 +449,13 @@ class Web {
 			println("Getting studies from: $urlFormatted")
 			nativeAsync {
 				try {
-					val response = web.get(
-						urlFormatted + (
-								if ((accessKey.isNotEmpty()))
-									URL_LIST_STUDIES_PASSWORD.replace("%s1", accessKey).replace("%s2", NativeLink.smartphoneData.lang)
-								else
-									URL_LIST_STUDIES.replace("%s", NativeLink.smartphoneData.lang)
-								)
-					)
+					val path = urlFormatted + (
+						if ((accessKey.isNotEmpty()))
+							URL_LIST_STUDIES_PASSWORD.replace("%s1", accessKey).replace("%s2", NativeLink.smartphoneData.lang)
+						else
+							URL_LIST_STUDIES.replace("%s", NativeLink.smartphoneData.lang)
+						)
+					val response = web.get(path)
 //					if(!web.client.isActive)
 //						throw ClientEngineClosedException()
 					onSuccess(response, urlFormatted)
