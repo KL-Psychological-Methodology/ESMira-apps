@@ -19,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar
 class Activity_main : AppCompatActivity(), ActivityTopInterface {
 	private lateinit var navigation: BottomNavigationView
 	private lateinit var currentFragment: Fragment
+	private var currentSiteCode = 0
 	private var timesClickedForAdmin = 0
 
 	override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,13 +83,6 @@ class Activity_main : AppCompatActivity(), ActivityTopInterface {
 		
 		
 		updateNavigationIcon()
-//		if(!DbLogic.hasStudiesWithStatistics())
-//			navigation.menu.findItem(R.id.navigation_statistics).isVisible = false
-//
-//		if(!DbLogic.hasStudiesForMessages())
-//			navigation.menu.findItem(R.id.navigation_messages).isVisible = false
-//		else
-//			updateNavigationBadges()
 		
 		val extras = intent.extras
 		if(extras != null) {
@@ -120,7 +114,7 @@ class Activity_main : AppCompatActivity(), ActivityTopInterface {
 	}
 	
 	override fun message(s: String) {
-		Snackbar.make(findViewById(R.id.fragment_container), s, Snackbar.LENGTH_LONG).show()
+		Snackbar.make(findViewById(R.id.fragment_container), s, 10000).show()
 		Log.e("error", s)
 	}
 	
@@ -135,6 +129,7 @@ class Activity_main : AppCompatActivity(), ActivityTopInterface {
 		val f: Fragment = when(site) {
 			SITE_QUESTIONNAIRE_DETAIL -> Fragment_questionnaireDetail()
 			SITE_LIST_QUESTIONNAIRES -> Fragment_listQuestionnaires()
+			SITE_QUESTIONNAIRE_SUCCESS -> Fragment_questionnaireSavedSuccessfully()
 			SITE_LIST_STATISTICS -> Fragment_listStatistics()
 			SITE_LIST_MESSAGES -> Fragment_listMessages()
 			SITE_STATISTICS_DETAIL -> Fragment_statisticsRoot()
@@ -164,6 +159,7 @@ class Activity_main : AppCompatActivity(), ActivityTopInterface {
 			updateBackButton(false)
 		}
 		currentFragment = f
+		currentSiteCode = site
 	}
 	
 	public override fun onResume() {
@@ -182,6 +178,9 @@ class Activity_main : AppCompatActivity(), ActivityTopInterface {
 		
 		DbLogic.checkLeaveStudies()
 		updateNavigationIcon()
+		
+		if(currentSiteCode == SITE_QUESTIONNAIRE_SUCCESS)
+			gotoSite(SITE_QUESTIONNAIRE_DETAIL)
 	}
 	
 	public override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -217,6 +216,7 @@ class Activity_main : AppCompatActivity(), ActivityTopInterface {
 		const val SITE_STATISTICS_DETAIL = -6
 		const val SITE_MESSAGES_DETAIL = -7
 		const val SITE_MESSAGE_NEW = -8
+		const val SITE_QUESTIONNAIRE_SUCCESS = -9
 		private const val FRAGMENT_TAG = "fragment_container"
 		
 		fun start(activity: Activity) {

@@ -219,8 +219,8 @@ class Fragment_questionnaireDetail : Base_fragment() {
 				
 				if(errorIndex == -1) {
 					questionnaire.saveQuestionnaire(formStarted)
-					message(R.string.info_questionnaire_success)
-					goToAsRoot(Activity_main.SITE_LIST_QUESTIONNAIRES, null)
+//					message(R.string.info_questionnaire_success)
+					goToAsRoot(Activity_main.SITE_QUESTIONNAIRE_SUCCESS, null)
 				}
 				else
 					messageMissing(contentBox, errorIndex)

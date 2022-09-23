@@ -145,6 +145,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		
 		DbLogic().startupApp()
 		
+		if(appState.openScreen == .questionnaireSavedSuccessfully) {
+			appState.openScreen = nil
+		}
+		
 		if(DbLogic().hasNewErrors()) {
 			appState.openScreen = .errorReport
 		}

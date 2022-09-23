@@ -116,8 +116,8 @@ struct QuestionnaireView: View {
 					Button("save", action: {
 						if(self.noMissings()) {
 							self.questionnaire!.saveQuestionnaire(formStarted: self.formStarted)
-							self.appState.showToast(NSLocalizedString("info_questionnaire_success", comment: ""))
 							self.appState.questionnaireOpened = false
+							self.appState.openScreen = .questionnaireSavedSuccessfully
 						}
 					})
 				}

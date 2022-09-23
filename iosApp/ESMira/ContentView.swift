@@ -32,6 +32,8 @@ struct ContentView: View {
 						}
 					), studyId: self.appState.scheduleStudyId).environmentObject(self.appState)
 				)
+			case .questionnaireSavedSuccessfully:
+				return AnyView(QuestionnaireSavedSuccessfully())
 			default:
 				return AnyView(Text("error"))
 		}

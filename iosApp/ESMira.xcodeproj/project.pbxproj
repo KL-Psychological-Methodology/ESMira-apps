@@ -15,6 +15,7 @@
 		6B4996DB2825BE3B00D8B6F1 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6B4996D92825BE3B00D8B6F1 /* Localizable.strings */; };
 		6B4996DE2825BE4D00D8B6F1 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 6B4996DC2825BE4D00D8B6F1 /* Localizable.stringsdict */; };
 		6B838D7C28461927001DE14E /* EmptyStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B838D7B28461927001DE14E /* EmptyStruct.swift */; };
+		6B99356128DB4E4D002F3180 /* QuestionnaireSavedSuccessfully.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B99356028DB4E4D002F3180 /* QuestionnaireSavedSuccessfully.swift */; };
 		6BA4BF9C283E569F00D3E8C7 /* WelcomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA4BF9B283E569F00D3E8C7 /* WelcomeView.swift */; };
 		6BA4BF9E283E575700D3E8C7 /* QrExistsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA4BF9D283E575700D3E8C7 /* QrExistsView.swift */; };
 		6BA4BFA0283E583800D3E8C7 /* ServerQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA4BF9F283E583800D3E8C7 /* ServerQuestionView.swift */; };
@@ -120,6 +121,7 @@
 		6B4996DF2825BE5800D8B6F1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6B4996E02825BE6300D8B6F1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		6B838D7B28461927001DE14E /* EmptyStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStruct.swift; sourceTree = "<group>"; };
+		6B99356028DB4E4D002F3180 /* QuestionnaireSavedSuccessfully.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionnaireSavedSuccessfully.swift; sourceTree = "<group>"; };
 		6BA4BF9B283E569F00D3E8C7 /* WelcomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeView.swift; sourceTree = "<group>"; };
 		6BA4BF9D283E575700D3E8C7 /* QrExistsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QrExistsView.swift; sourceTree = "<group>"; };
 		6BA4BF9F283E583800D3E8C7 /* ServerQuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerQuestionView.swift; sourceTree = "<group>"; };
@@ -293,6 +295,7 @@
 				6BCFEDAA2825284D009167B0 /* ChatBubble.swift */,
 				6BCFEDAB2825284D009167B0 /* LoadingView.swift */,
 				6BCFEDAC2825284D009167B0 /* Toast.swift */,
+				6B99356028DB4E4D002F3180 /* QuestionnaireSavedSuccessfully.swift */,
 			);
 			path = Elements;
 			sourceTree = "<group>";
@@ -546,6 +549,7 @@
 				6BA4BFA8283E614E00D3E8C7 /* QrStartView.swift in Sources */,
 				6BCFEDB22825284D009167B0 /* ChangeSchedulesView.swift in Sources */,
 				6BCFED6328252778009167B0 /* Workarounds.swift in Sources */,
+				6B99356128DB4E4D002F3180 /* QuestionnaireSavedSuccessfully.swift in Sources */,
 				6BCFEDE928252854009167B0 /* VaScaleStruct.swift in Sources */,
 				6BCFED822825283A009167B0 /* ListStatisticsView.swift in Sources */,
 				6BCFEDE528252854009167B0 /* DynamicStruct.swift in Sources */,
@@ -727,7 +731,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 32;
+				CURRENT_PROJECT_VERSION = 33;
 				DEVELOPMENT_ASSET_PATHS = "ESMira/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZXQ54B7QHL;
 				ENABLE_PREVIEWS = YES;
@@ -737,7 +741,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.1;
+				MARKETING_VERSION = 1.5.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -755,7 +759,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 32;
+				CURRENT_PROJECT_VERSION = 33;
 				DEVELOPMENT_ASSET_PATHS = "ESMira/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZXQ54B7QHL;
 				ENABLE_PREVIEWS = YES;
@@ -765,7 +769,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.1;
+				MARKETING_VERSION = 1.5.2;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",

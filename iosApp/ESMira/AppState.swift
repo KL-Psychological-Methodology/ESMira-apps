@@ -7,7 +7,7 @@ import sharedCode
 
 class AppState: ObservableObject {
 	enum DialogsScreens: Identifiable {
-		case errorReport, changeSchedule
+		case errorReport, changeSchedule, questionnaireSavedSuccessfully
 		
 		var id: Int {
 			self.hashValue
