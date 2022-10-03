@@ -10,7 +10,6 @@ import kotlinx.serialization.json.Json
  * Created by JodliDev on 05.05.2020.
  */
 
-@Suppress("unused")
 object DbLogic {
 	const val DATABASE_NAME = "data"
 	const val DATABASE_VERSION = Updater.DATABASE_VERSION

@@ -47,7 +47,7 @@ object Scheduler {
 	)
 	
 	
-	@Suppress("unused") fun checkMissedAlarms(missedAlarmsAsBroken: Boolean = false) {
+	fun checkMissedAlarms(missedAlarmsAsBroken: Boolean = false) {
 		//on IOS we can assume that all notifications have been issued or noticed by reactToBootOrTimeChange()
 		//so actions have to be issued, but notifications can be ignored
 		//on IOS when the user hasnt pressed the notification, it is not unlikely that this function will find missed alarms
@@ -147,7 +147,6 @@ object Scheduler {
 		}
 	}
 	
-	@Suppress("unused")
 	fun reactToBootOrTimeChange(timeChanged: Boolean) {
 		val now: Long = NativeLink.getNowMillis() + MIN_SCHEDULE_DISTANCE
 		val alarms: List<Alarm> = DbLogic.getAlarms()

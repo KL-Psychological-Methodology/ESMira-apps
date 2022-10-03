@@ -336,7 +336,6 @@ class Web {
 			Pair("Test Server", "https://esmira.jodli.dev")
 		)
 		
-		@Suppress("unused")
 		@Serializable
 		class StudyInfo(
 			val version: Int,
@@ -380,45 +379,33 @@ class Web {
 			@Serializable(with = JsonToStringSerializer::class) val dataset: String = ""
 		)
 		
-		@Serializable @Suppress("unused")
+		@Serializable
 		sealed class PostStructure {
 			val userId: String = DbLogic.getUid()
 			val appVersion: String = NativeLink.smartphoneData.appVersion
 			val appType: String = DbLogic.getAdminAppType()
 			val serverVersion: Int = Updater.EXPECTED_SERVER_VERSION
 			
-			@Serializable @Suppress("unused")
+			@Serializable
 			class UpdateStructure(
 				val dataset: Map<String, StudyInfo>
 			) : PostStructure()
 			
 			
-			@Serializable @Suppress("unused")
+			@Serializable
 			class SyncStructure(
 				val dataset: List<DataSet>
 			) : PostStructure()
 			
-			@Serializable @Suppress("unused")
+			@Serializable
 			class MessageStructure(
 				val content: String,
 				val studyId: Long
 			) : PostStructure()
 		}
-
-
-//		@Serializable @Suppress("unused")
-//		private class SyncStructure(
-//			val dataset: List<DataSet>
-//		) : PostStructure()
-//
-//		@Serializable @Suppress("unused")
-//		private class UpdateStructure(
-//			val dataset: Map<String, StudyInfo>
-//		) : PostStructure()
 		
 		
 		
-		@Suppress("unused")
 		fun loadStudies(
 			serverUrl: String,
 			accessKey: String,
@@ -476,7 +463,6 @@ class Web {
 			return web
 		}
 		
-		@Suppress("unused")
 		fun updateStudiesBlocking(forceStudyUpdate: Boolean = false): Int {
 			var updateCount = -1
 			nativeBlocking {
@@ -495,7 +481,6 @@ class Web {
 			}
 		}
 		
-		@Suppress("unused")
 		fun syncDataSetsBlocking(web: Web = Web()): Boolean {
 			var r = false
 			nativeBlocking {
@@ -503,7 +488,6 @@ class Web {
 			}
 			return r
 		}
-		@Suppress("unused")
 		@Synchronized
 		fun syncDataSetsAsync(continueWith: (Boolean) -> Unit): Web {
 			val web = Web()
@@ -513,7 +497,6 @@ class Web {
 			return web
 		}
 		
-		@Suppress("unused")
 		@Synchronized
 		fun sendErrorReportAsync(
 			comment: String?,
@@ -530,7 +513,6 @@ class Web {
 			}
 		}
 		
-		@Suppress("unused")
 		@Synchronized
 		fun sendMessageAsync(
 			content: String,
@@ -548,7 +530,6 @@ class Web {
 			}
 		}
 		
-		@Suppress("unused")
 		@Synchronized
 		fun loadStatistics(
 			study: Study,
@@ -573,7 +554,6 @@ class Web {
 		
 		
 		
-		@Suppress("unused")
 		val serverList: List<Pair<String, String>> get() {
 			return (if(DbLogic.isDev()) {
 				at.jodlidev.esmira.sharedCode.serverList + debugServerList
@@ -582,7 +562,6 @@ class Web {
 				at.jodlidev.esmira.sharedCode.serverList).asList()
 		}
 		
-		@Suppress("unused")
 		fun getServerName(url: String): String {
 			for(entry in at.jodlidev.esmira.sharedCode.serverList) {
 				if(entry.second == url)

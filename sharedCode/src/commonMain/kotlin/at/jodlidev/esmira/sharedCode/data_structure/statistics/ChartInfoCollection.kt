@@ -172,7 +172,6 @@ class ChartInfoCollection {
 	}
 	
 	
-	@Suppress("unused")
 	fun addPublicData(publicChartCollection: ChartInfoCollection) {
 		hasPublicData = true
 		for(chart in charts) {

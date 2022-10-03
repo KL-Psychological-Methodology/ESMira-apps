@@ -79,11 +79,8 @@ class Study internal constructor(
 	
 	var title: String = "Error"
 	var studyDescription: String = "" //can be empty
-	@Suppress("unused")
 	var contactEmail: String = "" //can be empty
-	@Suppress("unused")
 	var informedConsentForm: String = "" //can be empty
-	@Suppress("unused")
 	var postInstallInstructions: String = "" //can be empty
 	var randomGroups: Int = 0 // will not be saved in deb, but Instead used to select group
 	@Transient
@@ -115,7 +112,6 @@ class Study internal constructor(
 		return _questionnaires
 	}
 	
-	@Suppress("unused")
 	val availableQuestionnaires: List<Questionnaire> get() {
 		val r = ArrayList<Questionnaire>()
 		for(q in questionnaires) {
@@ -156,7 +152,6 @@ class Study internal constructor(
 	
 	@Transient
 	private lateinit var _observedVariables: List<ObservedVariable>
-	@Suppress("unused")
 	val observedVariables: List<ObservedVariable> get() {
 		if(!this::_observedVariables.isInitialized) {
 			if(fromJsonOrUpdated) {
@@ -192,7 +187,6 @@ class Study internal constructor(
 	
 	@Transient
 	private lateinit var _enabledActionTriggers: List<ActionTrigger>
-	@Suppress("unused")
 	val enabledActionTriggers: List<ActionTrigger> get() { //only loaded from db
 		if(!this::_enabledActionTriggers.isInitialized) {
 			val c = NativeLink.sql.select(
@@ -217,7 +211,6 @@ class Study internal constructor(
 	
 	@Transient
 	private lateinit var _editableSignalTimes: List<SignalTime>
-	@Suppress("unused")
 	val editableSignalTimes: List<SignalTime> get() { //only loaded from db
 		if(!this::_editableSignalTimes.isInitialized) {
 			val list = ArrayList<SignalTime>()
@@ -289,7 +282,6 @@ class Study internal constructor(
 		return settings[name] ?: defaultSettings[name] ?: true
 	}
 	
-	@Suppress("unused")
 	fun hasSchedules(): Boolean {
 		for(q in questionnaires) {
 			if(q.hasSchedules())
@@ -297,7 +289,6 @@ class Study internal constructor(
 		}
 		return false
 	}
-	@Suppress("unused")
 	fun hasEditableSchedules(): Boolean {
 		for(q in questionnaires) {
 			if(q.isActive() && q.hasEditableSchedules())
@@ -306,7 +297,6 @@ class Study internal constructor(
 		return false
 	}
 	
-	@Suppress("unused")
 	fun hasEvents(): Boolean {
 		for(q in questionnaires) {
 			if(q.hasEvents())
@@ -315,7 +305,6 @@ class Study internal constructor(
 		return false
 	}
 	
-	@Suppress("unused")
 	fun hasDelayedEvents(): Boolean {
 		for(q in questionnaires) {
 			if(q.hasDelayedEvents())
@@ -324,7 +313,6 @@ class Study internal constructor(
 		return false
 	}
 	
-	@Suppress("unused")
 	fun hasNotifications(): Boolean {
 		for(q in questionnaires) {
 			if(q.hasNotifications())
@@ -349,7 +337,6 @@ class Study internal constructor(
 		return false
 	}
 	
-	@Suppress("unused")
 	fun usesPostponedActions(): Boolean {
 		for(q in questionnaires) {
 			if(q.usesPostponedActions())
@@ -370,7 +357,6 @@ class Study internal constructor(
 		return state == STATES.Joined && isActive()
 	}
 	
-	@Suppress("unused")
 	fun hasNotYetActiveQuestionnaires(): Boolean {
 		for(q in questionnaires) {
 			if(q.willBeActiveIn(this) > 0)
@@ -379,17 +365,14 @@ class Study internal constructor(
 		return false
 	}
 	
-	@Suppress("unused")
 	fun hasInformedConsent(): Boolean {
 		return informedConsentForm.isNotEmpty()
 	}
 	
-	@Suppress("unused")
 	fun needsPermissionScreen(): Boolean {
 		return hasInformedConsent() || usesPostponedActions() || hasNotifications() || hasScreenOrAppTracking()
 	}
 	
-	@Suppress("unused")
 	fun needsJoinedScreen(): Boolean {
 		return postInstallInstructions.isNotEmpty() || hasSchedules()
 	}
@@ -450,7 +433,6 @@ class Study internal constructor(
 		}
 	}
 	
-	@Suppress("unused")
 	fun join() {
 		ErrorBox.log("Study", "Joining study $title ($webId)")
 		state = STATES.Joined
@@ -578,7 +560,7 @@ class Study internal constructor(
 		}
 	}
 	
-	@Suppress("unused") fun leave() {
+	fun leave() {
 		val db = NativeLink.sql
 		val values = db.getValueBox()
 		state = STATES.HasLeft
@@ -685,7 +667,7 @@ class Study internal constructor(
 			DataSet.TYPE_STUDY_UPDATED to false,
 		)
 		
-		@Suppress("unused") fun newInstance(serverUrl: String, accessKey: String, json: String, checkUpdate: Boolean = true): Study {
+		fun newInstance(serverUrl: String, accessKey: String, json: String, checkUpdate: Boolean = true): Study {
 			val study = DbLogic.getJsonConfig().decodeFromString<Study>(json)
 			study.json = json
 			study.finishJSON(serverUrl, accessKey)
@@ -701,7 +683,7 @@ class Study internal constructor(
 			return study
 		}
 		
-		@Suppress("unused") fun getFilteredStudyList(json: String, url: String, accessKey: String, studyWebId: Long = 0, qId: Long = 0): List<Study> {
+		fun getFilteredStudyList(json: String, url: String, accessKey: String, studyWebId: Long = 0, qId: Long = 0): List<Study> {
 			val jsonList = DbLogic.getJsonConfig().decodeFromString<List<JsonObject>>(json)
 			val list = ArrayList<Study>()
 			

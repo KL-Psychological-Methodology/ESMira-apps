@@ -56,7 +56,7 @@ class Questionnaire {
 	
 	@SerialName("pages") @Serializable(with = JsonToStringSerializer::class) var pagesString = "[]"
 	@Transient private lateinit var _pages: List<Page>
-	@Suppress("unused") val pages: List<Page> get() {
+	val pages: List<Page> get() {
 		if(!this::_pages.isInitialized) {
 			_pages = try {
 				DbLogic.getJsonConfig().decodeFromString(pagesString)
@@ -141,7 +141,6 @@ class Questionnaire {
 		return list
 	}
 	
-	@Suppress("unused")
 	fun getQuestionnaireTitle(pageIndex: Int): String {
 		return if(pages.size > 1)
 			"$title ${(pageIndex + 1)}/${pages.size}"
@@ -211,7 +210,6 @@ class Questionnaire {
 		}
 	}
 	
-	@Suppress("unused")
 	fun saveQuestionnaire(formStarted: Long) {
 		val dataSet = DataSet(DataSet.TYPE_QUESTIONNAIRE, this)
 		
@@ -241,7 +239,6 @@ class Questionnaire {
 			nextAlarm = DbLogic.getNextAlarm(this)
 		}
 	}
-	@Suppress("unused")
 	fun checkQuestionnaire(pageI: Int): Int {
 		val page = pages[pageI]
 		for((i, input) in page.inputs.withIndex()) {
@@ -261,7 +258,7 @@ class Questionnaire {
 		}
 	}
 	
-	@Suppress("unused") fun updateLastCompleted(reset_last_notification: Boolean) { //we need this because we dont want to recreate all triggers again
+	fun updateLastCompleted(reset_last_notification: Boolean) { //we need this because we dont want to recreate all triggers again
 		lastCompleted = NativeLink.getNowMillis()
 		if(exists) {
 			val db = NativeLink.sql
@@ -444,7 +441,7 @@ class Questionnaire {
 				(NativeLink.smartphoneData.phoneType != PhoneType.IOS || publishedIOS) &&
 				(NativeLink.smartphoneData.phoneType != PhoneType.Android || publishedAndroid)
 	}
-	@Suppress("unused") fun questionnairePageHasRequired(index: Int): Boolean {
+	fun questionnairePageHasRequired(index: Int): Boolean {
 		if(index >= pages.size)
 			return false
 		for(input in pages[index].inputs) {
