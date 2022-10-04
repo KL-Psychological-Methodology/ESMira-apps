@@ -81,6 +81,10 @@ class Fragment_listQuestionnaires : Base_fragment() {
 			var badge: TextView = vG.findViewById(R.id.badge1)
 		}
 		
+		class ViewHolderEmpty constructor(vG: View) : RecyclerView.ViewHolder(vG) {
+			var title: TextView = vG.findViewById(R.id.text1)
+		}
+		
 		override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
 			val vH: RecyclerView.ViewHolder
 			when(viewType) {
@@ -160,7 +164,7 @@ class Fragment_listQuestionnaires : Base_fragment() {
 					})
 				}
 				TYPE_EMPTY ->
-					return ViewHolderQuestionnaire(LayoutInflater.from(parent.context).inflate(R.layout.item_text_center_small, parent, false))
+					return ViewHolderEmpty(LayoutInflater.from(parent.context).inflate(R.layout.item_text_center_small, parent, false))
 				else ->
 					return ViewHolderQuestionnaire(LayoutInflater.from(parent.context).inflate(R.layout.item_text_center_small, parent, false))
 			}
@@ -186,7 +190,7 @@ class Fragment_listQuestionnaires : Base_fragment() {
 						questionnaireHolder.badge.visibility = View.GONE
 				}
 				TYPE_EMPTY ->
-					(holder as ViewHolderQuestionnaire).title.setText(R.string.info_no_questionnaires)
+					(holder as ViewHolderEmpty).title.setText(R.string.info_no_questionnaires)
 				else ->
 					(holder as ViewHolderQuestionnaire).title.setText(R.string.info_no_questionnaires)
 			}
