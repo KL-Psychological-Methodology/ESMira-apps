@@ -95,8 +95,8 @@ public class Activity_errorReport : AppCompatActivity(), View.OnClickListener {
 		
 		comment = findViewById(R.id.comment)
 
-		val btnSendData = findViewById<View>(R.id.btn_send_data)
-		btnSendData.setOnClickListener(this)
+		findViewById<View>(R.id.btn_send_data).setOnClickListener(this)
+		findViewById<View>(R.id.btn_whom_data).setOnClickListener(this)
 
 		findViewById<View>(R.id.btn_send).setOnClickListener(this)
 		findViewById<View>(R.id.btn_cancel).setOnClickListener(this)
@@ -114,10 +114,17 @@ public class Activity_errorReport : AppCompatActivity(), View.OnClickListener {
 				list.layoutManager = LinearLayoutManager(this)
 				list.adapter = ListAdapter(DbLogic.getErrors(), comment.text.toString())
 				MaterialAlertDialogBuilder(this, R.style.AppTheme_ActivityDialog)
-						.setView(list)
-						.setTitle(R.string.what_is_sent)
-						.setPositiveButton(R.string.close, null)
-						.show()
+					.setView(list)
+					.setTitle(R.string.what_is_sent)
+					.setPositiveButton(R.string.close, null)
+					.show()
+			}
+			R.id.btn_whom_data -> {
+				MaterialAlertDialogBuilder(this, R.style.AppTheme_ActivityDialog)
+					.setTitle(R.string.what_is_sent)
+					.setMessage(getString(R.string.data_will_be_sent_to_app_developer, Web.DEV_SERVER))
+					.setPositiveButton(R.string.close, null)
+					.show()
 			}
 			R.id.btn_cancel -> finish()
 			R.id.btn_send -> {

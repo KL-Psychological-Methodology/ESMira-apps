@@ -69,7 +69,7 @@
     <string name="error_settings_not_opened">Konnte Einstellungen nicht öffnen!</string>
     <string name="hint_server">example.com</string>
     <string name="hint_message">Nachricht</string>
-    <string name="hint_error_comment">Haben Sie Details, die uns helfen könnten?</string>
+    <string name="hint_error_comment">Welches Problem ist aufgetreten?</string>
     <string name="https">https://</string>
     <string name="i_agree">Ich stimme zu</string>
     <string name="ignore">Ignorieren</string>
@@ -216,4 +216,6 @@
     <string name="notificationChannel_screen_tracking">Bildschirm-Zeit Service Benachrichtigung.</string>
     <string name="notificationChannel_screen_tracking_desc">Manche Studien messen die Bildschirmzeit, wofür ein seperater Service benötigt wird.</string>
     <string name="just_finished">Gerade ausgefüllt</string>
+    <string name="sent_to_whom">An wen?</string>
+    <string name="data_will_be_sent_to_app_developer">Der Fehlerbericht wird an den App-Entwicker (%1$s) geschickt. Wir möchten hervorheben, dass der Fehlerbericht keine persönlichen oder Fragebogen Daten enthält!</string>
 </resources>
