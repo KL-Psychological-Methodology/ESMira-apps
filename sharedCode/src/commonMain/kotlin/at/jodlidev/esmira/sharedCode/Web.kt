@@ -87,7 +87,7 @@ class Web {
 			ErrorBox.warn("Web", "This app may be outdated (server version ${interpreter.serverVersion}, local version ${Updater.EXPECTED_SERVER_VERSION})")
 		}
 		if(!interpreter.success)
-			throw SuccessFailedException(interpreter.error)
+			throw SuccessFailedException(interpreter.error, interpreter.errorCode)
 	}
 	
 	fun cancel() {
@@ -328,8 +328,9 @@ class Web {
 		private const val URL_UPLOAD_FILE: String = "/api/file_uploads.php"
 		private const val URL_UPLOAD_ERRORBOX: String = "/api/save_errors.php"
 		private const val URL_UPLOAD_MESSAGE: String = "/api/save_message.php?lang=%s"
+		private const val URL_REWARD: String = "/api/reward.php"
 		
-		internal class SuccessFailedException(msg: String) : Throwable(if(msg.isEmpty()) "Failed with empty response from server" else msg)
+		internal class SuccessFailedException(msg: String, val errorCode: Int = 0) : Throwable(msg.ifEmpty { "Failed with empty response from server" })
 		
 		private val debugServerList = arrayOf(
 			Pair("Emulator Server", DEBUG_EMULATOR_SERVER),
@@ -357,6 +358,14 @@ class Web {
 			)
 		}
 		
+		@Serializable
+		class RewardInfo(
+			val code: String = "",
+			val errorMessage: String = "",
+			val errorCode: Int = 0,
+			val fulFilledQuestionnaires: Map<Long, Boolean> = HashMap()
+		)
+		
 		
 		@Serializable
 		private class UpdateInfo(
@@ -376,6 +385,7 @@ class Web {
 			val success: Boolean,
 			val serverVersion: Int,
 			val error: String = "",
+			val errorCode: Int = 0,
 			@Serializable(with = JsonToStringSerializer::class) val dataset: String = ""
 		)
 		
@@ -400,6 +410,11 @@ class Web {
 			@Serializable
 			class MessageStructure(
 				val content: String,
+				val studyId: Long
+			) : PostStructure()
+			
+			@Serializable
+			class RewardRequestStructure(
 				val studyId: Long
 			) : PostStructure()
 		}
@@ -545,7 +560,7 @@ class Web {
 				}
 				catch (e: Throwable) {
 					ErrorBox.warn("Load Statistics", "Could not load statistics", e)
-					onError(e.message ?: "Error")
+					onError(e.message ?: "No error message")
 				}
 			}
 			
@@ -553,6 +568,26 @@ class Web {
 		}
 		
 		
+		@Synchronized
+		fun loadRewardCode(
+			study: Study,
+			onError: (msg: String) -> Unit,
+			onSuccess: (rewardInfo: RewardInfo) -> Unit
+		) {
+			val web = Web()
+			nativeAsync {
+				try {
+					val response = web.postJson(study.serverUrl + URL_REWARD, PostStructure.RewardRequestStructure(study.webId))
+					val obj = DbLogic.getJsonConfig().decodeFromString<RewardInfo>(response)
+					if(obj.errorCode == Study.REWARD_SUCCESS)
+						study.saveRewardCode(obj.code)
+					onSuccess(obj)
+				}
+				catch (e: Throwable) {
+					onError(e.message ?: "No error message")
+				}
+			}
+		}
 		
 		val serverList: List<Pair<String, String>> get() {
 			return (if(DbLogic.isDev()) {

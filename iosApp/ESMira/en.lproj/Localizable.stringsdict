@@ -2,6 +2,22 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>info_reward_is_not_active_yet</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string></string>
+		<key>days</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>other</key>
+			<string>Rewards for this study are not active yet. They will be available in %1$d days</string>
+			<key>one</key>
+			<string>Rewards for this study are not active yet. They will be available in one day.</string>
+		</dict>
+	</dict>
 	<key>ios_info_missed_notifications</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>

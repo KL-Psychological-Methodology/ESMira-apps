@@ -216,4 +216,17 @@
     <string name="notificationChannel_screen_tracking">Bildschirm-Zeit Service Benachrichtigung.</string>
     <string name="notificationChannel_screen_tracking_desc">Manche Studien messen die Bildschirmzeit, wofür ein seperater Service benötigt wird.</string>
     <string name="just_finished">Gerade ausgefüllt</string>
+    <string name="rewards">Belohungen</string>
+    <plurals name="info_reward_is_not_active_yet">
+        <item quantity="one" formatted="true">Belohnungen für diese Studie sind erst in einem Tag aktiv.</item>
+        <item quantity="other" formatted="true">Belohnungen für diese Studie sind erst in %1$d Tagen aktiv.</item>
+    </plurals>
+    <string name="error_reward_conditions_not_met">Sie erfüllen noch nicht alle Bedingungen um eine Belohnung zu erhalten.</string>
+    <string name="error_already_generated">Auf einem anderen Gerät wurde bereits ein Belohnungscode generiert. Bitte kontaktieren Sie den / die ForscherIn.</string>
+    <string name="error_reward_questionnaires_not_finished">Manche Fragebögen wurden noch nicht oft genug ausgefüllt:</string>
+    <string name="colon_reward_code_header">Dies ist Ihr Belohnungscode:</string>
+    <string name="reward_code_send_email">Per Email versenden</string>
+    <string name="reward_code_share">Per App teilen</string>
+    <string name="reward_code_content">Hallo,\ndies ist mein Belohnungscode: [[CODE]].\nMeine Daten:</string>
+    <string name="reward_code_description">Es ist uns wichtig, dass sämtliche Daten, welche Sie über ESMira eingeben haben, komplett anonym bleiben. Doch um die Belohnung erhalten zu können, müssen persönliche Daten angegeben werden, welche nicht mit den Studiendaten verknüpft sein sollten. Daher gibt es den Belohnungscode, welcher komplett unabhängig von Ihrer User-Id und Ihren Studiendaten ist.</string>
 </resources>

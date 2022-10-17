@@ -39,6 +39,7 @@ class Questionnaire {
 	var completableAtSpecificTimeStart = -1
 	var completableAtSpecificTimeEnd = -1
 	var limitToGroup = 0
+	var minDataSetsForReward = 0
 
 	
 	@SerialName("actionTriggers") private var jsonActionTriggers: List<ActionTrigger> = ArrayList()
@@ -112,6 +113,7 @@ class Questionnaire {
 		sumScoresString = c.getString(22)
 		publishedAndroid = c.getBoolean(23)
 		publishedIOS = c.getBoolean(24)
+		minDataSetsForReward = c.getInt(25)
 		exists = true
 		fromJsonOrUpdated = false
 	}
@@ -172,8 +174,9 @@ class Questionnaire {
 		values.putLong(KEY_INTERNAL_ID, internalId)
 		values.putString(KEY_PAGES, pagesString)
 		values.putString(KEY_SUMSCORES, sumScoresString)
-		values.putBoolean(KEY_PUBLISHEDANDROID, publishedAndroid)
-		values.putBoolean(KEY_PUBLISHEDIOS, publishedIOS)
+		values.putBoolean(KEY_PUBLISHED_ANDROID, publishedAndroid)
+		values.putBoolean(KEY_PUBLISHED_IOS, publishedIOS)
+		values.putInt(KEY_MIN_DATASETS_FOR_REWARD, minDataSetsForReward)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -484,8 +487,9 @@ class Questionnaire {
 		const val KEY_INTERNAL_ID = "internal_id"
 		const val KEY_PAGES = "pages"
 		const val KEY_SUMSCORES = "sumScores"
-		const val KEY_PUBLISHEDANDROID = "publishedAndroid"
-		const val KEY_PUBLISHEDIOS = "publishedIOS"
+		const val KEY_PUBLISHED_ANDROID = "publishedAndroid"
+		const val KEY_PUBLISHED_IOS = "publishedIOS"
+		const val KEY_MIN_DATASETS_FOR_REWARD = "minDataSetsForReward"
 		
 		val COLUMNS = arrayOf(
 			KEY_ID,
@@ -511,8 +515,9 @@ class Questionnaire {
 			KEY_INTERNAL_ID,
 			KEY_PAGES,
 			KEY_SUMSCORES,
-			KEY_PUBLISHEDANDROID,
-			KEY_PUBLISHEDIOS
+			KEY_PUBLISHED_ANDROID,
+			KEY_PUBLISHED_IOS,
+			KEY_MIN_DATASETS_FOR_REWARD
 		)
 	}
 }

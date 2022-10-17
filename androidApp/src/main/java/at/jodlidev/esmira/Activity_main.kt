@@ -110,6 +110,7 @@ class Activity_main : AppCompatActivity(), ActivityTopInterface {
 	fun updateNavigationIcon() {
 		navigation.menu.findItem(R.id.navigation_statistics).isVisible = DbLogic.hasStudiesWithStatistics()
 		navigation.menu.findItem(R.id.navigation_messages).isVisible = DbLogic.hasStudiesForMessages()
+		navigation.menu.findItem(R.id.navigation_rewards).isVisible = DbLogic.hasStudiesWithRewards()
 		updateNavigationBadges()
 	}
 	
@@ -135,6 +136,8 @@ class Activity_main : AppCompatActivity(), ActivityTopInterface {
 			SITE_STATISTICS_DETAIL -> Fragment_statisticsRoot()
 			SITE_MESSAGES_DETAIL -> Fragment_messages()
 			SITE_MESSAGE_NEW -> Fragment_messageNew()
+			SITE_LIST_REWARDS -> Fragment_listRewards()
+			SITE_REWARD -> Fragment_reward()
 			SITE_SETTINGS -> Fragment_settings()
 			else -> return
 		}
@@ -211,12 +214,14 @@ class Activity_main : AppCompatActivity(), ActivityTopInterface {
 		const val SITE_LIST_QUESTIONNAIRES = R.id.navigation_questionnaire
 		const val SITE_LIST_STATISTICS = R.id.navigation_statistics
 		const val SITE_LIST_MESSAGES = R.id.navigation_messages
+		const val SITE_LIST_REWARDS = R.id.navigation_rewards
 		const val SITE_SETTINGS = R.id.navigation_settings
 		const val SITE_QUESTIONNAIRE_DETAIL = -5
 		const val SITE_STATISTICS_DETAIL = -6
 		const val SITE_MESSAGES_DETAIL = -7
 		const val SITE_MESSAGE_NEW = -8
 		const val SITE_QUESTIONNAIRE_SUCCESS = -9
+		const val SITE_REWARD = -10
 		private const val FRAGMENT_TAG = "fragment_container"
 		
 		fun start(activity: Activity) {

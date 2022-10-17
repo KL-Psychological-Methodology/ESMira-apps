@@ -9,6 +9,7 @@ import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_per
 import kotlinx.serialization.*
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.Serializable
+import kotlin.math.ceil
 import kotlin.random.Random
 
 /**
@@ -48,63 +49,54 @@ class Study internal constructor(
 		publicStatisticsNeeded = c.getBoolean(18)
 		sendMessagesAllowed = c.getBoolean(19)
 		eventUploadSettingsString = c.getString(20)
+		enableRewardSystem = c.getBoolean(21)
+		rewardVisibleAfterDays = c.getInt(22)
+		rewardEmailContent = c.getString(23)
+		rewardInstructions = c.getString(24)
+		cachedRewardCode = c.getString(25)
 	}
 	
-	@Transient
-	var exists = false
-	@Transient
-	var fromJsonOrUpdated = true
-	@Transient
-	var json: String = "" //only used to keep the original json-code between instances
+	@Transient var exists = false
+	@Transient var id = -1L
+	@Transient var state = STATES.Pending
+	@Transient var joined = 0L //is automatically set to CURRENT_TIMESTAMP by sql
+	@Transient lateinit var serverUrl: String
+	@Transient lateinit var accessKey: String
+	@Transient var group = 0 // will be calculated from randomGroups
+	@Transient var fromJsonOrUpdated = true
+	@Transient var json = "" //only used to keep the original json-code between instances
+	@Transient var msgTimestamp = 0L
+	@Transient var publicStatisticsNeeded = false
+	@Transient private var cachedRewardCode: String = ""
 	
 	var publishedAndroid = true //not in db, only known when directly from server
 	var publishedIOS = true //not in db, only known when directly from server
-	
-	@Transient
-	var id: Long = -1
-	@Transient
-	var state = STATES.Pending
-	@Transient
-	lateinit var serverUrl: String
-	@Transient
-	lateinit var accessKey: String
-	
-	var version: Int = -1
-	var subVersion: Int = -1
-	var serverVersion: Int = Updater.EXPECTED_SERVER_VERSION
-	var lang: String = ""
-	
-	@Transient
-	var joined: Long = 0 //is automatically set to CURRENT_TIMESTAMP by sql
-	
-	var title: String = "Error"
-	var studyDescription: String = "" //can be empty
-	var contactEmail: String = "" //can be empty
-	var informedConsentForm: String = "" //can be empty
-	var postInstallInstructions: String = "" //can be empty
-	var randomGroups: Int = 0 // will not be saved in deb, but Instead used to select group
-	@Transient
-	var group: Int = 0 // will be calculated from randomGroups
-	
-	
-	@Transient
-	var msgTimestamp: Long = 0
-	@Transient
-	var publicStatisticsNeeded: Boolean = false
-	
-	var sendMessagesAllowed: Boolean = true
+	var version = -1
+	var subVersion = -1
+	var serverVersion = Updater.EXPECTED_SERVER_VERSION
+	var lang = ""
+	var title = "Error"
+	var studyDescription = "" //can be empty
+	var contactEmail = "" //can be empty
+	var informedConsentForm = "" //can be empty
+	var postInstallInstructions = "" //can be empty
+	var randomGroups = 0 // will not be saved in deb, but Instead used to select group
+	var sendMessagesAllowed = true
+	var enableRewardSystem = false
+	var rewardVisibleAfterDays = 0
+	var rewardEmailContent = ""
+	var rewardInstructions = ""
 	
 	@SerialName("eventUploadSettings")
 	@Serializable(with = JsonToStringSerializer::class)
 	private var eventUploadSettingsString = "{}"
 	
+	
 	@SerialName("questionnaires")
 	private var _jsonQuestionnaires: List<Questionnaire> = ArrayList()
 	
-	
 	@Transient
 	private lateinit var _questionnaires: List<Questionnaire>
-	
 	val questionnaires: List<Questionnaire> get() {
 		if(!this::_questionnaires.isInitialized) {
 			_questionnaires = if(fromJsonOrUpdated) _jsonQuestionnaires else loadQuestionnairesDB()
@@ -337,6 +329,13 @@ class Study internal constructor(
 		return false
 	}
 	
+	fun daysUntilRewardsAreActive(): Int {
+		val oneDay = 86400000
+		return ceil((((joined + rewardVisibleAfterDays * oneDay) - NativeLink.getNowMillis()).toFloat() / oneDay))
+			.toInt()
+			.coerceAtLeast(0)
+	}
+	
 	fun usesPostponedActions(): Boolean {
 		for(q in questionnaires) {
 			if(q.usesPostponedActions())
@@ -419,6 +418,10 @@ class Study internal constructor(
 			this.publicStatisticsNeeded = newStudy.publicStatisticsNeeded
 			this.sendMessagesAllowed = newStudy.sendMessagesAllowed
 			this.eventUploadSettingsString = newStudy.eventUploadSettingsString
+			this.enableRewardSystem = newStudy.enableRewardSystem
+			this.rewardVisibleAfterDays = newStudy.rewardVisibleAfterDays
+			this.rewardEmailContent = newStudy.rewardEmailContent
+			this.rewardInstructions = newStudy.rewardInstructions
 			this._jsonQuestionnaires = newStudy.questionnaires
 			if(this.group > newStudy.randomGroups) {
 				this.randomGroups = newStudy.randomGroups
@@ -465,6 +468,11 @@ class Study internal constructor(
 		values.putBoolean(KEY_LOAD_PUBLIC_STATISTICS, publicStatisticsNeeded)
 		values.putBoolean(KEY_SEND_MESSAGES_ALLOWED, sendMessagesAllowed)
 		values.putString(KEY_UPLOAD_SETTINGS, eventUploadSettingsString)
+		values.putBoolean(KEY_ENABLE_REWARD_SYSTEM, enableRewardSystem)
+		values.putInt(KEY_REWARD_VISIBLE_AFTER, rewardVisibleAfterDays)
+		values.putString(KEY_REWARD_EMAIL_CONTENT, rewardEmailContent)
+		values.putString(KEY_REWARD_INSTRUCTIONS, rewardInstructions)
+		values.putString(KEY_CACHED_REWARD_CODE, cachedRewardCode)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -539,7 +547,30 @@ class Study internal constructor(
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
 		}
 	}
-
+	
+	fun saveRewardCode(code: String) {
+		cachedRewardCode = code
+		if(exists) {
+			val db = NativeLink.sql
+			val values = db.getValueBox()
+			values.putString(KEY_CACHED_REWARD_CODE, cachedRewardCode)
+			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
+		}
+		
+	}
+	
+	fun getRewardCode(
+		onError: (msg: String) -> Unit,
+		onSuccess: (rewardCode: Web.Companion.RewardInfo) -> Unit
+	) {
+		if(cachedRewardCode.isNotEmpty()) {
+			onSuccess(Web.Companion.RewardInfo(cachedRewardCode))
+			return
+		}
+		
+		Web.loadRewardCode(this, onError, onSuccess)
+	}
+	
 	fun delete() {
 		val db = NativeLink.sql
 		for(q in loadQuestionnairesDB()) {
@@ -625,6 +656,17 @@ class Study internal constructor(
 		const val KEY_PERSONAL_CHARTS_JSON = "personal_charts_json"
 		const val KEY_SEND_MESSAGES_ALLOWED = "sendMessagesAllowed"
 		const val KEY_UPLOAD_SETTINGS = "uploadSettingsString"
+		const val KEY_ENABLE_REWARD_SYSTEM = "enableRewardSystem"
+		const val KEY_REWARD_VISIBLE_AFTER = "rewardVisibleAfterDays"
+		const val KEY_REWARD_EMAIL_CONTENT = "rewardEmailContent"
+		const val KEY_REWARD_INSTRUCTIONS = "rewardInstructions"
+		const val KEY_CACHED_REWARD_CODE = "cachedRewardCode"
+		
+		const val REWARD_SUCCESS = 0;
+		const val REWARD_ERROR_DOES_NOT_EXIST = 1;
+		const val REWARD_ERROR_NOT_ENABLED = 2;
+		const val REWARD_ERROR_UNFULFILLED_REWARD_CONDITIONS = 3;
+		const val REWARD_ERROR_ALREADY_GENERATED = 4;
 		
 		val COLUMNS = arrayOf(
 			KEY_ID,
@@ -647,7 +689,12 @@ class Study internal constructor(
 			KEY_LAST_MSG_TIMESTAMP,
 			KEY_LOAD_PUBLIC_STATISTICS,
 			KEY_SEND_MESSAGES_ALLOWED,
-			KEY_UPLOAD_SETTINGS
+			KEY_UPLOAD_SETTINGS,
+			KEY_ENABLE_REWARD_SYSTEM,
+			KEY_REWARD_VISIBLE_AFTER,
+			KEY_REWARD_EMAIL_CONTENT,
+			KEY_REWARD_INSTRUCTIONS,
+			KEY_CACHED_REWARD_CODE
 		)
 		
 		val defaultSettings = hashMapOf(

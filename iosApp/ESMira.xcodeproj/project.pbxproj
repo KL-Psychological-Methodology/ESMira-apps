@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557BA273AAA24004C7B11 /* Assets.xcassets */; };
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
+		6B13CF5A28F808580035BA01 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B13CF5928F808580035BA01 /* ShareSheet.swift */; };
 		6B4996CD2825414100D8B6F1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4996CC2825414100D8B6F1 /* AppDelegate.swift */; };
 		6B4996CF2825415300D8B6F1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4996CE2825415300D8B6F1 /* SceneDelegate.swift */; };
 		6B4996D12825BD6300D8B6F1 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6B4996D02825BD6300D8B6F1 /* Colors.xcassets */; };
@@ -26,6 +27,8 @@
 		6BA4BFAA283E63B800D3E8C7 /* StudyDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA4BFA9283E63B800D3E8C7 /* StudyDetailView.swift */; };
 		6BA4BFAC283E6B7100D3E8C7 /* StudyPermissionsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA4BFAB283E6B7100D3E8C7 /* StudyPermissionsView.swift */; };
 		6BA4BFAE283E6ECA00D3E8C7 /* StudyJoinedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BA4BFAD283E6ECA00D3E8C7 /* StudyJoinedView.swift */; };
+		6BB47F7728F6FFB900C0F561 /* RewardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BB47F7628F6FFB900C0F561 /* RewardView.swift */; };
+		6BB47F7928F7001700C0F561 /* ListRewardsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BB47F7828F7001700C0F561 /* ListRewardsView.swift */; };
 		6BCD31C5282529E800BD266B /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 6BCD31C4282529E800BD266B /* CodeScanner */; };
 		6BCD31C828252A3700BD266B /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 6BCD31C728252A3700BD266B /* URLImage */; };
 		6BCFED5D2825274A009167B0 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCFED5C2825274A009167B0 /* AppState.swift */; };
@@ -113,6 +116,7 @@
 /* Begin PBXFileReference section */
 		058557BA273AAA24004C7B11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		6B13CF5928F808580035BA01 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		6B4996CC2825414100D8B6F1 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6B4996CE2825415300D8B6F1 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		6B4996D02825BD6300D8B6F1 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
@@ -132,6 +136,8 @@
 		6BA4BFA9283E63B800D3E8C7 /* StudyDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyDetailView.swift; sourceTree = "<group>"; };
 		6BA4BFAB283E6B7100D3E8C7 /* StudyPermissionsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyPermissionsView.swift; sourceTree = "<group>"; };
 		6BA4BFAD283E6ECA00D3E8C7 /* StudyJoinedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyJoinedView.swift; sourceTree = "<group>"; };
+		6BB47F7628F6FFB900C0F561 /* RewardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RewardView.swift; sourceTree = "<group>"; };
+		6BB47F7828F7001700C0F561 /* ListRewardsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListRewardsView.swift; sourceTree = "<group>"; };
 		6BCFED5C2825274A009167B0 /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		6BCFED6028252761009167B0 /* OrientationLockedController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrientationLockedController.swift; sourceTree = "<group>"; };
 		6BCFED6228252778009167B0 /* Workarounds.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Workarounds.swift; sourceTree = "<group>"; };
@@ -254,6 +260,8 @@
 				6BCFED692825283A009167B0 /* QuestionnaireView.swift */,
 				6BCFED7A2825283A009167B0 /* NewMessageView.swift */,
 				6BCFED7C2825283A009167B0 /* MessagesView.swift */,
+				6BB47F7628F6FFB900C0F561 /* RewardView.swift */,
+				6BB47F7828F7001700C0F561 /* ListRewardsView.swift */,
 				6BCFED7D2825283A009167B0 /* MainView.swift */,
 				6BCFED7E2825283A009167B0 /* ListMessagesView.swift */,
 				6BCFED7F2825283A009167B0 /* SendErrorReportView.swift */,
@@ -296,6 +304,7 @@
 				6BCFEDAB2825284D009167B0 /* LoadingView.swift */,
 				6BCFEDAC2825284D009167B0 /* Toast.swift */,
 				6B99356028DB4E4D002F3180 /* QuestionnaireSavedSuccessfully.swift */,
+				6B13CF5928F808580035BA01 /* ShareSheet.swift */,
 			);
 			path = Elements;
 			sourceTree = "<group>";
@@ -562,9 +571,12 @@
 				6BCFEDF028252854009167B0 /* TextStruct.swift in Sources */,
 				6BCFEDB02825284D009167B0 /* NextNotificationsView.swift in Sources */,
 				6BCFEDE128252854009167B0 /* InputViewWrapper.swift in Sources */,
+				6BB47F7728F6FFB900C0F561 /* RewardView.swift in Sources */,
 				6BCFEDB12825284D009167B0 /* SwiftUIChart.swift in Sources */,
+				6B13CF5A28F808580035BA01 /* ShareSheet.swift in Sources */,
 				6BCFEDEB28252854009167B0 /* ListMultipleStruct.swift in Sources */,
 				6BCFED8B2825283A009167B0 /* InformedConsentPermission.swift in Sources */,
+				6BB47F7928F7001700C0F561 /* ListRewardsView.swift in Sources */,
 				6BCFEDE428252854009167B0 /* TextInputStruct.swift in Sources */,
 				6BCFED8A2825283A009167B0 /* NotificationsPermission.swift in Sources */,
 				6BA4BFA0283E583800D3E8C7 /* ServerQuestionView.swift in Sources */,

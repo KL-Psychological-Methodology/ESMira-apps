@@ -212,4 +212,17 @@
     <string name="notificationChannel_screen_tracking">Screen time service notification</string>
     <string name="notificationChannel_screen_tracking_desc">Some studies measure screen time which needs a background service.</string>
     <string name="just_finished">Just finished</string>
+    <string name="rewards">Rewards</string>
+    <plurals name="info_reward_is_not_active_yet">
+        <item quantity="one" formatted="true">Rewards for this study are not active yet. They will be available in one day.</item>
+        <item quantity="other" formatted="true">Rewards for this study are not active yet. They will be available in %1$d days.</item>
+    </plurals>
+    <string name="error_reward_conditions_not_met">You are not eligible for a reward yet.</string>
+    <string name="error_already_generated">A reward code was already generated on another device. Please contact the researcher about this issue.</string>
+    <string name="error_reward_questionnaires_not_finished">Some questionnaires were not filled out often enough:</string>
+    <string name="colon_reward_code_header">This is your reward code:</string>
+    <string name="reward_code_send_email">Send via email</string>
+    <string name="reward_code_share">Share via app</string>
+    <string name="reward_code_content">Hello,\nHere is my reward code: [[CODE]].\nMy information:</string>
+    <string name="reward_code_description">It is important to us that all data provided through ESMira remain completely anonymous. But in order to receive your reward, you will have to provide some personal information which should not be linked to your user id. For this reason we have the reward code which is not linked to your user-id or any data you have provided.</string>
 </resources>
