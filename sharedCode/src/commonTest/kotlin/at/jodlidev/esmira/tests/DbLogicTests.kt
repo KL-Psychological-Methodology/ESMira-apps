@@ -124,6 +124,16 @@ class DbLogicTests : BaseCommonTest() {
 	}
 	
 	@Test
+	fun hasStudiesWithRewards() {
+		assertFalse(DbLogic.hasStudiesWithRewards())
+		
+		val study = DbLogic.getStudy(getBaseStudyId())!!
+		study.enableRewardSystem = true
+		study.join()
+		assertTrue(DbLogic.hasStudiesWithRewards())
+	}
+	
+	@Test
 	fun getStudy() {
 		val study1 = createStudy()
 		study1.title = "study1"
@@ -223,6 +233,16 @@ class DbLogicTests : BaseCommonTest() {
 		study.sendMessagesAllowed = true
 		study.join()
 		assertEquals(1, DbLogic.getStudiesForMessages().size)
+	}
+	
+	@Test
+	fun getStudiesWithRewards() {
+		assertEquals(0, DbLogic.getStudiesWithRewards().size)
+		
+		val study = DbLogic.getStudy(getBaseStudyId())!!
+		study.enableRewardSystem = true
+		study.join()
+		assertEquals(1, DbLogic.getStudiesWithRewards().size)
 	}
 	
 	@Test

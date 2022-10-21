@@ -10,6 +10,8 @@ import android.text.method.LinkMovementMethod
 import android.text.style.*
 import android.util.Base64
 import android.widget.TextView
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.viewinterop.AndroidView
 import at.jodlidev.esmira.sharedCode.nativeAsync
 import at.jodlidev.esmira.sharedCode.onUIThread
 import net.nightwhistler.htmlspanner.HtmlSpanner
@@ -110,6 +112,16 @@ class HtmlHandler {
 		fun setHtml(html: String, el: TextView) {
 			el.text = fromHtml(html, el)
 			el.movementMethod = LinkMovementMethod.getInstance()
+		}
+		
+		@Composable
+		fun HtmlText(html: String) {
+			AndroidView(factory = { context ->
+				TextView(context).apply {
+					text = fromHtml(html, this)
+					movementMethod = LinkMovementMethod.getInstance()
+				}
+			})
 		}
 	}
 }

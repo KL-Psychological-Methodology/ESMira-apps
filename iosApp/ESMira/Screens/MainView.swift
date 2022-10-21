@@ -9,6 +9,7 @@ struct MainView: View {
 	enum Screens: Hashable {
 		case questionnaire
 		case statistics
+		case rewards
 		case messages
 		case settings
 	}
@@ -91,6 +92,17 @@ struct MainView: View {
 							self.barTitle = NSLocalizedString("messages", comment: "")
 						}
 						.tag(Screens.messages)
+				}
+				if(DbLogic().hasStudiesWithRewards()) {
+					ListRewardsView()
+						.tabItem {
+							Image(systemName: "rosette")
+							Text("rewards")
+						}
+						.onAppear {
+							self.barTitle = NSLocalizedString("rewards", comment: "")
+						}
+						.tag(Screens.rewards)
 				}
 				SettingsView()
 					.tabItem {

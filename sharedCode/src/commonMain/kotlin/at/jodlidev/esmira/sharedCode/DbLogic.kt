@@ -10,7 +10,6 @@ import kotlinx.serialization.json.Json
  * Created by JodliDev on 05.05.2020.
  */
 
-@Suppress("unused")
 object DbLogic {
 	const val DATABASE_NAME = "data"
 	const val DATABASE_VERSION = Updater.DATABASE_VERSION
@@ -62,6 +61,11 @@ object DbLogic {
 			${Study.KEY_UPLOAD_SETTINGS} TEXT DEFAULT '{}',
 			${Study.KEY_PUBLIC_CHARTS_JSON} TEXT,
 			${Study.KEY_PERSONAL_CHARTS_JSON} TEXT,
+			${Study.KEY_ENABLE_REWARD_SYSTEM} INTEGER DEFAULT 0,
+			${Study.KEY_REWARD_VISIBLE_AFTER} INTEGER,
+			${Study.KEY_REWARD_EMAIL_CONTENT} TEXT,
+			${Study.KEY_REWARD_INSTRUCTIONS} TEXT,
+			${Study.KEY_CACHED_REWARD_CODE} TEXT DEFAULT '',
 			${Study.KEY_INSTRUCTIONS} TEXT)""")
 			
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${Message.TABLE} (
@@ -131,10 +135,11 @@ object DbLogic {
 			${Questionnaire.KEY_COMPLETABLE_AT_SPECIFIC_TIME_START} INTEGER,
 			${Questionnaire.KEY_COMPLETABLE_AT_SPECIFIC_TIME_END} INTEGER,
 			${Questionnaire.KEY_LIMIT_TO_GROUP} INTEGER,
+			${Questionnaire.KEY_MIN_DATASETS_FOR_REWARD} INTEGER,
 			${Questionnaire.KEY_PAGES} TEXT,
 			${Questionnaire.KEY_SUMSCORES} TEXT,
-			${Questionnaire.KEY_PUBLISHEDANDROID} INTEGER DEFAULT 1,
-			${Questionnaire.KEY_PUBLISHEDIOS} INTEGER DEFAULT 1,
+			${Questionnaire.KEY_PUBLISHED_ANDROID} INTEGER DEFAULT 1,
+			${Questionnaire.KEY_PUBLISHED_IOS} INTEGER DEFAULT 1,
 			FOREIGN KEY(${Questionnaire.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}) ON DELETE CASCADE)""")
 		
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${ActionTrigger.TABLE} (
@@ -546,6 +551,22 @@ object DbLogic {
 		c.close()
 		return r
 	}
+	fun hasStudiesWithRewards(): Boolean {
+		val c = NativeLink.sql.select(
+			Study.TABLE,
+			Study.COLUMNS,
+			"(${Study.KEY_STATE} = ${Study.STATES.Joined.ordinal} AND ${Study.KEY_ENABLE_REWARD_SYSTEM} = 1)", null,
+			null,
+			null,
+			null,
+			"1"
+		)
+		var r = false
+		if(c.moveToFirst())
+			r = true
+		c.close()
+		return r
+	}
 	
 	fun getStudy(id: Long): Study? {
 		val c = NativeLink.sql.select(
@@ -638,6 +659,24 @@ object DbLogic {
 			Study.TABLE,
 			Study.COLUMNS,
 			"(${Study.KEY_STATE} = ${Study.STATES.Joined.ordinal} AND ${Study.KEY_SEND_MESSAGES_ALLOWED} = 1) OR ${Study.KEY_LAST_MSG_TIMESTAMP} IS NOT 0", null,
+			null,
+			null,
+			null,
+			null
+		)
+		val studies = ArrayList<Study>()
+		while(c.moveToNext()) {
+			studies.add(Study(c))
+		}
+		c.close()
+		return studies
+	}
+	
+	fun getStudiesWithRewards(): List<Study> {
+		val c = NativeLink.sql.select(
+			Study.TABLE,
+			Study.COLUMNS,
+			"(${Study.KEY_STATE} = ${Study.STATES.Joined.ordinal} AND ${Study.KEY_ENABLE_REWARD_SYSTEM} = 1)", null,
 			null,
 			null,
 			null,

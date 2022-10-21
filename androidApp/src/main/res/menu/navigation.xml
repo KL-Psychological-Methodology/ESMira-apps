@@ -22,6 +22,11 @@
 		android:title="@string/messages"/>
 	
 	<item
+		android:id="@+id/navigation_rewards"
+		android:icon="@drawable/ic_reward_black_24"
+		android:title="@string/rewards"/>
+	
+	<item
 		android:id="@+id/navigation_settings"
 		android:icon="@drawable/ic_settings_24dp"
 		android:title="@string/settings"/>

@@ -11,13 +11,13 @@ import kotlinx.serialization.json.*
  */
 internal object Updater {
 	const val EXPECTED_SERVER_VERSION: Int = 10
-	const val DATABASE_VERSION = 36
+	const val DATABASE_VERSION = 37
 	const val LIBRARY_VERSION = 19 //this is mainly used for iOS so we can check that changes in the library have been used in the C library
 	
 	fun updateSQL(db: SQLiteInterface, oldVersion: Int) {
 		if(oldVersion >= DATABASE_VERSION)
 			return
-		println("Updating from $oldVersion to ${DATABASE_VERSION}")
+		println("Updating from $oldVersion to $DATABASE_VERSION")
 		
 		if(oldVersion <= 6) {
 			db.execSQL("ALTER TABLE " + Study.TABLE + " ADD COLUMN " + Study.KEY_LOAD_PUBLIC_STATISTICS + " INTEGER;")
@@ -490,6 +490,14 @@ internal object Updater {
 			db.execSQL("ALTER TABLE dataSets ADD COLUMN study_group INTEGER DEFAULT 0;")
 			db.setTransactionSuccessful()
 			db.endTransaction()
+		}
+		if(oldVersion <= 36) {
+			db.execSQL("ALTER TABLE studies ADD COLUMN enableRewardSystem INTEGER DEFAULT 0;")
+			db.execSQL("ALTER TABLE studies ADD COLUMN rewardVisibleAfterDays INTEGER;")
+			db.execSQL("ALTER TABLE studies ADD COLUMN rewardEmailContent TEXT DEFAULT '';")
+			db.execSQL("ALTER TABLE studies ADD COLUMN rewardInstructions TEXT DEFAULT '';")
+			db.execSQL("ALTER TABLE studies ADD COLUMN cachedRewardCode TEXT DEFAULT '';")
+			db.execSQL("ALTER TABLE questionnaires ADD COLUMN minDataSetsForReward INTEGER;")
 		}
 	}
 	

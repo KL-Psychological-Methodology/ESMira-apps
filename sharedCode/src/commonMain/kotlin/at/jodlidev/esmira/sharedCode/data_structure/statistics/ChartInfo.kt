@@ -16,15 +16,15 @@ class ChartInfo (
 	var dataType: Int = DATA_TYPE_DAILY,
 	var valueType: Int = VALUE_TYPE_MEAN,
 	var displayPublicVariable: Boolean = false,
-	@Suppress("unused") var hideUntilCompletion: Boolean = false,
-	@Suppress("unused") var storageType: Int = ObservedVariable.STORAGE_TYPE_TIMED,
+	var hideUntilCompletion: Boolean = false,
+	var storageType: Int = ObservedVariable.STORAGE_TYPE_TIMED,
 	var inPercent: Boolean = false,
 	var publicVariables: List<AxisContainer> = ArrayList(),
 	var axisContainer: List<AxisContainer> = ArrayList(),
 	var title: String = "",
-	@Suppress("unused") var chartDescription: String = "",
-	@Suppress("unused") var xAxisLabel: String = "",
-	@Suppress("unused") var yAxisLabel: String = "",
+	var chartDescription: String = "",
+	var xAxisLabel: String = "",
+	var yAxisLabel: String = "",
 	var maxYValue: Int = 0,
 	var fitToShowLinearProgression: Int = 0,
 	var xAxisIsNumberRange: Boolean = false
@@ -51,7 +51,6 @@ class ChartInfo (
 	@Transient
 	lateinit var builder: ChartBuilder
 	
-	@Suppress("unused")
 	fun initBuilder(chartInfoCollection: ChartInfoCollection, chartChooser: ChartChooserInterface) {
 		builder = when(chartType) {
 			CHART_TYPE_LINE_FILLED -> chartChooser.getLineChartBuilder(true, chartInfoCollection, this)

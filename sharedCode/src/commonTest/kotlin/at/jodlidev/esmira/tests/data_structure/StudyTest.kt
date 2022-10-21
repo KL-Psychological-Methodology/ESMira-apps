@@ -3,6 +3,7 @@ package tests.data_structure
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.data_structure.*
 import BaseCommonTest
+import at.jodlidev.esmira.sharedCode.NativeLink
 import kotlin.test.*
 
 /**
@@ -266,6 +267,20 @@ class StudyTest : BaseCommonTest() {
 	}
 	
 	@Test
+	fun daysUntilRewardsAreActive() {
+		val oneDay = 86400000
+		val study = createStudy("""{"id":$studyWebId, "rewardVisibleAfterDays": 3}""")
+		study.joined = NativeLink.getNowMillis()
+		assertEquals(3, study.daysUntilRewardsAreActive())
+		study.joined -= oneDay * 2
+		assertEquals(1, study.daysUntilRewardsAreActive())
+		study.joined -= oneDay
+		assertEquals(0, study.daysUntilRewardsAreActive())
+		study.joined -= oneDay
+		assertEquals(0, study.daysUntilRewardsAreActive())
+	}
+	
+	@Test
 	fun usesPostponedActions() {
 		//study.usesPostponedActions is very similar to hasDelayedEvents
 		
@@ -459,6 +474,15 @@ class StudyTest : BaseCommonTest() {
 		study.saveMsgTimestamp(timestamp)
 		
 		assertSqlWasUpdated(Study.TABLE, Study.KEY_LAST_MSG_TIMESTAMP, timestamp)
+	}
+	
+	@Test
+	fun saveRewardCode() {
+		val study = createStudy()
+		study.exists = true
+		study.saveRewardCode("code123")
+		
+		assertSqlWasUpdated(Study.TABLE, Study.KEY_CACHED_REWARD_CODE, "code123")
 	}
 	
 	@Test

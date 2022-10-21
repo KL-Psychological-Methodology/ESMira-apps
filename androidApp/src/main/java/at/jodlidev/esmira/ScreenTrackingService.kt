@@ -15,7 +15,7 @@ import at.jodlidev.esmira.sharedCode.data_structure.ErrorBox
  * Created by JodliDev on 14.06.2022.
  */
 class ScreenTrackingService : Service() {
-	private lateinit var receiver: BroadcastReceiver
+	private var receiver: BroadcastReceiver? = null
 	override fun onBind(intent: Intent?): IBinder? {
 		return null
 	}
@@ -35,8 +35,10 @@ class ScreenTrackingService : Service() {
 	}
 	
 	override fun onDestroy() {
-		if(this::receiver.isInitialized)
+		if(receiver != null) {
 			unregisterReceiver(receiver)
+			receiver = null
+		}
 	}
 	companion object {
 		//this is a static variable. So it wont reset as long as the service stays alive. The moment ESMira gets killed, it will initialize to false again.
