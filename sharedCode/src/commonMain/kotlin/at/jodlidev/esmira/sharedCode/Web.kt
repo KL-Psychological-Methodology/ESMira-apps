@@ -363,7 +363,7 @@ class Web {
 			val code: String = "",
 			val errorMessage: String = "",
 			val errorCode: Int = 0,
-			val fulFilledQuestionnaires: Map<Long, Boolean> = HashMap()
+			val fulfilledQuestionnaires: Map<Long, Boolean> = HashMap()
 		)
 		
 		
