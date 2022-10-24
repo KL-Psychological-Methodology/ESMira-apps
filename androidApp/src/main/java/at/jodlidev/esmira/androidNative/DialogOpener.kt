@@ -2,6 +2,7 @@ package at.jodlidev.esmira.androidNative
 
 import android.content.Context
 import at.jodlidev.esmira.*
+import at.jodlidev.esmira.activities.SimpleDialogActivity
 import at.jodlidev.esmira.activities.ErrorReportDialogActivity
 import at.jodlidev.esmira.sharedCode.DialogOpenerInterface
 import java.lang.ref.WeakReference
@@ -21,7 +22,7 @@ object DialogOpener : DialogOpenerInterface {
 	}
 	override fun updateNeeded() {
 		context.get()?.let {
-			Activity_dialog.updateMsg(it)
+			SimpleDialogActivity.updateMsg(it)
 		}
 	}
 	override fun notificationsBroken() {
@@ -31,7 +32,7 @@ object DialogOpener : DialogOpenerInterface {
 	}
 	override fun dialog(title: String, msg: String) {
 		context.get()?.let {
-			Activity_dialog.start(it, title, msg)
+			SimpleDialogActivity.start(it, title, msg)
 		}
 	}
 }

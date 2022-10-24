@@ -73,7 +73,7 @@
             android:excludeFromRecents="true">
         </activity>
         <activity
-            android:name="at.jodlidev.esmira.Activity_dialog"
+            android:name="at.jodlidev.esmira.activities.SimpleDialogActivity"
             android:theme="@style/AppTheme.ActivityDialog"
             android:label="@string/app_name"
             android:excludeFromRecents="true">
