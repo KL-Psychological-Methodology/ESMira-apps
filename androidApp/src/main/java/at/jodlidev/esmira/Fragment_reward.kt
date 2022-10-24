@@ -5,12 +5,8 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.method.LinkMovementMethod
 import android.view.*
-import android.widget.TextView
 import android.widget.Toast
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -23,17 +19,13 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.Study
@@ -107,7 +99,8 @@ class Fragment_reward : Base_fragment() {
 						rewardCode = rewardInfo.code
 					Study.REWARD_ERROR_UNFULFILLED_REWARD_CONDITIONS -> {
 						error = getString(R.string.error_reward_conditions_not_met)
-						fulfilledQuestionnaires = rewardInfo.fulFilledQuestionnaires
+						println(rewardInfo.fulfilledQuestionnaires)
+						fulfilledQuestionnaires = rewardInfo.fulfilledQuestionnaires
 					}
 					Study.REWARD_ERROR_ALREADY_GENERATED ->
 						error = getString(R.string.error_already_generated)
@@ -131,7 +124,7 @@ class Fragment_reward : Base_fragment() {
 		) {
 			Text(stringResource(R.string.colon_reward_code_header))
 			Spacer(modifier = Modifier.size(10.dp))
-			UnimportantButton(onClick = {
+			TextButton(onClick = {
 				context?.let {
 					MaterialAlertDialogBuilder(it, R.style.AppTheme_ActivityDialog)
 						.setMessage(R.string.reward_code_description)
@@ -147,11 +140,10 @@ class Fragment_reward : Base_fragment() {
 		
 		Column(
 			modifier = Modifier
-				.fillMaxWidth()
-				.verticalScroll(rememberScrollState()),
+				.fillMaxWidth(),
 			horizontalAlignment = Alignment.CenterHorizontally
 		) {
-			UnimportantButton(onClick = {
+			TextButton(onClick = {
 				val context = requireContext()
 				val clipBoard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
 				val clipData = ClipData.newPlainText("label", rewardCode)
@@ -224,7 +216,9 @@ class Fragment_reward : Base_fragment() {
 		}
 		if(study.rewardInstructions.isNotEmpty()) {
 			Spacer(modifier = Modifier.size(20.dp))
-			HtmlHandler.HtmlText(study.rewardInstructions)
+			Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+				HtmlHandler.HtmlText(study.rewardInstructions, modifier = Modifier.fillMaxWidth())
+			}
 		}
 	}
 	
@@ -233,7 +227,7 @@ class Fragment_reward : Base_fragment() {
 		Column(
 			modifier = Modifier
 				.padding(all = 10.dp)
-				.fillMaxSize(),
+				.fillMaxWidth()
 		) {
 			val untilActive = study.daysUntilRewardsAreActive()
 			if(!study.enableRewardSystem || untilActive != 0) {
