@@ -16,6 +16,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import at.jodlidev.esmira.activities.ErrorReportDialogActivity
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.SQLite
@@ -139,7 +140,7 @@ class Fragment_settings : PreferenceFragmentCompat(), Preference.OnPreferenceCli
 	override fun onPreferenceClick(preference: Preference): Boolean {
 		when(preference.key) {
 			KEY_SEND_ERRORS ->
-                Activity_errorReport.start(requireActivity(), true)
+                ErrorReportDialogActivity.start(requireActivity(), true)
 			KEY_NOTIFICATIONS_BROKEN ->
                 Activity_notificationsBroken.start(requireActivity(), true)
 			KEY_SEND_SYNC_NOW ->

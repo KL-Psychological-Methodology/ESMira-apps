@@ -11,6 +11,7 @@ import android.text.style.*
 import android.util.Base64
 import android.widget.TextView
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
 import at.jodlidev.esmira.sharedCode.nativeAsync
 import at.jodlidev.esmira.sharedCode.onUIThread
@@ -115,8 +116,8 @@ class HtmlHandler {
 		}
 		
 		@Composable
-		fun HtmlText(html: String) {
-			AndroidView(factory = { context ->
+		fun HtmlText(html: String, modifier: Modifier = Modifier) {
+			AndroidView(modifier = modifier, factory = { context ->
 				TextView(context).apply {
 					text = fromHtml(html, this)
 					movementMethod = LinkMovementMethod.getInstance()

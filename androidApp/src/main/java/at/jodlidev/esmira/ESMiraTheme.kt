@@ -63,6 +63,13 @@ import androidx.navigation.compose.rememberNavController
 val colorGreen = Color(0xFF009600)
 val colorRed = Color(0xFFC80000)
 
+val colorLineBackground1 = Color(0x34000000)
+val colorLineBackground2 = Color(0x34FFFFFF)
+
+val colorLog = Color(0x34FFFFFF)
+val colorWarn = Color(0xFFFFBB00)
+val colorError = Color(0xFFFF0000)
+
 // This theme is just meant to look close to the current xml design.
 // When we migrated everything over to Compose, we will migrate to Material 3
 private val LightColorPalette = lightColors(
@@ -176,21 +183,6 @@ fun DefaultButton(
 		content = content
 	)
 }
-@Composable
-fun UnimportantButton(
-	onClick: () -> Unit,
-	modifier: Modifier = Modifier,
-	content: @Composable RowScope.() -> Unit
-) {
-	TextButton(
-		colors = ButtonDefaults.textButtonColors(
-			contentColor = MaterialTheme.colors.secondary
-		),
-		onClick = onClick,
-		modifier = modifier,
-		content = content
-	)
-}
 
 
 @Preview(name = "Light Mode")
@@ -208,11 +200,6 @@ fun PreviewButtons() {
 				Icon(Icons.Default.Home, "home")
 				Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
 				Text("DefaultButton")
-			}
-			UnimportantButton(onClick = {}) {
-				Icon(Icons.Default.Home, "home")
-				Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-				Text("UnimportantButton")
 			}
 			Button(onClick = {}) {
 				Icon(Icons.Default.Home, "home")

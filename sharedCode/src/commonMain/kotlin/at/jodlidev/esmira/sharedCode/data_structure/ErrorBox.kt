@@ -22,7 +22,7 @@ class ErrorBox {
 		msg = c.getString(4)
 	}
 	
-	private constructor(title: String, severity: Int, msg: String) {
+	constructor(title: String, severity: Int, msg: String) { //public for previews
 		timestamp = NativeLink.getNowMillis()
 		this.severity = severity
 		this.title = if(title.length > MAX_TITLE_SIZE) title.substring(0, MAX_TITLE_SIZE) else title

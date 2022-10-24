@@ -79,7 +79,7 @@
             android:excludeFromRecents="true">
         </activity>
         <activity
-            android:name="at.jodlidev.esmira.Activity_errorReport"
+            android:name="at.jodlidev.esmira.activities.ErrorReportDialogActivity"
             android:theme="@style/AppTheme.WideDialog"
             android:label="@string/send_error_report"
             android:excludeFromRecents="true">

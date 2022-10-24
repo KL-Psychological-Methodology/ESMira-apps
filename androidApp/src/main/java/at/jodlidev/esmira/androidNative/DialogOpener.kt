@@ -2,6 +2,7 @@ package at.jodlidev.esmira.androidNative
 
 import android.content.Context
 import at.jodlidev.esmira.*
+import at.jodlidev.esmira.activities.ErrorReportDialogActivity
 import at.jodlidev.esmira.sharedCode.DialogOpenerInterface
 import java.lang.ref.WeakReference
 
@@ -15,7 +16,7 @@ object DialogOpener : DialogOpenerInterface {
 	}
 	override fun errorReport() {
 		context.get()?.let {
-			Activity_errorReport.start(it)
+			ErrorReportDialogActivity.start(it)
 		}
 	}
 	override fun updateNeeded() {
