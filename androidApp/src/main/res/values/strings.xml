@@ -209,7 +209,7 @@
     <string name="take_picture">Take picture</string>
     <string name="error_no_cameraApp">Could not find a camera app!</string>
     <string name="info_screen_tracking_notification_content">Measuring screen time…</string>
-    <string name="notificationChannel_screen_tracking">Screen time service notification</string>
+    <string name="notificationChannel_screen_tracking">Screen time service notification.</string>
     <string name="notificationChannel_screen_tracking_desc">Some studies measure screen time which needs a background service.</string>
     <string name="just_finished">Just finished</string>
     <string name="sent_to_whom">Sent to whom?</string>
