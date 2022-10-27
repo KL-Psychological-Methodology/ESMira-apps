@@ -3,7 +3,9 @@
     <string name="app_name" translatable="false">ESMira</string>
     <string name="add">Add</string>
     <string name="add_a_study">Join a study</string>
-    <string name="additional_notification_settings_general_android">In the following screen, please make sure that ESMira is allowed to run in the background and is able to start when rebooting the phone. Unfortunately the names of the settings (and which settings actually exist) vary greatly between phone models and we do not have any screenshots for this phone model to assist you further. So please try to guess the appropriate settings. If you want to help us out and send us some screenshots, please contact the App developer (esmira@kl.ac.at).\n\nAfter you are done, press the back-key on your phone to return to this screen.</string>
+    <string name="additional_notification_settings_general_android">In the following screen, please make sure that ESMira is allowed to run in the background and is able to start when rebooting the phone. Unfortunately the names of the settings (and which settings actually exist) vary greatly between phone models and we do not have any screenshots for this phone model to assist you further. So please try to guess the appropriate settings. If you want to help us out and send us some screenshots, please contact the App developer (esmira@kl.ac.at).
+\n
+\nAfter you are done, press the back-key on your phone to return to this screen.</string>
     <string name="additional_notification_settings_esmi">In the upcoming screen find ESMira in the list of apps and make sure it has the permission to Autostart.</string>
     <string name="additional_notification_settings_huaweiV2_1">In the following screen, please find ESMira in the list of apps and make sure it is \"Manually managed\".</string>
     <string name="additional_notification_settings_huaweiV2_2">In the upcoming screen make sure ESMira has the permission for \"Auto-Launch\" and \"Run in background\".</string>
@@ -18,8 +20,8 @@
     <string name="additional_notification_settings_zte_blade_l110_3">Now search the list for \"ESMira\", and make sure that the checkbox is enabled.</string>
     <string name="additional_notification_settings_finish">After you are done, press the back-key on your phone to return to this screen.</string>
     <string name="android_version">Version: %1$s, %2$s</string>
-    <string name="ask_model_settings_correct">Were you able to adjust the settings as instructed?</string>
-    <string name="ask_notification_posted">Did you receive a notification?</string>
+    <string name="ask_model_settings_correct">Were you able to adjust the settings as instructed\?</string>
+    <string name="ask_notification_posted">Did you receive a notification\?</string>
     <string name="back">Back</string>
     <string name="backup">Backup</string>
     <string name="cancel">Cancel</string>
@@ -43,10 +45,10 @@
     <string name="delete_">Delete</string>
     <string name="desc_update_schedules">Change the schedules of your studies</string>
     <string name="desc_update_studies">Update the settings of your studies</string>
-    <string name="dialogTitle_delete_statistics">Delete statistics?</string>
-    <string name="dialogDesc_delete_statistics">Do you want to delete all statistics for this study?</string>
-    <string name="dialogTitle_leave_study">Leave study?</string>
-    <string name="dialogDesc_leave_study">Do you want to leave this study? You will have to reenter its credentials to join again.</string>
+    <string name="dialogTitle_delete_statistics">Delete statistics\?</string>
+    <string name="dialogDesc_delete_statistics">Do you want to delete all statistics for this study\?</string>
+    <string name="dialogTitle_leave_study">Leave study\?</string>
+    <string name="dialogDesc_leave_study">Do you want to leave this study\? You will have to reenter its credentials to join again.</string>
     <string name="android_email_study_subject">Regarding your study: %1$s</string>
     <string name="enter_manually">Enter manually</string>
     <string name="enable">Enable</string>
@@ -62,11 +64,11 @@
     <string name="error_notifications_broken_android_desc">Unfortunately some smartphone models have hidden settings which are necessary to allow background notifications.</string>
     <string name="error_notifications_broken_android_header">ESMira is not able not send notifications!</string>
     <string name="error_notifications_broken_android_dontkillmyapp">In case this dialog is not helpful to you, you can also visit <a href="https://dontkillmyapp.com/">dontkillmyapp.com</a> for more information.</string>
-    <string name="error_notifications_broken_android_footer">Do you need further assistance or you want to help us to incorporate more information (Screenshots, descriptions) on your device model into ESMira? Write us an email to: <a href="mailto:esmira@kl.ac.at">esmira@kl.ac.at</a>.</string>
+    <string name="error_notifications_broken_android_footer">Do you need further assistance or you want to help us to incorporate more information (Screenshots, descriptions) on your device model into ESMira\? Write us an email to: <a href="mailto:esmira@kl.ac.at">esmira@kl.ac.at</a>.</string>
     <string name="error_notifications_broken_android_model_settings">The following device settings were found for your phone:</string>
     <string name="error_schedule_time_window_too_small">Please choose a bigger time window!</string>
     <string name="error_settings_not_opened">Could not open settings!</string>
-    <string name="hint_error_comment">What problem did you encounter?</string>
+    <string name="hint_error_comment">What problem did you encounter\?</string>
     <string name="hint_message">Message</string>
     <string name="hint_server">example.com</string>
     <string name="https">https://</string>
@@ -83,8 +85,8 @@
     <string name="info_loading">Loading…</string>
     <string name="info_message_sent">Message has been sent</string>
     <plurals name="android_info_missed_notifications" comment="Needs to be short">
-        <item quantity="one" formatted="true">1 missed notification.</item>
-        <item quantity="other" formatted="true">%1$d missed notifications.</item>
+        <item quantity="one">1 missed notification.</item>
+        <item quantity="other">%1$d missed notifications.</item>
     </plurals>
     <string name="info_model_settings">To ensure that ESMira can issue notifications from the background, some special settings are necessary for your phone model. Tap \"Open device specific setup\" below to open your phone settings.</string>
     <string name="info_new_message">You got a new message!</string>
@@ -98,7 +100,10 @@
     <string name="info_no_studies_joined">You have not joined any study.</string>
     <string name="info_no_questionnaires">No questionnaires available at the moment…</string>
     <string name="info_nothing_to_sync">Nothing to sync</string>
-    <string name="info_notification_additional_settings">Please make sure that \n[1] your phone is not muted, \n[2] notifications for ESMira are enabled and \n[3] \"Do not disturb\"-mode (if available on your phone) is disabled:</string>
+    <string name="info_notification_additional_settings">Please make sure that
+\n[1] your phone is not muted,
+\n[2] notifications for ESMira are enabled and
+\n[3] \"Do not disturb\"-mode (if available on your phone) is disabled:</string>
     <string name="info_notification_setup_failed">It is very likely that your phone will not be able to receive notifications for this study. Your phone may have special settings that we are not aware of. Please contact the researcher of the study or the app developer (and mention the phone model you are using) to find a solution for your problem.</string>
     <string name="info_number_to_sync">You have %1$d unsynced datasets</string>
     <string name="info_questionnaire_success">Your entries were saved successfully!</string>
@@ -178,8 +183,8 @@
     <string name="upload_screenshots">Upload screenshots</string>
     <string name="android_user_id">User-id: %1$s</string>
     <string name="visible_when_study_finished">Only visible when the study has ended.</string>
-    <string name="welcome_accessKey_question">Do you have an access key?</string>
-    <string name="welcome_exit_questionTitle">Do you really want to cancel?</string>
+    <string name="welcome_accessKey_question">Do you have an access key\?</string>
+    <string name="welcome_exit_questionTitle">Do you really want to cancel\?</string>
     <string name="welcome_exit_questionDesc">In order to use ESMira, you have to join a study first.</string>
     <string name="welcome_first_instructions">Welcome to ESMira, the anonymous Questionnaire Assistant.
 \n
@@ -187,11 +192,12 @@
 \nThis dialog will assist you.</string>
     <string name="welcome_hello">Hello!</string>
     <string name="welcome_join_public_study">No, join a public study</string>
-    <string name="welcome_qr_question">Do you have a QR code for a study?</string>
-    <string name="welcome_qr_instructions">Please place the QR code about 30 cm away in front of your smartphone camera so that it is visible on the screen. \nESMira will scan the code automatically as soon as the camera has focused.</string>
-    <string name="welcome_server_question">On which server is the study located?</string>
-    <string name="what_for">What for?</string>
-    <string name="what_is_sent">What is sent?</string>
+    <string name="welcome_qr_question">Do you have a QR code for a study\?</string>
+    <string name="welcome_qr_instructions">Please place the QR code about 30 cm away in front of your smartphone camera so that it is visible on the screen.
+\nESMira will scan the code automatically as soon as the camera has focused.</string>
+    <string name="welcome_server_question">On which server is the study located\?</string>
+    <string name="what_for">What for\?</string>
+    <string name="what_is_sent">What is sent\?</string>
     <string name="word_and">and</string>
     <string name="yes">Yes</string>
     <string name="app_usage">App usage</string>
@@ -212,12 +218,12 @@
     <string name="notificationChannel_screen_tracking">Screen time service notification.</string>
     <string name="notificationChannel_screen_tracking_desc">Some studies measure screen time which needs a background service.</string>
     <string name="just_finished">Just finished</string>
-    <string name="sent_to_whom">Sent to whom?</string>
+    <string name="sent_to_whom">Sent to whom\?</string>
     <string name="data_will_be_sent_to_app_developer">The error report will be sent to the app developer (%1$s). We want to stress that the error report does not contain any personal or questionnaire data!</string>
     <string name="rewards">Rewards</string>
     <plurals name="info_reward_is_not_active_yet">
-        <item quantity="one" formatted="true">Rewards for this study are not active yet. They will be available in one day.</item>
-        <item quantity="other" formatted="true">Rewards for this study are not active yet. They will be available in %1$d days.</item>
+        <item quantity="one">Rewards for this study are not active yet. They will be available in one day.</item>
+        <item quantity="other">Rewards for this study are not active yet. They will be available in %1$d days.</item>
     </plurals>
     <string name="error_reward_conditions_not_met">You are not eligible for a reward yet.</string>
     <string name="error_already_generated">A reward code was already generated on another device. Please contact the researcher about this issue.</string>
@@ -225,6 +231,8 @@
     <string name="colon_reward_code_header">This is your reward code:</string>
     <string name="reward_code_send_email">Send via email</string>
     <string name="reward_code_share">Share via app</string>
-    <string name="reward_code_content">Hello,\nHere is my reward code: [[CODE]].\nMy information:</string>
+    <string name="reward_code_content">Hello,
+\nHere is my reward code: [[CODE]].
+\nMy information:</string>
     <string name="reward_code_description">It is important to us that all data provided through ESMira remain completely anonymous. But in order to receive your reward, you will have to provide some personal information which should not be linked to your user id. For this reason we have the reward code which is not linked to your user-id or any data you have provided.</string>
 </resources>
