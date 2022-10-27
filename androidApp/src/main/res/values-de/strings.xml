@@ -69,7 +69,7 @@
     <string name="error_settings_not_opened">Konnte Einstellungen nicht öffnen!</string>
     <string name="hint_server">example.com</string>
     <string name="hint_message">Nachricht</string>
-    <string name="hint_error_comment">Welches Problem ist aufgetreten?</string>
+    <string name="hint_error_comment">Welches Problem ist aufgetreten\?</string>
     <string name="https">https://</string>
     <string name="i_agree">Ich stimme zu</string>
     <string name="ignore">Ignorieren</string>
