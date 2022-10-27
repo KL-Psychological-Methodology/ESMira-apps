@@ -5,17 +5,19 @@
 	<key>info_reward_is_not_active_yet</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string></string>
+		<string>Belohnungen für diese Studie sind noch nicht verfügbar.</string>
 		<key>days</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>1$d</string>
-			<key>other</key>
-			<string>Belohnungen für diese Studie sind erst in %1$d Tagen aktiv.</string>
+			<key>zero</key>
+			<string>Belohnungen für diese Studie sind noch nicht verfügbar.</string>
 			<key>one</key>
 			<string>Belohnungen für diese Studie sind erst in einem Tag aktiv.</string>
+			<key>other</key>
+			<string>Belohnungen für diese Studie sind erst in %1$d Tagen aktiv.</string>
 		</dict>
 	</dict>
 	<key>ios_info_missed_notifications</key>
