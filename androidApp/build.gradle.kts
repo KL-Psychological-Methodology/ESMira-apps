@@ -14,13 +14,13 @@ repositories {
 }
 
 android {
-    compileSdk = 31
+    compileSdk = 32
     defaultConfig {
         applicationId = "at.jodlidev.esmira"
         minSdk = 21
-        targetSdk = 31
-        versionCode = 122
-        versionName = "2.6.1.1"
+        targetSdk = 32
+        versionCode = 125
+        versionName = "2.7.2"
         multiDexEnabled = true //project became too big. See: https://stackoverflow.com/a/59308589
     
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -57,6 +57,7 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:$composeVersion") // Integration with observables
     implementation("androidx.compose.foundation:foundation-layout:$composeVersion")
     implementation("androidx.navigation:navigation-compose:2.5.2") // Navigation
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1") //ConstraintLayout (different versioning)
     
     implementation("androidx.multidex:multidex:2.0.1") //project became too big. Needed for SdK<21 See: https://stackoverflow.com/a/59308589)
     
