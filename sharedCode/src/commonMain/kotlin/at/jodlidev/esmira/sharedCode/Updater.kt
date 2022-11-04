@@ -10,7 +10,7 @@ import kotlinx.serialization.json.*
  * Created by JodliDev on 08.09.2020.
  */
 internal object Updater {
-	const val EXPECTED_SERVER_VERSION: Int = 10
+	const val EXPECTED_SERVER_VERSION: Int = 11
 	const val DATABASE_VERSION = 37
 	const val LIBRARY_VERSION = 19 //this is mainly used for iOS so we can check that changes in the library have been used in the C library
 	
