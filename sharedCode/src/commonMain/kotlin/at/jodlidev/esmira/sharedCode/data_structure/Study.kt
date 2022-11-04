@@ -603,12 +603,15 @@ class Study internal constructor(
 	}
 
 	internal fun execLeave() {
-		//Note: we are not cleaning StudyToken when there are unsynced datasets.
-		//That means server_tokens can accumulate over time
+		// TODO: better system:
+		// we should never delete the study. And instead there should be a menu called "past studies" where all information can be accessed
+		
+		// Note: we are not cleaning StudyToken when there are unsynced datasets.
+		// That means server_tokens can accumulate over time
 		if(!DbLogic.hasUnsyncedDataSetsAfterQuit(id))
 			NativeLink.sql.delete(StudyToken.TABLE, "${StudyToken.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 
-		if(observedVariables.isEmpty()) {
+		if(observedVariables.isEmpty() && cachedRewardCode.isEmpty()) {
 			delete()
 		}
 		else {

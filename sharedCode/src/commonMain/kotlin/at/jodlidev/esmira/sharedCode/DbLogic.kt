@@ -555,7 +555,7 @@ object DbLogic {
 		val c = NativeLink.sql.select(
 			Study.TABLE,
 			Study.COLUMNS,
-			"(${Study.KEY_STATE} = ${Study.STATES.Joined.ordinal} AND ${Study.KEY_ENABLE_REWARD_SYSTEM} = 1)", null,
+			"(${Study.KEY_ENABLE_REWARD_SYSTEM} = 1 AND (${Study.KEY_STATE} = ${Study.STATES.Joined.ordinal} OR ${Study.KEY_CACHED_REWARD_CODE} IS NOT NULL))", null,
 			null,
 			null,
 			null,
@@ -676,7 +676,7 @@ object DbLogic {
 		val c = NativeLink.sql.select(
 			Study.TABLE,
 			Study.COLUMNS,
-			"(${Study.KEY_STATE} = ${Study.STATES.Joined.ordinal} AND ${Study.KEY_ENABLE_REWARD_SYSTEM} = 1)", null,
+			"${Study.KEY_ENABLE_REWARD_SYSTEM} = 1 AND (${Study.KEY_STATE} = ${Study.STATES.Joined.ordinal} OR ${Study.KEY_CACHED_REWARD_CODE} IS NOT NULL)", null,
 			null,
 			null,
 			null,
