@@ -164,7 +164,9 @@ class Fragment_reward : Base_fragment() {
 			) {
 				if(study.contactEmail.isNotEmpty()) {
 					DefaultButton(
-						modifier = Modifier.weight(0.45F),
+						modifier = Modifier
+							.weight(0.45F)
+							.height(80.dp),
 						onClick = {
 							val context = requireContext()
 							val intent = Intent(Intent.ACTION_SEND)
@@ -172,7 +174,7 @@ class Fragment_reward : Base_fragment() {
 							intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(study.contactEmail))
 							intent.putExtra(Intent.EXTRA_SUBJECT, context.getString(R.string.android_email_study_subject, study.title))
 							intent.putExtra(Intent.EXTRA_TEXT, emailContent.replace("[[CODE]]", rewardCode))
-							intent.type = "plain/text"
+							intent.type = "text/plain"
 							try {
 								context.startActivity(intent)
 							} catch(e: Exception) {
@@ -184,7 +186,7 @@ class Fragment_reward : Base_fragment() {
 							horizontalAlignment = Alignment.CenterHorizontally
 						) {
 							Icon(Icons.Default.Email, "email")
-							Text(stringResource(R.string.reward_code_send_email))
+							Text(stringResource(R.string.reward_code_send_email), textAlign = TextAlign.Center)
 						}
 						
 					}
@@ -192,12 +194,14 @@ class Fragment_reward : Base_fragment() {
 					Spacer(modifier = Modifier.weight(0.1F))
 				}
 				DefaultButton(
-					modifier = Modifier.weight(0.45F),
+					modifier = Modifier
+						.weight(0.45F)
+						.height(80.dp),
 					onClick = {
 						val context = requireContext()
 						val intent = Intent(Intent.ACTION_SEND)
 						intent.putExtra(Intent.EXTRA_TEXT, rewardCode)
-						intent.type = "plain/text"
+						intent.type = "text/plain"
 						try {
 							context.startActivity(intent)
 						} catch(e: Exception) {
@@ -209,7 +213,7 @@ class Fragment_reward : Base_fragment() {
 						horizontalAlignment = Alignment.CenterHorizontally
 					) {
 						Icon(Icons.Default.Share, "share")
-						Text(stringResource(R.string.reward_code_share))
+						Text(stringResource(R.string.reward_code_share), textAlign = TextAlign.Center)
 					}
 				}
 			}
