@@ -2,4 +2,19 @@
 <resources>
     <string name="add">Додати</string>
     <string name="back">Назад</string>
+    <string name="add_a_study">Приєднайтеся до дослідження</string>
+    <string name="yes">Так</string>
+    <string name="i_agree">Я згоден(-на)</string>
+    <string name="no">Ні</string>
+    <string name="info_required">* необхідно ввести дані</string>
+    <string name="informed_consent">Інформована згода</string>
+    <string name="messages">Повідомлення</string>
+    <string name="questionnaires">Опитування</string>
+    <string name="reload">Перевантажити</string>
+    <string name="save">Зберегти</string>
+    <string name="statistics">Статистика</string>
+    <string name="today">Сьогодні</string>
+    <string name="understood">зрозуміло</string>
+    <string name="please_select">Будь ласка оберіть</string>
+    <string name="send">Надіслати</string>
 </resources>
