@@ -97,10 +97,10 @@
     <string name="info_loading">Завантаження…</string>
     <string name="info_message_sent">Повідомлення надіслано</string>
     <plurals name="android_info_missed_notifications" comment="Needs to be short">
-        <item quantity="one">1 пропущене повідомлення</item>
-        <item quantity="few">%1$d пропущених повідомлень</item>
-        <item quantity="many">%1$d пропущених повідомлень</item>
-        <item quantity="other">%1$d пропущених повідомлень</item>
+        <item quantity="one">1 пропущене повідомлення.</item>
+        <item quantity="few">%1$d пропущених повідомлень.</item>
+        <item quantity="many">%1$d пропущених повідомлень.</item>
+        <item quantity="other">%1$d пропущених повідомлень.</item>
     </plurals>
     <string name="info_model_settings">Щоб переконатися, що ESMira може видавати сповіщення у фоновому режимі, необхідні деякі спеціальні налаштування для вашої моделі телефону. Натисніть «Відкрити налаштування пристрою» нижче, щоб відкрити налаштування телефону.</string>
     <string name="info_new_message">Ви отримали нове повідомлення!</string>
