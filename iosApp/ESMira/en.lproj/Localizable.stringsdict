@@ -17,7 +17,7 @@
 			<key>one</key>
 			<string>Rewards for this study are not active yet. They will be available in one day.</string>
 			<key>other</key>
-			<string>Rewards for this study are not active yet. They will be available in %1$d days</string>
+			<string>Rewards for this study are not active yet. They will be available in %1$d days.</string>
 		</dict>
 	</dict>
 	<key>ios_info_missed_notifications</key>
