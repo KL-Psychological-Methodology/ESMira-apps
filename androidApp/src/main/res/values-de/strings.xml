@@ -212,7 +212,7 @@
     <string name="colon_usageTime">Nutzungszeit:</string>
     <string name="colon_usageCount">Nutzungsanzahl:</string>
     <string name="take_picture">Foto aufnehmen</string>
-    <string name="error_no_cameraApp">Es konnte keine Kamere-App gefunden werden!</string>
+    <string name="error_no_cameraApp">Es konnte keine Kamera-App gefunden werden!</string>
     <string name="info_screen_tracking_notification_content">Messe Bildschirm-Zeit…</string>
     <string name="notificationChannel_screen_tracking">Bildschirm-Zeit Service Benachrichtigung.</string>
     <string name="notificationChannel_screen_tracking_desc">Manche Studien messen die Bildschirmzeit, wofür ein seperater Service benötigt wird.</string>
