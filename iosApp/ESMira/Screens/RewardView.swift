@@ -22,9 +22,7 @@ struct RewardView: View {
 			Text(error)
 			
 			if(!self.fulfilledQuestionnaires.isEmpty) {
-				Spacer()
-				Text("error_reward_questionnaires_not_finished")
-				Spacer(minLength: 20)
+				Text("error_reward_questionnaires_not_finished").padding(.vertical)
 				ForEach(self.study.questionnaires, id: \.internalId) { (questionnaire: Questionnaire) in
 					HStack {
 						Text(questionnaire.title)
@@ -38,6 +36,7 @@ struct RewardView: View {
 					}
 				}
 			}
+			Spacer()
 		}
 		.padding()
 	}
@@ -140,7 +139,7 @@ struct RewardView: View {
 							rewardCode = rewardInfo.code
 						case Study.Companion().REWARD_ERROR_UNFULFILLED_REWARD_CONDITIONS:
 							error = NSLocalizedString("error_reward_conditions_not_met", comment: "")
-							fulfilledQuestionnaires = rewardInfo.fulFilledQuestionnaires
+							fulfilledQuestionnaires = rewardInfo.fulfilledQuestionnaires
 						case Study.Companion().REWARD_ERROR_ALREADY_GENERATED:
 							error = NSLocalizedString("error_already_generated", comment: "")
 						default:
