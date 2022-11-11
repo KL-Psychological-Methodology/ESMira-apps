@@ -141,6 +141,9 @@ class SchedulerTest : BaseCommonTest() {
 		)
 		val nowDate = GMTDate(NativeLink.getNowMillis())
 		
+		val questionnaire = createJsonObj<Questionnaire>()
+		questionnaire.save(true)
+		
 		var idCount = 1L
 		for(dailyRepeatRate in 1 until 7) {
 			for((timestamp, hours, minutes, seconds) in timestamps) {
@@ -156,7 +159,7 @@ class SchedulerTest : BaseCommonTest() {
 				val schedule = createJsonObj<Schedule>("""{"dailyRepeatRate": $dailyRepeatRate}""")
 				schedule.id = idCount++
 				val signalTime = createJsonObj<SignalTime>("""{"random": true, "randomFixed": true}""")
-				signalTime.bindParent(-1, schedule)
+				signalTime.bindParent(questionnaire.id, schedule)
 				
 				Scheduler.rescheduleFromSignalTime(signalTime, -1, timestamp)
 				
@@ -180,6 +183,9 @@ class SchedulerTest : BaseCommonTest() {
 		val minutesBetween = 60
 		
 		var scheduleId = 1L
+		val questionnaire = createJsonObj<Questionnaire>()
+		questionnaire.save(true)
+		
 		for(manualDelayDays in -1 until 10) {
 			for(dailyRepeatRate in 1 until 10) {
 				for(loopFrequency in 0 until 10) {
@@ -202,7 +208,7 @@ class SchedulerTest : BaseCommonTest() {
 							"endTimeOfDay": $endTimeOfDay
 						}"""
 					)
-					signalTime.bindParent(-1, schedule)
+					signalTime.bindParent(questionnaire.id, schedule)
 					
 					
 					Scheduler.scheduleSignalTime(signalTime, -1, timestampNow, manualDelayDays)
@@ -224,7 +230,7 @@ class SchedulerTest : BaseCommonTest() {
 					assertEquals(
 						frequency,
 						alarms.size,
-						"Failed with $errorInfo"
+						"The wrong number of alarms was scheduled. Failed with $errorInfo"
 					)
 					val delay = if(manualDelayDays == -1) ONE_DAY_MS * dailyRepeatRate else manualDelayDays * ONE_DAY_MS
 					val min = timestampMidnight + startTimeOfDay + delay

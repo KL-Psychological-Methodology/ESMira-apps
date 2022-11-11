@@ -145,7 +145,7 @@ class Schedule {
 		if(actionTrigger.enabled) {
 			val initialDelay = getInitialDelayDays()
 			for(signalTime in signalTimes) {
-				if(DbLogic.getAlarmsFrom(signalTime).isEmpty())
+				if(signalTime.hasNoAlarms())
 					Scheduler.scheduleSignalTime(signalTime, actionTrigger.id, NativeLink.getNowMillis(), initialDelay)
 			}
 		}

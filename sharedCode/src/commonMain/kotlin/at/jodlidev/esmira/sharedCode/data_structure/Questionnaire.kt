@@ -229,10 +229,22 @@ class Questionnaire {
 		NativeLink.notifications.removeQuestionnaireBing(this)
 		
 		
-		//re adding alarms in case filling out the questionnaire changed things:
-		Scheduler.remove(this)
-		scheduleIfNeeded()
-		Scheduler.scheduleAhead()
+		// TODO: Following scenario:
+		// SignalTime with random=true and frequency=3 (something greater than 1) from 09:00 to 15:00
+		// Questionnaire with completableMinutesAfterNotification=60
+		// Assume that our random alarms are at 10:00, 12:00, 14:00. First Alarm went of at 10:00 and we fill out the questionnaire at 11:30.
+		// Next alarm will be at 12:00 but because of completableMinutesAfterNotification=60, the questionnaire will not be enabled by then.
+		// With the current code we cant just reschedule because signalTimes are always scheduled all at once (in this case all three, and we already had one).
+		// So we would risk "loosing" an Alarm (if more than one alarm is scheduled in the past) or having one too many (if all alarms are scheduled after 11:30)
+		// So we would have to count how many alarms are left for this SignalTime, remove them and reschedule them in the new timeframe (11:30 - 15:00)
+		
+		// removing everything in case filling out the questionnaire changed things (e.g. completableOnce=true):
+		if(!isActive() && willBeActiveIn() == 0L)
+			Scheduler.remove(this)
+		else {
+			scheduleIfNeeded()
+			Scheduler.scheduleAhead()
+		}
 		
 		//remove all reminder for this questionnaire until the next Bing
 		//Note: we have to be careful because on iOS all reminders are prescheduled.
@@ -391,6 +403,10 @@ class Questionnaire {
 			&& (!completableOnce || lastCompleted == 0L)
 	}
 	
+	/**
+	 * Returns ms until questionnaire will become active again
+	 * Returns 0 if questionnaire will never be active or is already active (combine with [isActive])
+	 */
 	fun willBeActiveIn(study: Study? = DbLogic.getStudy(studyId), now: Long = NativeLink.getNowMillis()): Long {
 		val joined = study?.joined ?: 0
 		val group = study?.group ?: 0

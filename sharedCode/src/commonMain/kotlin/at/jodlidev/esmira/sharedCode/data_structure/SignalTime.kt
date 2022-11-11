@@ -141,6 +141,9 @@ class SignalTime {
 		return NativeLink.formatTime(NativeLink.getMidnightMillis() + endTimeOfDay)
 	}
 	
+	fun hasNoAlarms(): Boolean {
+		return DbLogic.getAlarmsFrom(this).isEmpty()
+	}
 	
 	fun save(db: SQLiteInterface = NativeLink.sql) {
 		if(!exists) {

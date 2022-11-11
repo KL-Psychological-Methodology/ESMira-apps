@@ -260,7 +260,6 @@ class Alarm {
 				studyId = q.studyId
 				
 				actionTrigger.execActions(label, timestamp, fireNotifications)
-				
 				Scheduler.rescheduleFromAlarm(this)
 			}
 			TYPES.EventTrigger -> {

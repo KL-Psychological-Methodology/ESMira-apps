@@ -179,21 +179,30 @@ object Scheduler {
 		for(max in 1 .. reschedulesPerAlarm) {
 			for(alarm in alarms) {
 				val count = DbLogic.countAlarmsFrom(alarm.signalTimeId)
-				if(count < max)
-					alarm.scheduleAhead()
+				if(count >= max) {
+					ErrorBox.log("Scheduler", "Alarm (id=${alarm.id}, signalTime=${alarm.signalTimeId}) has $count/$max alarms. Skipping")
+					continue
+				}
+				alarm.scheduleAhead()
 			}
 		}
 	}
 	
 	
 	//takes an Alarm from the past and recreates it for the future
-	//on Android, if alarms where issued properly, anchorTimestamp should be equal to NativeLink.getTimeMillis()
+	//on Android, if alarms where issued properly, anchorTimestamp should be close to NativeLink.getTimeMillis()
 	internal fun rescheduleFromAlarm(alarm: Alarm) {
 //		rescheduleSignalTime(alarm.signalTime ?: return, alarm.actionTriggerId, alarm.timestamp)
 		val signalTime = alarm.signalTime ?: return
+		
+		if(!alarm.canBeRescheduled) {//when frequency > 1, then we want to reschedule only when all the other alarms are done as well
+			ErrorBox.log("Scheduler", "Several alarms belong to the same SignalTime. Only rescheduling from the last one. This is ${alarm.indexNum}/${signalTime.frequency}. Skipping")
+			return
+		}
+		
 		//Note: We use getLastSignalTimeAlarm() for iOS. On Android no other alarms should exist at this point (the original is deleted in Alarm.exec() )
 		val lastAlarm = DbLogic.getLastSignalTimeAlarm(signalTime) ?: alarm
-		//we have to use lastAlarm.timestamp to make sure we dont skip a day if this function was executed late:
+		//we have to use lastAlarm.timestamp to make sure we do not skip a day if this function was executed late:
 		rescheduleFromSignalTime(signalTime, lastAlarm.actionTriggerId, lastAlarm.timestamp)
 	}
 	internal fun rescheduleFromSignalTime(signalTime: SignalTime, actionTriggerId: Long, timestampAnchor: Long) {
@@ -255,19 +264,19 @@ object Scheduler {
 		if(manualDelayDays != -1) { //is only set when schedules are freshly created
 			baseTimestamp += ONE_DAY_MS * manualDelayDays
 			minDate = anchorTimestamp + (ONE_DAY_MS * manualDelayDays).coerceAtLeast(MIN_SCHEDULE_DISTANCE)
+			
+			// Assuming that anchorTimestamp = 23:58, startTimeOfDay = 00:00 and dailyRepeatRate = 5 (anything greater than 1).
+			// When we used getMidnightMillis(), we calculated backwards a whole day, so baseTimestamp is one day short.
+			// That means, when we just added ONE_DAY_MS * dailyRepeatRate, we effectively only added 4 days instead of 5.
+			// This would not be true if startTimeOfDay = 23:59, so we cant just blindly add a day.
+			// This loop fixes it:
+			while(baseTimestamp < minDate) {
+				baseTimestamp += ONE_DAY_MS
+			}
 		}
-		else {
+		else
 			baseTimestamp += ONE_DAY_MS * signalTime.schedule.dailyRepeatRate
-			minDate = anchorTimestamp + ONE_DAY_MS * signalTime.schedule.dailyRepeatRate
-		}
-		//Assumed that anchorTimestamp = 23:58, startTimeOfDay = 00:00 and dailyRepeatRate = 5 (anything greater than 1)
-		//when we used getMidnightMillis(), we calculated backwards a whole day, so baseTimestamp is one day short.
-		//That means, when we just added ONE_DAY_MS * dailyRepeatRate, we effectively only added 4 days instead of 5.
-		//This would not be true if startTimeOfDay = 23:59, so we cant just blindly add a day.
-		//this loop fixes it:
-		while(baseTimestamp < minDate) {
-			baseTimestamp += ONE_DAY_MS
-		}
+		
 		
 		//options:
 		baseTimestamp = considerScheduleOptions(baseTimestamp, signalTime)
