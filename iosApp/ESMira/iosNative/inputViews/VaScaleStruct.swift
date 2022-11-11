@@ -27,8 +27,12 @@ struct VaScaleStruct: View {
 			
 			HStack {
 				Text(self.viewModel.input.leftSideLabel)
+					.font(.system(size: 14))
+					.multilineTextAlignment(.leading)
 				Spacer()
 				Text(self.viewModel.input.rightSideLabel)
+					.font(.system(size: 14))
+					.multilineTextAlignment(.trailing)
 			}
 			
 			CustomSliderView(value: self.$viewModel.value)

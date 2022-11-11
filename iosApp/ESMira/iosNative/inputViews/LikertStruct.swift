@@ -13,10 +13,16 @@ struct LikertStruct: View {
 	var body: some View {
 		VStack {
 			TextStruct(viewModel: self.viewModel)
-			HStack {
+			HStack(alignment: .top) {
 				Text(self.viewModel.input.leftSideLabel)
+					.font(.system(size: 14))
+					.multilineTextAlignment(.leading)
+					.frame(width: 125)
 				Spacer()
 				Text(self.viewModel.input.rightSideLabel)
+					.font(.system(size: 14))
+					.frame(width: 125)
+					.multilineTextAlignment(.trailing)
 			}
 			HStack {
 				ForEach(1...self.viewModel.input.likertSteps, id: \.self) { index in

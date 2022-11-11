@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/danielgindi/Charts",
       "state" : {
-        "revision" : "66546404a6739173b8e436ab6bc1f2897cd08594",
-        "version" : "3.6.0"
+        "revision" : "07b23476ad52b926be772f317d8f1d4511ee8d02",
+        "version" : "4.1.0"
       }
     },
     {
@@ -15,7 +15,25 @@
       "location" : "https://github.com/twostraws/CodeScanner",
       "state" : {
         "branch" : "main",
-        "revision" : "c27a66149b7483fe42e2ec6aad61d5c3fffe522d"
+        "revision" : "9aef09bf5c0274689a89c2fd71794011bebdc43f"
+      }
+    },
+    {
+      "identity" : "swift-algorithms",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-algorithms",
+      "state" : {
+        "revision" : "b14b7f4c528c942f121c8b860b9410b2bf57825e",
+        "version" : "1.0.0"
+      }
+    },
+    {
+      "identity" : "swift-numerics",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-numerics",
+      "state" : {
+        "revision" : "0a5bc04095a675662cf24757cc0640aa2204253b",
+        "version" : "1.0.2"
       }
     },
     {

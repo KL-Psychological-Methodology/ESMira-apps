@@ -8,7 +8,7 @@ import sharedCode
 import UIKit
 
 class ChartViewWrapper : ChartViewInterface {
-	class AxisFormatter: IAxisValueFormatter {
+	class AxisFormatter: AxisValueFormatter {
 		let statisticFormatter: ChartFormatterInterface
 		
 		init(_ statisticFormatter: ChartFormatterInterface) {

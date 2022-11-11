@@ -19,13 +19,13 @@ class ChartTypeChooser : ChartChooserInterface {
 		override func createDataSet(label: String, color: String) -> ChartDataSetInterface {
 			let dataSet = LineChartDataSet(entries: [], label: label)
 			
-			lineData.addDataSet(dataSet)
+			lineData.append(dataSet)
 			
 			return DataSetWrapper(dataSet)
 		}
 		
 		override func addValue(xValue: Float, yValue: Float, dataSetIndex: Int32) {
-			lineData.addEntry(ChartDataEntry(x: Double(xValue), y: Double(yValue)), dataSetIndex: Int(dataSetIndex))
+			lineData.appendEntry(ChartDataEntry(x: Double(xValue), y: Double(yValue)), toDataSet: Int(dataSetIndex))
 		}
 		
 		override func createChart() -> Any {
@@ -66,12 +66,12 @@ class ChartTypeChooser : ChartChooserInterface {
 		override func createDataSet(label: String, color: String) -> ChartDataSetInterface {
 			let dataSet = BarChartDataSet(entries: [], label: label)
 			
-			barData.addDataSet(dataSet)
+			barData.append(dataSet)
 			return DataSetWrapper(dataSet)
 		}
 		
 		override func addValue(xValue: Float, yValue: Float, dataSetIndex: Int32) {
-			barData.addEntry(BarChartDataEntry(x: Double(xValue), y: Double(yValue)), dataSetIndex: Int(dataSetIndex))
+			barData.appendEntry(BarChartDataEntry(x: Double(xValue), y: Double(yValue)), toDataSet: Int(dataSetIndex))
 		}
 		
 		override func createChart() -> Any {
@@ -108,7 +108,7 @@ class ChartTypeChooser : ChartChooserInterface {
 		
 		override func createDataSet(label: String, color: String) -> ChartDataSetInterface {
 			let dataSet = ScatterChartDataSet(entries: [], label: label)
-			scatterData.addDataSet(dataSet)
+			scatterData.append(dataSet)
 			
 			return DataSetWrapper(dataSet)
 		}
@@ -119,25 +119,27 @@ class ChartTypeChooser : ChartChooserInterface {
 			regressionList.append(ChartDataEntry(x: Double(x2), y: Double(y2)))
 			
 			let regressionDataSet = LineChartDataSet(entries: regressionList, label: "")
-			regressionData.addDataSet(regressionDataSet)
+			regressionData.append(regressionDataSet)
 			
 			return DataSetWrapper(regressionDataSet)
 		}
 		
 		override func addValueIntoSet(xValue: Float, yValue: Float, dataSetIndex: Int32) {
-			scatterData.addEntry(ChartDataEntry(x: Double(xValue), y: Double(yValue)), dataSetIndex: Int(dataSetIndex))
+			scatterData.appendEntry(ChartDataEntry(x: Double(xValue), y: Double(yValue)), toDataSet: Int(dataSetIndex))
 		}
 		
 		override func addLegendEntry(label: String, color: String, isPublic: Bool) {
-			let entry = LegendEntry(
-				label: label,
-				form: .default,
-				formSize: CGFloat.nan,
-				formLineWidth: CGFloat.nan,
-				formLineDashPhase: CGFloat.nan,
-				formLineDashLengths: nil,
-				formColor: DataSetWrapper.getNSUIColor(color)
-			)
+			let entry = LegendEntry(label: label)
+			entry.formColor = DataSetWrapper.getNSUIColor(color)
+//			let entry = LegendEntry(
+//				label: label,
+//				form: .default,
+//				formSize: CGFloat.nan,
+//				formLineWidth: CGFloat.nan,
+//				formLineDashPhase: CGFloat.nan,
+//				formLineDashLengths: nil,
+//				formColor: DataSetWrapper.getNSUIColor(color)
+//			)
 			
 			if(!isPublic) {
 				entry.form = .circle

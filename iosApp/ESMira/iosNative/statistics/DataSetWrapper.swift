@@ -8,7 +8,7 @@ import Charts
 import UIKit
 
 class DataSetWrapper : ChartDataSetInterface {
-    class ValueFormatter: IValueFormatter {
+    class LibValueFormatter: ValueFormatter {
         let statisticFormatter: ChartFormatterInterface
         
         init(_ statisticFormatter: ChartFormatterInterface) {
@@ -126,7 +126,7 @@ class DataSetWrapper : ChartDataSetInterface {
 	}
 	
 	func setValueFormatter(formatter: ChartFormatterInterface) {
-        dataSet.valueFormatter = ValueFormatter(formatter)
+        dataSet.valueFormatter = LibValueFormatter(formatter)
 	}
     
     static func getNSUIColor(_ hex: String) -> NSUIColor {
