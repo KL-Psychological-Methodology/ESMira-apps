@@ -12,10 +12,12 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>1$d</string>
-			<key>other</key>
-			<string>Belohnungen für diese Studie sind erst in %1$d Tagen aktiv.</string>
+			<key>zero</key>
+			<string>Belohnungen für diese Studie sind noch nicht verfügbar.</string>
 			<key>one</key>
 			<string>Belohnungen für diese Studie sind erst in einem Tag aktiv.</string>
+			<key>other</key>
+			<string>Belohnungen für diese Studie sind erst in %1$d Tagen aktiv.</string>
 		</dict>
 	</dict>
 	<key>ios_info_missed_notifications</key>
@@ -31,7 +33,7 @@
 			<key>zero</key>
 			<string>Keine verpassten Benachrichtigungen.</string>
 			<key>one</key>
-			<string>1 verpasste Benachrichtigung.</string>
+			<string>Eine verpasste Benachrichtigung.</string>
 			<key>other</key>
 			<string>%1$d verpasste Benachrichtungen.</string>
 		</dict>

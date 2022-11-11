@@ -19,8 +19,8 @@
     <string name="additional_notification_settings_zte_blade_l110_3">Nun suchen Sie in der Liste nach dem Eintrag von \"ESMira\" und stellen Sie sicher, dass die Box daneben aktiviert ist.</string>
     <string name="additional_notification_settings_finish">Sobald sie fertig sind, drücken Sie die Zurück-Taste um wieder zu diesem Bildschirm zurück zu gelangen.</string>
     <string name="android_version">Version: %1$s, %2$s</string>
-    <string name="ask_model_settings_correct">Konnten Sie die App-Einstellungen entsprechend den Instruktionen setzen?</string>
-    <string name="ask_notification_posted">Haben Sie eine Benachrichtigung erhalten?</string>
+    <string name="ask_model_settings_correct">Konnten Sie die App-Einstellungen entsprechend den Instruktionen setzen\?</string>
+    <string name="ask_notification_posted">Haben Sie eine Benachrichtigung erhalten\?</string>
     <string name="back">Zurück</string>
     <string name="backup">Backup</string>
     <string name="cancel">Abbrechen</string>
@@ -44,10 +44,10 @@
     <string name="delete_">Löschen</string>
     <string name="desc_update_schedules">Die Zeitpläne Ihrer Studien verändern</string>
     <string name="desc_update_studies">Die Einstellungen Ihrer Studien aktualisieren</string>
-    <string name="dialogTitle_delete_statistics">Statistiken löschen?</string>
-    <string name="dialogDesc_delete_statistics">Sollen alle Statistiken für diese Studie gelöscht werden?</string>
-    <string name="dialogTitle_leave_study">Studie verlassen?</string>
-    <string name="dialogDesc_leave_study">Möchten Sie diese Studie verlassen? Um wieder beitreten zu können, müssen die Zugangsdaten erneut eingegeben werden.</string>
+    <string name="dialogTitle_delete_statistics">Statistiken löschen\?</string>
+    <string name="dialogDesc_delete_statistics">Sollen alle Statistiken für diese Studie gelöscht werden\?</string>
+    <string name="dialogTitle_leave_study">Studie verlassen\?</string>
+    <string name="dialogDesc_leave_study">Möchten Sie diese Studie verlassen\? Um wieder beitreten zu können, müssen die Zugangsdaten erneut eingegeben werden.</string>
     <string name="android_email_study_subject">Bezüglich der Studie: %1$s</string>
     <string name="enter_manually">Manuelle Eingabe</string>
     <string name="enable">Aktivieren</string>
@@ -69,7 +69,7 @@
     <string name="error_settings_not_opened">Konnte Einstellungen nicht öffnen!</string>
     <string name="hint_server">example.com</string>
     <string name="hint_message">Nachricht</string>
-    <string name="hint_error_comment">Welches Problem ist aufgetreten?</string>
+    <string name="hint_error_comment">Welches Problem ist aufgetreten\?</string>
     <string name="https">https://</string>
     <string name="i_agree">Ich stimme zu</string>
     <string name="ignore">Ignorieren</string>
@@ -84,8 +84,8 @@
     <string name="info_loading">Lade…</string>
     <string name="info_message_sent">Nachricht wurde verschickt</string>
     <plurals name="android_info_missed_notifications" comment="Needs to be short">
-        <item quantity="one" formatted="true">1 verpasste Benachrichtigung.</item>
-        <item quantity="other" formatted="true">%1$d verpasste Benachrichtigungen.</item>
+        <item quantity="one">1 verpasste Benachrichtigung.</item>
+        <item quantity="other">%1$d verpasste Benachrichtigungen.</item>
     </plurals>
     <string name="info_model_settings">Damit ESMira aus dem Hintergrund Benachrichtigungen verschicken kann, sind auf Ihrem Smartphone Modell spezielle Einstellungen notwendig. Klicken Sie auf \"Einstellungen öffnen\" um die Einstellungen Ihres Smartphones zu öffnen.</string>
     <string name="info_new_message">Eine neue Nachricht!</string>
@@ -182,8 +182,8 @@
     <string name="upload_screenshots">Screenshots hochladen</string>
     <string name="android_user_id">User-id: %1$s</string>
     <string name="visible_when_study_finished">Erst sichtbar, wenn die Studie beendet wurde.</string>
-    <string name="welcome_accessKey_question">Haben Sie einen Zugangscode?</string>
-    <string name="welcome_exit_questionTitle">Wirklich beenden?</string>
+    <string name="welcome_accessKey_question">Haben Sie einen Zugangscode\?</string>
+    <string name="welcome_exit_questionTitle">Wirklich beenden\?</string>
     <string name="welcome_exit_questionDesc">Sie müssen einer Studie beitreten um ESMira verwenden zu können.</string>
     <string name="welcome_first_instructions">Willkommen zu ESMira, dem anonymen Befragungsassistenten.
 \n
@@ -191,11 +191,12 @@
 \nDieser Dialog unterstützt Sie dabei.</string>
     <string name="welcome_hello">Hallo!</string>
     <string name="welcome_join_public_study">Nein, einer öffentlichen Studie beitreten</string>
-    <string name="welcome_qr_question">Haben Sie einen QR-Code für die Studie erhalten?</string>
-    <string name="welcome_qr_instructions">Bitte halten Sie den QR-code etwa 30 cm unter die Kamera Ihres Smartphones und stellen Sie sicher, dass der Code auf dem Display gut erkennbar ist. \nESMira liest den Code automatisch sobald die Smartphone Kamera scharf gestellt hat.</string>
-    <string name="welcome_server_question">Auf welchem Server liegt die Studie?</string>
-    <string name="what_for">Wofür?</string>
-    <string name="what_is_sent">Was wird gesendet?</string>
+    <string name="welcome_qr_question">Haben Sie einen QR-Code für die Studie erhalten\?</string>
+    <string name="welcome_qr_instructions">Bitte halten Sie den QR-code etwa 30 cm unter die Kamera Ihres Smartphones und stellen Sie sicher, dass der Code auf dem Display gut erkennbar ist.
+\nESMira liest den Code automatisch sobald die Smartphone Kamera scharf gestellt hat.</string>
+    <string name="welcome_server_question">Auf welchem Server liegt die Studie\?</string>
+    <string name="what_for">Wofür\?</string>
+    <string name="what_is_sent">Was wird gesendet\?</string>
     <string name="word_and">und</string>
     <string name="yes">Ja</string>
     <string name="app_usage">App Nutzungsdaten</string>
@@ -211,17 +212,17 @@
     <string name="colon_usageTime">Nutzungszeit:</string>
     <string name="colon_usageCount">Nutzungsanzahl:</string>
     <string name="take_picture">Foto aufnehmen</string>
-    <string name="error_no_cameraApp">Es konnte keine Kamere-App gefunden werden!</string>
+    <string name="error_no_cameraApp">Es konnte keine Kamera-App gefunden werden!</string>
     <string name="info_screen_tracking_notification_content">Messe Bildschirm-Zeit…</string>
     <string name="notificationChannel_screen_tracking">Bildschirm-Zeit Service Benachrichtigung.</string>
     <string name="notificationChannel_screen_tracking_desc">Manche Studien messen die Bildschirmzeit, wofür ein seperater Service benötigt wird.</string>
     <string name="just_finished">Gerade ausgefüllt</string>
-    <string name="sent_to_whom">An wen?</string>
+    <string name="sent_to_whom">An wen\?</string>
     <string name="data_will_be_sent_to_app_developer">Der Fehlerbericht wird an den App-Entwicker (%1$s) geschickt. Wir möchten hervorheben, dass der Fehlerbericht keine persönlichen oder Fragebogen Daten enthält!</string>
-    <string name="rewards">Belohungen</string>
+    <string name="rewards">Belohnungen</string>
     <plurals name="info_reward_is_not_active_yet">
-        <item quantity="one" formatted="true">Belohnungen für diese Studie sind erst in einem Tag aktiv.</item>
-        <item quantity="other" formatted="true">Belohnungen für diese Studie sind erst in %1$d Tagen aktiv.</item>
+        <item quantity="one">Belohnungen für diese Studie sind erst in einem Tag aktiv.</item>
+        <item quantity="other">Belohnungen für diese Studie sind erst in %1$d Tagen aktiv.</item>
     </plurals>
     <string name="error_reward_conditions_not_met">Sie erfüllen noch nicht alle Bedingungen um eine Belohnung zu erhalten.</string>
     <string name="error_already_generated">Auf einem anderen Gerät wurde bereits ein Belohnungscode generiert. Bitte kontaktieren Sie den / die ForscherIn.</string>
@@ -229,6 +230,9 @@
     <string name="colon_reward_code_header">Dies ist Ihr Belohnungscode:</string>
     <string name="reward_code_send_email">Per Email versenden</string>
     <string name="reward_code_share">Per App teilen</string>
-    <string name="reward_code_content">Hallo,\ndies ist mein Belohnungscode: [[CODE]].\nMeine Daten:</string>
+    <string name="reward_code_content">Hallo,
+\ndies ist mein Belohnungscode: [[CODE]].
+\nMeine Daten:</string>
     <string name="reward_code_description">Es ist uns wichtig, dass sämtliche Daten, welche Sie über ESMira eingeben haben, komplett anonym bleiben. Doch um die Belohnung erhalten zu können, müssen persönliche Daten angegeben werden, welche nicht mit den Studiendaten verknüpft sein sollten. Daher gibt es den Belohnungscode, welcher komplett unabhängig von Ihrer User-Id und Ihren Studiendaten ist.</string>
+    <string name="app_name" translatable="false"></string>
 </resources>
