@@ -35,8 +35,6 @@ class InputViewModel: ObservableObject {
 		}
 	}
 	
-//	@Published var isReady: Bool = false
-	
 	@Binding var readyCounter: Int
 	@Published var isReady: Bool = false {
 		willSet {
@@ -57,8 +55,6 @@ struct InputView: View {
 	let input: Input
 	let questionnaire: sharedCode.Questionnaire
 	@Binding var readyCounter: Int
-//	@State var value: String = ""
-//	@Binding var value: String
 	
 	@ObservedObject var viewModel: InputViewModel
 	
@@ -110,32 +106,5 @@ struct InputView: View {
 	
 	var body: some View {
 		getInput()
-//			.environmentObject(self.viewModel)
-		
-		
-		
-//		ZStack {
-//			getInput()
-//				.environmentObject(self.viewModel)
-//			if(!self.viewModel.isReady) {
-//				Rectangle().foregroundColor(Color(.white)).frame(minWidth: 0, maxWidth: .infinity, minHeight: 0, maxHeight: .infinity, alignment: .topLeading)
-//			}
-//		}
-		
-//		if(self.viewModel.isReady) {
-//			getInput()
-//				.environmentObject(self.viewModel)
-//				.padding()
-//		}
-//		else {
-//
-//			getInput()
-//				.environmentObject(self.viewModel)
-//				.frame(height: 0)
-//				.hidden()
-//		}
-//		getInput()
-//			.environmentObject(self.viewModel)
-//			.opacity(self.viewModel.isReady ? 1 : 0)
 	}
 }
