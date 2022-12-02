@@ -33,6 +33,7 @@ struct CheckBoxView : View {
 				Text(self.label)
 					.foregroundColor(Color.black)
 					.fixMultiline()
+					.multilineTextAlignment(.leading)
 			}
 		}
 	}

@@ -43,11 +43,12 @@ struct RadioButtonView<Content> : View where Content: View {
 				if(self.label != nil) {
 					Text(self.label!)
 						.fixMultiline()
+						.font(.system(size: 16))
+						.multilineTextAlignment(.leading)
 				}
 				else if(self.labelEl != nil) {
 					self.labelEl
 				}
-//				Text(self.state)
 			}
 		}
 	}

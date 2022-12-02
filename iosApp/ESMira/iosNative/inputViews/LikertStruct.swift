@@ -17,11 +17,11 @@ struct LikertStruct: View {
 				Text(self.viewModel.input.leftSideLabel)
 					.font(.system(size: 14))
 					.multilineTextAlignment(.leading)
-					.frame(width: 125)
+					.frame(maxWidth: 125, alignment: .leading)
 				Spacer()
 				Text(self.viewModel.input.rightSideLabel)
 					.font(.system(size: 14))
-					.frame(width: 125)
+					.frame(width: 125, alignment: .trailing)
 					.multilineTextAlignment(.trailing)
 			}
 			HStack {
