@@ -123,6 +123,20 @@ class Questionnaire {
 		this.studyWebId = study.webId
 	}
 	
+	fun isTooDifferent(other: Questionnaire): Boolean {
+		if(!hasNotifications())
+			return false
+		
+		return (completableOnce != other.completableOnce && lastCompleted != 0L)
+			|| durationStartingAfterDays != other.durationStartingAfterDays
+			|| durationStart != other.durationStart
+			|| durationPeriodDays != other.durationPeriodDays
+			|| durationEnd != other.durationEnd
+			|| limitToGroup != other.limitToGroup
+			|| (publishedIOS != other.publishedIOS && NativeLink.smartphoneData.phoneType == PhoneType.IOS)
+			|| (publishedAndroid != other.publishedAndroid && NativeLink.smartphoneData.phoneType == PhoneType.Android)
+		
+	}
 	
 	private fun loadActionTriggerDB(): List<ActionTrigger> {
 		val db = NativeLink.sql
@@ -387,12 +401,13 @@ class Questionnaire {
 		return pages.isNotEmpty()
 	}
 	
+	
 	fun isActive(now: Long = NativeLink.getNowMillis()): Boolean { //if study is active in general
 		val study: Study? = DbLogic.getStudy(studyId) //study can be null when we test for a study that we have not joined yet
 		
 		val durationCheck = study == null || (
-			(durationPeriodDays == 0 || now <= study.joined + durationPeriodDays * (1000*60*60*24))
-				&& (durationStartingAfterDays == 0 || now >= study.joined + durationStartingAfterDays * (1000*60*60*24))
+			(durationPeriodDays == 0 || now <= study.joined + durationPeriodDays.toLong() * ONE_DAY_MS)
+				&& (durationStartingAfterDays == 0 || now >= study.joined + durationStartingAfterDays.toLong() * ONE_DAY_MS)
 			)
 			
 		
@@ -471,6 +486,8 @@ class Questionnaire {
 	}
 	
 	companion object {
+		const val ONE_DAY_MS = 1000L*60L*60L*24L
+		
 		const val TABLE = "questionnaires"
 		const val KEY_ID = "_id"
 		const val KEY_STUDY_ID = "study_id"

@@ -486,10 +486,28 @@ class Study internal constructor(
 					NativeLink.notifications.fireSchedulesChanged(this)
 				}
 				else { //enable update check for triggers (and copy id over):
+					
+					var tooDifferent = false
 					for(i in _jsonQuestionnaires.indices) {
-						val newQuestionnaires = _jsonQuestionnaires[i]
-						newQuestionnaires.id = dbQuestionnaires[i].id
-						newQuestionnaires.exists = true
+						val newQ = _jsonQuestionnaires[i]
+						val dbQ = dbQuestionnaires[i]
+						if(newQ.isTooDifferent(dbQ)) {
+							tooDifferent = true
+							break
+						}
+					}
+					if(tooDifferent) {
+						for(q in dbQuestionnaires) {
+							q.delete()
+						}
+						NativeLink.notifications.fireSchedulesChanged(this)
+					}
+					else {
+						for(i in _jsonQuestionnaires.indices) {
+							val newQuestionnaire = _jsonQuestionnaires[i]
+							newQuestionnaire.id = dbQuestionnaires[i].id
+							newQuestionnaire.exists = true
+						}
 					}
 				}
 				_questionnaires = _jsonQuestionnaires
