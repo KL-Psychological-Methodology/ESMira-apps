@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">ESMira</string>
     <string name="add">Hinzufügen</string>
     <string name="add_a_study">Einer Studie beitreten</string>
     <string name="additional_notification_settings_general_android">Im folgenden Bildschirm stellen Sie bitte sicher, dass ESMira die Berechtigungen hat im Hintergrund zu laufen, sowie beim Start des Smartphones ausgeführt werden darf. Unglücklicherweise unterscheiden sich die Bezeichnungen der Einstellungen (und welche Einstellungen tatsächlich existieren) stark zwischen Smartphone-Herstellern und wir haben keine Screenshots für dieses Handymodell um Sie weiter zu unterstützen. Versuchen Sie bitte die entsprechenden Einstellungen so gut es geht zu erraten. Wenn Sie uns bei der Entwicklung von ESMira unterstützen und uns Screenshots zusenden möchten, kontaktieren Sie bitte den App Entwickler (esmira@kl.ac.at).
@@ -234,5 +235,4 @@
 \ndies ist mein Belohnungscode: [[CODE]].
 \nMeine Daten:</string>
     <string name="reward_code_description">Es ist uns wichtig, dass sämtliche Daten, welche Sie über ESMira eingeben haben, komplett anonym bleiben. Doch um die Belohnung erhalten zu können, müssen persönliche Daten angegeben werden, welche nicht mit den Studiendaten verknüpft sein sollten. Daher gibt es den Belohnungscode, welcher komplett unabhängig von Ihrer User-Id und Ihren Studiendaten ist.</string>
-    <string name="app_name" translatable="false"></string>
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name" translatable="false">ESMira</string>
+    <string name="app_name">ESMira</string>
     <string name="add">Add</string>
     <string name="add_a_study">Join a study</string>
     <string name="additional_notification_settings_general_android">In the following screen, please make sure that ESMira is allowed to run in the background and is able to start when rebooting the phone. Unfortunately the names of the settings (and which settings actually exist) vary greatly between phone models and we do not have any screenshots for this phone model to assist you further. So please try to guess the appropriate settings. If you want to help us out and send us some screenshots, please contact the App developer (esmira@kl.ac.at).

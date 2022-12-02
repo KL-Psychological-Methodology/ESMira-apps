@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">ESMira</string>
     <string name="add">Додати</string>
     <string name="back">Назад</string>
     <string name="add_a_study">Приєднайтеся до дослідження</string>
@@ -238,5 +239,4 @@
 \nМоя інформація:</string>
     <string name="reward_code_description">Для нас важливо, щоб усі дані, надані через ESMira, залишалися повністю анонімними. Але щоб отримати свою винагороду, вам доведеться надати певну особисту інформацію, яка не повинна бути пов’язана з вашим ідентифікатором користувача. З цієї причини у нас є код винагороди, який не пов’язаний з вашим ідентифікатором користувача чи будь-якими даними, які ви надали.</string>
     <string name="notificationChannel_screen_tracking">Сповіщення тривалості використання екрану.</string>
-    <string name="app_name" translatable="false"></string>
 </resources>
