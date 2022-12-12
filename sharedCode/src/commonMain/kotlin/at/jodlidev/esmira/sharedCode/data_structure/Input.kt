@@ -4,6 +4,8 @@ import at.jodlidev.esmira.sharedCode.DbLogic
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Transient
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.*
 
 
 /**
@@ -132,24 +134,45 @@ class Input internal constructor( ) {
 	}
 	
 	fun getBackupString(): String {
-		var r = "$value~"
-		
-		if(additionalValues.isNotEmpty()) {
-			for(additionalValue in additionalValues) {
-				r += "${additionalValue.key}=${additionalValue.value},"
+		val json = buildJsonObject {
+			put("value", value)
+			
+			if(additionalValues.isNotEmpty()) {
+				put("additionalValues", buildJsonObject {
+					for(additionalValue in additionalValues) {
+						put(additionalValue.key, additionalValue.value)
+					}
+				})
 			}
-			return r.substring(0, r.length-1)
+			
+			if(addedFiles.isNotEmpty()) {
+				put("addedFiles", buildJsonArray {
+					for(addedFile in addedFiles) {
+						add(addedFile.id)
+					}
+				})
+			}
 		}
 		
-		return r
+		return json.toString()
 	}
 	fun fromBackupString(backup: String) {
-		val parts = backup.split("~")
-		value = parts[0]
-		if(parts[1].isNotEmpty()) {
-			parts[1].split(",").associateTo(additionalValues) {
-				val (key, value) = it.split("=")
-				key to value
+		val obj = DbLogic.getJsonConfig().decodeFromString<JsonObject>(backup)
+		
+		value = obj.getValue("value").jsonPrimitive.content
+		
+		if(obj.contains("additionalValues")) {
+			val jsonAdditionalValues = obj.getValue("additionalValues").jsonObject
+			for(additionalValue in jsonAdditionalValues) {
+				additionalValues[additionalValue.key] = additionalValue.value.jsonPrimitive.content
+			}
+		}
+		
+		if(obj.contains("addedFiles")) {
+			val jsonAddedFiles = obj.getValue("addedFiles").jsonArray
+			for(fileUploadId in jsonAddedFiles) {
+				val fileUpload = DbLogic.getFileUpload(fileUploadId.jsonPrimitive.long) ?: continue
+				addedFiles.add(fileUpload)
 			}
 		}
 	}
