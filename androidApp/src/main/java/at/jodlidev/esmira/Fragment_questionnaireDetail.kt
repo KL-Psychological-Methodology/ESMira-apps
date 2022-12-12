@@ -305,28 +305,6 @@ class Fragment_questionnaireDetail : Base_fragment() {
 				return
 			
 			input.addImage(filePath, questionnaire.studyId)
-			
-			
-			
-			
-			
-			
-//			val byteArray = extras.getByteArray(Activity_photoCamera.PHOTO_DATA) ?: return
-//			val imageBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-//			imagePreview.setImageBitmap(imageBitmap)
-//
-//			//find input:
-//			var input: Input? = null
-//			for(loopInput: Input in questionnaire.pages[pageIndex].inputs) {
-//				if(loopInput.name == inputName) {
-//					input = loopInput
-//					break
-//				}
-//			}
-//			if(input == null)
-//				return
-//
-//			input.value = Base64.encodeToString(byteArray, Base64.DEFAULT)
 		}
 	}
 	
