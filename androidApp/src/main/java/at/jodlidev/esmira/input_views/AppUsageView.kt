@@ -80,16 +80,6 @@ class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_a
 	private var headerElement: TextView = findViewById(R.id.header)
 	private var packageNameElement: TextView = findViewById(R.id.packageName)
 	
-	init {
-		appUsageElement.addTextChangedListener(object : TextWatcher {
-			override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
-			override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
-			override fun afterTextChanged(s: Editable) {
-				if(isBound)
-					input.value = appUsageElement.text.toString()
-			}
-		})
-	}
 	override fun bindData(input: Input, questionnaire: Questionnaire) {
 		if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
 			return
