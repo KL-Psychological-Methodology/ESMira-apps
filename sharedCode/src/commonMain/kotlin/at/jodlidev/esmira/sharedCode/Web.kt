@@ -29,7 +29,7 @@ class Web {
 			})
 		}
 		install(HttpTimeout) {
-			requestTimeoutMillis = 30000
+			requestTimeoutMillis = 300000
 			connectTimeoutMillis = 15000
 			socketTimeoutMillis = 15000
 		}
