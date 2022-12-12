@@ -62,6 +62,7 @@ class FileUpload {
 	
 	internal fun setReadyForUpload() {
 		if(id != 0L) {
+			isTemporary = false
 			val db = NativeLink.sql
 			val values = db.getValueBox()
 			values.putBoolean(KEY_IS_TEMPORARY, false)

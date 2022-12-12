@@ -949,13 +949,27 @@ object DbLogic {
 	//FileUpload
 	//
 	
+	fun getFileUpload(id: Long): FileUpload? {
+		val c = NativeLink.sql.select(
+			FileUpload.TABLE,
+			FileUpload.COLUMNS,
+			"${FileUpload.KEY_ID} = ?", arrayOf(id.toString()),
+			null,
+			null,
+			null,
+			null
+		)
+		val r = if(c.moveToFirst()) FileUpload(c) else null
+		c.close()
+		return r
+	}
+	
 	fun cleanupFiles() {
 		val files = getTemporaryFileUploads()
 		for(file: FileUpload in files) {
 			file.delete();
 		}
 	}
-	
 	fun getPendingFileUploads(): List<FileUpload> {
 		val c = NativeLink.sql.select(
 			FileUpload.TABLE,
