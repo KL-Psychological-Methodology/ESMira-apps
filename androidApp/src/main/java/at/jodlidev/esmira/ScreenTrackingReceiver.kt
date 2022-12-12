@@ -141,7 +141,7 @@ class ScreenTrackingReceiver : BroadcastReceiver() {
 					else {
 						ErrorBox.warn("ScreenTrackingReceiver", "Screen was turned on before midnight. Splitting time between yesterday and today")
 						if(data.yesterdayTime != ScreenTrackData.MISSING_LONG)
-							data.yesterdayTime += data.lastScreenOnTime - data.now
+							data.yesterdayTime += NativeLink.getMidnightMillis() - data.lastScreenOnTime
 						if(data.yesterdayCount != ScreenTrackData.MISSING_INT)
 							++data.yesterdayCount
 						
