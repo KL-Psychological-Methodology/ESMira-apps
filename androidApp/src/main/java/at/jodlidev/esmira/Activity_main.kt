@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import at.jodlidev.esmira.activities.WelcomeScreenActivity
 import at.jodlidev.esmira.sharedCode.DbLogic
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -32,7 +33,7 @@ class Activity_main : AppCompatActivity(), ActivityTopInterface {
 			DbLogic.setDev(true, DbLogic.ADMIN_PASSWORD)
 		
 		if(DbLogic.hasNoStudies()) {
-			Activity_WelcomeScreen.start(this)
+			WelcomeScreenActivity.start(this)
 		}
 		
 		setContentView(R.layout.activity_main)

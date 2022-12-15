@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
+import at.jodlidev.esmira.activities.WelcomeScreenActivity
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
@@ -249,8 +250,7 @@ class Fragment_listQuestionnaires : Base_fragment() {
 			infoEmptyList.visibility = View.VISIBLE
 		}
 		rootView.findViewById<Button>(R.id.btn_add_study).setOnClickListener {
-//			goToAsSub(Activity_main.SITE_CONNECT_SERVER)
-			context?.let { it1 -> Activity_WelcomeScreen.start(it1, true) }
+			context?.let { it1 -> WelcomeScreenActivity.start(it1, true) }
 		}
 		
 		setTitle(R.string.questionnaires)

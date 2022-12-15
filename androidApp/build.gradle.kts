@@ -14,11 +14,11 @@ repositories {
 }
 
 android {
-    compileSdk = 32
+    compileSdk = 33
     defaultConfig {
         applicationId = "at.jodlidev.esmira"
         minSdk = 21
-        targetSdk = 32
+        targetSdk = 33
         versionCode = 133
         versionName = "2.7.9"
         multiDexEnabled = true //project became too big. See: https://stackoverflow.com/a/59308589
@@ -56,8 +56,13 @@ dependencies {
     implementation("androidx.compose.runtime:runtime:$composeVersion") // Integration with observables
     implementation("androidx.compose.runtime:runtime-livedata:$composeVersion") // Integration with observables
     implementation("androidx.compose.foundation:foundation-layout:$composeVersion")
-    implementation("androidx.navigation:navigation-compose:2.5.2") // Navigation
     implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1") //ConstraintLayout (different versioning)
+    
+    //Custom transitions in compose are not implemented yet, so we need the experimental library:
+    //https://issuetracker.google.com/issues/172112072
+    //https://issuetracker.google.com/issues/197140101
+    implementation("com.google.accompanist:accompanist-navigation-animation:0.28.0")
+//    implementation("androidx.navigation:navigation-compose:2.5.2") // Navigation
     
     implementation("androidx.multidex:multidex:2.0.1") //project became too big. Needed for SdK<21 See: https://stackoverflow.com/a/59308589)
     
@@ -66,7 +71,8 @@ dependencies {
     debugImplementation("com.amitshekhar.android:debug-db:1.0.4") // https://github.com/amitshekhariitbhu/Android-Debug-Database
     
     implementation("androidx.work:work-runtime:2.7.1") //WorkManager
-    implementation("me.dm7.barcodescanner:zxing:1.9.13") //qr scanner
+    implementation("com.journeyapps:zxing-android-embedded:4.3.0") //qr scanner
+    
     implementation("androidx.preference:preference:1.2.0") //PreferenceFragment
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0") //https://github.com/PhilJay/MPAndroidChart
     

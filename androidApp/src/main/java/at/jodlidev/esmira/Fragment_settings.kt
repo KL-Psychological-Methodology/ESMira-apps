@@ -17,6 +17,7 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import at.jodlidev.esmira.activities.ErrorReportDialogActivity
+import at.jodlidev.esmira.activities.WelcomeScreenActivity
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.SQLite
@@ -196,7 +197,7 @@ class Fragment_settings : PreferenceFragmentCompat(), Preference.OnPreferenceCli
 						.setPositiveButton(android.R.string.ok, null).show()
 			}
 			KEY_SHOW_WELCOME -> {
-				context?.let { Activity_WelcomeScreen.start(it) }
+				context?.let { WelcomeScreenActivity.start(it) }
 			}
 			KEY_USER_ID -> {
 				context?.let {

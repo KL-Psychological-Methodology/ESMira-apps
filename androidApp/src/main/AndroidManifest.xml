@@ -37,6 +37,12 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+    
+    
+        <activity
+            android:name="com.journeyapps.barcodescanner.CaptureActivity"
+            android:screenOrientation="unspecified"
+            tools:replace="screenOrientation" />
         
         <activity
             android:name="at.jodlidev.esmira.Activity_addStudy"
@@ -49,12 +55,7 @@
             android:label="@string/app_name">
         </activity>
         <activity
-            android:name="at.jodlidev.esmira.Activity_QRscanner"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/app_name">
-        </activity>
-        <activity
-            android:name="at.jodlidev.esmira.Activity_WelcomeScreen"
+            android:name="at.jodlidev.esmira.activities.WelcomeScreenActivity"
             android:theme="@style/AppTheme.ActivityWelcome"
             android:label="@string/app_name"
             android:excludeFromRecents="true">
