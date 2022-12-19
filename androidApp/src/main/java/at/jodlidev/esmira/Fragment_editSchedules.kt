@@ -26,7 +26,6 @@ class Fragment_editSchedules : Base_fragment() {
 		private class ViewHolderTrigger constructor(vG: ViewGroup) : RecyclerView.ViewHolder(vG) {
 			var timeStart: Element_DateTimeInput = vG.findViewById(R.id.time_start)
 			var timeEnd: Element_DateTimeInput = vG.findViewById(R.id.time_end)
-			var frequencyHeader: TextView = vG.findViewById(R.id.frequency_header)
 			var labelHeader: TextView = vG.findViewById(R.id.label_header)
 			var frequencyConnector: View = vG.findViewById(R.id.frequency_connector)
 		}
@@ -53,18 +52,6 @@ class Fragment_editSchedules : Base_fragment() {
 			})
 			triggerHolder.labelHeader.text = signalTime.label + ":"
 			if(signalTime.random) {
-				triggerHolder.frequencyHeader.text =
-					if(signalTime.schedule.dailyRepeatRate == 1)
-						context.getString(
-							R.string.colon_frequency_header_daily,
-							signalTime.frequency
-						)
-					else
-						context.getString(
-							R.string.colon_frequency_header_multiple_days,
-							signalTime.frequency,
-							signalTime.schedule.dailyRepeatRate
-						)
 				triggerHolder.timeEnd.setTimestamp(signalTime.getEnd())
 				triggerHolder.timeEnd.setListener(object : OnChangeListener {
 					override fun onChanged(date: Calendar) {
@@ -74,14 +61,6 @@ class Fragment_editSchedules : Base_fragment() {
 				})
 			}
 			else {
-				if(signalTime.schedule.dailyRepeatRate == 1)
-					triggerHolder.frequencyHeader.text =
-						context.getString(R.string.colon_frequency_header_one_time_daily)
-				else
-					triggerHolder.frequencyHeader.text = context.getString(
-						R.string.colon_frequency_header_one_time_multiple_days,
-						signalTime.schedule.dailyRepeatRate
-					)
 				triggerHolder.timeEnd.visibility = View.GONE
 				triggerHolder.frequencyConnector.visibility = View.GONE
 			}

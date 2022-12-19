@@ -35,10 +35,6 @@
     <string name="contact_researcher">Contact researcher</string>
     <string name="colon_accessCode">Access code:</string>
     <string name="colon_enter_manually">Enter manually:</string>
-    <string name="colon_frequency_header_daily">%1$d times daily, between:</string>
-    <string name="colon_frequency_header_multiple_days">%1$d times every %2$d days, between:</string>
-    <string name="colon_frequency_header_one_time_daily">Daily at:</string>
-    <string name="colon_frequency_header_one_time_multiple_days">Every %1$d days, at:</string>
     <string name="colon_next_expected_notification">Next expected notification:</string>
     <string name="colon_password">Password:</string>
     <string name="delete_statistics">Delete statistics</string>

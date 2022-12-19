@@ -11,24 +11,10 @@ struct ChangeSchedulesView: View {
 		@EnvironmentObject var appState: AppState
 
 		private let signalTime: SignalTime
-//		private let study: Study
 		@State private var startTime: String
 		@State private var endTime: String
-//		@State private var startTime: String = ""
-//		@State private var endTime: String = ""
 
 		@State private var isFaulty: Bool = false
-		
-//		init(_ study: Study, _ i: Int) {
-//			self.signalTime = study.editableSignalTimes[i]
-//
-//			self._startTime = State(initialValue: String(signalTime.getStart()))
-//			self._endTime = State(initialValue: String(signalTime.getEnd()))
-//			self.study = study
-//			print(String(signalTime.getStart()))
-//		}
-		
-//		init(_ signalTime: inout SignalTime) {
 		init(_ signalTime: SignalTime) {
 			self.signalTime = signalTime
 
@@ -50,10 +36,6 @@ struct ChangeSchedulesView: View {
 			VStack(alignment: .leading) {
 				Text(self.signalTime.label).bold()
 				if(self.signalTime.random) {
-					Text(self.signalTime.schedule.dailyRepeatRate == 1 ?
-						String(format: NSLocalizedString("colon_frequency_header_daily", comment: ""), self.signalTime.frequency) :
-						String(format: NSLocalizedString("colon_frequency_header_multiple_days", comment: ""), self.signalTime.frequency, self.signalTime.schedule.dailyRepeatRate)
-					)
 					HStack {
 						if(self.isFaulty) {
 							Image(systemName: "exclamationmark.circle.fill").foregroundColor(.red)
@@ -69,13 +51,6 @@ struct ChangeSchedulesView: View {
 					}
 				}
 				else {
-					if(self.signalTime.schedule.dailyRepeatRate == 1) {
-						Text("colon_frequency_header_one_time_daily")
-					}
-					else {
-						Text(String(format: NSLocalizedString("colon_frequency_header_one_time_multiple_days", comment: ""), self.signalTime.schedule.dailyRepeatRate))
-					}
-					
 					DateWindowView(value: self.$startTime, typeMode: .time, saveMode: .asTimestamp) { value in
 						self.signalTime.setStart(timestamp: Int64(value) ?? 0)
 						self.checkFaulty()
@@ -114,14 +89,8 @@ struct ChangeSchedulesView: View {
 	
 	func drawSignalTimes() -> some View {
 		//Swift is call by value. We need to force it to use call by reference because we want all changed data stored in self.studies:
-
-//		return List(self.currentStudy.editableSignalTimes.indices, id: \.self) { i in
-//			SignalTimeView(self.currentStudy, i)
-////			SignalTimeView(&signalTimes[i])
-//		}.fixButtons()
 		return List(self.currentStudy.editableSignalTimes, id: \.self) { signalTime in
 			SignalTimeView(signalTime)
-//			SignalTimeView(&signalTimes[i])
 		}.fixButtons()
 		
 	}

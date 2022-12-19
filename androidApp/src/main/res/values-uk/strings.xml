@@ -47,10 +47,6 @@
     <string name="contact_researcher">Зв\'язатися із дослідником</string>
     <string name="colon_accessCode">Код доступу:</string>
     <string name="colon_enter_manually">Ввести вручну:</string>
-    <string name="colon_frequency_header_daily">%1$d разів на день між:</string>
-    <string name="colon_frequency_header_multiple_days">%1$d разів кожні %2$d днів між:</string>
-    <string name="colon_frequency_header_one_time_daily">Щоденно о:</string>
-    <string name="colon_frequency_header_one_time_multiple_days">Кожні %1$d днів о:</string>
     <string name="colon_next_expected_notification">Наступне очікуване сповіщення:</string>
     <string name="colon_password">Пароль:</string>
     <string name="additional_notification_settings_samsung_3">На екрані натисніть кнопку «Додати програми». Потім виберіть у списку ESMira та натисніть «ОК».</string>

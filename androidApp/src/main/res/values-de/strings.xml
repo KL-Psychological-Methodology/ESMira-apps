@@ -35,10 +35,6 @@
     <string name="consent">Einwilligung</string>
     <string name="colon_accessCode">Zugangscode:</string>
     <string name="colon_enter_manually">Manuelle Eingabe:</string>
-    <string name="colon_frequency_header_daily">%1$d Mal täglich, zwischen:</string>
-    <string name="colon_frequency_header_multiple_days">%1$d Mal alle %2$d Tage, zwischen:</string>
-    <string name="colon_frequency_header_one_time_daily">Täglich um:</string>
-    <string name="colon_frequency_header_one_time_multiple_days">Alle %1$d Tage, um:</string>
     <string name="colon_next_expected_notification">Nächste erwartete Benachrichtigung:</string>
     <string name="colon_password">Passwort:</string>
     <string name="delete_statistics">Statistiken löschen</string>

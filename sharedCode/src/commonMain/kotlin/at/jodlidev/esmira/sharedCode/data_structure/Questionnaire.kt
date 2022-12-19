@@ -253,7 +253,7 @@ class Questionnaire {
 		// So we would have to count how many alarms are left for this SignalTime, remove them and reschedule them in the new timeframe (11:30 - 15:00)
 		
 		// removing everything in case filling out the questionnaire changed things (e.g. completableOnce=true):
-		if(!isActive() && willBeActiveIn() == 0L)
+		if(isNotActiveForGood())
 			Scheduler.remove(this)
 		else {
 			scheduleIfNeeded()
@@ -440,6 +440,10 @@ class Questionnaire {
 			else ->
 				durationValue.coerceAtMost(startingAfterDaysValue)
 		}.coerceAtLeast(0)
+	}
+	
+	fun isNotActiveForGood(): Boolean {
+		return !isActive() && willBeActiveIn() == 0L
 	}
 	
 	fun canBeFilledOut(now: Long = NativeLink.getNowMillis()): Boolean { //if there are any questionnaires at the current time

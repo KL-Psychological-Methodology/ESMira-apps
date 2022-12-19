@@ -283,7 +283,7 @@ class Study internal constructor(
 	}
 	fun hasEditableSchedules(): Boolean {
 		for(q in questionnaires) {
-			if(q.isActive() && q.hasEditableSchedules())
+			if(!q.isNotActiveForGood() && q.hasEditableSchedules())
 				return true
 		}
 		return false
