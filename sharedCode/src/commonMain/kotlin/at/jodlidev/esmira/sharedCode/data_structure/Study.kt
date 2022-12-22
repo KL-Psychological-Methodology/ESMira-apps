@@ -330,8 +330,8 @@ class Study internal constructor(
 	}
 	
 	fun daysUntilRewardsAreActive(): Int {
-		val oneDay = 86400000
-		return ceil((((joined + rewardVisibleAfterDays * oneDay) - NativeLink.getNowMillis()).toFloat() / oneDay))
+		val oneDay = 86400000L
+		return ceil((((joined + rewardVisibleAfterDays.toLong() * oneDay) - NativeLink.getNowMillis()).toFloat() / oneDay))
 			.toInt()
 			.coerceAtLeast(0)
 	}
