@@ -14,7 +14,7 @@ struct HtmlTextRepresentable: UIViewRepresentable {
 	@State var isScrollable = false
 	
 	func updateUIView(_ label: UITextView, context: Context) {
-		
+		updateHtml(label)
 	}
 	
 	func makeUIView(context: UIViewRepresentableContext<Self>) -> UITextView {
@@ -31,6 +31,15 @@ struct HtmlTextRepresentable: UIViewRepresentable {
 		label.text = html
 		label.backgroundColor = .clear
 		
+		updateHtml(label)
+		
+		return label
+	}
+	
+	private func updateHtml(_ label: UITextView) {
+		label.text = html
+		self.isReady = false
+		
 		DispatchQueue.main.async {
 			let data = NSString(string: "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\"/></head><body style=\"font-size: \(UILabel().font.pointSize)px; font-family: system-ui, -apple-system, sans-serif\">\(self.html)</body></html>")
 				.data(using: String.Encoding.unicode.rawValue)
@@ -41,18 +50,11 @@ struct HtmlTextRepresentable: UIViewRepresentable {
 				documentAttributes: nil
 			) {
 				label.attributedText = attributedString
-//				label.sizeToFit()
 				self.dynamicHeight = label.sizeThatFits(CGSize(width: label.frame.width, height: CGFloat.greatestFiniteMagnitude)).height
-//				let fixedWidth = label.frame.size.width
-//				let newSize = label.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-//				label.frame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
 			}
 			
 			self.isReady = true
 		}
-		
-		
-		return label
 	}
 }
 
