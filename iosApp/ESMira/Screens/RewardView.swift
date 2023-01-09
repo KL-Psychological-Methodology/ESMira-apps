@@ -8,7 +8,8 @@ import sharedCode
 
 struct RewardView: View {
 	@EnvironmentObject var appState: AppState
-	let study: Study
+	let studyId: Int64
+	@State private var study: Study? = nil
 	@State private var showShareSheet = false
 	@State private var error: String = ""
 	@State private var rewardCode: String = ""
@@ -17,13 +18,18 @@ struct RewardView: View {
 	@State private var showAlert: Bool = false
 	@State private var alertView: () -> Alert = { Alert(title: Text(""))}
 	
+	init(studyId: Int64) {
+		self.studyId = studyId
+		self.study = DbLogic().getStudy(id: studyId)
+	}
+	
 	private func getErrorView(error: String) -> some View {
 		VStack(alignment: .leading) {
 			Text(error)
 			
 			if(!self.fulfilledQuestionnaires.isEmpty) {
 				Text("error_reward_questionnaires_not_finished").padding(.vertical)
-				ForEach(self.study.questionnaires, id: \.internalId) { (questionnaire: Questionnaire) in
+				ForEach(self.study!.questionnaires, id: \.internalId) { (questionnaire: Questionnaire) in
 					HStack {
 						Text(questionnaire.title)
 						Spacer()
@@ -69,10 +75,11 @@ struct RewardView: View {
 			}
 			
 			HStack {
-				if(!study.contactEmail.isEmpty) {
+				if(!study!.contactEmail.isEmpty) {
+					Spacer()
 					Button(action: {
-						let emailContent = study.rewardEmailContent.isEmpty ? NSLocalizedString("reward_code_content", comment: "") : study.rewardEmailContent
-						if let url = URL(string: "mailto:\(self.study.contactEmail)?body=\(emailContent)") {
+						let emailContent = self.study!.rewardEmailContent.isEmpty ? NSLocalizedString("reward_code_content", comment: "") : self.study!.rewardEmailContent
+						if let url = URL(string: "mailto:\(self.study!.contactEmail)?body=\(emailContent)") {
 							if #available(iOS 10.0, *) {
 								UIApplication.shared.open(url)
 							} else {
@@ -85,8 +92,9 @@ struct RewardView: View {
 							Text("reward_code_send_email")
 						}
 					}
-					Spacer()
 				}
+				
+				Spacer()
 				Button(action: {
 					self.showShareSheet = true
 				}) {
@@ -95,10 +103,12 @@ struct RewardView: View {
 						Text("reward_code_share")
 					}
 				}
+				Spacer()
 			}
-			Spacer()
-			if(!study.rewardInstructions.isEmpty) {
-				ScrollableHtmlTextView(html: study.rewardInstructions)
+			Spacer(minLength: 10.0)
+			if(!study!.rewardInstructions.isEmpty) {
+				Text(study!.rewardInstructions)
+				ScrollableHtmlTextView(html: study!.rewardInstructions)
 			}
 				
 		}
@@ -110,26 +120,29 @@ struct RewardView: View {
 	
 	var body: some View {
 		HStack {
-			let untilActive = self.study.daysUntilRewardsAreActive()
-			if(!study.enableRewardSystem || untilActive != 0) {
-				self.getErrorView(error: String(format: NSLocalizedString("info_reward_is_not_active_yet", comment: ""), untilActive))
-			}
-			else {
-				if(!self.error.isEmpty) {
-					self.getErrorView(error: self.error)
-				}
-				else if(rewardCode.isEmpty) {
-					self.getLoadingView()
+			if(self.study != nil) {
+				let untilActive = self.study!.daysUntilRewardsAreActive()
+				if(!self.study!.enableRewardSystem || untilActive != 0) {
+					self.getErrorView(error: String(format: NSLocalizedString("info_reward_is_not_active_yet", comment: ""), untilActive))
 				}
 				else {
-					self.getCodeView()
+					if(!self.error.isEmpty) {
+						self.getErrorView(error: self.error)
+					}
+					else if(rewardCode.isEmpty) {
+						self.getLoadingView()
+					}
+					else {
+						self.getCodeView()
+					}
 				}
 			}
 		}
 		.padding()
 		.onAppear {
+			self.study = DbLogic().getStudy(id: self.studyId)
 			error = ""
-			study.getRewardCode(
+			self.study!.getRewardCode(
 				onError: {msg in
 						error = msg
 					},

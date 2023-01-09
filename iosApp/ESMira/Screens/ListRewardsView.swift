@@ -14,11 +14,11 @@ struct ListRewardsView: View {
 	var body: some View {
 		Group {
 			if(studies.count == 1 && self.studies[0].state == .joined) {
-				RewardView(study: self.studies[0])
+				RewardView(studyId: self.studies[0].id)
 			}
 			else {
 				List(studies, id: \.webId) { study in
-					NavigationLink(destination: RewardView(study: study)) {
+					NavigationLink(destination: RewardView(studyId: study.id)) {
 						Text(study.title)
 					}
 				}
