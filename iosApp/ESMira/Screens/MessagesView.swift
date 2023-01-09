@@ -18,7 +18,19 @@ struct MessagesView: View {
 	@State private var messages: [Message] = []
 	
 	private func reloadMessages() {
-		self.messages = DbLogic().getMessages(id: self.study?.id ?? -1)
+		Web.Companion().updateStudiesAsync(forceStudyUpdate: false) {updatedCount in
+			DispatchQueue.main.async {
+				let newMessages = DbLogic().getMessages(id: self.study?.id ?? -1)
+				if(newMessages.count != self.messages.count) {
+					self.messages = newMessages
+				}
+			}
+		}
+		
+		let newMessages = DbLogic().getMessages(id: self.study?.id ?? -1)
+		if(newMessages.count != self.messages.count) {
+			self.messages = newMessages
+		}
 	}
 	
 	var body: some View {
@@ -29,8 +41,9 @@ struct MessagesView: View {
 						position: msg.fromServer ? .left : .right,
 						isNew: msg.isNew,
 						content: msg.content
-					)					.onAppear {
-						msg.markAsRead()
+					)
+					.onAppear {
+						msg.markAsRead() //TODO: When messagesView has been opened and user uses "update studies"- button in settings, view will be updated in the background. And again when actually viewed showing everything as read
 					}
 				}
 
