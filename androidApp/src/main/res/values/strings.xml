@@ -89,7 +89,7 @@
     <string name="info_no_errors">No errors to report</string>
     <string name="info_no_messages">There are no messages.</string>
     <string name="info_no_model_settings">No device settings were found.</string>
-    <string name="info_no_studies_noAccessKey">Could not find public studies on this server.</string>
+    <string name="info_no_studies_noAccessKey">Could not find any public study on this server.</string>
     <string name="android_info_no_studies_withAccessKey">Could not find studies with the access key \"%1$s\" on this server.</string>
     <string name="info_no_schedules">No schedules to change.</string>
     <string name="info_no_statistics">No statistics to display.</string>
@@ -231,4 +231,5 @@
 \nHere is my reward code: [[CODE]].
 \nMy information:</string>
     <string name="reward_code_description">It is important to us that all data provided through ESMira remain completely anonymous. But in order to receive your reward, you will have to provide some personal information which should not be linked to your user id. For this reason we have the reward code which is not linked to your user-id or any data you have provided.</string>
+    <string name="colon_choose_study">Choose a study:</string>
 </resources>

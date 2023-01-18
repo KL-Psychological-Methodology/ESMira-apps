@@ -231,4 +231,5 @@
 \ndies ist mein Belohnungscode: [[CODE]].
 \nMeine Daten:</string>
     <string name="reward_code_description">Es ist uns wichtig, dass sämtliche Daten, welche Sie über ESMira eingeben haben, komplett anonym bleiben. Doch um die Belohnung erhalten zu können, müssen persönliche Daten angegeben werden, welche nicht mit den Studiendaten verknüpft sein sollten. Daher gibt es den Belohnungscode, welcher komplett unabhängig von Ihrer User-Id und Ihren Studiendaten ist.</string>
+    <string name="colon_choose_study">Wähle eine Studie:</string>
 </resources>
