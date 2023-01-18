@@ -1,7 +1,8 @@
-val composeVersion = "1.2.1"
+val composeVersion = "1.3.1"
 
 plugins {
     id("com.android.application")
+    id("kotlin-parcelize")
     kotlin("android")
 }
 
@@ -19,8 +20,8 @@ android {
         applicationId = "at.jodlidev.esmira"
         minSdk = 21
         targetSdk = 33
-        versionCode = 133
-        versionName = "2.7.9"
+        versionCode = 136
+        versionName = "2.7.12"
         multiDexEnabled = true //project became too big. See: https://stackoverflow.com/a/59308589
     
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -34,7 +35,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.3.1"
+        kotlinCompilerExtensionVersion = composeVersion
     }
 }
 

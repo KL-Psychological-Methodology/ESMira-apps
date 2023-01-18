@@ -448,7 +448,7 @@ class Web {
 					urlFormatted = "https://$urlFormatted"
 			}
 			
-			println("Getting studies from: $urlFormatted")
+			println("Getting studies from: $urlFormatted with accessKey \"$accessKey\"")
 			nativeAsync {
 				try {
 					val path = urlFormatted + (
@@ -579,6 +579,7 @@ class Web {
 				try {
 					val response = web.postJson(study.serverUrl + URL_REWARD, PostStructure.RewardRequestStructure(study.webId))
 					val obj = DbLogic.getJsonConfig().decodeFromString<RewardInfo>(response)
+					ErrorBox.log("Web", "Loaded rewardCode. Response: $response")
 					if(obj.errorCode == Study.REWARD_SUCCESS)
 						study.saveRewardCode(obj.code)
 					onSuccess(obj)
