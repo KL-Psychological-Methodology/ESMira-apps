@@ -3,6 +3,7 @@ package at.jodlidev.esmira.views.welcome
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -62,13 +63,13 @@ fun AccessKeyDialog(accessKey: String, openState: MutableState<Boolean>, gotoNex
 
 @Composable
 fun AccessKeyQuestionView(accessKey: String, gotoPrevious: () -> Unit, gotoNext: (accessKey: String) -> Unit) {
-	ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+	ConstraintLayout(modifier = Modifier.fillMaxSize().padding(all = 20.dp)) {
 		val openAccessKeyDialog = remember { mutableStateOf(false) }
 		
 		if(openAccessKeyDialog.value)
 			AccessKeyDialog(accessKey, openAccessKeyDialog, gotoNext)
 		
-		val (icon, questionMarkText, instructionsText, divider, buttonYes, buttonNo, buttonPrev) = createRefs()
+		val (icon, questionMarkText, instructionsText, buttonYes, buttonNo, navigation) = createRefs()
 		
 		Icon(
 			Icons.Filled.Key,
@@ -76,7 +77,7 @@ fun AccessKeyQuestionView(accessKey: String, gotoPrevious: () -> Unit, gotoNext:
 			modifier = Modifier
 				.size(100.dp)
 				.constrainAs(icon) {
-					top.linkTo(parent.top, margin = 20.dp)
+					top.linkTo(parent.top)
 					start.linkTo(parent.start)
 					end.linkTo(parent.end)
 				}
@@ -98,8 +99,8 @@ fun AccessKeyQuestionView(accessKey: String, gotoPrevious: () -> Unit, gotoNext:
 			textAlign = TextAlign.Center,
 			modifier = Modifier.constrainAs(instructionsText) {
 				top.linkTo(icon.bottom, margin = 20.dp)
-				start.linkTo(parent.start, margin = 20.dp)
-				end.linkTo(parent.end, margin = 20.dp)
+				start.linkTo(parent.start)
+				end.linkTo(parent.end)
 				width = Dimension.fillToConstraints
 			}
 		)
@@ -110,8 +111,8 @@ fun AccessKeyQuestionView(accessKey: String, gotoPrevious: () -> Unit, gotoNext:
 			},
 			modifier = Modifier
 				.constrainAs(buttonYes) {
-					start.linkTo(parent.start, margin = 40.dp)
-					end.linkTo(parent.end, margin = 40.dp)
+					start.linkTo(parent.start, margin = 20.dp)
+					end.linkTo(parent.end, margin = 20.dp)
 					top.linkTo(instructionsText.bottom, margin = 20.dp)
 					width = Dimension.fillToConstraints
 				}
@@ -125,8 +126,8 @@ fun AccessKeyQuestionView(accessKey: String, gotoPrevious: () -> Unit, gotoNext:
 			},
 			modifier = Modifier
 				.constrainAs(buttonNo) {
-					start.linkTo(parent.start, margin = 40.dp)
-					end.linkTo(parent.end, margin = 40.dp)
+					start.linkTo(parent.start, margin = 20.dp)
+					end.linkTo(parent.end, margin = 20.dp)
 					top.linkTo(buttonYes.bottom, margin = 10.dp)
 					width = Dimension.fillToConstraints
 				}
@@ -134,35 +135,16 @@ fun AccessKeyQuestionView(accessKey: String, gotoPrevious: () -> Unit, gotoNext:
 			Text(stringResource(R.string.welcome_join_public_study), textAlign = TextAlign.Center)
 		}
 		
-		Divider(
-			color = MaterialTheme.colors.primary,
-			thickness = 1.dp,
-			modifier = Modifier
-				.constrainAs(divider) {
-					start.linkTo(parent.start, margin = 20.dp)
-					end.linkTo(parent.end, margin = 20.dp)
-					bottom.linkTo(buttonPrev.top, margin = 5.dp)
-					width = Dimension.fillToConstraints
-				}
+		NavigationView(
+			gotoPrevious = gotoPrevious,
+			gotoNext = null,
+			modifier = Modifier.constrainAs(navigation) {
+				start.linkTo(parent.start)
+				end.linkTo(parent.end)
+				bottom.linkTo(parent.bottom)
+				width = Dimension.fillToConstraints
+			}
 		)
-		
-		TextButton(
-			onClick = gotoPrevious,
-			modifier = Modifier
-				.constrainAs(buttonPrev) {
-					start.linkTo(divider.start)
-					bottom.linkTo(parent.bottom, margin = 20.dp)
-				}
-		
-		) {
-			Icon(
-				Icons.Default.KeyboardArrowLeft,
-				contentDescription = "",
-				modifier = Modifier.size(ButtonDefaults.IconSize)
-			)
-			Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-			Text(stringResource(R.string.back))
-		}
 	}
 }
 

@@ -15,6 +15,7 @@
     <uses-permission android:name="com.huawei.permission.external_app_settings.USE_COMPONENT"/><!--To open Huawei settings-screen-->
     <uses-permission android:name="oppo.permission.OPPO_COMPONENT_SAFE"/><!--To open Oppo settings-screen-->
     
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/><!-- Notification permission starting with Android 33-->
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" /><!--for app_usage item in questionnaires-->
     
     <application
@@ -43,12 +44,6 @@
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="unspecified"
             tools:replace="screenOrientation" />
-        
-        <activity
-            android:name="at.jodlidev.esmira.Activity_addStudy"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/add_a_study">
-        </activity>
         <activity
             android:name="at.jodlidev.esmira.Activity_photoCamera"
             android:theme="@style/AppTheme.NoActionBar"
@@ -57,9 +52,18 @@
         <activity
             android:name="at.jodlidev.esmira.activities.WelcomeScreenActivity"
             android:theme="@style/AppTheme.ActivityWelcome"
-            android:label="@string/app_name"
-            android:excludeFromRecents="true">
+            android:label="@string/add_a_study"
+            android:excludeFromRecents="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="esmira"/>
+            </intent-filter>
         </activity>
+        
+        
         
         <activity
             android:name="at.jodlidev.esmira.Activity_notificationsBroken"
@@ -84,29 +88,6 @@
             android:theme="@style/AppTheme.WideDialog"
             android:label="@string/send_error_report"
             android:excludeFromRecents="true">
-        </activity>
-        
-        <activity
-            android:name="at.jodlidev.esmira.Activity_LinkInterpreter"
-            android:theme="@style/AppTheme.Transparent"
-            android:label="@string/add_a_study"
-            android:excludeFromRecents="true"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="esmira"/>
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:scheme="https"
-                    android:host="esmira.kl.ac.at"/>
-            </intent-filter>
         </activity>
         
         

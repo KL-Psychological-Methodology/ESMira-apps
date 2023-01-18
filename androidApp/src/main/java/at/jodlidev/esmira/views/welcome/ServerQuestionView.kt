@@ -111,7 +111,7 @@ fun ServerQuestionView(
 	getServerList: () -> List<Pair<String, String>>,
 	initialServerUrl: String,
 	gotoPrevious: () -> Unit,
-	gotoNext: (serverTitle: String, serverUrl: String) -> Unit
+	gotoNext: (serverUrl: String) -> Unit
 ) {
 	var selectedServerUrl = initialServerUrl
 	val serverList = remember {
@@ -121,8 +121,8 @@ fun ServerQuestionView(
 		}
 		list
 	}
-	ConstraintLayout(modifier = Modifier.fillMaxSize()) {
-		val (icon, questionMarkText, instructionsText, serverListElement, divider, buttonPrev, buttonNext) = createRefs()
+	ConstraintLayout(modifier = Modifier.fillMaxSize().padding(all = 20.dp)) {
+		val (icon, questionMarkText, instructionsText, serverListElement, navigation) = createRefs()
 		val serverTitle = remember { mutableStateOf("") }
 		val serverUrl = remember { mutableStateOf(selectedServerUrl) }
 		
@@ -147,7 +147,7 @@ fun ServerQuestionView(
 			modifier = Modifier
 				.size(100.dp)
 				.constrainAs(icon) {
-					top.linkTo(parent.top, margin = 20.dp)
+					top.linkTo(parent.top)
 					start.linkTo(parent.start)
 					end.linkTo(parent.end)
 				}
@@ -169,17 +169,17 @@ fun ServerQuestionView(
 			textAlign = TextAlign.Center,
 			modifier = Modifier.constrainAs(instructionsText) {
 				top.linkTo(icon.bottom, margin = 20.dp)
-				start.linkTo(parent.start, margin = 20.dp)
-				end.linkTo(parent.end, margin = 20.dp)
+				start.linkTo(parent.start)
+				end.linkTo(parent.end)
 				width = Dimension.fillToConstraints
 			}
 		)
 		
 		LazyColumn(modifier = Modifier.constrainAs(serverListElement) {
 			top.linkTo(instructionsText.bottom, margin = 20.dp)
-			bottom.linkTo(divider.top)
-			start.linkTo(parent.start, margin = 20.dp)
-			end.linkTo(parent.end, margin = 20.dp)
+			bottom.linkTo(navigation.top)
+			start.linkTo(parent.start)
+			end.linkTo(parent.end)
 			width = Dimension.fillToConstraints
 			height = Dimension.fillToConstraints
 		}) {
@@ -210,53 +210,16 @@ fun ServerQuestionView(
 			}
 		}
 		
-		Divider(
-			color = MaterialTheme.colors.primary,
-			thickness = 1.dp,
-			modifier = Modifier
-				.constrainAs(divider) {
-					start.linkTo(parent.start, margin = 20.dp)
-					end.linkTo(parent.end, margin = 20.dp)
-					bottom.linkTo(buttonPrev.top, margin = 5.dp)
-					width = Dimension.fillToConstraints
-				}
+		NavigationView(
+			gotoPrevious = gotoPrevious,
+			gotoNext = { gotoNext(serverUrl.value) },
+			modifier = Modifier.constrainAs(navigation) {
+				start.linkTo(parent.start)
+				end.linkTo(parent.end)
+				bottom.linkTo(parent.bottom)
+				width = Dimension.fillToConstraints
+			}
 		)
-		
-		TextButton(
-			onClick = gotoPrevious,
-			modifier = Modifier
-				.constrainAs(buttonPrev) {
-					start.linkTo(divider.start)
-					bottom.linkTo(parent.bottom, margin = 20.dp)
-				}
-		
-		) {
-			Icon(
-				Icons.Default.KeyboardArrowLeft,
-				contentDescription = "",
-				modifier = Modifier.size(ButtonDefaults.IconSize)
-			)
-			Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-			Text(stringResource(R.string.back))
-		}
-		
-		TextButton(
-			onClick = { gotoNext(serverTitle.value, serverUrl.value) },
-			modifier = Modifier
-				.constrainAs(buttonNext) {
-					end.linkTo(divider.end)
-					bottom.linkTo(parent.bottom, margin = 20.dp)
-				}
-		
-		) {
-			Text(stringResource(R.string.continue_))
-			Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-			Icon(
-				Icons.Default.KeyboardArrowRight,
-				contentDescription = "",
-				modifier = Modifier.size(ButtonDefaults.IconSize)
-			)
-		}
 	}
 }
 
@@ -287,7 +250,7 @@ fun PreviewServerQuestionView() {
 			initialServerUrl =  "example.url",
 			getServerList = { serverList },
 			gotoPrevious = {},
-			gotoNext = {_, _ -> }
+			gotoNext = { _ -> }
 		)
 	}
 }
@@ -306,7 +269,7 @@ fun PreviewServerQuestionViewWitManual() {
 			initialServerUrl =  "manual.url",
 			getServerList = { serverList },
 			gotoPrevious = {},
-			gotoNext = {_, _ -> }
+			gotoNext = { _ -> }
 		)
 	}
 }

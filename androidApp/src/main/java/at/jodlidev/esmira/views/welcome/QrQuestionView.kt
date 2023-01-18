@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -30,16 +31,16 @@ import at.jodlidev.esmira.R
 
 @Composable
 fun QrQuestionView(gotoNo: () -> Unit, gotoYes: () -> Unit, gotoPrevious: () -> Unit) {
-	ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+	ConstraintLayout(modifier = Modifier.fillMaxSize().padding(all = 20.dp)) {
 		
-		val (icon, questionMarkText, instructionsText, buttonNo, buttonYes, divider, buttonPrev) = createRefs()
+		val (icon, questionMarkText, instructionsText, buttonNo, buttonYes, navigation) = createRefs()
 		
 		Image(
 			painter = painterResource(id = R.drawable.example_qr_code),
 			contentDescription = "",
 			modifier = Modifier
 				.constrainAs(icon) {
-					top.linkTo(parent.top, margin = 20.dp)
+					top.linkTo(parent.top)
 					start.linkTo(parent.start)
 					end.linkTo(parent.end)
 				}
@@ -61,8 +62,8 @@ fun QrQuestionView(gotoNo: () -> Unit, gotoYes: () -> Unit, gotoPrevious: () -> 
 			textAlign = TextAlign.Center,
 			modifier = Modifier.constrainAs(instructionsText) {
 				top.linkTo(icon.bottom, margin = 20.dp)
-				start.linkTo(parent.start, margin = 20.dp)
-				end.linkTo(parent.end, margin = 20.dp)
+				start.linkTo(parent.start)
+				end.linkTo(parent.end)
 				width = Dimension.fillToConstraints
 			}
 		)
@@ -97,35 +98,16 @@ fun QrQuestionView(gotoNo: () -> Unit, gotoYes: () -> Unit, gotoPrevious: () -> 
 		}
 		
 		
-		Divider(
-			color = MaterialTheme.colors.primary,
-			thickness = 1.dp,
-			modifier = Modifier
-				.constrainAs(divider) {
-					start.linkTo(parent.start, margin = 20.dp)
-					end.linkTo(parent.end, margin = 20.dp)
-					bottom.linkTo(buttonPrev.top, margin = 5.dp)
-					width = Dimension.fillToConstraints
-				}
+		NavigationView(
+			gotoPrevious = gotoPrevious,
+			gotoNext = null,
+			modifier = Modifier.constrainAs(navigation) {
+				start.linkTo(parent.start)
+				end.linkTo(parent.end)
+				bottom.linkTo(parent.bottom)
+				width = Dimension.fillToConstraints
+			}
 		)
-		
-		TextButton(
-			onClick = gotoPrevious,
-			modifier = Modifier
-				.constrainAs(buttonPrev) {
-					start.linkTo(divider.start)
-					bottom.linkTo(parent.bottom, margin = 20.dp)
-				}
-		
-		) {
-			Icon(
-				Icons.Default.KeyboardArrowLeft,
-				contentDescription = "",
-				modifier = Modifier.size(ButtonDefaults.IconSize)
-			)
-			Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-			Text(stringResource(R.string.back))
-		}
 	}
 }
 

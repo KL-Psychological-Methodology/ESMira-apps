@@ -5,6 +5,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -31,7 +32,7 @@ import com.journeyapps.barcodescanner.ScanOptions
  */
 
 @Composable
-fun QrScanningView(gotoPrevious: () -> Unit, gotoNext: (serverTitle: String, serverUrl: String, accessKey: String, studyId: Long) -> Unit) {
+fun QrScanningView(gotoPrevious: () -> Unit, gotoNext: (serverUrl: String, accessKey: String, studyId: Long, qId: Long) -> Unit) {
 	val context = LocalContext.current
 	val scanLauncher = rememberLauncherForActivityResult(
 		contract = ScanContract(),
@@ -40,16 +41,16 @@ fun QrScanningView(gotoPrevious: () -> Unit, gotoNext: (serverTitle: String, ser
 				val interpreter = QrInterpreter()
 				val data = interpreter.check(result.contents)
 				if(data != null)
-					gotoNext(Web.getServerName(data.url), data.url, data.accessKey, data.studyId)
+					gotoNext(data.url, data.accessKey, data.studyId, data.qId)
 				else
 					Toast.makeText(context, R.string.qrCodeInvalid, Toast.LENGTH_SHORT).show()
 			}
 		}
 	)
 	
-	ConstraintLayout(modifier = Modifier.fillMaxSize()) {
+	ConstraintLayout(modifier = Modifier.fillMaxSize().padding(all = 20.dp)) {
 		
-		val (icon, instructionsText, divider, buttonScan, buttonPrev) = createRefs()
+		val (icon, instructionsText, buttonScan, navigation) = createRefs()
 		
 		Icon(
 			Icons.Filled.PhotoCamera,
@@ -57,7 +58,7 @@ fun QrScanningView(gotoPrevious: () -> Unit, gotoNext: (serverTitle: String, ser
 			modifier = Modifier
 				.size(100.dp)
 				.constrainAs(icon) {
-					top.linkTo(parent.top, margin = 20.dp)
+					top.linkTo(parent.top)
 					start.linkTo(parent.start)
 					end.linkTo(parent.end)
 				}
@@ -67,8 +68,8 @@ fun QrScanningView(gotoPrevious: () -> Unit, gotoNext: (serverTitle: String, ser
 			text = stringResource(id = R.string.welcome_qr_instructions),
 			modifier = Modifier.constrainAs(instructionsText) {
 				top.linkTo(icon.bottom, margin = 20.dp)
-				start.linkTo(parent.start, margin = 20.dp)
-				end.linkTo(parent.end, margin = 20.dp)
+				start.linkTo(parent.start)
+				end.linkTo(parent.end)
 				width = Dimension.fillToConstraints
 			}
 		)
@@ -86,35 +87,16 @@ fun QrScanningView(gotoPrevious: () -> Unit, gotoNext: (serverTitle: String, ser
 			Text(stringResource(R.string.start))
 		}
 		
-		Divider(
-			color = MaterialTheme.colors.primary,
-			thickness = 1.dp,
-			modifier = Modifier
-				.constrainAs(divider) {
-					start.linkTo(parent.start, margin = 20.dp)
-					end.linkTo(parent.end, margin = 20.dp)
-					bottom.linkTo(buttonPrev.top, margin = 5.dp)
-					width = Dimension.fillToConstraints
-				}
+		NavigationView(
+			gotoPrevious = gotoPrevious,
+			gotoNext = null,
+			modifier = Modifier.constrainAs(navigation) {
+				start.linkTo(parent.start)
+				end.linkTo(parent.end)
+				bottom.linkTo(parent.bottom)
+				width = Dimension.fillToConstraints
+			}
 		)
-		
-		TextButton(
-			onClick = gotoPrevious,
-			modifier = Modifier
-				.constrainAs(buttonPrev) {
-					start.linkTo(divider.start)
-					bottom.linkTo(parent.bottom, margin = 20.dp)
-				}
-		
-		) {
-			Icon(
-				Icons.Default.KeyboardArrowLeft,
-				contentDescription = "",
-				modifier = Modifier.size(ButtonDefaults.IconSize)
-			)
-			Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-			Text(stringResource(R.string.back))
-		}
 	}
 }
 
