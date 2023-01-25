@@ -39,7 +39,6 @@ class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_a
 		private var enableTimestamp = 0L
 		private var hasEvent = false
 		
-		@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 		fun addEvent(event: UsageEvents.Event) {
 			when(event.eventType) {
 				startEventCode -> {
@@ -153,24 +152,25 @@ class AppUsageView(context: Context) : TextElView(context, R.layout.view_input_a
 		return context.getSystemService(systemService) as UsageStatsManager
 	}
 	private fun countTotalEvents(from: Long, to: Long): UsageStatsInfo {
-		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
-			return UsageStatsInfo(-1, -1L)
-		
-		val usageStatsManager = getUsageStatsManager()
-		
-		return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-			val counter = AppUsageCounter(from, to, UsageEvents.Event.SCREEN_INTERACTIVE, UsageEvents.Event.SCREEN_NON_INTERACTIVE, UsageEvents.Event.DEVICE_SHUTDOWN)
-			val events = usageStatsManager.queryEvents(from, to)
-			val event: UsageEvents.Event = UsageEvents.Event()
-			
-			while(events.getNextEvent(event)) {
-				counter.addEvent(event)
-			}
-			
-			counter.getResults()
-		}
-		else
-			ScreenTrackingReceiver.getData(context)
+		return UsageStatsInfo(-1, -1L)
+//		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP)
+//			return UsageStatsInfo(-1, -1L)
+//
+//		val usageStatsManager = getUsageStatsManager()
+//
+//		return if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//			val counter = AppUsageCounter(from, to, UsageEvents.Event.SCREEN_INTERACTIVE, UsageEvents.Event.SCREEN_NON_INTERACTIVE, UsageEvents.Event.DEVICE_SHUTDOWN)
+//			val events = usageStatsManager.queryEvents(from, to)
+//			val event: UsageEvents.Event = UsageEvents.Event()
+//
+//			while(events.getNextEvent(event)) {
+//				counter.addEvent(event)
+//			}
+//
+//			counter.getResults()
+//		}
+//		else
+//			ScreenTrackingReceiver.getData(context)
 	}
 	
 	

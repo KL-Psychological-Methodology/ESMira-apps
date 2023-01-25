@@ -4,6 +4,7 @@ import at.jodlidev.esmira.sharedCode.data_structure.*
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_timed
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_perValue
+import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
 /**
@@ -18,6 +19,9 @@ object DbLogic {
 	
 	fun getJsonConfig(): Json { //TODO: Where does this function fit best..?
 		return Json {ignoreUnknownKeys = true}
+	}
+	inline fun <reified T>createJsonObj(json: String = "{}"): T { //used for testing
+		return DbLogic.getJsonConfig().decodeFromString(json)
 	}
 	
 	fun getVersion(): String {

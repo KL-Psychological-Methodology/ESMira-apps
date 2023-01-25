@@ -54,7 +54,7 @@ abstract class BaseTest {
 		return t
 	}
 	inline fun <reified T>createJsonObj(json: String = "{}"): T {
-		return DbLogic.getJsonConfig().decodeFromString(json)
+		return DbLogic.createJsonObj(json)
 	}
 	
 	fun createAlarmFromSignalTime(

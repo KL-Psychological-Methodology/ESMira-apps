@@ -6,6 +6,7 @@ import androidx.preference.PreferenceManager
 import at.jodlidev.esmira.input_views.AppUsageView
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.ErrorBox
+import at.jodlidev.esmira.views.inputViews.AppUsageCalculator
 
 /**
  * Created by JodliDev on 14.06.2022.
@@ -199,12 +200,12 @@ class ScreenTrackingReceiver : BroadcastReceiver() {
 			context.registerReceiver(receiver, intentFilter)
 			return receiver
 		}
-		fun getData(context: Context): AppUsageView.UsageStatsInfo {
+		fun getData(context: Context): AppUsageCalculator.UsageStatsInfo {
 			val data = ScreenTrackData(context)
 			
 			if(checkDay(data))
 				data.save()
-			return AppUsageView.UsageStatsInfo(data.yesterdayCount, data.yesterdayTime)
+			return AppUsageCalculator.UsageStatsInfo(data.yesterdayCount, data.yesterdayTime)
 		}
 	}
 }
