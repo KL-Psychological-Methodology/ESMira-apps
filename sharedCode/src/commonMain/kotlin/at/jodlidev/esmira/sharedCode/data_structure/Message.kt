@@ -15,7 +15,7 @@ class Message {
 	var isNew = false
 	var fromServer = false
 	
-	internal constructor(studyId: Long, content: String, sent: Long) {
+	constructor(studyId: Long, content: String, sent: Long) { //cant be internal because its needed for previews
 		this.studyId = studyId
 		this.content = content
 		this.sent = sent
