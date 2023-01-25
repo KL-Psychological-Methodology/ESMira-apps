@@ -448,12 +448,13 @@ class Web {
 					urlFormatted = "https://$urlFormatted"
 			}
 			
-			println("Getting studies from: $urlFormatted with accessKey \"$accessKey\"")
+			val correctedAccessKey = accessKey.trim().lowercase()
+			println("Getting studies from: $urlFormatted with accessKey \"$correctedAccessKey\"")
 			nativeAsync {
 				try {
 					val path = urlFormatted + (
-						if ((accessKey.isNotEmpty()))
-							URL_LIST_STUDIES_PASSWORD.replace("%s1", accessKey).replace("%s2", NativeLink.smartphoneData.lang)
+						if ((correctedAccessKey.isNotEmpty()))
+							URL_LIST_STUDIES_PASSWORD.replace("%s1", correctedAccessKey).replace("%s2", NativeLink.smartphoneData.lang)
 						else
 							URL_LIST_STUDIES.replace("%s", NativeLink.smartphoneData.lang)
 						)
