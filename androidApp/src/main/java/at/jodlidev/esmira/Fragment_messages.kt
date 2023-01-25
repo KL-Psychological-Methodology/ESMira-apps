@@ -43,7 +43,15 @@ class Fragment_messages : Base_fragment() {
 		return ComposeView(requireContext()).apply {
 			setContent {
 				ESMiraSurface {
-					val messages = remember { mutableStateOf(DbLogic.getMessages(study.id)) }
+					val messages = remember {
+						mutableStateOf(DbLogic.getMessages(study.id))
+					}
+
+					LaunchedEffect(true) {
+						Web.updateStudiesAsync {
+							messages.value = DbLogic.getMessages(study.id)
+						}
+					}
 					
 					MessageListView(
 						messages = messages.value,
@@ -78,10 +86,14 @@ class Fragment_messages : Base_fragment() {
 	
 	@Composable
 	private fun MessageView(message: Message, setAsRead: (Message) -> Unit) {
+		DisposableEffect(message) {
+			onDispose {
+				setAsRead(message)
+			}
+		}
 		val color = if(!message.fromServer)
 			MaterialTheme.colors.primary
 		else if(message.isNew) {
-			setAsRead(message)
 			MaterialTheme.colors.secondary
 		}
 		else
@@ -199,7 +211,9 @@ class Fragment_messages : Base_fragment() {
 			LazyColumn(
 				horizontalAlignment = Alignment.CenterHorizontally,
 				state = listState,
-				modifier = Modifier.fillMaxWidth().weight(1f)
+				modifier = Modifier
+					.fillMaxWidth()
+					.weight(1f)
 			) {
 				items(messages) { message ->
 					Spacer(modifier = Modifier.height(10.dp))
@@ -259,11 +273,9 @@ class Fragment_messages : Base_fragment() {
 		}
 	}
 	
-	
 	override fun onPause() {
 		super.onPause()
 		activity.let { a -> (a as Activity_main).updateNavigationBadges() }
-		
 	}
 	
 	companion object {
