@@ -124,16 +124,15 @@ class Fragment_reward : Base_fragment() {
 		) {
 			Text(stringResource(R.string.colon_reward_code_header))
 			Spacer(modifier = Modifier.size(10.dp))
-			TextButton(onClick = {
-				context?.let {
-					MaterialAlertDialogBuilder(it, R.style.AppTheme_ActivityDialog)
-						.setMessage(R.string.reward_code_description)
-						.setPositiveButton(R.string.close, null)
-						.show()
-				}
-			}) {
-				Text(stringResource(id = R.string.what_for))
-			}
+			DialogButton(stringResource(id = R.string.what_for),
+				onClick = {
+					context?.let {
+						MaterialAlertDialogBuilder(it, R.style.AppTheme_ActivityDialog)
+							.setMessage(R.string.reward_code_description)
+							.setPositiveButton(R.string.close, null)
+							.show()
+					}
+				})
 		}
 		
 		Spacer(modifier = Modifier.size(10.dp))
@@ -163,10 +162,10 @@ class Fragment_reward : Base_fragment() {
 				horizontalArrangement = Arrangement.SpaceEvenly
 			) {
 				if(study.contactEmail.isNotEmpty()) {
-					DefaultButton(
-						modifier = Modifier
-							.weight(0.45F)
-							.height(80.dp),
+					DefaultButtonIconAbove(
+						icon = Icons.Default.Email,
+						text = stringResource(R.string.reward_code_send_email),
+						modifier = Modifier.weight(0.45F),
 						onClick = {
 							val context = requireContext()
 							val intent = Intent(Intent.ACTION_SEND)
@@ -181,22 +180,14 @@ class Fragment_reward : Base_fragment() {
 								Toast.makeText(context, R.string.error_no_email_client, Toast.LENGTH_LONG).show()
 							}
 						}
-					) {
-						Column(
-							horizontalAlignment = Alignment.CenterHorizontally
-						) {
-							Icon(Icons.Default.Email, "email")
-							Text(stringResource(R.string.reward_code_send_email), textAlign = TextAlign.Center)
-						}
-						
-					}
+					)
 					
 					Spacer(modifier = Modifier.weight(0.1F))
 				}
-				DefaultButton(
-					modifier = Modifier
-						.weight(0.45F)
-						.height(80.dp),
+				DefaultButtonIconAbove(
+					icon = Icons.Default.Share,
+					text = stringResource(R.string.reward_code_share),
+					modifier = Modifier.weight(0.45F),
 					onClick = {
 						val context = requireContext()
 						val intent = Intent(Intent.ACTION_SEND)
@@ -208,14 +199,7 @@ class Fragment_reward : Base_fragment() {
 							Toast.makeText(context, R.string.error_no_email_client, Toast.LENGTH_LONG).show()
 						}
 					}
-				) {
-					Column(
-						horizontalAlignment = Alignment.CenterHorizontally
-					) {
-						Icon(Icons.Default.Share, "share")
-						Text(stringResource(R.string.reward_code_share), textAlign = TextAlign.Center)
-					}
-				}
+				)
 			}
 		}
 		if(study.rewardInstructions.isNotEmpty()) {

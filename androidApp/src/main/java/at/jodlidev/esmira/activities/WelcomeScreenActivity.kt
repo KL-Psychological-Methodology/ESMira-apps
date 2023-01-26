@@ -378,13 +378,11 @@ class WelcomeScreenActivity: ComponentActivity() {
 				}
 			},
 			confirmButton = {
-				TextButton(
+				DialogButton(stringResource(R.string.cancel),
 					onClick = {
 						onCancel()
 					}
-				) {
-					Text(stringResource(R.string.cancel))
-				}
+				)
 			},
 		)
 	}
@@ -402,23 +400,19 @@ class WelcomeScreenActivity: ComponentActivity() {
 				Text(stringResource(R.string.welcome_exit_questionDesc))
 			},
 			dismissButton = {
-				TextButton(
+				DialogButton(stringResource(R.string.cancel),
 					onClick = {
 						openState.value = false
 					}
-				) {
-					Text(stringResource(R.string.cancel))
-				}
+				)
 			},
 			confirmButton = {
-				TextButton(
+				DialogButton(stringResource(R.string.ok_),
 					onClick = {
 						openState.value = false
 						onConfirm()
 					}
-				) {
-					Text(stringResource(R.string.ok_))
-				}
+				)
 			},
 		)
 	}

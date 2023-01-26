@@ -17,6 +17,7 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import at.jodlidev.esmira.activities.ErrorReportDialogActivity
+import at.jodlidev.esmira.activities.NotificationsBrokenActivity
 import at.jodlidev.esmira.activities.WelcomeScreenActivity
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
@@ -143,7 +144,7 @@ class Fragment_settings : PreferenceFragmentCompat(), Preference.OnPreferenceCli
 			KEY_SEND_ERRORS ->
                 ErrorReportDialogActivity.start(requireActivity(), true)
 			KEY_NOTIFICATIONS_BROKEN ->
-                Activity_notificationsBroken.start(requireActivity(), true)
+                NotificationsBrokenActivity.start(requireActivity(), true)
 			KEY_SEND_SYNC_NOW ->
 				Web.syncDataSetsAsync { success ->
 					val a = activity ?: return@syncDataSetsAsync

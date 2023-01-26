@@ -14,7 +14,6 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -25,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import at.jodlidev.esmira.DefaultButton
 import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
-import at.jodlidev.esmira.sharedCode.data_structure.Study
 
 /**
  * Created by JodliDev on 20.12.2022.
@@ -99,11 +97,7 @@ fun AppTrackingContentScaffold(desc: Int, btnLabel: Int, onContinue: () -> Unit)
 	Column(horizontalAlignment = Alignment.CenterHorizontally) {
 		Text(stringResource(id = desc))
 		Spacer(modifier = Modifier.width(10.dp))
-		DefaultButton(
-			onClick = onContinue
-		) {
-			Text(stringResource(id = btnLabel))
-		}
+		DefaultButton(stringResource(btnLabel), onClick = onContinue)
 	}
 }
 

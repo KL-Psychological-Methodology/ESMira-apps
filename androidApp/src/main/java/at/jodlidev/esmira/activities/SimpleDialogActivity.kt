@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -20,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import at.jodlidev.esmira.DialogButton
 import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.HtmlHandler
 import at.jodlidev.esmira.R
@@ -79,7 +79,7 @@ class SimpleDialogActivity: ComponentActivity() {
 			) {
 				HtmlHandler.HtmlText(html = content, modifier = Modifier.fillMaxWidth())
 			}
-			TextButton(
+			DialogButton(stringResource(R.string.ok_),
 				onClick = {
 					if(notificationId != -1)
 						NativeLink.notifications.remove(notificationId)
@@ -93,9 +93,7 @@ class SimpleDialogActivity: ComponentActivity() {
 						width = Dimension.fillToConstraints
 					}
 			
-			) {
-				Text(stringResource(R.string.ok_))
-			}
+			)
 		}
 	}
 	

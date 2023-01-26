@@ -7,7 +7,6 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.AlertDialog
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.CheckCircle
@@ -22,10 +21,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import at.jodlidev.esmira.ESMiraSurface
+import at.jodlidev.esmira.*
 import at.jodlidev.esmira.R
-import at.jodlidev.esmira.colorGreen
-import at.jodlidev.esmira.colorRed
 
 /**
  * Created by JodliDev on 20.12.2022.
@@ -59,9 +56,7 @@ fun PermissionHeaderView(
 			
 			if(whatFor.isNotEmpty()) {
 				Spacer(modifier = Modifier.weight(1f))
-				TextButton(onClick = { openWhatForDialog.value = true }) {
-					Text(stringResource(R.string.what_for))
-				}
+				DialogButton(stringResource(R.string.what_for), onClick = { openWhatForDialog.value = true })
 			}
 		}
 		Spacer(modifier = Modifier.height(10.dp))
@@ -83,11 +78,9 @@ fun WhatForDialog(openState: MutableState<Boolean>, whatFor: String) {
 			}
 		},
 		confirmButton = {
-			TextButton(
+			DialogButton(stringResource(R.string.ok_),
 				onClick = { openState.value = false }
-			) {
-				Text(stringResource(R.string.ok_))
-			}
+			)
 		}
 	)
 }

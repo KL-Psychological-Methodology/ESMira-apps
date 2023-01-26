@@ -2,13 +2,9 @@ package at.jodlidev.esmira.views.welcome
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -71,7 +67,7 @@ fun QrQuestionView(gotoNo: () -> Unit, gotoYes: () -> Unit, gotoPrevious: () -> 
 		
 		createHorizontalChain(buttonNo, buttonYes, chainStyle = ChainStyle.Spread)
 		
-		DefaultButton(
+		DefaultButton(stringResource(R.string.no),
 			onClick = gotoNo,
 			modifier = Modifier
 				.constrainAs(buttonNo) {
@@ -80,11 +76,9 @@ fun QrQuestionView(gotoNo: () -> Unit, gotoYes: () -> Unit, gotoPrevious: () -> 
 					top.linkTo(instructionsText.bottom, margin = 20.dp)
 				}
 		
-		) {
-			Text(stringResource(R.string.no))
-		}
+		)
 		
-		DefaultButton(
+		DefaultButton(stringResource(R.string.yes),
 			onClick = gotoYes,
 			modifier = Modifier
 				.constrainAs(buttonYes) {
@@ -93,9 +87,7 @@ fun QrQuestionView(gotoNo: () -> Unit, gotoYes: () -> Unit, gotoPrevious: () -> 
 					top.linkTo(instructionsText.bottom, margin = 20.dp)
 				}
 		
-		) {
-			Text(stringResource(R.string.yes))
-		}
+		)
 		
 		
 		NavigationView(

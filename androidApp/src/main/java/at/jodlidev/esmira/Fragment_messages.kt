@@ -153,19 +153,17 @@ class Fragment_messages : Base_fragment() {
 			Row {
 				Spacer(modifier = Modifier.weight(1f))
 				
-				TextButton(onClick = {
-					cancel()
-				}) {
-					Text(stringResource(R.string.cancel), textAlign = TextAlign.Center)
-				}
+				DialogButton(stringResource(R.string.cancel),
+					onClick = {
+						cancel()
+					})
 				
 				Spacer(modifier = Modifier.width(20.dp))
 				
-				TextButton(onClick = {
-					sendMessage(messageContent.value)
-				}) {
-					Text(stringResource(R.string.send), textAlign = TextAlign.Center)
-				}
+				DialogButton(stringResource(R.string.send),
+					onClick = {
+						sendMessage(messageContent.value)
+					})
 			}
 		}
 	}
@@ -224,11 +222,11 @@ class Fragment_messages : Base_fragment() {
 				}
 				if(!writeMessage.value) {
 					item {
-						OutlinedButton(onClick = {
-							writeMessage.value = true
-						}) {
-							Text(stringResource(R.string.send_message_to_researcher))
-						}
+						DefaultButton(stringResource(R.string.send_message_to_researcher),
+							onClick = {
+								writeMessage.value = true
+							}
+						)
 						Spacer(modifier = Modifier.height(20.dp))
 					}
 				}
