@@ -57,7 +57,7 @@
     <string name="error_missing_fields">Please fill out all required fields!</string>
     <string name="error_no_email_client">Could not find an email-app…</string>
     <string name="error_no_images_to_upload">You have not selected any images to upload.</string>
-    <string name="error_notifications_broken_android_desc">Unfortunately some smartphone models have hidden settings which are necessary to allow background notifications.</string>
+    <string name="error_notifications_broken_android_desc">Unfortunately some smartphone models also have hidden settings which are necessary to allow background notifications.</string>
     <string name="error_notifications_broken_android_header">ESMira is not able not send notifications!</string>
     <string name="error_notifications_broken_android_dontkillmyapp">In case this dialog is not helpful to you, you can also visit <a href="https://dontkillmyapp.com/">dontkillmyapp.com</a> for more information.</string>
     <string name="error_notifications_broken_android_footer">Do you need further assistance or you want to help us to incorporate more information (Screenshots, descriptions) on your device model into ESMira\? Write us an email to: <a href="mailto:esmira@kl.ac.at">esmira@kl.ac.at</a>.</string>
@@ -138,7 +138,7 @@
     <string name="notificationChannel_studyUpdates_name">Study updated</string>
     <string name="notificationChannel_studyUpdates_desc">Sends a notification when a study was updated in case you want to change its notification schedules.</string>
     <string name="notifications">Notifications</string>
-    <string name="notifications_not_working">Notifications are not working</string>
+    <string name="notifications_not_working">In case notifications are not working</string>
     <string name="ok_">OK</string>
     <string name="open_device_specific_settings">Open device specific settings</string>
     <string name="open_device_specific_settings_numbered">Open device specific settings %1$d</string>
@@ -232,4 +232,8 @@
 \nMy information:</string>
     <string name="reward_code_description">It is important to us that all data provided through ESMira remain completely anonymous. But in order to receive your reward, you will have to provide some personal information which should not be linked to your user id. For this reason we have the reward code which is not linked to your user-id or any data you have provided.</string>
     <string name="colon_choose_study">Choose a study:</string>
+	<string name="from_X">From %1$s</string>
+	<string name="check_phone_model">Check phone model</string>
+    <string name="state_checking_device_model">Checking device model...</string>
+    <string name="open_device_instructions">Open device instructions</string>
 </resources>

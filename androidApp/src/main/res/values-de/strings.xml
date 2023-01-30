@@ -57,7 +57,7 @@
     <string name="error_missing_fields">Bitte machen Sie alle notwendigen Angaben!</string>
     <string name="error_no_email_client">Keine E-Mail-App gefunden…</string>
     <string name="error_no_images_to_upload">Es wurden keine Bilder zum Hochladen ausgewählt.</string>
-    <string name="error_notifications_broken_android_desc">Leider gibt es Smartphone-Modelle welche versteckte Einstellungen benötigen um Hintergrundbenachrichtigungen zu erlauben.</string>
+    <string name="error_notifications_broken_android_desc">Leider gibt es Smartphone-Modelle welche auch versteckte Einstellungen benötigen um Hintergrundbenachrichtigungen zu erlauben.</string>
     <string name="error_notifications_broken_android_header">ESMira hat Probleme Benachrichtigungen auf Ihrem Smartphone zu versenden!</string>
     <string name="error_notifications_broken_android_dontkillmyapp">Falls die gelisteten Einstellungen zu keiner Lösung führen sollten, können Sie auf folgender Website weitere Informationen finden: <a href="https://dontkillmyapp.com/">dontkillmyapp.com</a>.</string>
     <string name="error_notifications_broken_android_footer">Brauchen Sie Hilfe oder möchten uns helfen, genauere iInformationen (Screenshots, Hilfetexte) über Ihr Smartphone-Modell hinzuzufügen\? Dann schreiben Sie uns eine Em-Mail an: <a href="mailto:esmira@kl.ac.at">esmira@kl.ac.at</a>.</string>
@@ -138,7 +138,7 @@
     <string name="notificationChannel_studyUpdates_name">Studie aktualisiert</string>
     <string name="notificationChannel_studyUpdates_desc">Sendet eine Benachrichtigung, wenn eine Studie aktualisiert wurde.</string>
     <string name="notifications">Benachrichtigungen</string>
-    <string name="notifications_not_working">Benachrichtigungen funktionieren nicht</string>
+    <string name="notifications_not_working">Falls Benachrichtigungen nicht funktionieren</string>
     <string name="ok_">OK</string>
     <string name="open_device_specific_settings">Einstellungen öffnen</string>
     <string name="open_device_specific_settings_numbered">Einstellungen %1$d öffnen</string>
@@ -232,4 +232,8 @@
 \nMeine Daten:</string>
     <string name="reward_code_description">Es ist uns wichtig, dass sämtliche Daten, welche Sie über ESMira eingeben haben, komplett anonym bleiben. Doch um die Belohnung erhalten zu können, müssen persönliche Daten angegeben werden, welche nicht mit den Studiendaten verknüpft sein sollten. Daher gibt es den Belohnungscode, welcher komplett unabhängig von Ihrer User-Id und Ihren Studiendaten ist.</string>
     <string name="colon_choose_study">Wähle eine Studie:</string>
+	<string name="from_X">Von: %1$s</string>
+	<string name="check_phone_model">Überprüfe Handy Model</string>
+    <string name="open_device_instructions">Öffne Geräte-Instruktionen</string>
+    <string name="state_checking_device_model">Überprüfe Gerätemodel...</string>
 </resources>
