@@ -1,126 +1,116 @@
 package at.jodlidev.esmira
 
 import android.content.Context
-import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.text.Spannable
-import android.text.SpannableStringBuilder
+import android.text.Layout
 import android.text.Spanned
-import android.text.method.LinkMovementMethod
 import android.text.style.*
-import android.util.Base64
 import android.widget.TextView
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.viewinterop.AndroidView
-import at.jodlidev.esmira.sharedCode.nativeAsync
-import at.jodlidev.esmira.sharedCode.onUIThread
-import net.nightwhistler.htmlspanner.HtmlSpanner
-import net.nightwhistler.htmlspanner.TagNodeHandler
-import net.nightwhistler.htmlspanner.handlers.*
-import org.htmlcleaner.TagNode
-import java.net.URL
+import io.noties.markwon.*
+import io.noties.markwon.core.MarkwonTheme
+import io.noties.markwon.core.spans.LastLineSpacingSpan
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin
+import io.noties.markwon.html.CssInlineStyleParser
+import io.noties.markwon.html.HtmlPlugin
+import io.noties.markwon.html.HtmlTag
+import io.noties.markwon.html.tag.SimpleTagHandler
+import io.noties.markwon.image.ImagesPlugin
+import io.noties.markwon.image.network.OkHttpNetworkSchemeHandler
+import io.noties.markwon.linkify.LinkifyPlugin
+import org.commonmark.node.Heading
 
 
 /**
  * Created by JodliDev on 24.06.2021.
  */
 
-
 class HtmlHandler {
-	class OwnAlignmentHandler(wrapHandler: TagNodeHandler) : AlignmentHandler(wrapHandler) {
-		override fun handleTagNode(node: TagNode?, builder: SpannableStringBuilder, start: Int, end: Int) {
-			val align = node?.getAttributeByName("style")
-			if(align != null) {
-				val f = Regex(".*text-align:\\s*([^;]+)(;.*|)$").find(align)
-				println(f)
-				if(f != null) {
-					val (value) = f.destructured
-					node.setAttribute("align", value)
-				}
-			}
-			
-			super.handleTagNode(node, builder, start, end)
-		}
-	}
-	class SpannableHandler(private val getSpan: () -> CharacterStyle) : TagNodeHandler() {
-		override fun handleTagNode(node: TagNode?, builder: SpannableStringBuilder, start: Int, end: Int) {
-			builder.setSpan(getSpan(), start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-		}
-		
-	}
-	class OwnImageHandler(private val el: TextView?, private val context: Context) : ImageHandler() {
-		override fun handleTagNode(node: TagNode, builder: SpannableStringBuilder, start: Int, end: Int) {
-			val src = node.getAttributeByName("src")
-			builder.append("\uFFFC")
-			if(src.startsWith("data")) {
-				val split = src.indexOf(",", 0, true)
-				val imageBytes = Base64.decode(src.substring(split), Base64.DEFAULT)
-				val bitmap = BitmapFactory.decodeByteArray(imageBytes, 0, imageBytes.size)
-				builder.setSpan(ImageSpan(context, bitmap), start, end+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-			}
-			else if(el != null) {
-				nativeAsync {
-					try {
-						val bitmap = BitmapFactory.decodeStream(URL(src).openConnection().getInputStream())
-						builder.setSpan(ImageSpan(context, bitmap), start, end+1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-						
-						onUIThread {
-							el.text = builder
-						}
-					}
-					catch(e: Throwable) {
-						e.printStackTrace()
-					}
-				}
-			}
-		}
-	}
-	
 	companion object {
-		private lateinit var htmlSpanner: HtmlSpanner
-		
-		fun init() {
-			if(!this::htmlSpanner.isInitialized) {
-				htmlSpanner = HtmlSpanner()
-				
-				htmlSpanner.registerHandler("div", OwnAlignmentHandler(NewLineHandler(1)))
-				htmlSpanner.registerHandler("u", SpannableHandler{UnderlineSpan()})
-				htmlSpanner.registerHandler("s", SpannableHandler{StrikethroughSpan()})
-				htmlSpanner.registerHandler("mark", SpannableHandler{BackgroundColorSpan(Color.YELLOW)})
-				htmlSpanner.registerHandler("em", ItalicHandler()) //is bold in library for some reason
-				htmlSpanner.registerHandler("strong", BoldHandler()) //is italic in library for some reason
-			}
+		private fun getParser(context: Context): Markwon {
+			return Markwon.builder(context)
+				.usePlugin(object: AbstractMarkwonPlugin() {
+					override fun configureTheme(builder: MarkwonTheme.Builder) {
+						builder
+							.headingBreakHeight(0)
+					}
+				})
+				.usePlugin(object:AbstractMarkwonPlugin() {
+					override fun configureSpansFactory(builder:  MarkwonSpansFactory.Builder) {
+						builder.prependFactory(Heading::class.java) { _, _ -> LastLineSpacingSpan(50) }
+					}
+				})
+				.usePlugin(HtmlPlugin.create { plugin ->
+					plugin.addHandler(object: SimpleTagHandler() {
+						override fun supportedTags(): MutableCollection<String> {
+							return arrayListOf("mark")
+						}
+						override fun getSpans(configuration: MarkwonConfiguration, renderProps: RenderProps, tag: HtmlTag): Any {
+							return BackgroundColorSpan(Color.YELLOW)
+						}
+					})
+					plugin.addHandler(object: SimpleTagHandler() {
+						//Thanks to: https://github.com/noties/Markwon/issues/94
+						private val styleParser = CssInlineStyleParser.create()
+						override fun supportedTags(): MutableCollection<String> {
+							return arrayListOf("div")
+						}
+						override fun getSpans(configuration: MarkwonConfiguration, renderProps: RenderProps, tag: HtmlTag): Any? {
+							val style = tag.attributes()["style"]
+								?: return null
+							
+							for(property in styleParser.parse(style)) {
+								if(property.key() == "text-align") {
+									println(property.value())
+									return AlignmentSpan.Standard(when(property.value()) {
+										"left" -> Layout.Alignment.ALIGN_NORMAL
+										"center" -> Layout.Alignment.ALIGN_CENTER
+										"right" -> Layout.Alignment.ALIGN_OPPOSITE
+										else -> Layout.Alignment.ALIGN_NORMAL
+									})
+								}
+							}
+							return null
+						}
+					})
+//					plugin.addHandler(plugin.getHandler("p")!!)
+					
+//					plugin.addHandler(object: HeadingHandler() {
+//						override fun getSpans(configuration: MarkwonConfiguration, renderProps: RenderProps, tag: HtmlTag): Any {
+//							val span = super.getSpans(configuration, renderProps, tag)
+//							val factory = SpanFactory()
+//							return LastLineSpacingSpan(50)
+//						}
+//					})
+				})
+				.usePlugin(ImagesPlugin.create { plugin ->
+					plugin.addSchemeHandler(OkHttpNetworkSchemeHandler.create())
+				})
+				.usePlugin(StrikethroughPlugin.create())
+				.usePlugin(LinkifyPlugin.create())
+//				.usePlugin(SoftBreakAddsNewLinePlugin.create())
+				.build()
 		}
 		fun fromHtml(html: String, el: TextView): Spanned {
-			init()
-			htmlSpanner.registerHandler("img", OwnImageHandler(el, el.context))
-			val r = this.fromHtml(html)
-			htmlSpanner.unregisterHandler("img") //prevent memory leaks
-			return r
+			val parser = getParser(el.context)
+			return parser.toMarkdown(html)
 		}
 		fun fromHtml(html: String, context: Context): Spanned {
-			init()
-			htmlSpanner.registerHandler("img", OwnImageHandler(null, context))
-			val r = this.fromHtml(html)
-			htmlSpanner.unregisterHandler("img") //prevent memory leaks
-			return r
-		}
-		fun fromHtml(html: String): Spanned {
-			init()
-			return htmlSpanner.fromHtml(html).trim() as Spannable
+			val parser = getParser(context)
+			return parser.toMarkdown(html)
 		}
 		fun setHtml(html: String, el: TextView) {
-			el.text = fromHtml(html, el)
-			el.movementMethod = LinkMovementMethod.getInstance()
+			val parser = getParser(el.context)
+			parser.setMarkdown(el, html)
 		}
-		
+
 		@Composable
 		fun HtmlText(html: String, modifier: Modifier = Modifier) {
 			AndroidView(modifier = modifier, factory = { context ->
 				TextView(context).apply {
-					text = fromHtml(html, this)
-					movementMethod = LinkMovementMethod.getInstance()
+					setHtml(html, this)
 				}
 			})
 		}
