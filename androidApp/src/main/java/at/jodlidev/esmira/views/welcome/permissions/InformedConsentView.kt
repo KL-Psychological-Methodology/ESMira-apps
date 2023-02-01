@@ -4,10 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.AlertDialog
 import androidx.compose.material.Text
-import androidx.compose.material.TextButton
-import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -21,10 +18,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import at.jodlidev.esmira.DefaultButton
+import at.jodlidev.esmira.DialogButton
 import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.data_structure.Study
-import com.journeyapps.barcodescanner.ScanOptions
 
 /**
  * Created by JodliDev on 20.12.2022.
@@ -59,11 +56,9 @@ fun InformedConsentView(study: Study, num: Int, currentNum: MutableState<Int>) {
 			Spacer(modifier = Modifier.width(10.dp))
 			Text(stringResource(id = R.string.informed_consent_desc))
 			Spacer(modifier = Modifier.width(10.dp))
-			DefaultButton(
+			DefaultButton(stringResource(R.string.show_informed_consent),
 				onClick = { openInformedConsent.value = true }
-			) {
-				Text(stringResource(R.string.show_informed_consent))
-			}
+			)
 		}
 		
 	}
@@ -94,13 +89,9 @@ fun ConsentDialog(study: Study, onCancel: () -> Unit, onConsent: () -> Unit) {
 					
 					Row(modifier = Modifier.padding(top = 10.dp)) {
 						Spacer(modifier = Modifier.weight(1f))
-						TextButton(onClick = onCancel) {
-							Text(stringResource(R.string.cancel))
-						}
+						DialogButton(stringResource(R.string.cancel), onClick = onCancel)
 						Spacer(modifier = Modifier.width(10.dp))
-						TextButton(onClick = onConsent) {
-							Text(stringResource(R.string.i_agree))
-						}
+						DialogButton(stringResource(R.string.i_agree), onClick = onConsent)
 					}
 				}
 			}

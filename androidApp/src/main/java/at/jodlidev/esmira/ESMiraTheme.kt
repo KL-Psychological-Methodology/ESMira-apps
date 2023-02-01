@@ -7,15 +7,17 @@ import androidx.compose.material.*
 import androidx.compose.material.MaterialTheme.shapes
 import androidx.compose.material.MaterialTheme.typography
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Message
-import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -170,6 +172,22 @@ fun PreviewPage() {
 
 @Composable
 fun DefaultButton(
+	text: String,
+	onClick: () -> Unit,
+	modifier: Modifier = Modifier
+) {
+	OutlinedButton(
+		colors = ButtonDefaults.outlinedButtonColors(
+			contentColor = MaterialTheme.colors.secondary
+		),
+		onClick = onClick,
+		modifier = modifier
+	) {
+		Text(text)
+	}
+}
+@Composable
+fun DefaultButton(
 	onClick: () -> Unit,
 	modifier: Modifier = Modifier,
 	content: @Composable RowScope.() -> Unit
@@ -184,6 +202,110 @@ fun DefaultButton(
 	)
 }
 
+@Composable
+fun DefaultButtonIconLeft(
+	text: String,
+	icon: ImageVector,
+	onClick: () -> Unit,
+	modifier: Modifier = Modifier
+) {
+	OutlinedButton(
+		colors = ButtonDefaults.outlinedButtonColors(
+			contentColor = MaterialTheme.colors.secondary
+		),
+		onClick = onClick,
+		modifier = modifier
+	) {
+		Icon(
+			icon,
+			contentDescription = "",
+			modifier = Modifier.size(ButtonDefaults.IconSize)
+		)
+		Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+		Text(text)
+	}
+}
+@Composable
+fun DefaultButtonIconAbove(
+	text: String,
+	icon: ImageVector,
+	onClick: () -> Unit,
+	modifier: Modifier = Modifier
+) {
+	OutlinedButton(
+		colors = ButtonDefaults.outlinedButtonColors(
+			contentColor = MaterialTheme.colors.secondary
+		),
+		onClick = onClick,
+		modifier = modifier
+	) {
+		Column(
+			horizontalAlignment = Alignment.CenterHorizontally,
+			modifier = Modifier.padding(vertical = 10.dp)
+		) {
+			Icon(icon, "")
+			Text(text)
+		}
+	}
+}
+
+@Composable
+fun DialogButton(
+	text: String,
+	onClick: () -> Unit,
+	modifier: Modifier = Modifier
+) {
+	TextButton(
+		onClick = onClick,
+		modifier = modifier
+	) {
+		Text(text)
+	}
+}
+
+@Composable
+fun TextButtonIconLeft(
+	text: String,
+	icon: ImageVector,
+	onClick: () -> Unit,
+	modifier: Modifier = Modifier
+) {
+	TextButton(
+		onClick = onClick,
+		modifier = modifier
+	) {
+		Icon(
+			icon,
+			contentDescription = "",
+			modifier = Modifier.size(ButtonDefaults.IconSize)
+		)
+		Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+		Text(text)
+	}
+}
+@Composable
+fun TextButtonIconRight(
+	text: String,
+	icon: ImageVector,
+	onClick: () -> Unit,
+	modifier: Modifier = Modifier,
+	enabled: Boolean = true
+) {
+	TextButton(
+		onClick = onClick,
+		modifier = modifier,
+		enabled = enabled
+	) {
+		Text(text)
+		Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+		Icon(
+			icon,
+			contentDescription = "",
+			modifier = Modifier.size(ButtonDefaults.IconSize)
+		)
+	}
+}
+
 
 @Preview(name = "Light Mode")
 @Preview(
@@ -196,26 +318,13 @@ fun PreviewButtons() {
 	ESMiraSurface {
 		Column {
 			Text("Text")
-			DefaultButton(onClick = {}) {
-				Icon(Icons.Default.Home, "home")
-				Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-				Text("DefaultButton")
-			}
-			Button(onClick = {}) {
-				Icon(Icons.Default.Home, "home")
-				Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-				Text("Button")
-			}
-			OutlinedButton(onClick = {}) {
-				Icon(Icons.Default.Home, "home")
-				Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-				Text("OutlinedButton")
-			}
-			TextButton(onClick = {}) {
-				Icon(Icons.Default.Home, "home")
-				Spacer(modifier = Modifier.size(ButtonDefaults.IconSpacing))
-				Text("TextButton")
-			}
+			
+			DialogButton(onClick = {}, text = "DefaultButton")
+			DefaultButton(onClick = {}, text = "DefaultButton")
+			DefaultButtonIconLeft(onClick = {}, icon = Icons.Default.Home, text = "DefaultButtonIconLeft")
+			DefaultButtonIconAbove(onClick = {}, icon = Icons.Default.Home, text = "DefaultButtonIconAbove")
+			TextButtonIconLeft(onClick = {}, icon = Icons.Default.Home, text = "TextButtonIconLeft")
+			TextButtonIconRight(onClick = {}, icon = Icons.Default.Home, text = "TextButtonIconRight")
 		}
 	}
 }

@@ -30,7 +30,6 @@ import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.androidNative.Notifications
 import at.jodlidev.esmira.sharedCode.NativeLink
-import at.jodlidev.esmira.sharedCode.data_structure.Study
 
 /**
  * Created by JodliDev on 20.12.2022.
@@ -102,10 +101,16 @@ fun NotificationsView(num: Int, currentNum: MutableState<Int>) {
 					
 					}
 					NotificationViewState.FAILED -> {
-						NotificationFailedView(state) {
-							state.value = NotificationViewState.SKIPPED
-							success.value = false
-							++currentNum.value
+						Column {
+							NotificationFailedView()
+							
+							Spacer(modifier = Modifier.height(20.dp))
+							
+							NotificationTryAgainView(state) {
+								state.value = NotificationViewState.SKIPPED
+								success.value = false
+								++currentNum.value
+							}
 						}
 					}
 					NotificationViewState.SKIPPED -> {
@@ -132,16 +137,14 @@ fun NotificationPermissionView(state: MutableState<NotificationViewState>) {
 	Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 		Text(stringResource(id = R.string.notification_permission_check))
 		Spacer(modifier = Modifier.width(10.dp))
-		DefaultButton(
+		DefaultButton(stringResource(R.string.enable_notifications),
 			onClick = {
 				if(ContextCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED)
 					state.value = NotificationViewState.SEND_TEST_NOTIFICATION
 				else
 					launcher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
 			}
-		) {
-			Text(stringResource(R.string.enable_notifications))
-		}
+		)
 	}
 }
 
@@ -152,7 +155,7 @@ fun NotificationSendView(state: MutableState<NotificationViewState>) {
 	Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 		Text(stringResource(id = R.string.info_test_notifications))
 		Spacer(modifier = Modifier.width(10.dp))
-		DefaultButton(
+		DefaultButton(stringResource(R.string.send_test_notification),
 			onClick = {
 				NativeLink.notifications.remove(Notifications.TEST_ID)
 				NativeLink.notifications.fire(
@@ -162,9 +165,7 @@ fun NotificationSendView(state: MutableState<NotificationViewState>) {
 				)
 				state.value = NotificationViewState.ASK_TEXT_NOTIFICATION
 			}
-		) {
-			Text(stringResource(R.string.send_test_notification))
-		}
+		)
 	}
 }
 
@@ -174,29 +175,40 @@ fun NotificationAskView(state: MutableState<NotificationViewState>, onFinish: ()
 		Text(stringResource(id = R.string.ask_notification_posted))
 		Spacer(modifier = Modifier.width(10.dp))
 		Row (horizontalArrangement = Arrangement.SpaceEvenly, modifier = Modifier.fillMaxWidth()) {
-			DefaultButton(
+			DefaultButton(stringResource(R.string.no),
 				onClick = {
 					NativeLink.notifications.remove(Notifications.TEST_ID)
 					state.value = NotificationViewState.FAILED
 				}
-			) {
-				Text(stringResource(R.string.no))
-			}
+			)
 			
-			DefaultButton(
+			DefaultButton(stringResource(R.string.yes),
 				onClick = {
 					NativeLink.notifications.remove(Notifications.TEST_ID)
 					onFinish()
 				}
-			) {
-				Text(stringResource(R.string.yes))
-			}
+			)
 		}
 	}
 }
 
 @Composable
-fun NotificationFailedView(state: MutableState<NotificationViewState>, onSkip: () -> Unit) {
+fun NotificationTryAgainView(state: MutableState<NotificationViewState>, ignore: () -> Unit) {
+	Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceAround) {
+		DefaultButton(stringResource(R.string.ignore),
+			onClick = ignore
+		)
+		
+		DefaultButton(stringResource(R.string.try_again),
+			onClick = {
+				state.value = NotificationViewState.PERMISSION
+			}
+		)
+	}
+}
+
+@Composable
+fun NotificationFailedView() {
 	val context = LocalContext.current
 	
 	Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -209,7 +221,8 @@ fun NotificationFailedView(state: MutableState<NotificationViewState>, onSkip: (
 				context.startActivity(Intent(Settings.ACTION_SOUND_SETTINGS))
 			}
 		) {
-			Icon(Icons.Default.LooksOne, "")
+			Icon(Icons.Default.LooksOne, "", modifier = Modifier.size(ButtonDefaults.IconSize))
+			Spacer(Modifier.size(ButtonDefaults.IconSpacing))
 			Text(stringResource(R.string.open_sound_settings), modifier = Modifier.weight(1F))
 		}
 		
@@ -237,7 +250,8 @@ fun NotificationFailedView(state: MutableState<NotificationViewState>, onSkip: (
 				context.startActivity(notificationIntent)
 			}
 		) {
-			Icon(Icons.Default.LooksTwo, "")
+			Icon(Icons.Default.LooksTwo, "", modifier = Modifier.size(ButtonDefaults.IconSize))
+			Spacer(Modifier.size(ButtonDefaults.IconSpacing))
 			Text(stringResource(R.string.open_notification_settings), modifier = Modifier.weight(1F))
 		}
 		
@@ -257,25 +271,10 @@ fun NotificationFailedView(state: MutableState<NotificationViewState>, onSkip: (
 					}
 				}
 			) {
-				Icon(Icons.Default.Looks3, "")
+				Icon(Icons.Default.Looks3, "", modifier = Modifier.size(ButtonDefaults.IconSize))
+				Spacer(Modifier.size(ButtonDefaults.IconSpacing))
 				Text(stringResource(R.string.open_doNotDisturb_settings), modifier = Modifier.weight(1F))
 			}
-		}
-		
-		Spacer(modifier = Modifier.height(20.dp))
-		
-		DefaultButton(
-			onClick = {
-				state.value = NotificationViewState.PERMISSION
-			}
-		) {
-			Text(stringResource(R.string.try_again))
-		}
-		
-		DefaultButton(
-			onClick = onSkip
-		) {
-			Text(stringResource(R.string.ignore))
 		}
 	}
 }
@@ -285,13 +284,11 @@ fun NotificationSkippedView(state: MutableState<NotificationViewState>) {
 	Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 		Text(stringResource(id = R.string.info_notification_setup_failed))
 		Spacer(modifier = Modifier.width(10.dp))
-		DefaultButton(
+		DefaultButton(stringResource(R.string.try_again),
 			onClick = {
 				state.value = NotificationViewState.SEND_TEST_NOTIFICATION
 			}
-		) {
-			Text(stringResource(R.string.try_again))
-		}
+		)
 	}
 }
 
@@ -341,8 +338,16 @@ fun PreviewNotificationAskView() {
 @Composable
 fun PreviewNotificationFailedView() {
 	ESMiraSurface {
-		val currentNum = remember { mutableStateOf(NotificationViewState.FAILED) }
-		NotificationFailedView(currentNum) {}
+		NotificationFailedView()
+	}
+}
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+fun PreviewNotificationTryAgainView() {
+	ESMiraSurface {
+		val currentNum = remember { mutableStateOf(NotificationViewState.ASK_TEXT_NOTIFICATION) }
+		NotificationTryAgainView(currentNum) {}
 	}
 }
 

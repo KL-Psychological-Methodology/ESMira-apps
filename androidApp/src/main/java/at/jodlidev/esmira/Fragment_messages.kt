@@ -43,7 +43,15 @@ class Fragment_messages : Base_fragment() {
 		return ComposeView(requireContext()).apply {
 			setContent {
 				ESMiraSurface {
-					val messages = remember { mutableStateOf(DbLogic.getMessages(study.id)) }
+					val messages = remember {
+						mutableStateOf(DbLogic.getMessages(study.id))
+					}
+
+					LaunchedEffect(true) {
+						Web.updateStudiesAsync {
+							messages.value = DbLogic.getMessages(study.id)
+						}
+					}
 					
 					MessageListView(
 						messages = messages.value,
@@ -78,10 +86,14 @@ class Fragment_messages : Base_fragment() {
 	
 	@Composable
 	private fun MessageView(message: Message, setAsRead: (Message) -> Unit) {
+		DisposableEffect(message) {
+			onDispose {
+				setAsRead(message)
+			}
+		}
 		val color = if(!message.fromServer)
 			MaterialTheme.colors.primary
 		else if(message.isNew) {
-			setAsRead(message)
 			MaterialTheme.colors.secondary
 		}
 		else
@@ -141,19 +153,17 @@ class Fragment_messages : Base_fragment() {
 			Row {
 				Spacer(modifier = Modifier.weight(1f))
 				
-				TextButton(onClick = {
-					cancel()
-				}) {
-					Text(stringResource(R.string.cancel), textAlign = TextAlign.Center)
-				}
+				DialogButton(stringResource(R.string.cancel),
+					onClick = {
+						cancel()
+					})
 				
 				Spacer(modifier = Modifier.width(20.dp))
 				
-				TextButton(onClick = {
-					sendMessage(messageContent.value)
-				}) {
-					Text(stringResource(R.string.send), textAlign = TextAlign.Center)
-				}
+				DialogButton(stringResource(R.string.send),
+					onClick = {
+						sendMessage(messageContent.value)
+					})
 			}
 		}
 	}
@@ -199,7 +209,9 @@ class Fragment_messages : Base_fragment() {
 			LazyColumn(
 				horizontalAlignment = Alignment.CenterHorizontally,
 				state = listState,
-				modifier = Modifier.fillMaxWidth().weight(1f)
+				modifier = Modifier
+					.fillMaxWidth()
+					.weight(1f)
 			) {
 				items(messages) { message ->
 					Spacer(modifier = Modifier.height(10.dp))
@@ -210,11 +222,11 @@ class Fragment_messages : Base_fragment() {
 				}
 				if(!writeMessage.value) {
 					item {
-						OutlinedButton(onClick = {
-							writeMessage.value = true
-						}) {
-							Text(stringResource(R.string.send_message_to_researcher))
-						}
+						DefaultButton(stringResource(R.string.send_message_to_researcher),
+							onClick = {
+								writeMessage.value = true
+							}
+						)
 						Spacer(modifier = Modifier.height(20.dp))
 					}
 				}
@@ -259,11 +271,9 @@ class Fragment_messages : Base_fragment() {
 		}
 	}
 	
-	
 	override fun onPause() {
 		super.onPause()
 		activity.let { a -> (a as Activity_main).updateNavigationBadges() }
-		
 	}
 	
 	companion object {

@@ -7,9 +7,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.State
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -19,6 +16,8 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
+import at.jodlidev.esmira.TextButtonIconLeft
+import at.jodlidev.esmira.TextButtonIconRight
 
 /**
  * Created by JodliDev on 19.12.2022.
@@ -49,7 +48,9 @@ fun NavigationView(
 		)
 
 		if(gotoPrevious != null) {
-			TextButton(
+			TextButtonIconLeft(
+				text = prevLabel,
+				icon = prevIcon(),
 				onClick = gotoPrevious,
 				modifier = Modifier
 					.constrainAs(buttonPrev) {
@@ -57,19 +58,13 @@ fun NavigationView(
 						bottom.linkTo(parent.bottom)
 					}
 
-			) {
-				Icon(
-					prevIcon(),
-					contentDescription = "",
-					modifier = Modifier.size(ButtonDefaults.IconSize)
-				)
-				Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-				Text(prevLabel)
-			}
+			)
 		}
 
 		if(gotoNext != null) {
-			TextButton(
+			TextButtonIconRight(
+				text = nextLabel,
+				icon = nextIcon(),
 				onClick = gotoNext,
 				modifier = Modifier
 					.constrainAs(buttonNext) {
@@ -77,16 +72,7 @@ fun NavigationView(
 						bottom.linkTo(parent.bottom)
 					},
 				enabled = nextEnabled()
-
-			) {
-				Text(nextLabel)
-				Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-				Icon(
-					nextIcon(),
-					contentDescription = "",
-					modifier = Modifier.size(ButtonDefaults.IconSize)
-				)
-			}
+			)
 		}
 	}
 }

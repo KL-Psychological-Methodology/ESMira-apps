@@ -9,6 +9,7 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.client.request.forms.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.decodeFromString
@@ -38,6 +39,10 @@ class Web {
 		val interpreter: GetStructure = client.get(url).body()
 		checkResponse(interpreter)
 		return interpreter.dataset
+	}
+	
+	private suspend fun getGenericJson(url: String): HttpResponse {
+		return client.get(url)
 	}
 	private suspend fun postJson(url: String, data: PostStructure): String {
 		println("postJson to: $url")
@@ -330,6 +335,18 @@ class Web {
 		private const val URL_UPLOAD_MESSAGE: String = "/api/save_message.php?lang=%s"
 		private const val URL_REWARD: String = "/api/reward.php"
 		
+		private const val DOMAIN_DONT_KILL_MY_APP: String = "https://dontkillmyapp.com"
+		private const val URL_DONT_KILL_MY_APP: String = "$DOMAIN_DONT_KILL_MY_APP/api/v2/%s.json"
+		
+		
+		val serverList: List<Pair<String, String>> get() {
+			return (if(DbLogic.isDev()) {
+				at.jodlidev.esmira.sharedCode.serverList + debugServerList
+			}
+			else
+				at.jodlidev.esmira.sharedCode.serverList).asList()
+		}
+		
 		internal class SuccessFailedException(msg: String, val errorCode: Int = 0) : Throwable(msg.ifEmpty { "Failed with empty response from server" })
 		
 		private val debugServerList = arrayOf(
@@ -419,6 +436,15 @@ class Web {
 			) : PostStructure()
 		}
 		
+		@Serializable
+		public class DontKillMyAppInfo(
+			val name: String,
+			val url: String,
+			val explanation: String,
+			val user_solution: String,
+			val notFound: Boolean = false,
+			val domain: String = DOMAIN_DONT_KILL_MY_APP
+		)
 		
 		
 		fun loadStudies(
@@ -448,12 +474,13 @@ class Web {
 					urlFormatted = "https://$urlFormatted"
 			}
 			
-			println("Getting studies from: $urlFormatted with accessKey \"$accessKey\"")
+			val correctedAccessKey = accessKey.trim().lowercase()
+			println("Getting studies from: $urlFormatted with accessKey \"$correctedAccessKey\"")
 			nativeAsync {
 				try {
 					val path = urlFormatted + (
-						if ((accessKey.isNotEmpty()))
-							URL_LIST_STUDIES_PASSWORD.replace("%s1", accessKey).replace("%s2", NativeLink.smartphoneData.lang)
+						if ((correctedAccessKey.isNotEmpty()))
+							URL_LIST_STUDIES_PASSWORD.replace("%s1", correctedAccessKey).replace("%s2", NativeLink.smartphoneData.lang)
 						else
 							URL_LIST_STUDIES.replace("%s", NativeLink.smartphoneData.lang)
 						)
@@ -590,20 +617,35 @@ class Web {
 			}
 		}
 		
-		val serverList: List<Pair<String, String>> get() {
-			return (if(DbLogic.isDev()) {
-				at.jodlidev.esmira.sharedCode.serverList + debugServerList
+		@Synchronized
+		fun getDonKillMyAppInfo(
+			onError: (msg: String) -> Unit,
+			onSuccess: (DontKillMyAppInfo) -> Unit
+		) {
+			val manufacturer = NativeLink.smartphoneData.manufacturer.lowercase().replace(" ", "-")
+			val url = URL_DONT_KILL_MY_APP.replace("%s", manufacturer)
+			
+			val web = Web()
+			nativeAsync {
+				try {
+					web.getGenericJson(url)
+					val response = web.getGenericJson(url)
+					if(response.status == HttpStatusCode.NotFound)
+						onSuccess(DontKillMyAppInfo(
+							manufacturer,
+							"/$manufacturer",
+							"",
+							"",
+							true
+						))
+					else
+						onSuccess(response.body())
+				}
+				catch (e: Throwable) {
+					e.printStackTrace()
+					onError(e.message ?: "No error message")
+				}
 			}
-			else
-				at.jodlidev.esmira.sharedCode.serverList).asList()
-		}
-		
-		fun getServerName(url: String): String {
-			for(entry in at.jodlidev.esmira.sharedCode.serverList) {
-				if(entry.second == url)
-					return entry.first
-			}
-			return url
 		}
 	}
 }

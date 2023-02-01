@@ -91,6 +91,16 @@ class WelcomeScreenActivity: ComponentActivity() {
 						ArrayList()
 				} }
 				
+				val gotoStudies = {
+					if(studyList.value.size == 1) {
+						if(isOpenedFromLink)
+							navController.popBackStack()
+						navController.navigate("studyInfo/0")
+					}
+					else if(navController.currentDestination?.route != "studyList")
+						navController.navigate("studyList")
+				}
+				
 				DisposableEffect(studyLoadingData.value) {
 					if(!showStudyLoader.value) // block will be called again, when screen was rotated because studyLoadingData was set in loadStudies()
 						return@DisposableEffect onDispose {}
@@ -111,13 +121,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 						runOnUiThread {
 							showStudyLoader.value = false
 							
-							if(studyList.value.size == 1) {
-								if(isOpenedFromLink)
-									navController.popBackStack()
-								navController.navigate("studyInfo/0")
-							}
-							else if(navController.currentDestination?.route != "studyList")
-								navController.navigate("studyList")
+							gotoStudies()
 						}
 					})
 					onDispose {
@@ -154,8 +158,17 @@ class WelcomeScreenActivity: ComponentActivity() {
 					},
 					studyList = studyList,
 					loadStudies = { serverUrl: String, accessKey: String, studyId: Long, qId: Long ->
-						showStudyLoader.value = true
-						studyLoadingData.value = StudyLoadingData(serverUrl, accessKey, studyId, qId)
+						
+						if(studyLoadingData.value?.serverUrl == serverUrl
+							&& studyLoadingData.value?.accessKey == accessKey
+							&& studyLoadingData.value?.studyId == studyId
+							&& studyLoadingData.value?.qId == qId
+						)
+							gotoStudies()
+						else {
+							showStudyLoader.value = true
+							studyLoadingData.value = StudyLoadingData(serverUrl, accessKey, studyId, qId)
+						}
 					},
 					navController = navController
 				)
@@ -378,13 +391,11 @@ class WelcomeScreenActivity: ComponentActivity() {
 				}
 			},
 			confirmButton = {
-				TextButton(
+				DialogButton(stringResource(R.string.cancel),
 					onClick = {
 						onCancel()
 					}
-				) {
-					Text(stringResource(R.string.cancel))
-				}
+				)
 			},
 		)
 	}
@@ -402,23 +413,19 @@ class WelcomeScreenActivity: ComponentActivity() {
 				Text(stringResource(R.string.welcome_exit_questionDesc))
 			},
 			dismissButton = {
-				TextButton(
+				DialogButton(stringResource(R.string.cancel),
 					onClick = {
 						openState.value = false
 					}
-				) {
-					Text(stringResource(R.string.cancel))
-				}
+				)
 			},
 			confirmButton = {
-				TextButton(
+				DialogButton(stringResource(R.string.ok_),
 					onClick = {
 						openState.value = false
 						onConfirm()
 					}
-				) {
-					Text(stringResource(R.string.ok_))
-				}
+				)
 			},
 		)
 	}

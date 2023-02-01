@@ -1,4 +1,5 @@
 val composeVersion = "1.3.1"
+val markwonVersion = "4.6.2"
 
 plugins {
     id("com.android.application")
@@ -20,8 +21,8 @@ android {
         applicationId = "at.jodlidev.esmira"
         minSdk = 21
         targetSdk = 33
-        versionCode = 136
-        versionName = "2.7.12"
+        versionCode = 138
+        versionName = "2.7.14"
         multiDexEnabled = true //project became too big. See: https://stackoverflow.com/a/59308589
     
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -77,7 +78,12 @@ dependencies {
     implementation("androidx.preference:preference:1.2.0") //PreferenceFragment
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0") //https://github.com/PhilJay/MPAndroidChart
     
-    implementation("com.github.NightWhistler:HtmlSpanner:0.4") //https://github.com/NightWhistler/HtmlSpanner
+    //HtmlView:
+    implementation("io.noties.markwon:core:$markwonVersion")
+    implementation("io.noties.markwon:html:$markwonVersion")
+    implementation("io.noties.markwon:image:$markwonVersion")
+    implementation("io.noties.markwon:linkify:$markwonVersion")
+    implementation("io.noties.markwon:ext-strikethrough:$markwonVersion")
     
     implementation("com.otaliastudios:cameraview:2.7.2") //https://github.com/natario1/CameraView
 }

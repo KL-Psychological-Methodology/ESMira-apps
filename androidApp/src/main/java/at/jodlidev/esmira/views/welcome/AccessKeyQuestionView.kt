@@ -1,14 +1,12 @@
 package at.jodlidev.esmira.views.welcome
 
 import android.content.res.Configuration
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Key
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +21,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import at.jodlidev.esmira.DefaultButton
+import at.jodlidev.esmira.DialogButton
 import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
 
@@ -49,14 +48,12 @@ fun AccessKeyDialog(accessKey: String, openState: MutableState<Boolean>, gotoNex
 			)
 		},
 		confirmButton = {
-			TextButton(
+			DialogButton(stringResource(R.string.ok_),
 				onClick = {
 					openState.value = false
 					gotoNext(rememberAccessKey.value)
 				}
-			) {
-				Text(stringResource(R.string.ok_))
-			}
+			)
 		},
 	)
 }
@@ -106,6 +103,7 @@ fun AccessKeyQuestionView(accessKey: String, gotoPrevious: () -> Unit, gotoNext:
 		)
 		
 		DefaultButton(
+			text = stringResource(R.string.yes),
 			onClick = {
 				openAccessKeyDialog.value = true
 			},
@@ -116,11 +114,10 @@ fun AccessKeyQuestionView(accessKey: String, gotoPrevious: () -> Unit, gotoNext:
 					top.linkTo(instructionsText.bottom, margin = 20.dp)
 					width = Dimension.fillToConstraints
 				}
-		) {
-			Text(stringResource(R.string.yes))
-		}
+		)
 		
 		DefaultButton(
+			text = stringResource(R.string.welcome_join_public_study),
 			onClick = {
 				gotoNext("")
 			},
@@ -131,9 +128,7 @@ fun AccessKeyQuestionView(accessKey: String, gotoPrevious: () -> Unit, gotoNext:
 					top.linkTo(buttonYes.bottom, margin = 10.dp)
 					width = Dimension.fillToConstraints
 				}
-		) {
-			Text(stringResource(R.string.welcome_join_public_study), textAlign = TextAlign.Center)
-		}
+		)
 		
 		NavigationView(
 			gotoPrevious = gotoPrevious,

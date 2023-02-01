@@ -7,8 +7,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -25,9 +23,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
+import at.jodlidev.esmira.DialogButton
 import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
-import at.jodlidev.esmira.sharedCode.Web
 
 /**
  * Created by JodliDev on 15.12.2022.
@@ -84,24 +82,20 @@ fun ManualServerDialog(openState: MutableState<Boolean>, manualServerUrl: Mutabl
 		},
 		
 		dismissButton = {
-			TextButton(
+			DialogButton(stringResource(R.string.cancel),
 				onClick = {
 					openState.value = false
 				}
-			) {
-				Text(stringResource(R.string.cancel))
-			}
+			)
 		},
 		confirmButton = {
-			TextButton(
+			DialogButton(stringResource(R.string.ok_),
 				onClick = {
 					if(manualServerUrl.value.isNotEmpty())
 						rememberServerUrl(manualServerUrl.value)
 					openState.value = false
 				}
-			) {
-				Text(stringResource(R.string.ok_))
-			}
+			)
 		}
 	)
 }

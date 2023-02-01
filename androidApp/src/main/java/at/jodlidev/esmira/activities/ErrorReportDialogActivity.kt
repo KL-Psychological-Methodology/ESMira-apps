@@ -84,12 +84,10 @@ class ErrorReportDialogActivity : ComponentActivity() {
 				Text(stringResource(R.string.data_will_be_sent_to_app_developer, Web.DEV_SERVER))
 			},
 			confirmButton = {
-				TextButton(
+				DialogButton(stringResource(R.string.close),
 					onClick = {
 						openToWhomDialog.value = false
-					}) {
-					Text(stringResource(R.string.close))
-				}
+					})
 			},
 		)
 	}
@@ -140,14 +138,12 @@ class ErrorReportDialogActivity : ComponentActivity() {
 						}
 						Row {
 							Spacer(modifier = Modifier.weight(1f))
-							TextButton(
+							DialogButton(stringResource(R.string.close),
 								onClick = {
 									openWhatIsSentDialog.value = false
 								},
 								modifier = Modifier.padding(all = 10.dp)
-							) {
-								Text(stringResource(R.string.close))
-							}
+							)
 						}
 					}
 				}
@@ -181,17 +177,15 @@ class ErrorReportDialogActivity : ComponentActivity() {
 					label = { Text(stringResource(R.string.hint_error_comment)) }
 				)
 				Row {
-					TextButton(onClick = {
-						openWhatIsSentDialog.value = true
-					}) {
-						Text(stringResource(R.string.what_is_sent), textAlign = TextAlign.Center)
-					}
+					DialogButton(stringResource(R.string.what_is_sent),
+						onClick = {
+							openWhatIsSentDialog.value = true
+						})
 					Spacer(modifier = Modifier.weight(1f))
-					TextButton(onClick = {
-						openToWhomDialog.value = true
-					}) {
-						Text(stringResource(R.string.sent_to_whom), textAlign = TextAlign.Center)
-					}
+					DialogButton(stringResource(R.string.sent_to_whom),
+						onClick = {
+							openToWhomDialog.value = true
+						})
 				}
 				
 				Spacer(modifier = Modifier.size(20.dp))
@@ -201,16 +195,14 @@ class ErrorReportDialogActivity : ComponentActivity() {
 			}
 			Row(modifier = Modifier.padding(5.dp)) {
 				Spacer(modifier = Modifier.weight(1f))
-				TextButton(onClick = {
-					finish()
-				}) {
-					Text(stringResource(R.string.cancel), textAlign = TextAlign.Center)
-				}
-				TextButton(onClick = {
-					sendErrorReport()
-				}) {
-					Text(stringResource(R.string.send), textAlign = TextAlign.Center)
-				}
+				DialogButton(stringResource(R.string.cancel),
+					onClick = {
+						finish()
+					})
+				DialogButton(stringResource(R.string.send),
+					onClick = {
+						sendErrorReport()
+					})
 			}
 		}
 	}

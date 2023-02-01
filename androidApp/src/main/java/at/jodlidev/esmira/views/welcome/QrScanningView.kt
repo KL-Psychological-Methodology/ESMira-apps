@@ -3,13 +3,11 @@ package at.jodlidev.esmira.views.welcome
 import android.content.res.Configuration
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,7 +21,6 @@ import at.jodlidev.esmira.DefaultButton
 import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.QrInterpreter
-import at.jodlidev.esmira.sharedCode.Web
 import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 
@@ -74,7 +71,7 @@ fun QrScanningView(gotoPrevious: () -> Unit, gotoNext: (serverUrl: String, acces
 			}
 		)
 		
-		DefaultButton(
+		DefaultButton(stringResource(R.string.start),
 			onClick = { scanLauncher.launch(ScanOptions()) },
 			modifier = Modifier
 				.constrainAs(buttonScan) {
@@ -83,9 +80,7 @@ fun QrScanningView(gotoPrevious: () -> Unit, gotoNext: (serverUrl: String, acces
 					top.linkTo(instructionsText.bottom, margin = 20.dp)
 				}
 		
-		) {
-			Text(stringResource(R.string.start))
-		}
+		)
 		
 		NavigationView(
 			gotoPrevious = gotoPrevious,
