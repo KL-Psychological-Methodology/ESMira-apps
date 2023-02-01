@@ -251,6 +251,7 @@ class DataSet {
 		const val TYPE_STATISTIC_VIEWED = "statistic_viewed"
 		const val TYPE_STUDY_MSG = "study_message"
 		const val TYPE_STUDY_UPDATED = "study_updated"
+		const val TYPE_REQUESTED_REWARD_CODE = "requested_reward_code"
 
 		val COLUMNS = arrayOf(
 			"$TABLE.$KEY_ID",

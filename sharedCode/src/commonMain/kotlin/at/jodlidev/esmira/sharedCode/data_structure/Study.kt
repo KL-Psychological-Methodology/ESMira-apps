@@ -585,7 +585,7 @@ class Study internal constructor(
 			onSuccess(Web.Companion.RewardInfo(cachedRewardCode))
 			return
 		}
-		
+		DataSet.createShortDataSet(DataSet.TYPE_REQUESTED_REWARD_CODE, this)
 		Web.loadRewardCode(this, onError, onSuccess)
 	}
 	

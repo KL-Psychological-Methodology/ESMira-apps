@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
+import at.jodlidev.esmira.sharedCode.data_structure.ErrorBox
 import at.jodlidev.esmira.sharedCode.data_structure.Study
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
@@ -94,12 +95,12 @@ class Fragment_reward : Base_fragment() {
 				error = msg
 			},
 			onSuccess = { rewardInfo ->
+				ErrorBox.log("Reward", "Received reward response (errorMessage: ${rewardInfo.errorMessage}, errorCode: ${rewardInfo.errorCode}, fulfilledQuestionnaires: ${rewardInfo.fulfilledQuestionnaires})")
 				when(rewardInfo.errorCode) {
 					Study.REWARD_SUCCESS ->
 						rewardCode = rewardInfo.code
 					Study.REWARD_ERROR_UNFULFILLED_REWARD_CONDITIONS -> {
 						error = getString(R.string.error_reward_conditions_not_met)
-						println(rewardInfo.fulfilledQuestionnaires)
 						fulfilledQuestionnaires = rewardInfo.fulfilledQuestionnaires
 					}
 					Study.REWARD_ERROR_ALREADY_GENERATED ->
