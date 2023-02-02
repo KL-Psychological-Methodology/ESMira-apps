@@ -14,7 +14,9 @@ struct HtmlTextRepresentable: UIViewRepresentable {
 	@State var isScrollable = false
 	
 	func updateUIView(_ label: UITextView, context: Context) {
-		updateHtml(label)
+		if(self.isReady) {
+			updateHtml(label)
+		}
 	}
 	
 	func makeUIView(context: UIViewRepresentableContext<Self>) -> UITextView {
@@ -28,7 +30,6 @@ struct HtmlTextRepresentable: UIViewRepresentable {
 		label.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
 		
 		label.font = UIFont.systemFont(ofSize: 16)
-		label.text = html
 		label.backgroundColor = .clear
 		
 		updateHtml(label)
@@ -36,12 +37,18 @@ struct HtmlTextRepresentable: UIViewRepresentable {
 		return label
 	}
 	
+	private func colorToHex(_ color: UIColor) -> String {
+		let components = color.cgColor.components
+		let r: CGFloat = components?[0] ?? 0.0
+		let g: CGFloat = components?[1] ?? 0.0
+		let b: CGFloat = components?[2] ?? 0.0
+
+		return String.init(format: "#%02lX%02lX%02lX", lroundf(Float(r * 255)), lroundf(Float(g * 255)), lroundf(Float(b * 255)))
+	}
+	
 	private func updateHtml(_ label: UITextView) {
-		label.text = html
-		self.isReady = false
-		
 		DispatchQueue.main.async {
-			let data = NSString(string: "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\"/></head><body style=\"font-size: \(UILabel().font.pointSize)px; font-family: system-ui, -apple-system, sans-serif\">\(self.html)</body></html>")
+			let data = NSString(string: "<html><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no\"/></head><body style=\"font-size: \(UILabel().font.pointSize)px; color: \(colorToHex(label.textColor!)); font-family: system-ui, -apple-system, sans-serif\">\(self.html)</body></html>")
 				.data(using: String.Encoding.unicode.rawValue)
 			
 			if let attributedString = try? NSAttributedString(
@@ -53,7 +60,9 @@ struct HtmlTextRepresentable: UIViewRepresentable {
 				self.dynamicHeight = label.sizeThatFits(CGSize(width: label.frame.width, height: CGFloat.greatestFiniteMagnitude)).height
 			}
 			
-			self.isReady = true
+			if(!self.isReady) {
+				self.isReady = true
+			}
 		}
 	}
 }

@@ -71,7 +71,7 @@ struct QuestionnaireView: View {
 				HtmlTextView(html: self.page!.header, isReady: self.$headerIsReady)
 					.padding()
 					.frame(width: width)
-					.background(Color(.white))
+					.background(Color("ListColor1"))
 			}
 
 			ForEach(0..<self.inputs.count, id: \.self) { i in
@@ -80,9 +80,8 @@ struct QuestionnaireView: View {
 						.padding()
 						.frame(width: width)
 						.uiTag(i)
-						.foregroundColor(Color.black)
 				}
-					.background((i % 2 != 0) ? Color("LighterGray") : Color(.white))
+					.background((i % 2 != 0) ? Color("ListColor1") : Color("ListColor2"))
 
 			}
 
@@ -90,7 +89,7 @@ struct QuestionnaireView: View {
 				HtmlTextView(html: self.page!.footer, isReady: self.$footerIsReady)
 					.padding()
 					.frame(width: width)
-					.background((self.inputs.count % 2 != 0) ? Color("LighterGray") : Color(.white))
+					.background((self.inputs.count % 2 != 0) ? Color("ListColor1") : Color("ListColor2"))
 			}
 			if(questionnaire!.questionnairePageHasRequired(index: Int32(pageIndex))) {
 				Text("info_required")

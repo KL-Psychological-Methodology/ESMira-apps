@@ -107,7 +107,6 @@ struct RewardView: View {
 			}
 			Spacer(minLength: 10.0)
 			if(!study!.rewardInstructions.isEmpty) {
-				Text(study!.rewardInstructions)
 				ScrollableHtmlTextView(html: study!.rewardInstructions)
 			}
 				
