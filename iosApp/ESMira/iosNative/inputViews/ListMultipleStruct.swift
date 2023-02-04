@@ -78,7 +78,7 @@ struct ListMultipleStruct: View {
 					a[i] = true
 				}
 			}
-
+			
 			self.checkedList = a
 		}
 	}
