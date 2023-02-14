@@ -87,6 +87,4 @@ dependencies {
     implementation("io.noties.markwon:image:$markwonVersion")
     implementation("io.noties.markwon:linkify:$markwonVersion")
     implementation("io.noties.markwon:ext-strikethrough:$markwonVersion")
-    
-    implementation("com.otaliastudios:cameraview:2.7.2") //https://github.com/natario1/CameraView
 }

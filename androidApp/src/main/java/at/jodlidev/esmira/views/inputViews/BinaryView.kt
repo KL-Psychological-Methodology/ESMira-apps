@@ -2,7 +2,6 @@ package at.jodlidev.esmira.views.inputViews
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.RadioButtonChecked
 import androidx.compose.material.icons.filled.RadioButtonUnchecked
@@ -10,7 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import at.jodlidev.esmira.ESMiraSurface
+import at.jodlidev.esmira.*
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.data_structure.Input
 
@@ -20,39 +19,27 @@ import at.jodlidev.esmira.sharedCode.data_structure.Input
 
 
 @Composable
-fun BinaryView(input: Input, get: () -> String, set: (String) -> Unit) {
-	Row(modifier = Modifier.fillMaxSize()) {
-		OutlinedButton(
-			modifier = Modifier.weight(0.45f),
+fun BinaryView(input: Input, get: () -> String, save: (String) -> Unit) {
+	Row(modifier = Modifier.fillMaxWidth()) {
+		DefaultButtonIconLeft(
+			text = input.leftSideLabel,
+			icon = if(get() == "1") Icons.Default.RadioButtonChecked else Icons.Default.RadioButtonUnchecked,
 			onClick = {
-				set("1")
-			}
-		) {
-			Icon(
-				if(get() == "1") Icons.Default.RadioButtonChecked else Icons.Default.RadioButtonUnchecked,
-				contentDescription = "",
-				modifier = Modifier.size(ButtonDefaults.IconSize)
-			)
-			Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-			Text(input.leftSideLabel)
-		}
+				save("0")
+			},
+			modifier = Modifier.weight(0.45f)
+		)
 		
 		Spacer(modifier = Modifier.width(10.dp))
 		
-		OutlinedButton(
-			modifier = Modifier.weight(0.45f),
+		DefaultButtonIconRight(
+			text = input.rightSideLabel,
+			icon = if(get() == "2") Icons.Default.RadioButtonChecked else Icons.Default.RadioButtonUnchecked,
 			onClick = {
-				set("2")
-			}
-		) {
-			Text(input.rightSideLabel)
-			Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-			Icon(
-				if(get() == "2") Icons.Default.RadioButtonChecked else Icons.Default.RadioButtonUnchecked,
-				contentDescription = "",
-				modifier = Modifier.size(ButtonDefaults.IconSize)
-			)
-		}
+				save("1")
+			},
+			modifier = Modifier.weight(0.45f)
+		)
 	}
 }
 

@@ -1,6 +1,6 @@
 package at.jodlidev.esmira.views.inputViews
 
-import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.res.Configuration
 import android.text.format.DateFormat
 import androidx.compose.foundation.layout.*
@@ -27,10 +27,10 @@ import java.util.*
 
 
 @Composable
-fun DateView(input: Input, get: () -> String, save: (String) -> Unit) {
+fun TimeView(input: Input, get: () -> String, save: (String) -> Unit) {
 	val context = LocalContext.current
-	val targetFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-	val localFormat = DateFormat.getDateFormat(context)
+	val targetFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
+	val localFormat = DateFormat.getTimeFormat(context)
 	
 	try {
 		targetFormat.parse(get())
@@ -40,18 +40,17 @@ fun DateView(input: Input, get: () -> String, save: (String) -> Unit) {
 		targetFormat.calendar = Calendar.getInstance()
 	}
 	val calendar = targetFormat.calendar
-	val dialog = DatePickerDialog(
+	val dialog = TimePickerDialog(
 		context,
-		{ _, year, month, day ->
-			calendar.set(Calendar.YEAR, year)
-			calendar.set(Calendar.MONTH, month)
-			calendar.set(Calendar.DAY_OF_MONTH, day)
+		{ _, hour, minute ->
+			calendar.set(Calendar.HOUR_OF_DAY, hour)
+			calendar.set(Calendar.MINUTE, minute)
 			
 			localFormat.calendar = calendar
 			targetFormat.calendar = calendar
 			
 			save(targetFormat.format(calendar.time))
-		}, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
+		}, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(context)
 	)
 	
 	Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
@@ -69,11 +68,11 @@ fun DateView(input: Input, get: () -> String, save: (String) -> Unit) {
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun PreviewDateView() {
+fun PreviewTimeView() {
 	val input = DbLogic.createJsonObj<Input>("""
 		{}
 	""")
 	ESMiraSurface {
-		DateView(input, { "1989-02-01" }) {}
+		TimeView(input, { "" }) {}
 	}
 }

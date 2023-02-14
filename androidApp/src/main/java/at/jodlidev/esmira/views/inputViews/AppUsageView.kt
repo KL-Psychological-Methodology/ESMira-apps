@@ -8,8 +8,6 @@ import android.os.Build
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -18,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import at.jodlidev.esmira.ESMiraSurface
+import at.jodlidev.esmira.ESMiraSurfaceM2
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.ScreenTrackingReceiver
 import at.jodlidev.esmira.sharedCode.NativeLink
@@ -32,10 +31,10 @@ import java.util.concurrent.TimeUnit
 
 
 
-class AppUsageCalculator {
+class AppUsageCalculator(context: Context) {
 	val context: WeakReference<Context>
 	
-	constructor(context: Context) {
+	init {
 		this.context = WeakReference(context)
 	}
 	
@@ -150,16 +149,19 @@ class AppUsageCalculator {
 		for((packageName, counter) in counterList) {
 			returnList[packageName] = counter.getResults()
 		}
+		
+		returnList["com.android.chrome"] = UsageStatsInfo(5, 9460000)
+		returnList["com.google.android.youtube"] = UsageStatsInfo(1, 44600000)
 		return returnList
 	}
 }
 
 @Composable
-fun AppUsageView(input: Input, get: () -> String, set: (String) -> Unit) {
+fun AppUsageView(input: Input, get: () -> String, save: (String) -> Unit) {
 	val appUsageCalculator = AppUsageCalculator(LocalContext.current)
 	val to = NativeLink.getMidnightMillis()
 	val from = to - 86400000
-	val displayAppUsage = input.packageId == ""
+	val displayAppUsage = input.packageId != ""
 	
 	val yesterdayUsageTime: Long
 	val yesterdayUsageCount: Int
@@ -176,7 +178,7 @@ fun AppUsageView(input: Input, get: () -> String, set: (String) -> Unit) {
 	}
 	
 	input.additionalValues["usageCount"] = yesterdayUsageCount.toString()
-	set(yesterdayUsageTime.toString())
+	save(yesterdayUsageTime.toString())
 	
 	AppUsageTableView(yesterdayUsageCount, yesterdayUsageTime, displayAppUsage, input.packageId)
 }
@@ -199,7 +201,7 @@ fun AppUsageTableView(yesterdayUsageCount: Int, yesterdayUsageTime: Long, displa
 		)
 	}
 	
-	Column(modifier = Modifier.fillMaxSize()) {
+	Column(modifier = Modifier.fillMaxWidth()) {
 		Text(
 			stringResource(if(displayAppUsage) R.string.colon_app_usage else R.string.colon_total_screenTime),
 			fontWeight = FontWeight.Bold
@@ -246,7 +248,7 @@ fun PreviewAppUsageTableViewForAppUsageWithNoData() {
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
 fun PreviewAppUsageTableViewForScreenTracking() {
-	ESMiraSurface {
+	ESMiraSurfaceM2 {
 		AppUsageTableView(1, 5400000, false, "")
 	}
 }

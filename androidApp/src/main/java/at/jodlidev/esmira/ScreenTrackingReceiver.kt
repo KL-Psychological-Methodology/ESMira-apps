@@ -1,9 +1,7 @@
 package at.jodlidev.esmira;
 
 import android.content.*
-import android.widget.Toast
 import androidx.preference.PreferenceManager
-import at.jodlidev.esmira.input_views.AppUsageView
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.ErrorBox
 import at.jodlidev.esmira.views.inputViews.AppUsageCalculator
