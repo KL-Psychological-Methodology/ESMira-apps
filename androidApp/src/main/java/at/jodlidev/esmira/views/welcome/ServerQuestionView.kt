@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.selection.selectable
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Public
 import androidx.compose.runtime.Composable
@@ -56,6 +56,7 @@ fun ServerOptionLineView(title: String, url: String, isSelected: () -> Boolean, 
 	}
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ManualServerDialog(openState: MutableState<Boolean>, manualServerUrl: MutableState<String>, rememberServerUrl: (serverUrl: String) -> Unit) {
 	AlertDialog(
@@ -71,7 +72,7 @@ fun ManualServerDialog(openState: MutableState<Boolean>, manualServerUrl: Mutabl
 				verticalAlignment = Alignment.CenterVertically
 			) {
 				Text(stringResource(R.string.https))
-				TextField(
+				OutlinedTextField(
 					modifier = Modifier.weight(1f),
 					value = manualServerUrl.value,
 					onValueChange = {

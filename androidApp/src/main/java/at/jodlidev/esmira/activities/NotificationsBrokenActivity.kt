@@ -13,7 +13,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -56,7 +55,7 @@ class NotificationsBrokenActivity : ComponentActivity() {
 				)
 			}
 			
-			ESMiraSurface {
+			ESMiraSurfaceM2 {
 				if(showDontKillMyAppDialog.value && data.value != null) {
 					DontKillMyAppDialog(
 						data.value!!,
@@ -133,7 +132,7 @@ class NotificationsBrokenActivity : ComponentActivity() {
 				close()
 			},
 			content = {
-				ESMiraSurface {
+				ESMiraSurfaceM2 {
 					Column {
 						val uriHandler = LocalUriHandler.current
 						val url = "${data.domain}${data.url}"
@@ -147,7 +146,7 @@ class NotificationsBrokenActivity : ComponentActivity() {
 							TextButton(onClick = { uriHandler.openUri(url) }) {
 								Text(
 									stringResource(R.string.from_X, url),
-									fontSize = 12.sp,
+									fontSize = fontSizeSmall,
 									modifier = Modifier
 										.padding(start = 20.dp)
 								)
@@ -173,7 +172,7 @@ class NotificationsBrokenActivity : ComponentActivity() {
 	@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 	@Composable
 	fun PreviewMainDialogWithHeaderAndLoading() {
-		ESMiraSurface {
+		ESMiraSurfaceM2 {
 			MainDialog(true, { null }, {})
 		}
 	}
@@ -182,7 +181,7 @@ class NotificationsBrokenActivity : ComponentActivity() {
 	@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 	@Composable
 	fun PreviewMainDialogWithoutHeaderAndNoModelInfo() {
-		ESMiraSurface {
+		ESMiraSurfaceM2 {
 			MainDialog(false, { Web.Companion.DontKillMyAppInfo(
 				"nothing",
 				"/nothing",
@@ -197,7 +196,7 @@ class NotificationsBrokenActivity : ComponentActivity() {
 	@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 	@Composable
 	fun PreviewMainDialogWithoutHeaderAndWithModelInfo() {
-		ESMiraSurface {
+		ESMiraSurfaceM2 {
 			MainDialog(false, { Web.Companion.DontKillMyAppInfo(
 				"something",
 				"/something",
@@ -212,7 +211,7 @@ class NotificationsBrokenActivity : ComponentActivity() {
 	@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 	@Composable
 	fun PreviewDontKillMyAppDialog() {
-		ESMiraSurface {
+		ESMiraSurfaceM2 {
 			DontKillMyAppDialog(
 				Web.Companion.DontKillMyAppInfo(
 					"something",

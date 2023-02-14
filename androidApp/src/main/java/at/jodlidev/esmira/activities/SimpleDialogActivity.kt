@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import at.jodlidev.esmira.DialogButton
-import at.jodlidev.esmira.ESMiraSurface
+import at.jodlidev.esmira.ESMiraSurfaceM2
 import at.jodlidev.esmira.HtmlHandler
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.NativeLink
@@ -39,7 +39,7 @@ class SimpleDialogActivity: ComponentActivity() {
 		
 		
 		setContent {
-			ESMiraSurface {
+			ESMiraSurfaceM2 {
 				Dialog(
 					title = extras.getString(EXTRAS_TITLE) ?: "",
 					content = extras.getString(EXTRAS_MSG) ?: "",
@@ -101,7 +101,7 @@ class SimpleDialogActivity: ComponentActivity() {
 	@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 	@Composable
 	fun PreviewDialog() {
-		ESMiraSurface {
+		ESMiraSurfaceM2 {
 			Dialog(title = "Dialog title", content = "This<br>is<br>definitely<br>a<br>Very<br>long<br>text<br>ith<br>a<br>lot<br>of<br>lines!")
 		}
 	}

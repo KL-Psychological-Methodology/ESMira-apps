@@ -17,9 +17,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import at.jodlidev.esmira.DefaultButton
-import at.jodlidev.esmira.DialogButton
-import at.jodlidev.esmira.ESMiraSurface
+import at.jodlidev.esmira.*
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.data_structure.Study
 
@@ -71,7 +69,7 @@ fun ConsentDialog(study: Study, onCancel: () -> Unit, onConsent: () -> Unit) {
 	Dialog(
 		onDismissRequest = onCancel,
 		content = {
-			ESMiraSurface {
+			ESMiraSurfaceM2 {
 				Column (modifier = Modifier.padding(all = 20.dp)){
 					Text(stringResource(R.string.what_for),
 						fontSize = 18.sp,

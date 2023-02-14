@@ -14,11 +14,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
-import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.DueDateFormatter
 import at.jodlidev.esmira.sharedCode.data_structure.Alarm
-import at.jodlidev.esmira.sharedCode.data_structure.Study
-import at.jodlidev.esmira.views.welcome.StudyInfoView
 
 /**
  * Created by JodliDev on 21.12.2022.

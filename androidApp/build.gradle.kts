@@ -1,4 +1,5 @@
 val composeVersion = "1.3.1"
+val m3Version = "1.0.1"
 val markwonVersion = "4.6.2"
 
 plugins {
@@ -48,6 +49,8 @@ dependencies {
     
     //jetpack compose:
     //the plan is, that we will slowly migrate to jetpack and then move to material 3
+    implementation("androidx.compose.material3:material3:$m3Version")
+    
     implementation("androidx.compose.ui:ui:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion") // previews, ...
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion") // previews, ...

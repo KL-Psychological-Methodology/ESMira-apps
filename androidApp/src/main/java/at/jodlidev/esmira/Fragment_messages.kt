@@ -12,7 +12,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -92,12 +92,12 @@ class Fragment_messages : Base_fragment() {
 			}
 		}
 		val color = if(!message.fromServer)
-			MaterialTheme.colors.primary
+			MaterialTheme.colorScheme.primary
 		else if(message.isNew) {
-			MaterialTheme.colors.secondary
+			MaterialTheme.colorScheme.tertiary
 		}
 		else
-			MaterialTheme.colors.primaryVariant
+			MaterialTheme.colorScheme.secondary
 		
 		Row {
 			if(!message.fromServer)
@@ -112,14 +112,14 @@ class Fragment_messages : Base_fragment() {
 			) {
 				Text(
 					NativeLink.formatDateTime(message.sent),
-					color = MaterialTheme.colors.onPrimary,
+					color = MaterialTheme.colorScheme.onPrimary,
 					textAlign = TextAlign.End,
 					fontSize = 10.sp,
 					modifier = Modifier.fillMaxWidth()
 				)
 				Text(
 					message.content,
-					color = MaterialTheme.colors.onPrimary,
+					color = MaterialTheme.colorScheme.onPrimary,
 					textAlign = TextAlign.Start,
 					modifier = Modifier.fillMaxWidth()
 				)
@@ -130,6 +130,7 @@ class Fragment_messages : Base_fragment() {
 		}
 	}
 	
+	@OptIn(ExperimentalMaterial3Api::class)
 	@Composable
 	private fun NewMessageBox(sendMessage: (String) -> Unit, cancel: () -> Unit) {
 		val messageContent = rememberSaveable { mutableStateOf("") }

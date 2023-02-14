@@ -6,7 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -33,7 +33,7 @@ fun StudyListItemView(study: Study, modifier: Modifier = Modifier, gotoStudy: ()
 			.fillMaxWidth()
 	) {
 		Text(study.title, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-		Text(study.contactEmail, fontSize = 12.sp, modifier = Modifier.padding(start = 20.dp))
+		Text(study.contactEmail, fontSize = fontSizeSmall, modifier = Modifier.padding(start = 20.dp))
 	}
 }
 

@@ -3,172 +3,136 @@ package at.jodlidev.esmira
 import android.content.res.Configuration
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
-import androidx.compose.material.MaterialTheme.shapes
-import androidx.compose.material.MaterialTheme.typography
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+//import androidx.compose.material.MaterialTheme.shapes
+import androidx.compose.material3.MaterialTheme.shapes
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.MaterialTheme.typography
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.compose.ui.unit.sp
 
 /**
  * Created by JodliDev on 05.10.2022.
  */
 
 
-//Material 3:
-//private val LightColorPalette = lightColorScheme(
-//	primary = Color(0XFF2B98CA),
-//	onPrimary = Color.White,
-//	primaryContainer = Color(0XFFe6f9ff),
-//	onPrimaryContainer = Color(0XFF2B98CA),
-//
-//	secondary = Color(0xFF2DBFF3),
-//	onSecondary = Color.White,
-//	secondaryContainer = Color(0xFF9fe0f7),
-//	onSecondaryContainer = Color(0xFF2DBFF3),
-//
-//	tertiary = Color(0xFFDC4E9d),
-//	onTertiary = Color.White,
-//	tertiaryContainer = Color(0xFFff8fce),
-//	onTertiaryContainer = Color.White,
-//
-//	background = Color.White,
-//	onBackground = Color(0xFF757575),
-//
-////	surface = Color.White,
-////	onSurface = Color(0xFF757575),
-////	surfaceVariant =  Color(0xFFEEEEEE),
-////	onSurfaceVariant = Color(0xFF757575),
-//
-//	outline = Color(0xFF9fe0f7),
-//	outlineVariant = Color(0xFF2DBFF3),
-//
-//	error = Color.Red,
-//	onError = Color.White
-//)
-
+val fontSizeSmall = 12.sp
 
 val colorGreen = Color(0xFF009600)
 val colorRed = Color(0xFFC80000)
 
-val colorLineBackground1 = Color(0x34000000)
-val colorLineBackground2 = Color(0x34FFFFFF)
+//val colorLineBackground1 = Color(0x1A000000)
+//val colorLineBackground2 = Color(0x1AFFFFFF)
+val colorLineBackground1 = Color(0x0D000000)
+val colorLineBackground2 = Color(0x0DFFFFFF)
 
 val colorLog = Color(0x34FFFFFF)
 val colorWarn = Color(0xFFFFBB00)
 val colorError = Color(0xFFFF0000)
 
-// This theme is just meant to look close to the current xml design.
-// When we migrated everything over to Compose, we will migrate to Material 3
-private val LightColorPalette = lightColors(
-	primary = Color(0XFF9FE0F7),
-	primaryVariant = Color(0xFF2DBFF3),
-	onPrimary = Color.White,
-	secondary = Color(0xFFDC4E9D),
-	secondaryVariant = Color(0xFFff8fce),
-	onSecondary = Color(0xFF757575),
-	background = Color.White,
-	onBackground = Color(0xFF757575),
-	surface = Color.White,
-	onSurface = Color(0xFF757575),
-	error = Color.Red,
-	onError = Color.White,
-)
 
-private val DarkColorPalette = darkColors(
-	primary = Color(0xFF8D8D8D),
-	primaryVariant = Color(0xFF5E5E5E),
-	onPrimary = Color.Black,
-	secondary = Color(0xFFDC4E9d),
-	secondaryVariant = Color(0xFFff8fce),
+//Material 3:
+private val blue1 = Color(0XFFe6f9ff)
+private val blue2 = Color(0xFF9fe0f7)
+private val blue3 = Color(0xFF2DBFF3)
+private val blue4 = Color(0XFF2B98CA)
+private val pink1 = Color(0xFFff8fce)
+private val pink2 = Color(0xFFDC4E9d)
+
+private val LightColorPalette = lightColorScheme(
+	primary = Color(0XFF2B98CA),
+	onPrimary = Color.White,
+	primaryContainer = Color(0xFF9fe0f7),
+	onPrimaryContainer = Color.Black,
+	
+	secondary = Color(0xFF2DBFF3),
 	onSecondary = Color.White,
+	secondaryContainer = Color(0XFFe6f9ff),
+	onSecondaryContainer = Color.Black,
+	
+	tertiary = Color(0xFFDC4E9d),
+	onTertiary = Color.White,
+	tertiaryContainer = Color(0xFFff8fce),
+	onTertiaryContainer = Color.Black,
+	
+	background = Color.White,
+	onBackground = Color.Black,
+	
+	surfaceTint = Color(0XFFe6f9ff),
+	surface = Color.White,
+	onSurface = Color.Black,
+	surfaceVariant =  Color(0x1A000000),
+	onSurfaceVariant = Color(0x80000000),
+	
+	outline = Color(0x1A000000),
+	outlineVariant = Color(0x80000000),
+	
+	error = Color.Red,
+	onError = Color.White
+)
+private val DarkColorPalette = darkColorScheme(
+	primary = Color(0XFF2B98CA),
+	onPrimary = Color.White,
+	primaryContainer = Color(0xFF9fe0f7),
+	onPrimaryContainer = Color.Black,
+	
+	secondary = Color(0xFF2DBFF3),
+	onSecondary = Color.White,
+	secondaryContainer = Color(0XFFe6f9ff),
+	onSecondaryContainer = Color.Black,
+	
+	tertiary = Color(0xFFDC4E9d),
+	onTertiary = Color.White,
+	tertiaryContainer = Color(0xFFff8fce),
+	onTertiaryContainer = Color.Black,
+	
 	background = Color.Black,
 	onBackground = Color.White,
+	
+	surfaceTint = Color(0XFFe6f9ff),
 	surface = Color.Black,
 	onSurface = Color.White,
+	surfaceVariant =  Color(0x4DFFFFFF),
+	onSurfaceVariant = Color(0xCCFFFFFF),
+	
+	outline = Color(0x4DFFFFFF),
+	outlineVariant = Color(0xCCFFFFFF),
+	
 	error = Color.Red,
-	onError = Color.Black
+	onError = Color.White
 )
-
 @Composable
 fun ESMiraTheme (
 	darkTheme: Boolean = isSystemInDarkTheme(),
 	content: @Composable () -> Unit
 ) {
 	MaterialTheme(
-		colors  = if (darkTheme) DarkColorPalette else LightColorPalette,
+		colorScheme = if(darkTheme) DarkColorPalette else LightColorPalette,
 		typography = typography,
 		shapes = shapes,
 		content = content
 	)
 }
-
 @Composable fun ESMiraSurface (
 	darkTheme: Boolean = isSystemInDarkTheme(),
 	content: @Composable () -> Unit
 ) {
 	ESMiraTheme(darkTheme) {
-		Surface(color = MaterialTheme.colors.surface, content = content)
+		Surface(color = MaterialTheme.colorScheme.surface, content = content)
 	}
 }
 
-@Preview(name = "Light Mode")
-@Preview(
-	uiMode = Configuration.UI_MODE_NIGHT_YES,
-	showBackground = true,
-	name = "Dark Mode"
-)
-@Composable
-fun PreviewPage() {
-	ESMiraSurface {
-		val navController = rememberNavController()
 
-		Scaffold(
-				topBar = {
-					TopAppBar { Text("TopBar") }
-				},
-				bottomBar = {
-				BottomNavigation {
-					BottomNavigationItem(
-						icon = {Icon(Icons.Filled.Home, contentDescription  = "")},
-						label = { Text("test1") },
-						selected = true,
-						onClick = {}
-					)
-					BottomNavigationItem(
-						icon = {Icon(Icons.Filled.Message, contentDescription  = "")},
-						label = { Text("test2") },
-						selected = false,
-						onClick = {}
-					)
-				}
-			}
-		) { innerPadding ->
-			NavHost(navController, startDestination = "test1", Modifier.padding(innerPadding)) {
-				composable("test1") {
-					Text("test1")
-				}
-				composable("test2") {
-					Text("test2")
-				}
-			}
-		}
-	}
-}
 
 @Composable
 fun DefaultButton(
@@ -177,9 +141,7 @@ fun DefaultButton(
 	modifier: Modifier = Modifier
 ) {
 	OutlinedButton(
-		colors = ButtonDefaults.outlinedButtonColors(
-			contentColor = MaterialTheme.colors.secondary
-		),
+		shape = RoundedCornerShape(5.dp),
 		onClick = onClick,
 		modifier = modifier
 	) {
@@ -193,9 +155,7 @@ fun DefaultButton(
 	content: @Composable RowScope.() -> Unit
 ) {
 	OutlinedButton(
-		colors = ButtonDefaults.outlinedButtonColors(
-			contentColor = MaterialTheme.colors.secondary
-		),
+		shape = RoundedCornerShape(5.dp),
 		onClick = onClick,
 		modifier = modifier,
 		content = content
@@ -207,12 +167,11 @@ fun DefaultButtonIconLeft(
 	text: String,
 	icon: ImageVector,
 	onClick: () -> Unit,
-	modifier: Modifier = Modifier
+	modifier: Modifier = Modifier,
+	textModifier: Modifier = Modifier
 ) {
 	OutlinedButton(
-		colors = ButtonDefaults.outlinedButtonColors(
-			contentColor = MaterialTheme.colors.secondary
-		),
+		shape = RoundedCornerShape(5.dp),
 		onClick = onClick,
 		modifier = modifier
 	) {
@@ -222,7 +181,29 @@ fun DefaultButtonIconLeft(
 			modifier = Modifier.size(ButtonDefaults.IconSize)
 		)
 		Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-		Text(text)
+		Text(text, modifier = textModifier)
+	}
+}
+@Composable
+fun DefaultButtonIconRight(
+	text: String,
+	icon: ImageVector,
+	onClick: () -> Unit,
+	modifier: Modifier = Modifier,
+	textModifier: Modifier = Modifier
+) {
+	OutlinedButton(
+		shape = RoundedCornerShape(5.dp),
+		onClick = onClick,
+		modifier = modifier
+	) {
+		Text(text, modifier = textModifier)
+		Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+		Icon(
+			icon,
+			contentDescription = "",
+			modifier = Modifier.size(ButtonDefaults.IconSize)
+		)
 	}
 }
 @Composable
@@ -233,9 +214,7 @@ fun DefaultButtonIconAbove(
 	modifier: Modifier = Modifier
 ) {
 	OutlinedButton(
-		colors = ButtonDefaults.outlinedButtonColors(
-			contentColor = MaterialTheme.colors.secondary
-		),
+		shape = RoundedCornerShape(5.dp),
 		onClick = onClick,
 		modifier = modifier
 	) {

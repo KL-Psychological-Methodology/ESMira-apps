@@ -2,7 +2,7 @@ package at.jodlidev.esmira.views.welcome
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -14,10 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import at.jodlidev.esmira.ESMiraSurface
+import at.jodlidev.esmira.*
 import at.jodlidev.esmira.R
-import at.jodlidev.esmira.TextButtonIconLeft
-import at.jodlidev.esmira.TextButtonIconRight
 
 /**
  * Created by JodliDev on 19.12.2022.
@@ -36,7 +34,7 @@ fun NavigationView(
 	ConstraintLayout(modifier = modifier) {
 		val (divider, buttonPrev, buttonNext) = createRefs()
 		Divider(
-			color = MaterialTheme.colors.primary,
+			color = MaterialTheme.colorScheme.primary,
 			thickness = 1.dp,
 			modifier = Modifier
 				.constrainAs(divider) {

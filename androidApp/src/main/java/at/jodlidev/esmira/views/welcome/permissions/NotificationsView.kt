@@ -11,7 +11,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Looks3
 import androidx.compose.material.icons.filled.LooksOne
@@ -25,8 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
-import at.jodlidev.esmira.DefaultButton
-import at.jodlidev.esmira.ESMiraSurface
+import at.jodlidev.esmira.*
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.androidNative.Notifications
 import at.jodlidev.esmira.sharedCode.NativeLink
@@ -215,20 +214,20 @@ fun NotificationFailedView() {
 		Text(stringResource(id = R.string.info_notification_additional_settings))
 		
 		Spacer(modifier = Modifier.height(10.dp))
-		DefaultButton(
-			modifier = Modifier.fillMaxWidth(),
+		DefaultButtonIconLeft(
+			text = stringResource(R.string.open_sound_settings),
+			icon = Icons.Default.LooksOne,
 			onClick = {
 				context.startActivity(Intent(Settings.ACTION_SOUND_SETTINGS))
-			}
-		) {
-			Icon(Icons.Default.LooksOne, "", modifier = Modifier.size(ButtonDefaults.IconSize))
-			Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-			Text(stringResource(R.string.open_sound_settings), modifier = Modifier.weight(1F))
-		}
+			},
+			modifier = Modifier.fillMaxWidth(),
+			textModifier = Modifier.weight(1F)
+		)
 		
 		Spacer(modifier = Modifier.height(5.dp))
-		DefaultButton(
-			modifier = Modifier.fillMaxWidth(),
+		DefaultButtonIconLeft(
+			text = stringResource(R.string.open_notification_settings),
+			icon = Icons.Default.LooksTwo,
 			onClick = {
 				val notificationIntent = Intent()
 				if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -248,17 +247,16 @@ fun NotificationFailedView() {
 					notificationIntent.data = Uri.parse("package:" + context.packageName)
 				}
 				context.startActivity(notificationIntent)
-			}
-		) {
-			Icon(Icons.Default.LooksTwo, "", modifier = Modifier.size(ButtonDefaults.IconSize))
-			Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-			Text(stringResource(R.string.open_notification_settings), modifier = Modifier.weight(1F))
-		}
+			},
+			modifier = Modifier.fillMaxWidth(),
+			textModifier = Modifier.weight(1F)
+		)
 		
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 			Spacer(modifier = Modifier.height(5.dp))
-			DefaultButton(
-				modifier = Modifier.fillMaxWidth(),
+			DefaultButtonIconLeft(
+				text = stringResource(R.string.open_doNotDisturb_settings),
+				icon = Icons.Default.Looks3,
 				onClick = {
 					var dndIntent = Intent(Settings.ACTION_ZEN_MODE_PRIORITY_SETTINGS)
 					
@@ -269,12 +267,10 @@ fun NotificationFailedView() {
 						if(intentExists(context, dndIntent))
 							context.startActivity(dndIntent)
 					}
-				}
-			) {
-				Icon(Icons.Default.Looks3, "", modifier = Modifier.size(ButtonDefaults.IconSize))
-				Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-				Text(stringResource(R.string.open_doNotDisturb_settings), modifier = Modifier.weight(1F))
-			}
+				},
+				modifier = Modifier.fillMaxWidth(),
+				textModifier = Modifier.weight(1F)
+			)
 		}
 	}
 }

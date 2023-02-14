@@ -44,7 +44,7 @@ class ErrorReportDialogActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContent {
-			ESMiraSurface {
+			ESMiraSurfaceM2 {
 				MainDialog(!intent.hasExtra(EXTRA_CALLED_MANUALLY) || intent.extras?.getBoolean(EXTRA_CALLED_MANUALLY) != true)
 				if(openWhatIsSentDialog.value)
 					WhatIsSentDialog(DbLogic.getErrors(), ErrorBox.getReportHeader(comment.value).toString())
@@ -99,7 +99,7 @@ class ErrorReportDialogActivity : ComponentActivity() {
 				openWhatIsSentDialog.value = false
 			},
 			content = {
-				ESMiraSurface {
+				ESMiraSurfaceM2 {
 					Column {
 						Text(stringResource(R.string.what_is_sent),
 							fontSize = 18.sp,
@@ -218,7 +218,7 @@ class ErrorReportDialogActivity : ComponentActivity() {
 			ErrorBox("Warn title", ErrorBox.SEVERITY_WARN, "Content of message"),
 			ErrorBox("Log title3", ErrorBox.SEVERITY_LOG, "Content of message")
 		)
-		ESMiraSurface {
+		ESMiraSurfaceM2 {
 			WhatIsSentDialog(errors, "Error report header")
 		}
 	}
@@ -227,7 +227,7 @@ class ErrorReportDialogActivity : ComponentActivity() {
 	@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 	@Composable
 	fun PreviewWithHeader() {
-		ESMiraSurface {
+		ESMiraSurfaceM2 {
 			MainDialog(true)
 		}
 	}
@@ -236,7 +236,7 @@ class ErrorReportDialogActivity : ComponentActivity() {
 	@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 	@Composable
 	fun PreviewWithoutHeader() {
-		ESMiraSurface {
+		ESMiraSurfaceM2 {
 			MainDialog(false)
 		}
 	}
@@ -245,7 +245,7 @@ class ErrorReportDialogActivity : ComponentActivity() {
 	@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 	@Composable
 	fun PreviewWithError() {
-		ESMiraSurface {
+		ESMiraSurfaceM2 {
 			error.value = "Test error"
 			MainDialog(true)
 		}

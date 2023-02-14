@@ -4,7 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Key
 import androidx.compose.runtime.Composable
@@ -29,6 +29,7 @@ import at.jodlidev.esmira.R
  * Created by JodliDev on 15.12.2022.
  */
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccessKeyDialog(accessKey: String, openState: MutableState<Boolean>, gotoNext: (accessKey: String) -> Unit) {
 	val rememberAccessKey = remember { mutableStateOf(accessKey) }
@@ -40,7 +41,7 @@ fun AccessKeyDialog(accessKey: String, openState: MutableState<Boolean>, gotoNex
 			Text(stringResource(R.string.colon_accessCode))
 		},
 		text = {
-			TextField(
+			OutlinedTextField(
 				value = rememberAccessKey.value,
 				onValueChange = {
 					rememberAccessKey.value = it
