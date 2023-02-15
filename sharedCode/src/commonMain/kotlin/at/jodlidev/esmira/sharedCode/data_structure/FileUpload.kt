@@ -22,6 +22,7 @@ class FileUpload {
 	private var isTemporary = true
 	private val filePath: String
 	internal val type: TYPES
+	internal val timestamp: Long
 	
 	internal val studyId: Long
 	
@@ -32,6 +33,7 @@ class FileUpload {
 		this.filePath = filePath
 		this.identifier = (0 .. Int.MAX_VALUE).random()
 		this.type = type
+		this.timestamp = NativeLink.getNowMillis()
 	}
 	internal constructor(c: SQLiteCursor) {
 		id = c.getLong(0)
@@ -42,6 +44,11 @@ class FileUpload {
 		filePath = c.getString(5)
 		identifier = c.getInt(6)
 		type = TYPES.values()[c.getInt(7)]
+		timestamp = c.getLong(8)
+	}
+	
+	internal fun isTooOld(): Boolean {
+		return timestamp + MAX_TEMPORARY_AGE < NativeLink.getNowMillis()
 	}
 	
 	internal fun save() {
@@ -57,6 +64,7 @@ class FileUpload {
 		values.putString(KEY_FILE_PATH, filePath)
 		values.putInt(KEY_IDENTIFIER, identifier)
 		values.putInt(KEY_TYPE, type.ordinal)
+		values.putLong(KEY_TIMESTAMP, timestamp)
 		id = db.insert(TABLE, values)
 	}
 	
@@ -95,6 +103,7 @@ class FileUpload {
 	}
 	
 	companion object {
+		const val MAX_TEMPORARY_AGE = 86400000
 		const val TABLE = "fileUploads"
 		
 		const val KEY_ID = "_id"
@@ -105,6 +114,7 @@ class FileUpload {
 		const val KEY_FILE_PATH = "filePath"
 		const val KEY_IDENTIFIER = "identifier"
 		const val KEY_TYPE = "uploadType"
+		const val KEY_TIMESTAMP = "creationTimestamp"
 
 		val COLUMNS = arrayOf(
 			"$TABLE.$KEY_ID",
@@ -114,7 +124,8 @@ class FileUpload {
 			"$TABLE.$KEY_IS_TEMPORARY",
 			"$TABLE.$KEY_FILE_PATH",
 			"$TABLE.$KEY_IDENTIFIER",
-			"$TABLE.$KEY_TYPE"
+			"$TABLE.$KEY_TYPE",
+			"$TABLE.$KEY_TIMESTAMP"
 		)
 	}
 }

@@ -248,6 +248,7 @@ object DbLogic {
 			${FileUpload.KEY_FILE_PATH} TEXT,
 			${FileUpload.KEY_IDENTIFIER} INTEGER,
 			${FileUpload.KEY_TYPE} INTEGER,
+			${FileUpload.KEY_TIMESTAMP} INTEGER,
 			FOREIGN KEY(${FileUpload.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}))""")
 		
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${DynamicInputData.TABLE} (
@@ -971,7 +972,8 @@ object DbLogic {
 	fun cleanupFiles() {
 		val files = getTemporaryFileUploads()
 		for(file: FileUpload in files) {
-			file.delete();
+			if(file.isTooOld())
+				file.delete();
 		}
 	}
 	fun getPendingFileUploads(): List<FileUpload> {
