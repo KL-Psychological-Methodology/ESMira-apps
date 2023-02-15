@@ -74,7 +74,7 @@ class ErrorBox {
 		const val SEVERITY_WARN: Int = 2
 		const val SEVERITY_ERROR: Int = 3
 		
-		const val MAX_SAVED_ERRORS = 800
+		const val MAX_SAVED_ERRORS = 3000
 		private const val MAX_TITLE_SIZE = 1000
 		private const val MAX_MSG_SIZE = 5000
 		
