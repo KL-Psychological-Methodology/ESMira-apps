@@ -84,8 +84,8 @@ actual object NativeLink {
 		return iosCode.getMidnightMillis(timestamp)
 	}
 	
-	actual fun formatShortDate(ms: Long): String {
-		return iosCode.formatShortDate(ms)
+	actual fun formatDate(ms: Long): String {
+		return iosCode.formatDate(ms)
 	}
 	
 	actual fun formatTime(ms: Long): String {

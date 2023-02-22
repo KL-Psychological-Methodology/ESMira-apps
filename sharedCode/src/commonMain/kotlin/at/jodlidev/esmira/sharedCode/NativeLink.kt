@@ -19,7 +19,7 @@ expect object NativeLink {
 	fun getNowMillis(): Long
 	fun getTimezone(): String
 	fun getMidnightMillis(timestamp: Long = -1L): Long
-	fun formatShortDate(ms: Long): String
+	fun formatDate(ms: Long): String
 	fun formatTime(ms: Long): String
 	fun formatDateTime(ms: Long): String
 }

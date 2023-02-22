@@ -19,11 +19,11 @@ class IosCode: IosCodeInterface {
 	
 	func formatTime(ms: Int64) -> String {
 		let formatter = DateFormatter()
-		formatter.dateFormat = "HH:mm:ss"
+		formatter.dateFormat = "HH:mm"
 		return formatter.string(from: Date(timeIntervalSince1970: Double(ms)/1000))
 	}
 	
-	func formatShortDate(ms: Int64) -> String {
+	func formatDate(ms: Int64) -> String {
 		let formatter = DateFormatter()
 		formatter.dateStyle = .short
 		formatter.timeStyle = .none

@@ -30,7 +30,7 @@ abstract class ChartBuilder(
 	}
 	private class DateFormatter(private val firstDay: Long): ChartFormatterInterface {
 		override fun getString(value: Float): String {
-			return NativeLink.formatShortDate((firstDay + StatisticData_timed.ONE_DAY * value.toInt()) * 1000)
+			return NativeLink.formatDate((firstDay + StatisticData_timed.ONE_DAY * value.toInt()) * 1000)
 		}
 	}
 	private class PercentFormatter: ChartFormatterInterface {

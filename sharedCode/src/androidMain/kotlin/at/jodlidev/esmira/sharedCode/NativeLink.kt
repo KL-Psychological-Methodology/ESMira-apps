@@ -80,19 +80,20 @@ actual object NativeLink {
 		cal[Calendar.MILLISECOND] = 0
 		return cal.timeInMillis
 	}
-	actual fun formatShortDate(ms: Long): String {
+	actual fun formatDate(ms: Long): String {
 		val date = Date(ms)
 		val formatter: DateFormat = SimpleDateFormat.getDateInstance(DateFormat.SHORT)
 		return formatter.format(date)
 	}
 	actual fun formatTime(ms: Long): String {
 		val date = Date(ms)
-		val formatter: DateFormat = SimpleDateFormat.getTimeInstance()
+		val formatter: DateFormat = SimpleDateFormat.getTimeInstance(DateFormat.SHORT)
 		return formatter.format(date)
 	}
 	actual fun formatDateTime(ms: Long): String {
 		val date = Date(ms)
-		val formatter: DateFormat = DateFormat.getDateTimeInstance()
+		val formatter: DateFormat = SimpleDateFormat.getDateTimeInstance(DateFormat.SHORT, DateFormat.SHORT)
+//		val formatter: DateFormat = DateFormat.getDateTimeInstance()
 		return formatter.format(date)
 	}
 	actual fun getTimezone(): String {
