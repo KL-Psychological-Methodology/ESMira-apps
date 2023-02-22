@@ -35,7 +35,7 @@ struct CustomSliderView: View {
 			.gesture(DragGesture(minimumDistance: 0)
 						.onChanged({ value in
 							// TODO: - maybe use other logic here
-							self.percentage = min(max(0, Float(round(value.location.x / geometry.size.width * 100))), 100)
+							self.percentage = min(max(1, Float(round(value.location.x / geometry.size.width * 100))), 100)
 							self.value = String(Int(self.percentage))
 							self.color = .accentColor
 						}))

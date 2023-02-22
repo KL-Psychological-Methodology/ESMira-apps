@@ -35,7 +35,7 @@ fun VaScaleView(input: Input, get: () -> String, save: (String) -> Unit) {
 		}
 		Slider(
 			value = try { get().toFloat() } catch(_: Throwable) { 50F },
-			valueRange = 0F .. 100F,
+			valueRange = 1F .. 100F,
 			onValueChange = { value ->
 				save(value.toString())
 				showThumb.value = true
