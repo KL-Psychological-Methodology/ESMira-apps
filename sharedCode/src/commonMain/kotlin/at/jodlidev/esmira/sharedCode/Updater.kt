@@ -11,7 +11,7 @@ import kotlinx.serialization.json.*
  */
 internal object Updater {
 	const val EXPECTED_SERVER_VERSION: Int = 11
-	const val DATABASE_VERSION = 38
+	const val DATABASE_VERSION = 39
 	const val LIBRARY_VERSION = 19 //this is mainly used for iOS so we can check that changes in the library have been used in the C library
 	
 	fun updateSQL(db: SQLiteInterface, oldVersion: Int) {
@@ -156,8 +156,8 @@ internal object Updater {
 			db.execSQL("ALTER TABLE ${Questionnaire.TABLE} ADD COLUMN ${Questionnaire.KEY_SUMSCORES} TEXT;")
 		}
 		if(oldVersion <= 20) {
-			db.execSQL("ALTER TABLE ${DbLogic.User.TABLE} ADD COLUMN ${DbLogic.User.KEY_IS_DEV} INTEGER;")
-			db.execSQL("ALTER TABLE ${DbLogic.User.TABLE} ADD COLUMN ${DbLogic.User.KEY_WAS_DEV} INTEGER;")
+			db.execSQL("ALTER TABLE ${DbUser.TABLE} ADD COLUMN ${DbUser.KEY_IS_DEV} INTEGER;")
+			db.execSQL("ALTER TABLE ${DbUser.TABLE} ADD COLUMN ${DbUser.KEY_WAS_DEV} INTEGER;")
 		}
 		if(oldVersion <= 21) { //4.9.20 - update group.inputs[][] to group.page[]
 			db.execSQL("ALTER TABLE groups ADD COLUMN pages TEXT;")
@@ -405,15 +405,15 @@ internal object Updater {
 			
 			val values = db.getValueBox()
 			try {
-				values.putString(DbLogic.User.KEY_APP_LANG, NativeLink.smartphoneData.lang)
+				values.putString(DbUser.KEY_APP_LANG, NativeLink.smartphoneData.lang)
 			}
 			catch(e : Throwable) {
 				// NativeLink.smartphoneData probably is not ready yet
 				println("Could not detect language??")
 				e.printStackTrace()
-				values.putString(DbLogic.User.KEY_APP_LANG, "")
+				values.putString(DbUser.KEY_APP_LANG, "")
 			}
-			db.update(DbLogic.User.TABLE, values, null, null)
+			db.update(DbUser.TABLE, values, null, null)
 		}
 		if(oldVersion <= 33) {
 			db.execSQL("""CREATE TABLE IF NOT EXISTS fileUploads (
@@ -501,6 +501,17 @@ internal object Updater {
 		}
 		if(oldVersion <= 37) {
 			db.execSQL("ALTER TABLE fileUploads ADD COLUMN creationTimestamp INTEGER;")
+		}
+		if(oldVersion <= 38) {
+			db.execSQL("""CREATE TABLE IF NOT EXISTS questionnaireCache (
+			_id INTEGER,
+			questionnaireId INTEGER,
+			inputName TEXT,
+			backupFrom LONG,
+			cacheValue TEXT,
+			FOREIGN KEY(questionnaireId) REFERENCES questionnaire(_id))""")
+			db.execSQL("ALTER TABLE user ADD COLUMN current_study INTEGER DEFAULT 0;")
+			db.execSQL("ALTER TABLE studies ADD COLUMN quitTimestamp INTEGER DEFAULT 0;")
 		}
 	}
 	

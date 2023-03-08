@@ -22,7 +22,7 @@ class Study internal constructor(
 	@SerialName("id") val webId: Long
 ) {
 	enum class STATES {
-		Pending, Joined, HasLeft
+		Pending, Joined, Quit
 	}
 	
 	internal constructor(c: SQLiteCursor) : this(webId = c.getLong(1)) {
@@ -37,29 +37,30 @@ class Study internal constructor(
 		subVersion = c.getInt(6)
 		lang = c.getString(7)
 		group = c.getInt(8)
-		joined = c.getLong(9)
-		title = c.getString(10)
-		studyDescription = c.getString(11)
-		contactEmail = c.getString(12)
-		informedConsentForm = c.getString(13)
-		postInstallInstructions = c.getString(14)
-		publicChartsJsonString = c.getString(15)
-		personalChartsJsonString = c.getString(16)
-		msgTimestamp = c.getLong(17)
-		publicStatisticsNeeded = c.getBoolean(18)
-		sendMessagesAllowed = c.getBoolean(19)
-		eventUploadSettingsString = c.getString(20)
-		enableRewardSystem = c.getBoolean(21)
-		rewardVisibleAfterDays = c.getInt(22)
-		rewardEmailContent = c.getString(23)
-		rewardInstructions = c.getString(24)
-		cachedRewardCode = c.getString(25)
+		joinedTimestamp = c.getLong(9)
+		quitTimestamp = c.getLong(10)
+		title = c.getString(11)
+		studyDescription = c.getString(12)
+		contactEmail = c.getString(13)
+		informedConsentForm = c.getString(14)
+		postInstallInstructions = c.getString(15)
+		publicChartsJsonString = c.getString(16)
+		personalChartsJsonString = c.getString(17)
+		msgTimestamp = c.getLong(18)
+		publicStatisticsNeeded = c.getBoolean(19)
+		sendMessagesAllowed = c.getBoolean(20)
+		eventUploadSettingsString = c.getString(21)
+		enableRewardSystem = c.getBoolean(22)
+		rewardVisibleAfterDays = c.getInt(23)
+		rewardEmailContent = c.getString(24)
+		rewardInstructions = c.getString(25)
+		cachedRewardCode = c.getString(26)
 	}
 	
 	@Transient var exists = false
 	@Transient var id = -1L
 	@Transient var state = STATES.Pending
-	@Transient var joined = 0L //is automatically set to CURRENT_TIMESTAMP by sql
+	@Transient var joinedTimestamp = 0L
 	@Transient lateinit var serverUrl: String
 	@Transient lateinit var accessKey: String
 	@Transient var group = 0 // will be calculated from randomGroups
@@ -69,6 +70,7 @@ class Study internal constructor(
 	@Transient var publicStatisticsNeeded = false
 	@Transient private var cachedRewardCode: String = ""
 	
+	var quitTimestamp = 0L
 	var publishedAndroid = true //not in db, only known when directly from server
 	var publishedIOS = true //not in db, only known when directly from server
 	var version = -1
@@ -240,7 +242,7 @@ class Study internal constructor(
 		return questionnaires
 	}
 	
-	internal fun finishJSON(serverUrl: String, accessKey: String) {
+	fun finishJSON(serverUrl: String, accessKey: String) { //public for previews
 		fromJsonOrUpdated = true
 		this.serverUrl = serverUrl
 		this.accessKey = accessKey
@@ -331,7 +333,7 @@ class Study internal constructor(
 	
 	fun daysUntilRewardsAreActive(): Int {
 		val oneDay = 86400000L
-		return ceil((((joined + rewardVisibleAfterDays.toLong() * oneDay) - NativeLink.getNowMillis()).toFloat() / oneDay))
+		return ceil((((joinedTimestamp + rewardVisibleAfterDays.toLong() * oneDay) - NativeLink.getNowMillis()).toFloat() / oneDay))
 			.toInt()
 			.coerceAtLeast(0)
 	}
@@ -368,6 +370,16 @@ class Study internal constructor(
 		return informedConsentForm.isNotEmpty()
 	}
 	
+	fun hasMessages(): Boolean {
+		return sendMessagesAllowed || msgTimestamp != 0L
+	}
+	fun hasStatistics(): Boolean {
+		return publicChartsJsonString.length > 2 || personalChartsJsonString.length > 2
+	}
+	fun hasRewards(): Boolean {
+		return enableRewardSystem
+	}
+	
 	fun needsPermissionScreen(): Boolean {
 		return hasInformedConsent() || usesPostponedActions() || hasNotifications() || hasScreenOrAppTracking()
 	}
@@ -385,7 +397,7 @@ class Study internal constructor(
 		val c = NativeLink.sql.select(
 			TABLE,
 			COLUMNS,
-			"$KEY_WEB_ID = ? AND $KEY_SERVER_URL = ? AND $KEY_STATE = ${STATES.HasLeft.ordinal}", arrayOf(webId.toString(), serverUrl),
+			"$KEY_WEB_ID = ? AND $KEY_SERVER_URL = ? AND $KEY_STATE = ${STATES.Quit.ordinal}", arrayOf(webId.toString(), serverUrl),
 			null,
 			null,
 			null,
@@ -439,10 +451,12 @@ class Study internal constructor(
 	fun join() {
 		ErrorBox.log("Study", "Joining study $title ($webId)")
 		state = STATES.Joined
-		joined = NativeLink.getNowMillis()
+		joinedTimestamp = NativeLink.getNowMillis()
+		quitTimestamp = 0
 		save()
 		DataSet.createShortDataSet(DataSet.TYPE_JOIN, this)
 		NativeLink.postponedActions.updateStudiesRegularly()
+		DbUser.setCurrentStudyId(id)
 	}
 	
 	internal fun save() {
@@ -456,7 +470,8 @@ class Study internal constructor(
 		values.putString(KEY_LANG, lang)
 		values.putInt(KEY_GROUP, group)
 		values.putInt(KEY_STATE, state.ordinal)
-		values.putLong(KEY_JOINED, joined)
+		values.putLong(KEY_JOINED_TIMESTAMP, joinedTimestamp)
+		values.putLong(KEY_QUIT_TIMESTAMP, quitTimestamp)
 		values.putLong(KEY_LAST_MSG_TIMESTAMP, msgTimestamp)
 		values.putString(KEY_TITLE, title)
 		values.putString(KEY_DESC, studyDescription)
@@ -598,12 +613,14 @@ class Study internal constructor(
 		db.delete(ObservedVariable.TABLE, "${ObservedVariable.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StatisticData_timed.TABLE, "${StatisticData_timed.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StatisticData_perValue.TABLE, "${StatisticData_perValue.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
-		db.delete(DataSet.TABLE, "${DataSet.KEY_STUDY_ID} = ? AND ${DataSet.KEY_SYNCED} IS NOT ${DataSet.STATES.NOT_SYNCED.ordinal}", arrayOf(id.toString()))
+		db.delete(DataSet.TABLE, "${DataSet.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
+		db.delete(StudyToken.TABLE, "${StudyToken.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(TABLE, "$KEY_ID = ?", arrayOf(id.toString()))
+		DbUser.setCurrentStudyId(DbLogic.getFirstStudy()?.id ?: 0L)
 	}
 
-	fun leaveAfterCheck() {
-		if(state != STATES.HasLeft && !isActive() && !hasNotYetActiveQuestionnaires()) {
+	internal fun leaveAfterCheck() {
+		if(state != STATES.Quit && !isActive() && !hasNotYetActiveQuestionnaires()) {
 			ErrorBox.log("Study", "Leaving study \"$title\" because it is not active anymore")
 			leave()
 		}
@@ -612,30 +629,15 @@ class Study internal constructor(
 	fun leave() {
 		val db = NativeLink.sql
 		val values = db.getValueBox()
-		state = STATES.HasLeft
+		state = STATES.Quit
 		values.putInt(KEY_STATE, state.ordinal)
+		values.putLong(KEY_QUIT_TIMESTAMP, NativeLink.getNowMillis())
 		db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
-
-		if(!DataSet.createShortDataSet(DataSet.TYPE_QUIT, this))
-			execLeave()
-	}
-
-	internal fun execLeave() {
-		// TODO: better system:
-		// we should never delete the study. And instead there should be a menu called "past studies" where all information can be accessed
 		
-		// Note: we are not cleaning StudyToken when there are unsynced datasets.
-		// That means server_tokens can accumulate over time
-		if(!DbLogic.hasUnsyncedDataSetsAfterQuit(id))
-			NativeLink.sql.delete(StudyToken.TABLE, "${StudyToken.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
-
-		if(observedVariables.isEmpty() && cachedRewardCode.isEmpty()) {
-			delete()
-		}
-		else {
-			for(q in questionnaires) {
-				q.delete()
-			}
+		DataSet.createShortDataSet(DataSet.TYPE_QUIT, this)
+		
+		for(q in questionnaires) {
+			q.delete()
 		}
 	}
 
@@ -664,7 +666,8 @@ class Study internal constructor(
 		const val KEY_SUB_VERSION = "subVersion"
 		const val KEY_LANG = "study_lang"
 		const val KEY_GROUP = "randomGroup"
-		const val KEY_JOINED = "joinedTimestamp"
+		const val KEY_JOINED_TIMESTAMP = "joinedTimestamp"
+		const val KEY_QUIT_TIMESTAMP = "quitTimestamp"
 		const val KEY_STATE = "state"
 		const val KEY_LAST_MSG_TIMESTAMP = "msgTimestamp"
 		const val KEY_TITLE = "title"
@@ -699,7 +702,8 @@ class Study internal constructor(
 			KEY_SUB_VERSION,
 			KEY_LANG,
 			KEY_GROUP,
-			KEY_JOINED,
+			KEY_JOINED_TIMESTAMP,
+			KEY_QUIT_TIMESTAMP,
 			KEY_TITLE,
 			KEY_DESC,
 			KEY_EMAIL,
@@ -781,7 +785,6 @@ class Study internal constructor(
 					ErrorBox.warn("New Study list", "Format error: $jsonStudy", e)
 				}
 			}
-			println(list)
 			return list
 		}
 	}

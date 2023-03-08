@@ -68,7 +68,7 @@ class SchedulerTest : BaseCommonTest() {
 		
 		countQueries(
 			missedCount,
-			"UPDATE ${DbLogic.User.TABLE} SET ${DbLogic.User.KEY_NOTIFICATIONS_MISSED} = ${DbLogic.User.KEY_NOTIFICATIONS_MISSED} + 1"
+			"UPDATE ${DbUser.TABLE} SET ${DbUser.KEY_NOTIFICATIONS_MISSED} = ${DbUser.KEY_NOTIFICATIONS_MISSED} + 1"
 		) {
 			Scheduler.checkMissedAlarms(true)
 		}

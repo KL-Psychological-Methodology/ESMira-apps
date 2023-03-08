@@ -47,8 +47,8 @@ struct MainView: View {
 					if(s == .settings) {
 						self.pressedNum += 1
 						if(self.pressedNum >= 10) {
-							if(DbLogic().isDev()) {
-								DbLogic().setDev(enabled: false, pass: "")
+							if(DbUser().isDev()) {
+								DbUser().setDev(enabled: false, pass: "")
 								self.appState.showTranslatedToast("info_dev_inactive")
 							}
 							else {
@@ -119,7 +119,7 @@ struct MainView: View {
 		}
 			
 			.textFieldAlert(isPresented: self.$askDevPassword, text: self.$devPassword, title: "password") {
-				if (DbLogic().setDev(enabled: true, pass: self.devPassword)) {
+				if (DbUser().setDev(enabled: true, pass: self.devPassword)) {
 					self.appState.showTranslatedToast("info_dev_active")
 				}
 			}

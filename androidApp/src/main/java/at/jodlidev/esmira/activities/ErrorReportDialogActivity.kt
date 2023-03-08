@@ -15,7 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Modifier
@@ -25,12 +25,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.window.Dialog
 import at.jodlidev.esmira.*
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.Web
 import at.jodlidev.esmira.sharedCode.data_structure.ErrorBox
+import at.jodlidev.esmira.views.DialogButton
+import at.jodlidev.esmira.views.ESMiraDialog
+import at.jodlidev.esmira.views.ESMiraDialogContent
 
 /**
  * Created by JodliDev on 24.04.2019.
@@ -44,12 +46,12 @@ class ErrorReportDialogActivity : ComponentActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContent {
-			ESMiraSurfaceM2 {
+			if(openWhatIsSentDialog.value)
+				WhatIsSentDialog(DbLogic.getErrors(), ErrorBox.getReportHeader(comment.value).toString())
+			if(openToWhomDialog.value)
+				ToWhomDialog()
+			ESMiraSurface {
 				MainDialog(!intent.hasExtra(EXTRA_CALLED_MANUALLY) || intent.extras?.getBoolean(EXTRA_CALLED_MANUALLY) != true)
-				if(openWhatIsSentDialog.value)
-					WhatIsSentDialog(DbLogic.getErrors(), ErrorBox.getReportHeader(comment.value).toString())
-				if(openToWhomDialog.value)
-					ToWhomDialog()
 			}
 		}
 		DbLogic.setErrorsAsReviewed()
@@ -71,96 +73,20 @@ class ErrorReportDialogActivity : ComponentActivity() {
 		}
 	}
 	
-	@Composable
-	fun ToWhomDialog() {
-		AlertDialog(
-			onDismissRequest = {
-				openToWhomDialog.value = false
-			},
-			title = {
-				Text(stringResource(R.string.sent_to_whom))
-			},
-			text = {
-				Text(stringResource(R.string.data_will_be_sent_to_app_developer, Web.DEV_SERVER))
-			},
-			confirmButton = {
-				DialogButton(stringResource(R.string.close),
-					onClick = {
-						openToWhomDialog.value = false
-					})
-			},
-		)
-	}
-	
-	@Composable
-	fun WhatIsSentDialog(errors: List<ErrorBox>, errorReportHeader: String) {
-		Dialog(
-			onDismissRequest = {
-				openWhatIsSentDialog.value = false
-			},
-			content = {
-				ESMiraSurfaceM2 {
-					Column {
-						Text(stringResource(R.string.what_is_sent),
-							fontSize = 18.sp,
-							modifier = Modifier.padding(all = 20.dp)
-						)
-						LazyColumn(modifier = Modifier.weight(1f).fillMaxWidth()) {
-							item {
-								Text(errorReportHeader,
-									fontSize = 12.sp,
-									modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
-								)
-							}
-							
-							itemsIndexed(errors, { i, _ -> i }) { i, error ->
-								Column(
-									modifier = Modifier
-										.background(color = if(i % 2 == 0) colorLineBackground1 else colorLineBackground2)
-										.padding(all = 20.dp)
-								) {
-									Row {
-										Text(
-											error.title,
-											modifier = Modifier.weight(1f),
-											fontWeight = FontWeight.Bold,
-											color = when(error.severity) {
-												ErrorBox.SEVERITY_ERROR -> colorError
-												ErrorBox.SEVERITY_WARN -> colorWarn
-												else -> MaterialTheme.colors.onSurface
-											}
-										)
-										Text(error.getFormattedDateTime(), fontSize = 10.sp)
-									}
-									Text(error.msg, modifier = Modifier.padding(all = 5.dp))
-								}
-							}
-						}
-						Row {
-							Spacer(modifier = Modifier.weight(1f))
-							DialogButton(stringResource(R.string.close),
-								onClick = {
-									openWhatIsSentDialog.value = false
-								},
-								modifier = Modifier.padding(all = 10.dp)
-							)
-						}
-					}
-				}
-			}
-		)
-	}
-	
+	@OptIn(ExperimentalMaterial3Api::class)
 	@Composable
 	fun MainDialog(withHeader: Boolean) {
-		Column {
+		ESMiraDialogContent(
+			confirmButtonLabel = stringResource(R.string.send),
+			onConfirmRequest = { sendErrorReport() },
+			title = stringResource(R.string.send_error_report),
+			dismissButtonLabel = stringResource(R.string.cancel),
+			onDismissRequest = { finish() }
+		) {
 			Column(
 				modifier = Modifier
-					.padding(all = 20.dp)
 					.verticalScroll(rememberScrollState())
 			) {
-				Text(stringResource(R.string.send_error_report), fontSize = 18.sp)
-				Spacer(modifier = Modifier.size(20.dp))
 				if(withHeader) {
 					Text(stringResource(R.string.info_error_report_header), fontWeight = FontWeight.Bold)
 					Text(stringResource(R.string.info_error_report_desc))
@@ -193,16 +119,62 @@ class ErrorReportDialogActivity : ComponentActivity() {
 					Text(error.value, fontSize = 18.sp, color = colorRed, modifier = Modifier.weight(1f), textAlign = TextAlign.Right)
 				}
 			}
-			Row(modifier = Modifier.padding(5.dp)) {
-				Spacer(modifier = Modifier.weight(1f))
-				DialogButton(stringResource(R.string.cancel),
-					onClick = {
-						finish()
-					})
-				DialogButton(stringResource(R.string.send),
-					onClick = {
-						sendErrorReport()
-					})
+		}
+	}
+	
+	@Composable
+	fun ToWhomDialog() {
+		ESMiraDialog(
+			confirmButtonLabel = stringResource(R.string.close),
+			onConfirmRequest = {
+				openToWhomDialog.value = false
+			},
+			title = stringResource(R.string.sent_to_whom),
+		) {
+			Text(stringResource(R.string.data_will_be_sent_to_app_developer, Web.DEV_SERVER))
+		}
+	}
+	
+	@Composable
+	fun WhatIsSentDialog(errors: List<ErrorBox>, errorReportHeader: String) {
+		ESMiraDialog(
+			confirmButtonLabel = stringResource(R.string.close),
+			onConfirmRequest = {
+				openWhatIsSentDialog.value = false
+			},
+			title = stringResource(R.string.what_is_sent),
+			contentPadding = PaddingValues()
+		) {
+			LazyColumn(modifier = Modifier.fillMaxWidth()) {
+				item {
+					Text(errorReportHeader,
+						fontSize = 12.sp,
+						modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
+					)
+				}
+				
+				itemsIndexed(errors, { i, _ -> i }) { i, error ->
+					Column(
+						modifier = Modifier
+							.background(color = if(i % 2 == 0) colorLineBackground1 else colorLineBackground2)
+							.padding(all = 20.dp)
+					) {
+						Row {
+							Text(
+								error.title,
+								modifier = Modifier.weight(1f),
+								fontWeight = FontWeight.Bold,
+								color = when(error.severity) {
+									ErrorBox.SEVERITY_ERROR -> colorError
+									ErrorBox.SEVERITY_WARN -> colorWarn
+									else -> MaterialTheme.colorScheme.onBackground
+								}
+							)
+							Text(error.getFormattedDateTime(), fontSize = 10.sp)
+						}
+						Text(error.msg, modifier = Modifier.padding(all = 5.dp))
+					}
+				}
 			}
 		}
 	}
@@ -218,7 +190,7 @@ class ErrorReportDialogActivity : ComponentActivity() {
 			ErrorBox("Warn title", ErrorBox.SEVERITY_WARN, "Content of message"),
 			ErrorBox("Log title3", ErrorBox.SEVERITY_LOG, "Content of message")
 		)
-		ESMiraSurfaceM2 {
+		ESMiraSurface {
 			WhatIsSentDialog(errors, "Error report header")
 		}
 	}
@@ -227,7 +199,7 @@ class ErrorReportDialogActivity : ComponentActivity() {
 	@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 	@Composable
 	fun PreviewWithHeader() {
-		ESMiraSurfaceM2 {
+		ESMiraSurface {
 			MainDialog(true)
 		}
 	}
@@ -236,7 +208,7 @@ class ErrorReportDialogActivity : ComponentActivity() {
 	@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 	@Composable
 	fun PreviewWithoutHeader() {
-		ESMiraSurfaceM2 {
+		ESMiraSurface {
 			MainDialog(false)
 		}
 	}
@@ -245,7 +217,7 @@ class ErrorReportDialogActivity : ComponentActivity() {
 	@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 	@Composable
 	fun PreviewWithError() {
-		ESMiraSurfaceM2 {
+		ESMiraSurface {
 			error.value = "Test error"
 			MainDialog(true)
 		}

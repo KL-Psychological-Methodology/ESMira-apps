@@ -13,7 +13,6 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import at.jodlidev.esmira.ESMiraSurface
-import at.jodlidev.esmira.ESMiraSurfaceM2
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.data_structure.Input
 
@@ -48,7 +47,7 @@ fun CheckBoxLine(text: String, isChecked: () -> Boolean, onChecked: (Boolean) ->
 
 
 @Composable
-fun ListMultipleView(input: Input, get: () -> String, save: (String) -> Unit) {
+fun ListMultipleView(input: Input, get: () -> String, save: (String, Map<String, String>) -> Unit) {
 	val choices = remember {
 		val list = ArrayList<Pair<String,Boolean>>()
 		for(value in input.listChoices) {
@@ -64,15 +63,16 @@ fun ListMultipleView(input: Input, get: () -> String, save: (String) -> Unit) {
 				isChecked = { pair.second },
 				onChecked = {
 					choices[i] = pair.copy(second = it)
+					val map = HashMap<String, String>()
 					val s = StringBuilder()
 					for(pair_ in choices) {
-						input.additionalValues[pair_.first] = if(pair_.second) "1" else "0"
+						map[pair_.first] = if(pair_.second) "1" else "0"
 						if(pair_.second) {
 							s.append(pair_.first)
 							s.append(',')
 						}
 					}
-					save(s.toString())
+					save(s.toString(), map)
 				}
 			)
 		}
@@ -87,6 +87,6 @@ fun PreviewListMultipleView() {
 		{"listChoices": ["aaa", "bbb", "ccc", "ddd"]}
 	""")
 	ESMiraSurface {
-		ListMultipleView(input, {"ccc"}) {}
+		ListMultipleView(input, {"ccc"}) { _, _ -> }
 	}
 }

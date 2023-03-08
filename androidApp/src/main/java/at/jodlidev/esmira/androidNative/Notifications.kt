@@ -15,6 +15,8 @@ import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import at.jodlidev.esmira.*
+import at.jodlidev.esmira.activities.ChangeSchedulesDialogActivity
+import at.jodlidev.esmira.activities.MainActivity
 import at.jodlidev.esmira.sharedCode.NotificationsInterface
 import at.jodlidev.esmira.sharedCode.data_structure.*
 import java.lang.ref.WeakReference
@@ -170,16 +172,16 @@ object Notifications: NotificationsInterface {
 	override fun fireSchedulesChanged(study: Study) {
 		val context = context.get() ?: return
 		ErrorBox.log("update_studies", "schedules have been reset")
-		val intent = Intent(context, Activity_editSchedules::class.java)
+		val intent = Intent(context, ChangeSchedulesDialogActivity::class.java)
 		fire(context.getString(R.string.android_info_study_updated, study.title), context.getString(R.string.info_study_updated_desc), createId(study.id, SCHEDULE_CHANGED_ID_RANGE), CHANNEL_ID_STUDY_UPDATED, intent)
 	}
 	
 	override fun fireQuestionnaireBing(title: String, msg: String, questionnaire: Questionnaire, timeoutMin: Int, type: String, scheduledToTimestamp: Long) {
 		val context = context.get() ?: return
 		val notificationId: Int = createId(questionnaire.id, QUESTIONNAIRE_BING_ID_RANGE)
-		val intent = Intent(context, Activity_main::class.java)
+		val intent = Intent(context, MainActivity::class.java)
 		intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-		intent.putExtra(Activity_main.EXTRA_OPEN_QUESTIONNAIRE, questionnaire.id)
+		intent.putExtra(MainActivity.EXTRA_OPEN_QUESTIONNAIRE, questionnaire.id)
 		
 		val pendingIntent: PendingIntent = PendingIntent.getActivity(context, notificationId, intent, getPendingIntentFlag())
 		val builder: NotificationCompat.Builder = createNotification(context, title, msg, pendingIntent, CHANNEL_ID_QUESTIONNAIRE_INVITATION)
@@ -204,9 +206,9 @@ object Notifications: NotificationsInterface {
 	override fun fireMessageNotification(study: Study) {
 		val context = context.get() ?: return
 		val notificationId = createId(study.id, MESSAGE_ID_RANGE)
-		val intent = Intent(context, Activity_main::class.java)
+		val intent = Intent(context, MainActivity::class.java)
 		intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
-		intent.putExtra(Activity_main.EXTRA_OPEN_STUDY_MESSAGES, study.id)
+		intent.putExtra(MainActivity.EXTRA_OPEN_MESSAGES, study.id)
 		
 		val pendingIntent: PendingIntent = PendingIntent.getActivity(context, notificationId, intent, getPendingIntentFlag())
 		val builder: NotificationCompat.Builder = createNotification(context, study.title, context.getString(R.string.info_new_message), pendingIntent, CHANNEL_ID_STUDY_MESSAGES)

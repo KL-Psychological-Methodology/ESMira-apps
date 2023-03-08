@@ -2,25 +2,22 @@ package at.jodlidev.esmira.activities
 
 import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
 import android.os.Parcelable
 import android.widget.Toast
 import androidx.activity.ComponentActivity
-import androidx.activity.OnBackPressedCallback
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
-import androidx.compose.material.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
@@ -28,10 +25,11 @@ import androidx.preference.PreferenceManager
 import at.jodlidev.esmira.*
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.DbLogic
+import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.QrInterpreter
 import at.jodlidev.esmira.sharedCode.Web
-import at.jodlidev.esmira.sharedCode.data_structure.Alarm
 import at.jodlidev.esmira.sharedCode.data_structure.Study
+import at.jodlidev.esmira.views.ESMiraDialog
 import at.jodlidev.esmira.views.welcome.*
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -49,7 +47,8 @@ class WelcomeScreenActivity: ComponentActivity() {
 		var serverUrl: String, // needs to be changed when formatting is different. A change will not trigger a reload - which is what we want
 		val accessKey: String,
 		val studyId: Long,
-		val qId: Long
+		val qId: Long,
+		val loadedTimestamp: Long = NativeLink.getNowMillis() // just exists to force reloads of the same data
 	) : Parcelable
 	
 	@OptIn(ExperimentalAnimationApi::class)
@@ -58,8 +57,13 @@ class WelcomeScreenActivity: ComponentActivity() {
 		
 		val extras = intent.extras
 		val data = intent?.data
+		val serverUrl = extras?.getString(KEY_SERVER_URL, "") ?: ""
+		val accessKey = extras?.getString(KEY_ACCESS_KEY, "") ?: ""
+		val studyWebId = extras?.getLong(KEY_STUDY_WEB_ID, -1) ?: -1
 		val isOpenedFromLink = data != null
-		val skipEntrance = (extras != null && extras.getBoolean(KEY_SKIP_ENTRANCE)) || isOpenedFromLink
+		val hasStudyData = serverUrl.isNotEmpty() && studyWebId != -1L
+		val openStudyDirectly = isOpenedFromLink || hasStudyData
+		val skipEntrance = (extras != null && extras.getBoolean(KEY_SKIP_ENTRANCE)) || openStudyDirectly
 		
 		setContent {
 			ESMiraSurface {
@@ -76,12 +80,13 @@ class WelcomeScreenActivity: ComponentActivity() {
 						else
 							mutableStateOf<StudyLoadingData?>(StudyLoadingData(urlData.url, urlData.accessKey, urlData.studyId, urlData.qId))
 					}
+					else if(hasStudyData)
+						mutableStateOf<StudyLoadingData?>(StudyLoadingData(serverUrl, accessKey, studyWebId, 0))
 					else
 						mutableStateOf<StudyLoadingData?>(null)
 				}
 				
-				val showCancelWarning = remember { mutableStateOf(false) }
-				val showStudyLoader = remember { mutableStateOf(isOpenedFromLink) }
+				val showStudyLoader = remember { mutableStateOf(openStudyDirectly) }
 				val studyList = remember { derivedStateOf {
 					val loadData = studyLoadingData.value
 					val studiesJson = getStudyJsonList(context)
@@ -93,7 +98,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 				
 				val gotoStudies = {
 					if(studyList.value.size == 1) {
-						if(isOpenedFromLink)
+						if(openStudyDirectly)
 							navController.popBackStack()
 						navController.navigate("studyInfo/0")
 					}
@@ -129,17 +134,6 @@ class WelcomeScreenActivity: ComponentActivity() {
 					}
 				}
 				
-				if(!skipEntrance) {
-					onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
-						override fun handleOnBackPressed() {
-							if(navController.backQueue.size == 2)
-								showCancelWarning.value = true
-							else
-								navController.navigateUp()
-						}
-					})
-				}
-				
 				if(showStudyLoader.value) {
 					LoadingView {
 						showStudyLoader.value = false
@@ -147,28 +141,15 @@ class WelcomeScreenActivity: ComponentActivity() {
 					}
 				}
 				
-				if(showCancelWarning.value) {
-					CancelWarningDialog(showCancelWarning) { finish() }
-				}
-				
 				MainView(
-					startDestination = if(isOpenedFromLink) "studyList" else if(skipEntrance) "qrQuestion" else "entrance",
+					startDestination = if(openStudyDirectly) "studyList" else if(skipEntrance) "qrQuestion" else "entrance",
 					getServerList = {
 						Web.serverList
 					},
 					studyList = studyList,
 					loadStudies = { serverUrl: String, accessKey: String, studyId: Long, qId: Long ->
-						
-						if(studyLoadingData.value?.serverUrl == serverUrl
-							&& studyLoadingData.value?.accessKey == accessKey
-							&& studyLoadingData.value?.studyId == studyId
-							&& studyLoadingData.value?.qId == qId
-						)
-							gotoStudies()
-						else {
-							showStudyLoader.value = true
-							studyLoadingData.value = StudyLoadingData(serverUrl, accessKey, studyId, qId)
-						}
+						showStudyLoader.value = true
+						studyLoadingData.value = StudyLoadingData(serverUrl, accessKey, studyId, qId)
 					},
 					navController = navController
 				)
@@ -359,13 +340,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 				StudyJoinedView(
 					study = study,
 					getAlarms = {
-						val alarms = DbLogic.getNextAlarms(study.id)
-						val suitableAlarms = ArrayList<Alarm>()
-						for(alarm in alarms) {
-							if(alarm.actionTrigger.hasNotifications())
-								suitableAlarms.add(alarm)
-						}
-						suitableAlarms
+						DbLogic.getQuestionnaireAlarmsWithNotifications(study.id)
 					},
 					gotoNext = {
 						finish()
@@ -378,73 +353,27 @@ class WelcomeScreenActivity: ComponentActivity() {
 	
 	@Composable
 	fun LoadingView(onCancel: () -> Unit) {
-		AlertDialog(
+		ESMiraDialog(
 			onDismissRequest = {
 				onCancel()
 			},
-			text = {
-				Column(
-					horizontalAlignment = Alignment.CenterHorizontally,
-					modifier = Modifier.fillMaxWidth()
-				) {
-					CircularProgressIndicator()
-				}
-			},
-			confirmButton = {
-				DialogButton(stringResource(R.string.cancel),
-					onClick = {
-						onCancel()
-					}
-				)
-			},
-		)
-	}
-	
-	@Composable
-	fun CancelWarningDialog(openState: MutableState<Boolean>, onConfirm: () -> Unit) {
-		AlertDialog(
-			onDismissRequest = {
-				openState.value = false
-			},
-			title = {
-				Text(stringResource(R.string.welcome_exit_questionTitle))
-			},
-			text = {
-				Text(stringResource(R.string.welcome_exit_questionDesc))
-			},
-			dismissButton = {
-				DialogButton(stringResource(R.string.cancel),
-					onClick = {
-						openState.value = false
-					}
-				)
-			},
-			confirmButton = {
-				DialogButton(stringResource(R.string.ok_),
-					onClick = {
-						openState.value = false
-						onConfirm()
-					}
-				)
-			},
-		)
-	}
-	
-	
-	
-	@Preview
-	@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-	@Composable
-	fun PreviewCancelWarningDialog() {
-		val open = remember { mutableStateOf(false) }
-		
-		ESMiraSurface {
-			CancelWarningDialog(open) {}
+			confirmButtonLabel = stringResource(R.string.cancel),
+			onConfirmRequest = onCancel
+		) {
+			Column(
+				horizontalAlignment = Alignment.CenterHorizontally,
+				modifier = Modifier.fillMaxWidth()
+			) {
+				CircularProgressIndicator()
+			}
 		}
 	}
 	
 	companion object {
-		private const val KEY_SKIP_ENTRANCE = "skip_entrance"
+		private const val KEY_SKIP_ENTRANCE = "skipEntrance"
+		private const val KEY_SERVER_URL = "serverUrl"
+		private const val KEY_ACCESS_KEY = "accessKey"
+		private const val KEY_STUDY_WEB_ID = "studyWebId"
 		
 		private const val KEY_STUDY_LIST_JSON: String = "study_list_json"
 		
@@ -452,6 +381,14 @@ class WelcomeScreenActivity: ComponentActivity() {
 			val intent = Intent(context, WelcomeScreenActivity::class.java)
 			if(notFirstTime)
 				intent.putExtra(KEY_SKIP_ENTRANCE, true)
+			context.startActivity(intent)
+		}
+		
+		fun start(context: Context, serverUrl: String, accessKey: String, studyWebId: Long) {
+			val intent = Intent(context, WelcomeScreenActivity::class.java)
+			intent.putExtra(KEY_SERVER_URL, serverUrl)
+			intent.putExtra(KEY_ACCESS_KEY, accessKey)
+			intent.putExtra(KEY_STUDY_WEB_ID, studyWebId)
 			context.startActivity(intent)
 		}
 	}

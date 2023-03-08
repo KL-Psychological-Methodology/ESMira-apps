@@ -12,6 +12,8 @@ import androidx.compose.ui.unit.dp
 import at.jodlidev.esmira.*
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.data_structure.Input
+import at.jodlidev.esmira.views.DefaultButtonIconLeft
+import at.jodlidev.esmira.views.DefaultButtonIconRight
 
 /**
  * Created by JodliDev on 23.01.2023.
@@ -23,7 +25,7 @@ fun BinaryView(input: Input, get: () -> String, save: (String) -> Unit) {
 	Row(modifier = Modifier.fillMaxWidth()) {
 		DefaultButtonIconLeft(
 			text = input.leftSideLabel,
-			icon = if(get() == "1") Icons.Default.RadioButtonChecked else Icons.Default.RadioButtonUnchecked,
+			icon = if(get() == "0") Icons.Default.RadioButtonChecked else Icons.Default.RadioButtonUnchecked,
 			onClick = {
 				save("0")
 			},
@@ -34,7 +36,7 @@ fun BinaryView(input: Input, get: () -> String, save: (String) -> Unit) {
 		
 		DefaultButtonIconRight(
 			text = input.rightSideLabel,
-			icon = if(get() == "2") Icons.Default.RadioButtonChecked else Icons.Default.RadioButtonUnchecked,
+			icon = if(get() == "1") Icons.Default.RadioButtonChecked else Icons.Default.RadioButtonUnchecked,
 			onClick = {
 				save("1")
 			},

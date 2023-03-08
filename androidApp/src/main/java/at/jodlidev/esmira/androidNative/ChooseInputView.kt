@@ -16,41 +16,42 @@ import at.jodlidev.esmira.views.inputViews.*
  */
 @Composable
 fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifier) {
-	val backup = rememberSaveable { mutableStateOf(input.getBackupString()) }
-	val response = rememberSaveable { mutableStateOf(input.value) }
+	val response = rememberSaveable { mutableStateOf(input.getValue()) }
 	
-	LaunchedEffect(backup.value, input) {
-		input.fromBackupString(backup.value)
-	}
 	val get = {
 		response.value
 	}
-	val set = { inputValue: String ->
-		println("${input.name}: $inputValue, ${input.additionalValues}")
+	val set = { inputValue: String, additionalValues: Map<String, String>?, filePath: String? ->
+		println("${input.name} = $inputValue; $additionalValues; $filePath")
 		response.value = inputValue
-		input.value = inputValue
-		backup.value = input.getBackupString()
+		input.setValue(inputValue, additionalValues, filePath)
+	}
+	val setAdditionalValue = { inputValue: String, additionalValues: Map<String, String>? ->
+		set(inputValue, additionalValues, null)
+	}
+	val setValue = { inputValue: String ->
+		set(inputValue, null, null)
 	}
 	
 	Column(modifier = modifier) {
 		TextElView(input)
 		Spacer(modifier = Modifier.height(10.dp))
 		when(input.type) {
-			Input.TYPES.app_usage -> AppUsageView(input, get, set)
-			Input.TYPES.binary -> BinaryView(input, get, set)
-			Input.TYPES.date -> DateView(input, get, set)
-			Input.TYPES.dynamic_input -> DynamicView(input, questionnaire, get, set)
-			Input.TYPES.image -> ImageView(input, get, set)
-			Input.TYPES.likert -> LikertView(input, get, set)
-			Input.TYPES.list_multiple -> ListMultipleView(input, get, set)
-			Input.TYPES.list_single -> ListSingleView(input, get, set)
-			Input.TYPES.number -> NumberView(input, get, set)
+			Input.TYPES.app_usage -> AppUsageView(input, get, setAdditionalValue)
+			Input.TYPES.binary -> BinaryView(input, get, setValue)
+			Input.TYPES.date -> DateView(input, get, setValue)
+			Input.TYPES.dynamic_input -> DynamicView(input)
+			Input.TYPES.image -> ImageView(input, get, setValue)
+			Input.TYPES.likert -> LikertView(input, get, setValue)
+			Input.TYPES.list_multiple -> ListMultipleView(input, get, setAdditionalValue)
+			Input.TYPES.list_single -> ListSingleView(input, get, setValue)
+			Input.TYPES.number -> NumberView(input, get, setValue)
 			Input.TYPES.photo -> PhotoView(input, questionnaire, get, set)
 			Input.TYPES.text -> Unit
-			Input.TYPES.text_input -> TextInputView(input, get, set)
-			Input.TYPES.time -> TimeView(input, get, set)
-			Input.TYPES.va_scale -> VaScaleView(input, get, set)
-			Input.TYPES.video -> VideoView(input, get, set)
+			Input.TYPES.text_input -> TextInputView(input, get, setValue)
+			Input.TYPES.time -> TimeView(input, get, setValue)
+			Input.TYPES.va_scale -> VaScaleView(input, get, setValue)
+			Input.TYPES.video -> VideoView(input, get, setValue)
 			else -> ErrorView(input)
 		}
 	}

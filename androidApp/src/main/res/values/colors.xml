@@ -1,25 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<color name="colorPrimaryLight">#9FE0F7</color>
-	<color name="colorPrimaryDark">#2DBFF3</color>
-	<color name="colorAccent">#dc4e9d</color>
+	<color name="colorPrimaryDark">#2B98CA</color> <!--for Picker views-->
+	<color name="colorSurface">#e6f9ff</color>
 	
-	<color name="black_alpha">#99000000</color>
-	<color name="while_alpha">#DFEFEFEF</color>
-	<color name="medium_gray">#ccc</color>
-	<color name="light_gray">#ddd</color>
-
-	<color name="questionnaire1">#34000000</color>
-	<color name="questionnaire2">#34FFFFFF</color>
-	
-	<color name="toolbarTextColor">#fff</color>
-	
-	<color name="iconDefault">#000</color>
-	<color name="textDefault">#000</color>
-	
-	
-	
-	<color name="log">#000</color>
-	<color name="warn">#FFBB00</color>
-	<color name="error">#FF0000</color>
+	<color name="textDefault">#000</color> <!-- for ChartTypeChooser -->
 </resources>

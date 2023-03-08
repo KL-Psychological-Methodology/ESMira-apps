@@ -7,6 +7,8 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Alarm
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -16,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import at.jodlidev.esmira.*
 import at.jodlidev.esmira.R
+import at.jodlidev.esmira.activities.ChangeSchedulesDialogActivity
 import at.jodlidev.esmira.sharedCode.data_structure.Alarm
 import at.jodlidev.esmira.sharedCode.data_structure.Study
 import at.jodlidev.esmira.views.NextNotificationsView
@@ -49,12 +52,12 @@ fun StudyJoinedView(study: Study, getAlarms: () -> List<Alarm>, gotoNext: () -> 
 		
 		if(study.hasEditableSchedules()) {
 			NavigationView(
-				gotoPrevious = { Activity_editSchedules.start(context, study.id) },
+				gotoPrevious = { ChangeSchedulesDialogActivity.start(context, study.id, true) },
 				gotoNext = gotoNext,
 				modifier = Modifier.fillMaxWidth(),
 				prevIcon = { Icons.Default.Alarm },
 				nextIcon = { Icons.Default.Check },
-				prevLabel = stringResource(id = R.string.change_schedules),
+				prevLabel = stringResource(id = R.string.schedules),
 				nextLabel = stringResource(id = R.string.complete)
 			)
 		}

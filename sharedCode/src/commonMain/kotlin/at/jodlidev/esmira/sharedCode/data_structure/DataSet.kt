@@ -21,13 +21,13 @@ class DataSet {
 	@SerialName("dataSetId") var id: Long = 0
 	@SerialName("studyId") private var studyWebId: Long = 0
 	
-	private val eventType: String
+	val eventType: String
 	private val studyVersion: Int
 	private val studySubVersion: Int
 	private val studyLang: String
 	private val group: Int
 	private val accessKey: String
-	private val questionnaireName: String
+	val questionnaireName: String
 	private val questionnaireInternalId: Long
 	private val timezone: String
 	var responseTime: Long = 0
@@ -176,7 +176,7 @@ class DataSet {
 		save()
 	}
 	
-	private fun save(study: Study? = DbLogic.getStudy(studyId)): Boolean {
+	private fun save(study: Study? = DbLogic.getStudy(studyId)) {
 		if(id != 0L)
 			throw RuntimeException("Trying to save an already created DataSet")
 		
@@ -212,7 +212,16 @@ class DataSet {
 				"Sending \"$eventType\" to $serverUrl($studyWebId) (Questionnaire: $questionnaireName)"
 			)
 		}
-		return DbLogic.triggerEventTrigger(studyId, eventType, questionnaireId)
+		else
+			ErrorBox.log(
+				"DataSet not sent",
+				"Event \"$eventType\" is not logged"
+			)
+		DbLogic.triggerEventTrigger(studyId, eventType, questionnaireId)
+	}
+	
+	fun delete() {
+		NativeLink.sql.delete(TABLE, "$KEY_ID = ?", arrayOf(id.toString()))
 	}
 	
 	companion object {
@@ -273,9 +282,9 @@ class DataSet {
 			"${StudyToken.TABLE}.${StudyToken.KEY_TOKEN}"
 		)
 		
-		fun createShortDataSet(type: String, study: Study): Boolean {
+		fun createShortDataSet(type: String, study: Study) {
 			val dataSet = DataSet(type, study)
-			return dataSet.save(study)
+			dataSet.save(study)
 		}
 		
 		fun createScheduleChangedDataSet(schedule: Schedule) {

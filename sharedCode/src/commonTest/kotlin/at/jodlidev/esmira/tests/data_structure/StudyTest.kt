@@ -270,13 +270,13 @@ class StudyTest : BaseCommonTest() {
 	fun daysUntilRewardsAreActive() {
 		val oneDay = 86400000
 		val study = createStudy("""{"id":$studyWebId, "rewardVisibleAfterDays": 3}""")
-		study.joined = NativeLink.getNowMillis()
+		study.joinedTimestamp = NativeLink.getNowMillis()
 		assertEquals(3, study.daysUntilRewardsAreActive())
-		study.joined -= oneDay * 2
+		study.joinedTimestamp -= oneDay * 2
 		assertEquals(1, study.daysUntilRewardsAreActive())
-		study.joined -= oneDay
+		study.joinedTimestamp -= oneDay
 		assertEquals(0, study.daysUntilRewardsAreActive())
-		study.joined -= oneDay
+		study.joinedTimestamp -= oneDay
 		assertEquals(0, study.daysUntilRewardsAreActive())
 	}
 	
@@ -493,28 +493,13 @@ class StudyTest : BaseCommonTest() {
 		
 		val emptyStudy = createStudy()
 		emptyStudy.leaveAfterCheck()
-		assertEquals(Study.STATES.HasLeft, emptyStudy.state)
+		assertEquals(Study.STATES.Quit, emptyStudy.state)
 	}
 	
 	@Test
 	fun leave() {
 		createStudy().leave()
-		assertSqlWasUpdated(Study.TABLE, Study.KEY_STATE, Study.STATES.HasLeft.ordinal)
-	}
-	
-	@Test
-	fun execLeave() {
-		val study1 = createStudy()
-		study1.id = 5
-		study1.execLeave()
-		assertSqlWasDeleted(Study.TABLE, 0, study1.id.toString())
-		
-		val study2 = createStudy("""{"id":$studyWebId, "personalStatistics": {"charts": [], "observedVariables": {"test1":[{}]}}}""")
-		study2.id = 6
-		study2.execLeave()
-		assertFails {
-			assertSqlWasDeleted(Study.TABLE, 0, study2.id.toString())
-		}
+		assertSqlWasUpdated(Study.TABLE, Study.KEY_STATE, Study.STATES.Quit.ordinal)
 	}
 	
 	@Test

@@ -28,12 +28,12 @@ import at.jodlidev.esmira.sharedCode.data_structure.Study
 fun StudyListItemView(study: Study, modifier: Modifier = Modifier, gotoStudy: () -> Unit) {
 	Column(
 		modifier = modifier
-			.clickable { gotoStudy() }
+			.clickable(onClick = gotoStudy)
 			.padding(horizontal = 30.dp, vertical = 20.dp)
 			.fillMaxWidth()
 	) {
-		Text(study.title, fontSize = 18.sp, fontWeight = FontWeight.Bold)
-		Text(study.contactEmail, fontSize = fontSizeSmall, modifier = Modifier.padding(start = 20.dp))
+		Text(study.title, fontSize = MaterialTheme.typography.headlineSmall.fontSize, fontWeight = FontWeight.Bold)
+		Text(study.contactEmail, fontSize = MaterialTheme.typography.labelMedium.fontSize, modifier = Modifier.padding(start = 20.dp))
 	}
 }
 
@@ -44,7 +44,7 @@ fun StudyListView(studies: List<Study>, gotoPrevious: () -> Unit, gotoNext: (ind
 		
 		Text(stringResource(id = R.string.colon_choose_study),
 			fontWeight = FontWeight.Bold,
-			fontSize = 20.sp,
+			fontSize = MaterialTheme.typography.headlineMedium.fontSize,
 			modifier = Modifier.constrainAs(header) {
 				top.linkTo(parent.top, margin = 20.dp)
 				start.linkTo(parent.start, margin = 20.dp)

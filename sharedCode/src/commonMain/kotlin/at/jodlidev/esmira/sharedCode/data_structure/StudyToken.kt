@@ -43,7 +43,9 @@ class StudyToken(
 				null
 			)
 			
-			return c.moveToFirst()
+			val r = c.moveToFirst()
+			c.close()
+			return r;
 		}
 	}
 }

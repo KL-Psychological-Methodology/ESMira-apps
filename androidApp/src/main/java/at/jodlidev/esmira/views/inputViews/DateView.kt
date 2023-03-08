@@ -12,9 +12,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import at.jodlidev.esmira.DefaultButtonIconLeft
+import at.jodlidev.esmira.views.DefaultButtonIconLeft
 import at.jodlidev.esmira.ESMiraSurface
-import at.jodlidev.esmira.ESMiraSurfaceM2
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.data_structure.Input
@@ -40,8 +39,10 @@ fun DateView(input: Input, get: () -> String, save: (String) -> Unit) {
 		targetFormat.calendar = Calendar.getInstance()
 	}
 	val calendar = targetFormat.calendar
+	// DatePickerDialog does not exist in Material3 yet:
 	val dialog = DatePickerDialog(
 		context,
+		R.style.AppTheme_PickerDialog,
 		{ _, year, month, day ->
 			calendar.set(Calendar.YEAR, year)
 			calendar.set(Calendar.MONTH, month)

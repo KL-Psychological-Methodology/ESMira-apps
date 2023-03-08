@@ -20,7 +20,7 @@ class FileUpload {
 	internal val identifier: Int
 	internal val serverUrl: String
 	private var isTemporary = true
-	private val filePath: String
+	internal val filePath: String
 	internal val type: TYPES
 	internal val timestamp: Long
 	

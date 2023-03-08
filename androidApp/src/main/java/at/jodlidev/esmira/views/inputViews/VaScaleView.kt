@@ -8,12 +8,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import at.jodlidev.esmira.ESMiraSurface
-import at.jodlidev.esmira.fontSizeSmall
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.data_structure.Input
+import kotlin.math.roundToInt
 
 /**
  * Created by JodliDev on 23.01.2023.
@@ -29,15 +30,22 @@ fun VaScaleView(input: Input, get: () -> String, save: (String) -> Unit) {
 			.fillMaxWidth()
 			.padding(horizontal = 5.dp)
 		) {
-			Text(input.leftSideLabel, fontSize = fontSizeSmall)
-			Spacer(modifier = Modifier.weight(1F))
-			Text(input.rightSideLabel, fontSize = fontSizeSmall)
+			Text(input.leftSideLabel,
+				fontSize = MaterialTheme.typography.labelMedium.fontSize,
+				modifier = Modifier.weight(1F)
+			)
+			Spacer(modifier = Modifier.widthIn(min = 20.dp))
+			Text(input.rightSideLabel,
+				fontSize = MaterialTheme.typography.labelMedium.fontSize,
+				textAlign = TextAlign.End,
+				modifier = Modifier.weight(1F)
+			)
 		}
 		Slider(
 			value = try { get().toFloat() } catch(_: Throwable) { 50F },
 			valueRange = 1F .. 100F,
 			onValueChange = { value ->
-				save(value.toString())
+				save(value.roundToInt().toString())
 				showThumb.value = true
 			},
 			colors = SliderDefaults.colors(

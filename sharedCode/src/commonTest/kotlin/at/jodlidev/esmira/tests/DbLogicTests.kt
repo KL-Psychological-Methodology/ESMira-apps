@@ -14,42 +14,6 @@ import kotlin.test.*
  * Created by JodliDev on 20.04.2022.
  */
 class DbLogicTests : BaseCommonTest() {
-	@Test
-	fun getUid() {
-		val firstUid = DbLogic.getUid()
-		assertEquals(firstUid, DbLogic.getUid())
-		
-		reset()
-		assertNotEquals(firstUid, DbLogic.getUid())
-	}
-	
-	@Test
-	fun setDev_isDev_getAdminAppType() {
-		assertEquals(NativeLink.smartphoneData.appType, DbLogic.getAdminAppType()) //no user
-		DbLogic.getUid() //create user
-		assertEquals(NativeLink.smartphoneData.appType, DbLogic.getAdminAppType())
-		
-		DbLogic.setDev(true, "Chuck Norris")
-		assertFalse(DbLogic.isDev())
-		assertEquals(NativeLink.smartphoneData.appType, DbLogic.getAdminAppType())
-		
-		DbLogic.setDev(true, DbLogic.ADMIN_PASSWORD)
-		assertTrue(DbLogic.isDev())
-		assertEquals("${NativeLink.smartphoneData.appType}_dev", DbLogic.getAdminAppType())
-		
-		DbLogic.setDev(false)
-		assertFalse(DbLogic.isDev())
-		assertEquals("${NativeLink.smartphoneData.appType}_wasDev", DbLogic.getAdminAppType())
-	}
-	
-	@Test
-	fun setLang_getLang() {
-		DbLogic.getUid() //create user
-		DbLogic.setLang("de")
-		assertEquals("de", DbLogic.getLang())
-		DbLogic.setLang("en")
-		assertEquals("en", DbLogic.getLang())
-	}
 	
 	@Test
 	fun startupApp() {
@@ -64,7 +28,7 @@ class DbLogicTests : BaseCommonTest() {
 	
 	@Test
 	fun setNotificationsToSetup_notificationsAreSetup() {
-		DbLogic.getUid() //create user
+		DbUser.getUid() //create user
 		assertFalse(DbLogic.notificationsAreSetup())
 		DbLogic.setNotificationsToSetup()
 		assertTrue(DbLogic.notificationsAreSetup())
@@ -342,26 +306,26 @@ class DbLogicTests : BaseCommonTest() {
 	}
 	
 	@Test
-	fun hasUnsyncedDataSetsAfterQuit() {
+	fun hasUnSyncedDataSets() {
 		val db = NativeLink.sql
 		val study = DbLogic.getStudy(getBaseStudyId())!!
 		
-		assertFalse(DbLogic.hasUnsyncedDataSetsAfterQuit(getBaseStudyId()))
+		assertFalse(DbLogic.hasUnSyncedDataSets(getBaseStudyId()))
 		DataSet.createShortDataSet("joined", study)
-		assertTrue(DbLogic.hasUnsyncedDataSetsAfterQuit(getBaseStudyId()))
+		assertTrue(DbLogic.hasUnSyncedDataSets(getBaseStudyId()))
 		
 		val values = db.getValueBox()
 		values.putInt(DataSet.KEY_SYNCED, DataSet.STATES.SYNCED.ordinal)
 		db.update(DataSet.TABLE, values, null, null)
-		assertFalse(DbLogic.hasUnsyncedDataSetsAfterQuit(getBaseStudyId()))
+		assertFalse(DbLogic.hasUnSyncedDataSets(getBaseStudyId()))
 		
 		val fileUpload = FileUpload(study, "path/to/file", FileUpload.TYPES.Image)
 		fileUpload.save()
 		fileUpload.setReadyForUpload()
-		assertTrue(DbLogic.hasUnsyncedDataSetsAfterQuit(getBaseStudyId()))
+		assertTrue(DbLogic.hasUnSyncedDataSets(getBaseStudyId()))
 		
 		fileUpload.setTemporary()
-		assertFalse(DbLogic.hasUnsyncedDataSetsAfterQuit(getBaseStudyId()))
+		assertFalse(DbLogic.hasUnSyncedDataSets(getBaseStudyId()))
 	}
 	
 	@Test
@@ -644,10 +608,10 @@ class DbLogicTests : BaseCommonTest() {
 	}
 	
 	@Test
-	fun getNextAlarms() {
+	fun getNextAlarmsWithNotifications() {
 		val timestamp = 1114313512000
 		
-		assertEquals(0, DbLogic.getNextAlarms().size)
+		assertEquals(0, DbLogic.getQuestionnaireAlarmsWithNotifications(-1).size)
 		
 		//first entry:
 		val questionnaire1 = createJsonObj<Questionnaire>()
@@ -657,28 +621,19 @@ class DbLogicTests : BaseCommonTest() {
 		signalTime1.questionnaireId = questionnaire1.id
 		
 		Alarm.createFromSignalTime(signalTime1, -1, timestamp)
-		val nextAlarms1 = DbLogic.getNextAlarms()
-		val nextAlarmsPerQuestionnaire1 = DbLogic.getNextAlarms(getBaseStudyId())
-		assertEquals(1, nextAlarms1.size)
-		assertEquals(timestamp, nextAlarms1[0].timestamp)
+		val nextAlarmsPerQuestionnaire1 = DbLogic.getQuestionnaireAlarmsWithNotifications(getBaseStudyId())
 		assertEquals(1, nextAlarmsPerQuestionnaire1.size)
 		assertEquals(timestamp, nextAlarmsPerQuestionnaire1[0].timestamp)
 		
 		//later:
 		Alarm.createFromSignalTime(signalTime1, -1, timestamp+1)
-		val nextAlarms2 = DbLogic.getNextAlarms()
-		val nextAlarmsPerQuestionnaire2 = DbLogic.getNextAlarms(getBaseStudyId())
-		assertEquals(2, nextAlarms2.size)
-		assertEquals(timestamp, nextAlarms2[0].timestamp)
+		val nextAlarmsPerQuestionnaire2 = DbLogic.getQuestionnaireAlarmsWithNotifications(getBaseStudyId())
 		assertEquals(1, nextAlarmsPerQuestionnaire2.size)
 		assertEquals(timestamp, nextAlarmsPerQuestionnaire2[0].timestamp)
 		
 		//sooner:
 		Alarm.createFromSignalTime(signalTime1, -1, timestamp-1)
-		val nextAlarms3 = DbLogic.getNextAlarms()
-		val nextAlarmsPerQuestionnaire3 = DbLogic.getNextAlarms(getBaseStudyId())
-		assertEquals(3, nextAlarms3.size)
-		assertEquals(timestamp-1, nextAlarms3[0].timestamp)
+		val nextAlarmsPerQuestionnaire3 = DbLogic.getQuestionnaireAlarmsWithNotifications(getBaseStudyId())
 		assertEquals(1, nextAlarmsPerQuestionnaire3.size)
 		assertEquals(timestamp-1, nextAlarmsPerQuestionnaire3[0].timestamp)
 		
@@ -690,10 +645,7 @@ class DbLogicTests : BaseCommonTest() {
 		signalTime2.questionnaireId = questionnaire2.id
 		
 		Alarm.createFromSignalTime(signalTime2, -1, timestamp-2)
-		val nextAlarms4 = DbLogic.getNextAlarms()
-		val nextAlarmsPerQuestionnaire4 = DbLogic.getNextAlarms(getBaseStudyId())
-		assertEquals(4, nextAlarms4.size)
-		assertEquals(timestamp-2, nextAlarms4[0].timestamp)
+		val nextAlarmsPerQuestionnaire4 = DbLogic.getQuestionnaireAlarmsWithNotifications(getBaseStudyId())
 		assertEquals(2, nextAlarmsPerQuestionnaire4.size)
 		assertEquals(timestamp-2, nextAlarmsPerQuestionnaire4[0].timestamp)
 		assertEquals(timestamp-1, nextAlarmsPerQuestionnaire4[1].timestamp)
@@ -706,10 +658,7 @@ class DbLogicTests : BaseCommonTest() {
 		signalTime3.questionnaireId = questionnaire3.id
 		
 		Alarm.createFromSignalTime(signalTime3, -1, timestamp-3)
-		val nextAlarms5 = DbLogic.getNextAlarms()
-		val nextAlarmsPerQuestionnaire5 = DbLogic.getNextAlarms(getBaseStudyId())
-		assertEquals(5, nextAlarms5.size)
-		assertEquals(timestamp-3, nextAlarms5[0].timestamp)
+		val nextAlarmsPerQuestionnaire5 = DbLogic.getQuestionnaireAlarmsWithNotifications(getBaseStudyId())
 		assertEquals(2, nextAlarmsPerQuestionnaire5.size)
 		assertEquals(timestamp-2, nextAlarmsPerQuestionnaire5[0].timestamp)
 		assertEquals(timestamp-1, nextAlarmsPerQuestionnaire5[1].timestamp)
@@ -938,41 +887,6 @@ class DbLogicTests : BaseCommonTest() {
 		eventTrigger1.studyId = 5
 		eventTrigger3.save()
 		assertEquals(1, DbLogic.getEventTriggers(getBaseStudyId(), cue).size)
-	}
-	
-	@Test
-	fun getLatestEventTrigger() {
-		val cue = "test"
-		
-		assertNull(DbLogic.getLatestEventTrigger(getBaseStudyId(), cue))
-		
-		val eventTrigger1 = createJsonObj<EventTrigger>()
-		eventTrigger1.cueCode = cue
-		eventTrigger1.studyId = getBaseStudyId()
-		eventTrigger1.delaySec = 1
-		eventTrigger1.save()
-		assertEquals(eventTrigger1.id, DbLogic.getLatestEventTrigger(getBaseStudyId(), cue)?.id)
-		
-		val eventTrigger2 = createJsonObj<EventTrigger>()
-		eventTrigger2.cueCode = cue
-		eventTrigger2.studyId = getBaseStudyId()
-		eventTrigger2.delaySec = 2
-		eventTrigger2.save()
-		assertEquals(eventTrigger2.id, DbLogic.getLatestEventTrigger(getBaseStudyId(), cue)?.id)
-		
-		val eventTrigger3 = createJsonObj<EventTrigger>()
-		eventTrigger3.cueCode = cue
-		eventTrigger3.studyId = getBaseStudyId()
-		eventTrigger3.delaySec = 1
-		eventTrigger3.save()
-		assertEquals(eventTrigger2.id, DbLogic.getLatestEventTrigger(getBaseStudyId(), cue)?.id)
-		
-		val eventTrigger4 = createJsonObj<EventTrigger>()
-		eventTrigger4.cueCode = cue
-		eventTrigger4.studyId = 5
-		eventTrigger4.delaySec = 3
-		eventTrigger4.save()
-		assertEquals(eventTrigger2.id, DbLogic.getLatestEventTrigger(getBaseStudyId(), cue)?.id)
 	}
 	
 	@Test

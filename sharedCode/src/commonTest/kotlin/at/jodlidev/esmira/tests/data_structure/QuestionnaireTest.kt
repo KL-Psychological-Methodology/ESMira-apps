@@ -225,25 +225,25 @@ class QuestionnaireTest : BaseCommonTest() {
 		val now = NativeLink.getNowMillis()
 		val study = createStudy()
 		study.group = 2
-		study.joined = now
+		study.joinedTimestamp = now
 		study.save()
 		
 		//test durationPeriodDays:
 		var questionnaire = createJsonObj<Questionnaire>("{\"durationPeriodDays\": 2}") {it.studyId = study.id}
 		assertTrue(questionnaire.isActive())
 		
-		study.joined = now - (1000*60*60*24*2 + 1)
+		study.joinedTimestamp = now - (1000*60*60*24*2 + 1)
 		study.save()
 		assertFalse(questionnaire.isActive())
 		
 		
 		//test durationStartingAfterDays:
 		questionnaire = createJsonObj<Questionnaire>("{\"durationStartingAfterDays\": 2}") {it.studyId = study.id}
-		study.joined = now - 1000*60*60*24*1
+		study.joinedTimestamp = now - 1000*60*60*24*1
 		study.save()
 		assertFalse(questionnaire.isActive())
 		
-		study.joined = now - (1000*60*60*24*2 + 1)
+		study.joinedTimestamp = now - (1000*60*60*24*2 + 1)
 		study.save()
 		assertTrue(questionnaire.isActive())
 		
@@ -290,11 +290,11 @@ class QuestionnaireTest : BaseCommonTest() {
 			"{\"durationStart\": ${now + oneDay*2}, \"durationStartingAfterDays\": 3}"
 		)
 		
-		study.joined = now
+		study.joinedTimestamp = now
 		var willBeActiveIn = questionnaire.willBeActiveIn(study)
 		assertTrue(willBeActiveIn > oneDay*2 - variance && willBeActiveIn <= oneDay*2)
 		
-		study.joined = now - oneDay*2
+		study.joinedTimestamp = now - oneDay*2
 		willBeActiveIn = questionnaire.willBeActiveIn(study)
 		assertTrue(willBeActiveIn > oneDay - variance && willBeActiveIn <= oneDay)
 	}

@@ -1,5 +1,6 @@
 package at.jodlidev.esmira.views.welcome.permissions
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -29,6 +30,8 @@ import at.jodlidev.esmira.*
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.androidNative.Notifications
 import at.jodlidev.esmira.sharedCode.NativeLink
+import at.jodlidev.esmira.views.DefaultButton
+import at.jodlidev.esmira.views.DefaultButtonIconLeft
 
 /**
  * Created by JodliDev on 20.12.2022.
@@ -138,10 +141,10 @@ fun NotificationPermissionView(state: MutableState<NotificationViewState>) {
 		Spacer(modifier = Modifier.width(10.dp))
 		DefaultButton(stringResource(R.string.enable_notifications),
 			onClick = {
-				if(ContextCompat.checkSelfPermission(context, android.Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED)
+				if(ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED)
 					state.value = NotificationViewState.SEND_TEST_NOTIFICATION
 				else
-					launcher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+					launcher.launch(Manifest.permission.POST_NOTIFICATIONS)
 			}
 		)
 	}

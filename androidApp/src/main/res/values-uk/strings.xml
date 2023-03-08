@@ -174,7 +174,7 @@
     <string name="state_loading_public_statistics">Завантаження публічної статистики…</string>
     <string name="statistics_personal">Персональний</string>
     <string name="statistics_public">Публічний</string>
-    <string name="sync_now">Синхронізувати зараз</string>
+    <string name="sync_data">Синхронізувати зараз</string>
     <string name="tomorrow">Завтра</string>
     <string name="try_again">Спробуйте знову</string>
     <string name="update_studies">Актуалізація досліджень</string>

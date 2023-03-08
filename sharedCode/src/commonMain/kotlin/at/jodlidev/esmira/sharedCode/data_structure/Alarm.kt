@@ -171,6 +171,10 @@ class Alarm {
 //		db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
 //	}
 	
+	fun isToday(): Boolean {
+		return timestamp < NativeLink.getMidnightMillis() + 86400000L
+	}
+	
 	private fun scheduleReminder() {
 		if(type == TYPES.SignalTime || type == TYPES.EventTrigger) {
 			actionTrigger.iteratePostponedReminder(this)

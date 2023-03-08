@@ -5,16 +5,15 @@ import android.content.res.Configuration
 import android.text.format.DateFormat
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Today
+import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import at.jodlidev.esmira.DefaultButtonIconLeft
+import at.jodlidev.esmira.views.DefaultButtonIconLeft
 import at.jodlidev.esmira.ESMiraSurface
-import at.jodlidev.esmira.ESMiraSurfaceM2
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.data_structure.Input
@@ -40,8 +39,10 @@ fun TimeView(input: Input, get: () -> String, save: (String) -> Unit) {
 		targetFormat.calendar = Calendar.getInstance()
 	}
 	val calendar = targetFormat.calendar
+	// TimePickerDialog does not exist in Material3 yet:
 	val dialog = TimePickerDialog(
 		context,
+		R.style.AppTheme_PickerDialog,
 		{ _, hour, minute ->
 			calendar.set(Calendar.HOUR_OF_DAY, hour)
 			calendar.set(Calendar.MINUTE, minute)
@@ -56,7 +57,7 @@ fun TimeView(input: Input, get: () -> String, save: (String) -> Unit) {
 	Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
 		DefaultButtonIconLeft(
 			text = if(get().isNotEmpty()) localFormat.format(calendar.time) else stringResource(R.string.no_dateTime_data),
-			icon = Icons.Default.Today,
+			icon = Icons.Default.AccessTime,
 			onClick = {
 				dialog.show()
 			},

@@ -4,9 +4,8 @@ import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.AlertDialog
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.CheckCircle
@@ -23,6 +22,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import at.jodlidev.esmira.*
 import at.jodlidev.esmira.R
+import at.jodlidev.esmira.views.DialogButton
+import at.jodlidev.esmira.views.ESMiraDialog
 
 /**
  * Created by JodliDev on 20.12.2022.
@@ -65,24 +66,18 @@ fun PermissionHeaderView(
 
 @Composable
 fun WhatForDialog(openState: MutableState<Boolean>, whatFor: String) {
-	AlertDialog(
+	ESMiraDialog(
 		onDismissRequest = {
 			openState.value = false
 		},
-		title = {
-			Text(stringResource(R.string.what_for))
-		},
-		text = {
-			Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-				Text(whatFor)
-			}
-		},
-		confirmButton = {
-			DialogButton(stringResource(R.string.ok_),
-				onClick = { openState.value = false }
-			)
+		title = stringResource(R.string.what_for),
+		confirmButtonLabel = stringResource(R.string.ok_),
+		onConfirmRequest = { openState.value = false }
+	) {
+		Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+			Text(whatFor)
 		}
-	)
+	}
 }
 
 

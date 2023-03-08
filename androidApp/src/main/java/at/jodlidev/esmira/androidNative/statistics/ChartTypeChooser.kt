@@ -89,7 +89,7 @@ class ChartTypeChooser(private val context: Context) : ChartChooserInterface {
 		chartInfo: ChartInfo
 	) : LineChartBuilder(chartInfoCollection, chartInfo) {
 		private var lineData: LineData = LineData()
-		private lateinit var chartViewRef: WeakReference<LineChart>
+		private var chartViewRef: WeakReference<LineChart>? = null
 		
 		override fun createDataSet(label: String, color: String): ChartDataSetInterface {
 			val dataSet = LineDataSet(ArrayList<Entry>(), label)
@@ -120,7 +120,7 @@ class ChartTypeChooser(private val context: Context) : ChartChooserInterface {
 		}
 		
 		override fun postUpdateChart() {
-			val chartView = chartViewRef.get() ?: return
+			val chartView = chartViewRef?.get() ?: return
 			postUpdateChart(ChartViewWrapper(chartView))
 		}
 		override fun removeEntries() {
@@ -136,7 +136,7 @@ class ChartTypeChooser(private val context: Context) : ChartChooserInterface {
 		chartInfo: ChartInfo
 	) : BarChartBuilder(chartInfoCollection, chartInfo) {
 		private var barData: BarData = BarData()
-		private lateinit var chartViewRef: WeakReference<BarChart>
+		private var chartViewRef: WeakReference<BarChart>? = null
 		
 		override fun groupBars(barWidth: Float, fromX: Float, groupSpace: Float, barSpace: Float) {
 			barData.barWidth = barWidth
@@ -170,7 +170,7 @@ class ChartTypeChooser(private val context: Context) : ChartChooserInterface {
 			return chartView
 		}
 		override fun postUpdateChart() {
-			val chartView = chartViewRef.get() ?: return
+			val chartView = chartViewRef?.get() ?: return
 			postUpdateChart(ChartViewWrapper(chartView))
 		}
 		override fun removeEntries() {
@@ -188,7 +188,7 @@ class ChartTypeChooser(private val context: Context) : ChartChooserInterface {
 		private var scatterData = ScatterData()
 		private var regressionData = LineData()
 		private var legendEntries = ArrayList<LegendEntry>()
-		private lateinit var chartViewRef: WeakReference<CombinedChart>
+		private var chartViewRef: WeakReference<CombinedChart>? = null
 
 
 		override fun createDataSet(label: String, color: String): ChartDataSetInterface {
@@ -222,7 +222,7 @@ class ChartTypeChooser(private val context: Context) : ChartChooserInterface {
 		}
 
 		override fun postUpdateChart() {
-			val chartView = chartViewRef.get() ?: return
+			val chartView = chartViewRef?.get() ?: return
 
 			if(legendEntries.isNotEmpty())
 				chartView.legend.setCustom(legendEntries)

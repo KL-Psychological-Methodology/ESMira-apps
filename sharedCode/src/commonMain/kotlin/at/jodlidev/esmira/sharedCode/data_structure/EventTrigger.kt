@@ -81,14 +81,6 @@ class EventTrigger {
 	
 	private fun exec(actionTrigger: ActionTrigger, timestamp: Long, fireNotifications: Boolean = true) {
 		actionTrigger.execActions(label, timestamp, fireNotifications)
-		if(cueCode == DataSet.TYPE_QUIT) {
-			val lastEventTrigger = DbLogic.getLatestEventTrigger(studyId, cueCode)
-
-			if(lastEventTrigger?.id == id) {
-				val study = DbLogic.getStudy(lastEventTrigger.studyId)
-				study!!.execLeave()
-			}
-		}
 	}
 	
 	fun save(db: SQLiteInterface = NativeLink.sql) {

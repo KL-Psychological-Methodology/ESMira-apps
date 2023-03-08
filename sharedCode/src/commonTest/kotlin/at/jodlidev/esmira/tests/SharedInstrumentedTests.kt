@@ -52,7 +52,7 @@ abstract class SharedInstrumentedTests : BaseInstrumentedTests() {
 	}
 	
 	open fun reportMissedInvitation_getMissedInvitations_resetMissedInvitations() {
-		DbLogic.getUid() //create user
+		DbUser.getUid() //create user
 		assertEquals(0, DbLogic.getMissedInvitations())
 		
 		val study = createStudy("""{"id":$studyWebId, "eventUploadSettings": {"${DataSet.TYPE_INVITATION_MISSED}": true}}""")

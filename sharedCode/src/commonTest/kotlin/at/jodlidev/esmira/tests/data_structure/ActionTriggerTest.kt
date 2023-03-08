@@ -1,6 +1,5 @@
 package tests.data_structure
 
-import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.*
 import BaseCommonTest
@@ -202,7 +201,7 @@ class ActionTriggerTest : BaseCommonTest() {
 		)
 		countQueries(
 			0,
-			"UPDATE ${DbLogic.User.TABLE} SET ${DbLogic.User.KEY_NOTIFICATIONS_MISSED} = ${DbLogic.User.KEY_NOTIFICATIONS_MISSED} + 1"
+			"UPDATE ${DbUser.TABLE} SET ${DbUser.KEY_NOTIFICATIONS_MISSED} = ${DbUser.KEY_NOTIFICATIONS_MISSED} + 1"
 		) {
 			actionTrigger.issueReminder("test", NativeLink.getNowMillis(), 0, 5)
 		}
@@ -211,7 +210,7 @@ class ActionTriggerTest : BaseCommonTest() {
 		
 		countQueries(
 			1,
-			"UPDATE ${DbLogic.User.TABLE} SET ${DbLogic.User.KEY_NOTIFICATIONS_MISSED} = ${DbLogic.User.KEY_NOTIFICATIONS_MISSED} + 1"
+			"UPDATE ${DbUser.TABLE} SET ${DbUser.KEY_NOTIFICATIONS_MISSED} = ${DbUser.KEY_NOTIFICATIONS_MISSED} + 1"
 		) {
 			actionTrigger.issueReminder("test", NativeLink.getNowMillis() - 1000*60*60*24, 0, 5)
 		}

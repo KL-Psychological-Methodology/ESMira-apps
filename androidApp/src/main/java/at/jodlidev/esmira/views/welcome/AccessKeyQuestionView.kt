@@ -20,10 +20,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import at.jodlidev.esmira.DefaultButton
-import at.jodlidev.esmira.DialogButton
-import at.jodlidev.esmira.ESMiraSurface
+import at.jodlidev.esmira.*
 import at.jodlidev.esmira.R
+import at.jodlidev.esmira.views.DefaultButton
+import at.jodlidev.esmira.views.ESMiraDialog
 
 /**
  * Created by JodliDev on 15.12.2022.
@@ -33,30 +33,24 @@ import at.jodlidev.esmira.R
 @Composable
 fun AccessKeyDialog(accessKey: String, openState: MutableState<Boolean>, gotoNext: (accessKey: String) -> Unit) {
 	val rememberAccessKey = remember { mutableStateOf(accessKey) }
-	AlertDialog(
+	ESMiraDialog(
 		onDismissRequest = {
 			openState.value = false
 		},
-		title = {
-			Text(stringResource(R.string.colon_accessCode))
-		},
-		text = {
-			OutlinedTextField(
-				value = rememberAccessKey.value,
-				onValueChange = {
-					rememberAccessKey.value = it
-				}
-			)
-		},
-		confirmButton = {
-			DialogButton(stringResource(R.string.ok_),
-				onClick = {
-					openState.value = false
-					gotoNext(rememberAccessKey.value)
-				}
-			)
-		},
-	)
+		title = stringResource(R.string.colon_accessCode),
+		confirmButtonLabel = stringResource(R.string.ok_),
+		onConfirmRequest = {
+			openState.value = false
+			gotoNext(rememberAccessKey.value)
+		}
+	) {
+		OutlinedTextField(
+			value = rememberAccessKey.value,
+			onValueChange = {
+				rememberAccessKey.value = it
+			}
+		)
+	}
 }
 
 @Composable

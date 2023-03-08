@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ChainStyle
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import at.jodlidev.esmira.DefaultButton
+import at.jodlidev.esmira.views.DefaultButton
 import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
 

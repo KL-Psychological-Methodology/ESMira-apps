@@ -1,10 +1,9 @@
 package at.jodlidev.esmira.androidNative
 
 import android.content.Context
-import at.jodlidev.esmira.*
 import at.jodlidev.esmira.activities.SimpleDialogActivity
 import at.jodlidev.esmira.activities.ErrorReportDialogActivity
-import at.jodlidev.esmira.activities.NotificationsBrokenActivity
+import at.jodlidev.esmira.activities.NotificationsBrokenDialogActivity
 import at.jodlidev.esmira.sharedCode.DialogOpenerInterface
 import java.lang.ref.WeakReference
 
@@ -28,7 +27,7 @@ object DialogOpener : DialogOpenerInterface {
 	}
 	override fun notificationsBroken() {
 		context.get()?.let {
-			NotificationsBrokenActivity.start(it)
+			NotificationsBrokenDialogActivity.start(it)
 		}
 	}
 	override fun dialog(title: String, msg: String) {

@@ -44,7 +44,7 @@
     <string name="dialogTitle_delete_statistics">Statistiken löschen\?</string>
     <string name="dialogDesc_delete_statistics">Sollen alle Statistiken für diese Studie gelöscht werden\?</string>
     <string name="dialogTitle_leave_study">Studie verlassen\?</string>
-    <string name="dialogDesc_leave_study">Möchten Sie diese Studie verlassen\? Um wieder beitreten zu können, müssen die Zugangsdaten erneut eingegeben werden.</string>
+    <string name="dialogDesc_leave_study">Möchten Sie diese Studie verlassen\? Der bisherige Fortschritt in der Studie geht dann verloren.</string>
     <string name="android_email_study_subject">Bezüglich der Studie: %1$s</string>
     <string name="enter_manually">Manuelle Eingabe</string>
     <string name="enable">Aktivieren</string>
@@ -122,6 +122,7 @@
     <string name="messages">Nachrichten</string>
     <string name="new_message">Neue Nachricht</string>
     <string name="next_notifications">Nächste Benachrichtigungen</string>
+    <string name="next_notification">Nächste Benachrichtigung</string>
     <string name="no">Nein</string>
     <string name="no_data">Keine Daten</string>
     <string name="no_dateTime_data">Nichts angegeben</string>
@@ -138,7 +139,7 @@
     <string name="notificationChannel_studyUpdates_name">Studie aktualisiert</string>
     <string name="notificationChannel_studyUpdates_desc">Sendet eine Benachrichtigung, wenn eine Studie aktualisiert wurde.</string>
     <string name="notifications">Benachrichtigungen</string>
-    <string name="notifications_not_working">Falls Benachrichtigungen nicht funktionieren</string>
+    <string name="notifications_not_working">Benachrichtigungen funktionieren nicht?</string>
     <string name="ok_">OK</string>
     <string name="open_device_specific_settings">Einstellungen öffnen</string>
     <string name="open_device_specific_settings_numbered">Einstellungen %1$d öffnen</string>
@@ -169,7 +170,7 @@
     <string name="statistics">Statistiken</string>
     <string name="statistics_personal">Persönliche</string>
     <string name="statistics_public">Über alle</string>
-    <string name="sync_now">Jetzt synchronisieren</string>
+    <string name="sync_data">Daten synchronisieren</string>
     <string name="today">Heute</string>
     <string name="tomorrow">Morgen</string>
     <string name="try_again">Erneut versuchen</string>
@@ -235,5 +236,30 @@
 	<string name="from_X">Von: %1$s</string>
 	<string name="check_phone_model">Überprüfe Handy Model</string>
     <string name="open_device_instructions">Öffne Geräte-Instruktionen</string>
-    <string name="state_checking_device_model">Überprüfe Gerätemodel...</string>
+    <string name="state_checking_device_model">Überprüfe Gerätemodel…</string>
+	<string name="pinned">Gepinned</string>
+    <string name="repeating">Wiederholend</string>
+    <string name="one_time">Einmalig</string>
+	<string name="about_ESMira">Über ESMira</string>
+	<string name="joined_at">Beigetreten am</string>
+    <string name="completed_questionnaires">Ausgefüllte Fragebögen</string>
+    <string name="upload_protocol">Upload-Protokoll</string>
+    <string name="extras">Extras</string>
+	<string name="none">Keine</string>
+	<string name="colon_last_filled_out">Zuletzt ausgefüllt: %1$s</string>
+	<string name="colon_between">Zwischen</string>
+	<string name="delete_study">Lösche Studie</string>
+	<string name="rejoin_study">Studie erneut beitreten</string>
+    <string name="confirm_delete_study">Möchten Sie diese Studie und dessen (lokale) Daten löschen?\n Bereits zum Server gesendete daten werden nicht gelöscht. Aber Ihre persönlichen Statistiken, Nachrichten oder Belohnungscode werden entfernt.</string>
+    <string name="quit_at">Verlassen am</string>
+    <string name="info_study_not_active_anymore">Diese Studie ist nicht mehr aktiv.</string>
+	<string name="are_you_sure">Sind Sie sicher?</string>
+	<string name="about_ESMira_description">ESMira ist eine Plattform, bestehend aus Server und App (Android, iOS) welche für Experience Sampling Method (ESM) Studien Designs entwickelt wurde. ESMira bietet ein simples setup, ist einfach zu bedienen, gratis, dezentralisiert und Open Source.</string>
+	<string name="colon_used_libraries">Verwendete Projekte:</string>
+    <string name="colon_homepage">Homepage:</string>
+    <string name="colon_github">GitHub:</string>
+	<string name="disabled_questionnaires">Deaktivierte Fragebögen</string>
+	<string name="show_disabled_questionnaires">Zeige deaktivierte Fragebögen</string>
+	<string name="info_unsynced_datasets">Manche Daten müssen noch synchronisiert werden.</string>
+	<string name="send_email">Sende E-Mail</string>
 </resources>

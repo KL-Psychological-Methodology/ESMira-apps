@@ -55,7 +55,7 @@ struct SettingsView: View {
 		self.hasEditableSchedules = !self.hasNoStudies && DbLogic().hasEditableSchedules()
 		self._unSyncedCount = State(initialValue: DbLogic().getUnSyncedDataSetCount())
 		self.errorCount = DbLogic().getErrorCount()
-		self.isDev = DbLogic().isDev()
+		self.isDev = DbUser().isDev()
 	}
 	
 	func createSaveDialog() -> some View {
@@ -173,9 +173,9 @@ struct SettingsView: View {
 			
 			VStack(alignment: .leading) {
 				HStack {
-					Text(String(format: NSLocalizedString("ios_user_id", comment: ""), String(DbLogic().getUid())))
+					Text(String(format: NSLocalizedString("ios_user_id", comment: ""), String(DbUser().getUid())))
 					Button(action: {
-						UIPasteboard.general.string = DbLogic().getUid()
+						UIPasteboard.general.string = DbUser().getUid()
 						self.appState.showTranslatedToast(String(format: NSLocalizedString("ios_info_copied_x_to_clipboard", comment: ""), DbLogic().getUid()))
 					}) {
 						Image(systemName: "doc.on.clipboard")

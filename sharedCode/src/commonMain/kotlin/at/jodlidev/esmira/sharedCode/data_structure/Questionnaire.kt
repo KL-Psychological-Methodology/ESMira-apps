@@ -5,6 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Transient
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.*
 
 /**
  * Created by JodliDev on 04.05.2020.
@@ -60,7 +61,13 @@ class Questionnaire {
 	val pages: List<Page> get() {
 		if(!this::_pages.isInitialized) {
 			_pages = try {
-				DbLogic.getJsonConfig().decodeFromString(pagesString)
+				val pages = DbLogic.getJsonConfig().decodeFromString<List<Page>>(pagesString)
+				for(page in pages) {
+					for(input in page.orderedInputs) {
+						input.questionnaire = this
+					}
+				}
+				pages
 			}
 			catch(e: Throwable) {
 				ErrorBox.warn("Questionnaire", "Questionnaire $title is faulty\n$pagesString", e)
@@ -237,6 +244,7 @@ class Questionnaire {
 		}
 		dataSet.saveQuestionnaire(this, formStarted)
 		updateLastCompleted(true) //this needs to be after we store last_notification in dataset
+		QuestionnaireCache.clearCache(id)
 		execMissingAlarms() //for iOS when the notification was ignored and the app was opened directly
 
 
@@ -401,13 +409,20 @@ class Questionnaire {
 		return pages.isNotEmpty()
 	}
 	
+	fun showLastCompleted(): Boolean {
+		return lastCompleted != 0L
+	}
+	fun showJustFinishedBadge(): Boolean {
+		return NativeLink.getNowMillis() - lastCompleted < 180000
+	}
+	
 	
 	fun isActive(now: Long = NativeLink.getNowMillis()): Boolean { //if study is active in general
 		val study: Study? = DbLogic.getStudy(studyId) //study can be null when we test for a study that we have not joined yet
 		
 		val durationCheck = study == null || (
-			(durationPeriodDays == 0 || now <= study.joined + durationPeriodDays.toLong() * ONE_DAY_MS)
-				&& (durationStartingAfterDays == 0 || now >= study.joined + durationStartingAfterDays.toLong() * ONE_DAY_MS)
+			(durationPeriodDays == 0 || now <= study.joinedTimestamp + durationPeriodDays.toLong() * ONE_DAY_MS)
+				&& (durationStartingAfterDays == 0 || now >= study.joinedTimestamp + durationStartingAfterDays.toLong() * ONE_DAY_MS)
 			)
 			
 		
@@ -423,7 +438,7 @@ class Questionnaire {
 	 * Returns 0 if questionnaire will never be active or is already active (combine with [isActive])
 	 */
 	fun willBeActiveIn(study: Study? = DbLogic.getStudy(studyId), now: Long = NativeLink.getNowMillis()): Long {
-		val joined = study?.joined ?: 0
+		val joined = study?.joinedTimestamp ?: 0
 		val group = study?.group ?: 0
 		
 		if(limitToGroup != 0 && limitToGroup != group)

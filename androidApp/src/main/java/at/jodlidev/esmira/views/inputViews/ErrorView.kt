@@ -1,14 +1,13 @@
 package at.jodlidev.esmira.views.inputViews
 
 import android.content.res.Configuration
-import androidx.compose.material.Text
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import at.jodlidev.esmira.ESMiraSurface
-import at.jodlidev.esmira.ESMiraSurfaceM2
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.data_structure.Input

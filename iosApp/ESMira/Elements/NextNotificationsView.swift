@@ -24,8 +24,7 @@ struct NextNotificationsView: View {
 			tomorrowString: NSLocalizedString("tomorrow", comment: ""),
 			inXDaysString: NSLocalizedString("in_x_days", comment: "")
 		)
-//		self.alarms = DbLogic().getNextAlarms(studyId: studyId)
-		self._alarms = State(initialValue: DbLogic().getNextAlarms(studyId: studyId))
+		self._alarms = State(initialValue: DbLogic().getQuestionnaireAlarmsWithNotifications(studyId: studyId))
 		self.groupByQuestionnaires = notExact
 	}
 	

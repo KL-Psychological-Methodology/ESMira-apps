@@ -47,15 +47,12 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.4.2")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     
-    //jetpack compose:
-    //the plan is, that we will slowly migrate to jetpack and then move to material 3
     implementation("androidx.compose.material3:material3:$m3Version")
-    
     implementation("androidx.compose.ui:ui:$composeVersion")
     debugImplementation("androidx.compose.ui:ui-tooling:$composeVersion") // previews, ...
     implementation("androidx.compose.ui:ui-tooling-preview:$composeVersion") // previews, ...
     implementation("androidx.compose.foundation:foundation:$composeVersion") // Border, Background, Box, Image, Scroll, shapes, animations
-    implementation("androidx.compose.material:material:$composeVersion") // Material Design
+//    implementation("androidx.compose.material:material:$composeVersion") // Material Design
     implementation("androidx.compose.material:material-icons-core:$composeVersion") // Material design icons
     implementation("androidx.compose.material:material-icons-extended:$composeVersion") // Material design icons
     implementation("androidx.compose.runtime:runtime:$composeVersion") // Integration with observables

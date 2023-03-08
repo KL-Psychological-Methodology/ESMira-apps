@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
-import at.jodlidev.esmira.DialogButton
+import at.jodlidev.esmira.views.ESMiraDialog
 import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
 
@@ -59,46 +59,33 @@ fun ServerOptionLineView(title: String, url: String, isSelected: () -> Boolean, 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ManualServerDialog(openState: MutableState<Boolean>, manualServerUrl: MutableState<String>, rememberServerUrl: (serverUrl: String) -> Unit) {
-	AlertDialog(
+	ESMiraDialog(
 		onDismissRequest = {
 			openState.value = false
 		},
-		title = {
-			Text(stringResource(R.string.colon_enter_manually))
-		},
-		text = {
-			Spacer(modifier = Modifier.height(20.dp))
-			Row(
-				verticalAlignment = Alignment.CenterVertically
-			) {
-				Text(stringResource(R.string.https))
-				OutlinedTextField(
-					modifier = Modifier.weight(1f),
-					value = manualServerUrl.value,
-					onValueChange = {
-						manualServerUrl.value = it
-					}
-				)
-			}
-		},
-		
-		dismissButton = {
-			DialogButton(stringResource(R.string.cancel),
-				onClick = {
-					openState.value = false
-				}
-			)
-		},
-		confirmButton = {
-			DialogButton(stringResource(R.string.ok_),
-				onClick = {
-					if(manualServerUrl.value.isNotEmpty())
-						rememberServerUrl(manualServerUrl.value)
-					openState.value = false
+		title = stringResource(R.string.colon_enter_manually),
+		dismissButtonLabel = stringResource(R.string.cancel),
+		confirmButtonLabel = stringResource(R.string.ok_),
+		onConfirmRequest = {
+			if(manualServerUrl.value.isNotEmpty())
+				rememberServerUrl(manualServerUrl.value)
+			openState.value = false
+		}
+	) {
+		Spacer(modifier = Modifier.height(20.dp))
+		Row(
+			verticalAlignment = Alignment.CenterVertically
+		) {
+			Text(stringResource(R.string.https))
+			OutlinedTextField(
+				modifier = Modifier.weight(1f),
+				value = manualServerUrl.value,
+				onValueChange = {
+					manualServerUrl.value = it
 				}
 			)
 		}
-	)
+	}
 }
 
 @Composable

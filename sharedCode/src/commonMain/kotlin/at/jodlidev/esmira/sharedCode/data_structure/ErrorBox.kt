@@ -111,7 +111,7 @@ class ErrorBox {
 				output.append(", state=")
 				output.append(study.state.name)
 				output.append(", joined at=")
-				output.append(study.joined)
+				output.append(study.joinedTimestamp)
 				output.append(", accessKey=")
 				output.append(study.accessKey)
 				output.append(", group=")
@@ -123,7 +123,7 @@ class ErrorBox {
 			
 			//User:
 			output.append("User: ")
-			output.append(DbLogic.getUid())
+			output.append(DbUser.getUid())
 			
 			//Comment:
 			if(comment != null) {

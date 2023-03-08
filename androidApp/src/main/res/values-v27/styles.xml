@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+	
+	<style name="AppTheme" parent="Theme.Material3.DayNight">
+		<item name="elevationOverlayEnabled">false</item>
+		<item name="android:statusBarColor">@color/colorSurface</item>
+		<item name="android:windowLightStatusBar" tools:targetApi="m">@bool/showLightSystemBars</item>
+		<item name="android:navigationBarColor">@color/colorSurface</item>
+		<item name="android:windowLightNavigationBar" tools:targetApi="m">@bool/showLightSystemBars</item>
+	</style>
+</resources>

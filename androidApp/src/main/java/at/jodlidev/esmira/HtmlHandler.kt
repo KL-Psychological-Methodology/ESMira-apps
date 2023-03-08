@@ -6,8 +6,13 @@ import android.text.Layout
 import android.text.Spanned
 import android.text.style.*
 import android.widget.TextView
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.viewinterop.AndroidView
 import io.noties.markwon.*
 import io.noties.markwon.core.MarkwonTheme
@@ -108,11 +113,21 @@ class HtmlHandler {
 
 		@Composable
 		fun HtmlText(html: String, modifier: Modifier = Modifier) {
-			AndroidView(modifier = modifier, factory = { context ->
-				TextView(context).apply {
-					setHtml(html, this)
-				}
-			})
+			val color = LocalContentColor.current
+			Column(modifier = modifier) {
+//				AndroidView(factory = { context ->
+//					TextView(context).apply {
+//						this.setTextColor(color.toArgb())
+//						this.text = html
+//					}
+//				})
+				AndroidView(factory = { context ->
+					TextView(context).apply {
+						this.setTextColor(color.toArgb())
+						setHtml(html, this)
+					}
+				})
+			}
 		}
 	}
 }

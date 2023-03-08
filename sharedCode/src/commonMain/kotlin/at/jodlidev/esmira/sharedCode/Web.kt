@@ -68,11 +68,11 @@ class Web {
 		val interpreter: GetStructure = client.submitFormWithBinaryData(
 			url = url,
 			formData = formData {
-				append("userId", DbLogic.getUid())
+				append("userId", DbUser.getUid())
 				append("studyId", fileUpload.webId)
 				append("dataType", fileUpload.type.toString())
 				append("appVersion", NativeLink.smartphoneData.appVersion)
-				append("appType", DbLogic.getAdminAppType())
+				append("appType", DbUser.getAdminAppType())
 				append("serverVersion", Updater.EXPECTED_SERVER_VERSION)
 
 				append("upload", file, Headers.build {
@@ -196,7 +196,7 @@ class Web {
 					dataSet.synced = DataSet.STATES.SYNCED
 				else {
 					error = true
-					dataSet?.synced = DataSet.STATES.NOT_SYNCED_ERROR
+					dataSet?.synced = DataSet.STATES.NOT_SYNCED_SERVER_ERROR
 					ErrorBox.warn("Sync failed", "Syncing DataSet(server_url:${url}, id:${syncState.dataSetId}) was not successful:\n${if(syncState.error.isNotEmpty()) syncState.error else "No server message"}")
 				}
 			}
@@ -249,7 +249,7 @@ class Web {
 				
 				for(dataSet in dataSetList) { //mark error on all dataSets that were not synced
 					if(dataSet.synced != DataSet.STATES.SYNCED && (dataSet.serverUrl == url))
-						dataSet.synced = DataSet.STATES.NOT_SYNCED_SERVER_ERROR
+						dataSet.synced = DataSet.STATES.NOT_SYNCED_ERROR
 				}
 				error = true
 				continue
@@ -340,7 +340,7 @@ class Web {
 		
 		
 		val serverList: List<Pair<String, String>> get() {
-			return (if(DbLogic.isDev()) {
+			return (if(DbUser.isDev()) {
 				at.jodlidev.esmira.sharedCode.serverList + debugServerList
 			}
 			else
@@ -408,9 +408,9 @@ class Web {
 		
 		@Serializable
 		sealed class PostStructure {
-			val userId: String = DbLogic.getUid()
+			val userId: String = DbUser.getUid()
 			val appVersion: String = NativeLink.smartphoneData.appVersion
-			val appType: String = DbLogic.getAdminAppType()
+			val appType: String = DbUser.getAdminAppType()
 			val serverVersion: Int = Updater.EXPECTED_SERVER_VERSION
 			
 			@Serializable
@@ -467,7 +467,7 @@ class Web {
 					urlFormatted = urlFormatted.substring(0, urlFormatted.length - 1)
 				
 				if(urlFormatted.startsWith("http://")) {
-					if(!DbLogic.isDev())
+					if(!DbUser.isDev())
 						urlFormatted = "https" + urlFormatted.substring(4)
 				}
 				else if(!urlFormatted.startsWith("https://"))
@@ -485,20 +485,24 @@ class Web {
 							URL_LIST_STUDIES.replace("%s", NativeLink.smartphoneData.lang)
 						)
 					val response = web.get(path)
-//					if(!web.client.isActive)
-//						throw ClientEngineClosedException()
-					onSuccess(response, urlFormatted)
+					kotlinRunOnUiThread {
+						onSuccess(response, urlFormatted)
+					}
 				}
 				catch(e: SuccessFailedException) {
 					ErrorBox.warn("Loading Studies", "Failed to load studies", e)
-					onError(e.message ?: "Unknown error", e)
+					kotlinRunOnUiThread {
+						onError(e.message ?: "Unknown error", e)
+					}
 				}
 				catch(e: ClientEngineClosedException) {
 					println("ClientEngineClosedException: Cancelled by user")
 				}
 				catch(e: Throwable) {
 					ErrorBox.warn("Loading Studies", "Failed to load studies", e)
-					onError(e.message ?: "Unknown error", e)
+					kotlinRunOnUiThread {
+						onError(e.message ?: "Unknown error", e)
+					}
 				}
 				web.close()
 			}
@@ -518,8 +522,11 @@ class Web {
 			nativeAsync {
 				val web = Web()
 				val r = web.updateStudies(forceStudyUpdate)
-				if(continueWith != null)
-					continueWith(r)
+				if(continueWith != null) {
+					kotlinRunOnUiThread {
+						continueWith(r)
+					}
+				}
 			}
 		}
 		
@@ -534,7 +541,10 @@ class Web {
 		fun syncDataSetsAsync(continueWith: (Boolean) -> Unit): Web {
 			val web = Web()
 			nativeAsync {
-				continueWith(web.syncDataSets())
+				val success = web.syncDataSets()
+				kotlinRunOnUiThread {
+					continueWith(success)
+				}
 			}
 			return web
 		}
@@ -548,10 +558,12 @@ class Web {
 			val web = Web()
 			nativeAsync {
 				val errorMsg = web.sendErrorReport(comment)
-				if(errorMsg == null)
-					onSuccess()
-				else
-					onError(errorMsg)
+				kotlinRunOnUiThread {
+					if(errorMsg == null)
+						onSuccess()
+					else
+						onError(errorMsg)
+				}
 			}
 		}
 		
@@ -565,10 +577,12 @@ class Web {
 			val web = Web()
 			nativeAsync {
 				val errorMsg = web.sendMessage(content, study)
-				if(errorMsg == null)
-					onSuccess()
-				else
-					onError(errorMsg)
+				kotlinRunOnUiThread {
+					if(errorMsg == null)
+						onSuccess()
+					else
+						onError(errorMsg)
+				}
 			}
 		}
 		
@@ -583,11 +597,15 @@ class Web {
 			nativeAsync {
 				try {
 					val response = web.get(study.serverUrl + URL_PUBLIC_STATISTICS.replace("%d", study.webId.toString()).replace("%s", study.accessKey))
-					onSuccess(response)
+					kotlinRunOnUiThread {
+						onSuccess(response)
+					}
 				}
 				catch (e: Throwable) {
 					ErrorBox.warn("Load Statistics", "Could not load statistics", e)
-					onError(e.message ?: "No error message")
+					kotlinRunOnUiThread {
+						onError(e.message ?: "No error message")
+					}
 				}
 			}
 			
@@ -609,10 +627,14 @@ class Web {
 					ErrorBox.log("Web", "Loaded rewardCode. Response: $response")
 					if(obj.errorCode == Study.REWARD_SUCCESS)
 						study.saveRewardCode(obj.code)
-					onSuccess(obj)
+					kotlinRunOnUiThread {
+						onSuccess(obj)
+					}
 				}
 				catch (e: Throwable) {
-					onError(e.message ?: "No error message")
+					kotlinRunOnUiThread {
+						onError(e.message ?: "No error message")
+					}
 				}
 			}
 		}
@@ -630,20 +652,26 @@ class Web {
 				try {
 					web.getGenericJson(url)
 					val response = web.getGenericJson(url)
-					if(response.status == HttpStatusCode.NotFound)
-						onSuccess(DontKillMyAppInfo(
-							manufacturer,
-							"/$manufacturer",
-							"",
-							"",
-							true
-						))
-					else
-						onSuccess(response.body())
+					kotlinRunOnUiThread {
+						if(response.status == HttpStatusCode.NotFound)
+							onSuccess(
+								DontKillMyAppInfo(
+									manufacturer,
+									"/$manufacturer",
+									"",
+									"",
+									true
+								)
+							)
+						else
+							onSuccess(response.body())
+					}
 				}
 				catch (e: Throwable) {
 					e.printStackTrace()
-					onError(e.message ?: "No error message")
+					kotlinRunOnUiThread {
+						onError(e.message ?: "No error message")
+					}
 				}
 			}
 		}

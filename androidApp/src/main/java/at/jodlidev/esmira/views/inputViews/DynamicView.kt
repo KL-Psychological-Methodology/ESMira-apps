@@ -12,9 +12,6 @@ import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
 
 
 @Composable
-fun DynamicView(input: Input, questionnaire: Questionnaire, get: () -> String, save: (String) -> Unit) {
-	val dynamicInput = input.getDynamicInput(questionnaire)
-	save(input.value)
-	
-	ChooseInputView(questionnaire, dynamicInput, Modifier)
+fun DynamicView(input: Input) {
+	ChooseInputView(input.questionnaire, input.getDynamicInput(), Modifier)
 }

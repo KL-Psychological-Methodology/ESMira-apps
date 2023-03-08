@@ -16,11 +16,7 @@ import kotlinx.serialization.json.*
 @Serializable
 class Input internal constructor( ) {
 	enum class TYPES {
-		text, binary, va_scale, likert, list_single, list_multiple, number, text_input, time,
-		time_old,  //TODO: can be removed when Selinas study is done
-		date,
-		date_old,  //TODO: can be removed when Selinas study is done
-		datetime, dynamic_input, app_usage, video, image, photo, ERROR
+		text, binary, va_scale, likert, list_single, list_multiple, number, text_input, time, date, datetime, dynamic_input, app_usage, video, image, photo, ERROR
 	}
 	var name: String = "input"
 	private var text: String = ""
@@ -37,20 +33,19 @@ class Input internal constructor( ) {
 	
 	var forceInt: Boolean = false
 	
-	val additionalValues: HashMap<String, String> = HashMap()
 	
-	@Transient private var _value: String = if(required) "" else defaultValue
-	var value: String
-		get() {
-			return if(type == TYPES.dynamic_input && this::dynamicInput.isInitialized)
-//				"$_value/${dynamicInput.value}"
-				dynamicInput.value
-			else
-				_value
-		}
-		set(value) {
-			_value = value
-		}
+//	@Transient private var _value: String = if(required) "" else defaultValue
+//	var value: String
+//		get() {
+//			return if(type == TYPES.dynamic_input && this::dynamicInput.isInitialized)
+////				"$_value/${dynamicInput.value}"
+//				dynamicInput.value
+//			else
+//				_value
+//		}
+//		set(value) {
+//			_value = value
+//		}
 	
 	val desc: String
 		get() {
@@ -70,20 +65,56 @@ class Input internal constructor( ) {
 	
 	val listChoices: List<String> = ArrayList()
 	val subInputs: List<Input> = ArrayList()
-	@Transient val addedFiles : MutableList<FileUpload> = ArrayList()
 	
 	@Transient private lateinit var dynamicInput: Input
 	
 	
-	fun addImage(filePath: String, studyId: Long) {
-		val study = DbLogic.getStudy(studyId) ?: return
+	@Transient lateinit var questionnaire: Questionnaire
+	
+	@Transient private val additionalValues: HashMap<String, String> = HashMap()
+	@Transient private val addedFiles : MutableList<FileUpload> = ArrayList()
+	
+	@Transient private lateinit var _value: String
+	fun getValue(): String {
+		return if(type == TYPES.dynamic_input && this::dynamicInput.isInitialized)
+			dynamicInput.getValue()
+		else if(!this::_value.isInitialized) {
+			val cache = QuestionnaireCache.loadCacheValue(questionnaire.id, name)
+			if(cache != null)
+				fromBackupObj(DbLogic.getJsonConfig().decodeFromString(cache))
+			else
+				_value = if(required) "" else defaultValue
+			
+			_value
+		}
+		else
+			_value
+	}
+	fun setValue(value: String, additionalValues: Map<String, String>? = null, filePath: String? = null) {
+		this._value = value
+		if(additionalValues != null) {
+			this.additionalValues.clear()
+			this.additionalValues.putAll(additionalValues)
+		}
+		if(filePath != null)
+			addImage(filePath) //will overwrite value
+		
+		QuestionnaireCache.saveCacheValue(questionnaire.id, name, getBackupString())
+	}
+	
+	private fun addImage(filePath: String) {
+		val study = DbLogic.getStudy(questionnaire.studyId) ?: return
 		val fileUpload = FileUpload(study, filePath, FileUpload.TYPES.Image)
 		fileUpload.save()
 		addedFiles.add(fileUpload)
-		value = fileUpload.identifier.toString()
+		_value = fileUpload.identifier.toString()
+	}
+	fun getFileName(): String? {
+		val fileUpload = DbLogic.getFileUploadByIdentifier(getValue())
+		return fileUpload?.filePath
 	}
 	
-	fun getDynamicInput(questionnaire: Questionnaire): Input {
+	fun getDynamicInput(): Input {
 		if(this::dynamicInput.isInitialized)
 			return dynamicInput
 		
@@ -118,6 +149,8 @@ class Input internal constructor( ) {
 //		value = dynamicIndex.toString()
 		additionalValues["index"] = dynamicIndex.toString();
 		dynamicInput = subInputs[dynamicIndex]
+		dynamicInput.questionnaire = questionnaire
+		dynamicInput.name = name
 		
 		required = dynamicInput.required
 		if(dynamicInput.required && desc.length > 1)
@@ -128,14 +161,16 @@ class Input internal constructor( ) {
 	
 	fun needsValue(): Boolean {
 		return if(required)
-			value.isEmpty()
+			getValue().isEmpty()
 		else
 			false
 	}
 	
-	fun getBackupString(): String {
-		val json = buildJsonObject {
-			put("value", value)
+	
+	
+	private fun getBackupJsonObj(): JsonObject {
+		return buildJsonObject {
+			put("value", _value)
 			
 			if(additionalValues.isNotEmpty()) {
 				put("additionalValues", buildJsonObject {
@@ -153,13 +188,12 @@ class Input internal constructor( ) {
 				})
 			}
 		}
-		
-		return json.toString()
 	}
-	fun fromBackupString(backup: String) {
-		val obj = DbLogic.getJsonConfig().decodeFromString<JsonObject>(backup)
-		
-		value = obj.getValue("value").jsonPrimitive.content
+	private fun getBackupString(): String {
+		return getBackupJsonObj().toString()
+	}
+	private fun fromBackupObj(obj: JsonObject) {
+		_value = obj.getValue("value").jsonPrimitive.content
 		
 		if(obj.contains("additionalValues")) {
 			val jsonAdditionalValues = obj.getValue("additionalValues").jsonObject
@@ -176,6 +210,9 @@ class Input internal constructor( ) {
 			}
 		}
 	}
+	fun fromBackupString(backup: String) {
+		fromBackupObj(DbLogic.getJsonConfig().decodeFromString(backup))
+	}
 	
 	internal fun hasScreenTracking(): Boolean {
 		return type == TYPES.app_usage && packageId.isEmpty()
@@ -185,7 +222,7 @@ class Input internal constructor( ) {
 	}
 	
 	internal fun fillIntoDataSet(dataSet: DataSet) {
-		dataSet.addResponseData(name, value)
+		dataSet.addResponseData(name, getValue())
 		val additionalName = "${name}~"
 		for(additionalValue in additionalValues) {
 			dataSet.addResponseData(additionalName + additionalValue.key, additionalValue.value)

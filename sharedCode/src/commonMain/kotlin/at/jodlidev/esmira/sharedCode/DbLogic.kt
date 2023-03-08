@@ -31,14 +31,15 @@ object DbLogic {
 	fun createTables(db: SQLiteInterface) {
 		println("Creating tables")
 		
-		db.execSQL("""CREATE TABLE IF NOT EXISTS ${User.TABLE} (
-			${User.KEY_ID} INTEGER PRIMARY KEY AUTOINCREMENT,
-			${User.KEY_NOTIFICATIONS_SETUP} INTEGER,
-			${User.KEY_IS_DEV} INTEGER,
-			${User.KEY_WAS_DEV} INTEGER,
-			${User.KEY_NOTIFICATIONS_MISSED} INTEGER DEFAULT 0,
-			${User.KEY_APP_LANG} TEXT,
-			${User.KEY_UID} TEXT)""")
+		db.execSQL("""CREATE TABLE IF NOT EXISTS ${DbUser.TABLE} (
+			${DbUser.KEY_ID} INTEGER PRIMARY KEY AUTOINCREMENT,
+			${DbUser.KEY_NOTIFICATIONS_SETUP} INTEGER,
+			${DbUser.KEY_IS_DEV} INTEGER,
+			${DbUser.KEY_WAS_DEV} INTEGER,
+			${DbUser.KEY_NOTIFICATIONS_MISSED} INTEGER DEFAULT 0,
+			${DbUser.KEY_APP_LANG} TEXT,
+			${DbUser.KEY_CURRENT_STUDY} INTEGER DEFAULT 0,
+			${DbUser.KEY_UID} TEXT)""")
 		
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${StudyToken.TABLE} (
 			${StudyToken.KEY_STUDY_ID} INTEGER PRIMARY KEY,
@@ -52,7 +53,8 @@ object DbLogic {
 			${Study.KEY_VERSION} INTEGER,
 			${Study.KEY_SUB_VERSION} INTEGER,
 			${Study.KEY_LANG} TEXT DEFAULT '',
-			${Study.KEY_JOINED} INTEGER DEFAULT 0,
+			${Study.KEY_JOINED_TIMESTAMP} INTEGER DEFAULT 0,
+			${Study.KEY_QUIT_TIMESTAMP} INTEGER DEFAULT 0,
 			${Study.KEY_GROUP} INTEGER DEFAULT 0,
 			${Study.KEY_STATE} INTEGER DEFAULT ${Study.STATES.Pending.ordinal},
 			${Study.KEY_LAST_MSG_TIMESTAMP} INTEGER DEFAULT 0,
@@ -145,6 +147,12 @@ object DbLogic {
 			${Questionnaire.KEY_PUBLISHED_ANDROID} INTEGER DEFAULT 1,
 			${Questionnaire.KEY_PUBLISHED_IOS} INTEGER DEFAULT 1,
 			FOREIGN KEY(${Questionnaire.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}) ON DELETE CASCADE)""")
+		db.execSQL("""CREATE TABLE IF NOT EXISTS ${QuestionnaireCache.TABLE} (
+			${QuestionnaireCache.KEY_ID} INTEGER PRIMARY KEY,
+			${QuestionnaireCache.KEY_QUESTIONNAIRE_ID} INTEGER,
+			${QuestionnaireCache.KEY_BACKUP_FROM} INTEGER,
+			${QuestionnaireCache.KEY_CACHE_VALUE} TEXT,
+			FOREIGN KEY(${QuestionnaireCache.KEY_QUESTIONNAIRE_ID}) REFERENCES ${Questionnaire.TABLE}(${Questionnaire.KEY_ID}) ON DELETE CASCADE)""")
 		
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${ActionTrigger.TABLE} (
 			${ActionTrigger.KEY_ID} INTEGER PRIMARY KEY,
@@ -278,129 +286,6 @@ object DbLogic {
 		Updater.updateSQL(db, oldVersion)
 	}
 	
-	internal object User {
-		const val TABLE = "user"
-		const val KEY_ID = "_id"
-		const val KEY_UID = "uid"
-		const val KEY_NOTIFICATIONS_SETUP = "notifications_setup"
-		const val KEY_IS_DEV = "is_dev"
-		const val KEY_WAS_DEV = "was_dev"
-		const val KEY_NOTIFICATIONS_MISSED = "notifications_missed"
-		const val KEY_APP_LANG = "app_lang"
-	}
-	
-	fun getUid(): String {
-		val c = NativeLink.sql.select(
-			User.TABLE,
-			arrayOf(User.KEY_UID),
-			null, null,
-			null,
-			null,
-			null,
-			"1"
-		)
-		val uid: String
-		if(c.moveToFirst())
-			uid = c.getString(0)
-		else {
-			val chars = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnpqrstuvwxyz" //for readability, there is no I,l,oO,0
-			var len = 12
-			val charsRange = chars.indices
-			
-			val sb = StringBuilder(len)
-			while(len > 0) {
-				sb.append(chars[charsRange.random()])
-				if(--len != 0 && len % 4 == 0)
-					sb.append('-')
-			}
-			uid = sb.toString()
-			
-			val db = NativeLink.sql
-			val values = db.getValueBox()
-			values.putString(User.KEY_UID, uid)
-			db.insert(User.TABLE, values)
-			
-			ErrorBox.log("UID", "Created new UID: $uid")
-		}
-		
-		c.close()
-		return uid
-	}
-	
-	fun getAdminAppType(): String {
-		val c = NativeLink.sql.select(
-			User.TABLE,
-			arrayOf(User.KEY_IS_DEV, User.KEY_WAS_DEV),
-			null, null,
-			null,
-			null,
-			null,
-			"1"
-		)
-		
-		val r = if(!c.moveToFirst())
-			NativeLink.smartphoneData.appType
-		else if(c.getBoolean(0))
-			"${NativeLink.smartphoneData.appType}_dev"
-		else if(c.getBoolean(1))
-			"${NativeLink.smartphoneData.appType}_wasDev"
-		else
-			NativeLink.smartphoneData.appType
-		
-		c.close()
-		return r
-	}
-	fun isDev(): Boolean {
-		val c = NativeLink.sql.select(
-			User.TABLE,
-			arrayOf(User.KEY_IS_DEV),
-			null, null,
-			null,
-			null,
-			null,
-			"1"
-		)
-		
-		val r = c.moveToFirst() && c.getBoolean(0)
-		c.close()
-		return r
-	}
-	fun setDev(enabled: Boolean, pass: String = ""): Boolean {
-		val db = NativeLink.sql
-		val values = db.getValueBox()
-		values.putBoolean(User.KEY_IS_DEV, enabled)
-		if(enabled) {
-			if(pass != ADMIN_PASSWORD)
-				return false
-		}
-		else
-			values.putBoolean(User.KEY_WAS_DEV, true)
-		db.update(User.TABLE, values, null, null)
-		
-		return true
-	}
-	
-	fun getLang(): String {
-		val c = NativeLink.sql.select(
-			User.TABLE,
-			arrayOf(User.KEY_APP_LANG),
-			null, null,
-			null,
-			null,
-			null,
-			"1"
-		)
-		
-		val r = if(c.moveToFirst()) c.getString(0) else ""
-		c.close()
-		return r
-	}
-	fun setLang(lang: String) {
-		val db = NativeLink.sql
-		val values = db.getValueBox()
-		values.putString(User.KEY_APP_LANG, lang)
-		db.update(User.TABLE, values, null, null)
-	}
 	
 	
 	fun startupApp() {
@@ -415,7 +300,7 @@ object DbLogic {
 			cleanupFiles();
 			
 			val newLang = NativeLink.smartphoneData.lang
-			val oldLang = getLang()
+			val oldLang = DbUser.getLang()
 			
 			if(!hasNoJoinedStudies()) {
 				checkLeaveStudies()
@@ -424,7 +309,7 @@ object DbLogic {
 					ErrorBox.log("startupApp", "Detected change in language to \"$newLang\"")
 					Web.updateStudiesAsync(true) { updatedCount ->
 						if(updatedCount != -1)
-							setLang(newLang)
+							DbUser.setLang(newLang)
 					}
 				}
 				else
@@ -434,7 +319,7 @@ object DbLogic {
 			}
 			else if(newLang != oldLang) {
 				ErrorBox.log("startupApp", "Detected change in language from \"$oldLang\" to \"$newLang\"")
-				setLang(newLang)
+				DbUser.setLang(newLang)
 			}
 		}
 	}
@@ -444,8 +329,8 @@ object DbLogic {
 	//
 	fun notificationsAreSetup(): Boolean {
 		val c = NativeLink.sql.select(
-			User.TABLE,
-			arrayOf(User.KEY_NOTIFICATIONS_SETUP),
+			DbUser.TABLE,
+			arrayOf(DbUser.KEY_NOTIFICATIONS_SETUP),
 			null, null,
 			null,
 			null,
@@ -459,22 +344,22 @@ object DbLogic {
 	fun setNotificationsToSetup() {
 		val db = NativeLink.sql
 		val values = db.getValueBox()
-		values.putInt(User.KEY_NOTIFICATIONS_SETUP, 1)
-		db.update(User.TABLE, values, null, null)
+		values.putInt(DbUser.KEY_NOTIFICATIONS_SETUP, 1)
+		db.update(DbUser.TABLE, values, null, null)
 	}
 	
 	fun reportMissedInvitation(questionnaire: Questionnaire, timestamp: Long) {
 		DataSet.createActionSentDataSet(DataSet.TYPE_INVITATION_MISSED, questionnaire, timestamp)
 
-		NativeLink.sql.execSQL("UPDATE ${User.TABLE} SET ${User.KEY_NOTIFICATIONS_MISSED} = ${User.KEY_NOTIFICATIONS_MISSED} + 1")
+		NativeLink.sql.execSQL("UPDATE ${DbUser.TABLE} SET ${DbUser.KEY_NOTIFICATIONS_MISSED} = ${DbUser.KEY_NOTIFICATIONS_MISSED} + 1")
 	}
 	fun resetMissedInvitations() {
-		NativeLink.sql.execSQL("UPDATE ${User.TABLE} SET ${User.KEY_NOTIFICATIONS_MISSED} = 0")
+		NativeLink.sql.execSQL("UPDATE ${DbUser.TABLE} SET ${DbUser.KEY_NOTIFICATIONS_MISSED} = 0")
 	}
 	fun getMissedInvitations(): Int {
 		val c = NativeLink.sql.select(
-			User.TABLE,
-			arrayOf(User.KEY_NOTIFICATIONS_MISSED),
+			DbUser.TABLE,
+			arrayOf(DbUser.KEY_NOTIFICATIONS_MISSED),
 			null, null,
 			null,
 			null,
@@ -573,6 +458,20 @@ object DbLogic {
 		return r
 	}
 	
+	fun getFirstStudy(): Study? {
+		val c = NativeLink.sql.select(
+			Study.TABLE,
+			Study.COLUMNS,
+			null, null,
+			null,
+			null,
+			Study.KEY_JOINED_TIMESTAMP,
+			null
+		)
+		val study = if(c.moveToFirst()) Study(c) else null
+		c.close()
+		return study
+	}
 	fun getStudy(id: Long): Study? {
 		val c = NativeLink.sql.select(
 			Study.TABLE,
@@ -787,6 +686,122 @@ object DbLogic {
 		return r
 	}
 	
+	fun getPinnedQuestionnairesSplitByState(studyId: Long): Pair<List<Questionnaire>, List<Questionnaire>> {
+		val c = NativeLink.sql.select(
+			Questionnaire.TABLE,
+			Questionnaire.COLUMNS,
+			"${Questionnaire.KEY_STUDY_ID} = ? AND ${Questionnaire.KEY_COMPLETABLE_ONCE} = 0 AND ${Questionnaire.KEY_LIMIT_COMPLETION_FREQUENCY} = 0 AND ${Questionnaire.KEY_COMPLETABLE_ONCE_PER_NOTIFICATION} = 0",
+			arrayOf(studyId.toString()),
+			null,
+			null,
+			null,
+			null
+		)
+		val enabled = ArrayList<Questionnaire>()
+		val disabled = ArrayList<Questionnaire>()
+		while(c.moveToNext()) {
+			val questionnaire = Questionnaire(c)
+			if(questionnaire.canBeFilledOut())
+				enabled.add(questionnaire)
+			else
+				disabled.add(questionnaire)
+		}
+		c.close()
+		return Pair(enabled, disabled)
+	}
+	fun hasPinnedQuestionnaires(studyId: Long): Boolean {
+		val c = NativeLink.sql.select(
+			Questionnaire.TABLE,
+			arrayOf(Questionnaire.KEY_STUDY_ID),
+			"${Questionnaire.KEY_STUDY_ID} = ? AND ${Questionnaire.KEY_COMPLETABLE_ONCE} = 0 AND ${Questionnaire.KEY_LIMIT_COMPLETION_FREQUENCY} = 0 AND ${Questionnaire.KEY_COMPLETABLE_ONCE_PER_NOTIFICATION} = 0",
+			arrayOf(studyId.toString()),
+			null,
+			null,
+			null,
+			"1"
+		)
+		val r = c.moveToFirst()
+		c.close()
+		return r
+	}
+	
+	fun getRepeatingQuestionnairesSplitByState(studyId: Long): Pair<List<Questionnaire>, List<Questionnaire>> {
+		val c = NativeLink.sql.select(
+			Questionnaire.TABLE,
+			Questionnaire.COLUMNS,
+			"${Questionnaire.KEY_STUDY_ID} = ? AND ${Questionnaire.KEY_COMPLETABLE_ONCE} = 0 AND (${Questionnaire.KEY_LIMIT_COMPLETION_FREQUENCY} = 1 OR ${Questionnaire.KEY_COMPLETABLE_ONCE_PER_NOTIFICATION} = 1)",
+			arrayOf(studyId.toString()),
+			null,
+			null,
+			null,
+			null
+		)
+		val enabled = ArrayList<Questionnaire>()
+		val disabled = ArrayList<Questionnaire>()
+		while(c.moveToNext()) {
+			val questionnaire = Questionnaire(c)
+			if(questionnaire.canBeFilledOut())
+				enabled.add(questionnaire)
+			else
+				disabled.add(questionnaire)
+		}
+		c.close()
+		return Pair(enabled, disabled)
+	}
+	fun hasRepeatingQuestionnaires(studyId: Long): Boolean {
+		val c = NativeLink.sql.select(
+			Questionnaire.TABLE,
+			arrayOf(Questionnaire.KEY_STUDY_ID),
+			"${Questionnaire.KEY_STUDY_ID} = ? AND ${Questionnaire.KEY_COMPLETABLE_ONCE} = 0 AND (${Questionnaire.KEY_LIMIT_COMPLETION_FREQUENCY} = 1 OR ${Questionnaire.KEY_COMPLETABLE_ONCE_PER_NOTIFICATION} = 1)",
+			arrayOf(studyId.toString()),
+			null,
+			null,
+			null,
+			"1"
+		)
+		
+		val r = c.moveToFirst()
+		c.close()
+		return r
+	}
+	
+	fun getOneTimeQuestionnairesSplitByState(studyId: Long): Pair<List<Questionnaire>, List<Questionnaire>> {
+		val c = NativeLink.sql.select(
+			Questionnaire.TABLE,
+			Questionnaire.COLUMNS,
+			"${Questionnaire.KEY_STUDY_ID} = ? AND ${Questionnaire.KEY_COMPLETABLE_ONCE} = 1", arrayOf(studyId.toString()),
+			null,
+			null,
+			null,
+			null
+		)
+		val enabled = ArrayList<Questionnaire>()
+		val disabled = ArrayList<Questionnaire>()
+		while(c.moveToNext()) {
+			val questionnaire = Questionnaire(c)
+			if(questionnaire.canBeFilledOut())
+				enabled.add(questionnaire)
+			else
+				disabled.add(questionnaire)
+		}
+		c.close()
+		return Pair(enabled, disabled)
+	}
+	fun hasOneTimeQuestionnaires(studyId: Long): Boolean {
+		val c = NativeLink.sql.select(
+			Questionnaire.TABLE,
+			arrayOf(Questionnaire.KEY_STUDY_ID),
+			"${Questionnaire.KEY_STUDY_ID} = ? AND ${Questionnaire.KEY_COMPLETABLE_ONCE} = 1", arrayOf(studyId.toString()),
+			null,
+			null,
+			null,
+			"1"
+		)
+		val r = c.moveToFirst()
+		c.close()
+		return r
+	}
+	
 	//
 	//RandomText
 	//
@@ -853,11 +868,29 @@ object DbLogic {
 	//
 	//DataSets
 	//
-	fun hasUnsyncedDataSetsAfterQuit(studyId: Long): Boolean {
+	fun getDataSets(studyId: Long): List<DataSet> {
+		val c = NativeLink.sql.select(
+			DataSet.TABLE_JOINED,
+			DataSet.COLUMNS,
+			"${DataSet.TABLE}.${DataSet.KEY_STUDY_ID} = ?", arrayOf(studyId.toString()),
+			null,
+			null,
+			"${DataSet.TABLE}.${DataSet.KEY_RESPONSE_TIME} DESC",
+			null
+		)
+		val list = ArrayList<DataSet>()
+		while(c.moveToNext()) {
+			list.add(DataSet(c))
+		}
+		c.close()
+		
+		return list
+	}
+	fun hasUnSyncedDataSets(studyId: Long): Boolean {
 		var c = NativeLink.sql.select(
 			DataSet.TABLE,
 			arrayOf(DataSet.KEY_STUDY_ID),
-			"${DataSet.KEY_STUDY_ID} = ? AND ${DataSet.KEY_SYNCED} IS NOT ${DataSet.STATES.SYNCED.ordinal} AND ${DataSet.KEY_TYPE} != 'quit'", arrayOf(studyId.toString()),
+			"${DataSet.KEY_STUDY_ID} = ? AND ${DataSet.KEY_SYNCED} IS NOT ${DataSet.STATES.SYNCED.ordinal}", arrayOf(studyId.toString()),
 			null,
 			null,
 			null,
@@ -914,6 +947,23 @@ object DbLogic {
 		c.close()
 		return r
 	}
+	fun getQuestionnaireDataSetCount(studyId: Long): Int {
+		val c = NativeLink.sql.select(
+			DataSet.TABLE,
+			arrayOf("COUNT(*)"),
+			"${DataSet.KEY_TYPE} = ? AND ${DataSet.KEY_STUDY_ID} = ?", arrayOf(DataSet.TYPE_QUESTIONNAIRE, studyId.toString()),
+			null,
+			null,
+			null,
+			null
+		)
+		val r = if(c.moveToFirst())
+			c.getInt(0)
+		else
+			0
+		c.close()
+		return r
+	}
 	
 	fun getUnSyncedDataSets(): Map<String, List<DataSet>> { //grouped by serverUrl
 		val c = NativeLink.sql.select(
@@ -959,6 +1009,21 @@ object DbLogic {
 			FileUpload.TABLE,
 			FileUpload.COLUMNS,
 			"${FileUpload.KEY_ID} = ?", arrayOf(id.toString()),
+			null,
+			null,
+			null,
+			null
+		)
+		val r = if(c.moveToFirst()) FileUpload(c) else null
+		c.close()
+		return r
+	}
+	
+	fun getFileUploadByIdentifier(identifier: String): FileUpload? {
+		val c = NativeLink.sql.select(
+			FileUpload.TABLE,
+			FileUpload.COLUMNS,
+			"${FileUpload.KEY_IDENTIFIER} = ?", arrayOf(identifier),
 			null,
 			null,
 			null,
@@ -1250,22 +1315,16 @@ object DbLogic {
 		return alarms
 	}
 	
-	
-	fun getNextAlarms(studyId: Long = -1): List<Alarm> {
-		val groupByQuestionnaires = studyId != -1L
-		
+	fun getQuestionnaireAlarmsWithNotifications(studyId: Long): List<Alarm> {
 		//a bit weird since this value will not be used and only "tricks" sql to group by the highest timestamp value
 		// but it has the lowest chance of breaking when code changes occur:
-		val columns = if(groupByQuestionnaires)
-			Alarm.COLUMNS.plus("MIN(${Alarm.KEY_TIMESTAMP})")
-		else
-			Alarm.COLUMNS
+		val columns = Alarm.COLUMNS.plus("MIN(${Alarm.KEY_TIMESTAMP})")
 		
 		val c = NativeLink.sql.select(
 			Alarm.TABLE,
 			columns,
 			null, null,
-			if(groupByQuestionnaires) Alarm.KEY_QUESTIONNAIRE_ID else null,
+			Alarm.KEY_QUESTIONNAIRE_ID,
 			null,
 			"${Alarm.KEY_TIMESTAMP} ASC",
 			null
@@ -1274,12 +1333,33 @@ object DbLogic {
 		while(c.moveToNext()) {
 			val alarm = Alarm(c)
 			val q = getQuestionnaire(alarm.questionnaireId) ?: continue
-			if(!groupByQuestionnaires || q.studyId == studyId) {
-				r.add(Alarm(c))
+			if(q.studyId == studyId && alarm.actionTrigger.hasNotifications()) {
+				r.add(alarm)
 			}
 		}
 		c.close()
 		return r
+	}
+	fun getNextAlarmWithNotifications(studyId: Long): Alarm? {
+		val c = NativeLink.sql.select(
+			Alarm.TABLE,
+			Alarm.COLUMNS,
+			null, null,
+			Alarm.KEY_QUESTIONNAIRE_ID,
+			null,
+			"${Alarm.KEY_TIMESTAMP} ASC",
+			null
+		)
+		while(c.moveToNext()) {
+			val alarm = Alarm(c)
+			val q = getQuestionnaire(alarm.questionnaireId) ?: continue
+			if(q.studyId == studyId && alarm.actionTrigger.hasNotifications()) {
+				c.close()
+				return alarm
+			}
+		}
+		c.close()
+		return null
 	}
 	fun getNextAlarm(schedule: Schedule): Alarm? {
 		val c = NativeLink.sql.select(
@@ -1507,33 +1587,14 @@ object DbLogic {
 		return r
 	}
 	
-	fun getLatestEventTrigger(id: Long, cue: String): EventTrigger? {
-		val c = NativeLink.sql.select(
-			EventTrigger.TABLE_JOINED,
-			EventTrigger.COLUMNS_JOINED,
-			"${EventTrigger.EXT_KEY_STUDY_ID} = ? AND ${EventTrigger.EXT_KEY_CUE} = ?", arrayOf(id.toString(), cue),
-			null,
-			null,
-			EventTrigger.KEY_DELAY + " DESC",
-			"1"
-		)
-		var r: EventTrigger? = null
-		if(c.moveToFirst())
-			r = EventTrigger(c)
-		c.close()
-		return r
-	}
-	
-	internal fun triggerEventTrigger(studyId: Long, cue: String, qId: Long): Boolean {
+	internal fun triggerEventTrigger(studyId: Long, cue: String, qId: Long) {
 		val list: List<EventTrigger> = getEventTriggers(studyId, cue)
 		if(list.isNotEmpty()) {
 			val q = if(qId == -1L) null else getQuestionnaire(qId)
 			for(eventTrigger in list) {
 				eventTrigger.triggerCheck(q)
 			}
-			return true
 		}
-		return false
 	}
 	
 	//
