@@ -1,9 +1,13 @@
 package at.jodlidev.esmira.views.main.studyDashboard
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.res.Configuration
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -183,7 +187,13 @@ fun StudyDashboardGrid(
 			}
 		}
 		item(span = { GridItemSpan(maxLineSpan) }) {
-			StudyDashboardInfoBoxView(null, stringResource(R.string.android_user_id, userId))
+			val context = LocalContext.current
+			StudyDashboardInfoBoxView(null, stringResource(R.string.android_user_id, userId), false, Modifier.clickable {
+				val clipBoard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+				val clipData = ClipData.newPlainText("label", userId)
+				clipBoard.setPrimaryClip(clipData)
+				Toast.makeText(context, context.getString(R.string.android_info_copied_x_to_clipboard, userId), Toast.LENGTH_SHORT).show()
+			})
 		}
 		item {
 			StudyDashboardInfoBoxView(stringResource(R.string.joined_at), NativeLink.formatDate(study.joinedTimestamp))
@@ -223,7 +233,7 @@ fun StudyDashboardGrid(
 			}
 			if(hasPinnedQuestionnaires) {
 				item {
-					StudyEntranceButtonView(
+					StudyDashboardButtonView(
 						stringResource(R.string.pinned),
 						Icons.Default.PushPin,
 						onClick = { gotoQuestionnaires("pinned") },
@@ -233,7 +243,7 @@ fun StudyDashboardGrid(
 			}
 			if(hasRepeatingQuestionnaires) {
 				item {
-					StudyEntranceButtonView(
+					StudyDashboardButtonView(
 						stringResource(R.string.repeating),
 						Icons.Default.Loop,
 						onClick = { gotoQuestionnaires("repeating") },
@@ -243,7 +253,7 @@ fun StudyDashboardGrid(
 			}
 			if(hasOneTimeQuestionnaires) {
 				item {
-					StudyEntranceButtonView(
+					StudyDashboardButtonView(
 						stringResource(R.string.one_time),
 						Icons.Default.LooksOne,
 						onClick = { gotoQuestionnaires("oneTime") },
@@ -259,12 +269,12 @@ fun StudyDashboardGrid(
 			}
 			if(hasStatistics) {
 				item {
-					StudyEntranceButtonView(stringResource(R.string.statistics), Icons.Default.BarChart, onClick = gotoStatistics)
+					StudyDashboardButtonView(stringResource(R.string.statistics), Icons.Default.BarChart, onClick = gotoStatistics)
 				}
 			}
 			if(hasMessages) {
 				item {
-					StudyEntranceButtonView(
+					StudyDashboardButtonView(
 						stringResource(R.string.messages),
 						Icons.Default.Message,
 						onClick = gotoMessages,
@@ -274,7 +284,7 @@ fun StudyDashboardGrid(
 			}
 			if(!study.sendMessagesAllowed && study.contactEmail.isNotEmpty()) {
 				item {
-					StudyEntranceButtonView(
+					StudyDashboardButtonView(
 						stringResource(R.string.send_email),
 						Icons.Default.Email,
 						onClick = sendEmail
@@ -283,13 +293,13 @@ fun StudyDashboardGrid(
 			}
 			if(hasRewards) {
 				item {
-					StudyEntranceButtonView(stringResource(R.string.rewards), Icons.Default.EmojiEvents, onClick = gotoReward)
+					StudyDashboardButtonView(stringResource(R.string.rewards), Icons.Default.EmojiEvents, onClick = gotoReward)
 				}
 			}
 			
 			if(study.informedConsentForm.isNotEmpty()) {
 				item {
-					StudyEntranceButtonView(stringResource(R.string.informed_consent), Icons.Default.Assignment, onClick = showInformedConsent)
+					StudyDashboardButtonView(stringResource(R.string.informed_consent), Icons.Default.Assignment, onClick = showInformedConsent)
 				}
 			}
 		}
@@ -300,15 +310,15 @@ fun StudyDashboardGrid(
 		}
 		if(study.hasEditableSchedules()) {
 			item {
-				StudyEntranceButtonView(stringResource(R.string.change_schedules), Icons.Default.AccessTime, onClick = openChangeSchedulesDialog)
+				StudyDashboardButtonView(stringResource(R.string.change_schedules), Icons.Default.AccessTime, onClick = openChangeSchedulesDialog)
 			}
 		}
 		item {
-			StudyEntranceButtonView(stringResource(R.string.upload_protocol), Icons.Default.MenuBook, onClick = gotoDataProtocol)
+			StudyDashboardButtonView(stringResource(R.string.upload_protocol), Icons.Default.MenuBook, onClick = gotoDataProtocol)
 		}
 		if(study.state == Study.STATES.Joined) {
 			item {
-				StudyEntranceButtonView(stringResource(R.string.leave_study), Icons.Default.Logout, onClick = {
+				StudyDashboardButtonView(stringResource(R.string.leave_study), Icons.Default.Logout, onClick = {
 					showLeaveStudyDialog.value = true
 				}, important = true)
 			}
@@ -316,14 +326,14 @@ fun StudyDashboardGrid(
 		else {
 			item {
 				val context = LocalContext.current
-				StudyEntranceButtonView(stringResource(R.string.rejoin_study), Icons.Default.Restore, onClick = {
+				StudyDashboardButtonView(stringResource(R.string.rejoin_study), Icons.Default.Restore, onClick = {
 					WelcomeScreenActivity.start(context, study.serverUrl, study.accessKey, study.webId)
 				})
 			}
 			
 			item {
 				val context = LocalContext.current
-				StudyEntranceButtonView(stringResource(R.string.delete_study), Icons.Default.Delete, onClick = {
+				StudyDashboardButtonView(stringResource(R.string.delete_study), Icons.Default.Delete, onClick = {
 					if(actions.hasUnSyncedDataSets())
 						Toast.makeText(context, R.string.info_unsynced_datasets, Toast.LENGTH_LONG).show()
 					else
@@ -359,7 +369,7 @@ fun StudyDashboardHeaderView(text: String) {
 	}
 }
 @Composable
-fun StudyEntranceButtonView(
+fun StudyDashboardButtonView(
 	text: String,
 	icon: ImageVector,
 	onClick: () -> Unit,
@@ -367,7 +377,7 @@ fun StudyEntranceButtonView(
 	important: Boolean = false
 ) {
 	Box(
-		contentAlignment = Alignment.TopStart
+		contentAlignment = Alignment.Center,
 	) {
 		Button(
 			onClick = onClick,
@@ -382,15 +392,16 @@ fun StudyEntranceButtonView(
 			),
 			modifier = Modifier
 				.padding(all = 5.dp)
+				.heightIn(min = 80.dp)
 				.fillMaxSize()
 		) {
 			Column(horizontalAlignment = Alignment.CenterHorizontally) {
 				Icon(icon, "")
-				Text(text)
+				Text(text, textAlign = TextAlign.Center)
 			}
 		}
 		if(badge != null) {
-			Row(modifier = Modifier.fillMaxWidth()) {
+			Row(modifier = Modifier.fillMaxWidth().padding(bottom = 50.dp)) {
 				Spacer(modifier = Modifier.weight(1F))
 				Box(
 					contentAlignment = Alignment.Center,
@@ -411,14 +422,20 @@ fun StudyEntranceButtonView(
 	}
 }
 @Composable
-fun StudyDashboardInfoBoxView(header: String?, content: String, important: Boolean = false) {
+fun StudyDashboardInfoBoxView(
+	header: String?,
+	content: String,
+	important: Boolean = false,
+	modifier: Modifier = Modifier
+) {
 	Box(
-		modifier = Modifier.padding(all = 5.dp)
+		modifier = modifier.padding(all = 5.dp)
 	) {
 		Column(
 			horizontalAlignment = Alignment.CenterHorizontally,
 			modifier = Modifier
 				.fillMaxSize()
+				.heightIn(min = if(header == null) 0.dp else 90.dp)
 				.border(
 					width = 1.dp,
 					color = if(important) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.outlineVariant
@@ -429,10 +446,9 @@ fun StudyDashboardInfoBoxView(header: String?, content: String, important: Boole
 					color = MaterialTheme.colorScheme.onSurface,
 					fontSize = MaterialTheme.typography.bodyMedium.fontSize,
 					textAlign = TextAlign.Center,
-					modifier = Modifier
-						.padding(top = 5.dp, start = 5.dp, end = 5.dp)
-						.heightIn(min = 30.dp)
+					modifier = Modifier.padding(top = 5.dp, start = 5.dp, end = 5.dp).weight(1F)
 				)
+//				Spacer(modifier = Modifier.weight(1F))
 			}
 			if(important) {
 				Text(
