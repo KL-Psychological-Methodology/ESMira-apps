@@ -12,6 +12,8 @@ import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.internal.synchronized
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.Serializable
@@ -237,41 +239,50 @@ class Web {
 		return if(error) -1 else updatedCount
 	}
 	private suspend fun syncDataSets(): Boolean {
-		val container = DbLogic.getUnSyncedDataSets()
-		for((url, dataSetList) in container) {
-			ErrorBox.log("Syncing", "Syncing $url (${dataSetList.size} dataSets)")
-			val response: String
-			try {
-				response = postJson("$url$URL_UPLOAD_DATASET", PostStructure.SyncStructure(dataSetList))
-			}
-			catch(e: Throwable) {
-				ErrorBox.warn("Syncing failed", "Could not sync ${dataSetList.size} dataSets to $url", e)
-				
-				for(dataSet in dataSetList) { //mark error on all dataSets that were not synced
-					if(dataSet.synced != DataSet.STATES.SYNCED && (dataSet.serverUrl == url))
-						dataSet.synced = DataSet.STATES.NOT_SYNCED_ERROR
+		if(NativeLink.isSynchronizing)
+			return true
+		NativeLink.isSynchronizing = true
+		delay(200) //in case there are multiple datasets being saved
+		try {
+			val container = DbLogic.getUnSyncedDataSets()
+			for((url, dataSetList) in container) {
+				ErrorBox.log("Syncing", "Syncing $url (${dataSetList.size} dataSets)")
+				val response: String
+				try {
+					response = postJson("$url$URL_UPLOAD_DATASET", PostStructure.SyncStructure(dataSetList))
+				} catch(e: Throwable) {
+					ErrorBox.warn("Syncing failed", "Could not sync ${dataSetList.size} dataSets to $url", e)
+					
+					for(dataSet in dataSetList) { //mark error on all dataSets that were not synced
+						if(dataSet.synced != DataSet.STATES.SYNCED && (dataSet.serverUrl == url))
+							dataSet.synced = DataSet.STATES.NOT_SYNCED_ERROR
+					}
+					error = true
+					continue
 				}
-				error = true
-				continue
+				
+				processSyncData(url, response)
 			}
 			
-			processSyncData(url, response)
+			error = syncFiles() || error
+			close()
 		}
-		
-		error = syncFiles() || error
-		close()
-		return !error && container.size != -1
+		finally {
+			NativeLink.isSynchronizing = false
+		}
+		return !error
 	}
 	private suspend fun syncFiles(): Boolean {
 		val fileUploads = DbLogic.getPendingFileUploads()
+		ErrorBox.log("FileUpload", "Found ${fileUploads.size} files for uploading")
 		for(fileUpload in fileUploads) {
 			val url = fileUpload.serverUrl
-			ErrorBox.log("FileUpload", "Uploading ${fileUpload.identifier} to $url")
+			ErrorBox.log("FileUpload", "Uploading ${fileUpload.identifier} to $url for study ${fileUpload.studyId}")
 			try {
 				postFile("$url$URL_UPLOAD_FILE", fileUpload)
 			}
 			catch(e: Throwable) {
-				ErrorBox.warn("Syncing failed", "Could not upload ${fileUpload.identifier} to $url", e)
+				ErrorBox.warn("Syncing failed", "Could not upload ${fileUpload.identifier} to $url (studyId: ${fileUpload.studyId})", e)
 				
 				error = true
 				continue
@@ -321,7 +332,6 @@ class Web {
 	}
 	
 	companion object {
-		
 		const val DEV_SERVER = "https://esmira.kl.ac.at"
 		private const val DEBUG_EMULATOR_SERVER = "http://10.0.2.2/smartphones/ESMira/ESMira-web/dist"
 		

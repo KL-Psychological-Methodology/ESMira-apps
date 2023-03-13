@@ -15,31 +15,29 @@ actual object FileOpener {
 			true
 	}
 	
+	/**
+	 * @throws FileNotFoundException
+	 * @throws SecurityException
+	 */
 	actual fun getFile(path: String): ByteArray {
 		val file = File(path)
 		
-		try {
-			val input: InputStream = FileInputStream(file)
-			val output = ByteArrayOutputStream()
-			
-			var nextByte: Int = input.read()
-			while(nextByte != -1) {
-				output.write(nextByte)
-				nextByte = input.read()
-			}
-			
-			val r = output.toByteArray()
-			
-			input.close()
-			output.flush()
-			output.close()
-			
-			return r
+		val input: InputStream = FileInputStream(file)
+		val output = ByteArrayOutputStream()
+		
+		var nextByte: Int = input.read()
+		while(nextByte != -1) {
+			output.write(nextByte)
+			nextByte = input.read()
 		}
-		catch(e: IOException) {
-			ErrorBox.error("Could not load File", "Error while reading File", e)
-			return ByteArray(0)
-		}
+		
+		val r = output.toByteArray()
+		
+		input.close()
+		output.flush()
+		output.close()
+		
+		return r
 	}
 	
 	actual fun getFileSize(path: String): Long {

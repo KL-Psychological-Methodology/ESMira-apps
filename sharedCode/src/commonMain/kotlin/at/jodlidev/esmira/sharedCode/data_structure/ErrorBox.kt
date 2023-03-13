@@ -107,6 +107,8 @@ class ErrorBox {
 				output.append(".")
 				output.append(study.subVersion)
 				output.append(" (id=")
+				output.append(study.id)
+				output.append(", webId=")
 				output.append(study.webId)
 				output.append(", state=")
 				output.append(study.state.name)

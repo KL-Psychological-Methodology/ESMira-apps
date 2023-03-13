@@ -296,8 +296,8 @@ object DbLogic {
 			Scheduler.checkMissedAlarms(true)
 			Scheduler.scheduleIfNeeded()
 			Scheduler.scheduleAhead()
-			NativeLink.postponedActions.syncDataSets()
 			cleanupFiles();
+			NativeLink.postponedActions.syncDataSets()
 			
 			val newLang = NativeLink.smartphoneData.lang
 			val oldLang = DbUser.getLang()

@@ -9,6 +9,7 @@ expect object NativeLink {
 	fun resetSql(sql: SQLiteInterface)
 	
 	val isInitialized: Boolean
+	var isSynchronizing: Boolean
 	
 	val sql: SQLiteInterface
 	val smartphoneData: SmartphoneDataInterface
