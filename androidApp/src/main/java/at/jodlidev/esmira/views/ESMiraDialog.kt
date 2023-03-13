@@ -3,6 +3,7 @@ package at.jodlidev.esmira.views
 import android.content.res.Configuration
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -20,7 +21,7 @@ import at.jodlidev.esmira.ESMiraTheme
  */
 
 @Composable
-fun  ESMiraDialog(
+fun ESMiraDialog(
 	confirmButtonLabel: String,
 	onConfirmRequest: () -> Unit,
 	title: String? = null,
@@ -30,7 +31,7 @@ fun  ESMiraDialog(
 	content: @Composable ColumnScope.() -> Unit,
 ) {
 	Dialog(
-		onDismissRequest = onDismissRequest ?: onConfirmRequest
+		onDismissRequest = onDismissRequest ?: onConfirmRequest,
 	) {
 		ESMiraDialogContent(
 			confirmButtonLabel = confirmButtonLabel,
@@ -59,7 +60,10 @@ fun ESMiraDialogContent(
 ) {
 	val darkTheme = isSystemInDarkTheme()
 	ESMiraTheme(darkTheme) {
-		Surface(color = if(darkTheme) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.background) {
+		Surface(
+			color = if(darkTheme) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.background,
+			shape = RoundedCornerShape(5.dp)
+		) {
 			ConstraintLayout(modifier = Modifier.fillMaxWidth()) {
 				val (titleEl, contentEl, dismissButtonEl, confirmButtonEl) = createRefs()
 				
