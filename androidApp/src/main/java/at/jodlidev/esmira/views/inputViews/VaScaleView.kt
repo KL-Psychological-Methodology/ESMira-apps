@@ -49,8 +49,8 @@ fun VaScaleView(input: Input, get: () -> String, save: (String) -> Unit) {
 				showThumb.value = true
 			},
 			colors = SliderDefaults.colors(
-				inactiveTrackColor = MaterialTheme.colorScheme.secondary,
-				activeTrackColor = MaterialTheme.colorScheme.secondary,
+				inactiveTrackColor = MaterialTheme.colorScheme.primary,
+				activeTrackColor = MaterialTheme.colorScheme.primary,
 			),
 			thumb = {
 				if(showThumb.value) {
