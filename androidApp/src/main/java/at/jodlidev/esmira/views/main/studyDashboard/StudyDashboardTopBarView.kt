@@ -61,7 +61,7 @@ fun StudyEntranceTopBarView(
 			}
 			else {
 				val context = LocalContext.current
-				IconButton(onClick = { WelcomeScreenActivity.start(context, true) }) {
+				IconButton(onClick = openWelcomeScreen) {
 					Icon(imageVector = Icons.Default.Add, contentDescription = "change study")
 				}
 			}
@@ -75,22 +75,46 @@ fun StudyEntranceTopBarView(
 			) {
 				SettingsDropdownView(
 					isDev,
-					openErrorReport,
-					openNotificationsDialog,
-					updateStudies,
-					openAbout,
-					openNextNotifications,
-					saveBackup,
-					loadBackup
+					{
+						openErrorReport()
+						settingsExpanded.value = false
+					},
+					{
+						openNotificationsDialog()
+						settingsExpanded.value = false
+					},
+					{
+						updateStudies()
+						settingsExpanded.value = false },
+					{
+						openAbout()
+						settingsExpanded.value = false
+					},
+					{
+						openNextNotifications()
+						settingsExpanded.value = false
+					},
+					{
+						saveBackup()
+						settingsExpanded.value = false
+					},
+					{
+						loadBackup()
+						settingsExpanded.value = false
+					}
 				)
 			}
 			DropdownMenu(
 				expanded = studyListExpanded.value,
 				onDismissRequest = { studyListExpanded.value = false }
 			) {
-				StudyListDropdownView(studyList, study, openWelcomeScreen) { id ->
+				StudyListDropdownView(studyList, study, {
+					openWelcomeScreen()
+					settingsExpanded.value = false
+				}) { id ->
 					studyListExpanded.value = false
 					studyActions.switchStudy(id)
+					settingsExpanded.value = false
 				}
 			}
 		}
