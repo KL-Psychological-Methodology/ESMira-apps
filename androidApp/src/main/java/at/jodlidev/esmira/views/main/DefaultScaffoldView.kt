@@ -9,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.text.style.TextOverflow
 
 /**
  * Created by JodliDev on 21.02.2023.
@@ -23,7 +24,7 @@ fun DefaultTopBar(
 ) {
 	
 	TopAppBar(
-		title = { Text(title) },
+		title = { Text(title, overflow = TextOverflow.Ellipsis, softWrap = false, maxLines = 1) },
 		actions = actions,
 		navigationIcon = {
 			if(goBack != null) {
