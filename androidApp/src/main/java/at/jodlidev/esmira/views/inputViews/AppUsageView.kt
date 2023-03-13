@@ -149,8 +149,6 @@ class AppUsageCalculator(context: Context) {
 			returnList[packageName] = counter.getResults()
 		}
 		
-		returnList["com.android.chrome"] = UsageStatsInfo(5, 9460000)
-		returnList["com.google.android.youtube"] = UsageStatsInfo(1, 44600000)
 		return returnList
 	}
 }

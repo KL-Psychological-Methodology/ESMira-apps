@@ -87,63 +87,6 @@ class MainActivity: ComponentActivity() {
 		}
 		
 		setContent {
-			val color = MaterialTheme.colorScheme.surface
-			
-			
-//			val color = SurfaceColors.SURFACE_5.getColor(this)
-//			window.statusBarColor = color // Set color of system statusBar same as ActionBar
-//			window.navigationBarColor = color
-//			val view = LocalView.current
-//			val darkTheme = isSystemInDarkTheme()
-//			WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
-//			WindowCompat.getInsetsController(window, view).isAppearanceLightNavigationBars = !darkTheme
-
-
-//			val colorSurface = MaterialTheme.colorScheme.surface
-//			val colorBackground = MaterialTheme.colorScheme.background
-//			val darkTheme = isSystemInDarkTheme()
-//
-//			val view = LocalView.current
-//			if (!view.isInEditMode) {
-//				SideEffect {
-//					val activity  = view.context as Activity
-//					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-//						activity.window.navigationBarColor = color.copy(alpha = 0.08f).compositeOver(colorSurface.copy()).toArgb()
-//						activity.window.statusBarColor = color.toArgb()
-//						WindowCompat.getInsetsController(activity.window, view).isAppearanceLightStatusBars = !darkTheme
-//						WindowCompat.getInsetsController(activity.window, view).isAppearanceLightNavigationBars = !darkTheme
-//					}
-//				}
-//			}
-			
-			
-			
-//			val view = LocalView.current
-//
-//			if (!view.isInEditMode) {
-//				SideEffect {
-//					(view.context as Activity).window.statusBarColor = color.toArgb()
-//					ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars = !darkTheme
-//					ViewCompat.getWindowInsetsController(view)?.isAppearanceLightNavigationBars = !darkTheme
-//				}
-//			}
-			
-//			val systemUiController = rememberSystemUiController()
-//			val darkTheme = !isSystemInDarkTheme()
-//
-//			DisposableEffect(systemUiController, color, darkTheme) {
-//				// Update all of the system bar colors to be transparent, and use
-//				// dark icons if we're in light theme
-//				systemUiController.setSystemBarsColor(
-//					color = color,
-//					darkIcons = darkTheme,
-//					transformColorForLightContent = { color }
-//				)
-//
-//				// setStatusBarColor() and setNavigationBarColor() also exist
-//
-//				onDispose {}
-//			}
 			ESMiraSurface {
 				val navController = rememberAnimatedNavController()
 				MainView(
