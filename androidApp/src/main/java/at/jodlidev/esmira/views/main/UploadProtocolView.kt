@@ -23,6 +23,7 @@ import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.DataSet
 import at.jodlidev.esmira.sharedCode.data_structure.Study
+import at.jodlidev.esmira.sharedCode.data_structure.UploadData
 import at.jodlidev.esmira.views.ESMiraDialog
 
 /**
@@ -31,21 +32,21 @@ import at.jodlidev.esmira.views.ESMiraDialog
 
 @Composable
 fun UploadProtocolView(
-	getDataSets: () -> List<DataSet>,
+	getUploadData: () -> List<UploadData>,
 	reSyncDataSets: (() -> Unit) -> Unit,
 	goBack: () -> Unit
 ) {
-	val dataSetToDelete = remember { mutableStateOf<DataSet?>(null) }
-	val dataSets = remember { mutableStateOf(getDataSets()) }
-	if(dataSetToDelete.value != null) {
+	val uploadDataToDelete = remember { mutableStateOf<UploadData?>(null) }
+	val uploadDataSets = remember { mutableStateOf(getUploadData()) }
+	if(uploadDataToDelete.value != null) {
 		ESMiraDialog(
-			onDismissRequest = { dataSetToDelete.value = null },
+			onDismissRequest = { uploadDataToDelete.value = null },
 			dismissButtonLabel = stringResource(R.string.cancel),
 			confirmButtonLabel = stringResource(R.string.ok_),
 			onConfirmRequest = {
-				dataSetToDelete.value?.delete()
-				dataSets.value = getDataSets()
-				dataSetToDelete.value = null
+				uploadDataToDelete.value?.delete()
+				uploadDataSets.value = getUploadData()
+				uploadDataToDelete.value = null
 			}
 		) {
 			Text(stringResource(R.string.are_you_sure))
@@ -62,7 +63,7 @@ fun UploadProtocolView(
 					showLoader.value = true
 					reSyncDataSets {
 						showLoader.value = false
-						dataSets.value = getDataSets()
+						uploadDataSets.value = getUploadData()
 					}
 				}
 			}
@@ -75,15 +76,15 @@ fun UploadProtocolView(
 					)
 				}
 				else
-					Icon(imageVector = Icons.Default.Sync, contentDescription = "upload dataSets")
+					Icon(imageVector = Icons.Default.Sync, contentDescription = "sync uploadData")
 			}
 		}
 	) {
 		LazyColumn(modifier = Modifier.fillMaxWidth()) {
-			itemsIndexed(dataSets.value, key = { _, dataSet -> dataSet.id }) { i, dataSet ->
+			itemsIndexed(uploadDataSets.value, key = { _, uploadData -> uploadData.id }) { i, uploadData ->
 				DataSetItemView(
-					dataSet = dataSet,
-					deleteDataSet = { dataSetToDelete.value = dataSet },
+					uploadData = uploadData,
+					deleteUploadData = { uploadDataToDelete.value = uploadData },
 					modifier = Modifier.background(color = if(i % 2 != 0) colorLineBackground1 else colorLineBackground2)
 				)
 			}
@@ -92,41 +93,46 @@ fun UploadProtocolView(
 }
 
 @Composable
-fun DataSetItemView(dataSet: DataSet, deleteDataSet: () -> Unit, modifier: Modifier = Modifier) {
-	Row(
-		modifier = modifier.fillMaxWidth(),
-		verticalAlignment = Alignment.CenterVertically
+fun DataSetItemView(uploadData: UploadData, deleteUploadData: () -> Unit, modifier: Modifier = Modifier) {
+	Column(
+		modifier = modifier
+			.padding(horizontal = 30.dp, vertical = 20.dp)
+			.fillMaxWidth()
 	) {
-		Column(
-			modifier = Modifier
-				.padding(horizontal = 30.dp, vertical = 20.dp)
-				.weight(1F)
-		) {
-			Text(
-				NativeLink.formatDateTime(dataSet.responseTime),
-				fontSize = MaterialTheme.typography.labelMedium.fontSize,
-				modifier = Modifier.align(Alignment.End)
-			)
-			Row(verticalAlignment = Alignment.CenterVertically) {
-				when(dataSet.synced) {
-					DataSet.STATES.SYNCED ->
-						Icon(Icons.Default.CheckCircle, "true", tint = colorGreen)
-					DataSet.STATES.NOT_SYNCED ->
-						Icon(Icons.Default.AccessTime, "true")
-					DataSet.STATES.NOT_SYNCED_ERROR ->
-						Icon(Icons.Default.Warning, "true")
-					DataSet.STATES.NOT_SYNCED_SERVER_ERROR ->
-						Icon(Icons.Default.Cancel, "true", tint = MaterialTheme.colorScheme.error)
-					
-				}
-				Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-				Text(dataSet.eventType.uppercase(), fontSize = MaterialTheme.typography.labelLarge.fontSize, fontWeight = FontWeight.Bold)
+		Text(
+			NativeLink.formatDateTime(uploadData.timestamp),
+			fontSize = MaterialTheme.typography.labelMedium.fontSize,
+			modifier = Modifier.align(Alignment.End)
+		)
+		Row(verticalAlignment = Alignment.CenterVertically) {
+			when(uploadData.synced) {
+				UploadData.States.SYNCED ->
+					Icon(Icons.Default.CheckCircle, "true", tint = colorGreen)
+				UploadData.States.NOT_SYNCED ->
+					Icon(Icons.Default.AccessTime, "true")
+				UploadData.States.NOT_SYNCED_ERROR ->
+					Icon(Icons.Default.Warning, "true")
+				UploadData.States.NOT_SYNCED_ERROR_DELETABLE ->
+					Icon(Icons.Default.Cancel, "true", tint = MaterialTheme.colorScheme.error)
+				
 			}
-			Text(dataSet.questionnaireName, fontSize = MaterialTheme.typography.labelMedium.fontSize, modifier = Modifier.padding(start = 20.dp))
-		}
-		if(dataSet.synced == DataSet.STATES.NOT_SYNCED_SERVER_ERROR) {
-			IconButton(onClick = deleteDataSet) {
-				Icon(Icons.Default.Delete, "remove")
+			Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+			Column {
+				Text(uploadData.type.uppercase(), fontSize = MaterialTheme.typography.labelLarge.fontSize, fontWeight = FontWeight.Bold)
+				if(uploadData.questionnaireName.isNotEmpty()) {
+					Text(
+						uploadData.questionnaireName,
+						fontSize = MaterialTheme.typography.labelMedium.fontSize,
+						modifier = Modifier.padding(start = 5.dp)
+					)
+				}
+			}
+			Spacer(Modifier.weight(1F))
+			
+			if(uploadData.synced == UploadData.States.NOT_SYNCED_ERROR_DELETABLE) {
+				IconButton(onClick = deleteUploadData) {
+					Icon(Icons.Default.Delete, "remove")
+				}
 			}
 		}
 	}
@@ -139,22 +145,36 @@ fun PreviewUploadProtocolView() {
 	ESMiraSurface {
 		val study = DbLogic.createJsonObj<Study>("""{"id":-1}""")
 		study.finishJSON("https://server.url", "accessKey")
-		val dataSetSuccess = DataSet("questionnaire", study, "Success", -1L, -1L)
-		dataSetSuccess.synced = DataSet.STATES.SYNCED
 		
-		val dataSetError = DataSet("questionnaire", study, "Unspecified error", -1L, -1L)
-		dataSetError.synced = DataSet.STATES.NOT_SYNCED_ERROR
+		val dataSetSuccess = DataSet(DataSet.EventTypes.questionnaire, study, "Success", -1L, -1L)
+		dataSetSuccess.synced = UploadData.States.SYNCED
+		dataSetSuccess.id = 1
 		
-		val dataSetServerError = DataSet("questionnaire", study, "Server error", -1L, -1L)
-		dataSetServerError.synced = DataSet.STATES.NOT_SYNCED_SERVER_ERROR
+		val dataSetError = DataSet(DataSet.EventTypes.questionnaire, study, "Unspecified error", -1L, -1L)
+		dataSetError.synced = UploadData.States.NOT_SYNCED_ERROR
+		dataSetError.id = 2
 		
-		val dataSetServerWaiting = DataSet("questionnaire", study, "Waiting", -1L, -1L)
-		dataSetServerWaiting.synced = DataSet.STATES.NOT_SYNCED
-		UploadProtocolView({ listOf(
-			dataSetSuccess,
-			dataSetError,
-			dataSetServerError,
-			dataSetServerWaiting
-		) }, {}, {})
+		val dataSetServerError = DataSet(DataSet.EventTypes.questionnaire, study, "Server error", -1L, -1L)
+		dataSetServerError.synced = UploadData.States.NOT_SYNCED_ERROR_DELETABLE
+		dataSetServerError.id = 3
+		
+		val dataSetServerWaiting = DataSet(DataSet.EventTypes.questionnaire, study, "Waiting", -1L, -1L)
+		dataSetServerWaiting.synced = UploadData.States.NOT_SYNCED
+		dataSetServerWaiting.id = 4
+		
+		UploadProtocolView(
+			{ listOf(
+				dataSetServerError,
+				dataSetServerError,
+				dataSetServerError,
+			) },
+			{ listOf(
+				dataSetSuccess,
+				dataSetError,
+				dataSetServerError,
+				dataSetServerWaiting
+			) },
+			{}
+		)
 	}
 }

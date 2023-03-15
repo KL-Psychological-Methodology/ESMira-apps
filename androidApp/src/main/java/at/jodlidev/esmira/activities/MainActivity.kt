@@ -1,12 +1,9 @@
 package at.jodlidev.esmira.activities
 
-import android.app.Activity
 import at.jodlidev.esmira.views.main.studyDashboard.StudyDashboardView
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -14,7 +11,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -440,7 +436,7 @@ class MainActivity: ComponentActivity() {
 	fun PageUploadProtocol(studyId: Long) {
 		val context = LocalContext.current
 		UploadProtocolView(
-			getDataSets = { DbLogic.getDataSets(studyId) },
+			getUploadData = { DbLogic.getSortedUploadData(studyId) },
 			reSyncDataSets = { onFinish -> Web.syncDataSetsAsync { success ->
 				onFinish()
 				if(success)

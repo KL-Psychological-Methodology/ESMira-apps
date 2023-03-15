@@ -14,9 +14,9 @@ class DataSetTest : BaseCommonTest() {
 	fun synced() {
 		val dataSet = createDataSet()
 		dataSet.id = 123
-		dataSet.synced = DataSet.STATES.SYNCED
+		dataSet.synced = UploadData.States.SYNCED
 		
-		assertSqlWasUpdated(DataSet.TABLE, DataSet.KEY_SYNCED, DataSet.STATES.SYNCED.ordinal)
+		assertSqlWasUpdated(DataSet.TABLE, DataSet.KEY_SYNCED, UploadData.States.SYNCED.ordinal)
 	}
 	
 	@Test
@@ -71,15 +71,15 @@ class DataSetTest : BaseCommonTest() {
 		val value = getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
 		assertEquals(-1, value.indexOf("\"sumScore\":$sumScoreValue"))
 		
-		assertSqlWasSelected(EventTrigger.TABLE_JOINED, 1, DataSet.TYPE_QUESTIONNAIRE)
+		assertSqlWasSelected(EventTrigger.TABLE_JOINED, 1, DataSet.EventTypes.questionnaire.toString())
 		assertEquals(1, postponedActions.syncDataSetsCount)
 	}
 	
 	@Test
 	fun createShortDataSet() {
-		val study = createStudy("""{"id":$studyWebId, "eventUploadSettings": {"${DataSet.TYPE_ALARM_EXECUTED}": true}}""")
-		DataSet.createShortDataSet(DataSet.TYPE_ALARM_EXECUTED, study)
-		assertSqlWasSaved(DataSet.TABLE, DataSet.KEY_TYPE, DataSet.TYPE_ALARM_EXECUTED)
+		val study = createStudy("""{"id":$studyWebId, "eventUploadSettings": {"${DataSet.EventTypes.actions_executed}": true}}""")
+		DataSet.createShortDataSet(DataSet.EventTypes.actions_executed, study)
+		assertSqlWasSaved(DataSet.TABLE, DataSet.KEY_TYPE, DataSet.EventTypes.actions_executed)
 	}
 	
 	@Test
@@ -94,13 +94,13 @@ class DataSetTest : BaseCommonTest() {
 	
 	@Test
 	fun createActionSentDataSet() {
-		val study = createStudy("""{"id":$studyWebId, "eventUploadSettings": {"${DataSet.TYPE_NOTIFICATION}": true}}""")
+		val study = createStudy("""{"id":$studyWebId, "eventUploadSettings": {"${DataSet.EventTypes.notification}": true}}""")
 		study.save()
 		
 		val questionnaire = createJsonObj<Questionnaire>()
 		questionnaire.studyId = study.id
 		val now = NativeLink.getNowMillis()
-		DataSet.createActionSentDataSet(DataSet.TYPE_NOTIFICATION, questionnaire, now)
+		DataSet.createActionSentDataSet(DataSet.EventTypes.notification, questionnaire, now)
 		
 		val value = getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
 		assertNotEquals(-1, value.indexOf("\"actionScheduledTo\":\"$now\""))
@@ -108,7 +108,7 @@ class DataSetTest : BaseCommonTest() {
 	
 	@Test
 	fun createAlarmExecuted() {
-		val study = createStudy("""{"id":$studyWebId, "eventUploadSettings": {"${DataSet.TYPE_ALARM_EXECUTED}": true}}""")
+		val study = createStudy("""{"id":$studyWebId, "eventUploadSettings": {"${DataSet.EventTypes.actions_executed}": true}}""")
 		study.save()
 		
 		val now = NativeLink.getNowMillis()

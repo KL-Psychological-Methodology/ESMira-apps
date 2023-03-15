@@ -10,7 +10,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class EventTrigger {
 	var label: String = "Event"
-	var cueCode: String = DataSet.TYPE_JOIN
+	var cueCode: DataSet.EventTypes = DataSet.EventTypes.joined
 	var randomDelay = false
 	var delaySec = 0
 	var delayMinimumSec = 0
@@ -50,7 +50,7 @@ class EventTrigger {
 	private fun getMinimalCursor(c: SQLiteCursor) {
 		id = c.getLong(0)
 		label = c.getString(1)
-		cueCode = c.getString(2)
+		cueCode = DataSet.EventTypes.valueOf(c.getString(2))
 		randomDelay = c.getBoolean(3)
 		delaySec = c.getInt(4)
 		delayMinimumSec = c.getInt(5)
@@ -86,7 +86,7 @@ class EventTrigger {
 	fun save(db: SQLiteInterface = NativeLink.sql) {
 		val values = db.getValueBox()
 		values.putString(KEY_LABEL, label)
-		values.putString(KEY_CUE, cueCode)
+		values.putString(KEY_CUE, cueCode.toString())
 		values.putBoolean(KEY_RANDOM_DELAY, randomDelay)
 		values.putInt(KEY_DELAY, delaySec)
 		values.putInt(KEY_DELAY_MIN, delayMinimumSec)

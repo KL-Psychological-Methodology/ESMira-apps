@@ -11,40 +11,60 @@ import kotlinx.serialization.json.*
  * Created by JodliDev on 17.04.2019.
  */
 @Serializable
-class DataSet {
-	enum class STATES {
-		NOT_SYNCED,
-		SYNCED,
-		NOT_SYNCED_ERROR,
-		NOT_SYNCED_SERVER_ERROR
+class DataSet: UploadData {
+	enum class EventTypes {
+		Image,
+		joined,
+		questionnaire,
+		quit,
+		actions_executed, 		//only on iOS
+		invitation, 			//only on Android
+		invitation_missed,
+		reminder,				 //only on Android
+		message,
+		notification,			 //only on Android
+		rejoined,
+		schedule_changed,
+		statistic_viewed,
+		study_message,
+		study_updated,
+		requested_reward_code
 	}
-	@SerialName("dataSetId") var id: Long = 0
-	@SerialName("studyId") private var studyWebId: Long = 0
+	@SerialName("dataSetId") override var id: Long = 0
+	@SerialName("studyId") override val studyWebId: Long
 	
-	val eventType: String
+	override val timestamp: Long
+		get() = responseTime
+	override val questionnaireName: String
+	@Transient override var serverUrl: String = ""
+	override val serverVersion: Int
+	
+	private val eventType: EventTypes
+	override val type: String
+		get() = eventType.toString()
+	
 	private val studyVersion: Int
 	private val studySubVersion: Int
 	private val studyLang: String
 	private val group: Int
 	private val accessKey: String
-	val questionnaireName: String
 	private val questionnaireInternalId: Long
 	private val timezone: String
-	var responseTime: Long = 0
+	private var responseTime: Long = 0
 	@SerialName("responses") private var responseTemp: MutableMap<String, JsonElement> = HashMap() //not in db. Just used to fill data and then create a response-string
 	
 	@Transient private var questionnaireId: Long = -1 //not in db
-	@Transient internal var studyId: Long = 0
-	@Transient lateinit var serverUrl: String
+	@Transient override var studyId: Long = 0
 	private var token = 0L //joined from StudyToken
-	@Transient private var _synced = STATES.NOT_SYNCED
-	var synced: STATES //this value will be updated in db immediately
+	
+	@Transient private var _synced = States.NOT_SYNCED
+	override var synced: States //this value will be updated in db immediately
 		get() {
 			return _synced
 		}
 		set(v) {
 			_synced = v
-			reupload = _synced == STATES.NOT_SYNCED_SERVER_ERROR
+			reupload = _synced == States.NOT_SYNCED_ERROR_DELETABLE
 			if(id != 0L) {
 				val db = NativeLink.sql
 				val values = db.getValueBox()
@@ -52,7 +72,7 @@ class DataSet {
 				db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
 			}
 		}
-	var reupload = false //not in db. Mainly for server. Is true when synced == STATES.NOT_SYNCED_SERVER_ERROR
+	private var reupload = false //not in db. Mainly for server. Is true when synced == States.NOT_SYNCED_ERROR_DELETABLE
 	
 	internal constructor(c: SQLiteCursor) {
 		id = c.getLong(0)
@@ -64,20 +84,21 @@ class DataSet {
 		questionnaireInternalId = c.getLong(6)
 		studyVersion = c.getInt(7)
 		studySubVersion = c.getInt(8)
-		studyLang = c.getString(9)
-		group = c.getInt(10)
-		timezone = c.getString(11)
-		responseTime = c.getLong(12)
-		eventType = c.getString(13)
-		setResponses(c.getString(14))
-		_synced = STATES.values()[c.getInt(15)]
-		token = c.getLong(16)
-		reupload = _synced == STATES.NOT_SYNCED_SERVER_ERROR
+		serverVersion = c.getInt(9)
+		studyLang = c.getString(10)
+		group = c.getInt(11)
+		timezone = c.getString(12)
+		responseTime = c.getLong(13)
+		eventType = EventTypes.valueOf(c.getString(14))
+		setResponses(c.getString(15))
+		_synced = States.values()[c.getInt(16)]
+		token = c.getLong(17)
+		reupload = _synced == States.NOT_SYNCED_ERROR_DELETABLE
 	}
 	
 	
 	constructor(
-		eventType: String,
+		eventType: EventTypes,
 		study: Study,
 		questionnaireName: String,
 		questionnaireId: Long,
@@ -91,6 +112,7 @@ class DataSet {
 		this.studyWebId = study.webId
 		this.studyVersion = study.version
 		this.studySubVersion = study.subVersion
+		this.serverVersion = study.serverVersion
 		this.serverUrl = study.serverUrl
 		this.accessKey = study.accessKey
 		this.studyLang = study.lang
@@ -99,7 +121,7 @@ class DataSet {
 		this.timezone = NativeLink.getTimezone()
 	}
 	
-	constructor(eventType: String, study: Study): this(
+	constructor(eventType: EventTypes, study: Study): this(
 		eventType = eventType,
 		study = study,
 		questionnaireName = "",
@@ -107,15 +129,13 @@ class DataSet {
 		questionnaireInternalId = -1
 	)
 	
-	constructor(eventType: String, questionnaire: Questionnaire): this(
+	constructor(eventType: EventTypes, questionnaire: Questionnaire): this(
 		eventType = eventType,
 		study = DbLogic.getStudy(questionnaire.studyId)!!,
 		questionnaireName = questionnaire.title,
 		questionnaireId = questionnaire.id,
 		questionnaireInternalId = questionnaire.internalId
-	) {
-		studyWebId = questionnaire.studyWebId //not needed because init() sets this too, but if study is not found, it will be helpful for the error report
-	}
+	)
 	
 	fun setResponses(json: String) {
 		if(json.isNotEmpty())
@@ -197,11 +217,12 @@ class DataSet {
 			values.putLong(KEY_QUESTIONNAIRE_INTERNAL_ID, questionnaireInternalId)
 			values.putInt(KEY_STUDY_VERSION, studyVersion)
 			values.putInt(KEY_STUDY_SUB_VERSION, studySubVersion)
+			values.putInt(KEY_SERVER_VERSION, serverVersion)
 			values.putString(KEY_STUDY_LANG, studyLang)
 			values.putInt(KEY_STUDY_GROUP, group)
 			values.putString(KEY_TIMEZONE, timezone)
 			values.putLong(KEY_RESPONSE_TIME, responseTime)
-			values.putString(KEY_TYPE, eventType)
+			values.putString(KEY_TYPE, eventType.toString())
 			values.putString(KEY_RESPONSES, responses)
 			values.putInt(KEY_SYNCED, _synced.ordinal)
 			id = db.insert(TABLE, values)
@@ -220,47 +241,32 @@ class DataSet {
 		DbLogic.triggerEventTrigger(studyId, eventType, questionnaireId)
 	}
 	
-	fun delete() {
+	override fun delete() {
 		NativeLink.sql.delete(TABLE, "$KEY_ID = ?", arrayOf(id.toString()))
 	}
 	
 	companion object {
 		const val TABLE = "dataSets"
 		
-		const val KEY_ID = "_id"
-		const val KEY_STUDY_ID = "study_id"
-		const val KEY_STUDY_WEB_ID = "study_webid"
-		const val KEY_SERVER_URL = "server_url"
+		const val KEY_ID = UploadData.KEY_ID
+		const val KEY_STUDY_ID = UploadData.KEY_STUDY_ID
+		const val KEY_STUDY_WEB_ID = UploadData.KEY_STUDY_WEB_ID
+		const val KEY_SERVER_URL = UploadData.KEY_SERVER_URL
 		const val KEY_ACCESS_KEY = "accessKey"
-		const val KEY_QUESTIONNAIRE_NAME = "group_name"
+		const val KEY_QUESTIONNAIRE_NAME = "questionnaire_name"
 		const val KEY_QUESTIONNAIRE_INTERNAL_ID = "questionnaire_internal_id"
 		const val KEY_STUDY_VERSION = "study_version"
 		const val KEY_STUDY_SUB_VERSION = "study_subVersion"
+		const val KEY_SERVER_VERSION = UploadData.KEY_SERVER_VERSION
 		const val KEY_STUDY_LANG = "study_lang"
 		const val KEY_STUDY_GROUP = "study_group"
 		const val KEY_TIMEZONE = "timezone"
 		const val KEY_RESPONSE_TIME = "response_time"
 		const val KEY_TYPE = "event_type"
 		const val KEY_RESPONSES = "responses"
-		const val KEY_SYNCED = "is_synced"
+		const val KEY_SYNCED = UploadData.KEY_SYNCED
 		
 		const val TABLE_JOINED = "$TABLE LEFT JOIN ${StudyToken.TABLE} ON $TABLE.$KEY_STUDY_ID=${StudyToken.TABLE}.${StudyToken.KEY_STUDY_ID}"
-		
-		const val TYPE_JOIN = "joined"
-		const val TYPE_QUESTIONNAIRE = "questionnaire"
-		const val TYPE_QUIT = "quit"
-		const val TYPE_ALARM_EXECUTED = "actions_executed" //only on iOS
-		const val TYPE_INVITATION = "invitation" //only on Android
-		const val TYPE_INVITATION_MISSED = "invitation_missed"
-		const val TYPE_INVITATION_REMINDER = "reminder" //only on Android
-		const val TYPE_MSG = "message"
-		const val TYPE_NOTIFICATION = "notification" //only on Android
-		const val TYPE_REJOIN = "rejoined"
-		const val TYPE_SCHEDULE_CHANGED = "schedule_changed"
-		const val TYPE_STATISTIC_VIEWED = "statistic_viewed"
-		const val TYPE_STUDY_MSG = "study_message"
-		const val TYPE_STUDY_UPDATED = "study_updated"
-		const val TYPE_REQUESTED_REWARD_CODE = "requested_reward_code"
 
 		val COLUMNS = arrayOf(
 			"$TABLE.$KEY_ID",
@@ -272,6 +278,7 @@ class DataSet {
 			"$TABLE.$KEY_QUESTIONNAIRE_INTERNAL_ID",
 			"$TABLE.$KEY_STUDY_VERSION",
 			"$TABLE.$KEY_STUDY_SUB_VERSION",
+			"$TABLE.$KEY_SERVER_VERSION",
 			"$TABLE.$KEY_STUDY_LANG",
 			"$TABLE.$KEY_STUDY_GROUP",
 			"$TABLE.$KEY_TIMEZONE",
@@ -282,18 +289,18 @@ class DataSet {
 			"${StudyToken.TABLE}.${StudyToken.KEY_TOKEN}"
 		)
 		
-		fun createShortDataSet(type: String, study: Study) {
+		fun createShortDataSet(type: EventTypes, study: Study) {
 			val dataSet = DataSet(type, study)
 			dataSet.save(study)
 		}
 		
 		fun createScheduleChangedDataSet(schedule: Schedule) {
-			val dataSet = DataSet(TYPE_SCHEDULE_CHANGED, schedule.getQuestionnaire())
+			val dataSet = DataSet(EventTypes.schedule_changed, schedule.getQuestionnaire())
 			dataSet.addResponseData("newSchedule", schedule.toDescString())
 			dataSet.save()
 		}
 		
-		fun createActionSentDataSet(type: String, questionnaire: Questionnaire, scheduledToTimestamp: Long) {
+		fun createActionSentDataSet(type: EventTypes, questionnaire: Questionnaire, scheduledToTimestamp: Long) {
 			val dataSet = DataSet(type, questionnaire)
 			dataSet.addResponseData("actionScheduledTo", scheduledToTimestamp)
 			dataSet.save()
@@ -302,12 +309,12 @@ class DataSet {
 		fun createAlarmExecuted(questionnaire: Questionnaire?, studyId: Long, scheduledToTimestamp: Long) {
 			if(questionnaire == null) {
 				val study = DbLogic.getStudy(studyId) ?: return
-				val dataSet = DataSet(TYPE_ALARM_EXECUTED, study)
+				val dataSet = DataSet(EventTypes.actions_executed, study)
 				dataSet.addResponseData("actionScheduledTo", scheduledToTimestamp)
 				dataSet.save(study)
 			}
 			else {
-				val dataSet = DataSet(TYPE_ALARM_EXECUTED, questionnaire)
+				val dataSet = DataSet(EventTypes.actions_executed, questionnaire)
 				dataSet.addResponseData("actionScheduledTo", scheduledToTimestamp)
 				dataSet.save()
 			}

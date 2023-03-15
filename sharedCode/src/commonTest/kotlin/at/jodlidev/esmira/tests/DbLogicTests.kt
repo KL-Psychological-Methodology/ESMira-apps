@@ -311,15 +311,15 @@ class DbLogicTests : BaseCommonTest() {
 		val study = DbLogic.getStudy(getBaseStudyId())!!
 		
 		assertFalse(DbLogic.hasUnSyncedDataSets(getBaseStudyId()))
-		DataSet.createShortDataSet("joined", study)
+		DataSet.createShortDataSet(DataSet.EventTypes.joined, study)
 		assertTrue(DbLogic.hasUnSyncedDataSets(getBaseStudyId()))
 		
 		val values = db.getValueBox()
-		values.putInt(DataSet.KEY_SYNCED, DataSet.STATES.SYNCED.ordinal)
+		values.putInt(DataSet.KEY_SYNCED, UploadData.States.SYNCED.ordinal)
 		db.update(DataSet.TABLE, values, null, null)
 		assertFalse(DbLogic.hasUnSyncedDataSets(getBaseStudyId()))
 		
-		val fileUpload = FileUpload(study, "path/to/file", FileUpload.TYPES.Image)
+		val fileUpload = FileUpload(study, "path/to/file", FileUpload.DataTypes.Image)
 		fileUpload.save()
 		fileUpload.setReadyForUpload()
 		assertTrue(DbLogic.hasUnSyncedDataSets(getBaseStudyId()))
@@ -333,33 +333,33 @@ class DbLogicTests : BaseCommonTest() {
 		val study = DbLogic.getStudy(getBaseStudyId())!!
 		assertEquals(0, DbLogic.getUnSyncedDataSetCount())
 		
-		DataSet.createShortDataSet("joined", study)
+		DataSet.createShortDataSet(DataSet.EventTypes.joined, study)
 		assertEquals(1, DbLogic.getUnSyncedDataSetCount())
 		
-		DataSet.createShortDataSet("joined", study)
+		DataSet.createShortDataSet(DataSet.EventTypes.joined, study)
 		assertEquals(2, DbLogic.getUnSyncedDataSetCount())
 		
-		val fileUpload1 = FileUpload(study, "path/to/file", FileUpload.TYPES.Image)
+		val fileUpload1 = FileUpload(study, "path/to/file", FileUpload.DataTypes.Image)
 		fileUpload1.save()
 		fileUpload1.setReadyForUpload()
 		assertEquals(2, DbLogic.getUnSyncedDataSetCount())
 		
-		val fileUpload2 = FileUpload(study, "path/to/file", FileUpload.TYPES.Image)
+		val fileUpload2 = FileUpload(study, "path/to/file", FileUpload.DataTypes.Image)
 		fileUpload2.save()
 		fileUpload2.setReadyForUpload()
 		assertEquals(2, DbLogic.getUnSyncedDataSetCount())
 		
-		val fileUpload3 = FileUpload(study, "path/to/file", FileUpload.TYPES.Image)
+		val fileUpload3 = FileUpload(study, "path/to/file", FileUpload.DataTypes.Image)
 		fileUpload3.save()
 		fileUpload3.setReadyForUpload()
 		assertEquals(3, DbLogic.getUnSyncedDataSetCount())
 		
-		val fileUpload4 = FileUpload(study, "path/to/file", FileUpload.TYPES.Image)
+		val fileUpload4 = FileUpload(study, "path/to/file", FileUpload.DataTypes.Image)
 		fileUpload4.save()
 		fileUpload4.setReadyForUpload()
 		assertEquals(4, DbLogic.getUnSyncedDataSetCount())
 		
-		DataSet.createShortDataSet("joined", study)
+		DataSet.createShortDataSet(DataSet.EventTypes.joined, study)
 		assertEquals(4, DbLogic.getUnSyncedDataSetCount())
 	}
 	
@@ -370,21 +370,21 @@ class DbLogicTests : BaseCommonTest() {
 		
 		assertEquals(0, DbLogic.getUnSyncedDataSets().size)
 		
-		DataSet.createShortDataSet("joined", study)
+		DataSet.createShortDataSet(DataSet.EventTypes.joined, study)
 		assertEquals(1, DbLogic.getUnSyncedDataSets()[testUrl]?.size)
 		
-		DataSet.createShortDataSet("joined", study)
+		DataSet.createShortDataSet(DataSet.EventTypes.joined, study)
 		assertEquals(2, DbLogic.getUnSyncedDataSets()[testUrl]?.size)
 		
 		val values = db.getValueBox()
-		values.putInt(DataSet.KEY_SYNCED, DataSet.STATES.SYNCED.ordinal)
+		values.putInt(DataSet.KEY_SYNCED, UploadData.States.SYNCED.ordinal)
 		db.update(DataSet.TABLE, values, null, null)
 		assertEquals(0, DbLogic.getUnSyncedDataSets().size)
 		
-		DataSet.createShortDataSet("joined", study)
+		DataSet.createShortDataSet(DataSet.EventTypes.joined, study)
 		assertEquals(1, DbLogic.getUnSyncedDataSets()[testUrl]?.size)
 		
-		val fileUpload = FileUpload(study, "path/to/file", FileUpload.TYPES.Image)
+		val fileUpload = FileUpload(study, "path/to/file", FileUpload.DataTypes.Image)
 		fileUpload.save()
 		fileUpload.setReadyForUpload()
 		assertEquals(1, DbLogic.getUnSyncedDataSets()[testUrl]?.size)
@@ -393,7 +393,7 @@ class DbLogicTests : BaseCommonTest() {
 	@Test
 	fun getPendingFileUploads_getTemporaryFileUploads_cleanupFiles() {
 		//create fileUpload, change state, cleanup
-		val fileUpload = FileUpload(createStudy(), "path/to/file", FileUpload.TYPES.Image)
+		val fileUpload = FileUpload(createStudy(), "path/to/file", FileUpload.DataTypes.Image)
 		fileUpload.save()
 		assertEquals(1, DbLogic.getTemporaryFileUploads().size)
 		
@@ -860,13 +860,13 @@ class DbLogicTests : BaseCommonTest() {
 		eventTrigger.save()
 		
 		assertNull(DbLogic.getEventTrigger(6))
-		assertEquals("test", DbLogic.getEventTrigger(eventTrigger.id)?.cueCode)
+		assertEquals(DataSet.EventTypes.quit, DbLogic.getEventTrigger(eventTrigger.id)?.cueCode)
 	}
 	
 	@Test
 	fun getEventTriggers() {
-		val cue = "test"
-		val other = "other"
+		val cue = DataSet.EventTypes.quit
+		val other = DataSet.EventTypes.joined
 		
 		assertEquals(0, DbLogic.getEventTriggers(getBaseStudyId(), cue).size)
 		
@@ -904,11 +904,11 @@ class DbLogicTests : BaseCommonTest() {
 		eventTrigger2.save()
 		
 		
-		DbLogic.triggerEventTrigger(5, "test1", -1)
+		DbLogic.triggerEventTrigger(5, DataSet.EventTypes.quit, -1)
 		assertEquals(1, notifications.fireMessageNotificationList.size)
 		
 		//cue code with wrong study:
-		DbLogic.triggerEventTrigger(5, "test2", -1)
+		DbLogic.triggerEventTrigger(5, DataSet.EventTypes.joined, -1)
 		assertEquals(1, notifications.fireMessageNotificationList.size)
 	}
 	

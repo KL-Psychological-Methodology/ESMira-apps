@@ -11,7 +11,7 @@ import kotlinx.serialization.json.*
  */
 internal object Updater {
 	const val EXPECTED_SERVER_VERSION: Int = 11
-	const val DATABASE_VERSION = 39
+	const val DATABASE_VERSION = 40
 	const val LIBRARY_VERSION = 19 //this is mainly used for iOS so we can check that changes in the library have been used in the C library
 	
 	fun updateSQL(db: SQLiteInterface, oldVersion: Int) {
@@ -479,9 +479,6 @@ internal object Updater {
 			db.execSQL("ALTER TABLE dataSets ADD COLUMN questionnaire_internal_id INTEGER;")
 			db.execSQL("UPDATE dataSets SET questionnaire_internal_id = group_internal_id;")
 			
-			db.execSQL("ALTER TABLE dataSets ADD COLUMN questionnaire_name TEXT;")
-			db.execSQL("UPDATE dataSets SET questionnaire_name = group_name;")
-			
 			db.execSQL("ALTER TABLE dynamicInput_store ADD COLUMN questionnaire_id INTEGER;")
 			db.execSQL("UPDATE dynamicInput_store SET questionnaire_id = group_id;")
 			
@@ -512,6 +509,16 @@ internal object Updater {
 			FOREIGN KEY(questionnaireId) REFERENCES questionnaire(_id))""")
 			db.execSQL("ALTER TABLE user ADD COLUMN current_study INTEGER DEFAULT 0;")
 			db.execSQL("ALTER TABLE studies ADD COLUMN quitTimestamp INTEGER DEFAULT 0;")
+		}
+		if(oldVersion <= 39) {
+			db.execSQL("ALTER TABLE dataSets ADD COLUMN questionnaire_name TEXT;")
+			db.execSQL("ALTER TABLE dataSets ADD COLUMN server_version INTEGER;")
+			db.execSQL("UPDATE dataSets SET questionnaire_name = group_name;")
+
+			db.execSQL("ALTER TABLE fileUploads ADD COLUMN is_synced INTEGER DEFAULT 0;")
+			db.execSQL("ALTER TABLE fileUploads ADD COLUMN server_version INTEGER;")
+
+			db.execSQL("ALTER TABLE studies ADD COLUMN serverVersion INTEGER DEFAULT 0;")
 		}
 	}
 	
@@ -713,6 +720,7 @@ internal object Updater {
 				}
 			}
 		}
+		
 		return newStudy
 	}
 }

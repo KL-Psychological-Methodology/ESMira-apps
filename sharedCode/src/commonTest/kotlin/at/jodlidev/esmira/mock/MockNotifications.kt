@@ -1,9 +1,7 @@
 package mock
 
 import at.jodlidev.esmira.sharedCode.NotificationsInterface
-import at.jodlidev.esmira.sharedCode.data_structure.Alarm
-import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
-import at.jodlidev.esmira.sharedCode.data_structure.Study
+import at.jodlidev.esmira.sharedCode.data_structure.*
 
 /**
  * Created by JodliDev on 31.03.2022.
@@ -35,7 +33,7 @@ class MockNotifications: NotificationsInterface {
 		msg: String,
 		questionnaire: Questionnaire,
 		timeoutMin: Int,
-		type: String,
+		type: DataSet.EventTypes,
 		scheduledToTimestamp: Long
 	) {
 		fireQuestionnaireBingList.add(questionnaire)

@@ -5,6 +5,7 @@ import at.jodlidev.esmira.sharedCode.*
 import at.jodlidev.esmira.sharedCode.data_structure.DataSet
 import at.jodlidev.esmira.sharedCode.data_structure.Study
 import at.jodlidev.esmira.sharedCode.data_structure.StudyToken
+import at.jodlidev.esmira.sharedCode.data_structure.UploadData
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertTrue
@@ -81,9 +82,9 @@ class WebTest : BaseCommonTest() {
 	@Test
 	fun processSyncData() {
 		val study = createStudy()
-		DataSet.createShortDataSet(DataSet.TYPE_JOIN, study)
-		DataSet.createShortDataSet(DataSet.TYPE_JOIN, study)
-		DataSet.createShortDataSet(DataSet.TYPE_JOIN, study)
+		DataSet.createShortDataSet(DataSet.EventTypes.joined, study)
+		DataSet.createShortDataSet(DataSet.EventTypes.joined, study)
+		DataSet.createShortDataSet(DataSet.EventTypes.joined, study)
 		val (dataSet1, dataSet2, dataSet3) = DbLogic.getUnSyncedDataSets()[testUrl]!!
 		
 		val response = """{
@@ -103,9 +104,9 @@ class WebTest : BaseCommonTest() {
 		Web().processSyncData(testUrl, response)
 		
 		//datasets;
-		assertEquals(DataSet.STATES.SYNCED, DbLogic.getDataSet(dataSet1.id)?.synced)
-		assertEquals(DataSet.STATES.NOT_SYNCED_ERROR, DbLogic.getDataSet(dataSet2.id)?.synced)
-		assertEquals(DataSet.STATES.SYNCED, DbLogic.getDataSet(dataSet3.id)?.synced)
+		assertEquals(UploadData.States.SYNCED, DbLogic.getDataSet(dataSet1.id)?.synced)
+		assertEquals(UploadData.States.NOT_SYNCED_ERROR, DbLogic.getDataSet(dataSet2.id)?.synced)
+		assertEquals(UploadData.States.SYNCED, DbLogic.getDataSet(dataSet3.id)?.synced)
 		
 		//token:
 		assertTrue(StudyToken.hasToken(5))

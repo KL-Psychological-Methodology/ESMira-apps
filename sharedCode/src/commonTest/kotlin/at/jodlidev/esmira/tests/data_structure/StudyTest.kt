@@ -76,16 +76,16 @@ class StudyTest : BaseCommonTest() {
 	
 	@Test
 	fun isEventUploaded() {
-		assertEquals(true, createStudy().isEventUploaded(DataSet.TYPE_JOIN)) //default value
-		assertEquals(true, createStudy().isEventUploaded(DataSet.TYPE_QUESTIONNAIRE)) //default value
-		assertEquals(true, createStudy().isEventUploaded(DataSet.TYPE_QUIT)) //default value
+		assertEquals(true, createStudy().isEventUploaded(DataSet.EventTypes.joined)) //default value
+		assertEquals(true, createStudy().isEventUploaded(DataSet.EventTypes.questionnaire)) //default value
+		assertEquals(true, createStudy().isEventUploaded(DataSet.EventTypes.quit)) //default value
 		assertEquals(true, createStudy(
-			"""{"id":$studyWebId, "eventUploadSettings": {"${DataSet.TYPE_INVITATION}": true}}"""
-		).isEventUploaded(DataSet.TYPE_INVITATION))
+			"""{"id":$studyWebId, "eventUploadSettings": {"${DataSet.EventTypes.invitation}": true}}"""
+		).isEventUploaded(DataSet.EventTypes.invitation))
 		assertEquals(false, createStudy(
-			"""{"id":$studyWebId, "eventUploadSettings": {"${DataSet.TYPE_SCHEDULE_CHANGED}": false}}"""
-		).isEventUploaded(DataSet.TYPE_SCHEDULE_CHANGED))
-		assertEquals(false, createStudy().isEventUploaded(DataSet.TYPE_ALARM_EXECUTED)) //default value
+			"""{"id":$studyWebId, "eventUploadSettings": {"${DataSet.EventTypes.schedule_changed}": false}}"""
+		).isEventUploaded(DataSet.EventTypes.schedule_changed))
+		assertEquals(false, createStudy().isEventUploaded(DataSet.EventTypes.actions_executed)) //default value
 	}
 	
 	@Test
@@ -347,13 +347,13 @@ class StudyTest : BaseCommonTest() {
 	fun study_do_getOldLeftStudy() {
 		val newStudy = createStudy()
 		
-		assertEquals(null, newStudy.getOldLeftStudy())
+		assertEquals(null, newStudy.getOldQuitStudy())
 		val study = createStudy("""{"id":$studyWebId, "personalStatistics": {"charts": [], "observedVariables": {"test1": [{}]}}}""")
 		study.save()
 		newStudy.id = study.id
 		study.leave()
 		
-		assertNotEquals(null, newStudy.getOldLeftStudy())
+		assertNotEquals(null, newStudy.getOldQuitStudy())
 	}
 	
 	@Test
@@ -422,7 +422,12 @@ class StudyTest : BaseCommonTest() {
 									{},
 									{"signalTimes": [{}, {}, {}, {}, {}]}
 								],
-								"eventTriggers": [{"cueCode": "test"}, {"cueCode": "test"}, {"cueCode": "test"}, {"cueCode": "test"}]
+								"eventTriggers": [
+									{"cueCode": "${DataSet.EventTypes.quit}"},
+									{"cueCode": "${DataSet.EventTypes.quit}"},
+									{"cueCode": "${DataSet.EventTypes.quit}"},
+									{"cueCode": "${DataSet.EventTypes.quit}"}
+								]
 							}
 						]
 					}
@@ -430,7 +435,7 @@ class StudyTest : BaseCommonTest() {
 		))
 		assertEquals(3, DbLogic.getActionTriggers(oldStudy.id).size)
 		assertEquals(2, DbLogic.getAllSchedules().size)
-		assertEquals(4, DbLogic.getEventTriggers(oldStudy.id, "test").size)
+		assertEquals(4, DbLogic.getEventTriggers(oldStudy.id, DataSet.EventTypes.quit).size)
 		
 		
 		//questionnaire has less elements
@@ -446,7 +451,7 @@ class StudyTest : BaseCommonTest() {
 								"schedules": [
 									{"signalTimes": [{}, {}, {}, {}]}
 								],
-								"eventTriggers": [{"cueCode": "test"}, {"cueCode": "test"}, {"cueCode": "test"}]
+								"eventTriggers": [{"cueCode": "${DataSet.EventTypes.quit}"}, {"cueCode": "${DataSet.EventTypes.quit}"}, {"cueCode": "${DataSet.EventTypes.quit}"}]
 							}
 						]
 					}
@@ -454,7 +459,7 @@ class StudyTest : BaseCommonTest() {
 		))
 		assertEquals(2, DbLogic.getActionTriggers(oldStudy.id).size)
 		assertEquals(1, DbLogic.getAllSchedules().size)
-		assertEquals(3, DbLogic.getEventTriggers(oldStudy.id, "test").size)
+		assertEquals(3, DbLogic.getEventTriggers(oldStudy.id, DataSet.EventTypes.quit).size)
 	}
 	
 	@Test
@@ -464,7 +469,7 @@ class StudyTest : BaseCommonTest() {
 		
 		assertEquals(1, postponedActions.updateStudiesRegularlyCount)
 		
-		assertSqlWasSaved(DataSet.TABLE, DataSet.KEY_TYPE, DataSet.TYPE_JOIN)
+		assertSqlWasSaved(DataSet.TABLE, DataSet.KEY_TYPE, DataSet.EventTypes.joined)
 	}
 	
 	@Test

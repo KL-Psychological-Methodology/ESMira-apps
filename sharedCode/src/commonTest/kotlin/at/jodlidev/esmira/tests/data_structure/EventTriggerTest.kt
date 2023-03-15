@@ -53,7 +53,7 @@ class EventTriggerTest : BaseCommonTest() {
 		actionTrigger.save(true)
 		eventTrigger.bindParent(actionTrigger.questionnaire, actionTrigger)
 		
-		eventTrigger.cueCode = DataSet.TYPE_QUIT
+		eventTrigger.cueCode = DataSet.EventTypes.quit
 		eventTrigger.save() //eventTrigger.exec() checks if this eventTrigger is the latest one in db
 		eventTrigger.exec(123, true)
 		assertSqlWasDeleted(Study.TABLE, 0, eventTrigger.studyId.toString())

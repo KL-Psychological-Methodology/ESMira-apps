@@ -52,6 +52,7 @@ object DbLogic {
 			${Study.KEY_ACCESS_KEY} TEXT,
 			${Study.KEY_VERSION} INTEGER,
 			${Study.KEY_SUB_VERSION} INTEGER,
+			${Study.KEY_SERVER_VERSION} INTEGER,
 			${Study.KEY_LANG} TEXT DEFAULT '',
 			${Study.KEY_JOINED_TIMESTAMP} INTEGER DEFAULT 0,
 			${Study.KEY_QUIT_TIMESTAMP} INTEGER DEFAULT 0,
@@ -150,6 +151,7 @@ object DbLogic {
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${QuestionnaireCache.TABLE} (
 			${QuestionnaireCache.KEY_ID} INTEGER PRIMARY KEY,
 			${QuestionnaireCache.KEY_QUESTIONNAIRE_ID} INTEGER,
+			${QuestionnaireCache.KEY_INPUT_NAME} TEXT,
 			${QuestionnaireCache.KEY_BACKUP_FROM} INTEGER,
 			${QuestionnaireCache.KEY_CACHE_VALUE} TEXT,
 			FOREIGN KEY(${QuestionnaireCache.KEY_QUESTIONNAIRE_ID}) REFERENCES ${Questionnaire.TABLE}(${Questionnaire.KEY_ID}) ON DELETE CASCADE)""")
@@ -237,6 +239,7 @@ object DbLogic {
 			${DataSet.KEY_QUESTIONNAIRE_INTERNAL_ID} INTEGER,
 			${DataSet.KEY_STUDY_VERSION} INTEGER,
 			${DataSet.KEY_STUDY_SUB_VERSION} INTEGER,
+			${DataSet.KEY_SERVER_VERSION} INTEGER,
 			${DataSet.KEY_STUDY_LANG} TEXT DEFAULT '',
 			${DataSet.KEY_STUDY_GROUP} INTEGER DEFAULT 0,
 			${DataSet.KEY_TIMEZONE} TEXT,
@@ -252,11 +255,13 @@ object DbLogic {
 			${FileUpload.KEY_STUDY_ID} INTEGER,
 			${FileUpload.KEY_STUDY_WEB_ID} INTEGER,
 			${FileUpload.KEY_SERVER_URL} TEXT,
+			${FileUpload.KEY_SERVER_VERSION} INTEGER,
 			${FileUpload.KEY_IS_TEMPORARY} INTEGER,
 			${FileUpload.KEY_FILE_PATH} TEXT,
 			${FileUpload.KEY_IDENTIFIER} INTEGER,
 			${FileUpload.KEY_TYPE} INTEGER,
-			${FileUpload.KEY_TIMESTAMP} INTEGER,
+			${FileUpload.KEY_CREATION_TIME} INTEGER,
+			${FileUpload.KEY_SYNCED} INTEGER DEFAULT 0,
 			FOREIGN KEY(${FileUpload.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}))""")
 		
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${DynamicInputData.TABLE} (
@@ -349,7 +354,7 @@ object DbLogic {
 	}
 	
 	fun reportMissedInvitation(questionnaire: Questionnaire, timestamp: Long) {
-		DataSet.createActionSentDataSet(DataSet.TYPE_INVITATION_MISSED, questionnaire, timestamp)
+		DataSet.createActionSentDataSet(DataSet.EventTypes.invitation_missed, questionnaire, timestamp)
 
 		NativeLink.sql.execSQL("UPDATE ${DbUser.TABLE} SET ${DbUser.KEY_NOTIFICATIONS_MISSED} = ${DbUser.KEY_NOTIFICATIONS_MISSED} + 1")
 	}
@@ -865,6 +870,20 @@ object DbLogic {
 		)
 	}
 	
+	
+	
+	//
+	//UploadData
+	//
+	fun getSortedUploadData(studyId: Long): List<UploadData> {
+		var list: List<UploadData> = getDataSets(studyId)
+		list = list.plus(getReadyFileUploads(studyId))
+		list = list.sortedByDescending { it.timestamp }
+		list = list.sortedWith { a, _ -> if(a.synced == UploadData.States.NOT_SYNCED_ERROR_DELETABLE) 0 else 1}
+//		list.filter { it.synced == UploadData.States.NOT_SYNCED_ERROR_DELETABLE }
+		return list
+	}
+	
 	//
 	//DataSets
 	//
@@ -890,7 +909,7 @@ object DbLogic {
 		var c = NativeLink.sql.select(
 			DataSet.TABLE,
 			arrayOf(DataSet.KEY_STUDY_ID),
-			"${DataSet.KEY_STUDY_ID} = ? AND ${DataSet.KEY_SYNCED} IS NOT ${DataSet.STATES.SYNCED.ordinal}", arrayOf(studyId.toString()),
+			"${DataSet.KEY_STUDY_ID} = ? AND ${DataSet.KEY_SYNCED} IS NOT ${UploadData.States.SYNCED.ordinal}", arrayOf(studyId.toString()),
 			null,
 			null,
 			null,
@@ -903,7 +922,7 @@ object DbLogic {
 			c = NativeLink.sql.select(
 				FileUpload.TABLE,
 				FileUpload.COLUMNS,
-				"${FileUpload.KEY_IS_TEMPORARY} IS 0", null,
+				"${FileUpload.KEY_STUDY_ID} = ? AND ${FileUpload.KEY_IS_TEMPORARY} IS 0", arrayOf(studyId.toString()),
 				null,
 				null,
 				null,
@@ -918,7 +937,7 @@ object DbLogic {
 		var c = NativeLink.sql.select(
 			DataSet.TABLE,
 			arrayOf("COUNT(*)"),
-			"${DataSet.KEY_SYNCED} IS NOT ${DataSet.STATES.SYNCED.ordinal}", null,
+			"${DataSet.KEY_SYNCED} IS NOT ${UploadData.States.SYNCED.ordinal}", null,
 			null,
 			null,
 			null,
@@ -951,7 +970,7 @@ object DbLogic {
 		val c = NativeLink.sql.select(
 			DataSet.TABLE,
 			arrayOf("COUNT(*)"),
-			"${DataSet.KEY_TYPE} = ? AND ${DataSet.KEY_STUDY_ID} = ?", arrayOf(DataSet.TYPE_QUESTIONNAIRE, studyId.toString()),
+			"${DataSet.KEY_TYPE} = ? AND ${DataSet.KEY_STUDY_ID} = ?", arrayOf(DataSet.EventTypes.questionnaire.toString(), studyId.toString()),
 			null,
 			null,
 			null,
@@ -969,7 +988,7 @@ object DbLogic {
 		val c = NativeLink.sql.select(
 			DataSet.TABLE_JOINED,
 			DataSet.COLUMNS,
-			"${DataSet.KEY_SYNCED} IS NOT ${DataSet.STATES.SYNCED.ordinal}", null,
+			"${DataSet.KEY_SYNCED} IS NOT ${UploadData.States.SYNCED.ordinal}", null,
 			null,
 			null,
 			"${DataSet.KEY_SYNCED} ASC", //we have to make sure that erroneous entries who lead to crashes dont prevent new entries from getting synced
@@ -1003,6 +1022,25 @@ object DbLogic {
 	//
 	//FileUpload
 	//
+	
+	fun getReadyFileUploads(studyId: Long): List<FileUpload> {
+		val c = NativeLink.sql.select(
+			FileUpload.TABLE,
+			FileUpload.COLUMNS,
+			"${FileUpload.KEY_STUDY_ID} = ? AND ${FileUpload.KEY_IS_TEMPORARY} = 0", arrayOf(studyId.toString()),
+			null,
+			null,
+			"${FileUpload.KEY_CREATION_TIME} DESC",
+			null
+		)
+		val list = ArrayList<FileUpload>()
+		while(c.moveToNext()) {
+			list.add(FileUpload(c))
+		}
+		c.close()
+		
+		return list
+	}
 	
 	fun getFileUpload(id: Long): FileUpload? {
 		val c = NativeLink.sql.select(
@@ -1569,11 +1607,11 @@ object DbLogic {
 		return r
 	}
 	
-	fun getEventTriggers(study_id: Long, cue: String): List<EventTrigger> {
+	fun getEventTriggers(study_id: Long, cue: DataSet.EventTypes): List<EventTrigger> {
 		val c = NativeLink.sql.select(
 			EventTrigger.TABLE_JOINED,
 			EventTrigger.COLUMNS_JOINED,
-			"${EventTrigger.EXT_KEY_STUDY_ID}=? AND ${EventTrigger.EXT_KEY_CUE}=?", arrayOf(study_id.toString(), cue),
+			"${EventTrigger.EXT_KEY_STUDY_ID}=? AND ${EventTrigger.EXT_KEY_CUE}=?", arrayOf(study_id.toString(), cue.toString()),
 			null,
 			null,
 			null,
@@ -1587,7 +1625,7 @@ object DbLogic {
 		return r
 	}
 	
-	internal fun triggerEventTrigger(studyId: Long, cue: String, qId: Long) {
+	internal fun triggerEventTrigger(studyId: Long, cue: DataSet.EventTypes, qId: Long) {
 		val list: List<EventTrigger> = getEventTriggers(studyId, cue)
 		if(list.isNotEmpty()) {
 			val q = if(qId == -1L) null else getQuestionnaire(qId)

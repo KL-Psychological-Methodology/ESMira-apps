@@ -235,7 +235,7 @@ class Questionnaire {
 	}
 	
 	fun saveQuestionnaire(formStarted: Long) {
-		val dataSet = DataSet(DataSet.TYPE_QUESTIONNAIRE, this)
+		val dataSet = DataSet(DataSet.EventTypes.questionnaire, this)
 		
 		for(page in pages) {
 			for(input in page.inputs) {

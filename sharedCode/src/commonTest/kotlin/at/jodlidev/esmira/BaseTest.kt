@@ -2,12 +2,10 @@ import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.PhoneType
 import at.jodlidev.esmira.sharedCode.data_structure.*
-import kotlinx.serialization.decodeFromString
 import mock.MockDialogOpener
 import mock.MockNotifications
 import mock.MockPostponedActions
 import mock.MockSmartphoneData
-import kotlin.test.assertEquals
 
 /**
  * Created by JodliDev on 13.04.2022.
@@ -84,7 +82,7 @@ abstract class BaseTest {
 	
 	fun createDataSet(): DataSet {
 		return DataSet(
-			eventType = DataSet.TYPE_QUESTIONNAIRE,
+			eventType = DataSet.EventTypes.questionnaire,
 			study = createStudy(),
 			questionnaireName = "",
 			questionnaireId = -1,

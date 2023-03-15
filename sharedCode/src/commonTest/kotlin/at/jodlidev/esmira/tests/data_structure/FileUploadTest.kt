@@ -12,7 +12,7 @@ class FileUploadTest : BaseCommonTest() {
 	@Test
 	fun save() {
 		val path = "path/to/file"
-		val fileUpload = FileUpload(createStudy(), path, FileUpload.TYPES.Image)
+		val fileUpload = FileUpload(createStudy(), path, FileUpload.DataTypes.Image)
 		fileUpload.save()
 		assertSqlWasSaved(FileUpload.TABLE, FileUpload.KEY_FILE_PATH, path)
 	}
@@ -20,7 +20,7 @@ class FileUploadTest : BaseCommonTest() {
 	@Test
 	fun setReadyForUpload() {
 		val path = "path/to/file"
-		val fileUpload = FileUpload(createStudy(), path, FileUpload.TYPES.Image)
+		val fileUpload = FileUpload(createStudy(), path, FileUpload.DataTypes.Image)
 		fileUpload.save()
 		fileUpload.setReadyForUpload()
 		
@@ -30,7 +30,7 @@ class FileUploadTest : BaseCommonTest() {
 	@Test
 	fun setTemporary() {
 		val path = "path/to/file"
-		val fileUpload = FileUpload(createStudy(), path, FileUpload.TYPES.Image)
+		val fileUpload = FileUpload(createStudy(), path, FileUpload.DataTypes.Image)
 		fileUpload.save()
 		fileUpload.setTemporary()
 		

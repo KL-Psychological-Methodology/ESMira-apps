@@ -176,7 +176,7 @@ object Notifications: NotificationsInterface {
 		fire(context.getString(R.string.android_info_study_updated, study.title), context.getString(R.string.info_study_updated_desc), createId(study.id, SCHEDULE_CHANGED_ID_RANGE), CHANNEL_ID_STUDY_UPDATED, intent)
 	}
 	
-	override fun fireQuestionnaireBing(title: String, msg: String, questionnaire: Questionnaire, timeoutMin: Int, type: String, scheduledToTimestamp: Long) {
+	override fun fireQuestionnaireBing(title: String, msg: String, questionnaire: Questionnaire, timeoutMin: Int, type: DataSet.EventTypes, scheduledToTimestamp: Long) {
 		val context = context.get() ?: return
 		val notificationId: Int = createId(questionnaire.id, QUESTIONNAIRE_BING_ID_RANGE)
 		val intent = Intent(context, MainActivity::class.java)
@@ -200,7 +200,7 @@ object Notifications: NotificationsInterface {
 		fire(title, msg, notificationId)
 		
 		//TODO: it is possible that this check happens too soon and will not always catch the freshly posted notification
-		DataSet.createActionSentDataSet(DataSet.TYPE_NOTIFICATION, questionnaire, scheduledToTimestamp)
+		DataSet.createActionSentDataSet(DataSet.EventTypes.notification, questionnaire, scheduledToTimestamp)
 	}
 	
 	override fun fireMessageNotification(study: Study) {

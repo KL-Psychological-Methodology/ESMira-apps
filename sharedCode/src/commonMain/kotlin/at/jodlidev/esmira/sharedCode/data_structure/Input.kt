@@ -33,20 +33,6 @@ class Input internal constructor( ) {
 	
 	var forceInt: Boolean = false
 	
-	
-//	@Transient private var _value: String = if(required) "" else defaultValue
-//	var value: String
-//		get() {
-//			return if(type == TYPES.dynamic_input && this::dynamicInput.isInitialized)
-////				"$_value/${dynamicInput.value}"
-//				dynamicInput.value
-//			else
-//				_value
-//		}
-//		set(value) {
-//			_value = value
-//		}
-	
 	val desc: String
 		get() {
 			return if(required && text.isNotEmpty()) "$text*" else text
@@ -75,6 +61,10 @@ class Input internal constructor( ) {
 	@Transient private val addedFiles : MutableList<FileUpload> = ArrayList()
 	
 	@Transient private lateinit var _value: String
+	
+	/**
+	 * Loads input data from [QuestionnaireCache.loadCacheValue] and returns [_value]
+	 */
 	fun getValue(): String {
 		return if(type == TYPES.dynamic_input && this::dynamicInput.isInitialized)
 			dynamicInput.getValue()
@@ -90,24 +80,43 @@ class Input internal constructor( ) {
 		else
 			_value
 	}
-	fun setValue(value: String, additionalValues: Map<String, String>? = null, filePath: String? = null) {
+	
+	/**
+	 * For saving usual Input data
+	 * Overwrites [_value], and [additionalValues] and calls [QuestionnaireCache.saveCacheValue]
+	 * Cannot be combined with [setFile]
+	 */
+	fun setValue(value: String, additionalValues: Map<String, String>? = null) {
 		this._value = value
 		if(additionalValues != null) {
 			this.additionalValues.clear()
 			this.additionalValues.putAll(additionalValues)
 		}
-		if(filePath != null)
-			addImage(filePath) //will overwrite value
 		
 		QuestionnaireCache.saveCacheValue(questionnaire.id, name, getBackupString())
 	}
 	
-	private fun addImage(filePath: String) {
+	/**
+	 * For connecting a File with this input
+	 * Saves a [FileUpload], sets [FileUpload.identifier] in [_value] and calls [QuestionnaireCache.saveCacheValue]
+	 * Cannot be combined with [setValue]
+	 */
+	fun setFile(filePath: String, dataType: FileUpload.DataTypes = FileUpload.DataTypes.Image) {
+		val currentValue = getValue() // will also set _value
+		if(currentValue.isNotEmpty()) {
+			DbLogic.getFileUploadByIdentifier(currentValue)?.let { fileUpload ->
+				if(addedFiles.find { it.identifier == fileUpload.identifier } == null)
+					addedFiles.add(fileUpload)
+				return
+			}
+		}
+		
 		val study = DbLogic.getStudy(questionnaire.studyId) ?: return
-		val fileUpload = FileUpload(study, filePath, FileUpload.TYPES.Image)
+		val fileUpload = FileUpload(study, filePath, dataType)
 		fileUpload.save()
 		addedFiles.add(fileUpload)
 		_value = fileUpload.identifier.toString()
+		QuestionnaireCache.saveCacheValue(questionnaire.id, name, getBackupString())
 	}
 	fun getFileName(): String? {
 		val fileUpload = DbLogic.getFileUploadByIdentifier(getValue())

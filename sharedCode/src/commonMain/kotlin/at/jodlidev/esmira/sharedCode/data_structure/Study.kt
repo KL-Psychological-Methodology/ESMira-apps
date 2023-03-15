@@ -25,38 +25,6 @@ class Study internal constructor(
 		Pending, Joined, Quit
 	}
 	
-	internal constructor(c: SQLiteCursor) : this(webId = c.getLong(1)) {
-		exists = true
-		fromJsonOrUpdated = false
-		
-		id = c.getLong(0)
-		state = STATES.values()[c.getInt(2)]
-		serverUrl = c.getString(3)
-		accessKey = c.getString(4)
-		version = c.getInt(5)
-		subVersion = c.getInt(6)
-		lang = c.getString(7)
-		group = c.getInt(8)
-		joinedTimestamp = c.getLong(9)
-		quitTimestamp = c.getLong(10)
-		title = c.getString(11)
-		studyDescription = c.getString(12)
-		contactEmail = c.getString(13)
-		informedConsentForm = c.getString(14)
-		postInstallInstructions = c.getString(15)
-		publicChartsJsonString = c.getString(16)
-		personalChartsJsonString = c.getString(17)
-		msgTimestamp = c.getLong(18)
-		publicStatisticsNeeded = c.getBoolean(19)
-		sendMessagesAllowed = c.getBoolean(20)
-		eventUploadSettingsString = c.getString(21)
-		enableRewardSystem = c.getBoolean(22)
-		rewardVisibleAfterDays = c.getInt(23)
-		rewardEmailContent = c.getString(24)
-		rewardInstructions = c.getString(25)
-		cachedRewardCode = c.getString(26)
-	}
-	
 	@Transient var exists = false
 	@Transient var id = -1L
 	@Transient var state = STATES.Pending
@@ -224,6 +192,39 @@ class Study internal constructor(
 	}
 	
 	
+	internal constructor(c: SQLiteCursor) : this(webId = c.getLong(1)) {
+		exists = true
+		fromJsonOrUpdated = false
+		
+		id = c.getLong(0)
+		state = STATES.values()[c.getInt(2)]
+		serverUrl = c.getString(3)
+		accessKey = c.getString(4)
+		version = c.getInt(5)
+		subVersion = c.getInt(6)
+		serverVersion = c.getInt(7)
+		lang = c.getString(8)
+		group = c.getInt(9)
+		joinedTimestamp = c.getLong(10)
+		quitTimestamp = c.getLong(11)
+		title = c.getString(12)
+		studyDescription = c.getString(13)
+		contactEmail = c.getString(14)
+		informedConsentForm = c.getString(15)
+		postInstallInstructions = c.getString(15)
+		publicChartsJsonString = c.getString(17)
+		personalChartsJsonString = c.getString(18)
+		msgTimestamp = c.getLong(19)
+		publicStatisticsNeeded = c.getBoolean(20)
+		sendMessagesAllowed = c.getBoolean(21)
+		eventUploadSettingsString = c.getString(22)
+		enableRewardSystem = c.getBoolean(23)
+		rewardVisibleAfterDays = c.getInt(24)
+		rewardEmailContent = c.getString(25)
+		rewardInstructions = c.getString(26)
+		cachedRewardCode = c.getString(27)
+	}
+	
 	private fun loadQuestionnairesDB(): List<Questionnaire> {
 		val c = NativeLink.sql.select(
 			Questionnaire.TABLE,
@@ -270,10 +271,10 @@ class Study internal constructor(
 		}
 	}
 	
-	fun isEventUploaded(name: String): Boolean {
+	fun isEventUploaded(eventType: DataSet.EventTypes): Boolean {
 		val settings: Map<String, Boolean> = DbLogic.getJsonConfig().decodeFromString(eventUploadSettingsString)
 		
-		return settings[name] ?: defaultSettings[name] ?: true
+		return settings[eventType.toString()] ?: defaultSettings[eventType.toString()] ?: true
 	}
 	
 	fun hasSchedules(): Boolean {
@@ -390,10 +391,10 @@ class Study internal constructor(
 	
 	fun statisticWasViewed() {
 		if(state == STATES.Joined)
-			DataSet.createShortDataSet(DataSet.TYPE_STATISTIC_VIEWED, this)
+			DataSet.createShortDataSet(DataSet.EventTypes.statistic_viewed, this)
 	}
 	
-	internal fun getOldLeftStudy(): Study? {
+	internal fun getOldQuitStudy(): Study? {
 		val c = NativeLink.sql.select(
 			TABLE,
 			COLUMNS,
@@ -420,6 +421,7 @@ class Study internal constructor(
 		try {
 			this.version = newStudy.version
 			this.subVersion = newStudy.subVersion
+			this.serverVersion = newStudy.serverVersion
 			this.title = newStudy.title
 			this.studyDescription = newStudy.studyDescription
 			this.contactEmail = newStudy.contactEmail
@@ -440,7 +442,7 @@ class Study internal constructor(
 				this.group = if(newStudy.randomGroups == 0) 0 else Random.nextInt(1, randomGroups + 1)
 			}
 			save()
-			DataSet.createShortDataSet(DataSet.TYPE_STUDY_UPDATED, this)
+			DataSet.createShortDataSet(DataSet.EventTypes.study_updated, this)
 		}
 		catch(e: Throwable) {
 			ErrorBox.error("Updating study", "Could not update study!", e)
@@ -454,7 +456,7 @@ class Study internal constructor(
 		joinedTimestamp = NativeLink.getNowMillis()
 		quitTimestamp = 0
 		save()
-		DataSet.createShortDataSet(DataSet.TYPE_JOIN, this)
+		DataSet.createShortDataSet(DataSet.EventTypes.joined, this)
 		NativeLink.postponedActions.updateStudiesRegularly()
 		DbUser.setCurrentStudyId(id)
 	}
@@ -467,6 +469,7 @@ class Study internal constructor(
 		values.putString(KEY_ACCESS_KEY, accessKey)
 		values.putInt(KEY_VERSION, version)
 		values.putInt(KEY_SUB_VERSION, subVersion)
+		values.putInt(KEY_SERVER_VERSION, serverVersion)
 		values.putString(KEY_LANG, lang)
 		values.putInt(KEY_GROUP, group)
 		values.putInt(KEY_STATE, state.ordinal)
@@ -529,19 +532,12 @@ class Study internal constructor(
 			}
 		}
 		else {
-			id = db.insert(TABLE, values)
-			val oldStudy = getOldLeftStudy()
+			val oldStudy = getOldQuitStudy()
 			if(oldStudy != null) {
-				val observedValues = db.getValueBox()
-				observedValues.putLong(ObservedVariable.KEY_STUDY_ID, id)
-				db.update(ObservedVariable.TABLE, observedValues, "${ObservedVariable.KEY_STUDY_ID} = ?", arrayOf(oldStudy.id.toString()))
-				
-				val dailyValues = db.getValueBox()
-				dailyValues.putLong(ObservedVariable.KEY_STUDY_ID, id)
-				db.update(StatisticData_timed.TABLE, dailyValues, "${StatisticData_timed.KEY_STUDY_ID} = ?", arrayOf(oldStudy.id.toString()))
-				oldStudy.delete()
-				DataSet.createShortDataSet(DataSet.TYPE_REJOIN, oldStudy)
+				values.putLong(KEY_ID, oldStudy.id)
+				db.delete(TABLE, "$KEY_ID = ?", arrayOf(oldStudy.id.toString()))
 			}
+			id = db.insert(TABLE, values)
 		}
 		for(q in questionnaires) {
 			q.bindParent(this)
@@ -600,7 +596,7 @@ class Study internal constructor(
 			onSuccess(Web.Companion.RewardInfo(cachedRewardCode))
 			return
 		}
-		DataSet.createShortDataSet(DataSet.TYPE_REQUESTED_REWARD_CODE, this)
+		DataSet.createShortDataSet(DataSet.EventTypes.requested_reward_code, this)
 		Web.loadRewardCode(this, onError, onSuccess)
 	}
 	
@@ -610,13 +606,18 @@ class Study internal constructor(
 			q.delete()
 		}
 		db.delete(Message.TABLE, "${Message.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
-		db.delete(ObservedVariable.TABLE, "${ObservedVariable.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StatisticData_timed.TABLE, "${StatisticData_timed.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StatisticData_perValue.TABLE, "${StatisticData_perValue.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(DataSet.TABLE, "${DataSet.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StudyToken.TABLE, "${StudyToken.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(TABLE, "$KEY_ID = ?", arrayOf(id.toString()))
 		DbUser.setCurrentStudyId(DbLogic.getFirstStudy()?.id ?: 0L)
+		
+		//These were already deleted in leave() - but we are making sure:
+		db.delete(ObservedVariable.TABLE, "${ObservedVariable.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
+		for(q in questionnaires) {
+			q.delete()
+		}
 	}
 
 	internal fun leaveAfterCheck() {
@@ -634,8 +635,9 @@ class Study internal constructor(
 		values.putLong(KEY_QUIT_TIMESTAMP, NativeLink.getNowMillis())
 		db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
 		
-		DataSet.createShortDataSet(DataSet.TYPE_QUIT, this)
+		DataSet.createShortDataSet(DataSet.EventTypes.quit, this)
 		
+		db.delete(ObservedVariable.TABLE, "${ObservedVariable.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		for(q in questionnaires) {
 			q.delete()
 		}
@@ -664,6 +666,7 @@ class Study internal constructor(
 		const val KEY_ACCESS_KEY = "accessKey"
 		const val KEY_VERSION = "version"
 		const val KEY_SUB_VERSION = "subVersion"
+		const val KEY_SERVER_VERSION = "serverVersion"
 		const val KEY_LANG = "study_lang"
 		const val KEY_GROUP = "randomGroup"
 		const val KEY_JOINED_TIMESTAMP = "joinedTimestamp"
@@ -700,6 +703,7 @@ class Study internal constructor(
 			KEY_ACCESS_KEY,
 			KEY_VERSION,
 			KEY_SUB_VERSION,
+			KEY_SERVER_VERSION,
 			KEY_LANG,
 			KEY_GROUP,
 			KEY_JOINED_TIMESTAMP,
@@ -723,20 +727,20 @@ class Study internal constructor(
 		)
 		
 		val defaultSettings = hashMapOf(
-			DataSet.TYPE_JOIN to true,
-			DataSet.TYPE_QUESTIONNAIRE to true,
-			DataSet.TYPE_QUIT to true,
-			DataSet.TYPE_ALARM_EXECUTED to false,
-			DataSet.TYPE_INVITATION to false,
-			DataSet.TYPE_INVITATION_MISSED to false,
-			DataSet.TYPE_INVITATION_REMINDER to false,
-			DataSet.TYPE_MSG to false,
-			DataSet.TYPE_NOTIFICATION to false,
-			DataSet.TYPE_REJOIN to false,
-			DataSet.TYPE_SCHEDULE_CHANGED to true,
-			DataSet.TYPE_STATISTIC_VIEWED to false,
-			DataSet.TYPE_STUDY_MSG to false,
-			DataSet.TYPE_STUDY_UPDATED to false,
+			DataSet.EventTypes.joined.toString() to true,
+			DataSet.EventTypes.questionnaire.toString() to true,
+			DataSet.EventTypes.quit.toString() to true,
+			DataSet.EventTypes.actions_executed.toString() to false,
+			DataSet.EventTypes.invitation.toString() to false,
+			DataSet.EventTypes.invitation_missed.toString() to false,
+			DataSet.EventTypes.reminder.toString() to false,
+			DataSet.EventTypes.message.toString() to false,
+			DataSet.EventTypes.notification.toString() to false,
+			DataSet.EventTypes.rejoined.toString() to false,
+			DataSet.EventTypes.schedule_changed.toString() to true,
+			DataSet.EventTypes.statistic_viewed.toString() to false,
+			DataSet.EventTypes.study_message.toString() to false,
+			DataSet.EventTypes.study_updated.toString() to false,
 		)
 		
 		fun newInstance(serverUrl: String, accessKey: String, json: String, checkUpdate: Boolean = true): Study {

@@ -20,7 +20,7 @@ abstract class SharedInstrumentedTests : BaseInstrumentedTests() {
 		val content = "test 123"
 		
 		val path = createEmptyFile(content)
-		val fileUploadExists = FileUpload(createStudy(), path, FileUpload.TYPES.Image)
+		val fileUploadExists = FileUpload(createStudy(), path, FileUpload.DataTypes.Image)
 		fileUploadExists.save()
 		assertEquals(0, DbLogic.getPendingFileUploads().size)
 		assertEquals(1, DbLogic.getTemporaryFileUploads().size)
@@ -38,7 +38,7 @@ abstract class SharedInstrumentedTests : BaseInstrumentedTests() {
 		
 		
 		//check non existing file
-		val fileUploadDoesNotExist = FileUpload(createStudy(), "not/existing/file", FileUpload.TYPES.Image)
+		val fileUploadDoesNotExist = FileUpload(createStudy(), "not/existing/file", FileUpload.DataTypes.Image)
 		fileUploadDoesNotExist.save()
 		assertEquals(0, DbLogic.getPendingFileUploads().size)
 		assertEquals(1, DbLogic.getTemporaryFileUploads().size)
@@ -55,7 +55,7 @@ abstract class SharedInstrumentedTests : BaseInstrumentedTests() {
 		DbUser.getUid() //create user
 		assertEquals(0, DbLogic.getMissedInvitations())
 		
-		val study = createStudy("""{"id":$studyWebId, "eventUploadSettings": {"${DataSet.TYPE_INVITATION_MISSED}": true}}""")
+		val study = createStudy("""{"id":$studyWebId, "eventUploadSettings": {"${DataSet.EventTypes.invitation_missed}": true}}""")
 		study.save()
 		
 		val questionnaire = createJsonObj<Questionnaire>()

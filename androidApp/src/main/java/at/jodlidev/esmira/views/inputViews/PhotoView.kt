@@ -29,7 +29,7 @@ import java.io.File
 
 
 @Composable
-fun PhotoView(input: Input, questionnaire: Questionnaire, get: () -> String, save: (String, Map<String, String>?, String?) -> Unit) {
+fun PhotoView(input: Input, get: () -> String, save: (String) -> Unit) {
 	val context = LocalContext.current
 	
 	val folder = File(context.filesDir, "photos")
@@ -38,7 +38,7 @@ fun PhotoView(input: Input, questionnaire: Questionnaire, get: () -> String, sav
 	val tempFile = File(folder, ".temp")
 	
 	val confirmImage = {
-		save("", null, file.path)
+		save(file.path)
 	}
 	val image = remember {
 		mutableStateOf(

@@ -305,7 +305,7 @@ class ActionTrigger {
 					DbLogic.getStudy(studyId)?.let { study ->
 						Message.addMessage(study.id, action.msg, NativeLink.getNowMillis(), true)
 						NativeLink.notifications.fireMessageNotification(study)
-						DataSet.createActionSentDataSet(DataSet.TYPE_MSG, questionnaire, actionScheduledTimestamp)
+						DataSet.createActionSentDataSet(DataSet.EventTypes.message, questionnaire, actionScheduledTimestamp)
 					}
 				}
 				else ->
@@ -453,7 +453,7 @@ class ActionTrigger {
 					action.msg,
 					questionnaire,
 					if(reminderCount > 0) 0 else timeout, //we only want a timeout on the last reminder
-					if(isReminder) DataSet.TYPE_INVITATION_REMINDER else DataSet.TYPE_INVITATION,
+					if(isReminder) DataSet.EventTypes.reminder else DataSet.EventTypes.invitation,
 					actionScheduledTimestamp
 				)
 				if(reminderCount > 0) {

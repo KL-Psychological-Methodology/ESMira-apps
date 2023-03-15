@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import at.jodlidev.esmira.sharedCode.data_structure.Input
@@ -16,21 +15,25 @@ import at.jodlidev.esmira.views.inputViews.*
  */
 @Composable
 fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifier) {
-	val response = rememberSaveable { mutableStateOf(input.getValue()) }
+	val response = remember { mutableStateOf(input.getValue()) }
 	
 	val get = {
 		response.value
 	}
-	val set = { inputValue: String, additionalValues: Map<String, String>?, filePath: String? ->
-		println("${input.name} = $inputValue; $additionalValues; $filePath")
+	val set = { inputValue: String, additionalValues: Map<String, String>? ->
+		println("${input.name} = $inputValue; $additionalValues")
 		response.value = inputValue
-		input.setValue(inputValue, additionalValues, filePath)
-	}
-	val setAdditionalValue = { inputValue: String, additionalValues: Map<String, String>? ->
-		set(inputValue, additionalValues, null)
+		input.setValue(inputValue, additionalValues)
 	}
 	val setValue = { inputValue: String ->
-		set(inputValue, null, null)
+		set(inputValue, null)
+	}
+	val setAdditionalValue = { inputValue: String, additionalValues: Map<String, String>? ->
+		set(inputValue, additionalValues)
+	}
+	val setFilePath = { filePath: String ->
+		println("File: ${input.name} = $filePath")
+		input.setFile(filePath)
 	}
 	
 	Column(modifier = modifier) {
@@ -46,7 +49,7 @@ fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifi
 			Input.TYPES.list_multiple -> ListMultipleView(input, get, setAdditionalValue)
 			Input.TYPES.list_single -> ListSingleView(input, get, setValue)
 			Input.TYPES.number -> NumberView(input, get, setValue)
-			Input.TYPES.photo -> PhotoView(input, questionnaire, get, set)
+			Input.TYPES.photo -> PhotoView(input, get, setFilePath)
 			Input.TYPES.text -> Unit
 			Input.TYPES.text_input -> TextInputView(input, get, setValue)
 			Input.TYPES.time -> TimeView(input, get, setValue)

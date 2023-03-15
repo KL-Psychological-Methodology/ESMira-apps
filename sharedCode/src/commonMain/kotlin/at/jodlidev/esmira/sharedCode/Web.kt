@@ -13,7 +13,6 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.internal.synchronized
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.Serializable
@@ -71,8 +70,8 @@ class Web {
 			url = url,
 			formData = formData {
 				append("userId", DbUser.getUid())
-				append("studyId", fileUpload.webId)
-				append("dataType", fileUpload.type.toString())
+				append("studyId", fileUpload.studyWebId)
+				append("dataType", fileUpload.dataType.toString())
 				append("appVersion", NativeLink.smartphoneData.appVersion)
 				append("appType", DbUser.getAdminAppType())
 				append("serverVersion", Updater.EXPECTED_SERVER_VERSION)
@@ -177,7 +176,7 @@ class Web {
 						latest = msg.sent
 				}
 				ErrorBox.log("Message", "Found ${updateInfo.msgs.size} messages for study ${study.id}")
-				DataSet.createShortDataSet(DataSet.TYPE_STUDY_MSG, study)
+				DataSet.createShortDataSet(DataSet.EventTypes.study_message, study)
 				if(latest != -1L)
 					study.saveMsgTimestamp(latest)
 				NativeLink.notifications.fireMessageNotification(study)
@@ -195,11 +194,11 @@ class Web {
 				val dataSet = DbLogic.getDataSet(syncState.dataSetId)
 				
 				if(syncState.success && dataSet != null)
-					dataSet.synced = DataSet.STATES.SYNCED
+					dataSet.synced = UploadData.States.SYNCED
 				else {
 					error = true
-					dataSet?.synced = DataSet.STATES.NOT_SYNCED_SERVER_ERROR
-					ErrorBox.warn("Sync failed", "Syncing DataSet(server_url:${url}, id:${syncState.dataSetId}) was not successful:\n${if(syncState.error.isNotEmpty()) syncState.error else "No server message"}")
+					dataSet?.synced = UploadData.States.NOT_SYNCED_ERROR_DELETABLE
+					ErrorBox.warn("Sync failed", "Syncing DataSet(server_url:${url}, id:${syncState.dataSetId}) was not successful:\n${syncState.error.ifEmpty { "No server message" }}")
 				}
 			}
 			
@@ -254,8 +253,8 @@ class Web {
 					ErrorBox.warn("Syncing failed", "Could not sync ${dataSetList.size} dataSets to $url", e)
 					
 					for(dataSet in dataSetList) { //mark error on all dataSets that were not synced
-						if(dataSet.synced != DataSet.STATES.SYNCED && (dataSet.serverUrl == url))
-							dataSet.synced = DataSet.STATES.NOT_SYNCED_ERROR
+						if(dataSet.synced != UploadData.States.SYNCED && (dataSet.serverUrl == url))
+							dataSet.synced = UploadData.States.NOT_SYNCED_ERROR
 					}
 					error = true
 					continue
@@ -283,6 +282,7 @@ class Web {
 			}
 			catch(e: Throwable) {
 				ErrorBox.warn("Syncing failed", "Could not upload ${fileUpload.identifier} to $url (studyId: ${fileUpload.studyId})", e)
+				fileUpload.synced = UploadData.States.NOT_SYNCED_ERROR_DELETABLE // we also make it deletable if the file could not be loaded
 				
 				error = true
 				continue
