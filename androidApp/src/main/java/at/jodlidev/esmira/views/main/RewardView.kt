@@ -212,7 +212,7 @@ fun RewardErrorView(study: Study, error: String, fulfilledQuestionnaires: Map<Lo
 		Text(error, textAlign = TextAlign.Center)
 	}
 	
-	if(fulfilledQuestionnaires.isNotEmpty()) {
+	if(fulfilledQuestionnaires.isNotEmpty() && study.questionnaires.isNotEmpty()) {
 		Spacer(modifier = Modifier.size(30.dp))
 		Text(stringResource(id = R.string.error_reward_questionnaires_not_finished))
 		Spacer(modifier = Modifier.size(10.dp))
