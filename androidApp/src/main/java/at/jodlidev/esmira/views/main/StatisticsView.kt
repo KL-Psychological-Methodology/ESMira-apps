@@ -172,6 +172,7 @@ fun StatisticsContentView(charts: List<ChartInfo>, chartInfoCollection: ChartInf
 						.fillMaxWidth()
 				)
 			}
+			Spacer(modifier = Modifier.height(20.dp))
 		}
 	}
 }
