@@ -31,8 +31,18 @@ class InputViewModel: ObservableObject {
 	let input: Input
 	@Published var value: String {
 		didSet {
-			self.input.value = self.value
+			input.setValue(value: self.value, additionalValues: nil)
 		}
+	}
+	
+	func setAdditionalValue(value: String, additionalValues: Dictionary<String, String>) {
+		input.setValue(value: self.value, additionalValues: additionalValues)
+		self.value = value
+		
+	}
+	
+	func setFilePath(filePath: String) {
+		input.setFile(filePath: filePath, dataType: .image)
 	}
 	
 	@Binding var readyCounter: Int
@@ -46,22 +56,20 @@ class InputViewModel: ObservableObject {
 	
 	init(_ input: Input, readyCounter: Binding<Int>) {
 		self.input = input
-		self.value = input.value
+		self.value = input.getValue()
 		self._readyCounter = readyCounter
 	}
 }
 
 struct InputView: View {
 	let input: Input
-	let questionnaire: sharedCode.Questionnaire
 	@Binding var readyCounter: Int
 	
 	@ObservedObject var viewModel: InputViewModel
 	
-	init(input: Input, questionnaire: sharedCode.Questionnaire, readyCounter: Binding<Int>) {
+	init(input: Input, readyCounter: Binding<Int>) {
 		self._viewModel = ObservedObject(initialValue: InputViewModel(input, readyCounter: readyCounter))
 		self.input = input
-		self.questionnaire = questionnaire
 		self._readyCounter = readyCounter
 	}
 	
@@ -73,10 +81,8 @@ struct InputView: View {
 				return AnyView(BinaryStruct(viewModel: self.viewModel))
 			case Input.TYPES.date:
 				return AnyView(DateStruct(viewModel: self.viewModel))
-			case Input.TYPES.dateOld:
-				return AnyView(DateStruct_old(viewModel: self.viewModel))
 			case Input.TYPES.dynamicInput:
-				return AnyView(DynamicStruct(viewModel: self.viewModel, questionnaire: questionnaire, readyCounter: self.$readyCounter))
+				return AnyView(DynamicStruct(viewModel: self.viewModel, readyCounter: self.$readyCounter))
 			case Input.TYPES.image:
 				return AnyView(ImageStruct(viewModel: self.viewModel))
 			case Input.TYPES.likert:
@@ -88,13 +94,11 @@ struct InputView: View {
 			case Input.TYPES.number:
 				return AnyView(NumberStruct(viewModel: self.viewModel))
 			case Input.TYPES.photo:
-			   return AnyView(PhotoStruct(viewModel: self.viewModel, studyId: self.questionnaire.studyId))
+			   return AnyView(PhotoStruct(viewModel: self.viewModel))
 			case Input.TYPES.textInput:
 				return AnyView(TextInputStruct(viewModel: self.viewModel))
 			case Input.TYPES.time:
 				return AnyView(TimeStruct(viewModel: self.viewModel))
-			case Input.TYPES.timeOld:
-				return AnyView(TimeStruct_old(viewModel: self.viewModel))
 			case Input.TYPES.vaScale:
 				return AnyView(VaScaleStruct(viewModel: self.viewModel))
 			case Input.TYPES.video:

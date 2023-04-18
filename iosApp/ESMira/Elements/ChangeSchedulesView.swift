@@ -63,33 +63,12 @@ struct ChangeSchedulesView: View {
 	
 	@EnvironmentObject var appState: AppState
 	@Binding var isShown: Bool
-	private let studies: [Study]
-	private let resetSchedules: Bool
-	@State private var currentStudy: Study
+	let study: Study
+	let resetSchedules: Bool
 	
-	init(isShown: Binding<Bool>, studyId: Int64 = -1) {
-		self._isShown = isShown
-		self.studies = DbLogic().getStudiesWithEditableSchedules()
-		
-		if(studyId != -1) {
-			self.resetSchedules = studyId != -1
-			for study in studies {
-				if(studyId == study.id) {
-					self._currentStudy = State(initialValue: study)
-					return
-				}
-			}
-			self._currentStudy = State(initialValue: studies[0]) //this should never be reached
-		}
-		else {
-			self.resetSchedules = false
-			self._currentStudy = State(initialValue: studies[0])
-		}
-	}
 	
 	func drawSignalTimes() -> some View {
-		//Swift is call by value. We need to force it to use call by reference because we want all changed data stored in self.studies:
-		return List(self.currentStudy.editableSignalTimes, id: \.self) { signalTime in
+		return List(self.study.editableSignalTimes, id: \.self) { signalTime in
 			SignalTimeView(signalTime)
 		}.fixButtons()
 		
@@ -97,24 +76,6 @@ struct ChangeSchedulesView: View {
 	
 	var body: some View {
 		VStack {
-			ScrollView(.horizontal) {
-				HStack {
-					ForEach(self.studies, id: \.id) { study in
-						Button(action: {
-							self.currentStudy = study
-						}) {
-							Text(study.title)
-								.bold()
-								.font(.system(size: 14))
-						}
-							.foregroundColor(study == self.currentStudy ? Color("Accent") : Color.white)
-							.padding()
-					}
-					Spacer()
-				}
-			}
-			.background(Color("PrimaryLight"))
-			Divider()
 			self.drawSignalTimes()
 			
 			HStack {
@@ -122,13 +83,7 @@ struct ChangeSchedulesView: View {
 					self.isShown = false
 				}.padding()
 				Button("save") {
-					var error = false
-					for study in self.studies {
-						if(!study.saveSchedules(rescheduleNow: self.resetSchedules)) {
-							error = true
-						}
-					}
-					if(!error) {
+					if(study.saveSchedules(rescheduleNow: self.resetSchedules)) {
 						self.isShown = false
 						if(!self.resetSchedules) {
 							self.appState.showTranslatedToast("info_schedule_changed_after_one_day")

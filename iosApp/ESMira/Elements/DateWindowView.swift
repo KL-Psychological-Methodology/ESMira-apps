@@ -55,22 +55,6 @@ struct DateWindowView: View {
 			initialValue = Date()
 		}
 		self._selectedDate = State(initialValue: initialValue)
-//		self._selectedDate = State(initialValue: value.wrappedValue != "" ?
-//			(self.asTimestamp ?
-//				Date(timeIntervalSince1970: (Double(value.wrappedValue) ?? 0) / 1000) :
-//				self.dateFormatter.date(from: value.wrappedValue) ?? Date()
-//			) :
-//			(mode == .time ?
-//				self.dateFormatter.date(from: "00:00") ?? Date() :
-//				Date()
-//			)
-//		)
-//		if(value.wrappedValue != "") {
-//			self._selectedDate = State(initialValue: self.asTimestamp ?
-//				Date(timeIntervalSince1970: (Double(value.wrappedValue) ?? 0) / 1000) :
-//				self.dateFormatter.date(from: value.wrappedValue) ?? Date()
-//			)
-//		}
 	}
 	
 	private func getValue(_ date: Date) -> String {
@@ -85,9 +69,6 @@ struct DateWindowView: View {
 			return self.dateFormatter.string(from: date)
 		}
 	}
-//	private func getDate(_ value: String) -> Date {
-//		self.asTimestamp ? Date(timeIntervalSince1970: (Double(value) ?? 0) / 1000) : self.dateFormatter.date(from: value) ?? Date()
-//	}
 	
 	private func getTimeString(_ minutes: Int) -> String {
 		let cal = Calendar.current
@@ -114,8 +95,10 @@ struct DateWindowView: View {
 					Text(self.value).bold()
 				}
 			}
-				.foregroundColor(Color("Accent"))
+				.foregroundColor(Color("PrimaryDark"))
 		}
+			.padding()
+			.border(Color("Outline"))
 			.sheet(isPresented: self.$isShown) {
 				VStack {
 					DatePicker("", selection: self.$selectedDate, displayedComponents: self.mode == TypeModes.time ? .hourAndMinute : .date).labelsHidden()

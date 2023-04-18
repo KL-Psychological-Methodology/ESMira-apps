@@ -8,7 +8,6 @@ import sharedCode
 
 struct PhotoStruct: View {
 	@ObservedObject var viewModel: InputViewModel
-	let studyId: Int64
 
 	@State private var isShown = false
 	@State private var uiImage: UIImage? = nil
@@ -31,8 +30,10 @@ struct PhotoStruct: View {
 					Image(systemName: "camera")
 					Text("take_picture").bold()
 				}
-				.foregroundColor(Color("Accent"))
+				.foregroundColor(Color("PrimaryDark"))
 			}
+				.padding()
+				.border(Color("Outline"))
 		}
 
 			.sheet(isPresented: self.$isShown) {
@@ -45,14 +46,10 @@ struct PhotoStruct: View {
 						let filePath = documentsUrl.appendingPathComponent(filename)
 						do {
 							try img.pngData()?.write(to: filePath, options: [])
-							self.viewModel.input.addImage(filePath: filename, studyId: self.studyId)
+							self.viewModel.value = ""
 						} catch {
 							ErrorBox.Companion().error(title: "PhotoStruct", msg: "Could not save image from camera. Error: \(error)")
 						}
-						
-						
-					
-						
 					}
 				}
 				else {

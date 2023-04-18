@@ -6,51 +6,6 @@ import Foundation
 import SwiftUI
 import sharedCode
 
-//struct ListSingleStruct: View {
-//	@Binding var value: String
-//	@State var dropdownShown: Bool = false
-//	let input: Input
-//	
-//	func createDropDown() -> [ActionSheet.Button] {
-//		var r = [ActionSheet.Button]()
-//		
-//		for choice in self.input.listChoices {
-//			r.append(ActionSheet.Button.default(Text(choice)) {
-//				self.value = choice
-//			})
-//		}
-//		return r
-//	}
-//	
-//	var body: some View {
-//		VStack(alignment: self.input.asDropDown ? .center : .leading) {
-//			TextStruct(input: self.input)
-//			if(self.input.asDropDown) {
-//				Button(action: {
-//					self.dropdownShown = true
-//				}) {
-//					if(value.isEmpty) {
-//						Text("please_select").bold().padding()
-//					}
-//					else {
-//						Text(value).bold().padding()
-//					}
-//				}
-//					.foregroundColor(Color("Accent"))
-//					.actionSheet(isPresented: self.$dropdownShown) {
-//						ActionSheet(title: Text("please_select"), buttons: self.createDropDown())
-//					}
-//			}
-//			else {
-//				ForEach(self.input.listChoices, id: \.self) { choice in
-//					RadioButtonView(state: self.$value, label: choice, value: choice)
-//				}
-//			}
-//		}
-//	}
-//}
-
-
 struct ListSingleStruct: View {
 	@ObservedObject var viewModel: InputViewModel
 	@State var value: String = "" //only used in RadioButton version
@@ -65,6 +20,7 @@ struct ListSingleStruct: View {
 				self.viewModel.value = choice
 			})
 		}
+		r.append(ActionSheet.Button.cancel())
 		return r
 	}
 	
@@ -82,7 +38,7 @@ struct ListSingleStruct: View {
 						Text(self.viewModel.value).bold().padding()
 					}
 				}
-				.foregroundColor(Color("Accent"))
+				.foregroundColor(Color("PrimaryDark"))
 				.actionSheet(isPresented: self.$dropdownShown) {
 					ActionSheet(title: Text("please_select"), buttons: self.createDropDown())
 				}

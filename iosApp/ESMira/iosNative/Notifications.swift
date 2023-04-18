@@ -63,7 +63,7 @@ class Notifications: NotificationsInterface {
 	
 	//is probably never used in iOS (because usually bings will be scheduled by firePostponed() unless they need to be fired right now).
 	//timeout_min (automatic removal of notification after x mins) is not supported on iOs
-	func fireQuestionnaireBing(title: String, msg: String, questionnaire: Questionnaire, timeoutMin: Int32, type: String, scheduledToTimestamp: Int64) {
+	func fireQuestionnaireBing(title: String, msg: String, questionnaire: Questionnaire, timeoutMin: Int32, type: DataSet.EventTypes, scheduledToTimestamp: Int64) {
 		createNotification(id: String("invitation_\(questionnaire.id)"), title: title, msg: msg) { (error) in
 			DispatchQueue.main.async {
 				DataSet.Companion().createActionSentDataSet(type: type, questionnaire: questionnaire, scheduledToTimestamp: scheduledToTimestamp)
@@ -75,7 +75,7 @@ class Notifications: NotificationsInterface {
 	func fireStudyNotification(title: String, msg: String, questionnaire: Questionnaire, scheduledToTimestamp: Int64) {
 		createNotification(id: String("notification_\(questionnaire.id)"), title: title, msg: msg) { (error) in
 			DispatchQueue.main.async {
-				DataSet.Companion().createActionSentDataSet(type: DataSet.Companion().TYPE_NOTIFICATION, questionnaire: questionnaire, scheduledToTimestamp: scheduledToTimestamp)
+				DataSet.Companion().createActionSentDataSet(type: DataSet.EventTypes.notification, questionnaire: questionnaire, scheduledToTimestamp: scheduledToTimestamp)
 			}
 		}
 	}

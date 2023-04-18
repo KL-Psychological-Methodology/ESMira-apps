@@ -5,7 +5,6 @@
 import Foundation
 import SwiftUI
 
-//struct RadioButtonView<Content> : View where Content: View {
 struct RadioButtonView<Content> : View where Content: View {
 	@Binding var state: String
 	let value: String
@@ -20,14 +19,6 @@ struct RadioButtonView<Content> : View where Content: View {
 		
 		self.labelEl = labelEl
 	}
-//	init(state: Binding<String>, label: String, value: String, listener: (() -> Void)? = nil) {
-//		self._state = state
-//		self.value = value
-//		self.listener = listener
-//
-//		self.label = label
-//		self.labelEl = (EmptyView() as! Content)
-//	}
 	
 	var body: some View {
 		Button(action: {
@@ -36,18 +27,20 @@ struct RadioButtonView<Content> : View where Content: View {
 		}) {
 			HStack(alignment: .center, spacing: 10) {
 				Image(systemName: self.state == self.value ? "largecircle.fill.circle" : "circle")
-					.renderingMode(.template)
 					.resizable()
 					.aspectRatio(contentMode: .fit)
 					.frame(width: 20, height: 20)
+					.foregroundColor(Color("PrimaryDark"))
 				if(self.label != nil) {
 					Text(self.label!)
+						.foregroundColor(Color.primary)
 						.fixMultiline()
 						.font(.system(size: 16))
 						.multilineTextAlignment(.leading)
 				}
 				else if(self.labelEl != nil) {
 					self.labelEl
+						.foregroundColor(Color.primary)
 				}
 			}
 		}

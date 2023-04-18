@@ -25,13 +25,13 @@ struct CheckBoxView : View {
 		}) {
 			HStack(alignment: .center, spacing: 10) {
 				Image(systemName: self.state ? "checkmark.square" : "square")
-					.renderingMode(.original)
 					.resizable()
 					.aspectRatio(contentMode: .fit)
 					.frame(width: 20, height: 20)
+					.foregroundColor(Color("PrimaryDark"))
 				
 				Text(self.label)
-					.foregroundColor(Color.black)
+					.foregroundColor(Color.primary)
 					.fixMultiline()
 					.multilineTextAlignment(.leading)
 			}

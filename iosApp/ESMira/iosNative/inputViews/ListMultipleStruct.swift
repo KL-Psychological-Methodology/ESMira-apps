@@ -6,46 +6,6 @@ import Foundation
 import SwiftUI
 import sharedCode
 
-//struct ListMultipleStruct: View {
-//	@Binding var value: String
-//	let input: Input
-//	@State var checkedList: [Bool]
-//	
-//	init(value: Binding<String>, input: Input) {
-//		self._value = value
-//		self.input = input
-//		
-//		var a = Array(repeating: false, count: input.listChoices.count)
-//		let valueString = value.wrappedValue
-//		let choices = input.listChoices
-//		for i in input.listChoices.indices {
-//			if(valueString.contains(choices[i])) {
-//				a[i] = true
-//			}
-//		}
-//		
-//		self._checkedList = State(initialValue: a)
-//	}
-//	
-//	var body: some View {
-//		VStack(alignment: .leading) {
-//			TextStruct(input: self.input)
-//			ForEach(self.input.listChoices.indices, id: \.self) { i in
-//				CheckBoxView(label: self.input.listChoices[i], state: self.$checkedList[i]) { checked in
-//					var export = ""
-//					for j in self.checkedList.indices {
-//						if(self.checkedList[j]) {
-//							export.append(self.input.listChoices[j])
-//							export.append(",")
-//						}
-//					}
-//					self.value = export
-//				}
-//			}
-//		}
-//	}
-//}
-
 struct ListMultipleStruct: View {
 	@ObservedObject var viewModel: InputViewModel
 	
@@ -58,13 +18,16 @@ struct ListMultipleStruct: View {
 				ForEach(self.viewModel.input.listChoices.indices, id: \.self) { i in
 					CheckBoxView(label: self.viewModel.input.listChoices[i], state: self.$checkedList[i]) { checked in
 						var export = ""
+						var dictionary = Dictionary<String, String>()
 						for j in self.checkedList.indices {
+							let key = self.viewModel.input.listChoices[j]
+							dictionary[key] = self.checkedList[j] ? "1" : "0"
 							if(self.checkedList[j]) {
-								export.append(self.viewModel.input.listChoices[j])
+								export.append(key)
 								export.append(",")
 							}
 						}
-						self.viewModel.value = export
+						self.viewModel.setAdditionalValue(value: export, additionalValues: dictionary)
 					}
 				}
 			}

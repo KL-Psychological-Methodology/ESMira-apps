@@ -23,11 +23,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		
 		let appDelegate = UIApplication.shared.delegate as! AppDelegate
 		let appState = appDelegate.appState
+		let navigationState = appDelegate.navigationState
 		
 		
 		
 		// Create the SwiftUI view that provides the window contents.
-		let contentView = ContentView().environmentObject(appState)
+		let contentView = ContentView().environmentObject(appState).environmentObject(navigationState)
 		
 		// Use a UIHostingController as window root view controller.
 		if let windowScene = scene as? UIWindowScene {
@@ -41,14 +42,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	
 	func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
 		let appDelegate = UIApplication.shared.delegate as! AppDelegate
-		let appState = appDelegate.appState
+		let navigationState = appDelegate.navigationState
 		
 		if let url = URLContexts.first?.url {
-			print(url.absoluteString)
 			let urlData = QrInterpreter().check(s: url.absoluteString)
 			if(urlData != nil) {
-				appState.connectData = urlData
-				appState.addStudyOpened = true
+				navigationState.addStudyConnectData = urlData
+				navigationState.addStudyOpened = true
 			}
 		}
 	}
@@ -62,12 +62,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 	}
 	
 	func sceneDidBecomeActive(_ scene: UIScene) {
-        UIScrollView.appearance().keyboardDismissMode = .onDrag
 		
 		//in case app was sleeping in background
 		let appDelegate = UIApplication.shared.delegate as! AppDelegate
-		let appState = appDelegate.appState
-		appState.updateLists.toggle()
+		appDelegate.navigationState.reloadStudy()
 	}
 	
 	func sceneWillResignActive(_ scene: UIScene) {
@@ -82,6 +80,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		
 		let appDelegate = UIApplication.shared.delegate as! AppDelegate
 		let appState = appDelegate.appState
+		let navigationState = appDelegate.navigationState
 		let defaults = UserDefaults.standard
 		
 		var timeChanged = false
@@ -145,12 +144,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		
 		DbLogic().startupApp()
 		
-		if(appState.openScreen == .questionnaireSavedSuccessfully) {
-			appState.openScreen = nil
-		}
-		
 		if(DbLogic().hasNewErrors()) {
-			appState.openScreen = .errorReport
+			navigationState.openErrorReport()
 		}
 		if(UserDefaults.standard.bool(forKey: DialogOpener.KEY_HAS_DIALOG)) {
 			let defaults = UserDefaults.standard

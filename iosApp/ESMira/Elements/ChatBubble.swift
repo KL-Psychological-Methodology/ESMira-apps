@@ -17,7 +17,7 @@ struct ChatBubble: View {
 		self.content = content
 		self.position = position
 		if(position == .right) {
-			self.color = Color("PrimaryLight")
+			self.color = Color("Secondary")
 		}
 		else if(isNew) {
 			self.color = Color("Accent")

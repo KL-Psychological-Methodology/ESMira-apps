@@ -10,12 +10,14 @@ import sharedCode
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
-	var appState = AppState()
+	let appState = AppState()
+	let navigationState = NavigationState()
 	
 	func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 		PostponedActions.register()
 		UNUserNotificationCenter.current().delegate = self
-		IosCode.initNativeLink(self.appState)
+		IosCode.initNativeLink(self.appState, self.navigationState)
+		self.navigationState.switchStudy(DbUser().getCurrentStudyId())
 		
 		return true
 	}
@@ -45,11 +47,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 				(NativeLink().dialogOpener as! DialogOpener).openGuiDialog(response.notification.request.content.title, response.notification.request.content.body)
 				break
 			case "schedule":
-				(NativeLink().dialogOpener as! DialogOpener).openChangeSchedule()
+				let study = DbLogic().getStudy(id: Int64(id[1]) ?? -1)
+			   if(study != nil) {
+				   navigationState.openChangeSchedules(study!.id)
+			   }
 			case "invitation":
 				let questionnaire = DbLogic().getQuestionnaire(id: Int64(id[1]) ?? -1)
 				if(questionnaire != nil) {
-					(NativeLink().dialogOpener as! DialogOpener).openQuestionnaire(questionnaireId: questionnaire!.id)
+					navigationState.openQuestionnaire(questionnaire!)
 				}
 				else {
 					ErrorBox.Companion().error(title: "Alarm", msg: "Questionnaire (id=\(id[1])) is null")
@@ -62,7 +67,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 					if(alarm!.actionTrigger.hasInvitation(nothingElse: false)) {
 						let questionnaire = DbLogic().getQuestionnaire(id: alarm?.questionnaireId ?? 0)
 						if(questionnaire != nil) {
-							(NativeLink().dialogOpener as! DialogOpener).openQuestionnaire(questionnaireId: questionnaire!.id)
+							navigationState.openQuestionnaire(questionnaire!)
 						}
 						else {
 							ErrorBox.Companion().error(title: "Alarm", msg: "Questionnaire (id=\(alarm?.questionnaireId ?? -1) for Alarm (label=\(alarm?.label ?? ""), id=\(alarm?.id ?? -1)) is null")
@@ -73,11 +78,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 					ErrorBox.Companion().error(title: "Alarm", msg: "Alarm is null! Ios-identifier: \(response.notification.request.identifier)")
 				}
 			case "message":
-				print("Getting message for study id: \(id[1])")
-				let study = DbLogic().getStudy(id: Int64(id[1]) ?? -1)
-				if(study != nil) {
-					(NativeLink().dialogOpener as! DialogOpener).openMessage(study: study!)
-				}
+				print("Opening message for study id: \(id[1])")
+				navigationState.openMessages(Int64(id[1]) ?? -1)
 			default:
 				break
 		}
@@ -87,6 +89,5 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 		completionHandler([.alert, .sound])
 		Scheduler().checkMissedAlarms(missedAlarmsAsBroken: false)
 		print("notification!")
-		appState.updateLists.toggle()
-	}
+		self.navigationState.reloadStudy()	}
 }

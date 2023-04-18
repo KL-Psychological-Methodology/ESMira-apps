@@ -6,13 +6,6 @@ import Foundation
 import SwiftUI
 import sharedCode
 
-//struct TextStruct: View {
-//	let input: Input
-//	var body: some View {
-//		HtmlTextView(html: self.input.desc)
-//	}
-//}
-
 struct TextStruct: View {
 	@ObservedObject var viewModel: InputViewModel
 	

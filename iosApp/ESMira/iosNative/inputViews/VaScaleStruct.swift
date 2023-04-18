@@ -6,18 +6,6 @@ import Foundation
 import SwiftUI
 import sharedCode
 
-//struct VaScaleStruct: View {
-//	@Binding var value: String
-//	let input: Input
-//	
-//	var body: some View {
-//		VStack {
-//			TextStruct(input: self.input)
-//			CustomSliderView(value: self.$value)
-//		}
-//	}
-//}
-
 struct VaScaleStruct: View {
 	@ObservedObject var viewModel: InputViewModel
 	

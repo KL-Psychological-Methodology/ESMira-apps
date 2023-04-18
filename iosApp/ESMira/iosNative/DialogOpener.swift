@@ -11,11 +11,15 @@ class DialogOpener: DialogOpenerInterface {
 	static let KEY_DIALOG_TITLE = "key_title"
 	static let KEY_DIALOG_MSG = "key_msg"
 
-	var appState: AppState?
+	var appState: AppState
+	var navigationState: NavigationState
 	
-	init(appState: AppState?) {
+	init(appState: AppState, navigationState: NavigationState) {
 		self.appState = appState
+		self.navigationState = navigationState
 	}
+	
+	
 	func saveDialogForLater(_ title: String, _ msg: String) {
 		ErrorBox.Companion().log(title: "DialogOpener", msg: "Saving dialog for later. title: \"\(title)\", msg: \"\(msg)\"")
 		UserDefaults.standard.set(true, forKey: DialogOpener.KEY_HAS_DIALOG)
@@ -24,28 +28,19 @@ class DialogOpener: DialogOpenerInterface {
 	}
 	
 	func dialog(title: String, msg: String) {
-		if(self.appState == nil) {
-			self.saveDialogForLater(title, msg)
-		}
-		else {
-			self.openGuiDialog(title, msg)
-		}
+		self.openGuiDialog(title, msg)
 		
 		NativeLink().notifications.fire(title: title, msg: msg, id: Int32(Date().timeIntervalSince1970))
 	}
 	func openGuiDialog(_ title: String, _ msg: String) {
 		DispatchQueue.main.async { //in case function was started from the background while app was in foreground
-			if (!self.appState!.showDialog(title: title, msg: msg)) {
-				self.saveDialogForLater(title, msg)
-			}
+			self.appState.showDialog(title: title, msg: msg)
 		}
 	}
 	
 	func errorReport() {
-		if(self.appState != nil) {
-			DispatchQueue.main.async { //in case function was started from the background while app was in foreground
-				self.appState!.openScreen = .errorReport
-			}
+		DispatchQueue.main.async { //in case function was started from the background while app was in foreground
+			self.navigationState.openErrorReport()
 		}
 	}
 	
@@ -53,27 +48,9 @@ class DialogOpener: DialogOpenerInterface {
 		self.dialog(title: NSLocalizedString("error_app_update_needed_title", comment: ""), msg: NSLocalizedString("error_app_update_needed_msg", comment: ""))
 	}
 	
-	func openQuestionnaire(questionnaireId: Int64) {
-		if(self.appState != nil) {
-			DispatchQueue.main.async { //in case function was started from the background while app was in foreground
-				self.appState!.openQuestionnaire(questionnaireId)
-			}
-		}
-	}
-	
-	func openMessage(study: Study) {
-		if(self.appState != nil) {
-			DispatchQueue.main.async { //in case function was started from the background while app was in foreground
-				self.appState!.openMessage(study)
-			}
-		}
-	}
-	
 	func openChangeSchedule(_ studyId: Int64 = -1) {
-		if(self.appState != nil) {
-			DispatchQueue.main.async { //in case function was started from the background while app was in foreground
-				self.appState!.openChangeSchedule(studyId)
-			}
+		DispatchQueue.main.async { //in case function was started from the background while app was in foreground
+			self.navigationState.openChangeSchedules(studyId)
 		}
 	}
 	

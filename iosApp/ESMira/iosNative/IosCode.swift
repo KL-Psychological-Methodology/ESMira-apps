@@ -38,12 +38,27 @@ class IosCode: IosCodeInterface {
 		TimeZone.current.abbreviation() ?? ""
 	}
 	
-	static func initNativeLink(_ appState: AppState? = nil) {
-		if(appState != nil || !NativeLink().isInitialized) { // we need to make sure that background service does not override foreground app
+	static func initNativeLink(_ appState: AppState, _ navigationState: NavigationState) {
+		NativeLink().doInit(
+			sql: SQLiteHelper(),
+			smartphoneData: SmartphoneData(),
+			dialogOpener: DialogOpener(appState: appState, navigationState: navigationState),
+			notifications: Notifications(),
+			postponedActions: PostponedActions(),
+			iosCode: IosCode()
+		)
+	}
+	
+	/**
+	 * For background service.
+	  * Does nothing if already initialized. WIll be overwritten as soon as app is opened by user
+	 */
+	static func initNativeLink() { //for background service. Either does nothing
+		if(!NativeLink().isInitialized) {
 			NativeLink().doInit(
 				sql: SQLiteHelper(),
 				smartphoneData: SmartphoneData(),
-				dialogOpener: DialogOpener(appState: appState),
+				dialogOpener: DialogOpenerForBackground(),
 				notifications: Notifications(),
 				postponedActions: PostponedActions(),
 				iosCode: IosCode()
