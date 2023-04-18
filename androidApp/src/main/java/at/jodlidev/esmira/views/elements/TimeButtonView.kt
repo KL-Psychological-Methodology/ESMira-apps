@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -28,6 +30,7 @@ fun TimeButtonView(
 	save: (Long) -> Unit,
 	modifier: Modifier = Modifier
 ) {
+	val text = remember { mutableStateOf(NativeLink.formatTime(get())) }
 	val context = LocalContext.current
 	val calendar = Calendar.getInstance()
 	calendar.timeInMillis = get()
@@ -39,16 +42,17 @@ fun TimeButtonView(
 			calendar.set(Calendar.HOUR_OF_DAY, hour)
 			calendar.set(Calendar.MINUTE, minute)
 			save(calendar.timeInMillis)
+			text.value = NativeLink.formatTime(get())
 		}, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(context)
 	)
 	
 	DefaultButtonIconLeft(
-		text = NativeLink.formatTime(get()),
+		text = text.value,
 		icon = Icons.Default.AccessTime,
 		onClick = {
 			dialog.show()
 		},
-		modifier = modifier.width(75.dp)
+		modifier = modifier.width(90.dp)
 	)
 }
 

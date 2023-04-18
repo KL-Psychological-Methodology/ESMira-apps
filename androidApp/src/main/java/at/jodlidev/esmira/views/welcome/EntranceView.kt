@@ -42,7 +42,7 @@ fun EntranceView(gotoNext: () -> Unit) {
 		)
 		Text(
 			text = stringResource(id = R.string.welcome_hello),
-			fontSize = 32.sp,
+			fontSize = MaterialTheme.typography.headlineLarge.fontSize,
 			fontWeight = FontWeight.Bold,
 			modifier = Modifier
 				.padding(start = 10.dp) //workaround: createHorizontalChain() removes all margins

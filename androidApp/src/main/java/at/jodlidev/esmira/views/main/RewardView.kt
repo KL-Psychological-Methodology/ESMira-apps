@@ -130,7 +130,7 @@ fun RewardCodeView(study: Study, rewardCode: String) {
 			},
 			colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.tertiary)
 		) {
-			Text(rewardCode, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+			Text(rewardCode, fontSize = MaterialTheme.typography.headlineLarge.fontSize, fontWeight = FontWeight.Bold)
 			Spacer(Modifier.size(ButtonDefaults.IconSpacing))
 			Icon(Icons.Default.ContentCopy,
 				contentDescription = "copy",

@@ -21,7 +21,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import at.jodlidev.esmira.views.DefaultButton
 import at.jodlidev.esmira.views.DialogButton
 import at.jodlidev.esmira.ESMiraSurface
@@ -78,7 +77,7 @@ fun MessagesView(
 
 
 @Composable
-private fun MessageView(message: Message, setAsRead: (Message) -> Unit) {
+private fun SingleMessageView(message: Message, setAsRead: (Message) -> Unit) {
 	DisposableEffect(message) {
 		onDispose {
 			setAsRead(message)
@@ -107,7 +106,7 @@ private fun MessageView(message: Message, setAsRead: (Message) -> Unit) {
 				NativeLink.formatDateTime(message.sent),
 				color = MaterialTheme.colorScheme.onPrimary,
 				textAlign = TextAlign.End,
-				fontSize = 10.sp,
+				fontSize = MaterialTheme.typography.labelLarge.fontSize,
 				modifier = Modifier.fillMaxWidth()
 			)
 			Text(
@@ -127,44 +126,45 @@ private fun MessageView(message: Message, setAsRead: (Message) -> Unit) {
 private fun MessageListView(messages: List<Message>, setAsRead: (Message) -> Unit, sendMessage: (String, done: (Boolean) -> Unit) -> Unit) {
 	val listState = rememberLazyListState()
 	
-//	LaunchedEffect(messages.size) {
-//		listState.scrollToItem(messages.size)
-//	}
-	
-	Column(horizontalAlignment = Alignment.CenterHorizontally,
-		modifier = Modifier
-			.fillMaxSize()
-			.padding(horizontal = 5.dp)
+	Column(
+		horizontalAlignment = Alignment.CenterHorizontally,
+		modifier = Modifier.fillMaxSize()
 	) {
-		if(messages.isEmpty()) {
-			Box(
-				contentAlignment = Alignment.Center,
-				modifier = Modifier
+		Column(
+			horizontalAlignment = Alignment.CenterHorizontally,
+			modifier = Modifier
 				.fillMaxWidth()
-				.weight(1f)
-			) {
-				Text(stringResource(R.string.info_no_messages))
-			}
-		}
-		else {
-			LazyColumn(
-				horizontalAlignment = Alignment.CenterHorizontally,
-				verticalArrangement = Arrangement.Bottom,
-				reverseLayout = true,
-				state = listState,
-				modifier = Modifier
-					.fillMaxWidth()
-					.weight(1f)
-			) {
-				items(messages.reversed()) { message ->
-					Spacer(modifier = Modifier.height(10.dp))
-					MessageView(message, setAsRead)
-				}
-				item {
-					Spacer(modifier = Modifier.height(20.dp))
+				.weight(1F)
+				.padding(horizontal = 5.dp)
+		) {
+			if(messages.isEmpty()) {
+				Box(
+					contentAlignment = Alignment.Center,
+					modifier = Modifier.fillMaxSize()
+				) {
+					Text(stringResource(R.string.info_no_messages))
 				}
 			}
+			else {
+				LazyColumn(
+					horizontalAlignment = Alignment.CenterHorizontally,
+					verticalArrangement = Arrangement.Bottom,
+					reverseLayout = true,
+					state = listState,
+					modifier = Modifier
+						.fillMaxWidth()
+				) {
+					items(messages.reversed()) { message ->
+						Spacer(modifier = Modifier.height(10.dp))
+						SingleMessageView(message, setAsRead)
+					}
+					item {
+						Spacer(modifier = Modifier.height(20.dp))
+					}
+				}
+			}
 		}
+		
 		
 		Footer(sendMessage)
 	}

@@ -93,7 +93,7 @@ class ChangeSchedulesDialogActivity: ComponentActivity() {
 			modifier = modifier.padding(vertical = 5.dp)
 		) {
 			Text(signalTime.label,
-				fontSize = MaterialTheme.typography.titleMedium.fontSize,
+				fontSize = MaterialTheme.typography.titleLarge.fontSize,
 				fontWeight = FontWeight.Bold,
 				modifier = Modifier
 					.padding(vertical = 10.dp)

@@ -51,7 +51,7 @@ fun ServerOptionLineView(title: String, url: String, isSelected: () -> Boolean, 
 		Column {
 			Text(title, fontWeight = FontWeight.Bold)
 			if(url.isNotEmpty())
-				Text(url, fontSize = 14.sp, modifier = Modifier.padding(start = 10.dp))
+				Text(url, fontSize = MaterialTheme.typography.labelLarge.fontSize, modifier = Modifier.padding(start = 10.dp))
 		}
 	}
 }
@@ -136,7 +136,7 @@ fun ServerQuestionView(
 		)
 		Text(
 			text = stringResource(id = R.string.questionMark),
-			fontSize = 64.sp,
+			fontSize = MaterialTheme.typography.displayLarge.fontSize,
 			fontWeight = FontWeight.Bold,
 			modifier = Modifier
 				.constrainAs(questionMarkText) {

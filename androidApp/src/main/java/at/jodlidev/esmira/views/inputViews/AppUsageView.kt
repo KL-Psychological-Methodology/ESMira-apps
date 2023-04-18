@@ -203,7 +203,7 @@ fun AppUsageTableView(yesterdayUsageCount: Int, yesterdayUsageTime: Long, displa
 			fontWeight = FontWeight.Bold
 		)
 		if(displayAppUsage) {
-			Text(packageId, fontSize = 10.sp, modifier = Modifier.padding(start = 10.dp))
+			Text(packageId, fontSize = MaterialTheme.typography.labelLarge.fontSize, modifier = Modifier.padding(start = 10.dp))
 		}
 		
 		Spacer(modifier = Modifier.height(5.dp))

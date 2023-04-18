@@ -158,7 +158,6 @@ class ScreenTrackingReceiver : BroadcastReceiver() {
 		
 		fun markMissings(context: Context) {
 			val data = ScreenTrackData(context)
-			val prefs = PreferenceManager.getDefaultSharedPreferences(context)
 			data.todayTime = ScreenTrackData.MISSING_LONG
 			data.todayCount = ScreenTrackData.MISSING_INT
 			

@@ -41,8 +41,7 @@ import at.jodlidev.esmira.views.DefaultButtonIconLeft
 enum class NotificationViewState {
 	PERMISSION, SEND_TEST_NOTIFICATION, ASK_TEXT_NOTIFICATION, FAILED, SKIPPED
 }
-fun intentExists(context: Context, intent: Intent): Boolean {
-	var dndIntent = Intent(Settings.ACTION_ZEN_MODE_PRIORITY_SETTINGS)
+fun intentExists(context: Context, dndIntent: Intent): Boolean {
 	val list = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
 		context.packageManager.queryIntentActivities(dndIntent, PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong()))
 	else

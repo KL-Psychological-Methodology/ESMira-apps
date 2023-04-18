@@ -32,9 +32,11 @@ import at.jodlidev.esmira.views.main.DefaultTopBar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StudyEntranceTopBarView(
-	studyActions: StudyDashboardActions,
 	scrollBehavior: TopAppBarScrollBehavior,
+	getStudy: () -> Study,
+	getStudyList: () -> List<Study>,
 	isDev: () -> Boolean,
+	switchStudy: (Long) -> Unit,
 	openWelcomeScreen: () -> Unit,
 	openErrorReport: () -> Unit,
 	openNotificationsDialog: () -> Unit,
@@ -44,8 +46,8 @@ fun StudyEntranceTopBarView(
 	saveBackup: () -> Unit,
 	loadBackup: () -> Unit
 ) {
-	val study = studyActions.getStudy()
-	val studyList = studyActions.getStudyList()
+	val study = getStudy()
+	val studyList = getStudyList()
 	val settingsExpanded = remember { mutableStateOf(false) }
 	val studyListExpanded = remember { mutableStateOf(false) }
 	
@@ -60,7 +62,6 @@ fun StudyEntranceTopBarView(
 				}
 			}
 			else {
-				val context = LocalContext.current
 				IconButton(onClick = openWelcomeScreen) {
 					Icon(imageVector = Icons.Default.Add, contentDescription = "change study")
 				}
@@ -113,7 +114,7 @@ fun StudyEntranceTopBarView(
 					settingsExpanded.value = false
 				}) { id ->
 					studyListExpanded.value = false
-					studyActions.switchStudy(id)
+					switchStudy(id)
 					settingsExpanded.value = false
 				}
 			}
@@ -174,7 +175,6 @@ fun StudyListDropdownView(
 	openWelcomeScreen: () -> Unit,
 	switchStudy: (Long) -> Unit
 ) {
-	val context = LocalContext.current
 	for(study in studyList) {
 		MenuItem(study.title, Icons.Default.ArrowRightAlt, { switchStudy(study.id) }, study.id != currentStudy.id)
 	}
@@ -230,12 +230,11 @@ fun PreviewStudyListDropdownView() {
 fun PreviewStudyEntranceTopBarViewSingleStudy() {
 	ESMiraSurface {
 		StudyEntranceTopBarView(
-			studyActions = StudyDashboardActions(
-				getStudy = { DbLogic.createJsonObj("""{"id": 1, "title": "Test Study"}""") },
-				getStudyList = { listOf(DbLogic.createJsonObj("""{"id": 1, "title": "Title 1"}""")) }
-			),
 			scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+			getStudy = { DbLogic.createJsonObj("""{"id": 1, "title": "Test Study"}""") },
+			getStudyList = { listOf(DbLogic.createJsonObj("""{"id": 1, "title": "Title 1"}""")) },
 			isDev = { false },
+			switchStudy = {},
 			openWelcomeScreen = {},
 			openErrorReport = {},
 			openNotificationsDialog = {},
@@ -254,17 +253,16 @@ fun PreviewStudyEntranceTopBarViewSingleStudy() {
 fun PreviewStudyEntranceTopBarViewMultipleStudies() {
 	ESMiraSurface {
 		StudyEntranceTopBarView(
-			studyActions = StudyDashboardActions(
-				getStudy = { DbLogic.createJsonObj("""{"id": 1, "title": "Test Study"}""") },
-				getStudyList = {
-					listOf(
-						DbLogic.createJsonObj("""{"id": 1, "title": "Title 1"}"""),
-						DbLogic.createJsonObj("""{"id": 2, "title": "Title 2"}""")
-					)
-				}
-			),
 			scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+			getStudy = { DbLogic.createJsonObj("""{"id": 1, "title": "Test Study"}""") },
+			getStudyList = {
+				listOf(
+					DbLogic.createJsonObj("""{"id": 1, "title": "Title 1"}"""),
+					DbLogic.createJsonObj("""{"id": 2, "title": "Title 2"}""")
+				)
+			},
 			isDev = { false },
+			switchStudy = {},
 			openWelcomeScreen = {},
 			openErrorReport = {},
 			openNotificationsDialog = {},

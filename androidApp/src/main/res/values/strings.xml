@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">ESMira</string>
     <string name="add">Add</string>
-    <string name="add_a_study">Join a study</string>
+    <string name="add_a_study">Join a new study</string>
     <string name="additional_notification_settings_general_android">In the following screen, please make sure that ESMira is allowed to run in the background and is able to start when rebooting the phone. Unfortunately the names of the settings (and which settings actually exist) vary greatly between phone models and we do not have any screenshots for this phone model to assist you further. So please try to guess the appropriate settings. If you want to help us out and send us some screenshots, please contact the App developer (esmira@kl.ac.at).
 \n
 \nAfter you are done, press the back-key on your phone to return to this screen.</string>
@@ -250,7 +250,7 @@
 	<string name="colon_between">Between:</string>
     <string name="delete_study">Delete study</string>
     <string name="rejoin_study">Join study again</string>
-    <string name="confirm_delete_study">Do you want to delete this study and all its (local) data?\nData that was already transmitted to the server will not be deleted. But your personal statistics, messages or reward code will be lost.</string>
+    <string name="confirm_delete_study">Do you want to delete this study and all its (local) data? Data that was already transmitted to the server will not be deleted. But your personal statistics, messages or reward code will be lost.</string>
     <string name="quit_at">Left at</string>
     <string name="info_study_not_active_anymore">This study is not active anymore.</string>
     <string name="are_you_sure">Are you sure?</string>
@@ -259,7 +259,9 @@
     <string name="colon_homepage">Homepage:</string>
     <string name="colon_github">GitHub:</string>
     <string name="disabled_questionnaires">Disabled questionnaires</string>
-	<string name="show_disabled_questionnaires">Show disabled questionnaires</string>
+	<string name="show_inactive_questionnaires">Show inactive questionnaires</string>
     <string name="info_unsynced_datasets">Some data still needs to be synced.</string>
     <string name="send_email">Send email</string>
+	<string name="study_information">Study information</string>
+	<string name="study_description">Study description</string>
 </resources>

@@ -132,11 +132,11 @@ class NotificationsBrokenDialogActivity : ComponentActivity() {
 					.weight(1F)
 					.verticalScroll(rememberScrollState())
 			) {
-				Text(data.name, fontSize = 20.sp, fontWeight = FontWeight.Bold)
+				Text(data.name, fontSize = MaterialTheme.typography.titleLarge.fontSize, fontWeight = FontWeight.Bold)
 				TextButton(onClick = { uriHandler.openUri(url) }) {
 					Text(
 						stringResource(R.string.from_X, url),
-						fontSize = MaterialTheme.typography.labelSmall.fontSize,
+						fontSize = MaterialTheme.typography.labelLarge.fontSize,
 						modifier = Modifier
 							.padding(start = 20.dp)
 					)

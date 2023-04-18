@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
@@ -34,8 +35,8 @@ fun PermissionHeaderView(
 	currentNum: MutableState<Int>,
 	success: MutableState<Boolean>,
 	header: String,
-	whatFor: String = "",
-	modifier: Modifier = Modifier
+	modifier: Modifier = Modifier,
+	whatFor: String = ""
 ) {
 	val openWhatForDialog = remember { mutableStateOf(false) }
 	
@@ -44,10 +45,9 @@ fun PermissionHeaderView(
 	
 	Column(modifier = modifier.fillMaxWidth().alpha(if(currentNum.value < num) 0.3f else 1f)) {
 		Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-			Text(num.toString(), fontSize = 20.sp)
-			Text(".", fontSize = 20.sp)
+			Text("$num.", fontSize = MaterialTheme.typography.titleLarge.fontSize)
 			Spacer(modifier = Modifier.width(10.dp))
-			Text(header, fontSize = 20.sp)
+			Text(header, fontSize = MaterialTheme.typography.titleLarge.fontSize)
 			Spacer(modifier = Modifier.width(10.dp))
 			
 			if(!success.value)
@@ -89,11 +89,12 @@ fun PreviewPermissionHeaderDisabledView() {
 		val currentNum = remember { mutableStateOf(1) }
 		val success = remember { mutableStateOf(false) }
 		PermissionHeaderView(
-			2,
-			currentNum,
-			success,
-			"Header",
-			"Explanation"
+			num = 2,
+			currentNum = currentNum,
+			success = success,
+			header = "Header",
+			modifier = Modifier,
+			whatFor = "Explanation"
 		)
 	}
 }
@@ -105,11 +106,12 @@ fun PreviewPermissionHeaderEnabledView() {
 		val currentNum = remember { mutableStateOf(2) }
 		val success = remember { mutableStateOf(false) }
 		PermissionHeaderView(
-			2,
-			currentNum,
-			success,
-			"Header",
-			"Explanation"
+			num = 2,
+			currentNum = currentNum,
+			success = success,
+			header = "Header",
+			modifier = Modifier,
+			whatFor = "Explanation"
 		)
 	}
 }
@@ -122,11 +124,12 @@ fun PreviewPermissionFinishedHeaderView() {
 		val currentNum = remember { mutableStateOf(2) }
 		val success = remember { mutableStateOf(true) }
 		PermissionHeaderView(
-			1,
-			currentNum,
-			success,
-			"Header",
-			"Explanation"
+			num = 1,
+			currentNum = currentNum,
+			success = success,
+			header = "Header",
+			modifier = Modifier,
+			whatFor = "Explanation"
 		)
 	}
 }
@@ -139,10 +142,11 @@ fun PreviewPermissionFailedHeaderView() {
 		val currentNum = remember { mutableStateOf(2) }
 		val success = remember { mutableStateOf(false) }
 		PermissionHeaderView(
-			1,
-			currentNum,
-			success,
-			"Header"
+			num = 1,
+			currentNum = currentNum,
+			success = success,
+			header = "Header",
+			modifier = Modifier
 		)
 	}
 }

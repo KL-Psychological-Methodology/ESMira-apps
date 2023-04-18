@@ -8,6 +8,7 @@ import android.text.style.*
 import android.widget.TextView
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -114,16 +115,12 @@ class HtmlHandler {
 		@Composable
 		fun HtmlText(html: String, modifier: Modifier = Modifier) {
 			val color = LocalContentColor.current
+			val size = MaterialTheme.typography.bodyLarge.fontSize
 			Column(modifier = modifier) {
-//				AndroidView(factory = { context ->
-//					TextView(context).apply {
-//						this.setTextColor(color.toArgb())
-//						this.text = html
-//					}
-//				})
 				AndroidView(factory = { context ->
 					TextView(context).apply {
 						this.setTextColor(color.toArgb())
+						this.textSize = size.value
 						setHtml(html, this)
 					}
 				})

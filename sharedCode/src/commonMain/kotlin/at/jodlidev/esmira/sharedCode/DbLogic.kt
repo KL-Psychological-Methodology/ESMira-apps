@@ -691,120 +691,46 @@ object DbLogic {
 		return r
 	}
 	
-	fun getPinnedQuestionnairesSplitByState(studyId: Long): Pair<List<Questionnaire>, List<Questionnaire>> {
+	fun getHiddenQuestionnaires(studyId: Long): List<Questionnaire> {
 		val c = NativeLink.sql.select(
 			Questionnaire.TABLE,
 			Questionnaire.COLUMNS,
-			"${Questionnaire.KEY_STUDY_ID} = ? AND ${Questionnaire.KEY_COMPLETABLE_ONCE} = 0 AND ${Questionnaire.KEY_LIMIT_COMPLETION_FREQUENCY} = 0 AND ${Questionnaire.KEY_COMPLETABLE_ONCE_PER_NOTIFICATION} = 0",
+			"${Questionnaire.KEY_STUDY_ID} = ?",
 			arrayOf(studyId.toString()),
 			null,
 			null,
 			null,
 			null
 		)
-		val enabled = ArrayList<Questionnaire>()
-		val disabled = ArrayList<Questionnaire>()
+		val list = ArrayList<Questionnaire>()
 		while(c.moveToNext()) {
 			val questionnaire = Questionnaire(c)
-			if(questionnaire.canBeFilledOut())
-				enabled.add(questionnaire)
-			else
-				disabled.add(questionnaire)
+			if(!questionnaire.canBeFilledOut())
+				list.add(questionnaire)
 		}
 		c.close()
-		return Pair(enabled, disabled)
-	}
-	fun hasPinnedQuestionnaires(studyId: Long): Boolean {
-		val c = NativeLink.sql.select(
-			Questionnaire.TABLE,
-			arrayOf(Questionnaire.KEY_STUDY_ID),
-			"${Questionnaire.KEY_STUDY_ID} = ? AND ${Questionnaire.KEY_COMPLETABLE_ONCE} = 0 AND ${Questionnaire.KEY_LIMIT_COMPLETION_FREQUENCY} = 0 AND ${Questionnaire.KEY_COMPLETABLE_ONCE_PER_NOTIFICATION} = 0",
-			arrayOf(studyId.toString()),
-			null,
-			null,
-			null,
-			"1"
-		)
-		val r = c.moveToFirst()
-		c.close()
-		return r
+		return list
 	}
 	
-	fun getRepeatingQuestionnairesSplitByState(studyId: Long): Pair<List<Questionnaire>, List<Questionnaire>> {
+	fun getEnabledQuestionnaires(studyId: Long): List<Questionnaire> {
 		val c = NativeLink.sql.select(
 			Questionnaire.TABLE,
 			Questionnaire.COLUMNS,
-			"${Questionnaire.KEY_STUDY_ID} = ? AND ${Questionnaire.KEY_COMPLETABLE_ONCE} = 0 AND (${Questionnaire.KEY_LIMIT_COMPLETION_FREQUENCY} = 1 OR ${Questionnaire.KEY_COMPLETABLE_ONCE_PER_NOTIFICATION} = 1)",
+			"${Questionnaire.KEY_STUDY_ID} = ?",
 			arrayOf(studyId.toString()),
 			null,
 			null,
 			null,
 			null
 		)
-		val enabled = ArrayList<Questionnaire>()
-		val disabled = ArrayList<Questionnaire>()
+		val list = ArrayList<Questionnaire>()
 		while(c.moveToNext()) {
 			val questionnaire = Questionnaire(c)
 			if(questionnaire.canBeFilledOut())
-				enabled.add(questionnaire)
-			else
-				disabled.add(questionnaire)
+				list.add(questionnaire)
 		}
 		c.close()
-		return Pair(enabled, disabled)
-	}
-	fun hasRepeatingQuestionnaires(studyId: Long): Boolean {
-		val c = NativeLink.sql.select(
-			Questionnaire.TABLE,
-			arrayOf(Questionnaire.KEY_STUDY_ID),
-			"${Questionnaire.KEY_STUDY_ID} = ? AND ${Questionnaire.KEY_COMPLETABLE_ONCE} = 0 AND (${Questionnaire.KEY_LIMIT_COMPLETION_FREQUENCY} = 1 OR ${Questionnaire.KEY_COMPLETABLE_ONCE_PER_NOTIFICATION} = 1)",
-			arrayOf(studyId.toString()),
-			null,
-			null,
-			null,
-			"1"
-		)
-		
-		val r = c.moveToFirst()
-		c.close()
-		return r
-	}
-	
-	fun getOneTimeQuestionnairesSplitByState(studyId: Long): Pair<List<Questionnaire>, List<Questionnaire>> {
-		val c = NativeLink.sql.select(
-			Questionnaire.TABLE,
-			Questionnaire.COLUMNS,
-			"${Questionnaire.KEY_STUDY_ID} = ? AND ${Questionnaire.KEY_COMPLETABLE_ONCE} = 1", arrayOf(studyId.toString()),
-			null,
-			null,
-			null,
-			null
-		)
-		val enabled = ArrayList<Questionnaire>()
-		val disabled = ArrayList<Questionnaire>()
-		while(c.moveToNext()) {
-			val questionnaire = Questionnaire(c)
-			if(questionnaire.canBeFilledOut())
-				enabled.add(questionnaire)
-			else
-				disabled.add(questionnaire)
-		}
-		c.close()
-		return Pair(enabled, disabled)
-	}
-	fun hasOneTimeQuestionnaires(studyId: Long): Boolean {
-		val c = NativeLink.sql.select(
-			Questionnaire.TABLE,
-			arrayOf(Questionnaire.KEY_STUDY_ID),
-			"${Questionnaire.KEY_STUDY_ID} = ? AND ${Questionnaire.KEY_COMPLETABLE_ONCE} = 1", arrayOf(studyId.toString()),
-			null,
-			null,
-			null,
-			"1"
-		)
-		val r = c.moveToFirst()
-		c.close()
-		return r
+		return list
 	}
 	
 	//

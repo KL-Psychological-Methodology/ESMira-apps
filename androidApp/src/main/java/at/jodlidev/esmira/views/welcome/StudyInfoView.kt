@@ -30,14 +30,14 @@ fun StudyInfoView(study: Study, gotoPrevious: () -> Unit, gotoNext: () -> Unit) 
 		val (title, contactEmail, desc, navigation) = createRefs()
 		
 		Text(study.title,
-			fontSize = 20.sp,
+			fontSize = MaterialTheme.typography.titleLarge.fontSize,
 			fontWeight = FontWeight.Bold,
 			modifier = Modifier.constrainAs(title) {
 				top.linkTo(parent.top)
 				start.linkTo(parent.start)
 			})
 		Text(study.contactEmail,
-			fontSize = 14.sp,
+			fontSize = MaterialTheme.typography.labelLarge.fontSize,
 			modifier = Modifier.constrainAs(contactEmail) {
 				top.linkTo(title.bottom, margin = 5.dp)
 				start.linkTo(title.start, margin = 20.dp)

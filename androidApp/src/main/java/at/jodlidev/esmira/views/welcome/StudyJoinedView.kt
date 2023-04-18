@@ -40,7 +40,7 @@ fun StudyJoinedView(study: Study, getAlarms: () -> List<Alarm>, gotoNext: () -> 
 		
 		if(study.hasNotifications()) {
 			Text(stringResource(id = R.string.colon_next_expected_notification),
-				fontSize = 20.sp,
+				fontSize = MaterialTheme.typography.titleLarge.fontSize,
 				fontWeight = FontWeight.Bold
 			)
 			

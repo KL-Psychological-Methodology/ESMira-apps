@@ -137,7 +137,7 @@ fun StatisticsBottomBar(navController: NavController) {
 fun StatisticsContentView(charts: List<ChartInfo>, chartInfoCollection: ChartInfoCollection) {
 	LazyColumn {
 		items(charts) { chartInfo ->
-			Text(chartInfo.title, fontSize = MaterialTheme.typography.headlineSmall.fontSize)
+			Text(chartInfo.title, fontSize = MaterialTheme.typography.titleLarge.fontSize)
 			HtmlHandler.HtmlText(html = chartInfo.chartDescription)
 			
 			if(chartInfo.hideUntilCompletion && chartInfoCollection.studyIsJoined) {
@@ -148,7 +148,7 @@ fun StatisticsContentView(charts: List<ChartInfo>, chartInfoCollection: ChartInf
 						.padding(all = 5.dp)
 						.border(
 							width = 1.dp,
-							color = MaterialTheme.colorScheme.outlineVariant
+							color = MaterialTheme.colorScheme.outline
 						),
 					contentAlignment = Alignment.Center
 				) {
@@ -164,7 +164,7 @@ fun StatisticsContentView(charts: List<ChartInfo>, chartInfoCollection: ChartInf
 			}
 			else {
 				AndroidView(
-					factory = { context ->
+					factory = {
 //						chartInfo.initBuilder(chartInfoCollection, ChartTypeChooser(context))
 						chartInfo.builder.createChart() as View
 					}, modifier = Modifier

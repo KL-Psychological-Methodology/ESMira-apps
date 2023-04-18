@@ -76,7 +76,7 @@ fun AccessKeyQuestionView(accessKey: String, gotoPrevious: () -> Unit, gotoNext:
 		)
 		Text(
 			text = stringResource(id = R.string.questionMark),
-			fontSize = 64.sp,
+			fontSize = MaterialTheme.typography.displayLarge.fontSize,
 			fontWeight = FontWeight.Bold,
 			modifier = Modifier
 				.constrainAs(questionMarkText) {

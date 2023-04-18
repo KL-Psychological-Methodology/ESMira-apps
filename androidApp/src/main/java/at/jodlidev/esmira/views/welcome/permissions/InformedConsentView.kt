@@ -46,8 +46,8 @@ fun InformedConsentView(study: Study, num: Int, currentNum: MutableState<Int>) {
 			num = num,
 			currentNum = currentNum,
 			success = success,
-			header = stringResource(id = R.string.informed_consent),
-			modifier = Modifier.fillMaxWidth()
+			modifier = Modifier.fillMaxWidth(),
+			header = stringResource(id = R.string.informed_consent)
 		)
 		
 		if(currentNum.value == num) {
@@ -99,12 +99,12 @@ fun PreviewInformedConsentView() {
 @Composable
 fun PreviewConsentDialog() {
 	ESMiraSurface {
-		val currentNum = remember { mutableStateOf(1) }
 		ConsentDialog(
-			Study.newInstance("", "",
+			study = Study.newInstance("", "",
 				"""{"id":1, "informedConsentForm": "This\n is\n a\n consent\n form"}"""
 			),
-			{}, {}
+			onCancel = {},
+			onConsent = {}
 		)
 	}
 }

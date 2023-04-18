@@ -66,13 +66,13 @@ private val LightColorPalette = lightColorScheme(
 	onSurfaceVariant = Color(0XFF2B98CA),
 	
 	outline = Color(0XFF2B98CA),
-	outlineVariant = Color(0xFF9fe0f7),
+	outlineVariant = Color(0XFF2B98CA),
 	
 	error = Color.Red,
 	onError = Color.White
 )
 private val DarkColorPalette = darkColorScheme(
-	primary = Color(0xFF2DBFF3),
+	primary = Color(0XFF2B98CA),
 	onPrimary = Color.White,
 //	primaryContainer = Color(0xFF9fe0f7),
 //	onPrimaryContainer = Color.Black,
@@ -96,7 +96,7 @@ private val DarkColorPalette = darkColorScheme(
 	surfaceVariant =  Color(0xFF3C3C3C),
 	onSurfaceVariant = Color.White,
 	
-	outline = Color(0xFF2DBFF3),
+	outline = Color(0XFF2B98CA),
 	outlineVariant = Color(0XFF2B98CA),
 	
 	error = Color.Red,

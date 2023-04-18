@@ -52,12 +52,13 @@ fun UploadProtocolView(
 			Text(stringResource(R.string.are_you_sure))
 		}
 	}
+	
 	DefaultScaffoldView(
 		title = stringResource(R.string.upload_protocol),
 		goBack = goBack,
 		actions = {
 			val showLoader = remember { mutableStateOf(false) }
-			
+
 			IconButton(onClick = {
 				if(!showLoader.value) {
 					showLoader.value = true
@@ -84,8 +85,7 @@ fun UploadProtocolView(
 			itemsIndexed(uploadDataSets.value, key = { _, uploadData -> uploadData.id }) { i, uploadData ->
 				DataSetItemView(
 					uploadData = uploadData,
-					deleteUploadData = { uploadDataToDelete.value = uploadData },
-					modifier = Modifier.background(color = if(i % 2 != 0) colorLineBackground1 else colorLineBackground2)
+					deleteUploadData = { uploadDataToDelete.value = uploadData }
 				)
 			}
 		}
@@ -93,10 +93,10 @@ fun UploadProtocolView(
 }
 
 @Composable
-fun DataSetItemView(uploadData: UploadData, deleteUploadData: () -> Unit, modifier: Modifier = Modifier) {
+fun DataSetItemView(uploadData: UploadData, deleteUploadData: () -> Unit) {
 	Column(
-		modifier = modifier
-			.padding(horizontal = 30.dp, vertical = 20.dp)
+		modifier = Modifier
+			.padding(horizontal = 20.dp, vertical = 5.dp)
 			.fillMaxWidth()
 	) {
 		Text(
@@ -135,6 +135,11 @@ fun DataSetItemView(uploadData: UploadData, deleteUploadData: () -> Unit, modifi
 				}
 			}
 		}
+		Divider(
+			color = MaterialTheme.colorScheme.outline,
+			modifier = Modifier
+				.padding(top = 20.dp, bottom = 0.dp)
+		)
 	}
 }
 
@@ -164,16 +169,12 @@ fun PreviewUploadProtocolView() {
 		
 		UploadProtocolView(
 			{ listOf(
-				dataSetServerError,
-				dataSetServerError,
-				dataSetServerError,
-			) },
-			{ listOf(
 				dataSetSuccess,
 				dataSetError,
 				dataSetServerError,
 				dataSetServerWaiting
 			) },
+			{},
 			{}
 		)
 	}

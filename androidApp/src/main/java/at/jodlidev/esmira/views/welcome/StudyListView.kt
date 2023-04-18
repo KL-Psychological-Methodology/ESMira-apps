@@ -29,11 +29,15 @@ fun StudyListItemView(study: Study, modifier: Modifier = Modifier, gotoStudy: ()
 	Column(
 		modifier = modifier
 			.clickable(onClick = gotoStudy)
-			.padding(horizontal = 30.dp, vertical = 20.dp)
+			.padding(horizontal = 20.dp, vertical = 5.dp)
 			.fillMaxWidth()
 	) {
-		Text(study.title, fontSize = MaterialTheme.typography.headlineSmall.fontSize, fontWeight = FontWeight.Bold)
-		Text(study.contactEmail, fontSize = MaterialTheme.typography.labelMedium.fontSize, modifier = Modifier.padding(start = 20.dp))
+		Text(study.title,
+			fontSize = MaterialTheme.typography.labelLarge.fontSize,
+			color = MaterialTheme.colorScheme.onSurface
+		)
+		Text(study.contactEmail, fontSize = MaterialTheme.typography.labelLarge.fontSize, modifier = Modifier.padding(start = 20.dp))
+		Divider(modifier = Modifier.padding(all = 10.dp))
 	}
 }
 
@@ -44,16 +48,16 @@ fun StudyListView(studies: List<Study>, gotoPrevious: () -> Unit, gotoNext: (ind
 		
 		Text(stringResource(id = R.string.colon_choose_study),
 			fontWeight = FontWeight.Bold,
-			fontSize = MaterialTheme.typography.headlineMedium.fontSize,
+			fontSize = MaterialTheme.typography.labelLarge.fontSize,
 			modifier = Modifier.constrainAs(header) {
-				top.linkTo(parent.top, margin = 20.dp)
+				top.linkTo(parent.top, margin = 10.dp)
 				start.linkTo(parent.start, margin = 20.dp)
 				end.linkTo(parent.end)
 				width = Dimension.fillToConstraints
 			})
 		
 		LazyColumn(modifier = Modifier.constrainAs(studyListElement) {
-			top.linkTo(header.bottom)
+			top.linkTo(header.bottom, margin = 20.dp)
 			bottom.linkTo(navigation.top)
 			start.linkTo(parent.start)
 			end.linkTo(parent.end)
@@ -61,7 +65,7 @@ fun StudyListView(studies: List<Study>, gotoPrevious: () -> Unit, gotoNext: (ind
 			height = Dimension.fillToConstraints
 		}) {
 			itemsIndexed(studies, { i, _ -> i }) { i, study: Study ->
-				StudyListItemView(study, modifier = Modifier.background(color = if(i % 2 == 0) colorLineBackground2 else colorLineBackground1)) {
+				StudyListItemView(study) {
 					gotoNext(i)
 				}
 			}

@@ -116,7 +116,7 @@ class ErrorReportDialogActivity : ComponentActivity() {
 				
 				Spacer(modifier = Modifier.size(20.dp))
 				if(error.value.isNotEmpty()) {
-					Text(error.value, fontSize = 18.sp, color = colorRed, modifier = Modifier.weight(1f), textAlign = TextAlign.Right)
+					Text(error.value, fontSize = MaterialTheme.typography.bodyLarge.fontSize, color = colorRed, modifier = Modifier.weight(1f), textAlign = TextAlign.Right)
 				}
 			}
 		}
@@ -148,7 +148,7 @@ class ErrorReportDialogActivity : ComponentActivity() {
 			LazyColumn(modifier = Modifier.fillMaxWidth()) {
 				item {
 					Text(errorReportHeader,
-						fontSize = 12.sp,
+						fontSize = MaterialTheme.typography.titleSmall.fontSize,
 						modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 20.dp)
 					)
 				}
@@ -170,7 +170,7 @@ class ErrorReportDialogActivity : ComponentActivity() {
 									else -> MaterialTheme.colorScheme.onBackground
 								}
 							)
-							Text(error.getFormattedDateTime(), fontSize = 10.sp)
+							Text(error.getFormattedDateTime(), fontSize = MaterialTheme.typography.labelSmall.fontSize)
 						}
 						Text(error.msg, modifier = Modifier.padding(all = 5.dp))
 					}

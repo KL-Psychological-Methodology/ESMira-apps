@@ -31,9 +31,8 @@ import at.jodlidev.esmira.sharedCode.data_structure.DbUser
 import at.jodlidev.esmira.views.ESMiraDialog
 import at.jodlidev.esmira.views.NextNotificationsView
 import at.jodlidev.esmira.views.main.*
-import at.jodlidev.esmira.views.main.studyDashboard.StudyDashboardActions
 import at.jodlidev.esmira.views.main.questionnaire.QuestionnaireFinishedView
-import at.jodlidev.esmira.views.main.questionnaire.QuestionnaireListView
+import at.jodlidev.esmira.views.main.questionnaire.HiddenQuestionnairesListView
 import at.jodlidev.esmira.views.main.questionnaire.QuestionnaireView
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -144,20 +143,9 @@ class MainActivity: ComponentActivity() {
 					navController = navController
 				)
 			}
-			composable("questionnaireList/{type}/{enabledView}",
-				arguments = listOf(
-					navArgument("type") {
-						type = NavType.StringType
-					},
-					navArgument("enabledView") {
-						type = NavType.BoolType
-					}
-				)
-			) { backStackEntry ->
-				PageQuestionnaireList(
+			composable("hiddenQuestionnairesList") {
+				PageHiddenQuestionnaireList(
 					studyId.value,
-					backStackEntry.arguments?.getString("type") ?: "",
-					backStackEntry.arguments?.getBoolean("enabledView") ?: true,
 					navController
 				)
 			}
@@ -198,6 +186,10 @@ class MainActivity: ComponentActivity() {
 				PageUploadProtocol(studyId.value)
 			}
 			
+			composable("studyInformation") {
+				PageStudyInformation(studyId.value)
+			}
+			
 			composable("about") {
 				PageAbout()
 			}
@@ -217,37 +209,10 @@ class MainActivity: ComponentActivity() {
 			val study = DbLogic.getStudy(currentStudyId) ?: return@Crossfade //can be null when study was deleted
 			
 			val studyList = remember(reloadState.value) { mutableStateOf(DbLogic.getAllStudies()) }
-			val questionnaireDataSetCount = remember(reloadState.value) { mutableStateOf(DbLogic.getQuestionnaireDataSetCount(currentStudyId)) }
-			val hasPinnedQuestionnaires = remember(reloadState.value) { mutableStateOf(DbLogic.hasPinnedQuestionnaires(currentStudyId)) }
-			val hasRepeatingQuestionnaires = remember(reloadState.value) { mutableStateOf(DbLogic.hasRepeatingQuestionnaires(currentStudyId)) }
-			val hasOneTimeQuestionnaires = remember(reloadState.value) { mutableStateOf(DbLogic.hasOneTimeQuestionnaires(currentStudyId)) }
-			val countActivePinnedQuestionnaires = remember(reloadState.value) { mutableStateOf(DbLogic.getPinnedQuestionnairesSplitByState(currentStudyId).first.size) }
-			val countActiveRepeatingQuestionnaires = remember(reloadState.value) { mutableStateOf(DbLogic.getRepeatingQuestionnairesSplitByState(currentStudyId).first.size) }
-			val countActiveOneTimeQuestionnaires = remember(reloadState.value) { mutableStateOf(DbLogic.getOneTimeQuestionnairesSplitByState(currentStudyId).first.size) }
 			val hasUnSyncedDataSets = remember(reloadState.value) { mutableStateOf(DbLogic.hasUnSyncedDataSets(currentStudyId)) }
 			val countUnreadMessages = remember(reloadState.value) { mutableStateOf(DbLogic.countUnreadMessages(currentStudyId)) }
-			val nextAlarmWithNotifications = remember(reloadState.value) { mutableStateOf(DbLogic.getNextAlarmWithNotifications(currentStudyId)) }
 			val missedInvitations = remember(reloadState.value) { mutableStateOf(DbLogic.getMissedInvitations()) }
 			
-			val studyData = StudyDashboardActions(
-				getStudy = { study },
-				getStudyList = { studyList.value },
-				reloadStudy = reloadStudy,
-				switchStudy = { newStudyId ->
-					DbUser.setCurrentStudyId(newStudyId)
-					switchStudy(newStudyId)
-				},
-				getCompletedQuestionnaireCount = { questionnaireDataSetCount.value },
-				hasPinnedQuestionnaires = { hasPinnedQuestionnaires.value },
-				countActivePinnedQuestionnaires = { countActivePinnedQuestionnaires.value },
-				hasRepeatingQuestionnaires = { hasRepeatingQuestionnaires.value },
-				countActiveRepeatingQuestionnaires = { countActiveRepeatingQuestionnaires.value },
-				hasOneTimeQuestionnaires = { hasOneTimeQuestionnaires.value },
-				countActiveOneTimeQuestionnaires = { countActiveOneTimeQuestionnaires.value },
-				hasUnSyncedDataSets = { hasUnSyncedDataSets.value },
-				countUnreadMessages = { countUnreadMessages.value },
-				getNextAlarm = { nextAlarmWithNotifications.value }
-			)
 			
 			
 			val showNextNotifications = remember { mutableStateOf(false) }
@@ -264,18 +229,6 @@ class MainActivity: ComponentActivity() {
 							.padding(vertical = 20.dp),
 						exactDate = true
 					)
-				}
-			}
-			val showInformedConsent = remember { mutableStateOf(false) }
-			if(showInformedConsent.value) {
-				ESMiraDialog(
-					title = stringResource(R.string.informed_consent),
-					confirmButtonLabel = stringResource(R.string.close),
-					onConfirmRequest = { showInformedConsent.value = false },
-				) {
-					Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-						Text(study.informedConsentForm)
-					}
 				}
 			}
 			
@@ -320,12 +273,27 @@ class MainActivity: ComponentActivity() {
 			}
 			
 			StudyDashboardView(
-				userId = DbUser.getUid(),
-				actions = studyData,
-				isDev = { DbUser.isDev() },
+				getStudy = { study },
+				getStudyList = { studyList.value },
+				getQuestionnaireList = { DbLogic.getEnabledQuestionnaires(currentStudyId) },
+				hasEditableSchedules = { study.hasEditableSchedules() },
+				hasUnSyncedDataSets = { hasUnSyncedDataSets.value },
+				countUnreadMessages = { countUnreadMessages.value },
 				getMissedNotifications = { missedInvitations.value },
-				gotoQuestionnaires = { type -> navController.navigate("questionnaireList/$type/true") },
-				gotoMessages = { navController.navigate("messages") },
+				isDev = { DbUser.isDev() },
+				reloadStudy = reloadStudy,
+				switchStudy = { newStudyId ->
+					DbUser.setCurrentStudyId(newStudyId)
+					switchStudy(newStudyId)
+				},
+				updateStudies = {
+					Web.updateStudiesAsync {updatedCount ->
+						if(updatedCount != -1)
+							Toast.makeText(context, context.getString(R.string.info_update_complete, updatedCount), Toast.LENGTH_SHORT).show()
+						else
+							Toast.makeText(context, context.getString(R.string.info_update_failed), Toast.LENGTH_SHORT).show()
+					}
+				},
 				sendEmail = {
 					val intent = Intent(Intent.ACTION_SEND)
 					intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(study.contactEmail))
@@ -338,26 +306,21 @@ class MainActivity: ComponentActivity() {
 						Toast.makeText(context, R.string.error_no_email_client, Toast.LENGTH_LONG).show()
 					}
 				},
-				gotoReward = { navController.navigate("reward") },
-				showInformedConsent = { showInformedConsent.value = true },
-				gotoStatistics = { navController.navigate("statistics") },
-				gotoDataProtocol = { navController.navigate("uploadProtocol") },
-				openChangeSchedulesDialog = { ChangeSchedulesDialogActivity.start(context, studyId) },
 				openWelcomeScreen = { WelcomeScreenActivity.start(context, true) },
 				openErrorReport = { ErrorReportDialogActivity.start(context, true) },
 				openNotificationsDialog = { NotificationsBrokenDialogActivity.start(context, true) },
-				updateStudies = {
-					Web.updateStudiesAsync {updatedCount ->
-						if(updatedCount != -1)
-							Toast.makeText(context, context.getString(R.string.info_update_complete, updatedCount), Toast.LENGTH_SHORT).show()
-						else
-							Toast.makeText(context, context.getString(R.string.info_update_failed), Toast.LENGTH_SHORT).show()
-					}
-				},
 				openAbout = { navController.navigate("about") },
+				openChangeSchedulesDialog = { ChangeSchedulesDialogActivity.start(context, studyId) },
 				openNextNotifications = {
 					showNextNotifications.value = true
 				},
+				gotoQuestionnaire = { navController.navigate("questionnaire/${it.id}/0") },
+				gotoDisabledQuestionnaires = { navController.navigate("hiddenQuestionnairesList") },
+				gotoMessages = { navController.navigate("messages") },
+				gotoReward = { navController.navigate("reward") },
+				gotoStatistics = { navController.navigate("statistics") },
+				gotoDataProtocol = { navController.navigate("uploadProtocol") },
+				gotoStudyInformation = { navController.navigate("studyInformation") },
 				saveBackup = { saveBackupLauncher.launch("backup.db") },
 				loadBackup = { loadBackupLauncher.launch("*/*") },
 			)
@@ -365,23 +328,15 @@ class MainActivity: ComponentActivity() {
 	}
 	
 	@Composable
-	fun PageQuestionnaireList(studyId: Long, type: String, enabledView: Boolean, navController: NavHostController) {
-		val questionnaires = when(type) {
-			"pinned" -> DbLogic.getPinnedQuestionnairesSplitByState(studyId)
-			"repeating" -> DbLogic.getRepeatingQuestionnairesSplitByState(studyId)
-			"oneTime" -> DbLogic.getOneTimeQuestionnairesSplitByState(studyId)
-			else -> Pair(ArrayList(), ArrayList())
-		}
-		QuestionnaireListView(
-			title = if(enabledView) stringResource(R.string.questionnaires) else stringResource(R.string.disabled_questionnaires),
-			questionnaires = if(enabledView) questionnaires.first else questionnaires.second,
+	fun PageHiddenQuestionnaireList(studyId: Long, navController: NavHostController) {
+		val questionnaires = DbLogic.getHiddenQuestionnaires(studyId)
+		
+		HiddenQuestionnairesListView(
+			questionnaires = questionnaires,
 			goBack = { onBackPressedDispatcher.onBackPressed() },
 			gotoQuestionnaire = { questionnaire ->
 				navController.navigate("questionnaire/${questionnaire.id}/0")
-			},
-			gotoDisabledQuestionnaires = if(enabledView && questionnaires.second.isNotEmpty()) {
-				{ navController.navigate("questionnaireList/$type/false") }
-			} else null
+			}
 		)
 	}
 	
@@ -445,6 +400,48 @@ class MainActivity: ComponentActivity() {
 					Toast.makeText(context, context.getString(R.string.info_sync_failed), Toast.LENGTH_SHORT).show()
 				
 			} },
+			goBack = { onBackPressedDispatcher.onBackPressed() }
+		)
+	}
+	
+	@Composable
+	fun PageStudyInformation(studyId: Long) {
+		
+		val showInformedConsent = remember { mutableStateOf(false) }
+		if(showInformedConsent.value) {
+			ESMiraDialog(
+				title = stringResource(R.string.informed_consent),
+				confirmButtonLabel = stringResource(R.string.close),
+				onConfirmRequest = { showInformedConsent.value = false },
+			) {
+				Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+					val study = DbLogic.getStudy(studyId) ?: return@Column
+					Text(study.informedConsentForm)
+				}
+			}
+		}
+		
+		val showStudyDescription = remember { mutableStateOf(false) }
+		if(showStudyDescription.value) {
+			ESMiraDialog(
+				title = stringResource(R.string.informed_consent),
+				confirmButtonLabel = stringResource(R.string.close),
+				onConfirmRequest = { showStudyDescription.value = false },
+			) {
+				Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+					val study = DbLogic.getStudy(studyId) ?: return@Column
+					HtmlHandler.HtmlText(study.studyDescription)
+				}
+			}
+		}
+		StudyInformationView(
+			userId = DbUser.getUid(),
+			getStudy = { DbLogic.getStudy(studyId)!! },
+			getCompletedQuestionnaireCount = { DbLogic.getQuestionnaireDataSetCount(studyId) },
+			hasNotifications = { study -> study.hasNotifications() },
+			getNextAlarm = { DbLogic.getNextAlarmWithNotifications(studyId) },
+			showInformedConsent = { showInformedConsent.value = true },
+			showStudyDescription = { showStudyDescription.value = true },
 			goBack = { onBackPressedDispatcher.onBackPressed() }
 		)
 	}

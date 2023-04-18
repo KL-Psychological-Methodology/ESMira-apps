@@ -14,7 +14,9 @@ import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -69,6 +71,10 @@ fun QuestionnaireView(
 	}
 }
 
+fun getBackgroundColor(i: Int): Color {
+	return if(i % 2 == 0) colorLineBackground1 else colorLineBackground2
+}
+
 @Composable
 fun MainView(
 	listState: LazyListState,
@@ -94,34 +100,33 @@ fun MainView(
 				input,
 				Modifier
 					.fillMaxWidth()
-					.background(color = if(i % 2 == 0) colorLineBackground1 else colorLineBackground2)
-					.padding(all = 5.dp)
+					.background(color = getBackgroundColor(i))
+					.padding(all = 10.dp)
 			)
 		}
 		
-		
+		var colorCount = page.inputs.size
 		if(page.footer.isNotEmpty()) {
 			item {
 				HtmlHandler.HtmlText(html = page.footer, modifier = Modifier
 					.fillMaxWidth()
-					.background(color = if(page.inputs.size % 2 == 0) colorLineBackground1 else colorLineBackground2)
+					.background(color = getBackgroundColor(colorCount))
 					.padding(all = 5.dp)
 				)
 			}
+			++colorCount
 		}
 		
 		item {
-			Row(
-				horizontalArrangement = Arrangement.Center,
+			Column(
+				horizontalAlignment = Alignment.CenterHorizontally,
 				modifier = Modifier
 					.fillMaxWidth()
-					.padding(vertical = 10.dp)
+					.background(color = getBackgroundColor(colorCount))
+					.padding(vertical = 20.dp)
 			) {
 				if(hasRequired) {
-					Text(stringResource(R.string.info_required), modifier = Modifier.padding(vertical = 10.dp).weight(1f))
-				}
-				else {
-					Spacer(modifier = Modifier.weight(1f))
+					Text(stringResource(R.string.info_required), modifier = Modifier.padding(all = 10.dp).align(Alignment.Start))
 				}
 				
 				if(isLastPage) {

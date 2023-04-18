@@ -67,13 +67,6 @@ fun StudyPermissionsView(study: Study, gotoPrevious: () -> Unit, gotoNext: () ->
 			}
 		}
 		
-//		val isFinished = remember { derivedStateOf { currentNum.value > num } }
-//		Spacer(modifier = Modifier.weight(1f))
-//		if(isFinished.value) {
-//			Text(stringResource(id = R.string.info_study_permissionSetup_ended))
-//			Spacer(modifier = Modifier.height(10.dp))
-//		}
-		
 		NavigationView(
 			gotoPrevious = gotoPrevious,
 			gotoNext = { gotoNext() },
