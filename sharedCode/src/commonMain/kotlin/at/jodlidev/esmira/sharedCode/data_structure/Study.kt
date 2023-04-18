@@ -211,7 +211,7 @@ class Study internal constructor(
 		studyDescription = c.getString(13)
 		contactEmail = c.getString(14)
 		informedConsentForm = c.getString(15)
-		postInstallInstructions = c.getString(15)
+		postInstallInstructions = c.getString(16)
 		publicChartsJsonString = c.getString(17)
 		personalChartsJsonString = c.getString(18)
 		msgTimestamp = c.getLong(19)
