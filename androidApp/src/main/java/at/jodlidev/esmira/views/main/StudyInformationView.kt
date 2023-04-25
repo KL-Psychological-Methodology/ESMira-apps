@@ -57,7 +57,7 @@ fun StudyInformationView(
 	
 	val study = getStudy()
 	DefaultScaffoldView(
-		title = study.title,
+		title = stringResource(R.string.study_information),
 		goBack = goBack,
 	) {
 		LazyVerticalGrid(
