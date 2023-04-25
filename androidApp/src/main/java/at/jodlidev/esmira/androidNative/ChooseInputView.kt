@@ -42,6 +42,8 @@ fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifi
 		when(input.type) {
 			Input.TYPES.app_usage -> AppUsageView(input, get, setAdditionalValue)
 			Input.TYPES.binary -> BinaryView(input, get, setValue)
+			Input.TYPES.compass -> CompassView(input, get, setValue)
+			Input.TYPES.countdown -> CountdownView(input, get, setValue)
 			Input.TYPES.date -> DateView(input, get, setValue)
 			Input.TYPES.dynamic_input -> DynamicView(input)
 			Input.TYPES.image -> ImageView(input, get, setValue)
@@ -50,6 +52,8 @@ fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifi
 			Input.TYPES.list_single -> ListSingleView(input, get, setValue)
 			Input.TYPES.number -> NumberView(input, get, setValue)
 			Input.TYPES.photo -> PhotoView(input, get, setFilePath)
+			Input.TYPES.record_audio -> RecordAudioView(input)
+			Input.TYPES.share -> ShareView(input, get, setValue)
 			Input.TYPES.text -> Unit
 			Input.TYPES.text_input -> TextInputView(input, get, setValue)
 			Input.TYPES.time -> TimeView(input, get, setValue)
