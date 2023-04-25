@@ -264,4 +264,15 @@
     <string name="send_email">Send email</string>
 	<string name="study_information">Study information</string>
 	<string name="study_description">Study description</string>
+	<string name="north_abr">N</string>
+    <string name="east_abr">E</string>
+    <string name="south_abr">S</string>
+    <string name="west_abr">W</string>
+	<string name="start_scanning">start scanning</string>
+	<string name="start_timer">start timer</string>
+    <string name="start_audio_record">Start recording</string>
+	<string name="stop_audio_record">Stop recording</string>
+    <string name="start_playing_audio">Play</string>
+    <string name="stop_playing_audio">Stop</string>
+	<string name="open_url">Open url</string>
 </resources>
