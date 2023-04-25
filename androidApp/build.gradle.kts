@@ -1,6 +1,7 @@
 val composeVersion = "1.3.1"
 val m3Version = "1.0.1"
 val markwonVersion = "4.6.2"
+val accompanistVersion = "0.28.0"
 
 plugins {
     id("com.android.application")
@@ -22,8 +23,8 @@ android {
         applicationId = "at.jodlidev.esmira"
         minSdk = 21
         targetSdk = 33
-        versionCode = 141
-        versionName = "2.8.2"
+        versionCode = 142
+        versionName = "2.8.3"
         multiDexEnabled = true //project became too big. See: https://stackoverflow.com/a/59308589
     
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -63,7 +64,7 @@ dependencies {
     //Custom transitions in compose are not implemented yet, so we need the experimental library:
     //https://issuetracker.google.com/issues/172112072
     //https://issuetracker.google.com/issues/197140101
-    implementation("com.google.accompanist:accompanist-navigation-animation:0.28.0")
+    implementation("com.google.accompanist:accompanist-navigation-animation:$accompanistVersion")
 //    implementation("androidx.navigation:navigation-compose:2.5.2") // Navigation
     
     implementation("androidx.multidex:multidex:2.0.1") //project became too big. Needed for SdK<21 See: https://stackoverflow.com/a/59308589)
