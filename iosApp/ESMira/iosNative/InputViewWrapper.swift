@@ -29,6 +29,7 @@ class InputViewWrapper: InputViewInterface {
 
 class InputViewModel: ObservableObject {
 	let input: Input
+	
 	@Published var value: String {
 		didSet {
 			input.setValue(value: self.value, additionalValues: nil)
@@ -75,10 +76,12 @@ struct InputView: View {
 	
 	func getInput() -> some View {
 		switch (input.type) {
-			case Input.TYPES.text:
-				return AnyView(TextStruct(viewModel: self.viewModel))
 			case Input.TYPES.binary:
 				return AnyView(BinaryStruct(viewModel: self.viewModel))
+			case Input.TYPES.countdown:
+				return AnyView(CountdownStruct(viewModel: self.viewModel))
+			case Input.TYPES.compass:
+				return AnyView(CompassStruct(viewModel: self.viewModel))
 			case Input.TYPES.date:
 				return AnyView(DateStruct(viewModel: self.viewModel))
 			case Input.TYPES.dynamicInput:
@@ -95,6 +98,10 @@ struct InputView: View {
 				return AnyView(NumberStruct(viewModel: self.viewModel))
 			case Input.TYPES.photo:
 			   return AnyView(PhotoStruct(viewModel: self.viewModel))
+			case Input.TYPES.recordAudio:
+			   return AnyView(RecordAudioStruct(viewModel: self.viewModel))
+			case Input.TYPES.share:
+			   return AnyView(ShareStruct(viewModel: self.viewModel))
 			case Input.TYPES.textInput:
 				return AnyView(TextInputStruct(viewModel: self.viewModel))
 			case Input.TYPES.time:
@@ -109,6 +116,11 @@ struct InputView: View {
 	}
 	
 	var body: some View {
-		getInput()
+		VStack {
+			TextStruct(viewModel: self.viewModel)
+			if(input.type != Input.TYPES.text) {
+				getInput()
+			}
+		}
 	}
 }

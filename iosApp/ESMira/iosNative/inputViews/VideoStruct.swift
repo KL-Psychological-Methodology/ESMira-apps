@@ -15,7 +15,6 @@ struct VideoStruct: View {
 	
 	var body: some View {
 		VStack {
-			TextStruct(viewModel: self.viewModel)
 			if(self.loadingError) {
 				Text("error_loading_failed")
 				Button("reload") {

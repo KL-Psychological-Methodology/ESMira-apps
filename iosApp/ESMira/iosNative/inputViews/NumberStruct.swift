@@ -11,7 +11,6 @@ struct NumberStruct: View {
 	
 	var body: some View {
 		VStack {
-			TextStruct(viewModel: self.viewModel)
 			TextField("", text: self.$viewModel.value)
 				.keyboardType(self.viewModel.input.numberHasDecimal ? .decimalPad : .numberPad)
 				.frame(minWidth: 100, maxWidth: 100)

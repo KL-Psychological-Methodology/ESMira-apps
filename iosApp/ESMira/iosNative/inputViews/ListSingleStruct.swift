@@ -26,7 +26,6 @@ struct ListSingleStruct: View {
 	
 	var body: some View {
 		VStack(alignment: self.viewModel.input.asDropDown ? .center : .leading) {
-			TextStruct(viewModel: self.viewModel)
 			if(self.viewModel.input.asDropDown) {
 				Button(action: {
 					self.dropdownShown = true

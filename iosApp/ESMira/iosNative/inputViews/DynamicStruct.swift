@@ -12,9 +12,6 @@ struct DynamicStruct: View {
 	@Binding var readyCounter: Int
 	
 	var body: some View {
-		VStack {
-			TextStruct(viewModel: self.viewModel)
-			InputView(input: self.viewModel.input.getDynamicInput(), readyCounter: self.$readyCounter)
-		}
+		InputView(input: self.viewModel.input.getDynamicInput(), readyCounter: self.$readyCounter)
 	}
 }

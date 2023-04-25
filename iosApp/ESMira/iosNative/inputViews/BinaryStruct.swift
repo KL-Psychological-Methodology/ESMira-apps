@@ -11,43 +11,23 @@ struct BinaryStruct: View {
 	
 	
 	var body: some View {
-		VStack {
-			TextStruct(viewModel: self.viewModel)
-			
-			HStack {
-				Button(action: {
-					self.viewModel.value = "0"
-				}) {
-					HStack {
-						Image(systemName: self.viewModel.value == "0" ? "largecircle.fill.circle" : "circle")
-							.resizable()
-							.aspectRatio(contentMode: .fit)
-							.frame(width: 20, height: 20)
-							.foregroundColor(Color("PrimaryDark"))
-						Text(self.viewModel.input.leftSideLabel)
-							.padding()
-					}
-					.frame(maxWidth: UIScreen.main.bounds.width/2 - 20)
-					.border(Color("Outline"))
-				}
-				
-				Button(action: {
-					self.viewModel.value = "1"
-				}) {
-					HStack {
-						Text(self.viewModel.input.rightSideLabel)
-							.padding()
-						Image(systemName: self.viewModel.value == "1" ? "largecircle.fill.circle" : "circle")
-							.resizable()
-							.aspectRatio(contentMode: .fit)
-							.frame(width: 20, height: 20)
-							.foregroundColor(Color("PrimaryDark"))
-					}
-					.frame(maxWidth: UIScreen.main.bounds.width/2 - 20)
-					.border(Color("Outline"))
-				}
+		HStack {
+			DefaultIconButton(
+				icon: self.viewModel.value == "0" ? "largecircle.fill.circle" : "circle",
+				label: self.viewModel.input.leftSideLabel,
+				maxWidth: UIScreen.main.bounds.width/2 - 20
+			) {
+				self.viewModel.value = "0"
 			}
-			Spacer()
+			
+			
+			DefaultIconRightButton(
+				icon: self.viewModel.value == "1" ? "largecircle.fill.circle" : "circle",
+				label: self.viewModel.input.rightSideLabel,
+				maxWidth: UIScreen.main.bounds.width/2 - 20
+			) {
+				self.viewModel.value = "1"
+			}
 		}
 	}
 }

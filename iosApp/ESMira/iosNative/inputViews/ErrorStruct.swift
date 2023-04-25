@@ -15,9 +15,5 @@ struct ErrorStruct: View {
 			Text(String(describing: self.viewModel.input.type)).bold()
 		}
 		.foregroundColor(Color.red)
-		.padding(.vertical)
-		.onAppear {
-			self.viewModel.isReady = true
-		}
 	}
 }

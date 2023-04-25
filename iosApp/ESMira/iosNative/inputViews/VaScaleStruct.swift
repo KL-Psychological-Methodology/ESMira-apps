@@ -11,8 +11,6 @@ struct VaScaleStruct: View {
 	
 	var body: some View {
 		VStack {
-			TextStruct(viewModel: self.viewModel)
-			
 			HStack {
 				Text(self.viewModel.input.leftSideLabel)
 					.font(.system(size: 14))

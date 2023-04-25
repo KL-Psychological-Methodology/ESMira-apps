@@ -13,7 +13,6 @@ struct ListMultipleStruct: View {
 	
 	var body: some View {
 		VStack(alignment: .leading) {
-			TextStruct(viewModel: self.viewModel)
 			if(self.checkedList.count == self.viewModel.input.listChoices.indices.count) {
 				ForEach(self.viewModel.input.listChoices.indices, id: \.self) { i in
 					CheckBoxView(label: self.viewModel.input.listChoices[i], state: self.$checkedList[i]) { checked in

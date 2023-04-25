@@ -13,6 +13,10 @@
 		6B3A92C029E5C8250081A554 /* UploadProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3A92BF29E5C8250081A554 /* UploadProtocol.swift */; };
 		6B3A92C229E6E2900081A554 /* AddStudyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3A92C129E6E2900081A554 /* AddStudyState.swift */; };
 		6B3A92C429E816410081A554 /* AboutESMira.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3A92C329E816410081A554 /* AboutESMira.swift */; };
+		6B3A92C829F293BF0081A554 /* CountdownStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3A92C729F293BF0081A554 /* CountdownStruct.swift */; };
+		6B3A92CA29F2AE2B0081A554 /* ShareStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3A92C929F2AE2A0081A554 /* ShareStruct.swift */; };
+		6B3A92CC29F2B3CC0081A554 /* CompassStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3A92CB29F2B3CC0081A554 /* CompassStruct.swift */; };
+		6B3A92CE29F7B2720081A554 /* RecordAudioStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3A92CD29F7B2720081A554 /* RecordAudioStruct.swift */; };
 		6B4996CD2825414100D8B6F1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4996CC2825414100D8B6F1 /* AppDelegate.swift */; };
 		6B4996CF2825415300D8B6F1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4996CE2825415300D8B6F1 /* SceneDelegate.swift */; };
 		6B4996D12825BD6300D8B6F1 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6B4996D02825BD6300D8B6F1 /* Colors.xcassets */; };
@@ -101,6 +105,7 @@
 		6BCFEDF628252854009167B0 /* PostponedActions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCFEDDB28252854009167B0 /* PostponedActions.swift */; };
 		6BCFEDF728252854009167B0 /* SmartphoneData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCFEDDC28252854009167B0 /* SmartphoneData.swift */; };
 		6BCFEDF828252854009167B0 /* SQLiteHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCFEDDD28252854009167B0 /* SQLiteHelper.swift */; };
+		6BD037F729F7D29100CAF208 /* DefaultButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD037F629F7D29100CAF208 /* DefaultButtons.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 /* End PBXBuildFile section */
 
@@ -124,6 +129,10 @@
 		6B3A92BF29E5C8250081A554 /* UploadProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadProtocol.swift; sourceTree = "<group>"; };
 		6B3A92C129E6E2900081A554 /* AddStudyState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddStudyState.swift; sourceTree = "<group>"; };
 		6B3A92C329E816410081A554 /* AboutESMira.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutESMira.swift; sourceTree = "<group>"; };
+		6B3A92C729F293BF0081A554 /* CountdownStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CountdownStruct.swift; sourceTree = "<group>"; };
+		6B3A92C929F2AE2A0081A554 /* ShareStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareStruct.swift; sourceTree = "<group>"; };
+		6B3A92CB29F2B3CC0081A554 /* CompassStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassStruct.swift; sourceTree = "<group>"; };
+		6B3A92CD29F7B2720081A554 /* RecordAudioStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordAudioStruct.swift; sourceTree = "<group>"; };
 		6B4996CC2825414100D8B6F1 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6B4996CE2825415300D8B6F1 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		6B4996D02825BD6300D8B6F1 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
@@ -213,6 +222,7 @@
 		6BCFEDDB28252854009167B0 /* PostponedActions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PostponedActions.swift; sourceTree = "<group>"; };
 		6BCFEDDC28252854009167B0 /* SmartphoneData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SmartphoneData.swift; sourceTree = "<group>"; };
 		6BCFEDDD28252854009167B0 /* SQLiteHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SQLiteHelper.swift; sourceTree = "<group>"; };
+		6BD037F629F7D29100CAF208 /* DefaultButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultButtons.swift; sourceTree = "<group>"; };
 		7555FF7B242A565900829871 /* ESMira.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ESMira.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7555FF82242A565900829871 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		7555FF8C242A565B00829871 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -310,6 +320,7 @@
 				6BCFEDA12825284D009167B0 /* CheckBoxView.swift */,
 				6B6B607529DDD6EB00E7929D /* CustomNavigationLink.swift */,
 				6BCFEDA92825284D009167B0 /* CustomSliderView.swift */,
+				6BD037F629F7D29100CAF208 /* DefaultButtons.swift */,
 				6BCFED9B2825284D009167B0 /* DateWindowView.swift */,
 				6BCCF48029BF3D35006E88E1 /* FixedGridView.swift */,
 				6BCFEDA22825284D009167B0 /* HtmlTextView.swift */,
@@ -362,6 +373,9 @@
 			children = (
 				6BCFEDD328252854009167B0 /* BinaryStruct.swift */,
 				6BCFEDD428252854009167B0 /* DateStruct.swift */,
+				6B3A92C729F293BF0081A554 /* CountdownStruct.swift */,
+				6B3A92C929F2AE2A0081A554 /* ShareStruct.swift */,
+				6B3A92CB29F2B3CC0081A554 /* CompassStruct.swift */,
 				6BCFEDCA28252854009167B0 /* DynamicStruct.swift */,
 				6B838D7B28461927001DE14E /* EmptyStruct.swift */,
 				6BCFEDD128252854009167B0 /* ErrorStruct.swift */,
@@ -371,6 +385,7 @@
 				6BCFEDD028252854009167B0 /* ListMultipleStruct.swift */,
 				6BCFEDCD28252854009167B0 /* NumberStruct.swift */,
 				6BCFEDCB28252854009167B0 /* PhotoStruct.swift */,
+				6B3A92CD29F7B2720081A554 /* RecordAudioStruct.swift */,
 				6BCFEDC928252854009167B0 /* TextInputStruct.swift */,
 				6BCFEDD528252854009167B0 /* TextStruct.swift */,
 				6BCFEDD628252854009167B0 /* TimeStruct.swift */,
@@ -542,11 +557,13 @@
 				6BCFEDE028252854009167B0 /* ChartTypeChooser.swift in Sources */,
 				6BCFEDB92825284D009167B0 /* SaveFilePickerView.swift in Sources */,
 				6BA4BF9C283E569F00D3E8C7 /* WelcomeView.swift in Sources */,
+				6B3A92CE29F7B2720081A554 /* RecordAudioStruct.swift in Sources */,
 				6BCFEDDE28252854009167B0 /* ChartViewWrapper.swift in Sources */,
 				6B6B607429DDCC2200E7929D /* StudyInformation.swift in Sources */,
 				6BCFEDBE2825284D009167B0 /* LoadingView.swift in Sources */,
 				6BCFEDBB2825284D009167B0 /* scrollAction.swift in Sources */,
 				6BA4BFA6283E5FF000D3E8C7 /* StudyListView.swift in Sources */,
+				6B3A92CA29F2AE2B0081A554 /* ShareStruct.swift in Sources */,
 				6BCFED5D2825274A009167B0 /* AppState.swift in Sources */,
 				6B4996CD2825414100D8B6F1 /* AppDelegate.swift in Sources */,
 				6B3A92C029E5C8250081A554 /* UploadProtocol.swift in Sources */,
@@ -562,6 +579,7 @@
 				6BCFED882825283A009167B0 /* PermissionLine.swift in Sources */,
 				6B3A92C429E816410081A554 /* AboutESMira.swift in Sources */,
 				6BCFEDB32825284D009167B0 /* TextFieldAlert.swift in Sources */,
+				6BD037F729F7D29100CAF208 /* DefaultButtons.swift in Sources */,
 				6BA4BF9E283E575700D3E8C7 /* QrExistsView.swift in Sources */,
 				6BCFEDBD2825284D009167B0 /* ChatBubble.swift in Sources */,
 				6BCFED832825283A009167B0 /* StatisticsView.swift in Sources */,
@@ -597,6 +615,7 @@
 				6BCFEDB02825284D009167B0 /* NextNotificationsView.swift in Sources */,
 				6B92BF3629DD9B6F0011E8D9 /* NavigationState.swift in Sources */,
 				6BCFEDE128252854009167B0 /* InputViewWrapper.swift in Sources */,
+				6B3A92CC29F2B3CC0081A554 /* CompassStruct.swift in Sources */,
 				6BB47F7728F6FFB900C0F561 /* RewardView.swift in Sources */,
 				6BCFEDB12825284D009167B0 /* SwiftUIChart.swift in Sources */,
 				6B13CF5A28F808580035BA01 /* ShareSheet.swift in Sources */,
@@ -621,6 +640,7 @@
 				6BCFEDF528252854009167B0 /* Notifications.swift in Sources */,
 				6BCFEDB42825284D009167B0 /* CheckBoxView.swift in Sources */,
 				6BCFEDB52825284D009167B0 /* HtmlTextView.swift in Sources */,
+				6B3A92C829F293BF0081A554 /* CountdownStruct.swift in Sources */,
 				6BCFEDAD2825284D009167B0 /* MultilineTextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -772,7 +792,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 46;
+				CURRENT_PROJECT_VERSION = 47;
 				DEVELOPMENT_ASSET_PATHS = "ESMira/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZXQ54B7QHL;
 				ENABLE_PREVIEWS = YES;
@@ -782,7 +802,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7.11;
+				MARKETING_VERSION = 1.8.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -800,7 +820,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 46;
+				CURRENT_PROJECT_VERSION = 47;
 				DEVELOPMENT_ASSET_PATHS = "ESMira/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZXQ54B7QHL;
 				ENABLE_PREVIEWS = YES;
@@ -810,7 +830,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.7.11;
+				MARKETING_VERSION = 1.8.0;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",

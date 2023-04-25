@@ -12,7 +12,6 @@ struct LikertStruct: View {
 	
 	var body: some View {
 		VStack {
-			TextStruct(viewModel: self.viewModel)
 			HStack(alignment: .top) {
 				Text(self.viewModel.input.leftSideLabel)
 					.font(.system(size: 14))

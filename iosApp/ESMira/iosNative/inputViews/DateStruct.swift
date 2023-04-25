@@ -10,9 +10,6 @@ struct DateStruct: View {
 	@ObservedObject var viewModel: InputViewModel
 	
 	var body: some View {
-		VStack {
-			TextStruct(viewModel: self.viewModel)
-			DateWindowView(value: self.$viewModel.value)
-		}
+		DateWindowView(value: self.$viewModel.value)
 	}
 }

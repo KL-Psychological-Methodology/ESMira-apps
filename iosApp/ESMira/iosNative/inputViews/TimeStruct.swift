@@ -10,9 +10,6 @@ struct TimeStruct: View {
 	@ObservedObject var viewModel: InputViewModel
 	
 	var body: some View {
-		VStack {
-			TextStruct(viewModel: self.viewModel)
-			DateWindowView(value: self.$viewModel.value, typeMode: .time, saveMode: self.viewModel.input.forceInt ? .timeAsMinutes : .asString)
-		}
+		DateWindowView(value: self.$viewModel.value, typeMode: .time, saveMode: self.viewModel.input.forceInt ? .timeAsMinutes : .asString)
 	}
 }

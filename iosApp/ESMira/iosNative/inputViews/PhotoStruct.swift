@@ -8,14 +8,30 @@ import sharedCode
 
 struct PhotoStruct: View {
 	@ObservedObject var viewModel: InputViewModel
+	let filename: String
 
 	@State private var isShown = false
-	@State private var uiImage: UIImage? = nil
+	@State private var uiImage: UIImage?
 	
+	init(viewModel: InputViewModel) {
+		self.viewModel = viewModel
+		if let filename = viewModel.input.getFileName() {
+			self.filename = filename
+			do {
+				let data = try Data(contentsOf: getURL(filename))
+				self._uiImage = State(initialValue: UIImage(data: data))
+			}
+			catch {
+				self._uiImage = State(initialValue: nil)
+			}
+		}
+		else {
+			self.filename = String(Date().timeIntervalSince1970) + ".png"
+			self._uiImage = State(initialValue: nil)
+		}
+	}
 	var body: some View {
 		VStack {
-			TextStruct(viewModel: self.viewModel)
-			
 			if(self.uiImage != nil) {
 				Image(uiImage: self.uiImage!)
 					.resizable()
@@ -23,17 +39,9 @@ struct PhotoStruct: View {
 					.frame(height: 300)
 			}
 			
-			Button(action: {
+			DefaultIconButton(icon: "camera", label: "take_picture") {
 				self.isShown = true
-			}) {
-				HStack {
-					Image(systemName: "camera")
-					Text("take_picture").bold()
-				}
-				.foregroundColor(Color("PrimaryDark"))
 			}
-				.padding()
-				.border(Color("Outline"))
 		}
 
 			.sheet(isPresented: self.$isShown) {
@@ -41,12 +49,11 @@ struct PhotoStruct: View {
 					CameraView { img in
 						self.uiImage = img
 						self.isShown = false
-						let filename = String(Date().timeIntervalSince1970) + ".png"
-						let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
-						let filePath = documentsUrl.appendingPathComponent(filename)
+						
+						let filePath = getURL(self.filename)
 						do {
 							try img.pngData()?.write(to: filePath, options: [])
-							self.viewModel.value = ""
+							self.viewModel.input.setFile(filePath: self.filename, dataType: FileUpload.DataTypes.image)
 						} catch {
 							ErrorBox.Companion().error(title: "PhotoStruct", msg: "Could not save image from camera. Error: \(error)")
 						}
@@ -56,5 +63,10 @@ struct PhotoStruct: View {
 					Text("error_no_camera")
 				}
 			}
+	}
+	
+	private func getURL(_ filename: String) -> URL {
+		let documentsUrl =  FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+		return documentsUrl.appendingPathComponent(filename)
 	}
 }
