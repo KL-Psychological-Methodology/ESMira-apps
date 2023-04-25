@@ -60,13 +60,15 @@ fun DefaultButtonIconLeft(
 	icon: ImageVector,
 	onClick: () -> Unit,
 	modifier: Modifier = Modifier,
-	textModifier: Modifier = Modifier
+	textModifier: Modifier = Modifier,
+	enabled: Boolean = true
 ) {
 	OutlinedButton(
 		shape = RoundedCornerShape(5.dp),
 		onClick = onClick,
 		contentPadding = defaultButtonPadding,
-		modifier = modifier
+		modifier = modifier,
+		enabled = enabled
 	) {
 		Icon(
 			icon,
