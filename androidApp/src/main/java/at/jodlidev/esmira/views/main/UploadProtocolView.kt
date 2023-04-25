@@ -82,7 +82,7 @@ fun UploadProtocolView(
 		}
 	) {
 		LazyColumn(modifier = Modifier.fillMaxWidth()) {
-			itemsIndexed(uploadDataSets.value, key = { _, uploadData -> uploadData.id }) { i, uploadData ->
+			itemsIndexed(uploadDataSets.value, key = { _, uploadData ->  "${uploadData.type}.${uploadData.id}" }) { i, uploadData ->
 				DataSetItemView(
 					uploadData = uploadData,
 					deleteUploadData = { uploadDataToDelete.value = uploadData }
