@@ -10,7 +10,8 @@ import at.jodlidev.esmira.sharedCode.SQLiteCursor
  */
 class FileUpload: UploadData {
 	enum class DataTypes {
-		Image
+		Image,
+		Audio
 	}
 	override var id: Long = 0
 	override var studyWebId: Long = 0

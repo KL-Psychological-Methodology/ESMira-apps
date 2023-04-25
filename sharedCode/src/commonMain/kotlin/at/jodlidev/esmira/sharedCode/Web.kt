@@ -77,7 +77,12 @@ class Web {
 				append("serverVersion", Updater.EXPECTED_SERVER_VERSION)
 
 				append("upload", file, Headers.build {
-					append(HttpHeaders.ContentType, "image/png")
+					when(fileUpload.dataType) {
+						FileUpload.DataTypes.Image ->
+							append(HttpHeaders.ContentType, "image/png")
+						FileUpload.DataTypes.Audio ->
+							append(HttpHeaders.ContentType, "video/mp4")
+					}
 					append(HttpHeaders.ContentDisposition, "filename=${fileUpload.identifier}")
 				})
 			}

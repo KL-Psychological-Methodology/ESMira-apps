@@ -16,7 +16,27 @@ import kotlinx.serialization.json.*
 @Serializable
 class Input internal constructor( ) {
 	enum class TYPES {
-		text, binary, va_scale, likert, list_single, list_multiple, number, text_input, time, date, datetime, dynamic_input, app_usage, video, image, photo, ERROR
+		app_usage,
+		binary,
+		compass,
+		countdown,
+		date,
+		datetime,
+		dynamic_input,
+		image,
+		text,
+		likert,
+		list_single,
+		list_multiple,
+		number,
+		photo,
+		record_audio,
+		share,
+		text_input,
+		time,
+		va_scale,
+		video,
+		ERROR
 	}
 	var name: String = "input"
 	private var text: String = ""
@@ -30,6 +50,8 @@ class Input internal constructor( ) {
 	var numberHasDecimal: Boolean = false
 	var asDropDown: Boolean = true
 	var packageId: String = "" //for app_usage
+	var timeoutSec: Int = 0 //for countdown
+	var showValue: Boolean = true //only used in compass
 	
 	var forceInt: Boolean = false
 	
@@ -175,7 +197,9 @@ class Input internal constructor( ) {
 			false
 	}
 	
-	
+	fun getFilledUrl(): String {
+		return url.replace("[[USER_ID]]", DbUser.getUid())
+	}
 	
 	private fun getBackupJsonObj(): JsonObject {
 		return buildJsonObject {
