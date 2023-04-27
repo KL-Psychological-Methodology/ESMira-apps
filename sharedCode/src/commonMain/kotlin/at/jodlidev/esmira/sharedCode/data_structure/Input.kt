@@ -51,7 +51,8 @@ class Input internal constructor( ) {
 	var asDropDown: Boolean = true
 	var packageId: String = "" //for app_usage
 	var timeoutSec: Int = 0 //for countdown
-	var showValue: Boolean = true //only used in compass
+	var playSound: Boolean = false //for countdown
+	var showValue: Boolean = true //for compass
 	
 	var forceInt: Boolean = false
 	

@@ -6,6 +6,7 @@ import Foundation
 import SwiftUI
 import sharedCode
 import Combine
+import AVFoundation
 
 struct CountdownStruct: View {
 	@ObservedObject var viewModel: InputViewModel
@@ -38,12 +39,13 @@ struct CountdownStruct: View {
 			else if(timerIsRunning) {
 				Text(String(ticks)).font(.title)
 					.onReceive(timer!) { time in
-						if(ticks > 0) {
-							ticks -= 1
-						}
-						else {
+						ticks -= 1
+						if(ticks <= 0) {
 							viewModel.value = "1"
 							timerIsRunning = false
+							if(viewModel.input.playSound) {
+								AudioServicesPlaySystemSound(1322)
+							}
 						}
 					}
 				}
