@@ -37,7 +37,7 @@ fun CheckBoxLine(text: String, isChecked: () -> Boolean, onChecked: (Boolean) ->
 			.padding(8.dp)
 	) {
 		Checkbox(
-			checked = isChecked(),
+			checked = checkedState.value,
 			onCheckedChange = null
 		)
 		Spacer(modifier = Modifier.width(10.dp))
@@ -50,8 +50,9 @@ fun CheckBoxLine(text: String, isChecked: () -> Boolean, onChecked: (Boolean) ->
 fun ListMultipleView(input: Input, get: () -> String, save: (String, Map<String, String>) -> Unit) {
 	val choices = remember {
 		val list = ArrayList<Pair<String,Boolean>>()
+		val inputValue = get()
 		for(value in input.listChoices) {
-			list.add(Pair(value, get().contains(value)))
+			list.add(Pair(value, inputValue.contains(value)))
 		}
 		list
 	}
