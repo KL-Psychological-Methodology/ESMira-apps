@@ -87,14 +87,16 @@ class WelcomeScreenActivity: ComponentActivity() {
 				}
 				
 				val showStudyLoader = remember { mutableStateOf(openStudyDirectly) }
-				val studyList = remember { derivedStateOf {
+				
+				val getStudyList = {
 					val loadData = studyLoadingData.value
 					val studiesJson = getStudyJsonList(context)
 					if(loadData != null && studiesJson.isNotEmpty())
 						Study.getFilteredStudyList(studiesJson, loadData.serverUrl, loadData.accessKey, loadData.studyId, loadData.qId)
 					else
 						ArrayList()
-				} }
+				}
+				val studyList = remember { mutableStateOf(getStudyList()) }
 				
 				val gotoStudies = {
 					if(studyList.value.size == 1) {
@@ -123,6 +125,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 					}, onSuccess = { studyString, urlFormatted ->
 						loadData.serverUrl = urlFormatted
 						saveStudyJsonList(context, studyString)
+						studyList.value = getStudyList()
 						runOnUiThread {
 							showStudyLoader.value = false
 							
@@ -146,7 +149,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 					getServerList = {
 						Web.serverList
 					},
-					studyList = studyList,
+					studyList = { studyList.value },
 					loadStudies = { serverUrl: String, accessKey: String, studyId: Long, qId: Long ->
 						showStudyLoader.value = true
 						studyLoadingData.value = StudyLoadingData(serverUrl, accessKey, studyId, qId)
@@ -185,7 +188,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 	fun MainView(
 		startDestination: String,
 		getServerList: () -> List<Pair<String, String>>,
-		studyList: State<List<Study>>,
+		studyList: () -> List<Study>,
 		loadStudies: (
 			serverUrl: String,
 			accessKey: String,
@@ -270,14 +273,14 @@ class WelcomeScreenActivity: ComponentActivity() {
 				)
 			}
 			composable("studyList") {
-				if(studyList.value.isEmpty()) {
+				if(studyList().isEmpty()) {
 					StudyEmptyListView(accessKey.value) {
 						onBackPressedDispatcher.onBackPressed()
 					}
 				}
 				else {
 					StudyListView(
-						studies = studyList.value,
+						studies = studyList(),
 						gotoPrevious = {
 							onBackPressedDispatcher.onBackPressed()
 						},
@@ -295,7 +298,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 				)
 			) { backStackEntry ->
 				val studyIndex = backStackEntry.arguments?.getInt("studyIndex") ?: 0
-				val study = studyList.value[studyIndex]
+				val study = studyList()[studyIndex]
 				
 				StudyInfoView(
 					study = study,
@@ -317,7 +320,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 					}
 				)) { backStackEntry ->
 				val studyIndex = backStackEntry.arguments?.getInt("studyIndex") ?: 0
-				val study = studyList.value[studyIndex]
+				val study = studyList()[studyIndex]
 				
 				StudyPermissionsView(
 					study = study,
