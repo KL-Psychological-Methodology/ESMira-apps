@@ -125,7 +125,7 @@ struct CompassContent: View {
 					}.padding(10)
 				}
 			}
-			.rotationEffect(Angle(degrees: rotation))
+			.rotationEffect(Angle(degrees: -rotation))
 			
 			VStack {
 				Image(systemName: "location.north.line").resizable().frame(width: 30, height: 30)

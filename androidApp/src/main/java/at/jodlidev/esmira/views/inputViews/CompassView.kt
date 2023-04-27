@@ -201,7 +201,7 @@ fun CompassContentView(
 				modifier = Modifier
 					.size(200.dp)
 					.clip(CircleShape)
-					.rotate(rotation())
+					.rotate(-rotation())
 					.drawBehind {
 						drawCircle(color = borderColor, style = borderStroke)
 					}
