@@ -804,9 +804,19 @@ object DbLogic {
 	fun getSortedUploadData(studyId: Long): List<UploadData> {
 		var list: List<UploadData> = getDataSets(studyId)
 		list = list.plus(getReadyFileUploads(studyId))
-		list = list.sortedByDescending { it.timestamp }
-		list = list.sortedWith { a, _ -> if(a.synced == UploadData.States.NOT_SYNCED_ERROR_DELETABLE) 0 else 1}
-//		list.filter { it.synced == UploadData.States.NOT_SYNCED_ERROR_DELETABLE }
+		//we want deletable entries at the top. Apart from that everything should be sorted by timestamp (descending)
+		list = list.sortedWith { a, b ->
+			if(a.synced != b.synced) {
+				if(a.synced == UploadData.States.NOT_SYNCED_ERROR_DELETABLE)
+					-1
+				else if(b.synced == UploadData.States.NOT_SYNCED_ERROR_DELETABLE)
+					1
+				else
+					(b.timestamp - a.timestamp).toInt()
+			}
+			else
+				(b.timestamp - a.timestamp).toInt()
+		}
 		return list
 	}
 	
