@@ -64,7 +64,6 @@ fun RecordAudioView(input: Input) {
 	val mediaPlayer = remember {
 		MediaPlayer()
 	}
-//	val mediaPlayer = MediaPlayer.create(context, Uri.fromFile(file))
 	mediaPlayer.setOnCompletionListener {
 		isPlaying.value = false
 	}
@@ -84,14 +83,14 @@ fun RecordAudioView(input: Input) {
 	}
 	
 	val playAudio = {
-//		val mediaPlayer = MediaPlayer.create(context, Uri.fromFile(file))
+		mediaPlayer.reset()
 		mediaPlayer.setAudioAttributes(
 			AudioAttributes.Builder()
 				.setUsage(AudioAttributes.USAGE_MEDIA)
-				.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+				.setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
 				.build()
 		)
-
+		
 		mediaPlayer.setDataSource(filePath)
 		mediaPlayer.prepare()
 		mediaPlayer.start()
