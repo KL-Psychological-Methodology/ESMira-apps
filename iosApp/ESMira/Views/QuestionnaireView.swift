@@ -15,7 +15,6 @@ struct QuestionnaireView: View {
 
 	private let page: Page?
 	private let inputs: [Input]
-	@State var showSuccessScreen = false
 	@State var formStarted: Int64
 
 	@State var nextPage = false
@@ -129,7 +128,8 @@ struct QuestionnaireView: View {
 						Button(action: {
 							if(self.noMissings()) {
 								self.questionnaire.saveQuestionnaire(formStarted: self.formStarted)
-								self.showSuccessScreen = true
+								self.navigationState.questionnaireOpened = false
+								self.navigationState.questionnaireSuccessfullOpened = true
 							}
 						}) {
 							Image(systemName: "tray.and.arrow.down")
@@ -180,7 +180,6 @@ struct QuestionnaireView: View {
 	
 	var body: some View {
 		VStack {
-			NavigationLink(destination: QuestionnaireSavedSuccessfully(), isActive: self.$showSuccessScreen, label: { EmptyView() })
 			self.drawQuestionnaire()
 		}
 			.navigationBarTitle(self.questionnaire.getQuestionnaireTitle(pageIndex: Int32(self.pageIndex)))

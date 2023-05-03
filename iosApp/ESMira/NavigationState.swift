@@ -19,6 +19,7 @@ class NavigationState: ObservableObject {
 	@Published var addStudyConnectData: QrInterpreter.ConnectData? = nil
 	
 	@Published var questionnaireOpened = false
+	@Published var questionnaireSuccessfullOpened = false
 	@Published var messagesOpened = false
 	@Published var addStudyOpened = false
 	@Published var inactiveQuestionnaireOpened = false

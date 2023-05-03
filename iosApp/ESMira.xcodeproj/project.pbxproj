@@ -261,6 +261,7 @@
 		6BA4BF9A283E566D00D3E8C7 /* AddStudySubViews */ = {
 			isa = PBXGroup;
 			children = (
+				6BCFED6D2825283A009167B0 /* Permissions */,
 				6BA4BFA1283E58A700D3E8C7 /* AccessKeyQuestionView.swift */,
 				6BA4BF9D283E575700D3E8C7 /* QrExistsView.swift */,
 				6BA4BFA7283E614E00D3E8C7 /* QrStartView.swift */,
@@ -271,8 +272,6 @@
 				6BA4BFA3283E5AE600D3E8C7 /* StudyLoaderView.swift */,
 				6BA4BFAB283E6B7100D3E8C7 /* StudyPermissionsView.swift */,
 				6BA4BF9B283E569F00D3E8C7 /* WelcomeView.swift */,
-				6BCFED6D2825283A009167B0 /* Permissions */,
-				6B92BF3229DC38F80011E8D9 /* questionnaire */,
 			);
 			path = AddStudySubViews;
 			sourceTree = "<group>";
@@ -280,12 +279,13 @@
 		6BCFED642825283A009167B0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				6B99356028DB4E4D002F3180 /* QuestionnaireSavedSuccessfully.swift */,
+				6B92BF3229DC38F80011E8D9 /* questionnaire */,
 				6BCFED7B2825283A009167B0 /* AddStudyView.swift */,
 				6B3A92C329E816410081A554 /* AboutESMira.swift */,
 				6BCFED662825283A009167B0 /* InactiveQuestionnairesView.swift */,
 				6BCFED7C2825283A009167B0 /* MessagesView.swift */,
 				6BCFED7A2825283A009167B0 /* NewMessageView.swift */,
+				6B99356028DB4E4D002F3180 /* QuestionnaireSavedSuccessfully.swift */,
 				6BCFED692825283A009167B0 /* QuestionnaireView.swift */,
 				6BB47F7628F6FFB900C0F561 /* RewardView.swift */,
 				6BCFED7F2825283A009167B0 /* SendErrorReportView.swift */,
@@ -375,7 +375,6 @@
 				6BCFEDD428252854009167B0 /* DateStruct.swift */,
 				6B3A92CB29F2B3CC0081A554 /* CompassStruct.swift */,
 				6B3A92C729F293BF0081A554 /* CountdownStruct.swift */,
-				6B3A92C929F2AE2A0081A554 /* ShareStruct.swift */,
 				6BCFEDCA28252854009167B0 /* DynamicStruct.swift */,
 				6B838D7B28461927001DE14E /* EmptyStruct.swift */,
 				6BCFEDD128252854009167B0 /* ErrorStruct.swift */,
@@ -386,6 +385,7 @@
 				6BCFEDCD28252854009167B0 /* NumberStruct.swift */,
 				6BCFEDCB28252854009167B0 /* PhotoStruct.swift */,
 				6B3A92CD29F7B2720081A554 /* RecordAudioStruct.swift */,
+				6B3A92C929F2AE2A0081A554 /* ShareStruct.swift */,
 				6BCFEDC928252854009167B0 /* TextInputStruct.swift */,
 				6BCFEDD528252854009167B0 /* TextStruct.swift */,
 				6BCFEDD628252854009167B0 /* TimeStruct.swift */,
@@ -792,7 +792,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 50;
+				CURRENT_PROJECT_VERSION = 51;
 				DEVELOPMENT_ASSET_PATHS = "ESMira/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZXQ54B7QHL;
 				ENABLE_PREVIEWS = YES;
@@ -820,7 +820,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 50;
+				CURRENT_PROJECT_VERSION = 51;
 				DEVELOPMENT_ASSET_PATHS = "ESMira/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZXQ54B7QHL;
 				ENABLE_PREVIEWS = YES;

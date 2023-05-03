@@ -13,7 +13,7 @@ struct QuestionnaireSavedSuccessfully: View {
 			Text("info_questionnaire_success")
 			Spacer()
 			Button(action: {
-				self.navigationState.questionnaireOpened = false
+				self.navigationState.questionnaireSuccessfullOpened = false
 			}) {
 				Text("ok_")
 			}

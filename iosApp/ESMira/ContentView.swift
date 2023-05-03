@@ -54,6 +54,12 @@ struct ContentView: View {
 					isActive:self.$navigationState.addStudyOpened,
 					label: { EmptyView() }
 				)
+				NavigationLink(
+					destination: QuestionnaireSavedSuccessfully(),
+					isActive:self.$navigationState.questionnaireSuccessfullOpened,
+					label: { EmptyView() }
+				)
+				
 				if(self.navigationState.questionnaireId != -1) {
 					let questionnaire = DbLogic().getQuestionnaire(id: self.navigationState.questionnaireId) //happens when study was quit and a questionnaire was opened before
 					if(questionnaire != nil) {
