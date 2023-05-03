@@ -44,7 +44,7 @@ fun ShareView(input: Input, get: () -> String, save: (String) -> Unit) {
 			text = stringResource(R.string.open_url),
 			icon = Icons.Default.Share,
 			onClick = {
-				save("1")
+				save(((get().toIntOrNull() ?: 0) + 1).toString())
 				uriHandler.openUri(input.getFilledUrl())
 			}
 		)

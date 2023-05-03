@@ -14,7 +14,7 @@ struct ShareStruct: View {
 		VStack(alignment: .center) {
 			DefaultIconButton(icon: "square.and.arrow.up", label: "open_url") {
 				UIApplication.shared.open(URL(string: viewModel.input.getFilledUrl())!, options: [:])
-				viewModel.value = "1"
+				viewModel.value = String((Int(viewModel.value) ?? 0) + 1)
 			}
 		}
 	}
