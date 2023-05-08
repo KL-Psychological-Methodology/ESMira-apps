@@ -43,7 +43,6 @@ fun QuestionnaireView(
 	goNext: () -> Unit
 ) {
 	val context = LocalContext.current
-	val isLastPage = pageNumber == questionnaire.pages.size - 1
 	val listState = rememberLazyListState()
 	val coroutineScope = rememberCoroutineScope()
 	
@@ -51,11 +50,10 @@ fun QuestionnaireView(
 		MainView(
 			listState,
 			questionnaire,
-			questionnaire.pages[pageNumber],
-			isLastPage,
+			questionnaire.getPage(pageNumber),
+			questionnaire.isLastPage(pageNumber),
 			questionnaire.questionnairePageHasRequired(pageNumber)
 		) {
-			
 			val errorIndex = questionnaire.checkQuestionnaire(pageNumber)
 			if(errorIndex != -1) {
 				Toast.makeText(context, R.string.error_missing_fields, Toast.LENGTH_SHORT).show()

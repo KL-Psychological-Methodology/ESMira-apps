@@ -54,27 +54,21 @@ struct ContentView: View {
 					isActive:self.$navigationState.addStudyOpened,
 					label: { EmptyView() }
 				)
-				NavigationLink(
-					destination: QuestionnaireSavedSuccessfully(),
-					isActive:self.$navigationState.questionnaireSuccessfullOpened,
-					label: { EmptyView() }
-				)
-				
 				if(self.navigationState.questionnaireId != -1) {
 					let questionnaire = DbLogic().getQuestionnaire(id: self.navigationState.questionnaireId) //happens when study was quit and a questionnaire was opened before
 					if(questionnaire != nil) {
 						NavigationLink(
 							destination:
-								QuestionnaireView(
-									questionnaire: questionnaire!
-								),
+								QuestionnaireView(questionnaire: questionnaire!),
 							isActive: self.$navigationState.questionnaireOpened,
 							label: { EmptyView() }
 						)
 					}
 				}
-				
-				if(self.navigationState.study != nil) {
+				if(self.navigationState.questionnaireSuccessfullOpened) {
+					QuestionnaireSavedSuccessfully()
+				}
+				else if(self.navigationState.study != nil) {
 					NavigationLink(
 						destination: MessagesView(study: self.navigationState.study!),
 						isActive:self.$navigationState.messagesOpened,
@@ -114,6 +108,5 @@ struct ContentView: View {
 			
 			.accentColor(Color("PrimaryDark"))
 			.navigationViewStyle(.stack)
-			.navigationViewStyle(StackNavigationViewStyle())
 	}
 }

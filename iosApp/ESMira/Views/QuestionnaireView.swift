@@ -10,13 +10,12 @@ struct QuestionnaireView: View {
 	@EnvironmentObject var navigationState: NavigationState
 	
 	let questionnaire: sharedCode.Questionnaire
-	let pageIndex: Int
-
-
-	private let page: Page?
-	private let inputs: [Input]
+	let firstScreen: Bool
+	
+	@State var pageIndex: Int
 	@State var formStarted: Int64
-
+	
+	@State var nextPageWithoutBack = false
 	@State var nextPage = false
 
 	@State private var action = ScrollAction.idle
@@ -27,32 +26,19 @@ struct QuestionnaireView: View {
 	private let waitCounter: Int
 	
 	
-	
+	/**
+	 * Only called from ContentView
+	 */
 	init(questionnaire: sharedCode.Questionnaire) {
-		self.init(questionnaire: questionnaire, pageIndex: 0, formStarted: Int64(Date().timeIntervalSince1970 * 1000))
+		self.init(questionnaire: questionnaire, pageIndex: Int(questionnaire.getFirstPageIndex()), formStarted: Int64(Date().timeIntervalSince1970 * 1000), firstScreen: true)
 	}
-	init(questionnaire: sharedCode.Questionnaire, pageIndex: Int, formStarted: Int64) {
+	init(questionnaire: sharedCode.Questionnaire, pageIndex: Int, formStarted: Int64, firstScreen: Bool = false) {
+		self.firstScreen = firstScreen
 		self.questionnaire = questionnaire
-		self.pageIndex = pageIndex
+		self._pageIndex = State(initialValue: pageIndex)
 		self._formStarted = State(initialValue: formStarted)
-
-		if(questionnaire.pages.count == 0) {
-			self.waitCounter = 0
-			self.inputs = []
-			self.page = nil
-		}
-		else {
-			self.page = self.questionnaire.pages[self.pageIndex]
-			let preInputs = self.page!.inputs
-			var inputs: [Input] = []
-			for input in preInputs {
-				if(input.type !== Input.TYPES.appUsage) {
-					inputs.append(input)
-				}
-			}
-			self.inputs = inputs
-			self.waitCounter = inputs.count
-		}
+		
+		self.waitCounter = questionnaire.getPage(pageNumber: Int32(pageIndex)).inputs.count
 	}
 	
 	private func noMissings() -> Bool {
@@ -70,18 +56,18 @@ struct QuestionnaireView: View {
 		return (i % 2 != 0) ? Color("ListColor1") : Color("ListColor2")
 	}
 	
-	private func drawInnerQuestionnaire(width: CGFloat) -> some View {
-
+	private func drawInnerQuestionnaire(page: Page, width: CGFloat) -> some View {
+		let inputs = page.inputs
 		return VStack {
-			if(!self.page!.header.isEmpty) {
-				HtmlTextView(html: self.page!.header, isReady: self.$headerIsReady)
+			if(!page.header.isEmpty) {
+				HtmlTextView(html: page.header, isReady: self.$headerIsReady)
 					.padding()
 					.frame(width: width)
 					.background(Color("ListColor1"))
 			}
 
-			ForEach(0..<self.inputs.count, id: \.self) { i in
-				InputView(input: self.inputs[i], readyCounter: self.$readyCounter)
+			ForEach(0..<inputs.count, id: \.self) { i in
+				InputView(input: inputs[i], readyCounter: self.$readyCounter)
 					.padding()
 					.frame(width: width)
 					.uiTag(i)
@@ -90,11 +76,11 @@ struct QuestionnaireView: View {
 			}
 
 			
-			if(!self.page!.footer.isEmpty) {
-				HtmlTextView(html: self.page!.footer, isReady: self.$footerIsReady)
+			if(!page.footer.isEmpty) {
+				HtmlTextView(html: page.footer, isReady: self.$footerIsReady)
 					.padding()
 					.frame(width: width)
-					.background(getBackgroundColor(self.inputs.count))
+					.background(getBackgroundColor(inputs.count))
 			}
 			
 			VStack(alignment: .leading) {
@@ -102,7 +88,7 @@ struct QuestionnaireView: View {
 					Text("info_required")
 						.padding(10)
 				}
-				if(self.pageIndex < self.questionnaire.pages.count - 1) {
+				if(!self.questionnaire.isLastPage(pageNumber: Int32(pageIndex))) {
 					NavigationLink(
 						destination: QuestionnaireView(questionnaire: self.questionnaire, pageIndex: self.pageIndex + 1, formStarted: self.formStarted),
 						isActive: self.$nextPage,
@@ -113,7 +99,13 @@ struct QuestionnaireView: View {
 						Spacer()
 						Button(action: {
 							if(self.noMissings()) {
-								self.nextPage = true
+								QuestionnaireCache().savePage(questionnaireId: questionnaire.id, pageNumber: Int32(self.pageIndex + 1))
+								if(questionnaire.isBackEnabled) {
+									self.nextPage = true
+								}
+								else {
+									self.nextPageWithoutBack = true
+								}
 							}
 						}) {
 							Text("continue_").bold()
@@ -140,12 +132,13 @@ struct QuestionnaireView: View {
 				}
 			}
 				.padding(.vertical, 30)
-				.background(getBackgroundColor(self.page!.footer.isEmpty ? self.inputs.count : self.inputs.count + 1))
-		}.animation(.none)
+				.background(getBackgroundColor(page.footer.isEmpty ? inputs.count : inputs.count + 1))
+		}
+			.animation(.none)
 	}
 
 	func drawQuestionnaire() -> some View {
-		let page = questionnaire.pages[pageIndex]
+		let page = self.questionnaire.getPage(pageNumber: Int32(self.pageIndex))
 		let preinputs = page.inputs
 		let isDisabled = self.readyCounter < self.waitCounter || (!page.header.isEmpty && !self.headerIsReady) || (!page.footer.isEmpty && !self.footerIsReady)
 		let isZero = self.waitCounter == 0 || self.readyCounter == 0
@@ -161,7 +154,7 @@ struct QuestionnaireView: View {
         return GeometryReader { geometry in
             ScrollView {
 				ZStack(alignment: .top) {
-					self.drawInnerQuestionnaire(width: geometry.size.width).opacity(isDisabled ? 0 : 1).animation(.easeIn(duration: 0.8))
+					self.drawInnerQuestionnaire(page: page, width: geometry.size.width).opacity(isDisabled ? 0 : 1).animation(.easeIn(duration: 0.8))
 					if(isDisabled) {
 						VStack {
 							LoadingSpinner(isAnimating: .constant(true), style: .large).padding()
@@ -180,7 +173,17 @@ struct QuestionnaireView: View {
 	
 	var body: some View {
 		VStack {
-			self.drawQuestionnaire()
+			if(self.nextPageWithoutBack) {
+				QuestionnaireView(questionnaire: self.questionnaire, pageIndex: self.pageIndex + 1, formStarted: self.formStarted)
+			}
+			else {
+				self.drawQuestionnaire()
+					.onAppear {
+						if(self.firstScreen) { //The screen used by ContentView is cached. So pageIndex needs to be checked anytime
+							self.pageIndex = Int(questionnaire.getFirstPageIndex())
+						}
+					}
+			}
 		}
 			.navigationBarTitle(self.questionnaire.getQuestionnaireTitle(pageIndex: Int32(self.pageIndex)))
 			.onAppear {

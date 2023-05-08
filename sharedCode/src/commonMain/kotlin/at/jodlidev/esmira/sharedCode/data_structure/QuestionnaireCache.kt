@@ -20,6 +20,7 @@ object QuestionnaireCache {
 	const val KEY_CACHE_VALUE = "cacheValue"
 	
 	const val FORM_STARTED_NAME = "~formStarted"
+	const val FORM_PAGE = "~formPage"
 	
 	internal fun loadCacheValue(questionnaireId: Long, inputName: String): String? {
 		val db = NativeLink.sql
@@ -68,93 +69,16 @@ object QuestionnaireCache {
 			formStarted
 		}
 	}
+	
+	fun savePage(questionnaireId: Long, pageNumber: Int) {
+		saveCacheValue(questionnaireId, FORM_PAGE, pageNumber.toString())
+	}
+	fun getPage(questionnaireId: Long): Int {
+		return loadCacheValue(questionnaireId, FORM_PAGE)?.toInt() ?: 0
+	}
 
 
 	fun clearCache(questionnaireId: Long, db: SQLiteInterface = NativeLink.sql) {
 		db.delete(TABLE, "$KEY_QUESTIONNAIRE_ID = ?", arrayOf(questionnaireId.toString()))
 	}
-	
-	
-	
-//	private fun cacheExists(questionnaire: Questionnaire): Boolean {
-//		val c = NativeLink.sql.select(
-//			TABLE,
-//			arrayOf(KEY_QUESTIONNAIRE_ID),
-//			"$KEY_QUESTIONNAIRE_ID = ?", arrayOf(questionnaire.id.toString()),
-//			null,
-//			null,
-//			null,
-//			null
-//		)
-//
-//		val r = c.moveToFirst()
-//		c.close()
-//		return r;
-//	}
-//
-//	fun loadIntoQuestionnaire(questionnaire: Questionnaire): Long {
-//		val db = NativeLink.sql
-//		val c = db.select(
-//			TABLE,
-//			arrayOf(KEY_CACHE_VALUE),
-//			"$KEY_QUESTIONNAIRE_ID = ?", arrayOf(questionnaire.toString()),
-//			null,
-//			null,
-//			null,
-//			null
-//		)
-//
-//		if(c.moveToFirst()) {
-//			val cache = c.getString(0)
-//			c.close()
-//
-//
-//
-//			if(cache.isEmpty())
-//				return NativeLink.getNowMillis()
-//			val obj = DbLogic.getJsonConfig().decodeFromString<JsonObject>(cache)
-//
-//			val backupFrom = obj.getValue("backupFrom").jsonPrimitive.long
-//
-//			if(backupFrom < NativeLink.getNowMillis() - RESPONSES_BACKUP_VALID_TIMESPAN_MS) {
-//				clearCache(questionnaire, db)
-//				return NativeLink.getNowMillis()
-//			}
-//
-//			val jsonPages = obj.getValue("pages").jsonArray
-//			for((iPage, jsonPage) in jsonPages.withIndex()) {
-//				val orderedInputs = questionnaire.pages[iPage].orderedInputs
-//				for((iInput, jsonInput) in jsonPage.jsonArray.withIndex()) {
-//					orderedInputs[iInput].fromBackupObj(jsonInput.jsonObject)
-//				}
-//			}
-//			return obj.getValue("formStarted").jsonPrimitive.long
-//		}
-//		c.close()
-//		return NativeLink.getNowMillis();
-//	}
-//	fun saveFromQuestionnaire(questionnaire: Questionnaire, formStarted: Long) {
-//		val db = NativeLink.sql
-//		val json = buildJsonObject {
-//			put("backupFrom", NativeLink.getNowMillis())
-//			put("formStarted", formStarted)
-//			put("pages", buildJsonArray {
-//				for(page in questionnaire.pages) {
-//					add(buildJsonArray {
-//						for(input in page.orderedInputs) {
-//							add(input.getBackupJsonObj())
-//						}
-//					})
-//				}
-//			})
-//		}
-//
-//		val responsesBackup = json.toString()
-//		val values = db.getValueBox()
-//		values.putString(KEY_CACHE_VALUE, responsesBackup)
-//		if(cacheExists(questionnaire))
-//			db.update(TABLE, values, "$KEY_QUESTIONNAIRE_ID = ?", arrayOf(questionnaire.id.toString()))
-//		else
-//			db.insert(TABLE, values)
-//	}
 }

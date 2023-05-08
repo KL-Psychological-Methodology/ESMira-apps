@@ -41,6 +41,7 @@ class Questionnaire {
 	var completableAtSpecificTimeEnd = -1
 	var limitToGroup = 0
 	var minDataSetsForReward = 0
+	var isBackEnabled = true
 
 	
 	@SerialName("actionTriggers") private var jsonActionTriggers: List<ActionTrigger> = ArrayList()
@@ -58,7 +59,7 @@ class Questionnaire {
 	
 	@SerialName("pages") @Serializable(with = JsonToStringSerializer::class) var pagesString = "[]"
 	@Transient private lateinit var _pages: List<Page>
-	val pages: List<Page> get() {
+	internal val pages: List<Page> get() {
 		if(!this::_pages.isInitialized) {
 			_pages = try {
 				val pages = DbLogic.getJsonConfig().decodeFromString<List<Page>>(pagesString)
@@ -121,6 +122,7 @@ class Questionnaire {
 		publishedAndroid = c.getBoolean(23)
 		publishedIOS = c.getBoolean(24)
 		minDataSetsForReward = c.getInt(25)
+		isBackEnabled = c.getBoolean(26)
 		exists = true
 		fromJsonOrUpdated = false
 	}
@@ -164,6 +166,18 @@ class Questionnaire {
 		return list
 	}
 	
+	fun getFirstPageIndex(): Int {
+		return if(isBackEnabled)
+			0
+		else
+			QuestionnaireCache.getPage(id)
+	}
+	fun getPage(pageNumber: Int): Page {
+		return pages[pageNumber];
+	}
+	fun isLastPage(pageNumber: Int): Boolean {
+		return pageNumber == pages.size - 1
+	}
 	fun getQuestionnaireTitle(pageIndex: Int): String {
 		return if(pages.size > 1)
 			"$title ${(pageIndex + 1)}/${pages.size}"
@@ -198,6 +212,7 @@ class Questionnaire {
 		values.putBoolean(KEY_PUBLISHED_ANDROID, publishedAndroid)
 		values.putBoolean(KEY_PUBLISHED_IOS, publishedIOS)
 		values.putInt(KEY_MIN_DATASETS_FOR_REWARD, minDataSetsForReward)
+		values.putBoolean(KEY_IS_BACK_ENABLED, isBackEnabled)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -542,6 +557,7 @@ class Questionnaire {
 		const val KEY_PUBLISHED_ANDROID = "publishedAndroid"
 		const val KEY_PUBLISHED_IOS = "publishedIOS"
 		const val KEY_MIN_DATASETS_FOR_REWARD = "minDataSetsForReward"
+		const val KEY_IS_BACK_ENABLED = "isBackEnabled"
 		
 		val COLUMNS = arrayOf(
 			KEY_ID,
@@ -569,7 +585,8 @@ class Questionnaire {
 			KEY_SUMSCORES,
 			KEY_PUBLISHED_ANDROID,
 			KEY_PUBLISHED_IOS,
-			KEY_MIN_DATASETS_FOR_REWARD
+			KEY_MIN_DATASETS_FOR_REWARD,
+			KEY_IS_BACK_ENABLED
 		)
 	}
 }

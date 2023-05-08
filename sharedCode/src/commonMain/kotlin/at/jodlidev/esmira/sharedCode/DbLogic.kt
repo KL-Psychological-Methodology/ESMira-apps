@@ -143,6 +143,7 @@ object DbLogic {
 			${Questionnaire.KEY_COMPLETABLE_AT_SPECIFIC_TIME_END} INTEGER,
 			${Questionnaire.KEY_LIMIT_TO_GROUP} INTEGER,
 			${Questionnaire.KEY_MIN_DATASETS_FOR_REWARD} INTEGER,
+			${Questionnaire.KEY_IS_BACK_ENABLED} INTEGER,
 			${Questionnaire.KEY_PAGES} TEXT,
 			${Questionnaire.KEY_SUMSCORES} TEXT,
 			${Questionnaire.KEY_PUBLISHED_ANDROID} INTEGER DEFAULT 1,
