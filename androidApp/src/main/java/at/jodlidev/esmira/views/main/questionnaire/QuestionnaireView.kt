@@ -13,6 +13,7 @@ import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,7 +31,9 @@ import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
 import at.jodlidev.esmira.views.TextButtonIconLeft
 import at.jodlidev.esmira.views.TextButtonIconRight
 import at.jodlidev.esmira.views.main.DefaultScaffoldView
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.seconds
 
 /**
  * Created by JodliDev on 21.02.2023.
@@ -45,12 +48,19 @@ fun QuestionnaireView(
 	val context = LocalContext.current
 	val listState = rememberLazyListState()
 	val coroutineScope = rememberCoroutineScope()
+	val page = questionnaire.getPage(pageNumber)
+	if(page.skipAfterSecs != 0) {
+		LaunchedEffect(Unit) {
+			delay(page.skipAfterSecs.seconds)
+			goNext()
+		}
+	}
 	
 	DefaultScaffoldView(questionnaire.getQuestionnaireTitle(pageNumber), goBack) {
 		MainView(
 			listState,
 			questionnaire,
-			questionnaire.getPage(pageNumber),
+			page,
 			questionnaire.isLastPage(pageNumber),
 			questionnaire.questionnairePageHasRequired(pageNumber)
 		) {

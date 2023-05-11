@@ -4,6 +4,7 @@
 
 import SwiftUI
 import sharedCode
+import Combine
 
 struct QuestionnaireView: View {
 	@EnvironmentObject var appState: AppState
@@ -25,6 +26,7 @@ struct QuestionnaireView: View {
 	@State private var readyCounter = 0
 	private let waitCounter: Int
 	
+	@State var skipPageTimer: DispatchSourceTimer? = nil
 	
 	/**
 	 * Only called from ContentView
@@ -99,13 +101,7 @@ struct QuestionnaireView: View {
 						Spacer()
 						Button(action: {
 							if(self.noMissings()) {
-								QuestionnaireCache().savePage(questionnaireId: questionnaire.id, pageNumber: Int32(self.pageIndex + 1))
-								if(questionnaire.isBackEnabled) {
-									self.nextPage = true
-								}
-								else {
-									self.nextPageWithoutBack = true
-								}
+								goNext()
 							}
 						}) {
 							Text("continue_").bold()
@@ -119,9 +115,7 @@ struct QuestionnaireView: View {
 						Spacer()
 						Button(action: {
 							if(self.noMissings()) {
-								self.questionnaire.saveQuestionnaire(formStarted: self.formStarted)
-								self.navigationState.questionnaireOpened = false
-								self.navigationState.questionnaireSuccessfullOpened = true
+								goNext()
 							}
 						}) {
 							Image(systemName: "tray.and.arrow.down")
@@ -143,18 +137,10 @@ struct QuestionnaireView: View {
 		let isDisabled = self.readyCounter < self.waitCounter || (!page.header.isEmpty && !self.headerIsReady) || (!page.footer.isEmpty && !self.footerIsReady)
 		let isZero = self.waitCounter == 0 || self.readyCounter == 0
 
-		var inputs: [Input] = []
-		for input in preinputs {
-			if(input.type !== Input.TYPES.appUsage) {
-				inputs.append(input)
-			}
-		}
-
-
         return GeometryReader { geometry in
             ScrollView {
 				ZStack(alignment: .top) {
-					self.drawInnerQuestionnaire(page: page, width: geometry.size.width).opacity(isDisabled ? 0 : 1).animation(.easeIn(duration: 0.8))
+					self.drawInnerQuestionnaire(page: page, width: geometry.size.width).opacity(isDisabled ? 0 : 1).animation(.easeIn(duration: 0.4))
 					if(isDisabled) {
 						VStack {
 							LoadingSpinner(isAnimating: .constant(true), style: .large).padding()
@@ -164,10 +150,43 @@ struct QuestionnaireView: View {
 							}
 						}
 					}
+					else if(page.skipAfterSecs != 0) {
+						VStack {}
+							.onAppear {
+								let timer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
+								timer.schedule(deadline: .now() + TimeInterval(page.skipAfterSecs))
+								timer.setEventHandler {
+									goNext()
+								}
+								skipPageTimer = timer
+								timer.resume()
+							}
+							.onDisappear {
+								self.skipPageTimer?.cancel()
+							}
+					}
 				}
             }
 			.resignKeyboardOnDragGesture()
 			.scrollAction(self.$action)
+			
+		}
+	}
+	
+	private func goNext() {
+		if(!self.questionnaire.isLastPage(pageNumber: Int32(pageIndex))) {
+			QuestionnaireCache().savePage(questionnaireId: questionnaire.id, pageNumber: Int32(self.pageIndex + 1))
+			if(questionnaire.isBackEnabled) {
+				self.nextPage = true
+			}
+			else {
+				self.nextPageWithoutBack = true
+			}
+		}
+		else {
+			self.questionnaire.saveQuestionnaire(formStarted: self.formStarted)
+			self.navigationState.questionnaireOpened = false
+			self.navigationState.questionnaireSuccessfullOpened = true
 		}
 	}
 	

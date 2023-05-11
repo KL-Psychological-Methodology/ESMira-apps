@@ -13,6 +13,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class Page internal constructor( ) {
 	var randomized: Boolean = false
+	var skipAfterSecs = 0
 	var header: String = ""
 	var footer: String = ""
 	@SerialName("inputs") var orderedInputs: List<Input> = ArrayList()
