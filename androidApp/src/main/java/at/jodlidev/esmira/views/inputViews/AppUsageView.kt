@@ -156,25 +156,40 @@ class AppUsageCalculator(context: Context) {
 @Composable
 fun AppUsageView(input: Input, get: () -> String, save: (String, Map<String, String>) -> Unit) {
 	val appUsageCalculator = AppUsageCalculator(LocalContext.current)
+	val now = NativeLink.getNowMillis()
 	val to = NativeLink.getMidnightMillis()
 	val from = to - 86400000
 	val displayAppUsage = input.packageId != ""
 	
 	val yesterdayUsageTime: Long
 	val yesterdayUsageCount: Int
+	val todayUsageTime: Long
+	val todayUsageCount: Int
 	
 	if(displayAppUsage) {
 		val packageUsages = appUsageCalculator.getAllPackageUsages(from, to)
 		yesterdayUsageCount = packageUsages[input.packageId]?.count ?: -1
 		yesterdayUsageTime = packageUsages[input.packageId]?.totalTime ?: -1L
+		
+		val packageUsagesToday = appUsageCalculator.getAllPackageUsages(to, now)
+		todayUsageCount = packageUsagesToday[input.packageId]?.count ?: -1
+		todayUsageTime = packageUsagesToday[input.packageId]?.totalTime ?: -1L
 	}
 	else { //general screen time:
 		val yesterdayPair = appUsageCalculator.countTotalEvents(from, to)
 		yesterdayUsageCount = yesterdayPair.count
 		yesterdayUsageTime = yesterdayPair.totalTime
+		
+		val todayPair = appUsageCalculator.countTotalEvents(to, now)
+		todayUsageCount = todayPair.count
+		todayUsageTime = todayPair.totalTime
 	}
 	
-	save(yesterdayUsageTime.toString(), mapOf(Pair("usageCount", yesterdayUsageCount.toString())))
+	save(yesterdayUsageTime.toString(), mapOf(
+		Pair("usageCount", yesterdayUsageCount.toString()),
+		Pair("usageTimeToday", todayUsageTime.toString()),
+		Pair("usageCountToday", todayUsageCount.toString())
+	))
 	
 	AppUsageTableView(yesterdayUsageCount, yesterdayUsageTime, displayAppUsage, input.packageId)
 }
