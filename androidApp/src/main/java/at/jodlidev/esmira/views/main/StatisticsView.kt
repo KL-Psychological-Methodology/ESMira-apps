@@ -163,9 +163,10 @@ fun StatisticsContentView(charts: List<ChartInfo>, chartInfoCollection: ChartInf
 				}
 			}
 			else {
+				val context = LocalContext.current
 				AndroidView(
 					factory = {
-//						chartInfo.initBuilder(chartInfoCollection, ChartTypeChooser(context))
+						chartInfo.initBuilder(chartInfoCollection, ChartTypeChooser(context))
 						chartInfo.builder.createChart() as View
 					}, modifier = Modifier
 						.height(200.dp)
