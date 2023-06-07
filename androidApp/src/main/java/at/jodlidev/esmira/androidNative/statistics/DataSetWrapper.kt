@@ -1,6 +1,7 @@
 package at.jodlidev.esmira.androidNative.statistics
 
 import android.graphics.Color
+import at.jodlidev.esmira.sharedCode.data_structure.ErrorBox
 import at.jodlidev.esmira.sharedCode.statistics.ChartFormatterInterface
 import at.jodlidev.esmira.sharedCode.statistics.ChartDataSetInterface
 import com.github.mikephil.charting.charts.ScatterChart
@@ -93,8 +94,13 @@ class DataSetWrapper(private val dataSet: DataSet<*>) : ChartDataSetInterface {
 	
 	companion object {
 		fun getIntColor(color: String): Int {
-//			return ColorUtils.setAlphaComponent(Color.parseColor(color), 100)
-			return if(color.length != 0) Color.parseColor(color) else Color.BLACK
+			return try {
+				if(color.isNotEmpty()) Color.parseColor(color) else Color.BLACK
+			}
+			catch(e: Throwable) {
+				ErrorBox.warn("DataSetWrapper", "Color \"$color\" is not valid! Using black instead", e)
+				Color.BLACK
+			}
 		}
 	}
 }
