@@ -8,13 +8,13 @@ import android.os.Build
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.ScreenTrackingReceiver
@@ -22,6 +22,7 @@ import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.Input
 import java.lang.ref.WeakReference
 import java.util.concurrent.TimeUnit
+import kotlin.random.Random
 
 /**
  * Created by JodliDev on 23.01.2023.
@@ -191,26 +192,32 @@ fun AppUsageView(input: Input, get: () -> String, save: (String, Map<String, Str
 		Pair("usageCountToday", todayUsageCount.toString())
 	))
 	
-	AppUsageTableView(yesterdayUsageCount, yesterdayUsageTime, displayAppUsage, input.packageId)
+	AppUsageTableView(yesterdayUsageCount, yesterdayUsageTime, todayUsageCount, todayUsageTime, displayAppUsage, input.packageId)
 }
 
-@Composable
-fun AppUsageTableView(yesterdayUsageCount: Int, yesterdayUsageTime: Long, displayAppUsage: Boolean, packageId: String) {
-	val usageTime = if(yesterdayUsageTime == 0L || yesterdayUsageTime == -1L) {
-		stringResource(R.string.no_data)
+private fun formatTime(context: Context, time: Long): String {
+	return if(time == 0L || time == -1L) {
+		context.getString(R.string.no_data)
 	}
 	else {
-		val hours = TimeUnit.MILLISECONDS.toHours(yesterdayUsageTime)
-		val minutes = TimeUnit.MILLISECONDS.toMinutes(yesterdayUsageTime) % 60
-		val seconds = TimeUnit.MILLISECONDS.toSeconds(yesterdayUsageTime) % 60
+		val hours = TimeUnit.MILLISECONDS.toHours(time)
+		val minutes = TimeUnit.MILLISECONDS.toMinutes(time) % 60
+		val seconds = TimeUnit.MILLISECONDS.toSeconds(time) % 60
 		
-		stringResource(
+		context.getString(
 			R.string.time_format_android,
 			hours.toString().padStart(2, '0'),
 			minutes.toString().padStart(2, '0'),
 			seconds.toString().padStart(2, '0')
 		)
 	}
+}
+
+@Composable
+fun AppUsageTableView(yesterdayUsageCount: Int, yesterdayUsageTime: Long, todayUsageCount: Int, todayUsageTime: Long, displayAppUsage: Boolean, packageId: String) {
+	val context = LocalContext.current
+	val todayUsageTimeFormatted = formatTime(context, todayUsageTime)
+	val yesterdayUsageTimeFormatted = formatTime(context, yesterdayUsageTime)
 	
 	Column(modifier = Modifier.fillMaxWidth()) {
 		Text(
@@ -221,17 +228,41 @@ fun AppUsageTableView(yesterdayUsageCount: Int, yesterdayUsageTime: Long, displa
 			Text(packageId, fontSize = MaterialTheme.typography.labelLarge.fontSize, modifier = Modifier.padding(start = 10.dp))
 		}
 		
-		Spacer(modifier = Modifier.height(5.dp))
-		Row(modifier = Modifier.padding(start = 20.dp)) {
-			Text(stringResource(R.string.colon_usageTime))
-			Spacer(modifier = Modifier.width(20.dp))
-			Text(usageTime)
-		}
-		if(yesterdayUsageCount > 0) {
-			Row(modifier = Modifier.padding(start = 20.dp)) {
-				Text(stringResource(R.string.colon_usageCount))
-				Spacer(modifier = Modifier.width(20.dp))
-				Text(yesterdayUsageCount.toString())
+		Spacer(modifier = Modifier.height(15.dp))
+		
+		
+		Row(modifier = Modifier
+			.fillMaxWidth()
+		) {
+			Column {
+				Text(" ")
+				Spacer(modifier = Modifier.height(5.dp))
+				Text(stringResource(R.string.colon_usageTime), fontWeight = FontWeight.Bold)
+				if(yesterdayUsageCount > 0) {
+					Text(stringResource(R.string.colon_usageCount), fontWeight = FontWeight.Bold)
+				}
+			}
+			
+			Spacer(modifier = Modifier.width(15.dp))
+			
+			Column {
+				Text(stringResource(R.string.yesterday), fontWeight = FontWeight.Bold)
+				Spacer(modifier = Modifier.height(5.dp))
+				Text(yesterdayUsageTimeFormatted)
+				if(yesterdayUsageCount > 0) {
+					Text(yesterdayUsageCount.toString())
+				}
+			}
+			
+			Spacer(modifier = Modifier.width(15.dp))
+			
+			Column {
+				Text(stringResource(R.string.today), fontWeight = FontWeight.Bold)
+				Spacer(modifier = Modifier.height(5.dp))
+				Text(todayUsageTimeFormatted)
+				if(todayUsageCount > 0) {
+					Text(todayUsageCount.toString())
+				}
 			}
 		}
 	}
@@ -242,7 +273,14 @@ fun AppUsageTableView(yesterdayUsageCount: Int, yesterdayUsageTime: Long, displa
 @Composable
 fun PreviewAppUsageTableViewForAppUsage() {
 	ESMiraSurface {
-		AppUsageTableView(1, 5400000, true, "at.jodlidev.esmira")
+		AppUsageTableView(
+			Random.nextInt(1, 20),
+			Random.nextLong(1000L * 60 * 5, 1000L * 60 *  300),
+			Random.nextInt(1, 20),
+			Random.nextLong(1000L * 60 * 5, 1000L * 60 *  300),
+			true,
+			"at.jodlidev.esmira"
+		)
 	}
 }
 
@@ -251,7 +289,14 @@ fun PreviewAppUsageTableViewForAppUsage() {
 @Composable
 fun PreviewAppUsageTableViewForAppUsageWithNoData() {
 	ESMiraSurface {
-		AppUsageTableView(-1, -1, true, "at.jodlidev.esmira")
+		AppUsageTableView(
+			-1,
+			-1,
+			-1,
+			-1,
+			true,
+			"at.jodlidev.esmira"
+		)
 	}
 }
 
@@ -260,6 +305,13 @@ fun PreviewAppUsageTableViewForAppUsageWithNoData() {
 @Composable
 fun PreviewAppUsageTableViewForScreenTracking() {
 	ESMiraSurface {
-		AppUsageTableView(1, 5400000, false, "")
+		AppUsageTableView(
+			Random.nextInt(1, 20),
+			Random.nextLong(1000L * 60 * 5, 1000L * 60 *  300),
+			Random.nextInt(1, 20),
+			Random.nextLong(1000L * 60 * 5, 1000L * 60 *  300),
+			false,
+			""
+		)
 	}
 }
