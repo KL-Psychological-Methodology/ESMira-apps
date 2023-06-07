@@ -52,6 +52,8 @@ class ChartInfo (
 	lateinit var builder: ChartBuilder
 	
 	fun initBuilder(chartInfoCollection: ChartInfoCollection, chartChooser: ChartChooserInterface) {
+		if(this::builder.isInitialized)
+			return
 		builder = when(chartType) {
 			CHART_TYPE_LINE_FILLED -> chartChooser.getLineChartBuilder(true, chartInfoCollection, this)
 			CHART_TYPE_LINE -> chartChooser.getLineChartBuilder(false, chartInfoCollection, this)
