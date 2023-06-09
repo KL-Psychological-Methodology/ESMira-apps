@@ -16,6 +16,7 @@ import at.jodlidev.esmira.views.DefaultButtonIconLeft
 import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.DbLogic
+import at.jodlidev.esmira.sharedCode.data_structure.ErrorBox
 import at.jodlidev.esmira.sharedCode.data_structure.Input
 import java.text.SimpleDateFormat
 import java.util.*
@@ -31,14 +32,30 @@ fun DateView(input: Input, get: () -> String, save: (String) -> Unit) {
 	val targetFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 	val localFormat = DateFormat.getDateFormat(context)
 	
-	try {
-		targetFormat.parse(get())
-		localFormat.calendar = targetFormat.calendar
+	val calendar: Calendar
+	if(input.forceInt) {
+		calendar = Calendar.getInstance()
+		val value = get()
+		if(value.isNotEmpty()) {
+			try {
+				calendar.timeInMillis = value.toLong()
+			}
+			catch(_: Throwable) {
+				ErrorBox.warn("DateView", "Value $value in Item ${input.name} is faulty")
+			}
+		}
 	}
-	catch(_: Throwable) {
-		targetFormat.calendar = Calendar.getInstance()
+	else {
+		try {
+			targetFormat.parse(get())
+			localFormat.calendar = targetFormat.calendar
+		}
+		catch(_: Throwable) {
+			targetFormat.calendar = Calendar.getInstance()
+		}
+		calendar = targetFormat.calendar
 	}
-	val calendar = targetFormat.calendar
+	
 	// DatePickerDialog does not exist in Material3 yet:
 	val dialog = DatePickerDialog(
 		context,
