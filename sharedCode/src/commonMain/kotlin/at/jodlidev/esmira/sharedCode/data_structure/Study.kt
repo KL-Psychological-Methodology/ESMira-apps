@@ -427,7 +427,9 @@ class Study internal constructor(
 			this.contactEmail = newStudy.contactEmail
 			this.informedConsentForm = newStudy.informedConsentForm
 			this.postInstallInstructions = newStudy.postInstallInstructions
-			this.personalChartsJsonString = newStudy.personalChartsJsonString //also holds observedVariables because fromJsonOrUpdated = true
+			this.personalStatistics = newStudy.personalStatistics
+			this.publicStatistics = newStudy.publicStatistics
+			this.personalChartsJsonString = newStudy.personalChartsJsonString
 			this.publicChartsJsonString = newStudy.publicChartsJsonString
 			this.publicStatisticsNeeded = newStudy.publicStatisticsNeeded
 			this.sendMessagesAllowed = newStudy.sendMessagesAllowed
