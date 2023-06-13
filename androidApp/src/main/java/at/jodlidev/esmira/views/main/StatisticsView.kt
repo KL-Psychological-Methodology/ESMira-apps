@@ -2,6 +2,7 @@ package at.jodlidev.esmira.views.main
 
 import android.view.View
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -15,6 +16,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -43,7 +50,6 @@ fun StatisticsView(
 ) {
 	val context = LocalContext.current
 	val study = getStudy()
-	//TODO ChartInfoCollection() is a mess. We should redo it
 	val personalChartInfoCollection = ChartInfoCollection(study)
 	val personalCharts = personalChartInfoCollection.charts
 	for(chartInfo in personalCharts) {
@@ -164,14 +170,41 @@ fun StatisticsContentView(charts: List<ChartInfo>, chartInfoCollection: ChartInf
 			}
 			else {
 				val context = LocalContext.current
-				AndroidView(
-					factory = {
-						chartInfo.initBuilder(chartInfoCollection, ChartTypeChooser(context))
-						chartInfo.builder.createChart() as View
-					}, modifier = Modifier
-						.height(200.dp)
-						.fillMaxWidth()
-				)
+				Column(horizontalAlignment = Alignment.CenterHorizontally) {
+					Box(modifier = Modifier.padding(start = 30.dp)) {
+						Row(
+							horizontalArrangement = Arrangement.Center,
+							modifier = Modifier
+								.width(200.dp)
+								.graphicsLayer(
+									transformOrigin = TransformOrigin(
+										pivotFractionX = 0F,
+										pivotFractionY = 0F,
+									),
+									rotationZ = 90F,
+								)
+						) {
+							Text(
+								chartInfo.yAxisLabel,
+								fontSize = MaterialTheme.typography.labelSmall.fontSize,
+								maxLines = 1,
+							)
+						}
+						AndroidView(
+							factory = {
+								chartInfo.initBuilder(chartInfoCollection, ChartTypeChooser(context))
+								chartInfo.builder.createChart() as View
+							}, modifier = Modifier
+								.height(200.dp)
+								.fillMaxWidth()
+						)
+					}
+					
+					Text(
+						chartInfo.xAxisLabel,
+						fontSize = MaterialTheme.typography.labelSmall.fontSize
+					)
+				}
 			}
 			Spacer(modifier = Modifier.height(20.dp))
 		}
