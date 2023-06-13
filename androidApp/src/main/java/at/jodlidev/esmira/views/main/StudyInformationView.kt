@@ -12,6 +12,7 @@ import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Assignment
+import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -20,8 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalUriHandler
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -33,11 +32,10 @@ import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.DueDateFormatter
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.Alarm
-import at.jodlidev.esmira.sharedCode.data_structure.DbUser
 import at.jodlidev.esmira.sharedCode.data_structure.Study
+import at.jodlidev.esmira.views.DefaultButtonIconLeft
 import at.jodlidev.esmira.views.ESMiraDialog
 import at.jodlidev.esmira.views.main.studyDashboard.StudyDashboardButtonView
-import at.jodlidev.esmira.views.main.studyDashboard.StudyDashboardInfoBoxView
 
 /**
  * Created by JodliDev on 27.02.2023.
@@ -50,12 +48,36 @@ fun StudyInformationView(
 	getCompletedQuestionnaireCount: () -> Int,
 	hasNotifications: (Study) -> Boolean,
 	getNextAlarm: () -> Alarm?,
-	showInformedConsent: () -> Unit,
-	showStudyDescription: () -> Unit,
 	goBack: () -> Unit
 ) {
-	
 	val study = getStudy()
+	
+	val showInformedConsent = remember { mutableStateOf(false) }
+	if(showInformedConsent.value) {
+		ESMiraDialog(
+			title = stringResource(R.string.informed_consent),
+			confirmButtonLabel = stringResource(R.string.close),
+			onConfirmRequest = { showInformedConsent.value = false },
+		) {
+			Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+				Text(study.informedConsentForm)
+			}
+		}
+	}
+	
+	val showStudyDescription = remember { mutableStateOf(false) }
+	if(showStudyDescription.value) {
+		ESMiraDialog(
+			title = stringResource(R.string.study_description),
+			confirmButtonLabel = stringResource(R.string.close),
+			onConfirmRequest = { showStudyDescription.value = false },
+		) {
+			Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+				HtmlHandler.HtmlText(study.studyDescription)
+			}
+		}
+	}
+	
 	DefaultScaffoldView(
 		title = stringResource(R.string.study_information),
 		goBack = goBack,
@@ -64,38 +86,65 @@ fun StudyInformationView(
 			columns = GridCells.Fixed(2),
 			modifier = Modifier.fillMaxWidth()
 		) {
-			item(span = { GridItemSpan(maxLineSpan) }) {
+			item {
+				Header(stringResource(R.string.user_id))
+			}
+			item {
 				val context = LocalContext.current
-				Box(modifier = Modifier.clickable {
-					val clipBoard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-					val clipData = ClipData.newPlainText("label", userId)
-					clipBoard.setPrimaryClip(clipData)
-					Toast.makeText(context, context.getString(R.string.android_info_copied_x_to_clipboard, userId), Toast.LENGTH_SHORT).show()
-				}) {
-					StudyDashboardInfoBoxView(null, stringResource(R.string.android_user_id, userId), false)
+				Row(
+					modifier = Modifier
+						.padding(all = 5.dp)
+						.clickable {
+							val clipBoard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+							val clipData = ClipData.newPlainText("label", userId)
+							clipBoard.setPrimaryClip(clipData)
+							Toast
+								.makeText(context, context.getString(R.string.android_info_copied_x_to_clipboard, userId), Toast.LENGTH_SHORT)
+								.show()
+						},
+				) {
+					Text(userId)
+					Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+					Icon(Icons.Default.ContentCopy,
+						contentDescription = "copy",
+						tint = MaterialTheme.colorScheme.primary,
+						modifier = Modifier.size(ButtonDefaults.IconSize)
+					)
 				}
 			}
 
 			item {
-				StudyDashboardInfoBoxView(stringResource(R.string.joined_at), NativeLink.formatDate(study.joinedTimestamp))
+				Header(stringResource(R.string.joined_at))
 			}
-
+			item {
+				Content(NativeLink.formatDate(study.joinedTimestamp))
+			}
+			
 			if(study.state == Study.STATES.Quit) {
 				item {
-					StudyDashboardInfoBoxView(stringResource(R.string.quit_at), NativeLink.formatDate(study.quitTimestamp))
+					Header(stringResource(R.string.quit_at))
+				}
+				item {
+					Content(NativeLink.formatDate(study.quitTimestamp))
 				}
 			}
-
-			val completedQuestionnairesCount = getCompletedQuestionnaireCount()
+			
 			item {
-				StudyDashboardInfoBoxView(stringResource(R.string.completed_questionnaires), completedQuestionnairesCount.toString())
+				Header(stringResource(R.string.completed_questionnaires))
+			}
+			item {
+				Content(getCompletedQuestionnaireCount().toString())
 			}
 			
 			if(hasNotifications(study)) {
+				
+				item {
+					Header(stringResource(R.string.next_notification))
+				}
 				item {
 					val alarm = getNextAlarm()
 					if(alarm == null) {
-						StudyDashboardInfoBoxView(stringResource(R.string.next_notification), stringResource(R.string.none))
+						Content(stringResource(R.string.none))
 					}
 					else {
 						val formatter = DueDateFormatter(
@@ -104,25 +153,82 @@ fun StudyInformationView(
 							tomorrowString = stringResource(id = R.string.tomorrow),
 							inXDaysString = stringResource(id = R.string.in_x_days)
 						)
-						StudyDashboardInfoBoxView(stringResource(R.string.next_notification), formatter.get(alarm.timestamp))
+						Content(formatter.get(alarm.timestamp))
 					}
 				}
 			}
 			
-			item(span = { GridItemSpan(maxLineSpan) }) {
-				Divider(modifier = Modifier.padding(all = 10.dp))
-			}
-			
 			if(study.studyDescription.isNotEmpty()) {
 				item {
-					StudyDashboardButtonView(stringResource(R.string.study_description), Icons.Default.Info, onClick = showStudyDescription)
+					StudyDashboardButtonView(stringResource(R.string.study_description), Icons.Default.Info, onClick = { showStudyDescription.value = true; })
 				}
 			}
 			if(study.informedConsentForm.isNotEmpty()) {
 				item {
-					StudyDashboardButtonView(stringResource(R.string.informed_consent), Icons.Default.Assignment, onClick = showInformedConsent)
+					StudyDashboardButtonView(stringResource(R.string.informed_consent), Icons.Default.Assignment, onClick = { showInformedConsent.value = true; })
 				}
 			}
+		}
+	}
+}
+
+@Composable
+private fun Header(text: String) {
+	Text(
+		text,
+		color = MaterialTheme.colorScheme.primary,
+		fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+		modifier = Modifier.padding(all = 5.dp)
+	)
+}
+@Composable
+private fun Content(text: String) {
+	Text(
+		text,
+		fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+		modifier = Modifier.padding(all = 5.dp)
+	)
+}
+
+@Composable
+fun StudyInformationLine(
+	header: String?,
+	content: String,
+	important: Boolean = false
+) {
+	Box(
+		modifier = Modifier
+			.fillMaxSize()
+			.padding(all = 5.dp)
+	) {
+		Column(
+			horizontalAlignment = Alignment.CenterHorizontally,
+			verticalArrangement = Arrangement.Center,
+			modifier = Modifier
+				.fillMaxSize()
+				.heightIn(min = if(header == null) 0.dp else 90.dp)
+				.border(
+					width = 1.dp,
+					color = if(important) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.outline
+				)
+		) {
+			if(header != null) {
+				Text(
+					header,
+					color = if(important) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.primary,
+					fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+					fontWeight = if(important) FontWeight.Bold else FontWeight.Normal,
+					textAlign = TextAlign.Center,
+					modifier = Modifier
+						.padding(top = 5.dp, start = 5.dp, end = 5.dp)
+				)
+			}
+			Text(
+				content,
+				color = if(important) MaterialTheme.colorScheme.tertiary else MaterialTheme.colorScheme.onBackground,
+				fontSize = MaterialTheme.typography.bodyMedium.fontSize,
+				modifier = Modifier.padding(vertical = 10.dp, horizontal = 5.dp)
+			)
 		}
 	}
 }
@@ -142,8 +248,6 @@ fun PreviewStudyInformationView() {
 			getCompletedQuestionnaireCount = { 5 },
 			hasNotifications = { true },
 			getNextAlarm = { null },
-			showInformedConsent = {},
-			showStudyDescription = {},
 			goBack = {}
 		)
 	}

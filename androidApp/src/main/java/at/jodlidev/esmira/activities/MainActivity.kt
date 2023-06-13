@@ -410,42 +410,12 @@ class MainActivity: ComponentActivity() {
 	
 	@Composable
 	fun PageStudyInformation(studyId: Long) {
-		
-		val showInformedConsent = remember { mutableStateOf(false) }
-		if(showInformedConsent.value) {
-			ESMiraDialog(
-				title = stringResource(R.string.informed_consent),
-				confirmButtonLabel = stringResource(R.string.close),
-				onConfirmRequest = { showInformedConsent.value = false },
-			) {
-				Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-					val study = DbLogic.getStudy(studyId) ?: return@Column
-					Text(study.informedConsentForm)
-				}
-			}
-		}
-		
-		val showStudyDescription = remember { mutableStateOf(false) }
-		if(showStudyDescription.value) {
-			ESMiraDialog(
-				title = stringResource(R.string.informed_consent),
-				confirmButtonLabel = stringResource(R.string.close),
-				onConfirmRequest = { showStudyDescription.value = false },
-			) {
-				Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-					val study = DbLogic.getStudy(studyId) ?: return@Column
-					HtmlHandler.HtmlText(study.studyDescription)
-				}
-			}
-		}
 		StudyInformationView(
 			userId = DbUser.getUid(),
 			getStudy = { DbLogic.getStudy(studyId)!! },
 			getCompletedQuestionnaireCount = { DbLogic.getQuestionnaireDataSetCount(studyId) },
 			hasNotifications = { study -> study.hasNotifications() },
 			getNextAlarm = { DbLogic.getNextAlarmWithNotifications(studyId) },
-			showInformedConsent = { showInformedConsent.value = true },
-			showStudyDescription = { showStudyDescription.value = true },
 			goBack = { onBackPressedDispatcher.onBackPressed() }
 		)
 	}
