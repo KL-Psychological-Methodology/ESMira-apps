@@ -96,15 +96,10 @@ fun UploadProtocolView(
 fun DataSetItemView(uploadData: UploadData, deleteUploadData: () -> Unit) {
 	Column(
 		modifier = Modifier
-			.padding(horizontal = 20.dp, vertical = 5.dp)
+			.padding(horizontal = 20.dp, vertical = 10.dp)
 			.fillMaxWidth()
 	) {
-		Text(
-			NativeLink.formatDateTime(uploadData.timestamp),
-			fontSize = MaterialTheme.typography.labelMedium.fontSize,
-			modifier = Modifier.align(Alignment.End)
-		)
-		Row(verticalAlignment = Alignment.CenterVertically) {
+		Row(verticalAlignment = Alignment.Top) {
 			when(uploadData.synced) {
 				UploadData.States.SYNCED ->
 					Icon(Icons.Default.CheckCircle, "true", tint = colorGreen)
@@ -118,10 +113,15 @@ fun DataSetItemView(uploadData: UploadData, deleteUploadData: () -> Unit) {
 			}
 			Spacer(Modifier.size(ButtonDefaults.IconSpacing))
 			Column {
-				Text(uploadData.type.uppercase(), fontSize = MaterialTheme.typography.labelLarge.fontSize, fontWeight = FontWeight.Bold)
+				Text(uploadData.type.uppercase(),
+					color = MaterialTheme.colorScheme.onSurface,
+					fontSize = MaterialTheme.typography.labelLarge.fontSize,
+					fontWeight = FontWeight.Bold
+				)
 				if(uploadData.questionnaireName.isNotEmpty()) {
 					Text(
 						uploadData.questionnaireName,
+						color = MaterialTheme.colorScheme.onSurface,
 						fontSize = MaterialTheme.typography.labelMedium.fontSize,
 						modifier = Modifier.padding(start = 5.dp)
 					)
@@ -129,17 +129,19 @@ fun DataSetItemView(uploadData: UploadData, deleteUploadData: () -> Unit) {
 			}
 			Spacer(Modifier.weight(1F))
 			
-			if(uploadData.synced == UploadData.States.NOT_SYNCED_ERROR_DELETABLE) {
-				IconButton(onClick = deleteUploadData) {
-					Icon(Icons.Default.Delete, "remove")
+			Column(horizontalAlignment = Alignment.End) {
+				Text(
+					NativeLink.formatDateTime(uploadData.timestamp),
+					color = MaterialTheme.colorScheme.onSurface,
+					fontSize = MaterialTheme.typography.labelMedium.fontSize
+				)
+				if(uploadData.synced == UploadData.States.NOT_SYNCED_ERROR_DELETABLE) {
+					IconButton(onClick = deleteUploadData) {
+						Icon(Icons.Default.Delete, "remove")
+					}
 				}
 			}
 		}
-		Divider(
-			color = MaterialTheme.colorScheme.outline,
-			modifier = Modifier
-				.padding(top = 20.dp, bottom = 0.dp)
-		)
 	}
 }
 
