@@ -26,7 +26,25 @@ fun NumberView(input: Input, get: () -> String, save: (String) -> Unit) {
 		OutlinedTextField(
 			value = get(),
 			keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-			onValueChange = { save(it) },
+			onValueChange = {
+				val value = try {
+					if(it.isEmpty())
+						""
+					else if(input.numberHasDecimal) {
+						if(it.toDoubleOrNull() != null)
+							it
+						else
+							get()
+					}
+					else
+						it.toInt().toString()
+				}
+				catch(e: Throwable) {
+					get()
+				}
+				
+				save(value)
+			},
 			modifier = Modifier.width(100.dp)
 		)
 	}
