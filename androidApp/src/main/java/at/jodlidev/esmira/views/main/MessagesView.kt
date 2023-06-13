@@ -8,6 +8,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Message
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -30,6 +32,7 @@ import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.Web
 import at.jodlidev.esmira.sharedCode.data_structure.Message
 import at.jodlidev.esmira.sharedCode.data_structure.Study
+import at.jodlidev.esmira.views.DefaultButtonIconLeft
 
 /**
  * Created by JodliDev on 21.02.2023.
@@ -179,8 +182,9 @@ private fun Footer(sendMessage: (String, done: (Boolean) -> Unit) -> Unit) {
 	}
 	
 	if(!writeMessage.value) {
-		DefaultButton(
+		DefaultButtonIconLeft(
 			stringResource(R.string.send_message_to_researcher),
+			icon = Icons.Default.Message,
 			onClick = {
 				writeMessage.value = true
 			}
