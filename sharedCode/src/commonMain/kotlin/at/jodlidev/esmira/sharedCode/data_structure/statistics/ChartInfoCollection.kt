@@ -13,6 +13,7 @@ import kotlinx.serialization.Serializable
  * not in db
  */
 class ChartInfoCollection {
+	//TODO ChartInfoCollection() is a mess. We should redo it
 	@Serializable
 	class StatisticServerData (
 		val storageType: Int,
