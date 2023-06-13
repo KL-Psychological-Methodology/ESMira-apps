@@ -1,6 +1,7 @@
 package at.jodlidev.esmira.views
 
 import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -31,11 +32,15 @@ fun DefaultButton(
 	onClick: () -> Unit,
 	modifier: Modifier = Modifier
 ) {
-	OutlinedButton(
-		shape = RoundedCornerShape(5.dp),
-		onClick = onClick,
+	Button(
+		shape = RoundedCornerShape(1.dp),
+		colors = ButtonDefaults.buttonColors(
+			containerColor = MaterialTheme.colorScheme.surface,
+			contentColor = MaterialTheme.colorScheme.onSurface,
+		),
 		contentPadding = defaultButtonPadding,
-		modifier = modifier
+		modifier = modifier,
+		onClick = onClick
 	) {
 		Text(text)
 	}
@@ -46,11 +51,15 @@ fun DefaultButton(
 	modifier: Modifier = Modifier,
 	content: @Composable RowScope.() -> Unit
 ) {
-	OutlinedButton(
-		shape = RoundedCornerShape(5.dp),
-		onClick = onClick,
+	Button(
+		shape = RoundedCornerShape(1.dp),
+		colors = ButtonDefaults.buttonColors(
+			containerColor = MaterialTheme.colorScheme.surface,
+			contentColor = MaterialTheme.colorScheme.onSurface,
+		),
 		contentPadding = defaultButtonPadding,
 		modifier = modifier,
+		onClick = onClick,
 		content = content
 	)
 }
@@ -63,11 +72,15 @@ fun DefaultButtonIconLeft(
 	textModifier: Modifier = Modifier,
 	enabled: Boolean = true
 ) {
-	OutlinedButton(
-		shape = RoundedCornerShape(5.dp),
-		onClick = onClick,
+	Button(
+		shape = RoundedCornerShape(1.dp),
+		colors = ButtonDefaults.buttonColors(
+			containerColor = MaterialTheme.colorScheme.surface,
+			contentColor = MaterialTheme.colorScheme.onSurface,
+		),
 		contentPadding = defaultButtonPadding,
 		modifier = modifier,
+		onClick = onClick,
 		enabled = enabled
 	) {
 		Icon(
@@ -87,11 +100,15 @@ fun DefaultButtonIconRight(
 	modifier: Modifier = Modifier,
 	textModifier: Modifier = Modifier
 ) {
-	OutlinedButton(
+	Button(
 		shape = RoundedCornerShape(5.dp),
-		onClick = onClick,
+		colors = ButtonDefaults.buttonColors(
+			containerColor = MaterialTheme.colorScheme.surface,
+			contentColor = MaterialTheme.colorScheme.onSurface,
+		),
 		contentPadding = defaultButtonPadding,
-		modifier = modifier
+		modifier = modifier,
+		onClick = onClick
 	) {
 		Text(text, modifier = textModifier)
 		Spacer(Modifier.size(ButtonDefaults.IconSpacing))
@@ -109,11 +126,15 @@ fun DefaultButtonIconAbove(
 	onClick: () -> Unit,
 	modifier: Modifier = Modifier
 ) {
-	OutlinedButton(
+	Button(
 		shape = RoundedCornerShape(5.dp),
-		onClick = onClick,
+		colors = ButtonDefaults.buttonColors(
+			containerColor = MaterialTheme.colorScheme.surface,
+			contentColor = MaterialTheme.colorScheme.onSurface,
+		),
 		contentPadding = defaultButtonPadding,
-		modifier = modifier
+		modifier = modifier,
+		onClick = onClick
 	) {
 		Column(
 			horizontalAlignment = Alignment.CenterHorizontally,
@@ -195,7 +216,7 @@ fun PreviewButtons() {
 		Column {
 			Text("Text")
 			
-			DialogButton(onClick = {}, text = "DefaultButton")
+			DialogButton(onClick = {}, text = "DialogButton")
 			DefaultButton(onClick = {}, text = "DefaultButton")
 			DefaultButtonIconLeft(onClick = {}, icon = Icons.Default.Home, text = "DefaultButtonIconLeft")
 			DefaultButtonIconAbove(onClick = {}, icon = Icons.Default.Home, text = "DefaultButtonIconAbove")
