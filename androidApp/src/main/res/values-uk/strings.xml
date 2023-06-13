@@ -180,7 +180,7 @@
     <string name="update_studies">Актуалізація досліджень</string>
     <string name="upload">Підвантажити</string>
     <string name="upload_screenshots">Завантажте скріншоти</string>
-    <string name="android_user_id">ID користувача: %1$s</string>
+    <string name="user_id">ID користувача</string>
     <string name="visible_when_study_finished">Відображається лише після завершення дослідження.</string>
     <string name="welcome_accessKey_question">У вас є ключ доступу\?</string>
     <string name="welcome_exit_questionTitle">Ви дійсно хочете скасувати\?</string>

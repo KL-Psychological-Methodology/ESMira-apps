@@ -178,7 +178,7 @@
     <string name="update_studies">Studien aktualisieren</string>
     <string name="upload">Hochladen</string>
     <string name="upload_screenshots">Screenshots hochladen</string>
-    <string name="android_user_id">User-id: %1$s</string>
+    <string name="user_id">User-id</string>
     <string name="visible_when_study_finished">Erst sichtbar, wenn die Studie beendet wurde.</string>
     <string name="welcome_accessKey_question">Haben Sie einen Zugangscode\?</string>
     <string name="welcome_exit_questionTitle">Wirklich beenden\?</string>
@@ -275,4 +275,5 @@
     <string name="start_playing_audio">Abspielen</string>
     <string name="stop_playing_audio">Stoppen</string>
     <string name="open_url">Öffne Url</string>
+	<string name="yesterday">Gestern</string>
 </resources>

@@ -178,7 +178,7 @@
     <string name="update_studies">Update studies</string>
     <string name="upload">Upload</string>
     <string name="upload_screenshots">Upload screenshots</string>
-    <string name="android_user_id">User-id: %1$s</string>
+    <string name="user_id">User-id</string>
     <string name="visible_when_study_finished">Only visible when the study has ended.</string>
     <string name="welcome_accessKey_question">Do you have an access key\?</string>
     <string name="welcome_exit_questionTitle">Do you really want to cancel\?</string>
@@ -275,4 +275,5 @@
     <string name="start_playing_audio">Play</string>
     <string name="stop_playing_audio">Stop</string>
 	<string name="open_url">Open url</string>
+    <string name="yesterday">Yesterday</string>
 </resources>
