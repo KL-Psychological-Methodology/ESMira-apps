@@ -21,6 +21,7 @@ import at.jodlidev.esmira.R
 import at.jodlidev.esmira.activities.WelcomeScreenActivity
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
+import at.jodlidev.esmira.sharedCode.Web
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
 import at.jodlidev.esmira.sharedCode.data_structure.Study
 import at.jodlidev.esmira.views.main.questionnaire.QuestionnaireLine
@@ -209,11 +210,6 @@ fun StudyDashboardGrid(
 				Column(
 					modifier = Modifier
 						.fillMaxWidth()
-						.padding(horizontal = 5.dp)
-						.border(
-							width = 1.dp,
-							color = MaterialTheme.colorScheme.outline
-						)
 				) {
 					for(questionnaire in questionnaireList) {
 						QuestionnaireLine(
@@ -283,6 +279,7 @@ fun StudyDashboardGrid(
 			item {
 				val context = LocalContext.current
 				StudyDashboardButtonView(stringResource(R.string.delete_study), Icons.Default.Delete, onClick = {
+					Web.syncDataSetsAsync {  }
 					if(hasUnSyncedDataSets())
 						Toast.makeText(context, R.string.info_unsynced_datasets, Toast.LENGTH_LONG).show()
 					else
