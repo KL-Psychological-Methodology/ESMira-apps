@@ -23,7 +23,7 @@ struct QuestionnaireLineView: View {
 		}) {
 			VStack(alignment: .leading) {
 				HStack {
-					Image(systemName: "arrow.right")
+					Image(systemName: "doc.text.fill")
 					Text(questionnaire.title)
 					Spacer()
 					if(questionnaire.showJustFinishedBadge()) {
@@ -34,26 +34,27 @@ struct QuestionnaireLineView: View {
 							Text("just_finished")
 								.foregroundColor(.white)
 								.font(Font.system(size: 12))
+								.padding(2)
 						}
 						.aspectRatio(contentMode: .fit)
 						.fixedSize(horizontal: true, vertical: false)
 						.frame(height: 20)
 					}
 				}
-				.padding([.leading, .top], 10)
+					.padding(10)
+				
 				if(questionnaire.showLastCompleted()) {
 					HStack {
 						Spacer()
 						Text(String(format: NSLocalizedString("colon_last_filled_out", comment: ""), NativeLink().formatDateTime(ms: questionnaire.lastCompleted)))
 							.font(.caption)
 					}
-					.padding([.horizontal], 5)
+					.padding(.horizontal, 5)
+					.padding(.vertical, 2)
 				}
-				Divider()
-					.background(Color("Outline"))
-					.padding([.horizontal], 10)
 			}
 		}
 		.foregroundColor(Color("PrimaryDark"))
+		.background(Color("Surface"))
 	}
 }

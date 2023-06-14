@@ -9,6 +9,48 @@
 import Foundation
 import SwiftUI
 
+struct NavigationLinkModifier: ViewModifier {
+	func body(content: Content) -> some View {
+		content
+			.foregroundColor(Color("PrimaryDark"))
+			.padding()
+			.background(Color("Surface"))
+	}
+}
+
+extension NavigationLink {
+	func defaultDesign() -> some View {
+		return modifier(NavigationLinkModifier())
+	}
+}
+
+struct DefaultButton: View {
+	let label: String
+	let maxWidth: CGFloat?
+	let disabled: Bool
+	let action: () -> Void
+	init(_ label: String, maxWidth: CGFloat? = nil, disabled: Bool = false, action: @escaping () -> Void) {
+		self.label = label
+		self.maxWidth = maxWidth
+		self.disabled = disabled
+		self.action = action
+	}
+	
+	var body: some View {
+		Button(action: self.action) {
+			Text(NSLocalizedString(self.label, comment: ""))
+				.bold()
+				.frame(maxWidth: self.maxWidth)
+				.foregroundColor(Color("PrimaryDark"))
+		}
+			.opacity(self.disabled ? 0.3 : 1)
+			.disabled(self.disabled)
+			.padding()
+			.background(Color("Surface"))
+	}
+}
+
+
 struct DefaultIconButton: View {
 	let icon: String
 	let label: String
@@ -35,7 +77,7 @@ struct DefaultIconButton: View {
 			.opacity(self.disabled ? 0.3 : 1)
 			.disabled(self.disabled)
 			.padding()
-			.border(Color("Outline"))
+			.background(Color("Surface"))
 	}
 }
 
@@ -61,6 +103,6 @@ struct DefaultIconRightButton: View {
 			.foregroundColor(Color("PrimaryDark"))
 		}
 			.padding()
-			.border(Color("Outline"))
+			.background(Color("Surface"))
 	}
 }

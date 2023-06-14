@@ -14,7 +14,7 @@ class NotificationsPermission : PermissionLine {
 	}
 	
 	override func getActionRow() -> AnyView {
-		AnyView(Button("enable_notifications") {
+		AnyView(DefaultButton("enable_notifications") {
 			Notifications.authorize { success in
 				if(success) {
 					self.complete()
@@ -31,7 +31,7 @@ class NotificationsPermission : PermissionLine {
 		AnyView(
 			VStack {
 				Text("ios_dialogDesc_notifications_disabled")
-				Button("open_settings") {
+				DefaultButton("open_settings") {
 					self.listRoot.openAppSettings()
 					
 				}.padding()

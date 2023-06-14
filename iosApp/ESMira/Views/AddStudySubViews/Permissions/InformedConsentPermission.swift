@@ -14,7 +14,7 @@ class InformedConsentPermission : PermissionLine {
 	}
 	
 	override func getActionRow() -> AnyView {
-		AnyView(Button("show_informed_consent") {
+		AnyView(DefaultButton("show_informed_consent") {
 			self.listRoot.alert(
 				Alert(title: Text("informed_consent"),
 					  message: Text(self.listRoot.getStudy().informedConsentForm),

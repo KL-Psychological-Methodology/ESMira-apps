@@ -34,6 +34,8 @@ struct HeaderLine: FixedGridItem {
 	var view: some View {
 		VStack {
 			VStack {
+				Divider()
+					.background(Color("Outline"))
 				HStack {
 					Text(content)
 					Spacer()
@@ -46,12 +48,14 @@ struct HeaderLine: FixedGridItem {
 					}
 				}
 				.padding([.horizontal], 20)
-				.padding([.vertical], 10)
 				
+				Divider()
+					.background(Color("Outline"))
 			}
 			.padding(0)
 			.foregroundColor(Color("onSurface"))
 			.background(Color("Surface"))
+			.shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.05), radius: 5, y: 5)
 		}
 			.padding([.vertical], 5)
 			.frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
@@ -136,10 +140,7 @@ struct ContentLine<Content: View>: FixedGridItem {
 	let viewContent: Content
 	func fillsLine() -> Bool { return true }
 	var view: some View {
-		VStack {
-			viewContent
-				.border(Color("Outline"))
-		}
+		viewContent
 			.padding(5)
 	}
 }

@@ -27,20 +27,15 @@ struct ListSingleStruct: View {
 	var body: some View {
 		VStack(alignment: self.viewModel.input.asDropDown ? .center : .leading) {
 			if(self.viewModel.input.asDropDown) {
-				Button(action: {
-					self.dropdownShown = true
-				}) {
-					if(self.viewModel.value.isEmpty) {
-						Text("please_select").bold().padding()
+				DefaultButton(
+					self.viewModel.value.isEmpty ? "please_select" : self.viewModel.value,
+					action: {
+						self.dropdownShown = true
 					}
-					else {
-						Text(self.viewModel.value).bold().padding()
+				)
+					.actionSheet(isPresented: self.$dropdownShown) {
+						ActionSheet(title: Text("please_select"), buttons: self.createDropDown())
 					}
-				}
-				.foregroundColor(Color("PrimaryDark"))
-				.actionSheet(isPresented: self.$dropdownShown) {
-					ActionSheet(title: Text("please_select"), buttons: self.createDropDown())
-				}
 			}
 			else {
 				ForEach(self.viewModel.input.listChoices, id: \.self) { choice in

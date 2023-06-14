@@ -50,7 +50,8 @@ class Notifications: NotificationsInterface {
 		}
 		let trigger = UNTimeIntervalNotificationTrigger(timeInterval: Double(alarm.timestamp/1000) - Date().timeIntervalSince1970, repeats: false)
 		
-		createNotification(id: id, title: alarm.label, msg: msg, trigger: trigger)
+		let questionnaire = DbLogic().getQuestionnaire(id: alarm.questionnaireId)
+		createNotification(id: id, title: questionnaire?.title ?? "Error", msg: msg, trigger: trigger)
 	}
 	
 	func fire(title: String, msg: String, id: Int32) {

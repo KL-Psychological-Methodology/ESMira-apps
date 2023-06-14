@@ -22,12 +22,12 @@ struct AccessKeyQuesionView: View {
 				Text("questionMark").font(.system(size: 64))
 			}
 			Text("welcome_accessKey_question").padding(.vertical)
-			Button("yes") {
+			DefaultButton("yes") {
 				self.askAccessKey = true
 			}
 				.padding()
 			
-			Button("welcome_join_public_study") {
+			DefaultButton("welcome_join_public_study") {
 				self.addStudyState.accessKey = ""
 				self.gotoStudyLoader = true
 			}

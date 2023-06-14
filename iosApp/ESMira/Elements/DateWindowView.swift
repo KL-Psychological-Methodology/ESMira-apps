@@ -77,28 +77,19 @@ struct DateWindowView: View {
 		return self.dateFormatter.string(from: date)
 	}
 	var body: some View {
-		Button(action: {
-			self.isShown = true
-		}) {
-			HStack {
-				Image(systemName: self.mode == .time ? "clock" : "calendar")
-				if (self.value == "") {
-					Text("no_dateTime_data").bold()
-				}
-				else if(self.asTimestamp) {
-					Text(self.dateFormatter.string(from: Date(timeIntervalSince1970: (Double(self.value) ?? 0) / 1000))).bold()
-				}
-				else if(self.timeAsMinutes) {
-					Text(self.getTimeString(Int(self.value) ?? 0)).bold()
-				}
-				else {
-					Text(self.value).bold()
-				}
+		DefaultIconButton(
+			icon: self.mode == .time ? "clock" : "calendar",
+			label: self.value == ""
+				? "no_dateTime_data"
+				: (self.asTimestamp
+				   ? self.dateFormatter.string(from: Date(timeIntervalSince1970: (Double(self.value) ?? 0) / 1000))
+				   : (self.timeAsMinutes
+					  ? self.getTimeString(Int(self.value) ?? 0)
+					  : self.value)),
+			action: {
+				self.isShown = true
 			}
-				.foregroundColor(Color("PrimaryDark"))
-		}
-			.padding()
-			.border(Color("Outline"))
+		)
 			.sheet(isPresented: self.$isShown) {
 				VStack {
 					DatePicker("", selection: self.$selectedDate, displayedComponents: self.mode == TypeModes.time ? .hourAndMinute : .date).labelsHidden()

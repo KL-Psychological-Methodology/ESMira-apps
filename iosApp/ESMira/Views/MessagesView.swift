@@ -66,19 +66,13 @@ struct MessagesView: View {
 						.padding(.horizontal)
 				}
 				else {
-					Button(action: { draftNewMessage = true }) {
-						Image(systemName: "plus")
-						Text("write_message_to_researcher")
-					}
+					DefaultIconButton(
+						icon: "message.fill",
+						label: "write_message_to_researcher",
+						action: { draftNewMessage = true }
+					)
 					.padding(.top)
 				}
-//				NavigationLink(
-//					destination: NewMessageView(study: study)
-//				) {
-//					Image(systemName: "plus")
-//					Text("write_message_to_researcher")
-//				}
-//				.padding(.top)
 			}
 			.modifier(FlipEffect())
 			.padding()

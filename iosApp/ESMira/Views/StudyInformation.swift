@@ -43,6 +43,51 @@ struct InformationButtonBox: FixedGridItem {
 		.padding(5)
 	}
 }
+private struct RowHeaderItem: FixedGridItem {
+	let content: String
+	
+	func fillsLine() -> Bool { return false }
+	
+	var view: some View {
+		Text(content)
+			.foregroundColor(Color("Outline"))
+			.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+			.padding(.vertical, 10)
+			.padding(.horizontal, 5)
+	}
+}
+private struct RowContentItem: FixedGridItem {
+	let content: String
+	let action: (() -> Void)?
+	let icon: String?
+	
+	init(content: String, action: (() -> Void)? = nil, icon: String? = nil) {
+		self.content = content
+		self.action = action
+		self.icon = icon
+	}
+	
+	func fillsLine() -> Bool { return false }
+	
+	var view: some View {
+		HStack {
+			if(action == nil) {
+				Text(content)
+			}
+			else {
+				Button(action: self.action!) {
+					Text(content)
+						.foregroundColor(Color.black)
+					if(icon != nil) {
+						Image(systemName: icon!)
+					}
+				}
+			}
+		}
+		.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
+			  .padding(.vertical, 10)
+	}
+}
 
 struct InformationBox: FixedGridItem {
 	let header: String
@@ -80,42 +125,37 @@ struct StudyInformation: View {
 
 		//userId
 		let userId = DbUser().getUid()
-		list.append(InformationButtonBox(
-			content: String(format: NSLocalizedString("ios_user_id", comment: ""), userId),
-			action: {
-				UIPasteboard.general.string = userId
-				self.appState.showTranslatedToast(String(format: NSLocalizedString("ios_info_copied_x_to_clipboard", comment: ""), userId))
-			},
-			fillsLineState: true
-		))
+		list.append(RowHeaderItem(content: NSLocalizedString("user_id", comment: "")))
+		list.append(
+			RowContentItem(
+				content: userId,
+				action: {
+					UIPasteboard.general.string = userId
+					   self.appState.showTranslatedToast(String(format: NSLocalizedString("ios_info_copied_x_to_clipboard", comment: ""), userId))
+					},
+				icon: "doc.on.clipboard"
+			)
+		)
 
 		//joined at
-		list.append(InformationBox(
-			header: NSLocalizedString("joined_at", comment: ""),
-			content: NativeLink().formatDate(ms: study.joinedTimestamp)
-		))
+		list.append(RowHeaderItem(content: NSLocalizedString("joined_at", comment: "")))
+		list.append(RowContentItem(content: NativeLink().formatDate(ms: study.joinedTimestamp)))
 
 		//quit at
 		if(study.state == Study.STATES.quit) {
-			list.append(InformationBox(
-				header: NSLocalizedString("quit_at", comment: ""),
-				content: NativeLink().formatDate(ms: study.quitTimestamp)
-			))
+			list.append(RowHeaderItem(content: NSLocalizedString("quit_at", comment: "")))
+			list.append(RowContentItem(content: NativeLink().formatDate(ms: study.quitTimestamp)))
 		}
 
 		//completed questionnaires
-		list.append(InformationBox(
-			header: NSLocalizedString("completed_questionnaires", comment: ""),
-			content: String(DbLogic().getQuestionnaireDataSetCount(studyId: study.id))
-		))
+		list.append(RowHeaderItem(content: NSLocalizedString("completed_questionnaires", comment: "")))
+		list.append(RowContentItem(content: String(DbLogic().getQuestionnaireDataSetCount(studyId: study.id))))
 
 		//next notification
 		let alarm = DbLogic().getNextAlarmWithNotifications(studyId: study.id)
 		if(alarm == nil) {
-			list.append(InformationBox(
-				header: NSLocalizedString("next_notification", comment: ""),
-				content: NSLocalizedString("none", comment: "") //###
-			))
+			list.append(RowHeaderItem(content: NSLocalizedString("next_notification", comment: "")))
+			list.append(RowContentItem(content: NSLocalizedString("none", comment: "")))
 		}
 		else {
 			let formatter = DueDateFormatter(
@@ -124,14 +164,11 @@ struct StudyInformation: View {
 				tomorrowString: NSLocalizedString("tomorrow", comment: ""),
 				inXDaysString: NSLocalizedString("in_x_days", comment: "")
 			)
-			list.append(InformationBox(
-				header: NSLocalizedString("next_notification", comment: ""),
-				content: formatter.get(timestamp: alarm!.timestamp)
-			))
+			list.append(RowHeaderItem(content: NSLocalizedString("next_notification", comment: "")))
+			list.append(RowContentItem(content: formatter.get(timestamp: alarm!.timestamp)))
 		}
 		
 		
-		list.append(DividerBox())
 		
 		
 		//study description

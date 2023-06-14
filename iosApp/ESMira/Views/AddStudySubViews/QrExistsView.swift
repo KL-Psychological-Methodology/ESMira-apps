@@ -18,10 +18,10 @@ struct QrExistsView: View {
 			Text("welcome_qr_question").padding(.vertical)
 			HStack {
 				NavigationLink("no", destination: ServerQuestionView())
-					.padding()
+					.defaultDesign()
 				Spacer()
 				NavigationLink("yes", destination: QrStartView())
-					.padding()
+					.defaultDesign()
 			}
 			Spacer()
 		}

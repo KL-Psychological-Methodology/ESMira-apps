@@ -89,6 +89,7 @@ struct DataSetLine: View {
 				}
 			}
 		}
+			.foregroundColor(Color("PrimaryDark"))
 			.alert(isPresented: self.$showDeleteAlert) {
 				Alert(title: Text("are_you_sure"),
 					primaryButton: .destructive(Text("yes")) {
