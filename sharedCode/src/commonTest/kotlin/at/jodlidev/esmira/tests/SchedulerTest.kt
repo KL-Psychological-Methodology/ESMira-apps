@@ -29,7 +29,6 @@ class SchedulerTest : BaseCommonTest() {
 		
 		//on Android there is always only one alarm
 		val alarmAndroid = createAlarmFromSignalTime(timestamp = timestamp)
-		alarmAndroid.label = "android $daySpacing days"
 		alarmAndroid.scheduleId = schedule.id
 		alarmAndroid.questionnaireId = questionnaire.id //we need a questionnaire or DbLogic.reportMissedInvitation() will not be called
 		alarmAndroid.save()
@@ -49,7 +48,6 @@ class SchedulerTest : BaseCommonTest() {
 		//on iOS every alarm is pre scheduled:
 		for(i in 0 .. missedCount) {
 			val alarmIOS = createAlarmFromSignalTime(timestamp = timestamp - spacing*i)
-			alarmIOS.label = "iOS $daySpacing days; number $i"
 			alarmIOS.scheduleId = schedule.id
 			alarmIOS.actionTriggerId = actionTrigger.id //alarm.save() will call scheduleReminder() on iOS which needs an actionTrigger
 			alarmIOS.questionnaireId = questionnaire.id //we need a questionnaire or DbLogic.reportMissedInvitation() will not be called
@@ -366,7 +364,7 @@ class SchedulerTest : BaseCommonTest() {
 		val signalTime = createJsonObj<SignalTime>()
 		signalTime.id = 8
 		
-		val alarmReminder = Alarm.createAsReminder(now, questionnaire.id, -1, "", 0, 1)
+		val alarmReminder = Alarm.createAsReminder(now, questionnaire.id, -1, 0, 1)
 		
 		val alarmEventTrigger = Alarm.createFromEventTrigger(eventTrigger, now)
 		

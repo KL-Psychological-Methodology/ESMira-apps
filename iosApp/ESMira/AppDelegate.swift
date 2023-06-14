@@ -70,7 +70,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 							navigationState.openQuestionnaire(questionnaire!)
 						}
 						else {
-							ErrorBox.Companion().error(title: "Alarm", msg: "Questionnaire (id=\(alarm?.questionnaireId ?? -1) for Alarm (label=\(alarm?.label ?? ""), id=\(alarm?.id ?? -1)) is null")
+							ErrorBox.Companion().error(title: "Alarm", msg: "Questionnaire (id=\(alarm?.questionnaireId ?? -1) for Alarm (id=\(alarm?.id ?? -1)) is null")
 						}
 					}
 				}

@@ -504,7 +504,6 @@ class DbLogicTests : BaseCommonTest() {
 		val schedule = createJsonObj<Schedule>()
 		schedule.id = 7
 		val signalTime = createJsonObj<SignalTime>()
-		signalTime.label = "test1"
 		signalTime.bindParent(qId, schedule)
 		
 		assertEquals(0, DbLogic.getAlarms().size)
@@ -522,8 +521,8 @@ class DbLogicTests : BaseCommonTest() {
 		createAlarmFromSignalTime("""{"label": "test2"}""").save()
 		val alarms = DbLogic.getAlarms()
 		assertEquals(2, alarms.size)
-		assertEquals(alarms[0].label, DbLogic.getAlarm(alarms[0].id)?.label)
-		assertEquals(alarms[1].label, DbLogic.getAlarm(alarms[1].id)?.label)
+		assertEquals(alarms[0].timestamp, DbLogic.getAlarm(alarms[0].id)?.timestamp)
+		assertEquals(alarms[1].timestamp, DbLogic.getAlarm(alarms[1].id)?.timestamp)
 	}
 	
 	@Test
@@ -720,16 +719,16 @@ class DbLogicTests : BaseCommonTest() {
 		
 		assertEquals(0, DbLogic.getReminderAlarmsFrom(qId).size)
 		
-		Alarm.createAsReminder(timestamp, qId, -1, "test", 0, 2)
+		Alarm.createAsReminder(timestamp, qId, -1, 0, 2)
 		assertEquals(1, DbLogic.getReminderAlarmsFrom(qId).size)
 		
-		Alarm.createAsReminder(timestamp, -1, -1, "test", 0, 2)
+		Alarm.createAsReminder(timestamp, -1, -1, 0, 2)
 		assertEquals(1, DbLogic.getReminderAlarmsFrom(qId).size)
 		
 		Alarm.createFromSignalTime(createJsonObj(), -1, timestamp+1)
 		assertEquals(1, DbLogic.getReminderAlarmsFrom(qId).size)
 		
-		Alarm.createAsReminder(timestamp, qId, -1, "test", 0, 2)
+		Alarm.createAsReminder(timestamp, qId, -1, 0, 2)
 		assertEquals(2, DbLogic.getReminderAlarmsFrom(qId).size)
 		
 	}
@@ -961,13 +960,13 @@ class DbLogicTests : BaseCommonTest() {
 	@Test
 	fun getSignalTime() {
 		val signalTime = createJsonObj<SignalTime>()
-		signalTime.label = "test"
+		signalTime.questionnaireId = -5
 		signalTime.save()
 		
 		createJsonObj<SignalTime>().save()
 		
 		assertNull(DbLogic.getSignalTime(6))
-		assertEquals("test", DbLogic.getSignalTime(signalTime.id)?.label)
+		assertEquals(-5, DbLogic.getSignalTime(signalTime.id)?.questionnaireId)
 	}
 	
 	@Test

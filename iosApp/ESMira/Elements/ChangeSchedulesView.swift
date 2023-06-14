@@ -34,7 +34,7 @@ struct ChangeSchedulesView: View {
 
 		var body: some View {
 			VStack(alignment: .leading) {
-				Text(self.signalTime.label).bold()
+				Text(self.signalTime.questionnaire.title).bold()
 				if(self.signalTime.random) {
 					HStack {
 						if(self.isFaulty) {

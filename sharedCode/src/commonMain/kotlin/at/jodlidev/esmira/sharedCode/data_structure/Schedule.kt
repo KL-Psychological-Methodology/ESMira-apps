@@ -187,7 +187,7 @@ class Schedule {
 	internal fun toDescString(): String {
 		val s = StringBuilder()
 		for(signalTime in signalTimes) {
-			s.append(signalTime.label)
+			s.append(signalTime.questionnaire.title)
 			s.append(": ")
 			s.append(signalTime.getFormattedStart())
 			if(signalTime.random) {

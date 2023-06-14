@@ -67,7 +67,7 @@ object Scheduler {
 			val missedSchedules = HashMap<Long, Alarm>()
 			
 			for(alarm in alarms) {
-				ErrorBox.warn("Scheduler", "Action \"${alarm.label}\" (Alarm: ${alarm.id}) did not fire! Rescheduling alarm")
+				ErrorBox.warn("Scheduler", "Action (Alarm: ${alarm.id}) did not fire! Rescheduling alarm")
 				openDialog = true
 				
 				//We dont need to cancel the alarm in here because alarm.exec() calls delete()
@@ -102,7 +102,7 @@ object Scheduler {
 			val ignoredAlarms = HashMap<Long, Alarm>()
 			for(alarm in alarms.asReversed()) { //we want to execute the last alarm and ignore the others. So we iterate from the back
 				if(ignoredAlarms.containsKey(alarm.actionTriggerId)) {
-					ErrorBox.log("Scheduler", "Alarm \"${alarm.label}\" (id=${alarm.id}, type=${alarm.type}) has already another Alarm. Treat as missed")
+					ErrorBox.log("Scheduler", "Alarm (id=${alarm.id}, type=${alarm.type}) has already another Alarm. Treat as missed")
 					val q = DbLogic.getQuestionnaire(alarm.questionnaireId) ?: continue
 					if(alarm.type != Alarm.TYPES.Reminder)
 						DbLogic.reportMissedInvitation(q, alarm.timestamp)
@@ -118,12 +118,12 @@ object Scheduler {
 					if(alarm.actionTrigger.hasInvitation(true)) {
 						ErrorBox.log(
 							"Scheduler",
-							"Notification for Alarm \"${alarm.label}\" (id=${alarm.id}, type=${alarm.type}) was not pressed yet but has an invitation. Ignoring for now."
+							"Notification for Alarm (id=${alarm.id}, type=${alarm.type}) was not pressed yet but has an invitation. Ignoring for now."
 						)
 						alarm.actionTrigger.questionnaire.updateLastNotification(alarm.timestamp)
 					}
 					else {
-						ErrorBox.log("Scheduler", "Notification for Alarm \"${alarm.label}\" (id=${alarm.id}, type=${alarm.type}) was not pressed. Executing now.")
+						ErrorBox.log("Scheduler", "Notification for Alarm (id=${alarm.id}, type=${alarm.type}) was not pressed. Executing now.")
 						//alarm.exec() also calls alarm.delete()
 						alarm.exec(fireNotifications = false) //also deletes alarm
 					}
@@ -152,7 +152,7 @@ object Scheduler {
 		val alarms: List<Alarm> = DbLogic.getAlarms()
 		
 		for(alarm: Alarm in alarms) {
-			ErrorBox.log("BootOrTimeChange", "Recalculating \"${alarm.label}\" (id=${alarm.id}, type=${alarm.type})")
+			ErrorBox.log("BootOrTimeChange", "Recalculating Alarm (id=${alarm.id}, type=${alarm.type})")
 			
 			if(alarm.timestamp <= now)
 				alarm.exec()
@@ -249,7 +249,7 @@ object Scheduler {
 		val period = if(signalTime.random) signalTime.endTimeOfDay - signalTime.startTimeOfDay else 0
 		val block = period / frequency
 		if(signalTime.random && frequency > 1 && block < msBetween) {
-			ErrorBox.error("Scheduler", "${signalTime.label}: $frequency blocks with $msBetween ms do not fit into $period ms")
+			ErrorBox.error("Scheduler", "SignalTime ${signalTime.id}: $frequency blocks with $msBetween ms do not fit into $period ms")
 			return
 		}
 		
@@ -281,7 +281,7 @@ object Scheduler {
 		//options:
 		baseTimestamp = considerScheduleOptions(baseTimestamp, signalTime)
 		if(baseTimestamp == -1L) {
-			ErrorBox.log("Scheduler", "${signalTime.label} will never become active. Canceling")
+			ErrorBox.log("Scheduler", "SignalTime ${signalTime.id} will never become active. Canceling")
 			return
 		}
 		
@@ -317,7 +317,6 @@ object Scheduler {
 	internal fun addReminder(
 		questionnaireId: Long,
 		actionTriggerId: Long,
-		label: String,
 		index: Int,
 		delayMinutes: Int,
 		count: Int,
@@ -327,7 +326,7 @@ object Scheduler {
 	): Alarm {
 		ErrorBox.log("Scheduler", "Creating Reminder")
 		val timestamp = now + delayMinutes * 60 * 1000
-		return Alarm.createAsReminder(timestamp, questionnaireId, actionTriggerId, label, index, count, evenTriggerId, signalTimeId)
+		return Alarm.createAsReminder(timestamp, questionnaireId, actionTriggerId, index, count, evenTriggerId, signalTimeId)
 	}
 	
 	internal fun scheduleEventTrigger(eventTrigger: EventTrigger, now: Long = NativeLink.getNowMillis()) {

@@ -81,11 +81,11 @@ fun PreviewStudyJoinedView() {
 		StudyJoinedView(Study.newInstance("", "",
 			"""{"id":1, "title": "Study1", "contactEmail": "contact@email", "studyDescription": "This<br>is<br>a<br>description"}"""),
 			{ listOf(
-				Alarm(1671605321653, -1, -1, "Alarm 1", 0, 0, -1, -1),
-				Alarm(1671605321653, -1, -1, "Alarm 2", 0, 0, -1, -1),
-				Alarm(1671605321653, -1, -1, "Alarm 3", 0, 0, -1, -1),
-				Alarm(1671605321653, -1, -1, "Alarm 4", 0, 0, -1, -1),
-				Alarm(1671605321653, -1, -1, "Alarm 5", 0, 0, -1, -1)
+				Alarm(1671605321653, -1, -1, 0, 0, -1, -1),
+				Alarm(1671605321653, -1, -1, 0, 0, -1, -1),
+				Alarm(1671605321653, -1, -1, 0, 0, -1, -1),
+				Alarm(1671605321653, -1, -1, 0, 0, -1, -1),
+				Alarm(1671605321653, -1, -1, 0, 0, -1, -1)
 			)},
 			{}
 		)

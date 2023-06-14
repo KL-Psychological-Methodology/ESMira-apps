@@ -14,6 +14,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
+import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.DueDateFormatter
 import at.jodlidev.esmira.sharedCode.data_structure.Alarm
 
@@ -37,7 +38,15 @@ fun NextNotificationsView(
 	LazyColumn(modifier = modifier) {
 		items(alarms) { alarm ->
 			Row(modifier = Modifier.fillMaxWidth()) {
-				Text(alarm.label, fontWeight = FontWeight.Bold)
+				val label = if(alarm.questionnaireId == -1L) {
+					val study = DbLogic.getStudy(alarm.actionTrigger.studyId)
+					study?.title ?: "Error"
+				}
+				else {
+					val questionnaire = DbLogic.getQuestionnaire(alarm.questionnaireId)
+					questionnaire?.title ?: "Error"
+				}
+				Text(label, fontWeight = FontWeight.Bold)
 				Text(":")
 				Spacer(modifier = Modifier.weight(1f))
 				Text(dueDateFormatter.get(alarm.timestamp))
@@ -52,11 +61,11 @@ fun NextNotificationsView(
 fun PreviewNextNotificationsView() {
 	ESMiraSurface {
 		val alarms = listOf(
-			Alarm(1671605321653, -1, -1, "Alarm 1", 0, 0, -1, -1),
-			Alarm(1671605321653, -1, -1, "Alarm 2", 0, 0, -1, -1),
-			Alarm(1671605321653, -1, -1, "Alarm 3", 0, 0, -1, -1),
-			Alarm(1671605321653, -1, -1, "Alarm 4", 0, 0, -1, -1),
-			Alarm(1671605321653, -1, -1, "Alarm 5", 0, 0, -1, -1)
+			Alarm(1671605321653, -1, -1, 0, 0, -1, -1),
+			Alarm(1671605321653, -1, -1, 0, 0, -1, -1),
+			Alarm(1671605321653, -1, -1, 0, 0, -1, -1),
+			Alarm(1671605321653, -1, -1, 0, 0, -1, -1),
+			Alarm(1671605321653, -1, -1, 0, 0, -1, -1)
 		)
 		NextNotificationsView(alarms, Modifier, true)
 	}

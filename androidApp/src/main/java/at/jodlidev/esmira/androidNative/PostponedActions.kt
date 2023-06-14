@@ -40,7 +40,7 @@ object PostponedActions : PostponedActionsInterface {
 			pendingIntent.cancel()
 		}
 		else
-			ErrorBox.log("AlarmBox", "Could not cancel alarm ${alarm.label} (${alarm.id})")
+			ErrorBox.log("AlarmBox", "Could not cancel Alarm (${alarm.id})")
 	}
 	
 	override fun scheduleAlarm(alarm: Alarm): Boolean {

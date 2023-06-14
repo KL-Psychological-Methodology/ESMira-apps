@@ -21,8 +21,6 @@ class Alarm {
 	var indexNum = 1 //used when frequency > 1 to tell Alarms that belong to the same SignalTime apart
 	var reminderCount = 0
 	var onlySingleActionIndex = -1
-	var label: String = "Error"
-//	var wasRescheduled: Boolean = false
 	
 	var exists = false
 	
@@ -34,10 +32,10 @@ class Alarm {
 				if(actionTrigger == null) {
 					ErrorBox.error(
 						"Alarm",
-						"Alarm \"$label\" (id=$id, type=$type) had an error : ActionTrigger (id=$actionTriggerId) is null! Removing Alarm to prevent deathloop!\nQuestionnaire=$questionnaireId, Event=$eventTriggerId, Schedule=$scheduleId, SignalTime=$signalTimeId, timestamp=$timestamp"
+						"Alarm (id=$id, type=$type) had an error : ActionTrigger (id=$actionTriggerId) is null! Removing Alarm to prevent deathloop!\nQuestionnaire=$questionnaireId, Event=$eventTriggerId, Schedule=$scheduleId, SignalTime=$signalTimeId, timestamp=$timestamp"
 					)
 					delete()
-					throw Exception("Alarm \"$label\" (id=$id) had an error : ActionTrigger (id=$actionTriggerId) is null!")
+					throw Exception("Alarm (id=$id) had an error : ActionTrigger (id=$actionTriggerId) is null!")
 				}
 				else
 					_actionTrigger = actionTrigger
@@ -53,7 +51,7 @@ class Alarm {
 				if(_signalTime == null)
 					ErrorBox.error(
 						"Alarm",
-						"SignalTime is null! ActionTrigger: $actionTriggerId, Alarm: $label (id=$id), Questionnaire: $questionnaireId, SignalTime: $signalTimeId"
+						"SignalTime is null! ActionTrigger: $actionTriggerId, Alarm: $id, Questionnaire: $questionnaireId, SignalTime: $signalTimeId"
 					)
 			}
 			return _signalTime
@@ -69,7 +67,6 @@ class Alarm {
 		timestamp: Long,
 		questionnaireId: Long,
 		actionTriggerId: Long,
-		label: String,
 		onlySingleActionIndex: Int,
 		reminderCount: Int,
 		evenTriggerId: Long = -1,
@@ -79,7 +76,6 @@ class Alarm {
 		this.actionTriggerId = actionTriggerId
 		this.timestamp = timestamp
 		this.type = TYPES.Reminder
-		this.label = label
 		this.onlySingleActionIndex = onlySingleActionIndex
 		this.reminderCount = reminderCount
 		
@@ -93,7 +89,6 @@ class Alarm {
 		eventTriggerId = eventTrigger.id
 		this.timestamp = utc_timestamp
 		type = TYPES.EventTrigger
-		label = eventTrigger.label
 	}
 	
 	constructor(signalTime: SignalTime, actionTriggerId: Long, timestamp: Long, indexNum: Int) {
@@ -104,7 +99,6 @@ class Alarm {
 		this.timestamp = timestamp
 		this.type = TYPES.SignalTime
 		this.indexNum = indexNum
-		this.label = signalTime.label
 		this._signalTime = signalTime
 //		wasRescheduled = canBeRescheduled
 	}
@@ -123,10 +117,8 @@ class Alarm {
 		timestamp = c.getLong(i + 6)
 		type = TYPES.values()[c.getInt(i + 7)]
 		indexNum = c.getInt(i + 8)
-		label = c.getString(i + 9)
-		onlySingleActionIndex = c.getInt(i + 10)
-		reminderCount = c.getInt(i + 11)
-//		wasRescheduled = c.getBoolean(i + 12)
+		onlySingleActionIndex = c.getInt(i + 9)
+		reminderCount = c.getInt(i + 10)
 		
 		exists = true
 	}
@@ -139,7 +131,7 @@ class Alarm {
 	
 	fun save() {
 		if(exists) {
-			ErrorBox.error("Alarm", "Alarm \"$label\" (id=$id) already exists!")
+			ErrorBox.error("Alarm", "Alarm (id=$id) already exists!")
 			return
 		}
 		val db = NativeLink.sql
@@ -152,7 +144,6 @@ class Alarm {
 		values.putLong(KEY_TIMESTAMP, timestamp)
 		values.putInt(KEY_TYPE, type.ordinal)
 		values.putInt(KEY_INDEX_NUM, indexNum)
-		values.putString(KEY_LABEL, label)
 		values.putInt(KEY_ONLY_SINGLE_ACTION_INDEX, onlySingleActionIndex)
 		values.putInt(KEY_REMINDER_COUNT, reminderCount)
 		
@@ -187,7 +178,7 @@ class Alarm {
 
 			ErrorBox.log(
 				"Alarm",
-				"Scheduled \"$label\" (id=$id, type=$type), starting in: ${(timestamp - NativeLink.getNowMillis()) / 60000} min (${
+				"Scheduled Alarm (id=$id, type=$type), starting in: ${(timestamp - NativeLink.getNowMillis()) / 60000} min (${
 					NativeLink.formatDateTime(timestamp)
 				})"
 			)
@@ -195,7 +186,7 @@ class Alarm {
 		else {
 			ErrorBox.warn(
 				"Alarm",
-				"Could not schedule alarm \"$label\" (id=$id, type=$type), starting in: ${(timestamp - NativeLink.getNowMillis()) / 60000} min (${
+				"Could not schedule Alarm (id=$id, type=$type), starting in: ${(timestamp - NativeLink.getNowMillis()) / 60000} min (${
 					NativeLink.formatDateTime(timestamp)
 				})"
 			)
@@ -215,7 +206,7 @@ class Alarm {
 				
 				ErrorBox.log(
 					"Alarm",
-					"Scheduling \"$label\" (id=$id) ahead. Anchor in ${(timestampAnchor - NativeLink.getNowMillis()) / 60000} min (${
+					"Scheduling Alarm (id=$id) ahead. Anchor in ${(timestampAnchor - NativeLink.getNowMillis()) / 60000} min (${
 						NativeLink.formatDateTime(timestampAnchor)
 					})"
 				)
@@ -226,7 +217,7 @@ class Alarm {
 	fun exec(fireNotifications: Boolean = true) { //fireNotifications is false on IOS when called from checkMissedAlarms()
 		ErrorBox.log(
 			"Alarm",
-			"Running Alarm $label (id=$id, type=$type, SignalTime=$signalTimeId, ActionTrigger=$actionTriggerId, Questionnaire=$questionnaireId)"
+			"Running Alarm (id=$id, type=$type, SignalTime=$signalTimeId, ActionTrigger=$actionTriggerId, Questionnaire=$questionnaireId)"
 		)
 		delete()
 		
@@ -263,7 +254,7 @@ class Alarm {
 			TYPES.SignalTime -> {
 				studyId = q.studyId
 				
-				actionTrigger.execActions(label, timestamp, fireNotifications)
+				actionTrigger.execActions(timestamp, fireNotifications)
 				Scheduler.rescheduleFromAlarm(this)
 			}
 			TYPES.EventTrigger -> {
@@ -279,7 +270,7 @@ class Alarm {
 			TYPES.Reminder -> {
 				studyId = q.studyId
 				if(fireNotifications)
-					actionTrigger.issueReminder(label, timestamp, onlySingleActionIndex, reminderCount)
+					actionTrigger.issueReminder(timestamp, onlySingleActionIndex, reminderCount)
 			}
 		}
 
@@ -290,7 +281,7 @@ class Alarm {
 	fun delete() {
 		ErrorBox.log(
 			"Alarm",
-			"Removing Alarm \"$label\" (id=$id, type=$type, timestamp=$timestamp)"
+			"Removing Alarm (id=$id, type=$type, timestamp=$timestamp)"
 		)
 		NativeLink.postponedActions.cancel(this)
 		NativeLink.notifications.remove(id.toInt())
@@ -322,7 +313,6 @@ class Alarm {
 			KEY_TIMESTAMP,
 			KEY_TYPE,
 			KEY_INDEX_NUM,
-			KEY_LABEL,
 			KEY_ONLY_SINGLE_ACTION_INDEX,
 			KEY_REMINDER_COUNT
 		)
@@ -343,13 +333,12 @@ class Alarm {
 			timestamp: Long,
 			questionnaireId: Long,
 			actionTriggerId: Long,
-			label: String,
 			onlySingleActionIndex: Int,
 			reminderCount: Int,
 			evenTriggerId: Long = -1,
 			signalTimeId: Long = -1
 		): Alarm {
-			val alarm = Alarm(timestamp, questionnaireId, actionTriggerId, label, onlySingleActionIndex, reminderCount, evenTriggerId, signalTimeId)
+			val alarm = Alarm(timestamp, questionnaireId, actionTriggerId, onlySingleActionIndex, reminderCount, evenTriggerId, signalTimeId)
 			alarm.save()
 			return alarm
 		}

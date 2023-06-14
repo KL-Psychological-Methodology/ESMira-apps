@@ -206,7 +206,6 @@ class AlarmTest : BaseCommonTest() {
 			NativeLink.getNowMillis(),
 			questionnaireActive.id,
 			actionTrigger.id,
-			"test",
 			0,
 			1,
 			-1,
@@ -252,7 +251,6 @@ class AlarmTest : BaseCommonTest() {
 			1001L,
 			11L,
 			12L,
-			"test",
 			21,
 			22,
 			13L,
@@ -263,7 +261,6 @@ class AlarmTest : BaseCommonTest() {
 		assertSqlWasSaved(Alarm.TABLE, Alarm.KEY_ACTION_TRIGGER_ID, 12L)
 		assertSqlWasSaved(Alarm.TABLE, Alarm.KEY_EVENT_TRIGGER_ID, 13L)
 		assertSqlWasSaved(Alarm.TABLE, Alarm.KEY_SIGNAL_TIME_ID, 14L)
-		assertSqlWasSaved(Alarm.TABLE, Alarm.KEY_LABEL, "test")
 		assertSqlWasSaved(Alarm.TABLE, Alarm.KEY_ONLY_SINGLE_ACTION_INDEX, 21)
 		assertSqlWasSaved(Alarm.TABLE, Alarm.KEY_REMINDER_COUNT, 22)
 	}

@@ -9,7 +9,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 class SignalTime {
-	var label: String = ""
 	var random = false
 	internal var randomFixed = false
 	var frequency = 1
@@ -31,23 +30,30 @@ class SignalTime {
 		get() {
 			if(!this::_schedule.isInitialized)
 				_schedule = DbLogic.getSchedule(scheduleId)
-					?: throw Exception("SignalTime \"$label\" (id=$id) had an error. Schedule (id=$scheduleId) is null!")
+					?: throw Exception("SignalTime (id=$id) had an error. Schedule (id=$scheduleId) is null!")
 			return _schedule
+		}
+	@Transient private lateinit var _questionnaire: Questionnaire
+	val questionnaire: Questionnaire
+		get() {
+			if(!this::_questionnaire.isInitialized)
+				_questionnaire = DbLogic.getQuestionnaire(questionnaireId)
+					?: throw Exception("SignalTime (id=$id) had an error. Questionnaire (id=$_questionnaire) is null!")
+			return _questionnaire
 		}
 	
 	constructor(c: SQLiteCursor) {
 		id = c.getLong(0)
 		scheduleId = c.getLong(1)
 		questionnaireId = c.getLong(2)
-		label = c.getString(3)
-		random = c.getBoolean(4)
-		randomFixed = c.getBoolean(5)
-		frequency = c.getInt(6)
-		minutesBetween = c.getInt(7)
-		startTimeOfDay = c.getInt(8)
-		endTimeOfDay = c.getInt(9)
-		originalStartTimeOfDay = c.getInt(10)
-		originalEndTimeOfDay = c.getInt(11)
+		random = c.getBoolean(3)
+		randomFixed = c.getBoolean(4)
+		frequency = c.getInt(5)
+		minutesBetween = c.getInt(6)
+		startTimeOfDay = c.getInt(7)
+		endTimeOfDay = c.getInt(8)
+		originalStartTimeOfDay = c.getInt(9)
+		originalEndTimeOfDay = c.getInt(10)
 		exists = true
 	}
 	
@@ -101,8 +107,7 @@ class SignalTime {
 			endOther = other.endTimeOfDay
 		}
 		
-		return label != other.label
-			|| random != other.random
+		return random != other.random
 			|| randomFixed != other.randomFixed
 			|| frequency != other.frequency
 			|| minutesBetween != other.minutesBetween
@@ -155,7 +160,6 @@ class SignalTime {
 		val values = db.getValueBox()
 		values.putLong(KEY_SCHEDULE_ID, scheduleId)
 		values.putLong(KEY_QUESTIONNAIRE_ID, questionnaireId)
-		values.putString(KEY_LABEL, label)
 		values.putBoolean(KEY_RANDOM, random)
 		values.putBoolean(KEY_RANDOM_FIXED, randomFixed)
 		values.putInt(KEY_FREQUENCY, frequency)
@@ -176,11 +180,11 @@ class SignalTime {
 	
 	internal fun saveTimeFrames(schedule: Schedule, rescheduleNow: Boolean = false, db: SQLiteInterface = NativeLink.sql,) {
 		if(!exists) {
-			ErrorBox.error("SignalTime", "SignalTime(label=$label, id=$id) does not exist!")
+			ErrorBox.error("SignalTime", "SignalTime(id=$id) does not exist!")
 			return
 		}
 		else if(!timeHasChanged) {
-			ErrorBox.log("SignalTime", "SignalTime(label=$label, id=$id) was not changed. Skipping...")
+			ErrorBox.log("SignalTime", "SignalTime(id=$id) was not changed. Skipping...")
 			return
 		}
 		
@@ -237,7 +241,6 @@ class SignalTime {
 			KEY_ID,
 			KEY_SCHEDULE_ID,
 			KEY_QUESTIONNAIRE_ID,
-			KEY_LABEL,
 			KEY_RANDOM,
 			KEY_RANDOM_FIXED,
 			KEY_FREQUENCY,

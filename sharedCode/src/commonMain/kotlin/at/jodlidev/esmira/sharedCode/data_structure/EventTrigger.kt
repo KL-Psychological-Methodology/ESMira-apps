@@ -9,7 +9,6 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 class EventTrigger {
-	var label: String = "Event"
 	var cueCode: DataSet.EventTypes = DataSet.EventTypes.joined
 	var randomDelay = false
 	var delaySec = 0
@@ -35,10 +34,10 @@ class EventTrigger {
 	
 	internal constructor(c: SQLiteCursor) {
 		getMinimalCursor(c)
-		actionTriggerId = c.getLong(8)
-		studyId = c.getLong(9)
-		questionnaireId = c.getLong(10)
-		actionString = c.getString(11)
+		actionTriggerId = c.getLong(7)
+		studyId = c.getLong(8)
+		questionnaireId = c.getLong(9)
+		actionString = c.getString(10)
 	}
 	fun bindParent(questionnaire: Questionnaire, actionTrigger: ActionTrigger) {
 		actionTriggerId = actionTrigger.id
@@ -49,13 +48,12 @@ class EventTrigger {
 	
 	private fun getMinimalCursor(c: SQLiteCursor) {
 		id = c.getLong(0)
-		label = c.getString(1)
-		cueCode = DataSet.EventTypes.valueOf(c.getString(2))
-		randomDelay = c.getBoolean(3)
-		delaySec = c.getInt(4)
-		delayMinimumSec = c.getInt(5)
-		skipThisQuestionnaire = c.getBoolean(6)
-		specificQuestionnaireInternalId = c.getLong(7)
+		cueCode = DataSet.EventTypes.valueOf(c.getString(1))
+		randomDelay = c.getBoolean(2)
+		delaySec = c.getInt(3)
+		delayMinimumSec = c.getInt(4)
+		skipThisQuestionnaire = c.getBoolean(5)
+		specificQuestionnaireInternalId = c.getLong(6)
 	}
 	
 	fun triggerCheck(questionnaire: Questionnaire?) {
@@ -80,12 +78,11 @@ class EventTrigger {
 	}
 	
 	private fun exec(actionTrigger: ActionTrigger, timestamp: Long, fireNotifications: Boolean = true) {
-		actionTrigger.execActions(label, timestamp, fireNotifications)
+		actionTrigger.execActions(timestamp, fireNotifications)
 	}
 	
 	fun save(db: SQLiteInterface = NativeLink.sql) {
 		val values = db.getValueBox()
-		values.putString(KEY_LABEL, label)
 		values.putString(KEY_CUE, cueCode.toString())
 		values.putBoolean(KEY_RANDOM_DELAY, randomDelay)
 		values.putInt(KEY_DELAY, delaySec)
@@ -127,7 +124,6 @@ class EventTrigger {
 
 		val COLUMNS = arrayOf(
 			KEY_ID,
-			KEY_LABEL,
 			KEY_CUE,
 			KEY_RANDOM_DELAY,
 			KEY_DELAY,
@@ -137,7 +133,6 @@ class EventTrigger {
 		)
 		val COLUMNS_JOINED = arrayOf(
 			EXT_KEY_ID,
-			"$TABLE.$KEY_LABEL",
 			"$TABLE.$KEY_CUE",
 			"$TABLE.$KEY_RANDOM_DELAY",
 			"$TABLE.$KEY_DELAY",

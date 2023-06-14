@@ -268,12 +268,12 @@ class ActionTrigger {
 		return DbLogic.getJsonConfig().decodeFromString(actionsString)
 	}
 	
-	internal fun execActions(label: String, actionScheduledTimestamp: Long, fireNotifications: Boolean = true) {
+	internal fun execActions(actionScheduledTimestamp: Long, fireNotifications: Boolean = true) {
 		val now = NativeLink.getNowMillis()
 		if(abs(now - actionScheduledTimestamp) > MAX_ACTIONTIME_DEVIATION)
 			ErrorBox.warn(
 				"ActionTrigger",
-				"Action \"$label\" was ${(now - actionScheduledTimestamp) / 60000} min late ($actionScheduledTimestamp)!"
+				"Action $id was ${(now - actionScheduledTimestamp) / 60000} min late ($actionScheduledTimestamp)!"
 			)
 		val actions = getActionArray()
 		for((i, actionJson) in actions.withIndex()) {
@@ -282,7 +282,6 @@ class ActionTrigger {
 			when(action.type) {
 				JSON_ACTION_TYPE_INVITATION ->
 					issueInvitationNotification(
-						label = label,
 						actionScheduledTimestamp = actionScheduledTimestamp,
 						action = action,
 						index = i,
@@ -293,8 +292,9 @@ class ActionTrigger {
 					)
 				JSON_ACTION_TYPE_NOTIFICATION -> {
 					if(fireNotifications) {
+						val study = DbLogic.getStudy(studyId)
 						NativeLink.notifications.fireStudyNotification(
-							label,
+							study?.title ?: "Notification",
 							action.msg,
 							questionnaire,
 							actionScheduledTimestamp
@@ -325,7 +325,7 @@ class ActionTrigger {
 				val timestamp = alarm.timestamp
 				ErrorBox.log(
 					"Postponed Notification",
-					"Scheduling Postponed ${alarm.type} for alarm ${alarm.label} (id=${alarm.id}) starting in ${(timestamp - NativeLink.getNowMillis()) / 60000} min (${
+					"Scheduling Postponed ${alarm.type} for Alarm (id=${alarm.id}) starting in ${(timestamp - NativeLink.getNowMillis()) / 60000} min (${
 						NativeLink.formatDateTime(timestamp)
 					})"
 				)
@@ -387,7 +387,6 @@ class ActionTrigger {
 		delayMinutes: Int
 	) {
 		val timestamp = alarm.timestamp
-		val label = alarm.label
 		
 		if(reminderCount > 0) {
 			ErrorBox.log("Postponed Reminder", "Scheduling Postponed Reminder")
@@ -396,7 +395,6 @@ class ActionTrigger {
 			val newAlarm = Scheduler.addReminder(
 				questionnaire.id,
 				id,
-				label,
 				index,
 				delayMinutes,
 				reminderCount - 1,
@@ -410,13 +408,12 @@ class ActionTrigger {
 		}
 	}
 	
-	internal fun issueReminder(label: String, actionScheduledTimestamp: Long, index: Int, reminder_count: Int) { //for Android
+	internal fun issueReminder(actionScheduledTimestamp: Long, index: Int, reminder_count: Int) { //for Android
 		val actions = getActionArray()
-		issueInvitationNotification(label, actionScheduledTimestamp, Action(actions[index].jsonObject), index, reminder_count, true)
+		issueInvitationNotification(actionScheduledTimestamp, Action(actions[index].jsonObject), index, reminder_count, true)
 	}
 	
 	private fun issueInvitationNotification(
-		label: String,
 		actionScheduledTimestamp: Long,
 		action: Action,
 		index: Int,
@@ -436,7 +433,7 @@ class ActionTrigger {
 		if(!questionnaire.canBeFilledOut(now)) {
 			ErrorBox.log(
 				"Notification",
-				"Questionnaire (${questionnaire.title}) is not active at ${NativeLink.formatDateTime(now)}. Skipping notification '$label'"
+				"Questionnaire (${questionnaire.title}) is not active at ${NativeLink.formatDateTime(now)}. Skipping notification"
 			)
 			return
 		}
@@ -449,7 +446,7 @@ class ActionTrigger {
 		else {
 			if(fireNotifications) {
 				NativeLink.notifications.fireQuestionnaireBing(
-					label,
+					questionnaire.title,
 					action.msg,
 					questionnaire,
 					if(reminderCount > 0) 0 else timeout, //we only want a timeout on the last reminder
@@ -460,7 +457,6 @@ class ActionTrigger {
 					Scheduler.addReminder(
 						questionnaire.id,
 						id,
-						label,
 						index,
 						reminderDelay,
 						reminderCount - 1,
