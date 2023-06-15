@@ -257,7 +257,10 @@ class Questionnaire {
 				input.fillIntoDataSet(dataSet)
 			}
 		}
-		dataSet.saveQuestionnaire(this, formStarted)
+		
+		
+		
+		dataSet.saveQuestionnaire(this, formStarted, QuestionnaireCache.getPageTimestamps(id))
 		updateLastCompleted(true) //this needs to be after we store last_notification in dataset
 		QuestionnaireCache.clearCache(id)
 		execMissingAlarms() //for iOS when the notification was ignored and the app was opened directly
@@ -351,7 +354,7 @@ class Questionnaire {
 		val alarms = DbLogic.getAlarmsBefore(now, id)
 		
 		for(alarm in alarms) {
-			ErrorBox.log("Questionnaire", "Alarm \"${alarm.label}\" (${alarm.id}) for questionnaire \"$title\" was not executed. Executing now")
+			ErrorBox.log("Questionnaire", "Alarm (${alarm.id}) for questionnaire \"$title\" was not executed. Executing now")
 			alarm.exec(fireNotifications = NativeLink.smartphoneData.phoneType != PhoneType.IOS)
 		}
 	}

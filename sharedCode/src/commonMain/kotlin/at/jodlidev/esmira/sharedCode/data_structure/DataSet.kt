@@ -150,9 +150,18 @@ class DataSet: UploadData {
 	}
 	
 	
-	fun saveQuestionnaire(questionnaire: Questionnaire, formStarted: Long) {
+	fun saveQuestionnaire(questionnaire: Questionnaire, formStarted: Long, pageTimestamps: List<Long>) {
 		responseTime = NativeLink.getNowMillis()
+		
+		val pageDurations = ArrayList<Long>()
+		val lastPageTimeStamp = pageTimestamps.fold(formStarted) {last, current ->
+			pageDurations.add(current - last)
+			current
+		}
+		pageDurations.add(responseTime - lastPageTimeStamp)
+		
 		addResponseData("formDuration", responseTime - formStarted)
+		addResponseData("pageDurations", pageDurations.joinToString(","))
 		addResponseData("lastInvitation", questionnaire.lastNotification)
 		
 		for(score in questionnaire.sumScores) { //needs to happen before we create statistics in case it is used for a statistic

@@ -1,10 +1,7 @@
 package at.jodlidev.esmira.sharedCode.data_structure
 
-import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.SQLiteInterface
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.*
 
 /**
  * Created by JodliDev on 09.02.2021.
@@ -19,8 +16,9 @@ object QuestionnaireCache {
 	const val KEY_BACKUP_FROM = "backupFrom"
 	const val KEY_CACHE_VALUE = "cacheValue"
 	
-	const val FORM_STARTED_NAME = "~formStarted"
+	const val FORM_STARTED = "~formStarted"
 	const val FORM_PAGE = "~formPage"
+	const val FORM_PAGE_TIMESTAMPS = "~formPageTimestamp"
 	
 	internal fun loadCacheValue(questionnaireId: Long, inputName: String): String? {
 		val db = NativeLink.sql
@@ -56,7 +54,7 @@ object QuestionnaireCache {
 	}
 	
 	fun getFormStarted(questionnaireId: Long): Long {
-		val value = loadCacheValue(questionnaireId, FORM_STARTED_NAME)
+		val value = loadCacheValue(questionnaireId, FORM_STARTED)
 		return if(value != null)
 			value.toLong()
 		else {
@@ -65,16 +63,30 @@ object QuestionnaireCache {
 			// And loadCacheValue() calls clearCache(), so it deletes ALL entries if it is out of date
 			
 			val formStarted = NativeLink.getNowMillis()
-			saveCacheValue(questionnaireId, FORM_STARTED_NAME, formStarted.toString())
+			saveCacheValue(questionnaireId, FORM_STARTED, formStarted.toString())
 			formStarted
 		}
 	}
 	
 	fun savePage(questionnaireId: Long, pageNumber: Int) {
 		saveCacheValue(questionnaireId, FORM_PAGE, pageNumber.toString())
+		val timestamps = getPageTimestamps(questionnaireId).toMutableList()
+		if(pageNumber > timestamps.size) {
+			for(i in timestamps.size..pageNumber) {
+				timestamps.add(NativeLink.getNowMillis())
+			}
+		}
+		else
+			timestamps[pageNumber-1] = NativeLink.getNowMillis()
+		saveCacheValue(questionnaireId, FORM_PAGE_TIMESTAMPS, timestamps.joinToString(","))
 	}
 	fun getPage(questionnaireId: Long): Int {
 		return loadCacheValue(questionnaireId, FORM_PAGE)?.toInt() ?: 0
+	}
+	fun getPageTimestamps(questionnaireId: Long): List<Long> {
+		val value = loadCacheValue(questionnaireId, FORM_PAGE_TIMESTAMPS) ?: return ArrayList()
+		
+		return value.split(",").map { it.toLongOrNull() ?: 0L }
 	}
 
 
