@@ -68,7 +68,10 @@ fun DateView(input: Input, get: () -> String, save: (String) -> Unit) {
 			localFormat.calendar = calendar
 			targetFormat.calendar = calendar
 			
-			save(targetFormat.format(calendar.time))
+			if(input.forceInt)
+				save(calendar.time.toString())
+			else
+				save(targetFormat.format(calendar.time))
 		}, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)
 	)
 	

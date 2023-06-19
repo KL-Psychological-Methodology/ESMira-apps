@@ -38,7 +38,12 @@ fun TimeView(input: Input, get: () -> String, save: (String) -> Unit) {
 		val value = get()
 		if(value.isNotEmpty()) {
 			try {
-				calendar.timeInMillis = value.toLong()
+				val valueInt = value.toInt()
+				val hours = valueInt / 60
+				val minutes = valueInt % 60
+				
+				calendar.set(Calendar.HOUR_OF_DAY, hours)
+				calendar.set(Calendar.MINUTE, minutes)
 			}
 			catch(_: Throwable) {
 				ErrorBox.warn("TimeView", "Value $value in Item ${input.name} is faulty")
@@ -67,7 +72,12 @@ fun TimeView(input: Input, get: () -> String, save: (String) -> Unit) {
 			localFormat.calendar = calendar
 			targetFormat.calendar = calendar
 			
-			save(targetFormat.format(calendar.time))
+			if(input.forceInt) {
+				val minutes = hour * 60 + minute
+				save(minutes.toString())
+			}
+			else
+				save(targetFormat.format(calendar.time))
 		}, calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), DateFormat.is24HourFormat(context)
 	)
 	
