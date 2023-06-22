@@ -55,8 +55,8 @@ struct ContentView: View {
 					label: { EmptyView() }
 				)
 				if(self.navigationState.questionnaireId != -1) {
-					let questionnaire = DbLogic().getQuestionnaire(id: self.navigationState.questionnaireId) //happens when study was quit and a questionnaire was opened before
-					if(questionnaire != nil) {
+					let questionnaire = DbLogic().getQuestionnaire(id: self.navigationState.questionnaireId)
+					if(questionnaire != nil) {//happens when study was quit and a questionnaire was opened before
 						NavigationLink(
 							destination:
 								QuestionnaireView(questionnaire: questionnaire!),

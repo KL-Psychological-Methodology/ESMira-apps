@@ -27,7 +27,7 @@ struct QrStartView: View {
 			}
 			Image(systemName: "camera.fill").font(.system(size: 80))
 			Text("welcome_qr_instructions").padding(.vertical)
-			Button("start") {
+			DefaultButton("start") {
 				self.openQrScanner = true
 			}
 			Spacer()

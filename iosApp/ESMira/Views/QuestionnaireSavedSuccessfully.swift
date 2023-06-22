@@ -10,14 +10,14 @@ struct QuestionnaireSavedSuccessfully: View {
 	
 	var body: some View {
 		VStack {
+			Spacer()
 			Text("info_questionnaire_success")
 			Spacer()
-			Button(action: {
+			DefaultButton("ok_") {
 				self.navigationState.questionnaireSuccessfullOpened = false
-			}) {
-				Text("ok_")
 			}
 		}
+		.navigationBarTitle(Text(""), displayMode: .inline)
 		.padding()
 	}
 }

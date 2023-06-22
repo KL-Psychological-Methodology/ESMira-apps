@@ -106,33 +106,6 @@ struct StatisticsView: View {
 	}
 	var body: some View {
 		VStack {
-			if(self.showPublicStatistics) {
-                HStack {
-					Button(action:  {
-						self.currentScreen = .personalStatistics
-					}) {
-						Text("statistics_personal").bold().font(.system(size: 14))
-					}
-						.foregroundColor(self.currentScreen == .personalStatistics ? Color("Accent") : Color.white)
-						.padding()
-					Spacer()
-					Button(action:  {
-						self.currentScreen = .publicStatistics
-					}) {
-						Text("statistics_public").bold().font(.system(size: 14))
-					}
-						.foregroundColor(self.currentScreen == .publicStatistics ? Color("Accent") : Color.white)
-						.padding()
-				}
-					.background(Color("Surface"))
-			}
-			
-			
-//			GeometryReader { geometry in
-//				ScrollView {
-//					self.drawStatistics(charts: self.currentScreen == .personalStatistics ? self.personalCollection.charts : self.publicCollection!.charts, width: geometry.size.width)
-//				}
-//			}
 			
 			if(self.currentScreen == .personalStatistics) {
 				GeometryReader { geometry in
@@ -150,6 +123,43 @@ struct StatisticsView: View {
 				}
 				.padding(.horizontal)
 
+			}
+			
+			if(self.showPublicStatistics) {
+				HStack {
+					Spacer()
+					Button(action:  {
+						self.currentScreen = .personalStatistics
+					}) {
+						VStack {
+							Image(systemName: "person.fill")
+								.padding(.top, 3)
+							Text("statistics_personal").bold().font(.system(size: 14))
+								.padding(5)
+						}
+					}
+						.foregroundColor(self.currentScreen != .personalStatistics ? Color("PrimaryDark") : Color.white)
+						.background(self.currentScreen == .personalStatistics ? Color("PrimaryDark") : Color.white.opacity(0))
+						.cornerRadius(15)
+						.padding(10)
+					Spacer()
+					Button(action:  {
+						self.currentScreen = .publicStatistics
+					}) {
+						VStack {
+							Image(systemName: "person.3.fill")
+								.padding(.top, 3)
+							Text("statistics_public").bold().font(.system(size: 14))
+								.padding(5)
+						}
+					}
+						.foregroundColor(self.currentScreen != .publicStatistics ? Color("PrimaryDark") : Color.white)
+						.background(self.currentScreen == .publicStatistics ? Color("PrimaryDark") : Color.white.opacity(0))
+						.cornerRadius(15)
+						.padding(10)
+					Spacer()
+				}
+					.background(Color("Surface"))
 			}
 		}
 			.customLoader(isShowing: self.$loadingState,
