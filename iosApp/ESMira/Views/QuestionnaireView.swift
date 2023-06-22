@@ -25,6 +25,7 @@ struct QuestionnaireView: View {
 
 	@State private var readyCounter = 0
 	private let waitCounter: Int
+	@State private var pageIsActive = true
 	
 	@State var skipPageTimer: DispatchSourceTimer? = nil
 	
@@ -32,7 +33,12 @@ struct QuestionnaireView: View {
 	 * Only called from ContentView
 	 */
 	init(questionnaire: sharedCode.Questionnaire) {
-		self.init(questionnaire: questionnaire, pageIndex: Int(questionnaire.getFirstPageIndex()), formStarted: Int64(Date().timeIntervalSince1970 * 1000), firstScreen: true)
+		self.init(
+			questionnaire: questionnaire,
+			pageIndex: Int(questionnaire.getFirstPageIndex()),
+			formStarted: QuestionnaireCache().getFormStarted(questionnaireId: questionnaire.id),
+			firstScreen: true
+		)
 	}
 	init(questionnaire: sharedCode.Questionnaire, pageIndex: Int, formStarted: Int64, firstScreen: Bool = false) {
 		self.firstScreen = firstScreen
@@ -115,6 +121,7 @@ struct QuestionnaireView: View {
 						Spacer()
 						Button(action: {
 							if(self.noMissings()) {
+								self.pageIsActive = false
 								goNext()
 							}
 						}) {
@@ -138,33 +145,35 @@ struct QuestionnaireView: View {
 		let isZero = self.waitCounter == 0 || self.readyCounter == 0
 
         return GeometryReader { geometry in
-            ScrollView {
-				ZStack(alignment: .top) {
+			ZStack(alignment: .top) {
+				ScrollView {
 					self.drawInnerQuestionnaire(page: page, width: geometry.size.width).opacity(isDisabled ? 0 : 1).animation(.easeIn(duration: 0.4))
-					if(isDisabled) {
-						VStack {
-							LoadingSpinner(isAnimating: .constant(true), style: .large).padding()
-							HStack {
-								Text(isZero ? "100" : String(Int(100 / self.waitCounter * self.readyCounter)))
-								Text("%")
-							}
+				}
+				if(isDisabled) {
+					VStack {
+						LoadingSpinner(isAnimating: .constant(true), style: .large).padding()
+						HStack {
+							Text(isZero ? "100" : String(Int(100 / self.waitCounter * self.readyCounter)))
+							Text("%")
 						}
 					}
-					else if(page.skipAfterSecs != 0) {
-						VStack {}
-							.onAppear {
-								let timer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
-								timer.schedule(deadline: .now() + TimeInterval(page.skipAfterSecs))
-								timer.setEventHandler {
+				}
+				else if(page.skipAfterSecs != 0) {
+					VStack {}
+						.onAppear {
+							let timer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
+							timer.schedule(deadline: .now() + TimeInterval(page.skipAfterSecs))
+							timer.setEventHandler {
+								if(self.pageIsActive) {
 									goNext()
 								}
-								skipPageTimer = timer
-								timer.resume()
 							}
-							.onDisappear {
-								self.skipPageTimer?.cancel()
-							}
-					}
+							skipPageTimer = timer
+							timer.resume()
+						}
+						.onDisappear {
+							self.skipPageTimer?.cancel()
+						}
 				}
             }
 			.resignKeyboardOnDragGesture()
