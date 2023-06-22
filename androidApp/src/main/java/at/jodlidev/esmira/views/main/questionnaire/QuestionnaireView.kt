@@ -12,9 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -49,10 +47,12 @@ fun QuestionnaireView(
 	val listState = rememberLazyListState()
 	val coroutineScope = rememberCoroutineScope()
 	val page = questionnaire.getPage(pageNumber)
+	val pageIsActive = remember { mutableStateOf(true) }
 	if(page.skipAfterSecs != 0) {
 		LaunchedEffect(Unit) {
 			delay(page.skipAfterSecs.seconds)
-			goNext()
+			if(pageIsActive.value)
+				goNext()
 		}
 	}
 	
@@ -73,7 +73,7 @@ fun QuestionnaireView(
 				
 				return@MainView
 			}
-			
+			pageIsActive.value = false
 			goNext()
 		}
 	}
