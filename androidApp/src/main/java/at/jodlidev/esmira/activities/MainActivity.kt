@@ -75,8 +75,10 @@ class MainActivity: ComponentActivity() {
 				if(questionnaire != null) {
 					DbUser.setCurrentStudyId(questionnaire.studyId)
 					
-					if(questionnaire.canBeFilledOut())
+					if(questionnaire.canBeFilledOut()) {
+						QuestionnaireCache.saveFormStarted(questionnaire.id)
 						startDestination = "questionnaire/${questionnaire.id}/${questionnaire.getFirstPageIndex()}"
+					}
 				}
 			}
 		}
@@ -314,7 +316,10 @@ class MainActivity: ComponentActivity() {
 				openNextNotifications = {
 					showNextNotifications.value = true
 				},
-				gotoQuestionnaire = { navController.navigate("questionnaire/${it.id}/${it.getFirstPageIndex()}") },
+				gotoQuestionnaire = {
+					QuestionnaireCache.saveFormStarted(it.id)
+					navController.navigate("questionnaire/${it.id}/${it.getFirstPageIndex()}")
+				},
 				gotoDisabledQuestionnaires = { navController.navigate("hiddenQuestionnairesList") },
 				gotoMessages = { navController.navigate("messages") },
 				gotoReward = { navController.navigate("reward") },
@@ -335,6 +340,7 @@ class MainActivity: ComponentActivity() {
 			questionnaires = questionnaires,
 			goBack = { onBackPressedDispatcher.onBackPressed() },
 			gotoQuestionnaire = { questionnaire ->
+				QuestionnaireCache.saveFormStarted(questionnaire.id)
 				navController.navigate("questionnaire/${questionnaire.id}/${questionnaire.getFirstPageIndex()}")
 			}
 		)

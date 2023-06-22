@@ -48,6 +48,7 @@ class NavigationState: ObservableObject {
 		self.addStudyOpened = true
 	}
 	func openQuestionnaire(_ questionnaire: Questionnaire) {
+		QuestionnaireCache().saveFormStarted(questionnaireId: questionnaire.id)
 		switchStudy(questionnaire.studyId)
 		self.questionnaireId = questionnaire.id
 		self.questionnaireOpened = true
