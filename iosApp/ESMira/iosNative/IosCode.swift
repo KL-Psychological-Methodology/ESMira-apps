@@ -7,7 +7,7 @@ import sharedCode
 
 class IosCode: IosCodeInterface {
 	func currentTimeMillis() -> Int64 {
-		Int64(Date().timeIntervalSince1970) * 1000
+		Int64((Date().timeIntervalSince1970 * 1000.0).rounded())
 	}
 	
 	func formatDateTime(ms: Int64) -> String {
@@ -31,7 +31,7 @@ class IosCode: IosCodeInterface {
 	}
 	
 	func getMidnightMillis(timestamp: Int64) -> Int64 {
-		Int64(Calendar.current.startOfDay(for: timestamp == -1 ? Date() : Date(timeIntervalSince1970: Double(timestamp/1000))).timeIntervalSince1970) * 1000
+		Int64((Calendar.current.startOfDay(for: timestamp == -1 ? Date() : Date(timeIntervalSince1970: Double(timestamp/1000))).timeIntervalSince1970 * 1000.0).rounded())
 	}
 	
 	func getTimezone() -> String {
