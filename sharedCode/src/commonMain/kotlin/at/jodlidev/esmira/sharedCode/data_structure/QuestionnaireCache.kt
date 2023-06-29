@@ -53,26 +53,19 @@ object QuestionnaireCache {
 		db.insert(TABLE, values)
 	}
 	
+	fun saveFormStarted(questionnaireId: Long) {
+		if(loadCacheValue(questionnaireId, FORM_STARTED) == null)
+			saveCacheValue(questionnaireId, FORM_STARTED, NativeLink.getNowMillis().toString())
+	}
 	fun getFormStarted(questionnaireId: Long): Long {
-		val value = loadCacheValue(questionnaireId, FORM_STARTED)
-		return if(value != null)
-			value.toLong()
-		else {
-			// it is possible that some cache entries are out of date while others arent yet.
-			// But we can assume, that formStarted is always checked first. So it is always the oldest.
-			// And loadCacheValue() calls clearCache(), so it deletes ALL entries if it is out of date
-			
-			val formStarted = NativeLink.getNowMillis()
-			saveCacheValue(questionnaireId, FORM_STARTED, formStarted.toString())
-			formStarted
-		}
+		return loadCacheValue(questionnaireId, FORM_STARTED)?.toLong() ?: NativeLink.getNowMillis()
 	}
 	
 	fun savePage(questionnaireId: Long, pageNumber: Int) {
 		saveCacheValue(questionnaireId, FORM_PAGE, pageNumber.toString())
 		val timestamps = getPageTimestamps(questionnaireId).toMutableList()
 		if(pageNumber > timestamps.size) {
-			for(i in timestamps.size..pageNumber) {
+			for(i in timestamps.size until pageNumber) {
 				timestamps.add(NativeLink.getNowMillis())
 			}
 		}
