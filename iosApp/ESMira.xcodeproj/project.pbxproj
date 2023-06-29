@@ -279,6 +279,7 @@
 		6BCFED642825283A009167B0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6BA4BF9A283E566D00D3E8C7 /* AddStudySubViews */,
 				6B92BF3229DC38F80011E8D9 /* questionnaire */,
 				6BCFED7B2825283A009167B0 /* AddStudyView.swift */,
 				6B3A92C329E816410081A554 /* AboutESMira.swift */,
@@ -294,7 +295,6 @@
 				6BCCF47C29BF20FA006E88E1 /* StudyDashboard.swift */,
 				6B6B607329DDCC2200E7929D /* StudyInformation.swift */,
 				6B3A92BF29E5C8250081A554 /* UploadProtocol.swift */,
-				6BA4BF9A283E566D00D3E8C7 /* AddStudySubViews */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -500,6 +500,7 @@
 				6BCFEDF928252986009167B0 /* XCRemoteSwiftPackageReference "Charts" */,
 				6BCD31C3282529E800BD266B /* XCRemoteSwiftPackageReference "CodeScanner" */,
 				6BCD31C628252A3700BD266B /* XCRemoteSwiftPackageReference "url-image" */,
+				6B79802F2A4335120081C508 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 			);
 			productRefGroup = 7555FF7C242A565900829871 /* Products */;
 			projectDirPath = "";
@@ -867,6 +868,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6B79802F2A4335120081C508 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		6BCD31C3282529E800BD266B /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/twostraws/CodeScanner";
