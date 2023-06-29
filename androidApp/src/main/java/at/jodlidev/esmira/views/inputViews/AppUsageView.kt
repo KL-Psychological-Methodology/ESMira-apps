@@ -8,7 +8,6 @@ import android.os.Build
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -168,9 +167,9 @@ fun AppUsageView(input: Input, get: () -> String, save: (String, Map<String, Str
 	val todayUsageCount: Int
 	
 	if(displayAppUsage) {
-		val packageUsages = appUsageCalculator.getAllPackageUsages(from, to)
-		yesterdayUsageCount = packageUsages[input.packageId]?.count ?: -1
-		yesterdayUsageTime = packageUsages[input.packageId]?.totalTime ?: -1L
+		val packageUsagesYesterday = appUsageCalculator.getAllPackageUsages(from, to)
+		yesterdayUsageCount = packageUsagesYesterday[input.packageId]?.count ?: -1
+		yesterdayUsageTime = packageUsagesYesterday[input.packageId]?.totalTime ?: -1L
 		
 		val packageUsagesToday = appUsageCalculator.getAllPackageUsages(to, now)
 		todayUsageCount = packageUsagesToday[input.packageId]?.count ?: -1
@@ -186,10 +185,11 @@ fun AppUsageView(input: Input, get: () -> String, save: (String, Map<String, Str
 		todayUsageTime = todayPair.totalTime
 	}
 	
-	save(yesterdayUsageTime.toString(), mapOf(
-		Pair("usageCount", yesterdayUsageCount.toString()),
-		Pair("usageTimeToday", todayUsageTime.toString()),
-		Pair("usageCountToday", todayUsageCount.toString())
+	save(if(yesterdayUsageCount > 0 && todayUsageCount > 0) "1" else "0", mapOf(
+		Pair("usageCountYesterday", yesterdayUsageCount.toString()),
+		Pair("usageCountToday", todayUsageCount.toString()),
+		Pair("usageTimeYesterday", yesterdayUsageTime.toString()),
+		Pair("usageTimeToday", todayUsageTime.toString())
 	))
 	
 	AppUsageTableView(yesterdayUsageCount, yesterdayUsageTime, todayUsageCount, todayUsageTime, displayAppUsage, input.packageId)
