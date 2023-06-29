@@ -57,12 +57,14 @@ fun ListSingleView(input: Input, get: () -> String, save: (String) -> Unit) {
 @Composable
 fun ListSingleAsListView(input: Input, get: () -> String, save: (String) -> Unit) {
 	Column {
-		for(value in input.listChoices) {
+		for((i, value) in input.listChoices.withIndex()) {
+			val actualValue = if(input.forceInt) (i+1).toString() else value
+			
 			RadioButtonLine(
 				text = value,
-				isSelected = { value == get() },
+				isSelected = { actualValue == get() },
 				onSelected = {
-					save(value)
+					save(actualValue)
 				}
 			)
 		}
@@ -73,8 +75,13 @@ fun ListSingleAsDropdownView(input: Input, get: () -> String, save: (String) -> 
 	val expanded = remember { mutableStateOf(false) }
 	Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 		Box {
+			val shownValue =  if(input.forceInt)
+				get().toIntOrNull()?.let {input.listChoices[it-1]} ?: ""
+			else
+				get()
+			
 			DefaultButtonIconLeft(
-				text = get().ifEmpty { stringResource(R.string.please_select) },
+				text = shownValue.ifEmpty { stringResource(R.string.please_select) },
 				icon = Icons.Default.ArrowDropDown,
 				onClick = {
 					expanded.value = true
@@ -92,16 +99,17 @@ fun ListSingleAsDropdownView(input: Input, get: () -> String, save: (String) -> 
 				modifier = Modifier
 					.defaultMinSize(200.dp)
 			) {
-				for(value in input.listChoices) {
+				for((i, value) in input.listChoices.withIndex()) {
+					val actualValue = if(input.forceInt) (i+1).toString() else value
 					DropdownMenuItem(
 						text = {
 							Text(value)
 						},
 						onClick = {
-							save(value)
+							save(actualValue)
 							expanded.value = false
 						},
-						enabled = value != get()
+						enabled = actualValue != get()
 					)
 				}
 			}

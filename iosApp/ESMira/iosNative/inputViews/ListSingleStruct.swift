@@ -15,20 +15,34 @@ struct ListSingleStruct: View {
 	func createDropDown() -> [ActionSheet.Button] {
 		var r = [ActionSheet.Button]()
 		
-		for choice in self.viewModel.input.listChoices {
+		for (i, choice) in self.viewModel.input.listChoices.enumerated() {
+			let actualValue = self.viewModel.input.forceInt ? String(i+1) : choice
 			r.append(ActionSheet.Button.default(Text(choice)) {
-				self.viewModel.value = choice
+				self.viewModel.value = actualValue
 			})
 		}
 		r.append(ActionSheet.Button.cancel())
 		return r
 	}
 	
+	func getDropdownLabel() -> String {
+		var value = ""
+		if(self.viewModel.input.forceInt) {
+			if let i = Int(self.viewModel.value) {
+				value = self.viewModel.input.listChoices[i-1]
+			}
+		}
+		else {
+			value = self.viewModel.value
+		}
+		return value.isEmpty ? "please_select" : value
+	}
+	
 	var body: some View {
 		VStack(alignment: self.viewModel.input.asDropDown ? .center : .leading) {
 			if(self.viewModel.input.asDropDown) {
 				DefaultButton(
-					self.viewModel.value.isEmpty ? "please_select" : self.viewModel.value,
+					self.getDropdownLabel(),
 					action: {
 						self.dropdownShown = true
 					}
@@ -38,8 +52,9 @@ struct ListSingleStruct: View {
 					}
 			}
 			else {
-				ForEach(self.viewModel.input.listChoices, id: \.self) { choice in
-					RadioButtonView(state: self.$value, label: choice, value: choice) { value in
+				ForEach(Array(self.viewModel.input.listChoices.enumerated()), id: \.element) { i, choice in
+					let actualValue = self.viewModel.input.forceInt ? String(i+1) : choice
+					RadioButtonView(state: self.$value, label: choice, value: actualValue) { value in
 						self.viewModel.value = value
 					}
 				}
