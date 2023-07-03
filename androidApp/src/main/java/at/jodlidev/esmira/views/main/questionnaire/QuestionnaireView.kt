@@ -49,10 +49,11 @@ fun QuestionnaireView(
 	val page = questionnaire.getPage(pageNumber)
 	val pageIsActive = remember { mutableStateOf(true) }
 	if(page.skipAfterSecs != 0) {
+		val currentGoNext = rememberUpdatedState(newValue = goNext)
 		LaunchedEffect(Unit) {
 			delay(page.skipAfterSecs.seconds)
 			if(pageIsActive.value)
-				goNext()
+				currentGoNext.value()
 		}
 	}
 	
@@ -134,7 +135,9 @@ fun MainView(
 					.padding(vertical = 20.dp)
 			) {
 				if(hasRequired) {
-					Text(stringResource(R.string.info_required), modifier = Modifier.padding(all = 10.dp).align(Alignment.Start))
+					Text(stringResource(R.string.info_required), modifier = Modifier
+						.padding(all = 10.dp)
+						.align(Alignment.Start))
 				}
 				
 				if(isLastPage) {
