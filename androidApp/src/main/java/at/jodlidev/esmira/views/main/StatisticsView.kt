@@ -82,7 +82,7 @@ fun StatisticsView(
 			bottomBar = { StatisticsBottomBar(navController) }
 		) {
 			NavHost(navController, startDestination = "personal", modifier = Modifier
-				.padding(all = 20.dp)
+				.padding(horizontal = 20.dp)
 				.fillMaxWidth()
 			) {
 				composable("personal") {
@@ -143,6 +143,7 @@ fun StatisticsBottomBar(navController: NavController) {
 fun StatisticsContentView(charts: List<ChartInfo>, chartInfoCollection: ChartInfoCollection) {
 	LazyColumn {
 		items(charts) { chartInfo ->
+			Spacer(modifier = Modifier.height(10.dp))
 			Text(chartInfo.title, fontSize = MaterialTheme.typography.titleLarge.fontSize)
 			HtmlHandler.HtmlText(html = chartInfo.chartDescription)
 			
@@ -206,7 +207,7 @@ fun StatisticsContentView(charts: List<ChartInfo>, chartInfoCollection: ChartInf
 					)
 				}
 			}
-			Spacer(modifier = Modifier.height(20.dp))
+			Spacer(modifier = Modifier.height(10.dp))
 		}
 	}
 }
