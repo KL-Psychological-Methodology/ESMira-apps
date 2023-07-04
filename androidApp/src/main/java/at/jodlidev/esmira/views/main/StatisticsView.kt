@@ -7,6 +7,8 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Groups
 import androidx.compose.material.icons.filled.Person
@@ -39,6 +41,7 @@ import at.jodlidev.esmira.sharedCode.Web
 import at.jodlidev.esmira.sharedCode.data_structure.Study
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.ChartInfo
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.ChartInfoCollection
+import kotlinx.coroutines.delay
 
 /**
  * Created by JodliDev on 02.03.2023.
@@ -141,8 +144,9 @@ fun StatisticsBottomBar(navController: NavController) {
 
 @Composable
 fun StatisticsContentView(charts: List<ChartInfo>, chartInfoCollection: ChartInfoCollection) {
-	LazyColumn {
-		items(charts) { chartInfo ->
+	Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+		//we cant use LazyColumn because mpAndroidChart can only correctly calculate the position of bar charts when the chart is loaded
+		for(chartInfo in charts) {
 			Spacer(modifier = Modifier.height(10.dp))
 			Text(chartInfo.title, fontSize = MaterialTheme.typography.titleLarge.fontSize)
 			HtmlHandler.HtmlText(html = chartInfo.chartDescription)
