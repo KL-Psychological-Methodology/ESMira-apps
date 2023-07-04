@@ -7,13 +7,19 @@ import at.jodlidev.esmira.sharedCode.statistics.ChartDataSetInterface
 import com.github.mikephil.charting.charts.ScatterChart
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.IValueFormatter
+import com.github.mikephil.charting.utils.ViewPortHandler
 
 /**
  * Created by JodliDev on 07.10.2020.
  */
 //class DataSetWrapper(private val dataSet: BarLineScatterCandleBubbleDataSet<*>) : ChartDataSetInterface {
 class DataSetWrapper(private val dataSet: DataSet<*>) : ChartDataSetInterface {
-	
+	class AndroidChartFormatter(private val formatter: ChartFormatterInterface): IValueFormatter {
+		override fun getFormattedValue(value: Float, entry: Entry?, dataSetIndex: Int, viewPortHandler: ViewPortHandler?): String {
+			return formatter.getString(value)
+		}
+	}
 	override fun setColor(color: String) {
 		dataSet.color = getIntColor(color)
 	}
@@ -89,7 +95,7 @@ class DataSetWrapper(private val dataSet: DataSet<*>) : ChartDataSetInterface {
 	}
 	
 	override fun setValueFormatter(formatter: ChartFormatterInterface) {
-		dataSet.valueFormatter = ChartViewWrapper.AndroidFormatter(formatter)
+		dataSet.valueFormatter = AndroidChartFormatter(formatter)
 	}
 	
 	companion object {

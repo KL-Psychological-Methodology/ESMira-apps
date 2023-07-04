@@ -8,16 +8,15 @@ import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.formatter.ValueFormatter
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
 
 /**
  * Created by JodliDev on 06.10.2020.
  */
 class ChartViewWrapper(val chartView: Chart<*>): ChartViewInterface {
-//class ChartViewWrapper(private val chartView: BarLineChartBase<*>): ChartViewInterface {
 	
-	class AndroidFormatter(private val formatter: ChartFormatterInterface): ValueFormatter() {
-		override fun getFormattedValue(value: Float): String {
+	class AndroidFormatter(private val formatter: ChartFormatterInterface): IAxisValueFormatter {
+		override fun getFormattedValue(value: Float, axis: AxisBase?): String {
 			return formatter.getString(value)
 		}
 	}

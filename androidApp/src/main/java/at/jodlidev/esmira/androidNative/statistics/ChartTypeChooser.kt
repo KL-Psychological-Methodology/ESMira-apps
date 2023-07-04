@@ -18,70 +18,12 @@ import com.github.mikephil.charting.charts.*
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.LegendEntry
 import com.github.mikephil.charting.data.*
-import com.github.mikephil.charting.formatter.ValueFormatter
 import java.lang.ref.WeakReference
 
 /**
  * Created by JodliDev on 06.10.2020.
  */
 class ChartTypeChooser(private val context: Context) : ChartChooserInterface {
-
-//	private class CustomMarkerView constructor(context: Context?, layoutResource: Int, private val androidChartBuilder: AndroidChartBuilder) : MarkerView(context, layoutResource) {
-//		private val tvContent: TextView = findViewById(R.id.tvContent)
-//		private val outerLayer: ViewGroup = findViewById(R.id.outerLayer)
-//		private lateinit var calcOffset: MPPointF
-//		private var rightSided = false
-//		private var xPos = 0F
-//
-//		private val intFormatter: ValueFormatter = object : ValueFormatter() {
-//			private val float_format: DecimalFormat = DecimalFormat("0.0", DecimalFormatSymbols.getInstance(Locale.getDefault()))
-//			override fun getFormattedValue(value: Float): String {
-//				return float_format.format(value.toDouble())
-//			}
-//		}
-//
-//		override fun refreshContent(entry: Entry, highlight: Highlight) {
-//			val xLabel = if(androidChartBuilder.statisticChart.xAxisLabel.isEmpty()) context.getString(R.string.axis_x_name) else androidChartBuilder.statisticChart.xAxisLabel
-//			val yLabel = if(androidChartBuilder.statisticChart.yAxisLabel.isEmpty()) context.getString(R.string.axis_y_name) else androidChartBuilder.statisticChart.yAxisLabel
-//
-////			val xValue = androidChartBuilder.xAxisFormatter.getString(e.x.roundToInt().toFloat())
-//			val xValue = androidChartBuilder.xAxisFormatter.getString(entry.x)
-//			val yValue = intFormatter.getFormattedValue(entry.y)
-//
-//			val lineX = if(xValue.isEmpty()) "" else "<b>$xLabel:</b> $xValue"
-//			val lineY = if(yValue.isEmpty()) "" else "<b>$yLabel:</b> $yValue"
-//
-//			tvContent.text = HtmlCompat.fromHtml("$lineX<br/>$lineY", HtmlCompat.FROM_HTML_MODE_LEGACY)
-//
-//			xPos = highlight.drawX
-//
-//			super.refreshContent(entry, highlight)
-//		}
-//
-//		override fun getOffset(): MPPointF {
-//			val rightSided = xPos + width > androidChartBuilder.chartView.width
-//			if(!this::calcOffset.isInitialized || this.rightSided != rightSided) {
-//				if(rightSided) {
-//					calcOffset = MPPointF(-width.toFloat(), (-height).toFloat())
-//					outerLayer.background = ContextCompat.getDrawable(context, R.drawable.shape_speech_bubble_right)
-//				}
-//				else {
-//					calcOffset = MPPointF(0F, (-height).toFloat())
-//					outerLayer.background = ContextCompat.getDrawable(context, R.drawable.shape_speech_bubble_left)
-//				}
-//			}
-//
-//			this.rightSided = rightSided
-//			return calcOffset
-//		}
-//	}
-	
-	
-	private class AndroidFormatter(private val formatter: ChartFormatterInterface): ValueFormatter() {
-		override fun getFormattedValue(value: Float): String {
-			return formatter.getString(value)
-		}
-	}
 	
 	private class AndroidLineChartBuilder(
 		private val context: Context,

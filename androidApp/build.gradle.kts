@@ -77,7 +77,9 @@ dependencies {
     implementation("com.journeyapps:zxing-android-embedded:4.3.0") //qr scanner
     
     implementation("androidx.preference:preference:1.2.0") //PreferenceFragment
-    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0") //https://github.com/PhilJay/MPAndroidChart
+//    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0") //https://github.com/PhilJay/MPAndroidChart
+    //Unfortunately the original MPAndroidChart is dead. Using an updated fork instead:
+    implementation("com.github.AppDevNext:AndroidChart:3.1.0.15")
     
     //HtmlView:
     implementation("io.noties.markwon:core:$markwonVersion")
