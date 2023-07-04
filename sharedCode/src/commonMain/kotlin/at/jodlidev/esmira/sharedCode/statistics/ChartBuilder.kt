@@ -21,7 +21,6 @@ abstract class ChartBuilder(
 			}
 			else ""
 		}
-		
 	}
 	private class AddValueFormatter(val addValue: Float) : ChartFormatterInterface {
 		override fun getString(value: Float): String {
@@ -170,7 +169,7 @@ abstract class ChartBuilder(
 	internal open fun fillData() {
 		val dataListContainer = chartInfoCollection.dataListContainer
 		
-		if(chartInfo.publicVariables.isNotEmpty()) {
+		if(chartInfo.displayPublicVariable && chartInfo.publicVariables.isNotEmpty()) {
 			for(axisContainer in chartInfo.publicVariables) {
 				initDataSet(axisContainer.label, axisContainer.color, true)
 			}
@@ -182,7 +181,7 @@ abstract class ChartBuilder(
 		for(axisContainer in chartInfo.axisContainer) {
 			initDataSet(axisContainer.label, axisContainer.color)
 		}
-		val publicSum = chartInfo.publicVariables.size
+		val publicSum = if(chartInfo.displayPublicVariable) chartInfo.publicVariables.size else 0
 		
 		
 		when(chartInfo.dataType) {
