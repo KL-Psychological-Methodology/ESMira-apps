@@ -276,4 +276,5 @@
     <string name="stop_playing_audio">Stoppen</string>
     <string name="open_url">Öffne Url</string>
 	<string name="yesterday">Gestern</string>
+	<string name="select_picture">Bild auswählen</string>
 </resources>
