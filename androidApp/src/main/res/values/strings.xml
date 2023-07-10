@@ -277,4 +277,6 @@
 	<string name="open_url">Open url</string>
     <string name="yesterday">Yesterday</string>
 	<string name="select_picture">select picture</string>
+	<string name="show_data">Show data</string>
+    <string name="error_bluetooth_disabled">Bluetooth is disabled!</string>
 </resources>

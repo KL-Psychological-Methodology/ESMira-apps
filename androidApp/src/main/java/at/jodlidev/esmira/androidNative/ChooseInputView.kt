@@ -42,6 +42,7 @@ fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifi
 		when(input.type) {
 			Input.TYPES.app_usage -> AppUsageView(input, get, setAdditionalValue)
 			Input.TYPES.binary -> BinaryView(input, get, setValue)
+			Input.TYPES.bluetooth_devices -> BluetoothDevicesView(input, get, setAdditionalValue)
 			Input.TYPES.compass -> CompassView(input, get, setValue)
 			Input.TYPES.countdown -> CountdownView(input, get, setValue)
 			Input.TYPES.date -> DateView(input, get, setValue)

@@ -18,11 +18,13 @@ class Input internal constructor( ) {
 	enum class TYPES {
 		app_usage,
 		binary,
+		bluetooth_devices,
 		compass,
 		countdown,
 		date,
 		datetime,
 		dynamic_input,
+		file_upload,
 		image,
 		text,
 		likert,
@@ -102,6 +104,11 @@ class Input internal constructor( ) {
 		}
 		else
 			_value
+	}
+	
+	fun getAdditional(key: String): String? {
+		getValue() //make sure cache has been initialized
+		return additionalValues[key]
 	}
 	
 	/**
