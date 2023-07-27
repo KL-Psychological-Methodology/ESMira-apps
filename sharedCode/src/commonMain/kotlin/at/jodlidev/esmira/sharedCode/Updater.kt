@@ -435,7 +435,6 @@ internal object Updater {
 			db.execSQL("ALTER TABLE studies ADD COLUMN quitTimestamp INTEGER DEFAULT 0;")
 		}
 		if(oldVersion <= 39) {
-			db.execSQL("ALTER TABLE dataSets ADD COLUMN questionnaire_name TEXT;")
 			db.execSQL("ALTER TABLE dataSets ADD COLUMN server_version INTEGER;")
 			db.execSQL("UPDATE dataSets SET questionnaire_name = group_name;")
 
