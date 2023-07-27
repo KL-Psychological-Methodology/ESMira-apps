@@ -279,4 +279,7 @@
 	<string name="select_picture">Bild auswählen</string>
     <string name="show_data">Zeige Daten</string>
     <string name="error_bluetooth_disabled">Bluetooth ist deaktiviert!</string>
+    <string name="anonymised_device">Anonymisiertes Gerät</string>
+    <string name="distance_rssi">Entfernung (RSSI)</string>
+    <string name="distance_rssi_content">~%1$.1fm (%2$d)</string>
 </resources>

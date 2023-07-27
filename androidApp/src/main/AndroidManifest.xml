@@ -6,6 +6,8 @@
     
     <uses-feature android:required="false" android:name="android.hardware.camera" />
     <uses-feature android:required="false" android:name="android.hardware.camera.autofocus" />
+    <uses-feature android:required="false" android:name="android.hardware.bluetooth"/>
+    
     
     <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" /><!-- alarm permission for Android >= 12-->
     <uses-permission android:name="android.permission.INTERNET"/><!--for synchronisation-->
@@ -18,6 +20,13 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/><!-- Notification permission starting with Android 33-->
     <uses-permission android:name="android.permission.PACKAGE_USAGE_STATS" tools:ignore="ProtectedPermissions" /><!--for app_usage item in questionnaires-->
     <uses-permission android:name="android.permission.RECORD_AUDIO" /> <!-- for recordAudio item-->
+    
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_SCAN" android:usesPermissionFlags="neverForLocation" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     
     <application
         android:name="at.jodlidev.esmira.Application"

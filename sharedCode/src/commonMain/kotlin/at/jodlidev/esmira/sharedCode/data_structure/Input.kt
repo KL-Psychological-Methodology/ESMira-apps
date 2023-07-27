@@ -6,6 +6,7 @@ import kotlinx.serialization.Transient
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.*
+import kotlin.math.pow
 
 
 /**
@@ -54,7 +55,8 @@ class Input internal constructor( ) {
 	var packageId: String = "" //for app_usage
 	var timeoutSec: Int = 0 //for countdown
 	var playSound: Boolean = false //for countdown
-	var showValue: Boolean = true //for compass
+	var showValue: Boolean = false //for compass, vas
+	var maxValue: Float = 0F //for vas
 	
 	var forceInt: Boolean = false
 	
@@ -270,6 +272,15 @@ class Input internal constructor( ) {
 		}
 		for(fileUpload in addedFiles) {
 			fileUpload.setReadyForUpload()
+		}
+	}
+	
+	companion object {
+		fun anonymizeValue(s: String): String {
+			return s.hashCode().toUInt().toString()
+		}
+		fun rssiToDistance(rssi: Int): Double {
+			return 10.0.pow((-69 -rssi)/(10 * 2))
 		}
 	}
 }
