@@ -41,9 +41,14 @@ fun VaScaleView(input: Input, get: () -> String, save: (String) -> Unit) {
 				modifier = Modifier.weight(1F)
 			)
 		}
+		
+		if(input.showValue) {
+			Text(get(), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
+		}
+		
 		Slider(
 			value = try { get().toFloat() } catch(_: Throwable) { 50F },
-			valueRange = 1F .. 100F,
+			valueRange = 1F .. (if(input.maxValue > 1) input.maxValue else 100F),
 			onValueChange = { value ->
 				save(value.roundToInt().toString())
 				showThumb.value = true
@@ -69,6 +74,17 @@ fun VaScaleView(input: Input, get: () -> String, save: (String) -> Unit) {
 fun PreviewVaScaleView() {
 	val input = DbLogic.createJsonObj<Input>("""
 		{"leftSideLabel": "left", "rightSideLabel": "right"}
+	""")
+	ESMiraSurface {
+		VaScaleView(input, {"70"}) {}
+	}
+}
+
+@Preview
+@Composable
+fun PreviewVaScaleWithValueView() {
+	val input = DbLogic.createJsonObj<Input>("""
+		{"leftSideLabel": "left", "rightSideLabel": "right", "showValue": true}
 	""")
 	ESMiraSurface {
 		VaScaleView(input, {"70"}) {}

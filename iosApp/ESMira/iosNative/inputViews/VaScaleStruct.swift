@@ -21,7 +21,15 @@ struct VaScaleStruct: View {
 					.multilineTextAlignment(.trailing)
 			}
 			
-			CustomSliderView(value: self.$viewModel.value)
+			if(self.viewModel.input.showValue) {
+				HStack {
+					Spacer()
+					Text(self.viewModel.value.isEmpty ? " " : self.viewModel.value)
+					Spacer()
+				}
+			}
+			
+			CustomSliderView(value: self.$viewModel.value, maxValue: (self.viewModel.input.maxValue > 1 ? Int(self.viewModel.input.maxValue) : 100))
 		}
 	}
 }
