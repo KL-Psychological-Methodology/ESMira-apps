@@ -308,6 +308,9 @@ class ActionTrigger {
 						DataSet.createActionSentDataSet(DataSet.EventTypes.message, questionnaire, actionScheduledTimestamp)
 					}
 				}
+				JSON_ACTION_TYPE_DISABLED -> {
+					//Do nothing
+				}
 				else ->
 					ErrorBox.error("action", "Not implemented: " + action.type)
 			}
@@ -494,6 +497,7 @@ class ActionTrigger {
 		private const val JSON_TIMEOUT_MINUTES = "timeout"
 		private const val JSON_REMINDER_COUNT = "reminder_count"
 		private const val JSON_REMINDER_DELAY_MINUTES = "reminder_delay_minu"
+		internal const val JSON_ACTION_TYPE_DISABLED = 0
 		internal const val JSON_ACTION_TYPE_INVITATION = 1
 		internal const val JSON_ACTION_TYPE_MSG = 2
 		internal const val JSON_ACTION_TYPE_NOTIFICATION = 3
