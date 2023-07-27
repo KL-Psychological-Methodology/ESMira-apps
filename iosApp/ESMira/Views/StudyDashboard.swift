@@ -208,37 +208,37 @@ struct StudyDashboard: View {
 		}
 	}
 	
-	@State private var showBackupSheet = false {
+	@State private var showLoadBackupSheet = false {
 		didSet {
-			if(self.showBackupSheet) {
-				self.showSheet = true
+			if(self.showLoadBackupSheet) {
 				self.sheetContent = VStack {
 					Button("cancel") {
-						   self.showBackupSheet = false
-					   }.padding()
-					   OpenFilePickerView() { url in
-						   let outsideAccess = url.startAccessingSecurityScopedResource()
-						   defer {
-							   if(outsideAccess) {
-								   url.stopAccessingSecurityScopedResource()
-							   }
-						   }
-						   
-						   do {
-							   NativeLink().sql.close()
-							   let toUrl = SQLiteHelper.getFileUrl()
-							   try FileManager.default.removeItem(at: toUrl)
-							   try FileManager.default.copyItem(at: url, to: toUrl)
-						   }
-						   catch {
-							   print(error.localizedDescription)
-							   self.appState.showToast("Failed to copy file")
-						   }
-						   NativeLink().resetSql(sql: SQLiteHelper())
-						   
-						   self.showSheet = false
-					   }
-				   }
+						self.showLoadBackupSheet = false
+					}.padding()
+					OpenFilePickerView() { url in
+						let outsideAccess = url.startAccessingSecurityScopedResource()
+						defer {
+							if(outsideAccess) {
+								url.stopAccessingSecurityScopedResource()
+							}
+						}
+						
+						do {
+							NativeLink().sql.close()
+							let toUrl = SQLiteHelper.getFileUrl()
+							try FileManager.default.removeItem(at: toUrl)
+							try FileManager.default.copyItem(at: url, to: toUrl)
+						}
+						catch {
+							print(error.localizedDescription)
+							self.appState.showToast("Failed to copy file")
+						}
+						NativeLink().resetSql(sql: SQLiteHelper())
+						
+						self.showSheet = false
+					}
+				}
+				self.showSheet = true
 			}
 			else {
 				self.showSheet = false
@@ -246,16 +246,16 @@ struct StudyDashboard: View {
 		}
 	}
 	
-	@State private var showLoadBackupSheet = false {
+	@State private var showSaveBackupSheet = false {
 		didSet {
-			if(self.showLoadBackupSheet) {
+			if(self.showSaveBackupSheet) {
 				self.showSheet = true
 				let data = try! FileManager.default.url(
 					for: .documentDirectory,
 					in: .userDomainMask,
 					appropriateFor: nil,
 					create: false
-				).appendingPathComponent(DbLogic().DATABASE_NAME)
+				)
 				
 				self.sheetContent = SaveFilePickerView(activityItems: [data])
 			}
@@ -430,7 +430,7 @@ struct StudyDashboard: View {
 			})
 			
 			r.append(ActionSheet.Button.default(Text("backup")) {
-				self.showBackupSheet = true
+				self.showSaveBackupSheet = true
 			})
 			
 			r.append(ActionSheet.Button.default(Text("load_backup")) {
