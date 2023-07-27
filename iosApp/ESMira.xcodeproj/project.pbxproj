@@ -107,6 +107,7 @@
 		6BCFEDF728252854009167B0 /* SmartphoneData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCFEDDC28252854009167B0 /* SmartphoneData.swift */; };
 		6BCFEDF828252854009167B0 /* SQLiteHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCFEDDD28252854009167B0 /* SQLiteHelper.swift */; };
 		6BD037F729F7D29100CAF208 /* DefaultButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD037F629F7D29100CAF208 /* DefaultButtons.swift */; };
+		6BD318312A558FC400B14295 /* FileUploadStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD318302A558FC400B14295 /* FileUploadStruct.swift */; };
 		6BD318332A5D56DA00B14295 /* BluetoothDevicesStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BD318322A5D56DA00B14295 /* BluetoothDevicesStruct.swift */; };
 		7555FF83242A565900829871 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7555FF82242A565900829871 /* ContentView.swift */; };
 /* End PBXBuildFile section */
