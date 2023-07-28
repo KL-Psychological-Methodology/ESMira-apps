@@ -179,7 +179,8 @@ class Study internal constructor(
 			
 			for(trigger: ActionTrigger in enabledActionTriggers) {
 				for(schedule: Schedule in trigger.schedules) {
-					if(!schedule.userEditable)
+					val questionnaire = schedule.getQuestionnaire()
+					if(!schedule.userEditable || questionnaire.limitToGroup != group)
 						continue
 					for(signalTime: SignalTime in schedule.signalTimes) {
 						list.add(signalTime)
