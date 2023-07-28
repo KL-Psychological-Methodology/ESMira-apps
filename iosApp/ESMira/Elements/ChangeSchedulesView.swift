@@ -36,10 +36,12 @@ struct ChangeSchedulesView: View {
 			VStack(alignment: .leading) {
 				Text(self.signalTime.questionnaire.title).bold()
 				if(self.signalTime.random) {
-					HStack {
+					Text("colon_between").padding(.top, 10)
+					HStack(alignment: .center) {
 						if(self.isFaulty) {
 							Image(systemName: "exclamationmark.circle.fill").foregroundColor(.red)
 						}
+						Spacer()
 						DateWindowView(value: self.$startTime, typeMode: .time, saveMode: .asTimestamp) { value in
 							self.signalTime.setStart(timestamp: Int64(value) ?? 0)
 							self.checkFaulty()
@@ -47,13 +49,19 @@ struct ChangeSchedulesView: View {
 						Text("word_and")
 						DateWindowView(value: self.$endTime, typeMode: .time, saveMode: .asTimestamp) { value in
 							self.signalTime.setEnd(timestamp: Int64(value) ?? 0)
-							self.checkFaulty()						}
+							self.checkFaulty()
+						}
+						Spacer()
 					}
 				}
 				else {
-					DateWindowView(value: self.$startTime, typeMode: .time, saveMode: .asTimestamp) { value in
-						self.signalTime.setStart(timestamp: Int64(value) ?? 0)
-						self.checkFaulty()
+					HStack() {
+						Spacer()
+						DateWindowView(value: self.$startTime, typeMode: .time, saveMode: .asTimestamp) { value in
+							self.signalTime.setStart(timestamp: Int64(value) ?? 0)
+							self.checkFaulty()
+						}
+						Spacer()
 					}
 				}
 			}
