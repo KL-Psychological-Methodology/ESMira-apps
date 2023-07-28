@@ -12,7 +12,7 @@ import SwiftUI
 struct NavigationLinkModifier: ViewModifier {
 	func body(content: Content) -> some View {
 		content
-			.foregroundColor(Color("PrimaryDark"))
+			.foregroundColor(Color("onSurface"))
 			.padding()
 			.background(Color("Surface"))
 	}
@@ -41,7 +41,7 @@ struct DefaultButton: View {
 			Text(NSLocalizedString(self.label, comment: ""))
 				.bold()
 				.frame(maxWidth: self.maxWidth)
-				.foregroundColor(Color("PrimaryDark"))
+				.foregroundColor(Color("onSurface"))
 		}
 			.opacity(self.disabled ? 0.3 : 1)
 			.disabled(self.disabled)
@@ -72,7 +72,7 @@ struct DefaultIconButton: View {
 				Text(NSLocalizedString(self.label, comment: "")).bold()
 			}
 			.frame(maxWidth: self.maxWidth)
-			.foregroundColor(Color("PrimaryDark"))
+			.foregroundColor(Color("onSurface"))
 		}
 			.opacity(self.disabled ? 0.3 : 1)
 			.disabled(self.disabled)
@@ -100,7 +100,7 @@ struct DefaultIconRightButton: View {
 				Image(systemName: self.icon)
 			}
 			.frame(maxWidth: self.maxWidth)
-			.foregroundColor(Color("PrimaryDark"))
+			.foregroundColor(Color("onSurface"))
 		}
 			.padding()
 			.background(Color("Surface"))

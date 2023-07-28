@@ -77,7 +77,7 @@ private struct RowContentItem: FixedGridItem {
 			else {
 				Button(action: self.action!) {
 					Text(content)
-						.foregroundColor(Color.black)
+						.foregroundColor(Color.primary)
 					if(icon != nil) {
 						Image(systemName: icon!)
 					}

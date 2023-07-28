@@ -136,11 +136,11 @@ struct StatisticsView: View {
 								.padding(.top, 3)
 							Text("statistics_personal").bold().font(.system(size: 14))
 								.padding(5)
+								.background(self.currentScreen == .personalStatistics ? Color("PrimaryLight") : Color.white.opacity(0))
+								.cornerRadius(15)
 						}
 					}
-						.foregroundColor(self.currentScreen != .personalStatistics ? Color("PrimaryDark") : Color.white)
-						.background(self.currentScreen == .personalStatistics ? Color("PrimaryDark") : Color.white.opacity(0))
-						.cornerRadius(15)
+						.foregroundColor(Color("onSurface"))
 						.padding(10)
 					Spacer()
 					Button(action:  {
@@ -151,11 +151,11 @@ struct StatisticsView: View {
 								.padding(.top, 3)
 							Text("statistics_public").bold().font(.system(size: 14))
 								.padding(5)
+								.background(self.currentScreen == .publicStatistics ? Color("PrimaryLight") : Color.white.opacity(0))
+								.cornerRadius(15)
 						}
 					}
-						.foregroundColor(self.currentScreen != .publicStatistics ? Color("PrimaryDark") : Color.white)
-						.background(self.currentScreen == .publicStatistics ? Color("PrimaryDark") : Color.white.opacity(0))
-						.cornerRadius(15)
+						.foregroundColor(Color("onSurface"))
 						.padding(10)
 					Spacer()
 				}

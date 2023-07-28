@@ -54,7 +54,7 @@ struct QuestionnaireLineView: View {
 				}
 			}
 		}
-		.foregroundColor(Color("PrimaryDark"))
+		.foregroundColor(Color("onSurface"))
 		.background(Color("Surface"))
 	}
 }
