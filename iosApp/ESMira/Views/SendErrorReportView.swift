@@ -56,38 +56,28 @@ struct SendErrorReportView: View {
 					.border(Color("Outline"))
 				
 				HStack {
-					NavigationLink(destination:
-									List() {
-						ForEach(DbLogic().getErrors(), id: \.id) { error in
-							self.createErrorLine(error: error)
-								.padding()
-						}
-					}
-						.navigationBarTitle(Text("what_is_sent"), displayMode: .inline)
-								   
+					NavigationLink(
+						destination: List() {
+							ForEach(DbLogic().getErrors(), id: \.id) { error in
+								self.createErrorLine(error: error)
+									.padding()
+							}
+						}.navigationBarTitle(Text("what_is_sent"), displayMode: .inline)
 					) {
-						Text("what_is_sent").padding()
+						Text("what_is_sent").padding(.bottom)
 					}
 					
 					Spacer()
 					
-					Button(action: { self.shownToWhom = true}) {
-						Text("sent_to_whom").padding()
-					}
+					Button(action: { self.shownToWhom = true}) { Text("sent_to_whom").padding(.bottom) }
 				}
 				
 				HStack(alignment: .center) {
 					Spacer()
-					Button(action: {
-						self.navigationState.closeScreenDialog()
-					}) {
-						Text("cancel")
-					}.padding()
-					Button(action: {
-						self.loadingState = .loading
-					}) {
-						Text("ok_")
-					}.padding()
+					DefaultButton("cancel", action: { self.navigationState.closeScreenDialog() })
+						.padding()
+					DefaultButton("ok_", action: { self.loadingState = .loading })
+						.padding()
 				}
 				Spacer()
 			}

@@ -77,41 +77,27 @@ struct DateWindowView: View {
 		return self.dateFormatter.string(from: date)
 	}
 	var body: some View {
-		DefaultIconButton(
-			icon: self.mode == .time ? "clock" : "calendar",
-			label: self.value == ""
-				? "no_dateTime_data"
-				: (self.asTimestamp
-				   ? self.dateFormatter.string(from: Date(timeIntervalSince1970: (Double(self.value) ?? 0) / 1000))
-				   : (self.timeAsMinutes
-					  ? self.getTimeString(Int(self.value) ?? 0)
-					  : self.value)),
-			action: {
-				self.isShown = true
-			}
-		)
-			.sheet(isPresented: self.$isShown) {
-				VStack {
-					DatePicker("", selection: self.$selectedDate, displayedComponents: self.mode == TypeModes.time ? .hourAndMinute : .date).labelsHidden()
-					HStack {
-						Button(action: {
-							self.isShown =  false
-						}) {
-							Text("cancel")
-						}
-						Spacer()
-						Button(action: {
-							self.value = self.getValue(self.selectedDate)
-							if(self.callback != nil) {
-								self.callback?(self.value)
-							}
-							self.isShown =  false
-						}) {
-							Text("ok_")
-						}
+		HStack {
+			let dateBinding = Binding<Date>(
+				get: {
+					return self.selectedDate
+				},
+				set: { date in
+					self.selectedDate = date
+					self.value = getValue(selectedDate)
+					if(self.callback != nil) {
+						self.callback?(self.value)
 					}
-						.padding()
 				}
+			)
+			if(self.mode == .time) {
+				Image(systemName: "clock")
+				DatePicker("asd", selection: dateBinding, displayedComponents: .hourAndMinute).labelsHidden()
 			}
+			else {
+				Image(systemName: "calendar")
+				DatePicker("qwe", selection: dateBinding, displayedComponents: .date).labelsHidden()
+			}
+		}
 	}
 }

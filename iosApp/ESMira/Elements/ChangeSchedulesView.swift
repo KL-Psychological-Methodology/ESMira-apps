@@ -87,10 +87,10 @@ struct ChangeSchedulesView: View {
 			self.drawSignalTimes()
 			
 			HStack {
-				Button("cancel") {
+				DefaultButton("cancel") {
 					self.isShown = false
 				}.padding()
-				Button("save") {
+				DefaultButton("save") {
 					if(study.saveSchedules(rescheduleNow: self.resetSchedules)) {
 						self.isShown = false
 						if(!self.resetSchedules) {

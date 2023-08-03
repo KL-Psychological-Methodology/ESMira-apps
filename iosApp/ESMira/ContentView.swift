@@ -27,6 +27,7 @@ struct ContentView: View {
 					SendErrorReportView().environmentObject(self.appState)
 						.environmentObject(appState)
 						.environmentObject(navigationState)
+						.accentColor(Color("onSurface"))
 				)
 			case .changeSchedule:
 				let study = self.navigationState.study
@@ -35,6 +36,7 @@ struct ContentView: View {
 						ChangeSchedulesView(isShown: self.$navigationState.changeSchedulesOpened, study: study!, resetSchedules: self.navigationState.resetSchedules)
 							.environmentObject(appState)
 							.environmentObject(navigationState)
+							.accentColor(Color("onSurface"))
 					)
 				}
 				else {
@@ -106,7 +108,7 @@ struct ContentView: View {
 				return Alert(title: Text(self.appState.title), message: Text(self.appState.msg), dismissButton: .default(Text("OK")))
 			}
 			
-			.accentColor(Color("PrimaryDark"))
+			.accentColor(Color("onSurface"))
 			.navigationViewStyle(.stack)
 	}
 }

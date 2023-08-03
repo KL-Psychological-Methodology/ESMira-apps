@@ -503,8 +503,8 @@ struct StudyDashboard: View {
 					])
 				}
 				.sheet(isPresented: self.$showSheet) {
-					 AnyView(self.sheetContent)
-				 }
+					AnyView(self.sheetContent)
+				}
 		}
 	}
 }
