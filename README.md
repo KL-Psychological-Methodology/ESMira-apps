@@ -3,6 +3,7 @@
 </p>
 <p align="center">
 	<img src="https://raw.githubusercontent.com/KL-Psychological-Methodology/ESMira/main/about/images/web_header_normal.svg" alt="ESMira" width="300"/>
+    <br>
 	<a href="https://esmira.kl.ac.at/?about">[Screenshots]</a>
 	<a href="https://github.com/KL-Psychological-Methodology/ESMira/wiki">[Wiki]</a>
 	<a href="https://github.com/KL-Psychological-Methodology/ESMira/discussions">[Forum]</a>
