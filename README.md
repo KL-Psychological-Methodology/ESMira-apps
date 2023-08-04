@@ -8,9 +8,11 @@
 	<a href="https://github.com/KL-Psychological-Methodology/ESMira/wiki">[Wiki]</a>
 	<a href="https://github.com/KL-Psychological-Methodology/ESMira/discussions">[Forum]</a>
 </p>
+
 This is the app module for [ESMira](https://github.com/KL-Psychological-Methodology/ESMira) which incorporates the Android and iOS app.
 You can find more information about the mobile apps [in the wiki](https://github.com/KL-Psychological-Methodology/ESMira/wiki/App-overview).
 For more general information about ESMira have a look at the [main Readme](https://github.com/KL-Psychological-Methodology/ESMira).
+
 
 <p align="center">
 	<img src="https://raw.githubusercontent.com/KL-Psychological-Methodology/ESMira/main/about/images/demo_image_apps.png" height="400" alt=""/>
