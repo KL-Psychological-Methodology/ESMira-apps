@@ -3,6 +3,9 @@
 </p>
 <p align="center">
 	<img src="https://raw.githubusercontent.com/KL-Psychological-Methodology/ESMira/main/about/images/web_header_normal.svg" alt="ESMira" width="300"/>
+	<a href="https://esmira.kl.ac.at/?about">[Screenshots]</a>
+	<a href="https://github.com/KL-Psychological-Methodology/ESMira/wiki">[Wiki]</a>
+	<a href="https://github.com/KL-Psychological-Methodology/ESMira/discussions">[Forum]</a>
 </p>
 This is the app module for [ESMira](https://github.com/KL-Psychological-Methodology/ESMira) which incorporates the Android and iOS app.
 You can find more information about the mobile apps [in the wiki](https://github.com/KL-Psychological-Methodology/ESMira/wiki/App-overview).
@@ -11,16 +14,17 @@ For more general information about ESMira have a look at the [main Readme](https
 <p align="center">
 	<img src="https://raw.githubusercontent.com/KL-Psychological-Methodology/ESMira/main/about/images/demo_image_apps.png" height="400" alt=""/>
 	<br>
-	<a href="https://esmira.kl.ac.at/?about">[Screenshots]</a>
-	<a href="https://github.com/KL-Psychological-Methodology/ESMira/wiki">[Wiki]</a>
-	<a href="https://github.com/KL-Psychological-Methodology/ESMira/discussions">[Forum]</a>
 </p>
 
 ## :iphone: Download the app
 ESMira is available on Android and iOS:
 <p align="center">
-	<img src="https://raw.githubusercontent.com/KL-Psychological-Methodology/ESMira/main/about/images/google-play-badge-en.png" alt=""/>
-	<img src="https://raw.githubusercontent.com/KL-Psychological-Methodology/ESMira/main/about/images/apple-store-badge-en.png" alt=""/>
+    <a href="https://play.google.com/store/apps/details?id=at.jodlidev.esmira">
+	    <img src="https://raw.githubusercontent.com/KL-Psychological-Methodology/ESMira/main/about/images/google-play-badge-en.png" alt=""/>
+    </a>
+    <a href="https://apps.apple.com/gb/app/esmira/id1538774594">
+        <img src="https://raw.githubusercontent.com/KL-Psychological-Methodology/ESMira/main/about/images/apple-store-badge-en.png" alt=""/>
+    </a>
 </p>
 
 
