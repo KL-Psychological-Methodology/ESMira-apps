@@ -217,7 +217,7 @@ class MockDatabase: SQLiteInterface {
 		) {
 			prepareTable(tableString)
 			if(!savedData.containsKey(actualTable)) {
-				println("MockDatabase: No entries in $actualTable")
+				//println("MockDatabase: No entries in $actualTable")
 				return
 			}
 			val lines = savedData[actualTable]!!

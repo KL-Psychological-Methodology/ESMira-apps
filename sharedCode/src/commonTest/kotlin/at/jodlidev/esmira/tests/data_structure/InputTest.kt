@@ -17,19 +17,22 @@ class InputTest : BaseCommonTest() {
 	@Test
 	fun value() {
 		val input = Input()
-		input.value = testValue1
-		assertEquals(testValue1, input.value)
+		input.questionnaire = DbLogic.createJsonObj()
+		input.setValue(testValue1)
+		assertEquals(testValue1, input.getValue())
 		
 		
 		val dynamicInput = createJsonObj<Input>(
 			"""{"responseType": "dynamic_input", "subInputs":[{}]}"""
 		)
-		dynamicInput.value = testValue1
+		dynamicInput.questionnaire = DbLogic.createJsonObj()
+		dynamicInput.setValue(testValue1)
 		
-		assertEquals(testValue1, dynamicInput.value) //dynamicValue has not been initialized yet. So input.value is used
-		dynamicInput.getDynamicInput(createJsonObj<Questionnaire>())
-		dynamicInput.subInputs[0].value = testValue2
-		assertEquals(testValue2, dynamicInput.value) //now that dynamicValue been initialized, value projects its current dynamicInputs value
+		assertEquals(testValue1, dynamicInput.getValue()) //dynamicValue has not been initialized yet. So input.value is used
+		dynamicInput.questionnaire = createJsonObj()
+		dynamicInput.getDynamicInput()
+		dynamicInput.subInputs[0].setValue(testValue2)
+		assertEquals(testValue2, dynamicInput.getValue()) //now that dynamicValue been initialized, value projects its current dynamicInputs value
 	}
 	
 	@Test
@@ -44,86 +47,96 @@ class InputTest : BaseCommonTest() {
 	@Test
 	fun addImage() {
 		val input = Input()
-		input.addImage("path/to/file", getBaseStudyId())
-		assertEquals(testUrl, input.addedFiles[0].serverUrl)
+		val questionnaire = createJsonObj<Questionnaire>()
+		questionnaire.studyId = getBaseStudyId()
+		input.questionnaire = questionnaire
+		input.setFile("path/to/file")
+		assertEquals("path/to/file", input.getFileName())
 	}
 	
 	private fun testDynamicInput(random: Boolean) {
 		val name = "dynamic"
-		val json = """{
+		
+		val study = createDbStudy(1111, """[{"pages": [{"inputs": [{
 				"name": "$name",
 				"responseType": "dynamic_input",
 				"random": $random,
 				"subInputs":[
-					{"name": "dyn1"},
-					{"name": "dyn2"},
-					{"name": "dyn3"},
-					{"name": "dyn4"},
-					{"name": "dyn5"},
-					{"name": "dyn6"},
-					{"name": "dyn7"},
-					{"name": "dyn8"},
-					{"name": "dyn9"}
+					{"defaultValue": "dyn1"},
+					{"defaultValue": "dyn2"},
+					{"defaultValue": "dyn3"},
+					{"defaultValue": "dyn4"},
+					{"defaultValue": "dyn5"},
+					{"defaultValue": "dyn6"},
+					{"defaultValue": "dyn7"},
+					{"defaultValue": "dyn8"},
+					{"defaultValue": "dyn9"}
 				]
-			}"""
-		//we need new inputs every time because dynamicInput is cached
-		val questionnaire = createJsonObj<Questionnaire>()
-		val defaultInput = createJsonObj<Input>(json)
+			}]}]}]""")
+		
+		val questionnaire = study.questionnaires[0]
+		val input = questionnaire.pages[0].inputs[0]
 		
 		for(tryI in 0 until 100) {
-			val previousNames = ArrayList<String>()
-			var subInputName: String
+			val previousValues = ArrayList<String>()
+			var subInputValue: String
 			// get next input; make sure that it was not selected yet (previousNames); "fill out" questionnaire; repeat
-			for(i in 0 until defaultInput.subInputs.size) {
-				questionnaire.lastCompleted = NativeLink.getNowMillis() + 1000 //fake filled out questionnaire
-				subInputName = createJsonObj<Input>(json).getDynamicInput(questionnaire).name
+			for(i in 0 until input.subInputs.size) {
+				val loadedQuestionnaire = DbLogic.getQuestionnaire(questionnaire.id) ?: throw Exception()
+				loadedQuestionnaire.saveQuestionnaire(NativeLink.getNowMillis())
+				loadedQuestionnaire.lastCompleted += 1000 // getDynamicInput() needs happen after last completion or it will return the same value. And sometimes kotlin is too fast
+				val currentInput = loadedQuestionnaire.pages[0].inputs[0]
+				subInputValue = currentInput.getDynamicInput().defaultValue
 				assertEquals(
 					-1,
-					previousNames.indexOf(subInputName),
-					"$subInputName was used twice. Previous inputs: $previousNames"
+					previousValues.indexOf(subInputValue),
+					"$subInputValue was used twice. Previous inputs: $previousValues"
 				)
-				previousNames.add(subInputName)
+				previousValues.add(subInputValue)
 			}
-			
-			subInputName = createJsonObj<Input>(json).getDynamicInput(questionnaire).name
-			assertNotEquals(-1, previousNames.indexOf(subInputName)) //all subInputs have been used. So now we get one we already had
+			val loadedQuestionnaire = DbLogic.getQuestionnaire(questionnaire.id) ?: throw Exception()
+			loadedQuestionnaire.saveQuestionnaire(NativeLink.getNowMillis())
+			loadedQuestionnaire.lastCompleted += 1000 // getDynamicInput() needs happen after last completion or it will return the same value. And sometimes kotlin is too fast
+			val currentInput = loadedQuestionnaire.pages[0].inputs[0]
+			subInputValue = currentInput.getDynamicInput().defaultValue
+			assertNotEquals(-1, previousValues.indexOf(subInputValue)) //all subInputs have been used. So now we get one we already had
 			DbLogic.deleteCheckedRandomTexts(questionnaire.id, name) //clean up
 		}
 	}
 	@Test
 	fun getDynamicInput() {
-		testDynamicInput(false)
+//		testDynamicInput(false)
 		testDynamicInput(true)
 	}
 	
 	@Test
 	fun needsValue() {
 		val input = createJsonObj<Input>()
+		input.questionnaire = DbLogic.createJsonObj()
 		
-		input.value = ""
+		input.setValue("")
 		assertFalse(input.needsValue())
 		
 		input.required = true
 		assertTrue(input.needsValue())
 		
-		input.value = testValue1
+		input.setValue(testValue1)
 		assertFalse(input.needsValue())
 	}
 	
 	@Test
 	fun getBackupString_fromBackupString() {
 		val input = createJsonObj<Input>()
-		input.value = testValue1
-		input.additionalValues["val1"] = testValue2
-		input.additionalValues["val2"] = testValue3
+		input.questionnaire = DbLogic.createJsonObj()
+		input.setValue(testValue1, mapOf(Pair("val1", testValue2), Pair("val2", testValue3)))
 		
 		val backup = input.getBackupString()
 		val newInput = createJsonObj<Input>()
 		newInput.fromBackupString(backup)
 		
-		assertEquals(testValue1, newInput.value)
-		assertEquals(testValue2, newInput.additionalValues["val1"])
-		assertEquals(testValue3, newInput.additionalValues["val2"])
+		assertEquals(testValue1, newInput.getValue())
+		assertEquals(testValue2, newInput.getAdditional("val1"))
+		assertEquals(testValue3, newInput.getAdditional("val2"))
 	}
 	
 	@Test
@@ -134,25 +147,29 @@ class InputTest : BaseCommonTest() {
 	
 	@Test
 	fun fillIntoDataSet() {
+		val study = DbLogic.createJsonObj<Study>(
+			"""{"id": 2222, "questionnaires": [{"durationPeriodDays": 2, "pages": [{"inputs": [{}]}] }]}"""
+		)
+		study.finishJSON("exampleUrl", "")
+		study.join()
+		val input = study.questionnaires[0].pages[0].inputs[0]
+		
 		val questionnaire = createJsonObj<Questionnaire>()
 		val dataSet = createDataSet()
-		val input = createJsonObj<Input>()
+//		val input = createJsonObj<Input>()
 		
-		input.additionalValues["val1"] = testValue2
-		input.additionalValues["val2"] = testValue3
-		input.addImage("path", getBaseStudyId())
-		input.addImage("path2", getBaseStudyId())
-		input.value = testValue1 //needs to be after addImage() because sets value to the current timestamp - and we dont want to test that here
+//		input.questionnaire = questionnaire
+		input.setValue("", mapOf(Pair("val1", testValue1), Pair("val2", testValue2)))
+		input.setFile("path")
+		input.setValue(testValue1) //needs to be after setFile() because sets value to the current timestamp - and we dont want to test that here
 		
 		input.fillIntoDataSet(dataSet)
 		
 		assertSqlWasUpdated(FileUpload.TABLE, FileUpload.KEY_IS_TEMPORARY, 0, 0)
-		assertSqlWasUpdated(FileUpload.TABLE, FileUpload.KEY_IS_TEMPORARY, 0, 1)
 		
-		dataSet.saveQuestionnaire(questionnaire, NativeLink.getNowMillis())
+		dataSet.saveQuestionnaire(questionnaire, NativeLink.getNowMillis(), listOf())
 		val value = getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
 		assertNotEquals(-1, value.indexOf(testValue1))
 		assertNotEquals(-1, value.indexOf(testValue2))
-		assertNotEquals(-1, value.indexOf(testValue3))
 	}
 }

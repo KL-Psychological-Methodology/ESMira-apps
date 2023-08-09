@@ -29,16 +29,19 @@ class DataSetTest : BaseCommonTest() {
 	}
 	
 	@Test
-	fun addResponseData() {
-		val questionnaire = createJsonObj<Questionnaire>()
+	fun addResponseData() { //TODO is at the wrong place
+		val questionnaire = createJsonObj<Questionnaire>(
+			"""{"pages": [{"inputs": [{"name": "boolean123"}, {"name": "string123"}]}, {"inputs": [{"name": "integer123"}, {"name": "long123"}]}]}"""
+		)
+		questionnaire.studyId = getBaseStudyId()
 		val dataSet = createDataSet()
 		dataSet.studyId = getBaseStudyId()
 		
-		dataSet.addResponseData("boolean123", true)
-		dataSet.addResponseData("string123", "string")
-		dataSet.addResponseData("integer123", 5)
-		dataSet.addResponseData("long123", 5L)
-		dataSet.saveQuestionnaire(questionnaire, NativeLink.getNowMillis())
+		questionnaire.pages[0].inputs[0].setValue(true.toString())
+		questionnaire.pages[0].inputs[1].setValue("string")
+		questionnaire.pages[1].inputs[0].setValue("5")
+		questionnaire.pages[1].inputs[1].setValue("6")
+		questionnaire.saveQuestionnaire(NativeLink.getNowMillis())
 		
 		val value = getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
 		assertNotEquals(-1, value.indexOf("boolean123"))
@@ -52,6 +55,7 @@ class DataSetTest : BaseCommonTest() {
 		val questionnaire = createJsonObj<Questionnaire>(
 			"""{"sumScores": [{"addList": ["test1", "test2"], "subtractList": ["test3", "test4"]}]}"""
 		)
+		questionnaire.studyId = getBaseStudyId()
 		val dataSet = createDataSet()
 		dataSet.studyId = getBaseStudyId()
 		
@@ -66,7 +70,7 @@ class DataSetTest : BaseCommonTest() {
 		dataSet.addResponseData("test3", test3)
 		dataSet.addResponseData("test4", test4)
 		
-		dataSet.saveQuestionnaire(questionnaire, NativeLink.getNowMillis())
+		questionnaire.saveQuestionnaire(NativeLink.getNowMillis())
 		
 		val value = getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
 		assertEquals(-1, value.indexOf("\"sumScore\":$sumScoreValue"))
@@ -79,7 +83,7 @@ class DataSetTest : BaseCommonTest() {
 	fun createShortDataSet() {
 		val study = createStudy("""{"id":$studyWebId, "eventUploadSettings": {"${DataSet.EventTypes.actions_executed}": true}}""")
 		DataSet.createShortDataSet(DataSet.EventTypes.actions_executed, study)
-		assertSqlWasSaved(DataSet.TABLE, DataSet.KEY_TYPE, DataSet.EventTypes.actions_executed)
+		assertSqlWasSaved(DataSet.TABLE, DataSet.KEY_TYPE, DataSet.EventTypes.actions_executed.toString())
 	}
 	
 	@Test

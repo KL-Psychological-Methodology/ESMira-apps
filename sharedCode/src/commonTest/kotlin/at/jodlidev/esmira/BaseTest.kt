@@ -59,12 +59,12 @@ abstract class BaseTest {
 		signalTimeJson: String = "{}",
 		actionTriggerId: Long = -1,
 		timestamp: Long = NativeLink.getNowMillis(),
-		execAfter: ((Alarm) -> Unit)? = null
+		execOnSignalTime: ((SignalTime, Alarm) -> Unit)? = null
 	): Alarm {
 		val signalTime = createJsonObj<SignalTime>(signalTimeJson)
 		val alarm = Alarm(signalTime, actionTriggerId, timestamp, 1)
-		if(execAfter != null)
-			execAfter(alarm)
+		if(execOnSignalTime != null)
+			execOnSignalTime(signalTime, alarm)
 		return alarm
 	}
 	
@@ -106,6 +106,15 @@ abstract class BaseTest {
 		return schedule
 	}
 	
+	
+	fun createDbStudy(id: Int, questionnairesJson: String = "[]"): Study {
+		val study = DbLogic.createJsonObj<Study>(
+			"""{"id": $id, "questionnaires": $questionnairesJson}"""
+		)
+		study.finishJSON(testUrl, testAccessKey)
+		study.join()
+		return study
+	}
 	fun createStudy(json: String = """{"id":$studyWebId}""", execAfter: (Study) -> Unit): Study {
 		val study = createStudy(json)
 		execAfter(study)

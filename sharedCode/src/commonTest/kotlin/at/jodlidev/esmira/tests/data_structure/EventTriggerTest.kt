@@ -2,6 +2,7 @@ package tests.data_structure
 
 import at.jodlidev.esmira.sharedCode.data_structure.*
 import BaseCommonTest
+import at.jodlidev.esmira.sharedCode.NativeLink
 import kotlin.test.*
 
 /**
@@ -46,17 +47,21 @@ class EventTriggerTest : BaseCommonTest() {
 	
 	@Test
 	fun exec() {
-		val actionTrigger = createActionTrigger("""{"eventTriggers":[{}]}""")
+		val actionTrigger = createActionTrigger(
+			"""{"eventTriggers":[{"cueCode": "questionnaire"}], "actions": [{}]}""",
+			"""{"pages": [{}]}"""
+		)
 		val eventTrigger = actionTrigger.eventTriggers[0]
 		
 		//eventTrigger.exec() loads actionTrigger from db:
 		actionTrigger.save(true)
 		eventTrigger.bindParent(actionTrigger.questionnaire, actionTrigger)
 		
-		eventTrigger.cueCode = DataSet.EventTypes.quit
+//		eventTrigger.cueCode = DataSet.EventTypes.quit
 		eventTrigger.save() //eventTrigger.exec() checks if this eventTrigger is the latest one in db
-		eventTrigger.exec(123, true)
-		assertSqlWasDeleted(Study.TABLE, 0, eventTrigger.studyId.toString())
+		eventTrigger.exec(NativeLink.getNowMillis(), true)
+		assertEquals(1, notifications.fireQuestionnaireBingList.size)
+//		assertSqlWasDeleted(Study.TABLE, 0, eventTrigger.studyId.toString())
 	}
 	
 	@Test

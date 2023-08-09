@@ -43,35 +43,31 @@ class SignalTimeTest : BaseCommonTest() {
 	@Test
 	fun isDifferent() {
 		val signalTime = createJsonObj<SignalTime>(
-			"""{"label":"qwe", "random":true, "randomFixed":false, "frequency":2, "minutesBetween":30, "startTimeOfDay": 1000, "endTimeOfDay": 60000}"""
+			"""{"random":true, "randomFixed":false, "frequency":2, "minutesBetween":30, "startTimeOfDay": 1000, "endTimeOfDay": 60000}"""
 		)
 		
 		assertTrue(signalTime.isDifferent(createJsonObj(
-			"""{"label":"qwe2", "random":true, "randomFixed":false, "frequency":2, "minutesBetween":30, "startTimeOfDay": 1000, "endTimeOfDay": 60000}"""
+			"""{"random":false, "randomFixed":false, "frequency":2, "minutesBetween":30, "startTimeOfDay": 1000, "endTimeOfDay": 60000}"""
 		)))
 		
 		assertTrue(signalTime.isDifferent(createJsonObj(
-			"""{"label":"qwe", "random":false, "randomFixed":false, "frequency":2, "minutesBetween":30, "startTimeOfDay": 1000, "endTimeOfDay": 60000}"""
+			"""{"random":true, "randomFixed":true, "frequency":2, "minutesBetween":30, "startTimeOfDay": 1000, "endTimeOfDay": 60000}"""
 		)))
 		
 		assertTrue(signalTime.isDifferent(createJsonObj(
-			"""{"label":"qwe", "random":true, "randomFixed":true, "frequency":2, "minutesBetween":30, "startTimeOfDay": 1000, "endTimeOfDay": 60000}"""
+			"""{"random":true, "randomFixed":false, "frequency":1, "minutesBetween":30, "startTimeOfDay": 1000, "endTimeOfDay": 60000}"""
 		)))
 		
 		assertTrue(signalTime.isDifferent(createJsonObj(
-			"""{"label":"qwe", "random":true, "randomFixed":false, "frequency":1, "minutesBetween":30, "startTimeOfDay": 1000, "endTimeOfDay": 60000}"""
+			"""{"random":true, "randomFixed":false, "frequency":2, "minutesBetween":31, "startTimeOfDay": 1000, "endTimeOfDay": 60000}"""
 		)))
 		
 		assertTrue(signalTime.isDifferent(createJsonObj(
-			"""{"label":"qwe", "random":true, "randomFixed":false, "frequency":2, "minutesBetween":31, "startTimeOfDay": 1000, "endTimeOfDay": 60000}"""
+			"""{"random":true, "randomFixed":false, "frequency":2, "minutesBetween":30, "startTimeOfDay": 1100, "endTimeOfDay": 60000}"""
 		)))
 		
 		assertTrue(signalTime.isDifferent(createJsonObj(
-			"""{"label":"qwe", "random":true, "randomFixed":false, "frequency":2, "minutesBetween":30, "startTimeOfDay": 1100, "endTimeOfDay": 60000}"""
-		)))
-		
-		assertTrue(signalTime.isDifferent(createJsonObj(
-			"""{"label":"qwe", "random":true, "randomFixed":false, "frequency":2, "minutesBetween":30, "startTimeOfDay": 1000, "endTimeOfDay": 62000}"""
+			"""{"random":true, "randomFixed":false, "frequency":2, "minutesBetween":30, "startTimeOfDay": 1000, "endTimeOfDay": 62000}"""
 		)))
 		
 		//startTimeOfDay and endTimeOfDay become originalStartTimeOfDay and originalEndTimeOfDay after save:

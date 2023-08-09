@@ -77,7 +77,7 @@ class QuestionnaireTest : BaseCommonTest() {
 		val questionnaire = createJsonObj<Questionnaire>("""{"pages": [{"inputs": [{}]}]}""")
 		questionnaire.studyId = getBaseStudyId()
 		val input = questionnaire.pages[0].inputs[0]
-		input.value = testValue
+		input.setValue(testValue)
 		
 		val lastCompleted = questionnaire.lastCompleted
 		questionnaire.save(true) // so updateLastCompleted() is run completely
@@ -107,9 +107,9 @@ class QuestionnaireTest : BaseCommonTest() {
 		
 		questionnaire = createJsonObj<Questionnaire>(
 			"""{"pages": [
-				{"inputs": [{}, {"required": true}, {}]},
-				{"inputs": [{"required": true}, {}, {"required": true}]},
-				{"inputs": [{"required": true}]}
+				{"inputs": [{"name": "input1"}, {"required": true, "name": "input2"}, {"name": "input3"}]},
+				{"inputs": [{"required": true, "name": "input4"}, {"name": "input5"}, {"required": true, "name": "input6"}]},
+				{"inputs": [{"required": true, "name": "input7"}]}
 			]}"""
 		)
 		
@@ -117,21 +117,21 @@ class QuestionnaireTest : BaseCommonTest() {
 		assertEquals(0, questionnaire.checkQuestionnaire(1))
 		assertEquals(0, questionnaire.checkQuestionnaire(2))
 		
-		questionnaire.pages[0].inputs[0].value = "It's alive! It's alive!"
+		questionnaire.pages[0].inputs[0].setValue("It's alive! It's alive!")
 		assertEquals(1, questionnaire.checkQuestionnaire(0))
-		questionnaire.pages[0].inputs[2].value = "It's alive! It's alive!"
+		questionnaire.pages[0].inputs[2].setValue("It's alive! It's alive!")
 		assertEquals(1, questionnaire.checkQuestionnaire(0))
-		questionnaire.pages[0].inputs[1].value = "It's alive! It's alive!"
+		questionnaire.pages[0].inputs[1].setValue("It's alive! It's alive!")
 		assertEquals(-1, questionnaire.checkQuestionnaire(0))
 		
-		questionnaire.pages[1].inputs[0].value = "It's alive! It's alive!"
+		questionnaire.pages[1].inputs[0].setValue("It's alive! It's alive!")
 		assertEquals(2, questionnaire.checkQuestionnaire(1))
-		questionnaire.pages[1].inputs[1].value = "It's alive! It's alive!"
+		questionnaire.pages[1].inputs[1].setValue("It's alive! It's alive!")
 		assertEquals(2, questionnaire.checkQuestionnaire(1))
-		questionnaire.pages[1].inputs[2].value = "It's alive! It's alive!"
+		questionnaire.pages[1].inputs[2].setValue("It's alive! It's alive!")
 		assertEquals(-1, questionnaire.checkQuestionnaire(1))
 		
-		questionnaire.pages[2].inputs[0].value = "It's alive! It's alive!"
+		questionnaire.pages[2].inputs[0].setValue("It's alive! It's alive!")
 		assertEquals(-1, questionnaire.checkQuestionnaire(2))
 	}
 	

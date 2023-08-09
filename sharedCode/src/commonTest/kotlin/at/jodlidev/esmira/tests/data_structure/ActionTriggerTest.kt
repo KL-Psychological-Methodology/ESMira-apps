@@ -135,7 +135,7 @@ class ActionTriggerTest : BaseCommonTest() {
 	
 	@Test
 	fun execActions() {
-		createActionTrigger().execActions("test", NativeLink.getNowMillis())
+		createActionTrigger().execActions(NativeLink.getNowMillis())
 		assertEquals(0, notifications.fireQuestionnaireBingList.size)
 		assertEquals(0, notifications.fireStudyNotificationList.size)
 		assertEquals(0, notifications.fireMessageNotificationList.size)
@@ -145,7 +145,7 @@ class ActionTriggerTest : BaseCommonTest() {
 			"""{"pages": [{"inputs": [{}]}]}"""
 		)
 		a1.studyId = getBaseStudyId() //JSON_ACTION_TYPE_MSG needs a study obj
-		a1.execActions("test", NativeLink.getNowMillis())
+		a1.execActions(NativeLink.getNowMillis())
 		assertEquals(0, notifications.fireQuestionnaireBingList.size)
 		assertEquals(0, notifications.fireStudyNotificationList.size)
 		assertEquals(1, notifications.fireMessageNotificationList.size)
@@ -155,7 +155,7 @@ class ActionTriggerTest : BaseCommonTest() {
 			"""{"pages": [{"inputs": [{}]}]}"""
 		)
 		a2.studyId = getBaseStudyId() //JSON_ACTION_TYPE_MSG needs a study obj
-		a2.execActions("test", NativeLink.getNowMillis())
+		a2.execActions(NativeLink.getNowMillis())
 		
 		assertEquals(1, notifications.fireQuestionnaireBingList.size)
 		assertEquals(1, notifications.fireStudyNotificationList.size)
@@ -203,7 +203,7 @@ class ActionTriggerTest : BaseCommonTest() {
 			0,
 			"UPDATE ${DbUser.TABLE} SET ${DbUser.KEY_NOTIFICATIONS_MISSED} = ${DbUser.KEY_NOTIFICATIONS_MISSED} + 1"
 		) {
-			actionTrigger.issueReminder("test", NativeLink.getNowMillis(), 0, 5)
+			actionTrigger.issueReminder(NativeLink.getNowMillis(), 0, 5)
 		}
 		assertEquals(1, notifications.fireQuestionnaireBingList.size)
 		assertEquals(1, postponedActions.scheduleAlarmList.size)
@@ -212,7 +212,7 @@ class ActionTriggerTest : BaseCommonTest() {
 			1,
 			"UPDATE ${DbUser.TABLE} SET ${DbUser.KEY_NOTIFICATIONS_MISSED} = ${DbUser.KEY_NOTIFICATIONS_MISSED} + 1"
 		) {
-			actionTrigger.issueReminder("test", NativeLink.getNowMillis() - 1000*60*60*24, 0, 5)
+			actionTrigger.issueReminder(NativeLink.getNowMillis() - 1000*60*60*24, 0, 5)
 		}
 		assertEquals(1, notifications.fireQuestionnaireBingList.size)
 		assertEquals(1, postponedActions.scheduleAlarmList.size)

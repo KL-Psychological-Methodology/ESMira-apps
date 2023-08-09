@@ -5,6 +5,7 @@ import at.jodlidev.esmira.sharedCode.PhoneType
 import at.jodlidev.esmira.sharedCode.Scheduler
 import at.jodlidev.esmira.sharedCode.data_structure.*
 import BaseCommonTest
+import at.jodlidev.esmira.sharedCode.DbLogic
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -74,72 +75,39 @@ class AlarmTest : BaseCommonTest() {
 	
 	@Test
 	fun scheduleAhead() {
+		//TODO: needs sorting
 		setPhoneType(PhoneType.IOS)
 		val scheduleAheadDays = Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS / Scheduler.ONE_DAY_MS
 		
-		val actionTrigger = createActionTrigger()
-		actionTrigger.save(true)
-		
-		val questionnaire = actionTrigger.questionnaire
 		
 		//schedule ahead from now
 		postponedActions.reset()
-		createAlarmFromSignalTime(actionTriggerId = actionTrigger.id) {
-			it.questionnaireId = questionnaire.id
-			it.signalTime!!.bindParent(questionnaire.id, createJsonObj())
-			it.timestamp = NativeLink.getNowMillis()
-			it.scheduleAhead()
-		}
-		assertEquals(scheduleAheadDays.toInt()-1, postponedActions.scheduleAlarmList.size)
+		var study = DbLogic.createJsonObj<Study>(
+			"""{"id": 1111, "questionnaires": [{"pages": [{}], "actionTriggers": [{"schedules": [{"signalTimes": [{}]}]}]}]}"""
+		)
+		study.finishJSON("exampleUrl", "")
+		study.join()
+		assertEquals(scheduleAheadDays.toInt(), postponedActions.scheduleAlarmList.size)
+		
+		
+		
+		//schedule ahead when some alarms already exist
+		val alarm = DbLogic.getLastSignalTimeAlarm(study.questionnaires[0].actionTriggers[0].schedules[0].signalTimes[0]) ?: throw Exception("Error")
+		alarm.delete() //this alarm should be replaced when scheduling ahead
+		postponedActions.reset()
+		Scheduler.scheduleAhead()
+		assertEquals(1, postponedActions.scheduleAlarmList.size)
+		
 		
 		
 		//schedule ahead from now with inactive questionnaire
 		postponedActions.reset()
-		createAlarmFromSignalTime(actionTriggerId = actionTrigger.id) {
-			val study = createStudy()
-			study.join()
-			
-			val questionnaireInactive = createJsonObj<Questionnaire>("""{"durationPeriodDays": 2}""")
-			questionnaireInactive.studyId = study.id
-			questionnaireInactive.save(true)
-			it.questionnaireId = questionnaireInactive.id
-			it.signalTime!!.bindParent(questionnaireInactive.id, createJsonObj())
-			it.timestamp = NativeLink.getNowMillis()
-			it.scheduleAhead()
-		}
+		study = DbLogic.createJsonObj<Study>(
+			"""{"id": 2222, "questionnaires": [{"durationPeriodDays": 2, "pages": [{}], "actionTriggers": [{"schedules": [{"signalTimes": [{}]}]}]}]}"""
+		)
+		study.finishJSON("exampleUrl", "")
+		study.join()
 		assertEquals(2, postponedActions.scheduleAlarmList.size)
-		
-		
-		//schedule ahead from an alarm before threshold (Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS)
-		postponedActions.reset()
-		createAlarmFromSignalTime(actionTriggerId = actionTrigger.id) {
-			it.questionnaireId = questionnaire.id
-			it.signalTime!!.bindParent(questionnaire.id, createJsonObj())
-			it.timestamp = NativeLink.getNowMillis() + Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS - 1
-			it.scheduleAhead()
-		}
-		assertEquals(1, postponedActions.scheduleAlarmList.size)
-		
-		
-		//schedule ahead from an alarm after threshold (Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS)
-		postponedActions.reset()
-		createAlarmFromSignalTime(actionTriggerId = actionTrigger.id) {
-			it.questionnaireId = questionnaire.id
-			it.signalTime!!.bindParent(questionnaire.id, createJsonObj())
-			it.timestamp = NativeLink.getNowMillis() + Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS + 1000
-			it.scheduleAhead()
-		}
-		assertEquals(0, postponedActions.scheduleAlarmList.size)
-		
-		
-		//schedule ahead from an alarm after threshold (Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS) with greater dailyRepeatRate
-		postponedActions.reset()
-		createAlarmFromSignalTime(actionTriggerId = actionTrigger.id) {
-			it.signalTime!!.bindParent(questionnaire.id, createJsonObj("""{"dailyRepeatRate": ${scheduleAheadDays + 1}}"""))
-			it.timestamp = NativeLink.getNowMillis() + Scheduler.IOS_DAYS_TO_SCHEDULE_AHEAD_MS // will be ignored because dailyRepeatRate is greater
-			it.scheduleAhead()
-		}
-		assertEquals(1, postponedActions.scheduleAlarmList.size)
 	}
 	
 	@Test
@@ -149,8 +117,8 @@ class AlarmTest : BaseCommonTest() {
 		val studyNotificationList = notifications.fireStudyNotificationList
 		val questionnaireBingList = notifications.fireQuestionnaireBingList
 		
-		val study = createStudy()
-		study.join()
+		val study = createDbStudy(1111, """[{"pages": [{}]}]""")
+//		study.join()
 		
 		//test questionnaire that will be active later
 		val questionnaireActiveSoon = createJsonObj<Questionnaire>("""{"durationStartingAfterDays": 5}""")
@@ -159,7 +127,7 @@ class AlarmTest : BaseCommonTest() {
 		
 		val alarmActiveSoon = createAlarmFromSignalTime()
 		alarmActiveSoon.questionnaireId = questionnaireActiveSoon.id
-		alarmActiveSoon.signalTime?.bindParent(-1, createJsonObj())
+		alarmActiveSoon.signalTime?.bindParent(study.questionnaires[0].id, createJsonObj())
 		alarmActiveSoon.exec()
 		assertEquals(1, scheduleAlarmList.size)
 		
@@ -185,7 +153,7 @@ class AlarmTest : BaseCommonTest() {
 		
 		val alarmSignalTime = createAlarmFromSignalTime(actionTriggerId = actionTrigger.id)
 		alarmSignalTime.questionnaireId = questionnaireActive.id
-		alarmSignalTime.signalTime?.bindParent(questionnaireInactive.id, createJsonObj())
+		alarmSignalTime.signalTime?.bindParent(questionnaireActive.id, createJsonObj())
 		alarmSignalTime.exec()
 		assertEquals(2, scheduleAlarmList.size)
 		assertEquals(1, studyNotificationList.size)

@@ -469,7 +469,7 @@ class StudyTest : BaseCommonTest() {
 		
 		assertEquals(1, postponedActions.updateStudiesRegularlyCount)
 		
-		assertSqlWasSaved(DataSet.TABLE, DataSet.KEY_TYPE, DataSet.EventTypes.joined)
+		assertSqlWasSaved(DataSet.TABLE, DataSet.KEY_TYPE, DataSet.EventTypes.joined.toString())
 	}
 	
 	@Test

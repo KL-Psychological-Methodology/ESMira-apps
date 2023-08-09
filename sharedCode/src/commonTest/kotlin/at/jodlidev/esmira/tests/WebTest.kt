@@ -105,7 +105,7 @@ class WebTest : BaseCommonTest() {
 		
 		//datasets;
 		assertEquals(UploadData.States.SYNCED, DbLogic.getDataSet(dataSet1.id)?.synced)
-		assertEquals(UploadData.States.NOT_SYNCED_ERROR, DbLogic.getDataSet(dataSet2.id)?.synced)
+		assertEquals(UploadData.States.NOT_SYNCED_ERROR_DELETABLE, DbLogic.getDataSet(dataSet2.id)?.synced)
 		assertEquals(UploadData.States.SYNCED, DbLogic.getDataSet(dataSet3.id)?.synced)
 		
 		//token:

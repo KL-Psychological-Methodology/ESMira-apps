@@ -124,10 +124,15 @@ class ScheduleTest : BaseCommonTest() {
 		val later = NativeLink.getNowMillis() + oneDay + 1000*60
 		val soon = NativeLink.getNowMillis()
 		
+		
+		val questionnaire = createJsonObj<Questionnaire>()
+		questionnaire.save(true)
+		
 		val schedule = createJsonObj<Schedule>("""{"signalTimes":[{}]}""")
 		schedule.bindParent(createActionTrigger())
 		val signalTime = schedule.signalTimes[0]
 		signalTime.bindParent(-1, schedule)
+		signalTime.questionnaireId = questionnaire.id
 		signalTime.save()
 		signalTime.timeHasChanged = true
 		

@@ -232,7 +232,7 @@ class Input internal constructor( ) {
 			}
 		}
 	}
-	private fun getBackupString(): String {
+	fun getBackupString(): String { //public for testing
 		return getBackupJsonObj().toString()
 	}
 	private fun fromBackupObj(obj: JsonObject) {
