@@ -38,7 +38,7 @@ class SignalTime {
 		get() {
 			if(!this::_questionnaire.isInitialized)
 				_questionnaire = DbLogic.getQuestionnaire(questionnaireId)
-					?: throw Exception("SignalTime (id=$id) had an error. Questionnaire (id=$_questionnaire) is null!")
+					?: throw Exception("SignalTime (id=$id) had an error. Questionnaire (id=$questionnaireId) is null!")
 			return _questionnaire
 		}
 	
@@ -227,7 +227,6 @@ class SignalTime {
 		const val KEY_ID = "_id"
 		const val KEY_SCHEDULE_ID = "schedule_id"
 		const val KEY_QUESTIONNAIRE_ID = "questionnaire_id"
-		const val KEY_LABEL = "label"
 		const val KEY_RANDOM = "random"
 		const val KEY_RANDOM_FIXED = "random_fixed"
 		const val KEY_FREQUENCY = "frequency"

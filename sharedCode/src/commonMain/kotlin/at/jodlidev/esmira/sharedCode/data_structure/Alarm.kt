@@ -153,18 +153,6 @@ class Alarm {
 		if(NativeLink.smartphoneData.phoneType == PhoneType.IOS)
 			scheduleReminder()
 	}
-//	private fun setWasRescheduled() { //only ued in IOS
-//		wasRescheduled = true
-//
-//		val db = NativeLink.sql
-//		val values = db.getValueBox()
-//		values.putInt(KEY_WAS_RESCHEDULED,  1)
-//		db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
-//	}
-	
-	fun isToday(): Boolean {
-		return timestamp < NativeLink.getMidnightMillis() + 86400000L
-	}
 	
 	private fun scheduleReminder() {
 		if(type == TYPES.SignalTime || type == TYPES.EventTrigger) {
@@ -195,7 +183,7 @@ class Alarm {
 	}
 	
 	fun scheduleAhead() { //for IOS
-		// this function will only schedule one Alarm
+		// this will only schedule one Alarm and its reminder
 		
 		if(canBeRescheduled) {
 			val signalTime = this.signalTime
@@ -206,7 +194,7 @@ class Alarm {
 				
 				ErrorBox.log(
 					"Alarm",
-					"Scheduling Alarm (id=$id) ahead. Anchor in ${(timestampAnchor - NativeLink.getNowMillis()) / 60000} min (${
+					"Scheduling Alarm (id=$id, questionnaire=${questionnaire.title}) ahead. Anchor in ${(timestampAnchor - NativeLink.getNowMillis()) / 60000} min (${
 						NativeLink.formatDateTime(timestampAnchor)
 					})"
 				)
@@ -299,7 +287,6 @@ class Alarm {
 		const val KEY_TIMESTAMP = "alarm_timestamp"
 		const val KEY_TYPE = "alarm_type"
 		const val KEY_INDEX_NUM = "alarm_index"
-		const val KEY_LABEL = "alarm_label"
 		const val KEY_REMINDER_COUNT = "reminder_count"
 		const val KEY_ONLY_SINGLE_ACTION_INDEX = "only_single_action_index"
 		
