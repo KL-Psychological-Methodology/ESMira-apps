@@ -21,7 +21,7 @@ object DbLogic {
 		return Json {ignoreUnknownKeys = true}
 	}
 	inline fun <reified T>createJsonObj(json: String = "{}"): T { //used for testing
-		return DbLogic.getJsonConfig().decodeFromString(json)
+		return getJsonConfig().decodeFromString(json)
 	}
 	
 	fun getVersion(): String {
@@ -299,7 +299,7 @@ object DbLogic {
 			Scheduler.checkMissedAlarms(true)
 			Scheduler.scheduleIfNeeded()
 			Scheduler.scheduleAhead()
-			cleanupFiles();
+			cleanupFiles()
 			NativeLink.postponedActions.syncDataSets()
 			
 			val newLang = NativeLink.smartphoneData.lang
@@ -324,6 +324,23 @@ object DbLogic {
 				ErrorBox.log("startupApp", "Detected change in language from \"$oldLang\" to \"$newLang\"")
 				DbUser.setLang(newLang)
 			}
+			
+			val alarms = getAlarms()
+			val alarmLog = StringBuilder("Found ${alarms.size} Alarms:\n")
+			
+			for(alarm in alarms) {
+				val label = if(alarm.questionnaireId == -1L) {
+					val study = getStudy(alarm.actionTrigger.studyId)
+					study?.title ?: "Error"
+				}
+				else {
+					val questionnaire = getQuestionnaire(alarm.questionnaireId)
+					questionnaire?.title ?: "Error"
+				}
+				
+				alarmLog.append("$label (qid=${alarm.questionnaireId}): ${alarm.timestamp} (id=${alarm.id})\n")
+			}
+			ErrorBox.log("Alarm log", alarmLog.toString())
 		}
 	}
 	
@@ -1006,11 +1023,11 @@ object DbLogic {
 		return r
 	}
 	
-	fun cleanupFiles() {
+	fun cleanupFiles(deleteEverything: Boolean = false) {
 		val files = getTemporaryFileUploads()
 		for(file: FileUpload in files) {
-			if(file.isTooOld())
-				file.delete();
+			if(deleteEverything || file.isTooOld())
+				file.delete()
 		}
 	}
 	fun getPendingFileUploads(): List<FileUpload> {
@@ -1470,6 +1487,22 @@ object DbLogic {
 		}
 		c.close()
 		return alarms
+	}
+	
+	
+	fun countAlarms(): Int {
+		val c = NativeLink.sql.select(
+			Alarm.TABLE,
+			arrayOf("COUNT(*)"),
+			null, null,
+			null,
+			null,
+			null,
+			null
+		)
+		val r = if(c.moveToFirst()) c.getInt(0) else 0
+		c.close()
+		return r
 	}
 	
 	fun countAlarmsFrom(signalTimeId: Long): Int {
