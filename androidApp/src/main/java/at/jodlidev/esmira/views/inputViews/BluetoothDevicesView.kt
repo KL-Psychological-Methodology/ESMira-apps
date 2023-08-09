@@ -1,15 +1,10 @@
 package at.jodlidev.esmira.views.inputViews
 
 import android.Manifest
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
 import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.os.Build
@@ -84,8 +79,10 @@ class BluetoothScanner(val context: Context) {
 	
 	fun finishScanning() {
 		try {
-			bluetoothManager.adapter.bluetoothLeScanner.flushPendingScanResults(callback)
-			bluetoothManager.adapter.bluetoothLeScanner.stopScan(callback)
+			if(bluetoothManager.adapter.bluetoothLeScanner != null) { //is null when bluetooth is disabled
+				bluetoothManager.adapter.bluetoothLeScanner.flushPendingScanResults(callback)
+				bluetoothManager.adapter.bluetoothLeScanner.stopScan(callback)
+			}
 		}
 		catch(e: SecurityException) {
 			// do nothing
