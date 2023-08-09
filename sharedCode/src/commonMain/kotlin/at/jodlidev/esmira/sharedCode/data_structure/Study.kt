@@ -180,7 +180,7 @@ class Study internal constructor(
 			for(trigger: ActionTrigger in enabledActionTriggers) {
 				for(schedule: Schedule in trigger.schedules) {
 					val questionnaire = schedule.getQuestionnaire()
-					if(!schedule.userEditable || questionnaire.limitToGroup != group)
+					if(!schedule.userEditable || (questionnaire.limitToGroup != 0 && questionnaire.limitToGroup != group))
 						continue
 					for(signalTime: SignalTime in schedule.signalTimes) {
 						list.add(signalTime)
@@ -257,7 +257,7 @@ class Study internal constructor(
 			for(chart in personalCharts) {
 				if(chart.displayPublicVariable) {
 					publicStatisticsNeeded = true
-					break;
+					break
 				}
 			}
 		}
@@ -692,11 +692,11 @@ class Study internal constructor(
 		const val KEY_REWARD_INSTRUCTIONS = "rewardInstructions"
 		const val KEY_CACHED_REWARD_CODE = "cachedRewardCode"
 		
-		const val REWARD_SUCCESS = 0;
-		const val REWARD_ERROR_DOES_NOT_EXIST = 1;
-		const val REWARD_ERROR_NOT_ENABLED = 2;
-		const val REWARD_ERROR_UNFULFILLED_REWARD_CONDITIONS = 3;
-		const val REWARD_ERROR_ALREADY_GENERATED = 4;
+		const val REWARD_SUCCESS = 0
+		const val REWARD_ERROR_DOES_NOT_EXIST = 1
+		const val REWARD_ERROR_NOT_ENABLED = 2
+		const val REWARD_ERROR_UNFULFILLED_REWARD_CONDITIONS = 3
+		const val REWARD_ERROR_ALREADY_GENERATED = 4
 		
 		val COLUMNS = arrayOf(
 			KEY_ID,
