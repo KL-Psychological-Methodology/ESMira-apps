@@ -34,7 +34,7 @@ object Scheduler {
 	const val MIN_SCHEDULE_DISTANCE = 60000L //1000*60 = 1 min
 	internal const val IOS_DAYS_TO_SCHEDULE_AHEAD_MS = 4 * ONE_DAY_MS
 	internal const val IOS_MAX_TIMES_TO_SCHEDULE_AHEAD = 4
-	private const val IOS_MAX_ALARM_COUNT = 50 //on iOS alarms are limited to 64 and we need a few free slots for possible eventTrigger with timers
+	private const val IOS_MAX_ALARM_COUNT = 55 //on iOS alarms are limited to 64 and we need a few free slots for possible eventTrigger with timers
 	
 	private val WEEKDAY_CODES = intArrayOf( //to comply with WeekDay-enum in io.ktor.util.date.WeekDay
 		2,  //Monday
@@ -171,9 +171,14 @@ object Scheduler {
 		val alarms = DbLogic.getLastAlarmPerSignalTime()
 		if(alarms.isEmpty())
 			return
-		val reschedulesPerAlarm = IOS_MAX_TIMES_TO_SCHEDULE_AHEAD.coerceAtMost(IOS_MAX_ALARM_COUNT / alarms.size)
 		
-		ErrorBox.log("Scheduler", "Found ${alarms.size} different alarms that can be rescheduled. Trying to reschedule $reschedulesPerAlarm times")
+		var additionalAlarms = 0
+		for(alarm in alarms) {
+			additionalAlarms += alarm.actionTrigger.countPostponedReminder()
+		}
+		val reschedulesPerAlarm = IOS_MAX_TIMES_TO_SCHEDULE_AHEAD.coerceAtMost(IOS_MAX_ALARM_COUNT / (alarms.size + additionalAlarms))
+		
+		ErrorBox.log("Scheduler", "Found ${alarms.size} different alarms with $additionalAlarms reminder that can be rescheduled. Trying to reschedule $reschedulesPerAlarm times")
 		//this loop has a lot of empty runs, but it makes sure that all alarms are scheduled equally even if we hit the max notification limit on iOS
 		// overhead should be ok because IOS_MAX_ALARM_COUNT or IOS_MAX_TIMES_TO_SCHEDULE_AHEAD are expected to be small
 		for(max in 1 .. reschedulesPerAlarm) {
@@ -183,6 +188,11 @@ object Scheduler {
 					ErrorBox.log("Scheduler", "Alarm (id=${alarm.id}, signalTime=${alarm.signalTimeId}) has $count/$max alarms. Skipping")
 					continue
 				}
+				if(DbLogic.countAlarms() > IOS_MAX_ALARM_COUNT) {
+					ErrorBox.warn("Scheduler", "Trying to schedule more than $IOS_MAX_ALARM_COUNT alarms. Aborting!")
+					return
+				}
+					
 				alarm.scheduleAhead()
 			}
 		}

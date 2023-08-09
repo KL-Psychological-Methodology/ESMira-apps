@@ -364,6 +364,19 @@ class ActionTrigger {
 		}
 	}
 	
+	fun countPostponedReminder(): Int {
+		val actions = getActionArray()
+		var count = 0
+		for(actionJson in actions) {
+			val action = Action(actionJson.jsonObject)
+			
+			if(action.type == JSON_ACTION_TYPE_INVITATION) {
+				count += action.reminderCount
+			}
+		}
+		return count
+	}
+	
 	fun iteratePostponedReminder(alarm: Alarm) {
 		val actions = getActionArray()
 		for((index, actionJson) in actions.withIndex()) {
