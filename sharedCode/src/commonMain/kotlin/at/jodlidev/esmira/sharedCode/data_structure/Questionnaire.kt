@@ -173,7 +173,7 @@ class Questionnaire {
 			QuestionnaireCache.getPage(id)
 	}
 	fun getPage(pageNumber: Int): Page {
-		return pages[pageNumber];
+		return pages[pageNumber]
 	}
 	fun isLastPage(pageNumber: Int): Boolean {
 		return pageNumber == pages.size - 1
@@ -320,8 +320,8 @@ class Questionnaire {
 			val values = db.getValueBox()
 			values.putLong(KEY_LAST_COMPLETED, lastCompleted)
 			if(reset_last_notification) {
-				lastNotification = 0
-				values.putInt(KEY_LAST_NOTIFICATION, 0)
+				lastNotification = 0L
+				values.putLong(KEY_LAST_NOTIFICATION, 0L)
 			}
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
 		}
