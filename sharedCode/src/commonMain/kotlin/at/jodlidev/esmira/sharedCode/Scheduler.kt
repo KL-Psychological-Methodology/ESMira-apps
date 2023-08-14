@@ -183,14 +183,16 @@ object Scheduler {
 		// overhead should be ok because IOS_MAX_ALARM_COUNT or IOS_MAX_TIMES_TO_SCHEDULE_AHEAD are expected to be small
 		for(max in 1 .. reschedulesPerAlarm) {
 			for(alarm in alarms) {
-				val count = DbLogic.countAlarmsFrom(alarm.signalTimeId)
-				if(count >= max) {
-					ErrorBox.log("Scheduler", "Alarm (id=${alarm.id}, signalTime=${alarm.signalTimeId}) has $count/$max alarms. Skipping")
-					continue
-				}
-				if(DbLogic.countAlarms() > IOS_MAX_ALARM_COUNT) {
-					ErrorBox.warn("Scheduler", "Trying to schedule more than $IOS_MAX_ALARM_COUNT alarms. Aborting!")
+				val count1 = DbLogic.countAlarms()
+				if(count1 > IOS_MAX_ALARM_COUNT) {
+					ErrorBox.warn("Scheduler", "Trying to schedule $count1 alarms which is more than $IOS_MAX_ALARM_COUNT. Aborting!")
 					return
+				}
+				
+				val count2 = DbLogic.countAlarmsFrom(alarm.signalTimeId)
+				if(count2 >= max) {
+					ErrorBox.log("Scheduler", "Alarm (id=${alarm.id}, signalTime=${alarm.signalTimeId}) has $count2/$max alarms. Skipping")
+					continue
 				}
 					
 				alarm.scheduleAhead()

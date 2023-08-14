@@ -202,7 +202,7 @@ class Web {
 				else {
 					error = true
 					dataSet?.synced = UploadData.States.NOT_SYNCED_ERROR_DELETABLE
-					ErrorBox.warn("Sync failed", "Syncing DataSet(server_url:${url}, id:${syncState.dataSetId}) was not successful:\n${syncState.error.ifEmpty { "No server message" }}")
+					ErrorBox.warn("Syncing failed", "Syncing DataSet(server_url:${url}, id:${syncState.dataSetId}) was not successful:\n${syncState.error.ifEmpty { "No server message" }}")
 				}
 			}
 			
@@ -211,7 +211,7 @@ class Web {
 			}
 		}
 		catch(e: Throwable) {
-			ErrorBox.warn("Sync failed", "JSON structure is faulty: $response", e)
+			ErrorBox.warn("Syncing failed", "JSON structure is faulty: $response", e)
 		}
 	}
 	
