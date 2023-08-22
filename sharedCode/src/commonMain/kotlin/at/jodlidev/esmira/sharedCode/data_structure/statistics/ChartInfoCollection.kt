@@ -31,6 +31,7 @@ class ChartInfoCollection {
 		val container = HashMap<String, MutableMap<String, StatisticData>>()
 		loadDailyStatisticsFromDb(study, container)
 		loadFrequencyDistributionFromDb(study, container)
+		loadPerDataValuesFromDb(study, container)
 		
 		this.charts = study.personalCharts
 		this.dataListContainer = container
@@ -126,6 +127,38 @@ class ChartInfoCollection {
 		return container
 	}
 	
+	private fun loadPerDataValuesFromDb(
+		study: Study,
+		container: HashMap<String, MutableMap<String, StatisticData>>
+	): HashMap<String, MutableMap<String, StatisticData>> {
+		val c = NativeLink.sql.select(
+			StatisticData_perData.TABLE_CONNECTED,
+			StatisticData_perData.COLUMNS_CONNECTED,
+			"${StatisticData_perData.TABLE}.${StatisticData_perData.KEY_STUDY_ID} = ?", arrayOf(study.id.toString()),
+			null,
+			null,
+			StatisticData_perData.KEY_VALUE,
+			null
+		)
+		if(c.moveToFirst()) {
+			do {
+				val statistic = StatisticData_perData(c)
+				val key = statistic.variableName + statistic.observableIndex
+				var dataList: MutableMap<String, StatisticData>
+				if(container.containsKey(key)) {
+					dataList = container[key]!!
+				}
+				else {
+					dataList = HashMap()
+					container[key] = dataList
+				}
+				dataList[statistic.index.toString()] = statistic
+			} while(c.moveToNext())
+		}
+		c.close()
+		
+		return container
+	}
 	
 	private fun loadJson(
 		json: String,
@@ -160,8 +193,15 @@ class ChartInfoCollection {
 					ObservedVariable.STORAGE_TYPE_FREQ_DISTR -> {
 						val data: Map<String, Int> = DbLogic.getJsonConfig().decodeFromString(serverData.data)
 						
-						for((value_key, count) in data) {
-							statistics[value_key] = StatisticData_perValue(value_key, key, index, count, studyId)
+						for((valueKey, count) in data) {
+							statistics[valueKey] = StatisticData_perValue(valueKey, key, index, count, studyId)
+						}
+					}
+					ObservedVariable.STORAGE_TYPE_PER_DATA -> {
+						val data: Map<Int, Double> = DbLogic.getJsonConfig().decodeFromString(serverData.data)
+						
+						for((valueKey, value) in data) {
+							statistics[valueKey.toString()] = StatisticData_perData(valueKey, value, key, index, studyId)
 						}
 					}
 				}

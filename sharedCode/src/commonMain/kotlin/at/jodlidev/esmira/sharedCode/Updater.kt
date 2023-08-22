@@ -1,6 +1,7 @@
 package at.jodlidev.esmira.sharedCode
 
 import at.jodlidev.esmira.sharedCode.data_structure.*
+import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_perData
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_perValue
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_timed
 import kotlinx.serialization.decodeFromString
@@ -11,7 +12,7 @@ import kotlinx.serialization.json.*
  */
 internal object Updater {
 	const val EXPECTED_SERVER_VERSION: Int = 11
-	const val DATABASE_VERSION = 41
+	const val DATABASE_VERSION = 42
 	const val LIBRARY_VERSION = 19 //this is mainly used for iOS so we can check that changes in the library have been used in the C library
 	
 	fun updateSQL(db: SQLiteInterface, oldVersion: Int) {
@@ -445,6 +446,16 @@ internal object Updater {
 		}
 		if(oldVersion <= 40) {
 			db.execSQL("ALTER TABLE questionnaires ADD COLUMN isBackEnabled INTEGER;")
+		}
+		if(oldVersion <= 41) {
+			db.execSQL("""CREATE TABLE IF NOT EXISTS statistics_perData (
+			_id INTEGER PRIMARY KEY,
+			study_id INTEGER,
+			observed_id INTEGER,
+			variable_index INTEGER,
+			variable_value INTEGER,
+			FOREIGN KEY(study_id) REFERENCES studies(_id) ON DELETE CASCADE,
+			FOREIGN KEY(observed_id) REFERENCES observed_variables(_id) ON DELETE CASCADE)""")
 		}
 	}
 	

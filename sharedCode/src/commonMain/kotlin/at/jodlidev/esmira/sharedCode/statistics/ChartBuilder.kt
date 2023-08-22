@@ -357,31 +357,12 @@ abstract class ChartBuilder(
 		entriesCount = range.count()
 	}
 	private fun fillXY(statisticsX: Map<String, StatisticData>, statisticsY: Map<String, StatisticData>, dataSetIndex: Int) {
-		val valueType: Int = chartInfo.valueType
 		val unsortedList = ArrayList<Pair<Float, Float>>()
 		
 		for((dayStr, statX) in statisticsX) {
-			val xValue: Float
-			val yValue: Float
-			when(valueType) {
-				ChartInfo.VALUE_TYPE_MEAN -> {
-					xValue = if(statX.count != 0) statX.sum.toFloat() / statX.count.toFloat() else 0f
-					val statY = statisticsY[dayStr]
-					yValue = if(statY != null && statY.count != 0) statY.sum.toFloat() / statY.count.toFloat() else 0f
-				}
-				ChartInfo.VALUE_TYPE_SUM -> {
-					xValue = statX.sum.toFloat()
-					yValue = statisticsY[dayStr]?.sum?.toFloat() ?: 0f
-				}
-				ChartInfo.VALUE_TYPE_COUNT -> {
-					xValue = statX.count.toFloat()
-					yValue = statisticsY[dayStr]?.count?.toFloat() ?: 0f
-				}
-				else -> {
-					xValue = 0f
-					yValue = 0f
-				}
-			}
+			val xValue = statX.sum.toFloat()
+			val yValue = statisticsY[dayStr]?.sum?.toFloat() ?: 0f
+			
 			unsortedList.add(Pair(xValue, yValue))
 		}
 		

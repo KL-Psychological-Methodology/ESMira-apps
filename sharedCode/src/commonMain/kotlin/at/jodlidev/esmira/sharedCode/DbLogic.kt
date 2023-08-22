@@ -2,6 +2,7 @@ package at.jodlidev.esmira.sharedCode
 
 import at.jodlidev.esmira.sharedCode.data_structure.*
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData
+import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_perData
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_timed
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_perValue
 import kotlinx.serialization.decodeFromString
@@ -104,7 +105,6 @@ object DbLogic {
 			${StatisticData_timed.KEY_COUNT} INTEGER,
 			FOREIGN KEY(${StatisticData_timed.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}) ON DELETE CASCADE,
 			FOREIGN KEY(${StatisticData_timed.KEY_OBSERVED_ID}) REFERENCES ${ObservedVariable.TABLE}(${ObservedVariable.KEY_ID}) ON DELETE CASCADE)""")
-		
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${StatisticData_perValue.TABLE} (
 			${StatisticData_perValue.KEY_ID} INTEGER PRIMARY KEY,
 			${StatisticData_perValue.KEY_STUDY_ID} INTEGER,
@@ -113,6 +113,14 @@ object DbLogic {
 			${StatisticData_perValue.KEY_COUNT} INTEGER,
 			FOREIGN KEY(${StatisticData_perValue.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}) ON DELETE CASCADE,
 			FOREIGN KEY(${StatisticData_perValue.KEY_OBSERVED_ID}) REFERENCES ${ObservedVariable.TABLE}(${ObservedVariable.KEY_ID}) ON DELETE CASCADE)""")
+		db.execSQL("""CREATE TABLE IF NOT EXISTS ${StatisticData_perData.TABLE} (
+			${StatisticData_perData.KEY_ID} INTEGER PRIMARY KEY,
+			${StatisticData_perData.KEY_STUDY_ID} INTEGER,
+			${StatisticData_perData.KEY_OBSERVED_ID} INTEGER,
+			${StatisticData_perData.KEY_INDEX} INTEGER,
+			${StatisticData_perData.KEY_VALUE} INTEGER,
+			FOREIGN KEY(${StatisticData_perData.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}) ON DELETE CASCADE,
+			FOREIGN KEY(${StatisticData_perData.KEY_OBSERVED_ID}) REFERENCES ${ObservedVariable.TABLE}(${ObservedVariable.KEY_ID}) ON DELETE CASCADE)""")
 		
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${Questionnaire.TABLE} (
 			${Questionnaire.KEY_ID} INTEGER PRIMARY KEY,
@@ -707,11 +715,12 @@ object DbLogic {
 	}
 	
 	fun getHiddenQuestionnaires(studyId: Long): List<Questionnaire> {
+		val study = getStudy(studyId) ?: return ArrayList()
 		val c = NativeLink.sql.select(
 			Questionnaire.TABLE,
 			Questionnaire.COLUMNS,
-			"${Questionnaire.KEY_STUDY_ID} = ?",
-			arrayOf(studyId.toString()),
+			"${Questionnaire.KEY_STUDY_ID} = ? AND (${Questionnaire.KEY_LIMIT_TO_GROUP} == 0 OR ${Questionnaire.KEY_LIMIT_TO_GROUP} == ?)",
+			arrayOf(studyId.toString(), study.group.toString()),
 			null,
 			null,
 			null,

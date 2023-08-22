@@ -5,6 +5,7 @@ import at.jodlidev.esmira.sharedCode.JsonToStringSerializer
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.SQLiteCursor
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.Condition
+import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_perData
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_timed
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_perValue
 import kotlinx.serialization.SerialName
@@ -130,13 +131,17 @@ class ObservedVariable internal constructor() {
 		if(checkCondition(responses)) {
 			when(storageType) {
 				STORAGE_TYPE_TIMED -> {
-					val content = responses[variableName]?.jsonPrimitive?.content ?: ""
-					val num = try {if(content.isEmpty()) 0.0 else content.toDouble()} catch(e: Exception) {0.0}
+					val num = responses[variableName]?.jsonPrimitive?.content?.toDoubleOrNull() ?: 0.0
 					StatisticData_timed.getInstance(this, num).save()
 				}
 				STORAGE_TYPE_FREQ_DISTR ->
 					//Note: JsonPrimitive.toString() adds quotes around value. So we get the value directly
 					StatisticData_perValue.getInstance(this, responses[variableName]?.jsonPrimitive?.content ?: "").save()
+				STORAGE_TYPE_PER_DATA -> {
+					val num = responses[variableName]?.jsonPrimitive?.content?.toDoubleOrNull() ?: 0.0
+					StatisticData_perData.getInstance(this, num).save()
+				}
+				
 			}
 		}
 	}
@@ -154,6 +159,7 @@ class ObservedVariable internal constructor() {
 
 		const val STORAGE_TYPE_TIMED = 0
 		const val STORAGE_TYPE_FREQ_DISTR = 1
+		const val STORAGE_TYPE_PER_DATA = 2
 
 		val COLUMNS = arrayOf(
 			KEY_ID,

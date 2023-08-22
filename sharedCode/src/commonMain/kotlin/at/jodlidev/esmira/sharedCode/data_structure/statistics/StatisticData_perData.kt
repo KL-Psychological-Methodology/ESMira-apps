@@ -9,24 +9,22 @@ import kotlinx.serialization.Serializable
  * Created by JodliDev on 22.08.2019.
  */
 @Serializable
-class StatisticData_perValue internal constructor(
-	var value: String
-) : StatisticData() {
-	override var sum: Double = 0.0 // not used
-	override var count: Int = 0 // not used
+class StatisticData_perData(
+	var index: Int,
+	override var sum: Double, // used as value
 	
-	constructor(value: String, variableName: String, index: Int, count: Int, studyId: Long): this(
-		value
-	) {
+) : StatisticData() {
+	var value: Double by this::sum
+	override var count: Int = 1 // not used
+	
+	
+	constructor(valueIndex: Int, value: Double, variableName: String, index: Int, studyId: Long): this(valueIndex, value) {
 		this.studyId = studyId
 		this.observableIndex = index
-		this.count = count
 		this.variableName = variableName
 	}
 	
-	private constructor(observedVariable: ObservedVariable, value: String): this(
-		value
-	) {
+	private constructor(observedVariable: ObservedVariable, valueIndex: Int, value: Double): this(valueIndex, value) {
 		studyId = observedVariable.studyId
 		observedId = observedVariable.id
 		observableIndex = observedVariable.index
@@ -34,7 +32,8 @@ class StatisticData_perValue internal constructor(
 	}
 	
 	constructor(c: SQLiteCursor): this(
-		c.getString(3)
+		c.getInt(3),
+		c.getDouble(4),
 	) {
 		loadCursor(c)
 		observableIndex = c.getInt(5)
@@ -42,7 +41,8 @@ class StatisticData_perValue internal constructor(
 	}
 	
 	constructor(c: SQLiteCursor, observedVariable: ObservedVariable): this(
-		c.getString(3)
+		c.getInt(3),
+		c.getDouble(4),
 	) {
 		loadCursor(c)
 		observableIndex = observedVariable.index
@@ -55,16 +55,15 @@ class StatisticData_perValue internal constructor(
 		studyId = c.getLong(1)
 		observedId = c.getLong(2)
 //		value = c.getString(3)
-		count = c.getInt(4)
 	}
 	
 	override fun save() {
 		val db = NativeLink.sql
 		val values = db.getValueBox()
-		values.putString(KEY_VALUE, value)
+		values.putInt(KEY_INDEX, index)
+		values.putDouble(KEY_VALUE, value)
 		values.putLong(KEY_OBSERVED_ID, observedId)
 		values.putLong(KEY_STUDY_ID, studyId)
-		values.putInt(KEY_COUNT, count)
 
 		if(exists)
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -77,19 +76,19 @@ class StatisticData_perValue internal constructor(
 	}
 	
 	companion object {
-		const val TABLE = "statistics_perValue"
+		const val TABLE = "statistics_perData"
 		const val KEY_ID = "_id"
 		const val KEY_STUDY_ID = "study_id"
 		const val KEY_OBSERVED_ID = "observed_id"
+		const val KEY_INDEX = "variable_index"
 		const val KEY_VALUE = "variable_value"
-		const val KEY_COUNT = "variable_count"
 
 		val COLUMNS = arrayOf(
 			KEY_ID,
 			KEY_STUDY_ID,
 			KEY_OBSERVED_ID,
-			KEY_VALUE,
-			KEY_COUNT
+			KEY_INDEX,
+			KEY_VALUE
 		)
 
 		const val TABLE_CONNECTED = "$TABLE LEFT JOIN ${ObservedVariable.TABLE} ON $TABLE.$KEY_OBSERVED_ID=${ObservedVariable.TABLE}.$KEY_ID"
@@ -97,32 +96,27 @@ class StatisticData_perValue internal constructor(
 				"$TABLE.$KEY_ID",
 				"$TABLE.$KEY_STUDY_ID",
 				"$TABLE.$KEY_OBSERVED_ID",
+				"$TABLE.$KEY_INDEX",
 				"$TABLE.$KEY_VALUE",
-				"$TABLE.$KEY_COUNT",
 				"${ObservedVariable.TABLE}.${ObservedVariable.KEY_INDEX}",
 				"${ObservedVariable.TABLE}.${ObservedVariable.KEY_VARIABLE_NAME}"
 		)
 		
-		fun getInstance(observedVariable: ObservedVariable, value: String): StatisticData_perValue {
+		fun getInstance(observedVariable: ObservedVariable, value: Double): StatisticData_perData {
 			val c = NativeLink.sql.select(
 				TABLE,
-				COLUMNS,
-				"$KEY_OBSERVED_ID = ? AND $KEY_VALUE = ?", arrayOf(observedVariable.id.toString(), value),
+				arrayOf("COUNT(*)"),
+				"$KEY_OBSERVED_ID = ?", arrayOf(observedVariable.id.toString()),
 				null,
 				null,
 				null,
 				"1"
 			)
-			val statistic = if(c.moveToFirst()) StatisticData_perValue(
-				c,
-				observedVariable
-			)
-			else StatisticData_perValue(
+			return StatisticData_perData(
 				observedVariable,
+				if(c.moveToFirst()) c.getInt(0) else 0,
 				value
 			)
-			++statistic.count
-			return statistic
 		}
 	}
 }
