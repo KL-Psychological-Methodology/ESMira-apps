@@ -83,11 +83,11 @@ class Alarm {
 		this.signalTimeId = signalTimeId
 	}
 	
-	constructor(eventTrigger: EventTrigger, utc_timestamp: Long) {
+	constructor(eventTrigger: EventTrigger, timestamp: Long) {
 		questionnaireId = eventTrigger.questionnaireId
 		actionTriggerId = eventTrigger.actionTriggerId
 		eventTriggerId = eventTrigger.id
-		this.timestamp = utc_timestamp
+		this.timestamp = timestamp
 		type = TYPES.EventTrigger
 	}
 	

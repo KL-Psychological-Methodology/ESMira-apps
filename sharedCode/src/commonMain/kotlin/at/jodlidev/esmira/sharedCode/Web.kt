@@ -337,7 +337,7 @@ class Web {
 	
 	companion object {
 		const val DEV_SERVER = "https://esmira.kl.ac.at"
-		private const val DEBUG_EMULATOR_SERVER = "http://10.0.2.2/smartphones/ESMira/ESMira-web/dist"
+		private const val DEBUG_EMULATOR_SERVER = "http://10.0.2.2/smartphones/ESMira/git/ESMira-web/dist"
 		
 		private const val URL_LIST_STUDIES: String = "/api/studies.php?lang=%s"
 		private const val URL_LIST_STUDIES_PASSWORD: String = "/api/studies.php?access_key=%s1&lang=%s2"

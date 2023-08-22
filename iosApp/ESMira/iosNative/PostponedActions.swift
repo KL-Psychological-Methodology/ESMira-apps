@@ -19,16 +19,6 @@ class PostponedActions: PostponedActionsInterface {
 		BGTaskScheduler.shared.register(forTaskWithIdentifier: IDENTIFIER_UPDATE, using: nil, launchHandler: self.doUpdate)
 		BGTaskScheduler.shared.register(forTaskWithIdentifier: IDENTIFIER_SYNC, using: nil, launchHandler: self.doSync)
 		BGTaskScheduler.shared.register(forTaskWithIdentifier: IDENTIFIER_NOTIFICATIONS, using: nil, launchHandler: self.doUpdateNotifications)
-		
-//		BGTaskScheduler.shared.register(forTaskWithIdentifier: IDENTIFIER_UPDATE, using: nil) { task in
-//			self.doUpdate(task: task)
-//		}
-//		BGTaskScheduler.shared.register(forTaskWithIdentifier: IDENTIFIER_SYNC, using: nil) { task in
-//			self.doSync(task: task)
-//		}
-//		BGTaskScheduler.shared.register(forTaskWithIdentifier: IDENTIFIER_NOTIFICATIONS, using: nil) { task in
-//			self.doUpdateNotifications(task: task as! BGAppRefreshTask)
-//		}
 	}
 	
 	
