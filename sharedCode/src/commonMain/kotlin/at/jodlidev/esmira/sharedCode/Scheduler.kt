@@ -358,15 +358,10 @@ object Scheduler {
 	
 	internal fun considerScheduleOptions(timestamp: Long, signalTime: SignalTime): Long { //consider day_of_month:
 		val questionnaire = DbLogic.getQuestionnaire(signalTime.questionnaireId) ?: return -1
-		return if(!questionnaire.isActive(timestamp)) {
-			val activeInDays = ceil(questionnaire.willBeActiveIn(now = timestamp).toDouble() / ONE_DAY_MS).toInt()
-			if(activeInDays > 0)
-				considerScheduleOptions(timestamp + activeInDays * ONE_DAY_MS, signalTime.schedule)
-			else
-				-1
-		}
-		else
-			considerScheduleOptions(timestamp, signalTime.schedule)
+		val activeInDays = ceil(questionnaire.willBeActiveIn(now = timestamp).toDouble() / ONE_DAY_MS).toInt()
+		val newTimestamp = considerScheduleOptions(timestamp + activeInDays * ONE_DAY_MS, signalTime.schedule)
+		
+		return if(questionnaire.isActive(newTimestamp)) newTimestamp else -1
 	}
 	//internal for testing
 	internal fun considerScheduleOptions(timestamp: Long, schedule: Schedule): Long { //consider day_of_month:
