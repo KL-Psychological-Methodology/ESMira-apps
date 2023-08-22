@@ -282,4 +282,5 @@
     <string name="anonymised_device">Anonymised device</string>
     <string name="distance_rssi">Distance (RSSI)</string>
     <string name="distance_rssi_content">~%1$.1fm (%2$d)</string>
+    <string name="server_url">server url</string>
 </resources>

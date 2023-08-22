@@ -112,6 +112,13 @@ fun StudyInformationView(
 					)
 				}
 			}
+			
+			item {
+				Header(stringResource(R.string.server_url))
+			}
+			item {
+				Content(study.serverUrl)
+			}
 
 			item {
 				Header(stringResource(R.string.joined_at))
