@@ -12,8 +12,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -348,7 +346,7 @@ class MainActivity: ComponentActivity() {
 	
 	@Composable
 	fun PageQuestionnaire(qId: Long, pageNumber: Int, navController: NavHostController) {
-		val questionnaire = DbLogic.getQuestionnaire(qId) ?: return
+		val questionnaire = remember { DbLogic.getQuestionnaire(qId) } ?: return
 		val formStarted = QuestionnaireCache.getFormStarted(questionnaire.id)
 		
 		QuestionnaireView(
