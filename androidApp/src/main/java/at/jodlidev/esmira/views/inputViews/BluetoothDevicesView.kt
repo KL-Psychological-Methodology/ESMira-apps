@@ -114,73 +114,8 @@ fun BluetoothDevicesView(input: Input, get: () -> String, save: (String, Map<Str
 	val context = LocalContext.current
 	val bluetoothScanner = remember { BluetoothScanner(context) }
 	
-//	val isScanning = remember { mutableStateOf(false) }
 	val progress = remember { mutableStateOf(0f) }
-//	val startScanning = {
-//		if(bluetoothScanner.startScanning())
-//			isScanning.value = true
-//	}
-	
-//	val bluetoothManager = context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
-//	val isScanning = remember { mutableStateOf(false) }
-//	val deviceCount = remember { mutableStateOf(get().toIntOrNull() ?: 0) }
-//	val progress = remember { mutableStateOf(0f) }
-//
-//	var receiver: BroadcastReceiver? = null
-//	var devices = HashMap<String, Short>()
-//
-//	val finishScanning = { saveValue: Boolean ->
-//		bluetoothManager.adapter.cancelDiscovery()
-//		if(receiver != null) {
-//			context.unregisterReceiver(receiver)
-//			receiver = null
-//		}
-//		if(saveValue) {
-//			save(deviceCount.value.toString(), mapOf(Pair("devices", JSONObject(devices.toMap()).toString())))
-//		}
-//		isScanning.value = false
-//	}
-//
-//	val startScanning = {
-//		if(bluetoothManager.adapter == null || !bluetoothManager.adapter.isEnabled || !context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH))
-//			Toast.makeText(context, R.string.error_bluetooth_disabled, Toast.LENGTH_SHORT).show()
-//		else {
-//			isScanning.value = true
-//			deviceCount.value = 0
-//			devices = HashMap()
-//			receiver = object : BroadcastReceiver() {
-//				override fun onReceive(context: Context, intent: Intent) {
-//					when(intent.action) {
-//						BluetoothDevice.ACTION_FOUND -> {
-//							val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
-//							device?.address?.let {
-//								val hashed = Input.anonymizeValue(it)
-//								if(!devices.contains(hashed)) {
-//									++deviceCount.value
-//								}
-//								devices[hashed] = intent.getShortExtra(BluetoothDevice.EXTRA_RSSI, -1)
-//							}
-//						}
-//						BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
-//							try {
-//								bluetoothManager.adapter.startDiscovery();
-//							}
-//							catch(e: SecurityException) {
-//								finishScanning(true)
-//							}
-//						}
-//					}
-//				}
-//			}
-//
-//			val filter = IntentFilter().apply {
-//				addAction(BluetoothDevice.ACTION_FOUND)
-//				addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
-//			}
-//			context.registerReceiver(receiver, filter)
-//			bluetoothManager.adapter.startDiscovery()
-//		}
-//	}
+
 	val permissions = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
 		arrayOf(
 			Manifest.permission.BLUETOOTH,
@@ -286,7 +221,7 @@ fun BluetoothDevicesView(input: Input, get: () -> String, save: (String, Map<Str
 			}
 			
 			DefaultButton(
-				stringResource(R.string.show_data),
+				stringResource(R.string.list_devices, getDevices(input).size),
 				onClick = {
 					showData.value = true
 				}

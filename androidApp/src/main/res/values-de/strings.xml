@@ -277,7 +277,7 @@
     <string name="open_url">Öffne Url</string>
 	<string name="yesterday">Gestern</string>
 	<string name="select_picture">Bild auswählen</string>
-    <string name="show_data">Zeige Daten</string>
+    <string name="list_devices">Zeige %1$d Geräte</string>
     <string name="error_bluetooth_disabled">Bluetooth ist deaktiviert!</string>
     <string name="anonymised_device">Anonymisiertes Gerät</string>
     <string name="distance_rssi">Entfernung (RSSI)</string>
