@@ -197,7 +197,7 @@
 "stop_audio_record" = "Tonaufnahme stoppen";
 "start_playing_audio" = "Abspielen";
 "stop_playing_audio" = "Stoppen";
-"show_data" = "Zeige Daten";
+"list_devices" = "Zeige %1$d Geräte";
 "select_picture" = "Bild auswählen";
 "anonymised_device" = "Anonymisiertes Gerät";
 "distance_rssi" = "Entfernung (RSSI)";

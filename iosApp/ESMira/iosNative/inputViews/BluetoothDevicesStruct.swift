@@ -81,7 +81,7 @@ struct BluetoothDevicesStruct: View {
 					}
 			}
 			else if(!viewModel.value.isEmpty) {
-				DefaultButton("show_data") {
+				DefaultButton(String(format: NSLocalizedString("list_devices", comment: ""), viewModel.value)) {
 					self.showData = true
 				}
 			}
