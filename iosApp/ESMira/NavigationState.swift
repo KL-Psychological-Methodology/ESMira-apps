@@ -14,7 +14,7 @@ class NavigationState: ObservableObject {
 		}
 	}
 	@Published var study: Study? = nil
-	@Published var questionnaireId: Int64 = -1
+	@Published var questionnaire: Questionnaire? = nil
 	@Published var resetSchedules: Bool = false
 	@Published var addStudyConnectData: QrInterpreter.ConnectData? = nil
 	
@@ -50,7 +50,7 @@ class NavigationState: ObservableObject {
 	func openQuestionnaire(_ questionnaire: Questionnaire) {
 		QuestionnaireCache().saveFormStarted(questionnaireId: questionnaire.id)
 		switchStudy(questionnaire.studyId)
-		self.questionnaireId = questionnaire.id
+		self.questionnaire = DbLogic().getQuestionnaire(id: questionnaire.id) //we reload questionnaire to make sure all inputs get reset properly
 		self.questionnaireOpened = true
 	}
 	func openChangeSchedules(_ studyId: Int64, _ resetSchedules: Bool = false) {

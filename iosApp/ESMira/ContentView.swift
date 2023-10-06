@@ -53,19 +53,16 @@ struct ContentView: View {
 			VStack {
 				NavigationLink(
 					destination: AddStudyView(connectData: self.navigationState.addStudyConnectData),
-					isActive:self.$navigationState.addStudyOpened,
+					isActive: self.$navigationState.addStudyOpened,
 					label: { EmptyView() }
 				)
-				if(self.navigationState.questionnaireId != -1) {
-					let questionnaire = DbLogic().getQuestionnaire(id: self.navigationState.questionnaireId)
-					if(questionnaire != nil) {//happens when study was quit and a questionnaire was opened before
-						NavigationLink(
-							destination:
-								QuestionnaireView(questionnaire: questionnaire!),
-							isActive: self.$navigationState.questionnaireOpened,
-							label: { EmptyView() }
-						)
-					}
+				if(self.navigationState.questionnaire != nil) {
+					NavigationLink(
+						destination:
+							QuestionnaireView(questionnaire: self.navigationState.questionnaire!),
+						isActive: self.$navigationState.questionnaireOpened,
+						label: { EmptyView() }
+					)
 				}
 				if(self.navigationState.questionnaireSuccessfullOpened) {
 					QuestionnaireSavedSuccessfully()

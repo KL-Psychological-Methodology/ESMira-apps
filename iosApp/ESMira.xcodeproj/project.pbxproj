@@ -259,7 +259,10 @@
 		6B92BF3229DC38F80011E8D9 /* questionnaire */ = {
 			isa = PBXGroup;
 			children = (
+				6BCFED662825283A009167B0 /* InactiveQuestionnairesView.swift */,
+				6BCFED692825283A009167B0 /* QuestionnaireView.swift */,
 				6B92BF3329DC390C0011E8D9 /* QuestionnaireLineView.swift */,
+				6B99356028DB4E4D002F3180 /* QuestionnaireSavedSuccessfully.swift */,
 			);
 			path = questionnaire;
 			sourceTree = "<group>";
@@ -289,11 +292,8 @@
 				6B92BF3229DC38F80011E8D9 /* questionnaire */,
 				6BCFED7B2825283A009167B0 /* AddStudyView.swift */,
 				6B3A92C329E816410081A554 /* AboutESMira.swift */,
-				6BCFED662825283A009167B0 /* InactiveQuestionnairesView.swift */,
 				6BCFED7C2825283A009167B0 /* MessagesView.swift */,
 				6BCFED7A2825283A009167B0 /* NewMessageView.swift */,
-				6B99356028DB4E4D002F3180 /* QuestionnaireSavedSuccessfully.swift */,
-				6BCFED692825283A009167B0 /* QuestionnaireView.swift */,
 				6BB47F7628F6FFB900C0F561 /* RewardView.swift */,
 				6BCFED7F2825283A009167B0 /* SendErrorReportView.swift */,
 				6BCFED652825283A009167B0 /* SettingsView.swift */,
@@ -805,7 +805,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 55;
+				CURRENT_PROJECT_VERSION = 56;
 				DEVELOPMENT_ASSET_PATHS = "ESMira/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZXQ54B7QHL;
 				ENABLE_PREVIEWS = YES;
@@ -815,7 +815,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.9.3;
+				MARKETING_VERSION = 1.9.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -833,7 +833,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 55;
+				CURRENT_PROJECT_VERSION = 56;
 				DEVELOPMENT_ASSET_PATHS = "ESMira/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZXQ54B7QHL;
 				ENABLE_PREVIEWS = YES;
@@ -843,7 +843,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.9.3;
+				MARKETING_VERSION = 1.9.4;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
