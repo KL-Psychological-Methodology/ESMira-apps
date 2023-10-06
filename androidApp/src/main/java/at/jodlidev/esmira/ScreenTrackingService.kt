@@ -36,7 +36,12 @@ class ScreenTrackingService : Service() {
 	
 	override fun onDestroy() {
 		if(receiver != null) {
-			unregisterReceiver(receiver)
+			try {
+				applicationContext.unregisterReceiver(receiver)
+			}
+			catch(e: Throwable) {
+				ErrorBox.error("ScreenTrackingService", "Could not unregister ScreenTrackingService", e)
+			}
 			receiver = null
 		}
 	}
