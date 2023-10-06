@@ -83,7 +83,7 @@ class SignalTime {
 		else if(frequency <= 1)
 			endTimeOfDay - startTimeOfDay < minutesBetween * 60000 //makes sure that user can not have time window that is too small (default 60 min)
 		else
-			endTimeOfDay - startTimeOfDay < (frequency * minutesBetween + minutesBetween) * 60000
+			(endTimeOfDay - startTimeOfDay) / frequency < minutesBetween * 60000
 	}
 	fun isDifferent(other: SignalTime): Boolean {
 		val start: Int
