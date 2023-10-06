@@ -85,7 +85,7 @@ class ChangeSchedulesDialogActivity: ComponentActivity() {
 		signalTime: SignalTime,
 		modifier: Modifier = Modifier
 	) {
-		val showWarning = remember { mutableStateOf(false) }
+		val showWarning = remember { mutableStateOf(signalTime.isFaulty()) }
 		val checkValid = {
 			showWarning.value = signalTime.isFaulty()
 		}
@@ -93,7 +93,7 @@ class ChangeSchedulesDialogActivity: ComponentActivity() {
 			modifier = modifier.padding(vertical = 5.dp)
 		) {
 			Text(signalTime.questionnaire.title,
-				fontSize = MaterialTheme.typography.titleLarge.fontSize,
+				fontSize = MaterialTheme.typography.titleMedium.fontSize,
 				fontWeight = FontWeight.Bold,
 				modifier = Modifier
 					.padding(vertical = 10.dp)
