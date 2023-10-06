@@ -23,8 +23,8 @@ android {
         applicationId = "at.jodlidev.esmira"
         minSdk = 21
         targetSdk = 33
-        versionCode = 157
-        versionName = "2.9.2"
+        versionCode = 161
+        versionName = "2.9.6"
         multiDexEnabled = true //project became too big. See: https://stackoverflow.com/a/59308589
     
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -45,7 +45,7 @@ android {
 dependencies {
     implementation(project(":sharedCode"))
     implementation("com.google.android.material:material:1.6.1")
-    implementation("androidx.appcompat:appcompat:1.4.2")
+//    implementation("androidx.appcompat:appcompat:1.4.2")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     
     implementation("androidx.compose.material3:material3:$m3Version")
@@ -76,7 +76,7 @@ dependencies {
     implementation("androidx.work:work-runtime:2.7.1") //WorkManager
     implementation("com.journeyapps:zxing-android-embedded:4.3.0") //qr scanner
     
-    implementation("androidx.preference:preference:1.2.0") //PreferenceFragment
+    implementation("androidx.preference:preference:1.2.0") //PreferenceManager
 //    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0") //https://github.com/PhilJay/MPAndroidChart
     //Unfortunately the original MPAndroidChart is dead. Using an updated fork instead:
     implementation("com.github.AppDevNext:AndroidChart:3.1.0.15")
