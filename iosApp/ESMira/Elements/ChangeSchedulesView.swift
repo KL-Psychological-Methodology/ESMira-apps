@@ -13,13 +13,14 @@ struct ChangeSchedulesView: View {
 		private let signalTime: SignalTime
 		@State private var startTime: String
 		@State private var endTime: String
-
-		@State private var isFaulty: Bool = false
+		@State private var isFaulty: Bool
+		
 		init(_ signalTime: SignalTime) {
 			self.signalTime = signalTime
 
 			self._startTime = State(initialValue: String(signalTime.getStart()))
 			self._endTime = State(initialValue: String(signalTime.getEnd()))
+			self._isFaulty = State(initialValue: signalTime.isFaulty())
 		}
 
 		func checkFaulty() {
