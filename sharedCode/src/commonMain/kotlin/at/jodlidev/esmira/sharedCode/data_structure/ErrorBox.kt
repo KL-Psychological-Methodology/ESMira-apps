@@ -133,6 +133,9 @@ class ErrorBox {
 				output.append(comment)
 			}
 			
+			output.append("\nCurrent study: ")
+			output.append(DbUser.getCurrentStudyId())
+			
 			
 			return output
 		}
