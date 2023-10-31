@@ -84,7 +84,7 @@ object Scheduler {
 				
 				var timestamp = alarm.timestamp + schedule.dailyRepeatRate*ONE_DAY_MS
 				while(timestamp < now) {
-					timestamp = considerScheduleOptions(timestamp, schedule)
+					timestamp = considerDayOptions(timestamp, schedule)
 					
 					val signalTimes = DbLogic.getSignalTimes(schedule)
 					val q = DbLogic.getQuestionnaire(alarm.questionnaireId) ?: continue
@@ -220,8 +220,9 @@ object Scheduler {
 	internal fun rescheduleFromSignalTime(signalTime: SignalTime, actionTriggerId: Long, timestampAnchor: Long) {
 		if(signalTime.randomFixed) {
 			//this does the same as scheduleSignalTime() but it ignores frequency and reuses the time from the alarm.
-			
 			ErrorBox.log("Scheduler", "Creating fixed repeating Alarm")
+			
+			val questionnaire = DbLogic.getQuestionnaire(signalTime.questionnaireId) ?: return
 			val loopMs = ONE_DAY_MS * signalTime.schedule.dailyRepeatRate.toLong()
 			
 			val now = NativeLink.getNowMillis()
@@ -240,7 +241,8 @@ object Scheduler {
 			}
 			else
 				timestampAnchor
-			val baseTimestamp = considerScheduleOptions(timestamp + loopMs, signalTime)
+			
+			val baseTimestamp = considerDayOptions(timestamp + loopMs, questionnaire, signalTime.schedule)
 			if(baseTimestamp == -1L)
 				return
 			
@@ -250,15 +252,47 @@ object Scheduler {
 			scheduleSignalTime(signalTime, actionTriggerId, max(timestampAnchor, NativeLink.getNowMillis()))
 	}
 	
+	private fun calculateRandomPeriod(questionnaire: Questionnaire, signalTime: SignalTime): Int {
+		if(questionnaire.completableAtSpecificTime) {
+			if(questionnaire.completableAtSpecificTimeStart != -1 && questionnaire.completableAtSpecificTimeEnd != -1) {
+				if(questionnaire.completableAtSpecificTimeStart > questionnaire.completableAtSpecificTimeEnd) { //start and end include midnight
+					var period = 0
+					if(questionnaire.completableAtSpecificTimeStart < signalTime.endTimeOfDay)
+						period += signalTime.endTimeOfDay - questionnaire.completableAtSpecificTimeStart
+					if(questionnaire.completableAtSpecificTimeEnd > signalTime.startTimeOfDay)
+						period += questionnaire.completableAtSpecificTimeEnd - signalTime.startTimeOfDay
+					return period
+				}
+				else {
+					var period = 0
+					if(questionnaire.completableAtSpecificTimeEnd < signalTime.endTimeOfDay)
+						period += signalTime.endTimeOfDay - questionnaire.completableAtSpecificTimeEnd
+					if(questionnaire.completableAtSpecificTimeStart > signalTime.startTimeOfDay)
+						period += questionnaire.completableAtSpecificTimeStart - signalTime.startTimeOfDay
+					return period
+				}
+			}
+			else if(questionnaire.completableAtSpecificTimeStart != -1)
+				return questionnaire.completableAtSpecificTimeStart - signalTime.startTimeOfDay
+			else if(questionnaire.completableAtSpecificTimeEnd != -1)
+				return signalTime.endTimeOfDay - questionnaire.completableAtSpecificTimeEnd
+			else
+				return signalTime.endTimeOfDay - signalTime.startTimeOfDay
+		}
+		else
+			return signalTime.endTimeOfDay - signalTime.startTimeOfDay
+	}
+	
 	// * We can use this function for single time schedules as well. We can just set frequency=1 and it will fire at startTime_minutes
 	// * This function can also deal with random == false and frequency > 1 - but will we ever use it this way..?
 	// * randomFixed will be considered in rescheduleSignalTimeFromAlarm() after Alarm was issued for the first time
 	//if manualDelay is disabled (-1) then dailyRepeatRate is added to anchorTimestamp
 	internal fun scheduleSignalTime(signalTime: SignalTime, actionTriggerId: Long, anchorTimestamp: Long, manualDelayDays: Int = -1) {
-		ErrorBox.log("Scheduler", "Creating repeating Alarm")
+		ErrorBox.log("Scheduler", "Creating repeating Alarms")
+		val questionnaire = DbLogic.getQuestionnaire(signalTime.questionnaireId) ?: return
 		val frequency = signalTime.frequency
 		val msBetween = signalTime.minutesBetween * 60000
-		val period = if(signalTime.random) signalTime.endTimeOfDay - signalTime.startTimeOfDay else 0
+		val period = if(signalTime.random) calculateRandomPeriod(questionnaire, signalTime) else 0
 		val block = period / frequency
 		if(signalTime.random && frequency > 1 && block < msBetween) {
 			ErrorBox.error("Scheduler", "SignalTime ${signalTime.id}: $frequency blocks with $msBetween ms do not fit into $period ms")
@@ -291,7 +325,7 @@ object Scheduler {
 		
 		
 		//options:
-		baseTimestamp = considerScheduleOptions(baseTimestamp, signalTime)
+		baseTimestamp = considerDayOptions(baseTimestamp, questionnaire, signalTime.schedule)
 		if(baseTimestamp == -1L) {
 			ErrorBox.log("Scheduler", "SignalTime ${signalTime.id} will never become active. Canceling")
 			return
@@ -301,17 +335,17 @@ object Scheduler {
 		//
 		//Create alarms for each frequency:
 		//
-		var nextBlock = block //this variable is needed when we need to shorten a loop-block when a random notification was set less then minutes_between to the next block
+		var nextBlock = block //this variable is needed when we need to shorten a loop-block when a random notification was set less than minutes_between to the next block
 		for(i in 1 .. frequency) { //currently, frequency is always 1 when random == false.
 			var workTimestamp: Long
 			if(signalTime.random) {
 				val randomBlock = (nextBlock * getRandom()).toInt()
 				
-				workTimestamp = baseTimestamp + randomBlock //set the actual timing of the notification
-				baseTimestamp += nextBlock //prepare timestamp for the next loop
+				workTimestamp = considerHourOptions(baseTimestamp + randomBlock, questionnaire) //set the actual timing of the notification
+				baseTimestamp = considerHourOptions(baseTimestamp + nextBlock, questionnaire) //prepare timestamp for the next loop
 				
-				if(nextBlock - randomBlock < msBetween) { //if random is very late in this block, make sure that the next time gets shortened to account for minutesBetween
-					val shorten = msBetween - (block - randomBlock)
+				if(baseTimestamp - workTimestamp < msBetween) { //if random is very late in this block, make sure that the next time gets shortened to account for minutesBetween
+					val shorten = msBetween - (baseTimestamp - workTimestamp).toInt()
 					baseTimestamp += shorten.toLong() //start the next block later
 					nextBlock = block - shorten //make sure that the next block ends at the same time (so we shorten it in the end, to account for the later start)
 				}
@@ -356,15 +390,46 @@ object Scheduler {
 		return Random.nextDouble(1.0)
 	}
 	
-	internal fun considerScheduleOptions(timestamp: Long, signalTime: SignalTime): Long { //consider day_of_month:
-		val questionnaire = DbLogic.getQuestionnaire(signalTime.questionnaireId) ?: return -1
+	private fun considerHourOptions(timestamp: Long, questionnaire: Questionnaire): Long {
+		val midnight = NativeLink.getMidnightMillis(timestamp)
+		val fromMidnight = timestamp - midnight
+		
+		
+		if(!questionnaire.completableAtSpecificTime)
+			return timestamp
+		else if(questionnaire.completableAtSpecificTimeStart != -1 && questionnaire.completableAtSpecificTimeEnd != -1) {
+			if(questionnaire.completableAtSpecificTimeStart > questionnaire.completableAtSpecificTimeEnd) { //start and end include midnight
+				if(fromMidnight < questionnaire.completableAtSpecificTimeStart)
+					return midnight + questionnaire.completableAtSpecificTimeStart
+				else if(fromMidnight > questionnaire.completableAtSpecificTimeEnd) //this should never happen
+					return fromMidnight + questionnaire.completableAtSpecificTimeEnd
+			}
+			else {
+				if(fromMidnight > questionnaire.completableAtSpecificTimeStart && fromMidnight < questionnaire.completableAtSpecificTimeEnd)
+					return midnight + questionnaire.completableAtSpecificTimeEnd
+			}
+		}
+		else if(questionnaire.completableAtSpecificTimeStart != -1) {
+			if(fromMidnight < questionnaire.completableAtSpecificTimeStart)
+				return midnight + questionnaire.completableAtSpecificTimeStart
+		}
+		else if(questionnaire.completableAtSpecificTimeEnd != -1) {
+			if(fromMidnight > questionnaire.completableAtSpecificTimeEnd) //this should never happen
+				return midnight + questionnaire.completableAtSpecificTimeEnd
+		}
+		
+		return timestamp
+	}
+	
+	internal fun considerDayOptions(timestamp: Long, questionnaire: Questionnaire, schedule: Schedule): Long {
 		val activeInDays = ceil(questionnaire.willBeActiveIn(now = timestamp).toDouble() / ONE_DAY_MS).toInt()
-		val newTimestamp = considerScheduleOptions(timestamp + activeInDays * ONE_DAY_MS, signalTime.schedule)
+		val newTimestamp = considerDayOptions(timestamp + activeInDays * ONE_DAY_MS, schedule)
 		
 		return if(questionnaire.isActive(newTimestamp)) newTimestamp else -1
 	}
+	
 	//internal for testing
-	internal fun considerScheduleOptions(timestamp: Long, schedule: Schedule): Long { //consider day_of_month:
+	internal fun considerDayOptions(timestamp: Long, schedule: Schedule): Long {
 		var cal = GMTDate(timestamp)
 		if(schedule.dayOfMonth != 0) {
 			cal = if(cal.dayOfMonth <= schedule.dayOfMonth)

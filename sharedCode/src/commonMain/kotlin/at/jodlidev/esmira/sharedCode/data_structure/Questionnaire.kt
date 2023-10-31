@@ -490,19 +490,19 @@ class Questionnaire {
 				)
 		
 		val specificTime = !completableAtSpecificTime ||
-				if(completableAtSpecificTimeStart != -1 && completableAtSpecificTimeEnd != -1) {
-					if(completableAtSpecificTimeStart > completableAtSpecificTimeEnd)
-						fromMidnight >= completableAtSpecificTimeStart || fromMidnight <= completableAtSpecificTimeEnd
-					else
-						fromMidnight in completableAtSpecificTimeStart .. completableAtSpecificTimeEnd
-				}
+			if(completableAtSpecificTimeStart != -1 && completableAtSpecificTimeEnd != -1) {
+				if(completableAtSpecificTimeStart > completableAtSpecificTimeEnd)
+					fromMidnight >= completableAtSpecificTimeStart || fromMidnight <= completableAtSpecificTimeEnd
 				else
-					if(completableAtSpecificTimeStart != -1)
-						fromMidnight >= completableAtSpecificTimeStart
-					else if(completableAtSpecificTimeEnd != -1)
-						fromMidnight <= completableAtSpecificTimeEnd
-					else
-						true
+					fromMidnight in completableAtSpecificTimeStart .. completableAtSpecificTimeEnd
+			}
+			else
+				if(completableAtSpecificTimeStart != -1)
+					fromMidnight >= completableAtSpecificTimeStart
+				else if(completableAtSpecificTimeEnd != -1)
+					fromMidnight <= completableAtSpecificTimeEnd
+				else
+					true
 		val completionFrequency = (!limitCompletionFrequency || (now >= lastCompleted + completionFrequencyMinutes * 60 * 1000))
 
 		return hasQuestionnaire() && isActive() &&
