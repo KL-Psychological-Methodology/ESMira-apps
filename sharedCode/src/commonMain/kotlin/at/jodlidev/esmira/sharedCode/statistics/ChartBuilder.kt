@@ -55,7 +55,6 @@ abstract class ChartBuilder(
 	
 	
 	private lateinit var sortedValueIndex: List<String> //will be used when storageType is CHART_TYPE_FREQ_DISTR
-	private var valueSum = 0 //will be used when storageType is CHART_TYPE_FREQ_DISTR
 	
 	var valueFormatter: ChartFormatterInterface = if(chartInfo.inPercent) PercentFormatter() else FloatFormatter()
 	lateinit var xAxisFormatter: ChartFormatterInterface
@@ -386,40 +385,73 @@ abstract class ChartBuilder(
 		}
 	}
 	private fun fillFreqDistr(statistics: Map<String, StatisticData>, dataSetIndex: Int) {
-		val sum = valueSum
-		val inPercent = chartInfo.inPercent
-		
 		if(chartInfo.xAxisIsNumberRange) {
-			if(xMin != Float.MAX_VALUE) {
-				val xMin = xMin.toInt()
-				val xMax: Int = xMax.toInt()
-				
+			if(xMin == Float.MAX_VALUE) {
+				entriesCount = 0
+				return
+			}
+			
+			val xMin = xMin.toInt()
+			val xMax: Int = xMax.toInt()
+			if(chartInfo.inPercent) {
+				var sum = 0F
+				for(valueName in xMin..xMax) {
+					val statisticData = statistics[valueName.toString()]
+					if(statisticData != null)
+						sum += statisticData.count.toFloat()
+				}
 				for((i, valueName) in (xMin..xMax).withIndex()) {
 					val statisticData = statistics[valueName.toString()]
-					if(statisticData == null)
-						addValue(i.toFloat(), 0f, dataSetIndex)
-					else {
-						if(inPercent)
-							addValue(i.toFloat(), 100 / ((sum.toFloat() / statisticData.count.toFloat())), dataSetIndex)
+					addValue(
+						i.toFloat(),
+						if(statisticData == null)
+							0f
 						else
-							addValue(i.toFloat(), statisticData.count.toFloat(), dataSetIndex)
-					}
+							100 / (sum / statisticData.count.toFloat()),
+						dataSetIndex
+					)
 				}
-				entriesCount = xMax - xMin + 1
 			}
-			else
-				entriesCount = 0
+			else {
+				for((i, valueName) in (xMin..xMax).withIndex()) {
+					val statisticData = statistics[valueName.toString()]
+					addValue(
+						i.toFloat(),
+						statisticData?.count?.toFloat() ?: 0f,
+						dataSetIndex
+					)
+				}
+			}
+			entriesCount = xMax - xMin + 1
 		}
 		else {
-			for((i, valueName) in sortedValueIndex.withIndex()) {
-				val statisticData = statistics[valueName]
-				if(statisticData == null)
-					addValue(i.toFloat(), 0f, dataSetIndex)
-				else {
-					if(inPercent)
-						addValue(i.toFloat(), 100 / ((sum.toFloat() / statisticData.count.toFloat())), dataSetIndex)
-					else
-						addValue(i.toFloat(), statisticData.count.toFloat(), dataSetIndex)
+			if(chartInfo.inPercent) {
+				var sum = 0F
+				for(valueName in sortedValueIndex) {
+					val statisticData = statistics[valueName]
+					if(statisticData != null)
+						sum += statisticData.count.toFloat()
+				}
+				for((i, valueName) in sortedValueIndex.withIndex()) {
+					val statisticData = statistics[valueName]
+					addValue(
+						i.toFloat(),
+						if(statisticData == null)
+							0f
+						else
+							100 / (sum / statisticData.count.toFloat()),
+						dataSetIndex
+					)
+				}
+			}
+			else {
+				for((i, valueName) in sortedValueIndex.withIndex()) {
+					val statisticData = statistics[valueName]
+					addValue(
+						i.toFloat(),
+						statisticData?.count?.toFloat() ?: 0f,
+						dataSetIndex
+					)
 				}
 			}
 			entriesCount = sortedValueIndex.size
@@ -427,7 +459,6 @@ abstract class ChartBuilder(
 	}
 	
 	private fun setMinMaxForFreqDistr(statistics: Map<String, StatisticData>) {
-		var sum = 0
 		for((_, statisticData) in statistics) {
 			if(statisticData !is StatisticData_perValue)
 				continue
@@ -441,14 +472,11 @@ abstract class ChartBuilder(
 			catch(e: Exception) {
 				continue
 			}
-			sum += statisticData.count
 			if(value < xMin)
 				xMin = value
 			if(value > xMax)
 				xMax = value
 		}
-		
-		valueSum += sum
 	}
 	private fun getFreqDistrComparator(): Comparator<String> {
 		return Comparator { a, b ->
@@ -465,7 +493,6 @@ abstract class ChartBuilder(
 		}
 	}
 	private fun indexFreqDistrValues(statistics: Map<String, StatisticData>, unsortedValueIndex: MutableSet<String>) {
-		var sum = 0
 		for((_, statisticData) in statistics) {
 			if(statisticData !is StatisticData_perValue)
 				continue
@@ -475,12 +502,9 @@ abstract class ChartBuilder(
 			if(value.isEmpty()) //we want to skip empty values
 				continue
 			
-			sum += statisticData.count
 			if(!unsortedValueIndex.contains(value))
 				unsortedValueIndex.add(value)
 		}
-		
-		valueSum += sum
 	}
 	
 	
