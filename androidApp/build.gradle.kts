@@ -23,8 +23,8 @@ android {
         applicationId = "at.jodlidev.esmira"
         minSdk = 21
         targetSdk = 33
-        versionCode = 161
-        versionName = "2.9.6"
+        versionCode = 162
+        versionName = "2.9.7"
         multiDexEnabled = true //project became too big. See: https://stackoverflow.com/a/59308589
     
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
