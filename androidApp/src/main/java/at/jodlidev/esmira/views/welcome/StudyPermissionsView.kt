@@ -1,6 +1,7 @@
 package at.jodlidev.esmira.views.welcome
 
 import android.content.res.Configuration
+import android.os.Build
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -18,9 +19,7 @@ import androidx.constraintlayout.compose.Dimension
 import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.data_structure.Study
-import at.jodlidev.esmira.views.welcome.permissions.AppTrackingView
-import at.jodlidev.esmira.views.welcome.permissions.InformedConsentView
-import at.jodlidev.esmira.views.welcome.permissions.NotificationsView
+import at.jodlidev.esmira.views.welcome.permissions.*
 
 /**
  * Created by JodliDev on 15.12.2022.
@@ -52,6 +51,9 @@ fun StudyPermissionsView(study: Study, gotoPrevious: () -> Unit, gotoNext: () ->
 		) {
 			if(study.hasInformedConsent())
 				InformedConsentView(study, ++num, currentNum)
+			
+			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && (study.hasSchedules() || study.hasDelayedEvents()))
+				SchedulesPermissionView(++num, currentNum)
 			
 			if(study.usesPostponedActions() || study.hasNotifications())
 				NotificationsView(++num, currentNum)

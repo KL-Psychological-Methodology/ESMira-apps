@@ -51,7 +51,12 @@ object PostponedActions : PostponedActionsInterface {
 		
 		val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
 		val pendingIntent = PendingIntent.getBroadcast(context, alarm.id.toInt(), intent, getPendingIntentFlag())
-		AlarmManagerCompat.setExactAndAllowWhileIdle(alarmManager, AlarmManager.RTC_WAKEUP, alarm.timestamp, pendingIntent)
+		if(Build.VERSION.SDK_INT < Build.VERSION_CODES.S || alarmManager.canScheduleExactAlarms())
+			AlarmManagerCompat.setExactAndAllowWhileIdle(alarmManager, AlarmManager.RTC_WAKEUP, alarm.timestamp, pendingIntent)
+		else {
+			ErrorBox.warn("PostponedActions", "ESMira does not have the permission to use setExactAndAllowWhileIdle(). Using setAndAllowWhileIdle instead!")
+			AlarmManagerCompat.setAndAllowWhileIdle(alarmManager, AlarmManager.RTC_WAKEUP, alarm.timestamp, pendingIntent)
+		}
 		return true
 	}
 	override fun cancel(alarm: Alarm) {

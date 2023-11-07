@@ -283,4 +283,8 @@
     <string name="distance_rssi">Entfernung (RSSI)</string>
     <string name="distance_rssi_content">~%1$.1fm (%2$d)</string>
 	<string name="server_url">Server Url</string>
+	<string name="schedule_permission_setup_desc">ESMira benötigt die Berechtigung Events (z.B. Erinnerungen für Fragebögen) zu bestimmten Zeitpunkten auszuführen.</string>
+    <string name="schedule_permission_check">Bitte klicken Sie \"Zeitpläne aktivieren\" dann wählen Sie ESMira und wählen Sie \"Erlauben, Wecker und Erinnerungen einzurichten\".</string>
+    <string name="enable_schedules">Zeitpläne erlauben</string>
+    <string name="info_schedule_setup_skipped">Diese Studie wird nicht richtig funktionieren!</string>
 </resources>
