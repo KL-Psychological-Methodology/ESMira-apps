@@ -170,6 +170,9 @@ class Alarm {
 					NativeLink.formatDateTime(timestamp)
 				})"
 			)
+			val questionnaire = DbLogic.getQuestionnaire(questionnaireId)
+			if(questionnaire != null)
+				DataSet.createActionSentDataSet(DataSet.EventTypes.schedule_planned, questionnaire, timestamp)
 		}
 		else {
 			ErrorBox.warn(
@@ -271,6 +274,9 @@ class Alarm {
 			"Alarm",
 			"Removing Alarm (id=$id, type=$type, timestamp=$timestamp)"
 		)
+		val questionnaire = DbLogic.getQuestionnaire(questionnaireId)
+		if(questionnaire != null)
+			DataSet.createActionSentDataSet(DataSet.EventTypes.schedule_removed, questionnaire, timestamp)
 		NativeLink.postponedActions.cancel(this)
 		NativeLink.notifications.remove(id.toInt())
 		NativeLink.sql.delete(TABLE, "$KEY_ID = ?", arrayOf(id.toString()))

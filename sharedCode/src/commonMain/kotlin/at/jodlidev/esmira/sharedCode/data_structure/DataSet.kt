@@ -13,7 +13,8 @@ import kotlinx.serialization.json.*
 @Serializable
 class DataSet: UploadData {
 	enum class EventTypes {
-		Image,
+		schedule_planned,
+		schedule_removed,
 		joined,
 		questionnaire,
 		quit,

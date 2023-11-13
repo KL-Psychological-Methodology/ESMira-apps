@@ -730,6 +730,8 @@ class Study internal constructor(
 		)
 		
 		val defaultSettings = hashMapOf(
+			DataSet.EventTypes.schedule_planned.toString() to false,
+			DataSet.EventTypes.schedule_removed.toString() to false,
 			DataSet.EventTypes.joined.toString() to true,
 			DataSet.EventTypes.questionnaire.toString() to true,
 			DataSet.EventTypes.quit.toString() to true,
