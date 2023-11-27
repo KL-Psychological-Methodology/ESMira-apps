@@ -74,6 +74,7 @@ object DbLogic {
 			${Study.KEY_REWARD_EMAIL_CONTENT} TEXT,
 			${Study.KEY_REWARD_INSTRUCTIONS} TEXT,
 			${Study.KEY_CACHED_REWARD_CODE} TEXT DEFAULT '',
+			${Study.KEY_FAULTY_ACCESS_KEY} INTEGER DEFAULT 0,
 			${Study.KEY_INSTRUCTIONS} TEXT)""")
 			
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${Message.TABLE} (
@@ -349,6 +350,10 @@ object DbLogic {
 				alarmLog.append("$label (qid=${alarm.questionnaireId}): ${alarm.timestamp} (id=${alarm.id})\n")
 			}
 			ErrorBox.log("Alarm log", alarmLog.toString())
+			
+			val faultyStudy = getFirstStudyWithFaultyAccessKey()
+			if(faultyStudy != null)
+				NativeLink.dialogOpener.faultyAccessKey(faultyStudy)
 		}
 	}
 	
@@ -620,6 +625,21 @@ object DbLogic {
 		}
 		c.close()
 		return studies
+	}
+	
+	fun getFirstStudyWithFaultyAccessKey(): Study? {
+		val c = NativeLink.sql.select(
+			Study.TABLE,
+			Study.COLUMNS,
+			"${Study.KEY_FAULTY_ACCESS_KEY} = 1 AND (${Study.KEY_STATE} = ${Study.STATES.Joined.ordinal})", null,
+			null,
+			null,
+			null,
+			"1"
+		)
+		val study = if(c.moveToFirst()) Study(c) else null
+		c.close()
+		return study
 	}
 	
 	fun getAllStudies(): List<Study> {

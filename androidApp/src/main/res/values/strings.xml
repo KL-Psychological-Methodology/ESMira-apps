@@ -287,4 +287,5 @@
     <string name="schedule_permission_check">Please press \"Enable schedules\" then select ESMira in the list and enable \"Allow setting alarms and reminders\".</string>
     <string name="enable_schedules">Enable schedules</string>
     <string name="info_schedule_setup_skipped">This study will not work properly!</string>
+    <string name="info_wrong_access_key">The access key for this study seem to have changed. Your data will not be uploaded unless you proviede a correct access key.</string>
 </resources>

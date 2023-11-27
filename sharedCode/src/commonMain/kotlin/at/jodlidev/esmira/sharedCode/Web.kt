@@ -156,6 +156,13 @@ class Web {
 				continue
 			}
 			
+			if(updateInfo.errorCode != null) {
+				if(updateInfo.errorCode == "wrongAccessKey")
+					study.saveFaultyAccessKeyState(true)
+				else
+					ErrorBox.warn("Study update", "Server ($url) responded with unknown errorCode: ${updateInfo.errorCode}")
+			}
+			
 			val newStudyJson = updateInfo.study
 			if(newStudyJson != null) {
 				ErrorBox.log("Updating studies", "Found study update")
@@ -403,6 +410,7 @@ class Web {
 			@Serializable(with = JsonToStringSerializer::class)
 			var study: String? = null,
 			val msgs: List<MsgInfo> = ArrayList(),
+			val errorCode: String? = null,
 		)
 		
 		@Serializable

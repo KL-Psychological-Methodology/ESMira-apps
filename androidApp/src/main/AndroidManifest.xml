@@ -92,6 +92,11 @@
             android:label="@string/send_error_report"
             android:excludeFromRecents="true">
         </activity>
+        <activity
+            android:name="at.jodlidev.esmira.activities.FaultyAccessKeyActivity"
+            android:theme="@style/AppTheme.ActivityDialog"
+            android:excludeFromRecents="true">
+        </activity>
     
         <provider
             android:name="androidx.core.content.FileProvider"

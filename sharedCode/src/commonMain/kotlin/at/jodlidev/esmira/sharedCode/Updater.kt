@@ -12,7 +12,7 @@ import kotlinx.serialization.json.*
  */
 internal object Updater {
 	const val EXPECTED_SERVER_VERSION: Int = 11
-	const val DATABASE_VERSION = 42
+	const val DATABASE_VERSION = 43
 	const val LIBRARY_VERSION = 19 //this is mainly used for iOS so we can check that changes in the library have been used in the C library
 	
 	fun updateSQL(db: SQLiteInterface, oldVersion: Int) {
@@ -456,6 +456,9 @@ internal object Updater {
 			variable_value INTEGER,
 			FOREIGN KEY(study_id) REFERENCES studies(_id) ON DELETE CASCADE,
 			FOREIGN KEY(observed_id) REFERENCES observed_variables(_id) ON DELETE CASCADE)""")
+		}
+		if(oldVersion <= 42) {
+			db.execSQL("ALTER TABLE studies ADD COLUMN faultyAccessKey INTEGER DEFAULT 0;")
 		}
 	}
 	

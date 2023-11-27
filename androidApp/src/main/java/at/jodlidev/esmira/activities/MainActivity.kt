@@ -292,6 +292,10 @@ class MainActivity: ComponentActivity() {
 							Toast.makeText(context, context.getString(R.string.info_update_complete, updatedCount), Toast.LENGTH_SHORT).show()
 						else
 							Toast.makeText(context, context.getString(R.string.info_update_failed), Toast.LENGTH_SHORT).show()
+						
+						val faultyStudy = DbLogic.getFirstStudyWithFaultyAccessKey()
+						if(faultyStudy != null)
+							NativeLink.dialogOpener.faultyAccessKey(faultyStudy)
 					}
 				},
 				sendEmail = {

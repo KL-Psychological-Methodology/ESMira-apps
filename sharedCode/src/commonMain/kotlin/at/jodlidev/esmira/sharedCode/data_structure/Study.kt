@@ -580,6 +580,18 @@ class Study internal constructor(
 		}
 	}
 	
+	fun saveFaultyAccessKeyState(faulty: Boolean, newAccessKey: String? = null) {
+		if(exists) {
+			ErrorBox.log("Study", "Setting faulty accessKeyState to: $faulty (newAccessKey: $newAccessKey)")
+			val db = NativeLink.sql
+			val values = db.getValueBox()
+			values.putBoolean(KEY_FAULTY_ACCESS_KEY, faulty)
+			if(newAccessKey != null)
+				values.putString(KEY_ACCESS_KEY, newAccessKey)
+			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
+		}
+	}
+	
 	fun saveRewardCode(code: String) {
 		cachedRewardCode = code
 		if(exists) {
@@ -691,6 +703,7 @@ class Study internal constructor(
 		const val KEY_REWARD_EMAIL_CONTENT = "rewardEmailContent"
 		const val KEY_REWARD_INSTRUCTIONS = "rewardInstructions"
 		const val KEY_CACHED_REWARD_CODE = "cachedRewardCode"
+		const val KEY_FAULTY_ACCESS_KEY = "faultyAccessKey"
 		
 		const val REWARD_SUCCESS = 0
 		const val REWARD_ERROR_DOES_NOT_EXIST = 1
