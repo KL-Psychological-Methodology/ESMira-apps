@@ -209,7 +209,6 @@ class MainActivity: ComponentActivity() {
 			val study = DbLogic.getStudy(currentStudyId) ?: return@Crossfade //can be null when study was deleted
 			
 			val studyList = remember(reloadState.value) { mutableStateOf(DbLogic.getAllStudies()) }
-			val hasUnSyncedDataSets = remember(reloadState.value) { mutableStateOf(DbLogic.hasUnSyncedDataSets(currentStudyId)) }
 			val countUnreadMessages = remember(reloadState.value) { mutableStateOf(DbLogic.countUnreadMessages(currentStudyId)) }
 			val missedInvitations = remember(reloadState.value) { mutableStateOf(DbLogic.getMissedInvitations()) }
 			
@@ -277,7 +276,7 @@ class MainActivity: ComponentActivity() {
 				getStudyList = { studyList.value },
 				getQuestionnaireList = { DbLogic.getEnabledQuestionnaires(currentStudyId) },
 				hasEditableSchedules = { study.hasEditableSchedules() },
-				hasUnSyncedDataSets = { hasUnSyncedDataSets.value },
+				hasUnSyncedDataSets = { DbLogic.hasUnSyncedDataSets(currentStudyId) },
 				countUnreadMessages = { countUnreadMessages.value },
 				getMissedNotifications = { missedInvitations.value },
 				isDev = { DbUser.isDev() },
