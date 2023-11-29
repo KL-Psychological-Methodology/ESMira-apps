@@ -589,6 +589,12 @@ class Study internal constructor(
 			if(newAccessKey != null)
 				values.putString(KEY_ACCESS_KEY, newAccessKey)
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
+			
+			if(newAccessKey != null) {
+				val dataSetValues = db.getValueBox()
+				dataSetValues.putString(DataSet.KEY_ACCESS_KEY, newAccessKey)
+				db.update(DataSet.TABLE, dataSetValues, "${DataSet.KEY_STUDY_ID} = ? AND ${DataSet.KEY_SYNCED} IS NOT ${UploadData.States.SYNCED.ordinal}", arrayOf(id.toString()))
+			}
 		}
 	}
 	
