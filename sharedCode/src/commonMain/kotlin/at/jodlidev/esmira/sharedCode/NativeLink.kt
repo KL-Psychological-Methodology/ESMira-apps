@@ -10,6 +10,7 @@ expect object NativeLink {
 	
 	val isInitialized: Boolean
 	var isSynchronizing: Boolean
+	var isUpdating: Boolean
 	
 	val sql: SQLiteInterface
 	val smartphoneData: SmartphoneDataInterface

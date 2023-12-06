@@ -223,29 +223,41 @@ class Web {
 	}
 	
 	private suspend fun updateStudies(forceStudyUpdate: Boolean): Int {
-		val map = getStudyInfoMapForUpdates(forceStudyUpdate)
+		if(NativeLink.isUpdating)
+			return 0
+		NativeLink.isUpdating = true
 		var updatedCount = 0
-		
-		//do updates:
-		for((url, studyInfo) in map) {
-			ErrorBox.log("Updating studies", "Updating $url (${studyInfo.size} studies)")
-			val response: String
-			try {
-				response = postJson(
-					"$url${URL_UPDATE_STUDY.replace("%s", NativeLink.smartphoneData.lang)}",
-					PostStructure.UpdateStructure(studyInfo)
-				)
-			}
-			catch(e: Throwable) {
-				ErrorBox.warn("Updating studies failed", "Could not update studies for $url", e)
-				error = true
-				continue
+		try {
+			val map = getStudyInfoMapForUpdates(forceStudyUpdate)
+			
+			//do updates:
+			for((url, studyInfo) in map) {
+				ErrorBox.log("Updating studies", "Updating $url (${studyInfo.size} studies)")
+				val response: String
+				try {
+					response = postJson(
+						"$url${URL_UPDATE_STUDY.replace("%s", NativeLink.smartphoneData.lang)}",
+						PostStructure.UpdateStructure(studyInfo)
+					)
+				}
+				catch(e: Throwable) {
+					ErrorBox.warn("Updating studies failed", "Could not update studies for $url", e)
+					error = true
+					continue
+				}
+				
+				updatedCount += processStudyUpdateResponse(url, response)
 			}
 			
-			updatedCount += processStudyUpdateResponse(url, response)
+			close()
 		}
-		
-		close()
+		catch(e: Throwable) {
+			ErrorBox.error("Update Studies", "Unexpected error", e)
+			error = true
+		}
+		finally {
+			NativeLink.isUpdating = false
+		}
 		return if(error) -1 else updatedCount
 	}
 	private suspend fun syncDataSets(): Boolean {
@@ -276,6 +288,10 @@ class Web {
 			
 			error = syncFiles() || error
 			close()
+		}
+		catch(e: Throwable) {
+			ErrorBox.error("Sync data", "Unexpected error", e)
+			error = true
 		}
 		finally {
 			NativeLink.isSynchronizing = false

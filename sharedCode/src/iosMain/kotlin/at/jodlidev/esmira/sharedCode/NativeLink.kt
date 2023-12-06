@@ -35,6 +35,11 @@ actual object NativeLink {
 		get() = _isSynchronizing.value
 		set(value) { _isSynchronizing.value = value }
 	
+	private val _isUpdating = AtomicReference<Boolean>(false)
+	actual var isUpdating: Boolean
+		get() = _isUpdating.value
+		set(value) { _isUpdating.value = value }
+	
 	private val _sql = AtomicReference<SQLiteInterface?>(null)
 	actual val sql: SQLiteInterface
 		get() = _sql.value!!
