@@ -29,7 +29,7 @@ object QuestionnaireCache {
 			null,
 			null,
 			null,
-			null
+			"1"
 		)
 		
 		var r: String? = null
@@ -42,7 +42,37 @@ object QuestionnaireCache {
 		c.close()
 		return r;
 	}
+	
+	/**
+	 * Checks if FORM_STARTED exists.
+	 */
+	private fun cacheAcceptsValues(questionnaireId: Long): Boolean {
+		val db = NativeLink.sql
+		val c = db.select(
+			TABLE,
+			arrayOf(KEY_QUESTIONNAIRE_ID),
+			"$KEY_QUESTIONNAIRE_ID = ? AND $KEY_INPUT_NAME = ?", arrayOf(questionnaireId.toString(), FORM_STARTED),
+			null,
+			null,
+			null,
+			"1"
+		)
+		val r = c.moveToFirst()
+		c.close()
+		return r
+	}
+	
+	/**
+	 * Only saves values if FORM_STARTED (which is always the first value in cache) exists or is saved right now.
+	 * This prevents automatic items from saving values after the questionnaire was already sent on view updates
+	 * (at least on Android, when closing the questionnaire, views are animated which leads to the last page being rerendered
+	 * and items being reloaded AFTER the questionnaire was saved and the cache should have been emptied)
+	 */
 	internal fun saveCacheValue(questionnaireId: Long, inputName: String, cache: String) {
+		if(inputName != FORM_STARTED && !cacheAcceptsValues(questionnaireId)) {
+			println("Cache is disabled. Not saving $inputName for questionnaire $questionnaireId with the value $cache")
+			return
+		}
 		val db = NativeLink.sql
 		db.delete(TABLE, "$KEY_QUESTIONNAIRE_ID = ? AND $KEY_INPUT_NAME = ?", arrayOf(questionnaireId.toString(), inputName))
 		val values = db.getValueBox()

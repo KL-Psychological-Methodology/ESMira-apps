@@ -249,7 +249,7 @@ class Questionnaire {
 		}
 	}
 	
-	fun saveQuestionnaire(formStarted: Long) {
+	fun saveQuestionnaire() {
 		val dataSet = DataSet(DataSet.EventTypes.questionnaire, this)
 		
 		for(page in pages) {
@@ -260,7 +260,7 @@ class Questionnaire {
 		
 		
 		
-		dataSet.saveQuestionnaire(this, formStarted, QuestionnaireCache.getPageTimestamps(id))
+		dataSet.saveQuestionnaire(this)
 		updateLastCompleted(true) //this needs to be after we store last_notification in dataset
 		QuestionnaireCache.clearCache(id)
 		execMissingAlarms() //for iOS when the notification was ignored and the app was opened directly

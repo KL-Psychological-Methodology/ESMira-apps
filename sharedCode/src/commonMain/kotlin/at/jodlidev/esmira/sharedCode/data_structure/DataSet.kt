@@ -151,8 +151,10 @@ class DataSet: UploadData {
 	}
 	
 	
-	fun saveQuestionnaire(questionnaire: Questionnaire, formStarted: Long, pageTimestamps: List<Long>) {
+	fun saveQuestionnaire(questionnaire: Questionnaire) {
 		responseTime = NativeLink.getNowMillis()
+		val formStarted = QuestionnaireCache.getFormStarted(questionnaire.id)
+		val pageTimestamps = QuestionnaireCache.getPageTimestamps(questionnaire.id)
 		
 		val pageDurations = ArrayList<Long>()
 		val lastPageTimeStamp = pageTimestamps.fold(formStarted) {last, current ->
@@ -170,29 +172,11 @@ class DataSet: UploadData {
 			
 			for(key in score.addList) {
 				if(responseTemp.containsKey(key))
-					try {
-						sum += responseTemp[key]?.jsonPrimitive?.int ?: 0
-					}
-					catch(e: Exception) {
-						ErrorBox.warn(
-							"DataSet",
-							"Response \"$key\" is not an Integer: ${responseTemp[key]}",
-							e
-						)
-					}
+					sum += responseTemp[key]?.jsonPrimitive?.intOrNull ?: 0
 			}
 			for(key in score.subtractList) {
 				if(responseTemp.containsKey(key))
-					try {
-						sum -= responseTemp[key]?.jsonPrimitive?.int ?: 0
-					}
-					catch(e: Exception) {
-						ErrorBox.warn(
-							"DataSet",
-							"Response \"$key\" is not an Integer: ${responseTemp[key]}",
-							e
-						)
-					}
+					sum -= responseTemp[key]?.jsonPrimitive?.intOrNull ?: 0
 			}
 			addResponseData(score.name, sum)
 		}
