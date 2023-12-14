@@ -350,7 +350,6 @@ class MainActivity: ComponentActivity() {
 	@Composable
 	fun PageQuestionnaire(qId: Long, pageNumber: Int, navController: NavHostController) {
 		val questionnaire = remember { DbLogic.getQuestionnaire(qId) } ?: return
-		val formStarted = QuestionnaireCache.getFormStarted(questionnaire.id)
 		
 		QuestionnaireView(
 			questionnaire = questionnaire,
@@ -360,7 +359,7 @@ class MainActivity: ComponentActivity() {
 			},
 			goNext = {
 				if(questionnaire.isLastPage(pageNumber)) {
-					questionnaire.saveQuestionnaire(formStarted)
+					questionnaire.saveQuestionnaire()
 					navController.popBackStack("entrance", false)
 					navController.navigate("finishedQuestionnaire") {
 						popUpTo("entrance") { inclusive = false }

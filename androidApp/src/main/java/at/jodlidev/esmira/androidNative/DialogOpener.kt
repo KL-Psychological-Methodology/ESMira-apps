@@ -3,7 +3,7 @@ package at.jodlidev.esmira.androidNative
 import android.content.Context
 import at.jodlidev.esmira.activities.SimpleDialogActivity
 import at.jodlidev.esmira.activities.ErrorReportDialogActivity
-import at.jodlidev.esmira.activities.FaultyAccessKeyActivity
+import at.jodlidev.esmira.activities.FaultyAccessKeyDialogActivity
 import at.jodlidev.esmira.activities.NotificationsBrokenDialogActivity
 import at.jodlidev.esmira.sharedCode.DialogOpenerInterface
 import at.jodlidev.esmira.sharedCode.data_structure.Study
@@ -35,7 +35,7 @@ object DialogOpener : DialogOpenerInterface {
 	
 	override fun faultyAccessKey(study: Study) {
 		context.get()?.let {
-			FaultyAccessKeyActivity.start(it, study)
+			FaultyAccessKeyDialogActivity.start(it, study)
 		}
 	}
 	
