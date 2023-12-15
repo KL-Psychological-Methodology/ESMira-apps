@@ -7,6 +7,7 @@ import sharedCode
 import SwiftUI
 
 class DialogOpenerForBackground: DialogOpenerInterface {
+
 	static let KEY_HAS_DIALOG = "has_dialog"
 	static let KEY_DIALOG_TITLE = "key_title"
 	static let KEY_DIALOG_MSG = "key_msg"
@@ -30,6 +31,10 @@ class DialogOpenerForBackground: DialogOpenerInterface {
 	
 	func updateNeeded() {
 		self.dialog(title: NSLocalizedString("error_app_update_needed_title", comment: ""), msg: NSLocalizedString("error_app_update_needed_msg", comment: ""))
+	}
+	
+	func faultyAccessKey(study: Study) {
+		//App is not running. Dialog will automatically opened next time it is started
 	}
 	
 	func notificationsBroken() {

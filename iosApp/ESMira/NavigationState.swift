@@ -7,7 +7,7 @@ import sharedCode
 
 class NavigationState: ObservableObject {
 	enum DialogsScreens: Identifiable {
-		case errorReport, changeSchedule
+		case errorReport, changeSchedule, faultyAccessKey
 		
 		var id: Int {
 			self.hashValue
@@ -60,6 +60,10 @@ class NavigationState: ObservableObject {
 	}
 	func openErrorReport() {
 		self.dialogOpened = .errorReport
+	}
+	func openFaultyAccessKeyDialog(studyId: Int64) {
+		switchStudy(studyId)
+		self.dialogOpened = .faultyAccessKey
 	}
 	func closeScreenDialog() {
 		self.dialogOpened = nil

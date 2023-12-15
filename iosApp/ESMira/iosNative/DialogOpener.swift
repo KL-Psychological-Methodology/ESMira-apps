@@ -7,6 +7,7 @@ import sharedCode
 import SwiftUI
 
 class DialogOpener: DialogOpenerInterface {
+
 	static let KEY_HAS_DIALOG = "has_dialog"
 	static let KEY_DIALOG_TITLE = "key_title"
 	static let KEY_DIALOG_MSG = "key_msg"
@@ -53,6 +54,13 @@ class DialogOpener: DialogOpenerInterface {
 			self.navigationState.openChangeSchedules(studyId)
 		}
 	}
+	
+	
+	func faultyAccessKey(study: Study) {
+		DispatchQueue.main.async { //in case function was started from the background while app was in foreground
+			self.navigationState.openFaultyAccessKeyDialog(studyId: study.id)
+		}
+	 }
 	
 	func notificationsBroken() {
 		//TODO

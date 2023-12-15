@@ -203,3 +203,4 @@
 "distance_rssi" = "Distance (RSSI)";
 "distance_rssi_content" = "~%1$.1fm (%2$d)";
 "colon_between" = "Between";
+"info_wrong_access_key" = "The access key for this study seems to have changed. Your data will not be uploaded unless you provide a correct access key.";

@@ -42,6 +42,20 @@ struct ContentView: View {
 				else {
 					return AnyView(Text("error"))
 				}
+		case .faultyAccessKey:
+			let study = self.navigationState.study
+			if(study != nil) {
+				return AnyView(
+					FaultyAccessKey(study: study!)
+						.environmentObject(appState)
+						.environmentObject(navigationState)
+						.accentColor(Color("onSurface"))
+				)
+			}
+			else {
+				return AnyView(Text("error"))
+			}
+				
 			default:
 				return AnyView(Text("error"))
 		}

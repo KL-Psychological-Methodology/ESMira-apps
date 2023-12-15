@@ -203,3 +203,4 @@
 "distance_rssi" = "Entfernung (RSSI)";
 "distance_rssi_content" = "~%1$.1fm (%2$d)";
 "colon_between" = "Zwischen:";
+"info_wrong_access_key" = "Der Zugangsschlüssel für diese Studie hat sich verändert. Ihre Daten werden nicht hochgeladen bis Sie den korrekten Zugangsschlüssel angeben.";

@@ -9,7 +9,7 @@ import sharedCode
 struct ChangeSchedulesView: View {
 	struct SignalTimeView: View {
 		@EnvironmentObject var appState: AppState
-
+		
 		private let signalTime: SignalTime
 		@State private var startTime: String
 		@State private var endTime: String

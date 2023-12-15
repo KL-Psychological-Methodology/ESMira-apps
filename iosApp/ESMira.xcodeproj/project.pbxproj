@@ -24,6 +24,8 @@
 		6B4996DE2825BE4D00D8B6F1 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 6B4996DC2825BE4D00D8B6F1 /* Localizable.stringsdict */; };
 		6B6B607429DDCC2200E7929D /* StudyInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6B607329DDCC2200E7929D /* StudyInformation.swift */; };
 		6B6B607629DDD6EB00E7929D /* CustomNavigationLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6B607529DDD6EB00E7929D /* CustomNavigationLink.swift */; };
+		6B6BD2B02B037FCC005648C0 /* ZMarkupParser in Frameworks */ = {isa = PBXBuildFile; productRef = 6B6BD2AF2B037FCC005648C0 /* ZMarkupParser */; };
+		6B6BD2B22B2871CC005648C0 /* FaultyAccessKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6BD2B12B2871CC005648C0 /* FaultyAccessKeyView.swift */; };
 		6B71345729194C9800DF8F72 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 6B71345629194C9800DF8F72 /* Charts */; };
 		6B838D7C28461927001DE14E /* EmptyStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B838D7B28461927001DE14E /* EmptyStruct.swift */; };
 		6B88658A29C069C200F7BE38 /* CodeScanner in Frameworks */ = {isa = PBXBuildFile; productRef = 6B88658929C069C200F7BE38 /* CodeScanner */; };
@@ -145,6 +147,7 @@
 		6B4996E02825BE6300D8B6F1 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		6B6B607329DDCC2200E7929D /* StudyInformation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyInformation.swift; sourceTree = "<group>"; };
 		6B6B607529DDD6EB00E7929D /* CustomNavigationLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationLink.swift; sourceTree = "<group>"; };
+		6B6BD2B12B2871CC005648C0 /* FaultyAccessKeyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaultyAccessKeyView.swift; sourceTree = "<group>"; };
 		6B838D7B28461927001DE14E /* EmptyStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStruct.swift; sourceTree = "<group>"; };
 		6B92BF3329DC390C0011E8D9 /* QuestionnaireLineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionnaireLineView.swift; sourceTree = "<group>"; };
 		6B92BF3529DD9B6F0011E8D9 /* NavigationState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationState.swift; sourceTree = "<group>"; };
@@ -239,6 +242,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6B6BD2B02B037FCC005648C0 /* ZMarkupParser in Frameworks */,
 				6B71345729194C9800DF8F72 /* Charts in Frameworks */,
 				6BCD31C828252A3700BD266B /* URLImage in Frameworks */,
 				6B88658A29C069C200F7BE38 /* CodeScanner in Frameworks */,
@@ -296,6 +300,7 @@
 				6BCFED7A2825283A009167B0 /* NewMessageView.swift */,
 				6BB47F7628F6FFB900C0F561 /* RewardView.swift */,
 				6BCFED7F2825283A009167B0 /* SendErrorReportView.swift */,
+				6B6BD2B12B2871CC005648C0 /* FaultyAccessKeyView.swift */,
 				6BCFED652825283A009167B0 /* SettingsView.swift */,
 				6BCFED682825283A009167B0 /* StatisticsView.swift */,
 				6BCCF47C29BF20FA006E88E1 /* StudyDashboard.swift */,
@@ -474,6 +479,7 @@
 				6BCD31C728252A3700BD266B /* URLImage */,
 				6B71345629194C9800DF8F72 /* Charts */,
 				6B88658929C069C200F7BE38 /* CodeScanner */,
+				6B6BD2AF2B037FCC005648C0 /* ZMarkupParser */,
 			);
 			productName = ESMira;
 			productReference = 7555FF7B242A565900829871 /* ESMira.app */;
@@ -509,6 +515,7 @@
 				6BCFEDF928252986009167B0 /* XCRemoteSwiftPackageReference "Charts" */,
 				6BCD31C3282529E800BD266B /* XCRemoteSwiftPackageReference "CodeScanner" */,
 				6BCD31C628252A3700BD266B /* XCRemoteSwiftPackageReference "url-image" */,
+				6B6BD2AE2B037FCC005648C0 /* XCRemoteSwiftPackageReference "ZMarkupParser" */,
 			);
 			productRefGroup = 7555FF7C242A565900829871 /* Products */;
 			projectDirPath = "";
@@ -655,6 +662,7 @@
 				6BD318332A5D56DA00B14295 /* BluetoothDevicesStruct.swift in Sources */,
 				6B3A92C829F293BF0081A554 /* CountdownStruct.swift in Sources */,
 				6BCFEDAD2825284D009167B0 /* MultilineTextField.swift in Sources */,
+				6B6BD2B22B2871CC005648C0 /* FaultyAccessKeyView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -805,7 +813,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 56;
+				CURRENT_PROJECT_VERSION = 58;
 				DEVELOPMENT_ASSET_PATHS = "ESMira/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZXQ54B7QHL;
 				ENABLE_PREVIEWS = YES;
@@ -815,7 +823,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.9.4;
+				MARKETING_VERSION = 1.9.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -833,7 +841,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 56;
+				CURRENT_PROJECT_VERSION = 58;
 				DEVELOPMENT_ASSET_PATHS = "ESMira/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZXQ54B7QHL;
 				ENABLE_PREVIEWS = YES;
@@ -843,7 +851,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.9.4;
+				MARKETING_VERSION = 1.9.6;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -880,6 +888,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		6B6BD2AE2B037FCC005648C0 /* XCRemoteSwiftPackageReference "ZMarkupParser" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ZhgChgLi/ZMarkupParser.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 		6BCD31C3282529E800BD266B /* XCRemoteSwiftPackageReference "CodeScanner" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/twostraws/CodeScanner";
@@ -907,6 +923,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		6B6BD2AF2B037FCC005648C0 /* ZMarkupParser */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6B6BD2AE2B037FCC005648C0 /* XCRemoteSwiftPackageReference "ZMarkupParser" */;
+			productName = ZMarkupParser;
+		};
 		6B71345629194C9800DF8F72 /* Charts */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 6BCFEDF928252986009167B0 /* XCRemoteSwiftPackageReference "Charts" */;
