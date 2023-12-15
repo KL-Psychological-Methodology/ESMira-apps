@@ -14,7 +14,6 @@ struct QuestionnaireView: View {
 	let firstScreen: Bool
 	
 	@State var pageIndex: Int
-	@State var formStarted: Int64
 	
 	@State var nextPageWithoutBack = false
 	@State var nextPage = false
@@ -36,17 +35,13 @@ struct QuestionnaireView: View {
 		self.init(
 			questionnaire: questionnaire,
 			pageIndex: Int(questionnaire.getFirstPageIndex()),
-			formStarted: QuestionnaireCache().getFormStarted(questionnaireId: questionnaire.id),
 			firstScreen: true
 		)
 	}
-	init(questionnaire: sharedCode.Questionnaire, pageIndex: Int, formStarted: Int64, firstScreen: Bool = false) {
+	init(questionnaire: sharedCode.Questionnaire, pageIndex: Int, firstScreen: Bool = false) {
 		self.firstScreen = firstScreen
 		self.questionnaire = questionnaire
 		self._pageIndex = State(initialValue: pageIndex)
-		self._formStarted = State(initialValue: formStarted)
-		
-		self.waitCounter = questionnaire.getPage(pageNumber: Int32(pageIndex)).inputs.count
 	}
 	
 	private func noMissings() -> Bool {
@@ -98,7 +93,7 @@ struct QuestionnaireView: View {
 				}
 				if(!self.questionnaire.isLastPage(pageNumber: Int32(pageIndex))) {
 					NavigationLink(
-						destination: QuestionnaireView(questionnaire: self.questionnaire, pageIndex: self.pageIndex + 1, formStarted: self.formStarted),
+						destination: QuestionnaireView(questionnaire: self.questionnaire, pageIndex: self.pageIndex + 1),
 						isActive: self.$nextPage,
 						label: { EmptyView() }
 					)
@@ -193,7 +188,7 @@ struct QuestionnaireView: View {
 			}
 		}
 		else {
-			self.questionnaire.saveQuestionnaire(formStarted: self.formStarted)
+			self.questionnaire.saveQuestionnaire()
 			self.navigationState.questionnaireOpened = false
 			self.navigationState.questionnaireSuccessfullOpened = true
 		}
@@ -202,7 +197,7 @@ struct QuestionnaireView: View {
 	var body: some View {
 		VStack {
 			if(self.nextPageWithoutBack) {
-				QuestionnaireView(questionnaire: self.questionnaire, pageIndex: self.pageIndex + 1, formStarted: self.formStarted)
+				QuestionnaireView(questionnaire: self.questionnaire, pageIndex: self.pageIndex + 1)
 			}
 			else {
 				self.drawQuestionnaire()
