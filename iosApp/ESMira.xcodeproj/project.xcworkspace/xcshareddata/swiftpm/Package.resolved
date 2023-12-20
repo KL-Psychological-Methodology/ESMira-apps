@@ -15,7 +15,7 @@
       "location" : "https://github.com/twostraws/CodeScanner",
       "state" : {
         "branch" : "main",
-        "revision" : "9aef09bf5c0274689a89c2fd71794011bebdc43f"
+        "revision" : "bf5d7087015620b250ee6c865b3c9039fc159d1a"
       }
     },
     {
@@ -23,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/apple/swift-algorithms",
       "state" : {
-        "revision" : "b14b7f4c528c942f121c8b860b9410b2bf57825e",
-        "version" : "1.0.0"
+        "revision" : "f6919dfc309e7f1b56224378b11e28bab5bccc42",
+        "version" : "1.2.0"
       }
     },
     {
@@ -43,6 +43,24 @@
       "state" : {
         "revision" : "4042f955f1fdff00ced85545e1eecdbf969b5cd0",
         "version" : "3.1.1"
+      }
+    },
+    {
+      "identity" : "zmarkupparser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/JodliDev/ZMarkupParser.git",
+      "state" : {
+        "branch" : "fix/breakLine-handling",
+        "revision" : "39239eacc9ddfcecbd29d31ada9fb389e702120c"
+      }
+    },
+    {
+      "identity" : "znstextattachment",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ZhgChgLi/ZNSTextAttachment",
+      "state" : {
+        "revision" : "1dcb1c58ed092cf9403604969f2f896003b8cbce",
+        "version" : "1.1.7"
       }
     }
   ],

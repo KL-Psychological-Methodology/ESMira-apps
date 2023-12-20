@@ -19,11 +19,7 @@ struct QuestionnaireView: View {
 	@State var nextPage = false
 
 	@State private var action = ScrollAction.idle
-	@State private var footerIsReady = false
-	@State private var headerIsReady = false
 
-	@State private var readyCounter = 0
-	private let waitCounter: Int
 	@State private var pageIsActive = true
 	
 	@State var skipPageTimer: DispatchSourceTimer? = nil
@@ -59,20 +55,21 @@ struct QuestionnaireView: View {
 		return (i % 2 != 0) ? Color("ListColor1") : Color("ListColor2")
 	}
 	
-	private func drawInnerQuestionnaire(page: Page, width: CGFloat) -> some View {
+//	private func drawInnerQuestionnaire(page: Page, width: CGFloat) -> some View {
+	private func drawInnerQuestionnaire(page: Page) -> some View {
 		let inputs = page.inputs
 		return VStack {
 			if(!page.header.isEmpty) {
-				HtmlTextView(html: page.header, isReady: self.$headerIsReady)
+				HtmlTextView(html: page.header)
 					.padding()
-					.frame(width: width)
+//					.frame(width: width)
 					.background(Color("ListColor1"))
 			}
 
 			ForEach(0..<inputs.count, id: \.self) { i in
-				InputView(input: inputs[i], readyCounter: self.$readyCounter)
+				InputView(input: inputs[i])
 					.padding()
-					.frame(width: width)
+//					.frame(width: width)
 					.uiTag(i)
 					.background(getBackgroundColor(i))
 
@@ -80,9 +77,9 @@ struct QuestionnaireView: View {
 
 			
 			if(!page.footer.isEmpty) {
-				HtmlTextView(html: page.footer, isReady: self.$footerIsReady)
+				HtmlTextView(html: page.footer)
 					.padding()
-					.frame(width: width)
+//					.frame(width: width)
 					.background(getBackgroundColor(inputs.count))
 			}
 			
@@ -135,46 +132,59 @@ struct QuestionnaireView: View {
 
 	func drawQuestionnaire() -> some View {
 		let page = self.questionnaire.getPage(pageNumber: Int32(self.pageIndex))
-		let preinputs = page.inputs
-		let isDisabled = self.readyCounter < self.waitCounter || (!page.header.isEmpty && !self.headerIsReady) || (!page.footer.isEmpty && !self.footerIsReady)
-		let isZero = self.waitCounter == 0 || self.readyCounter == 0
 
-        return GeometryReader { geometry in
-			ZStack(alignment: .top) {
-				ScrollView {
-					self.drawInnerQuestionnaire(page: page, width: geometry.size.width).opacity(isDisabled ? 0 : 1).animation(.easeIn(duration: 0.4))
-				}
-				if(isDisabled) {
-					VStack {
-						LoadingSpinner(isAnimating: .constant(true), style: .large).padding()
-						HStack {
-							Text(isZero ? "100" : String(Int(100 / self.waitCounter * self.readyCounter)))
-							Text("%")
+		return ScrollView {
+			self.drawInnerQuestionnaire(page: page)
+		}
+			.onAppear {
+				if(page.skipAfterSecs != 0) {
+					let timer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
+					timer.schedule(deadline: .now() + TimeInterval(page.skipAfterSecs))
+					timer.setEventHandler {
+						if(self.pageIsActive) {
+							goNext()
 						}
 					}
+					skipPageTimer = timer
+					timer.resume()
 				}
-				else if(page.skipAfterSecs != 0) {
-					VStack {}
-						.onAppear {
-							let timer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
-							timer.schedule(deadline: .now() + TimeInterval(page.skipAfterSecs))
-							timer.setEventHandler {
-								if(self.pageIsActive) {
-									goNext()
-								}
-							}
-							skipPageTimer = timer
-							timer.resume()
-						}
-						.onDisappear {
-							self.skipPageTimer?.cancel()
-						}
+			}
+			.onDisappear {
+				if(page.skipAfterSecs != 0) {
+					self.skipPageTimer?.cancel()
 				}
-            }
+			}
 			.resignKeyboardOnDragGesture()
 			.scrollAction(self.$action)
-			
-		}
+		
+		
+//        return GeometryReader { geometry in
+//			ZStack(alignment: .top) {
+//				ScrollView {
+//					self.drawInnerQuestionnaire(page: page, width: geometry.size.width)
+//				}
+//				if(page.skipAfterSecs != 0) {
+//					VStack {}
+//						.onAppear {
+//							let timer = DispatchSource.makeTimerSource(queue: DispatchQueue.main)
+//							timer.schedule(deadline: .now() + TimeInterval(page.skipAfterSecs))
+//							timer.setEventHandler {
+//								if(self.pageIsActive) {
+//									goNext()
+//								}
+//							}
+//							skipPageTimer = timer
+//							timer.resume()
+//						}
+//						.onDisappear {
+//							self.skipPageTimer?.cancel()
+//						}
+//				}
+//            }
+//			.resignKeyboardOnDragGesture()
+//			.scrollAction(self.$action)
+//
+//		}
 	}
 	
 	private func goNext() {

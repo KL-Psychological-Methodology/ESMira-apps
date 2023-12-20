@@ -9,9 +9,8 @@ import sharedCode
 
 struct DynamicStruct: View {
 	@ObservedObject var viewModel: InputViewModel
-	@Binding var readyCounter: Int
 	
 	var body: some View {
-		InputView(input: self.viewModel.input.getDynamicInput(), readyCounter: self.$readyCounter)
+		InputView(input: self.viewModel.input.getDynamicInput())
 	}
 }

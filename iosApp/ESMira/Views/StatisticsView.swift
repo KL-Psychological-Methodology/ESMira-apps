@@ -17,12 +17,10 @@ struct StatisticsView: View {
 		let studyStateIsJoined: Bool
 		let width: CGFloat
 		
-		@State private var isReady = false
-		
 		var body: some View {
 			VStack(alignment: .leading) {
 				Text(chartInfo.title).bold().fixMultiline()
-				HtmlTextView(html: chartInfo.chartDescription, isReady: self.$isReady).frame(width: width)
+				HtmlTextView(html: chartInfo.chartDescription).frame(width: width)
 				if(chartInfo.hideUntilCompletion && self.studyStateIsJoined) {
 					Group {
 						Text("visible_when_study_finished").bold().padding(.horizontal)
@@ -38,7 +36,6 @@ struct StatisticsView: View {
 				Divider()
 			}
 				.padding(.bottom)
-			.opacity(self.isReady ? 1 : 0)
 		}
 	}
 	

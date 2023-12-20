@@ -14,8 +14,5 @@ struct EmptyStruct: View {
 	
 	var body: some View {
 		EmptyView()
-		.onAppear {
-			self.viewModel.isReady = true
-		}
 	}
 }

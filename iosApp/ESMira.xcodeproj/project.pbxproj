@@ -10,6 +10,7 @@
 		058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557BA273AAA24004C7B11 /* Assets.xcassets */; };
 		058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 058557D8273AAEEB004C7B11 /* Preview Assets.xcassets */; };
 		6B13CF5A28F808580035BA01 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B13CF5928F808580035BA01 /* ShareSheet.swift */; };
+		6B1BB1172B2F28D0009B09C3 /* ZMarkupParser in Frameworks */ = {isa = PBXBuildFile; productRef = 6B1BB1162B2F28D0009B09C3 /* ZMarkupParser */; };
 		6B3A92C029E5C8250081A554 /* UploadProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3A92BF29E5C8250081A554 /* UploadProtocol.swift */; };
 		6B3A92C229E6E2900081A554 /* AddStudyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3A92C129E6E2900081A554 /* AddStudyState.swift */; };
 		6B3A92C429E816410081A554 /* AboutESMira.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3A92C329E816410081A554 /* AboutESMira.swift */; };
@@ -24,7 +25,6 @@
 		6B4996DE2825BE4D00D8B6F1 /* Localizable.stringsdict in Resources */ = {isa = PBXBuildFile; fileRef = 6B4996DC2825BE4D00D8B6F1 /* Localizable.stringsdict */; };
 		6B6B607429DDCC2200E7929D /* StudyInformation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6B607329DDCC2200E7929D /* StudyInformation.swift */; };
 		6B6B607629DDD6EB00E7929D /* CustomNavigationLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6B607529DDD6EB00E7929D /* CustomNavigationLink.swift */; };
-		6B6BD2B02B037FCC005648C0 /* ZMarkupParser in Frameworks */ = {isa = PBXBuildFile; productRef = 6B6BD2AF2B037FCC005648C0 /* ZMarkupParser */; };
 		6B6BD2B22B2871CC005648C0 /* FaultyAccessKeyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B6BD2B12B2871CC005648C0 /* FaultyAccessKeyView.swift */; };
 		6B71345729194C9800DF8F72 /* Charts in Frameworks */ = {isa = PBXBuildFile; productRef = 6B71345629194C9800DF8F72 /* Charts */; };
 		6B838D7C28461927001DE14E /* EmptyStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B838D7B28461927001DE14E /* EmptyStruct.swift */; };
@@ -242,7 +242,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6B6BD2B02B037FCC005648C0 /* ZMarkupParser in Frameworks */,
+				6B1BB1172B2F28D0009B09C3 /* ZMarkupParser in Frameworks */,
 				6B71345729194C9800DF8F72 /* Charts in Frameworks */,
 				6BCD31C828252A3700BD266B /* URLImage in Frameworks */,
 				6B88658A29C069C200F7BE38 /* CodeScanner in Frameworks */,
@@ -479,7 +479,7 @@
 				6BCD31C728252A3700BD266B /* URLImage */,
 				6B71345629194C9800DF8F72 /* Charts */,
 				6B88658929C069C200F7BE38 /* CodeScanner */,
-				6B6BD2AF2B037FCC005648C0 /* ZMarkupParser */,
+				6B1BB1162B2F28D0009B09C3 /* ZMarkupParser */,
 			);
 			productName = ESMira;
 			productReference = 7555FF7B242A565900829871 /* ESMira.app */;
@@ -515,7 +515,7 @@
 				6BCFEDF928252986009167B0 /* XCRemoteSwiftPackageReference "Charts" */,
 				6BCD31C3282529E800BD266B /* XCRemoteSwiftPackageReference "CodeScanner" */,
 				6BCD31C628252A3700BD266B /* XCRemoteSwiftPackageReference "url-image" */,
-				6B6BD2AE2B037FCC005648C0 /* XCRemoteSwiftPackageReference "ZMarkupParser" */,
+				6B1BB1152B2F28D0009B09C3 /* XCRemoteSwiftPackageReference "ZMarkupParser" */,
 			);
 			productRefGroup = 7555FF7C242A565900829871 /* Products */;
 			projectDirPath = "";
@@ -813,7 +813,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 58;
+				CURRENT_PROJECT_VERSION = 60;
 				DEVELOPMENT_ASSET_PATHS = "ESMira/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZXQ54B7QHL;
 				ENABLE_PREVIEWS = YES;
@@ -823,7 +823,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.9.6;
+				MARKETING_VERSION = 1.9.8;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -841,7 +841,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 58;
+				CURRENT_PROJECT_VERSION = 60;
 				DEVELOPMENT_ASSET_PATHS = "ESMira/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZXQ54B7QHL;
 				ENABLE_PREVIEWS = YES;
@@ -851,7 +851,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.9.6;
+				MARKETING_VERSION = 1.9.8;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -888,11 +888,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		6B6BD2AE2B037FCC005648C0 /* XCRemoteSwiftPackageReference "ZMarkupParser" */ = {
+		6B1BB1152B2F28D0009B09C3 /* XCRemoteSwiftPackageReference "ZMarkupParser" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/ZhgChgLi/ZMarkupParser.git";
+			repositoryURL = "https://github.com/JodliDev/ZMarkupParser.git";
 			requirement = {
-				branch = main;
+				branch = "fix/breakLine-handling";
 				kind = branch;
 			};
 		};
@@ -923,9 +923,9 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		6B6BD2AF2B037FCC005648C0 /* ZMarkupParser */ = {
+		6B1BB1162B2F28D0009B09C3 /* ZMarkupParser */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 6B6BD2AE2B037FCC005648C0 /* XCRemoteSwiftPackageReference "ZMarkupParser" */;
+			package = 6B1BB1152B2F28D0009B09C3 /* XCRemoteSwiftPackageReference "ZMarkupParser" */;
 			productName = ZMarkupParser;
 		};
 		6B71345629194C9800DF8F72 /* Charts */ = {

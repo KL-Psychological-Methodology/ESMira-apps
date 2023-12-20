@@ -46,32 +46,20 @@ class InputViewModel: ObservableObject {
 		input.setFile(filePath: filePath, dataType: .image)
 	}
 	
-	@Binding var readyCounter: Int
-	@Published var isReady: Bool = false {
-		willSet {
-			if(!self.isReady) {
-				self.readyCounter += 1
-			}
-		}
-	}
-	
-	init(_ input: Input, readyCounter: Binding<Int>) {
+	init(_ input: Input) {
 		self.input = input
 		self.value = input.getValue()
-		self._readyCounter = readyCounter
 	}
 }
 
 struct InputView: View {
 	let input: Input
-	@Binding var readyCounter: Int
 	
 	@ObservedObject var viewModel: InputViewModel
 	
-	init(input: Input, readyCounter: Binding<Int>) {
-		self._viewModel = ObservedObject(initialValue: InputViewModel(input, readyCounter: readyCounter))
+	init(input: Input) {
+		self._viewModel = ObservedObject(initialValue: InputViewModel(input))
 		self.input = input
-		self._readyCounter = readyCounter
 	}
 	
 	func getInput() -> some View {
@@ -89,7 +77,7 @@ struct InputView: View {
 			case Input.TYPES.fileUpload:
 				return AnyView(FileUploadStruct(viewModel: self.viewModel))
 			case Input.TYPES.dynamicInput:
-				return AnyView(DynamicStruct(viewModel: self.viewModel, readyCounter: self.$readyCounter))
+				return AnyView(DynamicStruct(viewModel: self.viewModel))
 			case Input.TYPES.image:
 				return AnyView(ImageStruct(viewModel: self.viewModel))
 			case Input.TYPES.likert:
