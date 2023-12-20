@@ -7,7 +7,8 @@ import at.jodlidev.esmira.sharedCode.SQLiteInterface
  * Created by JodliDev on 09.02.2021.
  */
 object QuestionnaireCache {
-	const val RESPONSES_BACKUP_VALID_TIMESPAN_MS = 1000*60L*60L // one hour
+//	const val RESPONSES_BACKUP_VALID_TIMESPAN_MS = 1000*60L*60L // one hour
+	const val RESPONSES_BACKUP_VALID_TIMESPAN_MS = 1000*30L // one hour
 	
 	const val TABLE = "questionnaireCache"
 	const val KEY_ID = "_id"
@@ -20,7 +21,7 @@ object QuestionnaireCache {
 	const val FORM_PAGE = "~formPage"
 	const val FORM_PAGE_TIMESTAMPS = "~formPageTimestamp"
 	
-	internal fun loadCacheValue(questionnaireId: Long, inputName: String): String? {
+	internal fun loadCacheValue(questionnaireId: Long, inputName: String, deleteOutdated: Boolean = false): String? {
 		val db = NativeLink.sql
 		val c = db.select(
 			TABLE,
@@ -34,8 +35,8 @@ object QuestionnaireCache {
 		
 		var r: String? = null
 		if(c.moveToFirst()) {
-			if(c.getLong(0) < NativeLink.getNowMillis() - RESPONSES_BACKUP_VALID_TIMESPAN_MS)
-				clearCache(questionnaireId) //if one is out of date, we dont want any of them
+			if(deleteOutdated && c.getLong(0) < NativeLink.getNowMillis() - RESPONSES_BACKUP_VALID_TIMESPAN_MS)
+				clearCache(questionnaireId) //FORM_STARTED will be the first one out of date. That makes the rest useless, so we delete all
 			else
 				r = c.getString(1)
 		}
@@ -83,8 +84,11 @@ object QuestionnaireCache {
 		db.insert(TABLE, values)
 	}
 	
+	/**
+	 * Is used when the questionnaire was opened. So we can use it to invalidate an outdated cache
+	 */
 	fun saveFormStarted(questionnaireId: Long) {
-		if(loadCacheValue(questionnaireId, FORM_STARTED) == null)
+		if(loadCacheValue(questionnaireId, FORM_STARTED, true) == null)
 			saveCacheValue(questionnaireId, FORM_STARTED, NativeLink.getNowMillis().toString())
 	}
 	fun getFormStarted(questionnaireId: Long): Long {
