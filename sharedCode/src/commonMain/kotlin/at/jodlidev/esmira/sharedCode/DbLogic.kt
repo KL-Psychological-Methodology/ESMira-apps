@@ -354,6 +354,9 @@ object DbLogic {
 			val faultyStudy = getFirstStudyWithFaultyAccessKey()
 			if(faultyStudy != null)
 				NativeLink.dialogOpener.faultyAccessKey(faultyStudy)
+
+			if(hasStudiesWithAppTracking())
+				NativeLink.dialogOpener.appTrackingRevoked()
 		}
 	}
 	
@@ -490,7 +493,12 @@ object DbLogic {
 		c.close()
 		return r
 	}
-	
+
+	fun hasStudiesWithAppTracking(): Boolean {
+		val studies = getJoinedStudies()
+		return studies.any() { study: Study -> study.hasScreenOrAppTracking() }
+	}
+
 	fun getFirstStudy(): Study? {
 		val c = NativeLink.sql.select(
 			Study.TABLE,
