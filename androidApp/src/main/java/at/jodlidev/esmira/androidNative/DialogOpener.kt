@@ -1,6 +1,7 @@
 package at.jodlidev.esmira.androidNative
 
 import android.content.Context
+import at.jodlidev.esmira.activities.AppTrackingRevokedDialogActivity
 import at.jodlidev.esmira.activities.SimpleDialogActivity
 import at.jodlidev.esmira.activities.ErrorReportDialogActivity
 import at.jodlidev.esmira.activities.FaultyAccessKeyDialogActivity
@@ -38,6 +39,13 @@ object DialogOpener : DialogOpenerInterface {
 			FaultyAccessKeyDialogActivity.start(it, study)
 		}
 	}
+
+	override fun appTrackingRevoked() {
+		context.get()?.let {
+			AppTrackingRevokedDialogActivity.start(it)
+		}
+	}
+
 	
 	override fun dialog(title: String, msg: String) {
 		context.get()?.let {

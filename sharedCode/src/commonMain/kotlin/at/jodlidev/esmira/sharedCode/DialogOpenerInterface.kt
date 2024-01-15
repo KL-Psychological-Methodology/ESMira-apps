@@ -10,5 +10,6 @@ interface DialogOpenerInterface {
 	fun updateNeeded()
 	fun notificationsBroken()
 	fun faultyAccessKey(study: Study)
+	fun appTrackingRevoked()
 	fun dialog(title: String, msg: String)
 }

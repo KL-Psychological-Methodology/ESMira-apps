@@ -61,7 +61,12 @@ class DialogOpener: DialogOpenerInterface {
 			self.navigationState.openFaultyAccessKeyDialog(studyId: study.id)
 		}
 	 }
-	
+
+
+	func appTrackingRevoked() {
+	}
+
+
 	func notificationsBroken() {
 		//TODO
 		
