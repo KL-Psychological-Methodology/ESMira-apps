@@ -99,7 +99,7 @@ fun RewardCodeView(study: Study, rewardCode: String) {
 	if(showRewardCodeExplanation.value) {
 		ESMiraDialog(
 			onDismissRequest = { showRewardCodeExplanation.value = false },
-			title = stringResource(R.string.reward_code_description),
+			title = null,
 			confirmButtonLabel = stringResource(R.string.close),
 			onConfirmRequest = { showRewardCodeExplanation.value = false },
 		) {
