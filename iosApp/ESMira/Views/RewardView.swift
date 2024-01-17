@@ -78,7 +78,7 @@ struct RewardView: View {
 					Spacer()
 					Button(action: {
 						let emailContent = self.study.rewardEmailContent.isEmpty ? NSLocalizedString("reward_code_content", comment: "") : self.study.rewardEmailContent
-						if let url = URL(string: "mailto:\(self.study.contactEmail)?body=\(emailContent)") {
+						if let url = URL(string: "mailto:\(self.study.contactEmail)?body=\(emailContent)".addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)!) {
 							if #available(iOS 10.0, *) {
 								UIApplication.shared.open(url)
 							} else {
