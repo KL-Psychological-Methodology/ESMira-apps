@@ -18,13 +18,20 @@ struct ListMultipleStruct: View {
 					CheckBoxView(label: self.viewModel.input.listChoices[i], state: self.$checkedList[i]) { checked in
 						var export = ""
 						var dictionary = Dictionary<String, String>()
-						for j in self.checkedList.indices {
-							let key = self.viewModel.input.listChoices[j]
-							dictionary[key] = self.checkedList[j] ? "1" : "0"
-							if(self.checkedList[j]) {
-								export.append(key)
-								export.append(",")
+						if(getStudyVersion(input: self.viewModel.input) <= 11) { //This is necessary for a change between server version 11 and 12
+							for j in self.checkedList.indices {
+								let key = self.viewModel.input.listChoices[j]
+								dictionary[key] = self.checkedList[j] ? "1" : "0"
+								if(self.checkedList[j]) {
+									export.append(key)
+									export.append(",")
+								}
 							}
+						} else {
+							for j in self.checkedList.indices {
+								dictionary[String(j)] = self.checkedList[j] ? "1" : "0"
+							}
+							export = self.viewModel.input.listChoices.indices.filter({checkedList[$0]}).map({self.viewModel.input.listChoices[$0]}).joined(separator: ", ")
 						}
 						self.viewModel.setAdditionalValue(value: export, additionalValues: dictionary)
 					}
@@ -44,4 +51,17 @@ struct ListMultipleStruct: View {
 			self.checkedList = a
 		}
 	}
+	
+	func getStudyVersion(input: Input) -> Int32 {
+		let questionnaire = input.questionnaire
+		let studyId = questionnaire.studyId
+		let study = DbLogic().getStudy(id: studyId)
+		if let study = study {
+			return study.serverVersion
+		} else {
+			return -1
+		}
+	}
 }
+
+
