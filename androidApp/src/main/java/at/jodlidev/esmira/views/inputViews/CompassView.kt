@@ -148,7 +148,7 @@ fun CompassView(input: Input, get: () -> String, save: (String) -> Unit) {
 			rotation = { azimuth.value },
 			showValue = input.showValue,
 			infoLabel = "${azimuth.value.toInt()}°",
-			buttonLabel = stringResource(R.string.save),
+			buttonLabel = stringResource(R.string.stop_scanning),
 			buttonAction = {
 				save(azimuth.value.toString())
 				isScanning.value = false

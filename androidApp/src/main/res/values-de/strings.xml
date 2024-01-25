@@ -269,6 +269,7 @@
     <string name="south_abr">S</string>
     <string name="west_abr">W</string>
     <string name="start_scanning">Scannen starten</string>
+    <string name="stop_scanning">Scannen stoppen</string>
     <string name="start_timer">Starte Timer</string>
     <string name="start_audio_record">Tonaufnahme starten</string>
     <string name="stop_audio_record">Tonaufnahme stoppen</string>
