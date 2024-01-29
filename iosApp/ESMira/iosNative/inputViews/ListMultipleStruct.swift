@@ -29,7 +29,7 @@ struct ListMultipleStruct: View {
 							}
 						} else {
 							for j in self.checkedList.indices {
-								dictionary[String(j)] = self.checkedList[j] ? "1" : "0"
+								dictionary[String(j+1)] = self.checkedList[j] ? "1" : "0"
 							}
 							export = self.viewModel.input.listChoices.indices.filter({checkedList[$0]}).map({self.viewModel.input.listChoices[$0]}).joined(separator: ", ")
 						}
