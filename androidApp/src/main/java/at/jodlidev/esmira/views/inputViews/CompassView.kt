@@ -33,6 +33,7 @@ import at.jodlidev.esmira.R
 import at.jodlidev.esmira.colorGreen
 import at.jodlidev.esmira.sharedCode.data_structure.Input
 import at.jodlidev.esmira.views.DefaultButton
+import kotlin.math.roundToInt
 
 /**
  * Created by JodliDev on 23.01.2023.
@@ -150,7 +151,11 @@ fun CompassView(input: Input, get: () -> String, save: (String) -> Unit) {
 			infoLabel = "${azimuth.value.toInt()}°",
 			buttonLabel = stringResource(R.string.stop_scanning),
 			buttonAction = {
-				save(azimuth.value.toString())
+				if(input.numberHasDecimal) {
+					save(azimuth.value.toString())
+				} else {
+					save(azimuth.value.toInt().toString())
+				}
 				isScanning.value = false
 			}
 		)
