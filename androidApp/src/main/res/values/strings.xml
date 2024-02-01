@@ -159,6 +159,8 @@
     <string name="search_manually">Search manually</string>
     <string name="send">Send</string>
     <string name="send_error_report">Send error report</string>
+    <string name="send_error_report_to_researcher">Also send this as an anonymous message to the researcher</string>
+    <string name="error_report_message">An error report was sent. Comment:</string>
     <string name="send_message_to_researcher">Send anonymous message to researcher</string>
     <string name="send_test_notification">Send test notification</string>
     <string name="settings">Settings</string>

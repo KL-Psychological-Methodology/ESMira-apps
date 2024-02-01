@@ -159,6 +159,7 @@
     <string name="search_manually">Manuel suchen</string>
     <string name="send">Senden</string>
     <string name="send_error_report">Fehlerbericht senden</string>
+    <string name="send_error_report_to_researcher">Dies auch als anonyme Nachricht an die Forscher senden</string>
     <string name="send_message_to_researcher">Anonyme Nachricht an Forscher schreiben</string>
     <string name="send_test_notification">Test-Benachrichtigung senden</string>
     <string name="settings">Einstellungen</string>
@@ -291,4 +292,5 @@
 	<string name="info_wrong_access_key">Der Zugangsschlüssel für diese Studie hat sich verändert. Ihre Daten werden nicht hochgeladen bis Sie den korrekten Zugangsschlüssel angeben.</string>
     <string name="error_app_usage_revoked_android_header">ESMira kann nicht auf Nutzungsdaten zugreifen</string>
     <string name="error_app_usage_revoked_android_desc">Eine Studie an der Sie teilnehmen benötigt Berechtigungen um auf Nutzungsdaten von Anwendungen zuzugreifen. Bitte stellen Sie sicher, dass der Zugriff für ESMira in den Einstellungen zugelassen ist.</string>
+    <string name="error_report_message">Ein Fehlerbericht wurde gesendet. Kommentar:</string>
 </resources>

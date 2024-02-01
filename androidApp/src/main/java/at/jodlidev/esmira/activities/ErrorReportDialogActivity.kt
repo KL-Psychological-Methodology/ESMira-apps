@@ -29,6 +29,7 @@ import at.jodlidev.esmira.*
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.Web
+import at.jodlidev.esmira.sharedCode.data_structure.DbUser
 import at.jodlidev.esmira.sharedCode.data_structure.ErrorBox
 import at.jodlidev.esmira.views.DialogButton
 import at.jodlidev.esmira.views.ESMiraDialog
@@ -42,6 +43,7 @@ class ErrorReportDialogActivity : ComponentActivity() {
 	private var comment = mutableStateOf("")
 	private val openWhatIsSentDialog = mutableStateOf(false)
 	private val openToWhomDialog = mutableStateOf(false)
+	private val sendAsMessage = mutableStateOf(true)
 	
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -70,6 +72,20 @@ class ErrorReportDialogActivity : ComponentActivity() {
 					finish()
 				}
 			)
+			if(sendAsMessage.value) {
+				val messageText = StringBuilder()
+				messageText.append(getString(R.string.error_report_message))
+				messageText.append("\n")
+				messageText.append(comment.value.ifEmpty { "" })
+				DbLogic.getStudy(DbUser.getCurrentStudyId())?.let {
+					Web.sendMessageAsync(
+						content = messageText.toString(),
+						study = it,
+						onError = { msg -> error.value = msg },
+						onSuccess = { }
+					)
+				}
+			}
 		}
 	}
 	
@@ -112,6 +128,10 @@ class ErrorReportDialogActivity : ComponentActivity() {
 						onClick = {
 							openToWhomDialog.value = true
 						})
+				}
+				Row {
+					Checkbox(checked = sendAsMessage.value, onCheckedChange = { sendAsMessage.value = it })
+					Text(stringResource(R.string.send_error_report_to_researcher))
 				}
 				
 				Spacer(modifier = Modifier.size(20.dp))
@@ -156,7 +176,7 @@ class ErrorReportDialogActivity : ComponentActivity() {
 				itemsIndexed(errors, { i, _ -> i }) { i, error ->
 					Column(
 						modifier = Modifier
-							.background(color = if(i % 2 == 0) colorLineBackground1 else colorLineBackground2)
+							.background(color = if (i % 2 == 0) colorLineBackground1 else colorLineBackground2)
 							.padding(all = 20.dp)
 					) {
 						Row {
