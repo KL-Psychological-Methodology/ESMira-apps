@@ -293,4 +293,5 @@
     <string name="error_app_usage_revoked_android_header">ESMira kann nicht auf Nutzungsdaten zugreifen</string>
     <string name="error_app_usage_revoked_android_desc">Eine Studie an der Sie teilnehmen benötigt Berechtigungen um auf Nutzungsdaten von Anwendungen zuzugreifen. Bitte stellen Sie sicher, dass der Zugriff für ESMira in den Einstellungen zugelassen ist.</string>
     <string name="error_report_message">Ein Fehlerbericht wurde gesendet. Kommentar:</string>
+    <string name="no_active_questionnaires">Keine aktiven Fragebögen</string>
 </resources>

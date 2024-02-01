@@ -293,4 +293,5 @@
     <string name="info_wrong_access_key">The access key for this study seems to have changed. Your data will not be uploaded unless you provide a correct access key.</string>
     <string name="error_app_usage_revoked_android_header">ESMira is unable to access app usage</string>
     <string name="error_app_usage_revoked_android_desc">A study you participate in requires permission to access application usage data. Please make sure that ESMira is enabled in the permission screen.</string>
+    <string name="no_active_questionnaires">No active questionnaires</string>
 </resources>

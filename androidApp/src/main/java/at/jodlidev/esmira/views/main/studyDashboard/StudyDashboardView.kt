@@ -13,8 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import at.jodlidev.esmira.views.ESMiraDialog
 import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
@@ -190,22 +192,22 @@ fun StudyDashboardGrid(
 		
 		
 		
+		item(span = { GridItemSpan(maxLineSpan) }) {
+			StudyDashboardHeaderView(
+				stringResource(R.string.questionnaires),
+				if(gotoDisabledQuestionnaires != null) {
+					{
+						MenuItem(
+							text = stringResource(R.string.show_inactive_questionnaires),
+							icon = Icons.Default.VisibilityOff,
+							onClick = gotoDisabledQuestionnaires
+						)
+					}
+				} else null
+			)
+		}
 		val questionnaireList = getQuestionnaireList()
 		if(questionnaireList.isNotEmpty()) {
-			item(span = { GridItemSpan(maxLineSpan) }) {
-				StudyDashboardHeaderView(
-					stringResource(R.string.questionnaires),
-					if(gotoDisabledQuestionnaires != null) {
-						{
-							MenuItem(
-								text = stringResource(R.string.show_inactive_questionnaires),
-								icon = Icons.Default.VisibilityOff,
-								onClick = gotoDisabledQuestionnaires
-							)
-						}
-					} else null
-				)
-			}
 			item(span = { GridItemSpan(maxLineSpan) }) {
 				Column(
 					modifier = Modifier
@@ -218,6 +220,14 @@ fun StudyDashboardGrid(
 						)
 					}
 				}
+			}
+		} else {
+			item(span = { GridItemSpan(maxLineSpan) }) {
+				Text(
+					text = stringResource(R.string.no_active_questionnaires),
+					color = MaterialTheme.colorScheme.onSurface,
+					textAlign = TextAlign.Center
+				)
 			}
 		}
 		
@@ -316,6 +326,37 @@ fun PreviewStudyDashboardView() {
 				finishedQuestionnaire,
 				DbLogic.createJsonObj("""{"title": "Questionnaire 3"}""")
 			) },
+			hasUnSyncedDataSets = { true },
+			hasEditableSchedules = { true },
+			countUnreadMessages = { 4 },
+			gotoQuestionnaire = {},
+			gotoDisabledQuestionnaires = {},
+			gotoMessages = {},
+			sendEmail = {},
+			gotoReward = {},
+			gotoStatistics = {},
+			gotoDataProtocol = {},
+			gotoStudyInformation = {},
+			openChangeSchedulesDialog = {}
+		)
+	}
+}
+
+// Without active questionnaires
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+fun PreviewStudyDashboardNoQuestionnairesView() {
+	ESMiraSurface {
+		val study = DbLogic.createJsonObj<Study>(
+			"""{"id": 1, "enableRewardSystem": true, "publicStatistics": {"charts": [{}]}, "questionnaires": [{"actionTriggers": [{"actions": [{"type": 3}]}]}]}"""
+		)
+		study.finishJSON("https://jodli.dev", "accessKey")
+
+		StudyDashboardGrid(
+			getStudy = { study },
+			reloadStudy = {},
+			getQuestionnaireList = { listOf() },
 			hasUnSyncedDataSets = { true },
 			hasEditableSchedules = { true },
 			countUnreadMessages = { 4 },
