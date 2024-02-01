@@ -278,16 +278,18 @@ struct StudyDashboard: View {
 		}
 		
 		let questionnaireList = DbLogic().getEnabledQuestionnaires(studyId: self.study.id)
+		
+		list.append(HeaderLine(content: NSLocalizedString("questionnaires", comment: "questionnaires"), action: {
+			self.showQuestionnaireMoreMenu = true
+		}))
 		if(!questionnaireList.isEmpty) {
-			list.append(HeaderLine(content: NSLocalizedString("questionnaires", comment: "questionnaires"), action: {
-				self.showQuestionnaireMoreMenu = true
-			}))
-			
 			list.append(ContentLine(viewContent: VStack {
 				ForEach(questionnaireList, id: \.id) { questionnaire in
 					QuestionnaireLineView(questionnaire: questionnaire)
 				}
 			}))
+		} else {
+			list.append(ContentLine(viewContent: Text("no_active_questionnaires").foregroundColor(Color("onSurface"))))
 		}
 		
 		
