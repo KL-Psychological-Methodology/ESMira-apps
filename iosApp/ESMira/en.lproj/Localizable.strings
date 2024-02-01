@@ -204,3 +204,6 @@
 "distance_rssi_content" = "~%1$.1fm (%2$d)";
 "colon_between" = "Between";
 "info_wrong_access_key" = "The access key for this study seems to have changed. Your data will not be uploaded unless you provide a correct access key.";
+"send_error_report_to_researcher" = "Also send this as an anonymous message to the researcher";
+"error_report_message" = "An error report was sent. Comment:";
+"no_active_questionnaires" = "No active questionnaires";

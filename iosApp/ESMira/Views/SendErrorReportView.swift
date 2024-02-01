@@ -12,6 +12,7 @@ struct SendErrorReportView: View {
 	
 	@State var shownToWhom = false
 	@State var loadingState: LoadingState = .hidden
+	@State var sendAsMessage = true
 	@State var comment: String = ""
 	
 	
@@ -71,6 +72,9 @@ struct SendErrorReportView: View {
 					
 					Button(action: { self.shownToWhom = true}) { Text("sent_to_whom").padding(.bottom) }
 				}
+				HStack {
+					CheckBoxView(label: NSLocalizedString("send_error_report_to_researcher", comment: ""), state: self.$sendAsMessage)
+				}
 				
 				HStack(alignment: .center) {
 					Spacer()
@@ -107,6 +111,20 @@ struct SendErrorReportView: View {
 								}
 							}
 						)
+						if(sendAsMessage) {
+							let message = String(format: "%1$@\n%2$@", NSLocalizedString("error_report_message", comment: ""), self.comment)
+							if let study = DbLogic().getStudy(id: DbUser().getCurrentStudyId()) {
+								Web.Companion().sendMessageAsync(
+									content: message,
+									study: study,
+									onError:  { msg in
+										DispatchQueue.main.async {
+											self.loadingState = .error
+											self.appState.showToast(msg)
+										}
+									}, onSuccess: {})
+							}
+						}
 					},
 					onCancel: {
 						self.navigationState.closeScreenDialog()
