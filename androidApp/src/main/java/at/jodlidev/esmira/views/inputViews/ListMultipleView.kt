@@ -66,33 +66,23 @@ fun ListMultipleView(input: Input, get: () -> String, save: (String, Map<String,
 				choices[i] = pair.copy(second = it)
 				val map = HashMap<String, String>()
 				val s = StringBuilder()
-				if (getStudyServerVersion(input) <= 11) { // This is necessary for backwards compatibility with older server
-					for (pair_ in choices) {
-						map[pair_.first] = if (pair_.second) "1" else "0"
-						if (pair_.second) {
-							s.append(pair_.first)
-							s.append(',')
-						}
-					}
-				} else {
-					for (i in choices.indices) {
-						map[(i + 1).toString()] = if (choices[i].second) "1" else "0"
-					}
-					s.append(
-						choices.filter { choice -> choice.second }.joinToString(transform = { choice -> choice.first })
-					)
+
+				// This is the old save format (variable~choice)
+				for (pair_ in choices) {
+					map[pair_.first] = if (pair_.second) "1" else "0"
 				}
+
+				// This is the new save format (variable~index)
+				for (i in choices.indices) {
+					map[(i + 1).toString()] = if (choices[i].second) "1" else "0"
+				}
+				s.append(
+					choices.filter { choice -> choice.second }.joinToString(transform = { choice -> choice.first })
+				)
 				save(s.toString(), map)
 			}
 		}
 	}
-}
-
-internal fun getStudyServerVersion(input: Input): Int {
-	val questionnaire = input.questionnaire
-	val studyId = questionnaire.studyId
-	val study = DbLogic.getStudy(studyId)
-	return study?.serverVersion ?: return -1
 }
 
 @Preview
