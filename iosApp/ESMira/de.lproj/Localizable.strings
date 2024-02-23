@@ -21,7 +21,7 @@
 "desc_update_schedules" = "Die Zeitpläne Ihrer Studien verändern";
 "desc_update_studies" = "Die Einstellungen Ihrer Studien aktualisieren";
 "dialogDesc_delete_statistics" = "Sollen alle Statistiken für diese Studie gelöscht werden?";
-"dialogDesc_leave_study" = "Möchten Sie diese Studie verlassen? Um wieder beitreten zu können, müssen die Zugangsdaten erneut eingegeben werden.";
+"dialogDesc_leave_study" = "Möchten Sie diese Studie verlassen? Der bisherige Fortschritt in der Studie geht dann verloren.";
 "dialogTitle_delete_statistics" = "Statistiken löschen?";
 "dialogTitle_leave_study" = "Studie verlassen?";
 "enable" = "Aktivieren";
@@ -128,7 +128,7 @@
 "update_studies" = "Studien aktualisieren";
 "upload" = "Hochladen";
 "upload_screenshots" = "Screenshots hochladen";
-"user_id" = "User-id";
+"user_id" = "User-Id";
 "visible_when_study_finished" = "Erst sichtbar, wenn die Studie beendet wurde.";
 "welcome_accessKey_question" = "Haben Sie einen Zugangscode?";
 "welcome_exit_questionDesc" = "Sie müssen einer Studie beitreten um ESMira verwenden zu können.";
@@ -162,7 +162,6 @@
 "reward_code_share" = "Per App teilen";
 "reward_code_content" = "Hallo,\ndies ist mein Belohnungscode: [[CODE]].\nMeine Daten:";
 "reward_code_description" = "Es ist uns wichtig, dass sämtliche Daten, welche Sie über ESMira eingeben haben, komplett anonym bleiben. Doch um die Belohnung erhalten zu können, müssen persönliche Daten angegeben werden, welche nicht mit den Studiendaten verknüpft sein sollten. Daher gibt es den Belohnungscode, welcher komplett unabhängig von Ihrer User-Id und Ihren Studiendaten ist.";
-
 "info_study_not_active_anymore" = "Diese Studie ist nicht mehr aktiv.";
 "colon_last_filled_out" = "Zuletzt ausgefüllt: %1$@";
 "extras" = "Extras";
@@ -175,7 +174,7 @@
 "upload_protocol" = "Upload-Protokoll";
 "are_you_sure" = "Sind Sie sicher?";
 "rejoin_study" = "Studie erneut beitreten";
-"delete_study" = "Lösche Studie";
+"delete_study" = "Studie löschen";
 "info_unsynced_datasets" = "Manche Daten müssen noch synchronisiert werden.";
 "confirm_delete_study" = "Möchten Sie diese Studie und dessen (lokale) Daten löschen?  Bereits zum Server gesendete daten werden nicht gelöscht. Aber Ihre persönlichen Statistiken, Nachrichten oder Belohnungscode werden entfernt.";
 "show_inactive_questionnaires" = "Zeige inaktive Fragebögen";
@@ -206,3 +205,4 @@
 "send_error_report_to_researcher" = "Dies auch als anonyme Nachricht an die Forscher senden";
 "error_report_message" = "Ein Fehlerbericht wurde gesendet. Kommentar:";
 "no_active_questionnaires" = "Keine aktiven Fragebögen";
+"info_wrong_access_key" = "Der Zugangsschlüssel für diese Studie hat sich verändert. Ihre Daten werden nicht hochgeladen bis Sie den korrekten Zugangsschlüssel angeben.";
