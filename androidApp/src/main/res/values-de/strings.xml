@@ -139,7 +139,7 @@
     <string name="notificationChannel_studyUpdates_name">Studie aktualisiert</string>
     <string name="notificationChannel_studyUpdates_desc">Sendet eine Benachrichtigung, wenn eine Studie aktualisiert wurde.</string>
     <string name="notifications">Benachrichtigungen</string>
-    <string name="notifications_not_working">Benachrichtigungen funktionieren nicht?</string>
+    <string name="notifications_not_working">Benachrichtigungen funktionieren nicht\?</string>
     <string name="ok_">OK</string>
     <string name="open_device_specific_settings">Einstellungen öffnen</string>
     <string name="open_device_specific_settings_numbered">Einstellungen %1$d öffnen</string>
@@ -251,7 +251,7 @@
     <string name="colon_between">Zwischen:</string>
     <string name="delete_study">Studie löschen</string>
     <string name="rejoin_study">Studie erneut beitreten</string>
-    <string name="confirm_delete_study">Möchten Sie diese Studie und dessen (lokale) Daten löschen?  Bereits zum Server gesendete daten werden nicht gelöscht. Aber Ihre persönlichen Statistiken, Nachrichten oder Belohnungscode werden entfernt.</string>
+    <string name="confirm_delete_study">Möchten Sie diese Studie und dessen (lokale) Daten löschen\? Bereits zum Server gesendete daten werden nicht gelöscht. Aber Ihre persönlichen Statistiken, Nachrichten oder Belohnungscode werden entfernt.</string>
     <string name="quit_at">Verlassen am</string>
     <string name="info_study_not_active_anymore">Diese Studie ist nicht mehr aktiv.</string>
     <string name="are_you_sure">Sind Sie sicher?</string>
@@ -263,8 +263,8 @@
     <string name="show_inactive_questionnaires">Zeige inaktive Fragebögen</string>
     <string name="info_unsynced_datasets">Manche Daten müssen noch synchronisiert werden.</string>
     <string name="send_email">Sende E-Mail</string>
-    <string name="study_information">Studien Information</string>
-    <string name="study_description">Studien Beschreibung</string>
+    <string name="study_information">Studien-Beschreibung</string>
+    <string name="study_description">Studien-Beschreibung</string>
     <string name="north_abr">N</string>
     <string name="east_abr">O</string>
     <string name="south_abr">S</string>
