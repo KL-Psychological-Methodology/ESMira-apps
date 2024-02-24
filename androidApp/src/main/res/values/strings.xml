@@ -286,7 +286,7 @@
     <string name="distance_rssi">Distance (RSSI)</string>
     <string name="distance_rssi_content">~%1$.1fm (%2$d)</string>
     <string name="server_url">server url</string>
-    <string name="schedule_permission_setup_desc">ESMira needs to be allowed to schedule events (like reminders for questionnaires) at specific times</string>
+    <string name="schedule_permission_setup_desc">ESMira needs to be allowed to schedule events (like reminders for questionnaires) at specific times.</string>
     <string name="schedule_permission_check">Please press \"Enable schedules\" then select ESMira in the list and enable \"Allow setting alarms and reminders\".</string>
     <string name="enable_schedules">Enable schedules</string>
     <string name="info_schedule_setup_skipped">This study will not work properly!</string>
