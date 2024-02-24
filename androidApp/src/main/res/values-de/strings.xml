@@ -254,7 +254,7 @@
     <string name="confirm_delete_study">Möchten Sie diese Studie und dessen (lokale) Daten löschen\? Bereits zum Server gesendete daten werden nicht gelöscht. Aber Ihre persönlichen Statistiken, Nachrichten oder Belohnungscode werden entfernt.</string>
     <string name="quit_at">Verlassen am</string>
     <string name="info_study_not_active_anymore">Diese Studie ist nicht mehr aktiv.</string>
-    <string name="are_you_sure">Sind Sie sicher?</string>
+    <string name="are_you_sure">Sind Sie sicher\?</string>
     <string name="about_ESMira_description">ESMira ist eine Plattform, bestehend aus Server und App (Android, iOS) welche für Experience Sampling Method (ESM) Studien Designs entwickelt wurde. ESMira bietet ein simples setup, ist einfach zu bedienen, gratis, dezentralisiert und Open Source.</string>
     <string name="colon_used_libraries">Verwendete Projekte:</string>
     <string name="colon_homepage">Homepage:</string>
