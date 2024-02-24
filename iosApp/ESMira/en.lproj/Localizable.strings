@@ -56,7 +56,7 @@
 "info_model_settings" = "To ensure that ESMira can issue notifications from the background, some special settings are necessary for your phone model. Tap \"Open device specific setup\" below to open your phone settings.";
 "info_no_errors" = "No errors to report";
 "info_no_model_settings" = "No device settings were found.";
-"info_no_questionnaires" = "No questionnaires available at the moment…";
+"info_no_questionnaires" = "No questionnaires are available at the moment…";
 "info_no_schedules" = "No schedules to change.";
 "info_no_statistics" = "No statistics to display.";
 "info_no_studies_joined" = "You have not joined any study.";
@@ -128,7 +128,7 @@
 "update_studies" = "Update studies";
 "upload" = "Upload";
 "upload_screenshots" = "Upload screenshots";
-"user_id" = "User-id";
+"user_id" = "User id";
 "visible_when_study_finished" = "Only visible when the study has ended.";
 "welcome_accessKey_question" = "Do you have an access key?";
 "welcome_exit_questionDesc" = "In order to use ESMira, you have to join a study first.";
@@ -162,7 +162,6 @@
 "reward_code_share" = "Share via app";
 "reward_code_content" = "Hello,\nHere is my reward code: [[CODE]].\nMy information:";
 "reward_code_description" = "It is important to us that all data provided through ESMira remain completely anonymous. But in order to receive your reward, you will have to provide some personal information which should not be linked to your user id. For this reason we have the reward code which is not linked to your user-id or any data you have provided.";
-
 "info_study_not_active_anymore" = "This study is not active anymore.";
 "colon_last_filled_out" = "Last filled out: %1$@";
 "extras" = "Extras";
@@ -197,12 +196,12 @@
 "stop_audio_record" = "Stop recording";
 "start_playing_audio" = "Play";
 "stop_playing_audio" = "Stop";
-"list_devices" = "Show %1$d devices";
+"list_devices" = "List %1$d devices";
 "select_picture" = "Select picture";
 "anonymised_device" = "Anonymised device";
 "distance_rssi" = "Distance (RSSI)";
 "distance_rssi_content" = "~%1$.1fm (%2$d)";
-"colon_between" = "Between";
+"colon_between" = "Between:";
 "info_wrong_access_key" = "The access key for this study seems to have changed. Your data will not be uploaded unless you provide a correct access key.";
 "send_error_report_to_researcher" = "Also send this as an anonymous message to the researcher";
 "error_report_message" = "An error report was sent. Comment:";
