@@ -1,6 +1,8 @@
 package at.jodlidev.esmira.sharedCode.data_structure
 
 import at.jodlidev.esmira.sharedCode.DbLogic
+import at.jodlidev.esmira.sharedCode.H3
+import at.jodlidev.esmira.sharedCode.LatLng
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Transient
 import kotlinx.serialization.Serializable
@@ -31,6 +33,7 @@ class Input internal constructor( ) {
 		likert,
 		list_single,
 		list_multiple,
+		location,
 		number,
 		photo,
 		record_audio,
@@ -57,6 +60,7 @@ class Input internal constructor( ) {
 	var playSound: Boolean = false //for countdown
 	var showValue: Boolean = false //for compass, vas
 	var maxValue: Float = 0F //for vas
+	var resolution: Int = 0 //for location
 	
 	var forceInt: Boolean = false
 	
