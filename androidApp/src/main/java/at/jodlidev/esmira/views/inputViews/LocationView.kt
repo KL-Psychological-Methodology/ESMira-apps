@@ -40,6 +40,7 @@ import at.jodlidev.esmira.sharedCode.H3
 import at.jodlidev.esmira.sharedCode.LatLng
 import at.jodlidev.esmira.views.DefaultButtonIconLeft
 import kotlinx.coroutines.delay
+import java.security.Security
 import kotlin.math.max
 import kotlin.math.min
 
@@ -82,21 +83,31 @@ class LocationScanner(val context: Context, private val resolution: Int, private
     }
 
     private fun getCachedLocation(): Location? {
-        val location = try {
-            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-        } catch (e: SecurityException) {
-            null
-        } ?: return null
-        return if((location.elapsedRealtimeNanos - SystemClock.elapsedRealtimeNanos()) > maxLocationAgeNanoS) {
-            location
+        val location: Location? = if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            try {
+                locationManager.getLastKnownLocation(LocationManager.FUSED_PROVIDER)
+            } catch (e: SecurityException) {
+                null
+            }
         } else {
-            null
+            try {
+                locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER) ?: locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+            } catch (e: SecurityException) {
+                null
+            }
+        }
+        return location?.let {
+            if((location.elapsedRealtimeNanos - SystemClock.elapsedRealtimeNanos()) > maxLocationAgeNanoS) {
+                location
+            } else {
+                null
+            }
         }
     }
 
     private fun getCurrentLocation(): Boolean {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            val provider = LocationManager.GPS_PROVIDER
+            val provider = LocationManager.FUSED_PROVIDER
             val locationRequest = LocationRequest.Builder(maxScanMilliS).setQuality(LocationRequest.QUALITY_LOW_POWER).build()
             cancellationSignal = CancellationSignal()
             try {
@@ -109,6 +120,7 @@ class LocationScanner(val context: Context, private val resolution: Int, private
         } else {
             try {
                 locationManager.requestSingleUpdate(LocationManager.GPS_PROVIDER, this, null)
+                locationManager.requestSingleUpdate(LocationManager.NETWORK_PROVIDER, this, null)
             } catch (e: SecurityException) {
                 setLocation(null)
                 return false
