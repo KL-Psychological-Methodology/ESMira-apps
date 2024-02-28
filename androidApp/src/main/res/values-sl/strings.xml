@@ -1,2 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="additional_notification_settings_general_android">Na naslednjem zaslonu se prepričajte, da je ESMiri dovoljeno delovanje v ozadju in da se lahko zažene ob ponovnem zagonu telefona. Žal se načini nastavitev (in katere nastavitve dejansko obstajajo) med modeli telefonov zelo razlikujejo, zato za ta model telefona nimamo zaslonskih slik, ki bi vam lahko dodatno pomagale. Poskusite sami izbrati ustrezne nastavitve. Če nam želite pomagati in nam poslati nekaj zaslonskih slik, se obrnite na razvijalca aplikacije (esmira@kl.ac.at).
+\n
+\nKo končate, pritisnite tipko za nazaj na telefonu, da se vrnete na ta zaslon.</string>
+    <string name="additional_notification_settings_samsung_2">Na dnu strani izberite možnost \"Nenadzorovane aplikacije\".</string>
+    <string name="app_name">ESMira</string>
+    <string name="additional_notification_settings_esmi">Pri naslednjem pogledu poiščite ESMira na seznamu aplikacij in se prepričajte, da ima dovoljenje za samodejni zagon.</string>
+    <string name="additional_notification_settings_huaweiV2_1">Na naslednjem zaslonu poiščite ESMira na seznamu aplikacij in se prepričajte, da je vklopljeno \"Ročno upravljanje\".</string>
+    <string name="additional_notification_settings_huaweiV2_2">V naslednjem zaslonu se prepričajte, da imate za ESMiro vklopljeno dovoljenje za \"Auto-Launch\" in \"Run in background\".</string>
+    <string name="additional_notification_settings_samsung_1">Pri naslednji strani počakajte, da se zaključi preverjanje, in se nato pomaknite do dna strani.</string>
+    <string name="additional_notification_settings_samsung_3">Na naslednji strani pritisnite gumb \"Dodaj aplikacije\". Nato na seznamu izberite ESMira in pritisnite \"V redu\".</string>
+    <string name="additional_notification_settings_zte_blade_3_1">Na naslednjem zaslonu izberite \"Optimizacija baterije\".</string>
+    <string name="additional_notification_settings_zte_blade_3_2">Nato odprite spustni meni in izberite \"Vse aplikacije\".</string>
+</resources>
