@@ -134,7 +134,7 @@ class LocationScanner(val context: Context, private val resolution: Int, private
         location?.let {
             val geo = LatLng.fromDegrees(location.latitude, location.longitude)
             val effectiveResolution = min(maxResolution, max(minResolution, resolution))
-            val indexResult = geo.latLngToCell(effectiveResolution)
+            val indexResult = geo.latLngToCellResult(effectiveResolution)
             indexResult.getOrNull()?.let{
                 index = H3.h3toString(it)
             }

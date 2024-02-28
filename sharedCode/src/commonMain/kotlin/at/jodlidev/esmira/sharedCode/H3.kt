@@ -64,7 +64,7 @@ internal val SQRT7_POWERS = arrayOf(
 
 class LatLng (var lat: Double, var lng: Double) {
 
-    fun latLngToCell(res: Int): Result<H3Index> {
+    fun latLngToCellResult(res: Int): Result<H3Index> {
         if(res < 0 || res > MAX_H3_RES) {
             return Result.failure(Exception("Invalid resolution"))
         }
@@ -79,6 +79,18 @@ class LatLng (var lat: Double, var lng: Double) {
         } else {
             return Result.success(out)
         }
+    }
+
+    fun latLngToCell(res: Int): H3Index {
+        if(res < 0 || res > MAX_H3_RES) {
+            return H3.H3_NULL
+        }
+        if(!lat.isFinite() || !lng.isFinite()) {
+            return H3.H3_NULL
+        }
+
+        val fijk = geoToFaceIjk(res)
+        return fijk.faceIjkToH3(res)
     }
 
     fun setGeoDegs(latDegs: Double, lngDegs: Double) {
