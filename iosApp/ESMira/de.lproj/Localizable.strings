@@ -208,6 +208,6 @@
 "no_active_questionnaires" = "Keine aktiven Fragebögen";
 "error_gps_disabled" = "GPS ist deaktiviert!";
 "scanning" = "Scanne ";
-"found_location" = "Gefundener Standort: %1$s";
+"found_location" = "Gefundener Standort: %1$@";
 "could_not_determine_location" = "Standort konnte nicht bestimmt werden";
 "stop_scannig" = "Scannen stoppen";

@@ -209,6 +209,6 @@
 "no_active_questionnaires" = "No active questionnaires";
 "error_gps_disabled" = "GPS is disabled!";
 "scanning" = "Scanning";
-"found_location" = "Found location: %1$s";
+"found_location" = "Found location: %1$@";
 "could_not_determine_location" = "Could not determine location";
 "stop_scanning" = "Stop scanning";
