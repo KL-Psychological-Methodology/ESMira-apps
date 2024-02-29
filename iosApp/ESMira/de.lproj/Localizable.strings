@@ -206,3 +206,8 @@
 "send_error_report_to_researcher" = "Dies auch als anonyme Nachricht an die Forscher senden";
 "error_report_message" = "Ein Fehlerbericht wurde gesendet. Kommentar:";
 "no_active_questionnaires" = "Keine aktiven Fragebögen";
+"error_gps_disabled" = "GPS ist deaktiviert!";
+"scanning" = "Scanne ";
+"found_location" = "Gefundener Standort: %1$s";
+"could_not_determine_location" = "Standort konnte nicht bestimmt werden";
+"stop_scannig" = "Scannen stoppen";

@@ -207,3 +207,8 @@
 "send_error_report_to_researcher" = "Also send this as an anonymous message to the researcher";
 "error_report_message" = "An error report was sent. Comment:";
 "no_active_questionnaires" = "No active questionnaires";
+"error_gps_disabled" = "GPS is disabled!";
+"scanning" = "Scanning";
+"found_location" = "Found location: %1$s";
+"could_not_determine_location" = "Could not determine location";
+"stop_scanning" = "Stop scanning";

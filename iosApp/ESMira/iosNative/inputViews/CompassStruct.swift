@@ -62,10 +62,14 @@ struct CompassStruct: View {
 					rotation: compassManager.degrees,
 					showValue: viewModel.input.showValue,
 					infoLabel: "\(Int(compassManager.degrees))°",
-					buttonLabel: NSLocalizedString("save", comment: "save"),
+					buttonLabel: NSLocalizedString("stop_scanning", comment: "stop_scanning"),
 					buttonAction: {
 						compassManager.stop()
-						viewModel.value = String(compassManager.degrees)
+						if viewModel.input.numberHasDecimal {
+							viewModel.value = String(compassManager.degrees)
+						} else {
+							viewModel.value = String(Int(compassManager.degrees))
+						}
 						isScanning = false
 					}
 				)
