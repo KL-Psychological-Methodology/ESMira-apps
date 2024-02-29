@@ -40,6 +40,7 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = composeVersion
     }
+    namespace = "at.jodlidev.esmira"
 }
 
 dependencies {
