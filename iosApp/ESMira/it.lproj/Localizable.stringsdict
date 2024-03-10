@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-    <dict>
-    </dict>
+<dict>
+	<key>ios_info_missed_notifications</key>
+	<dict>
+		<key>notifications</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>Nessuna notifica persa.</string>
+			<key>one</key>
+			<string>1 notifica persa.</string>
+			<key>other</key>
+			<string>%1$d notifiche perse.</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@notifiche@</string>
+	</dict>
+	<key>info_reward_is_not_active_yet</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Le ricompense per questo studio non sono ancora attive. Dovrebbero essere disponibili a breve.</string>
+		<key>days</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>Le ricompense per questo studio non sono ancora attive. Dovrebbero essere disponibili a breve.</string>
+			<key>one</key>
+			<string>Le ricompense per questo studio non sono ancora attive. Dovrebbero essere disponibili entro un giorno.</string>
+			<key>other</key>
+			<string>Le ricompense per questo studio non sono ancora attive. Dovrebbero essere disponibili ento %1$d giorni.</string>
+		</dict>
+	</dict>
+</dict>
 </plist>
