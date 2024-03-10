@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">ESMira</string>
+    <string name="additional_notification_settings_general_android">Nella schermata seguente, assicurati che ESMira possa essere eseguita in background e che possa essere avviata al riavvio del telefono. Purtroppo i nomi delle impostazioni (e le impostazioni effettivamente esistenti) variano notevolmente da un modello di telefono all\'altro e non disponiamo di schermate per questo modello di telefono per aiutarvi ulteriormente. Pertanto, cercate di individuare le impostazioni appropriate. Se volete aiutarci e inviarci qualche screenshot, contattate lo sviluppatore dell\'app (esmira@kl.ac.at).
+\n
+\nAl termine, premere il tasto indietro del telefono per tornare a questa schermata.</string>
+    <string name="add">Aggiungi</string>
+    <string name="add_a_study">Partecipa ad un nuovo studio</string>
+    <string name="additional_notification_settings_esmi">Nella schermata successiva trovate ESMira nell\'elenco delle applicazioni e assicuratevi che abbia l\'autorizzazione all\'avvio automatico.</string>
+    <string name="additional_notification_settings_huaweiV2_1">Nella schermata seguente, trovare ESMira nell\'elenco delle applicazioni e assicurarsi che sia \"Gestita manualmente\".</string>
+    <string name="additional_notification_settings_huaweiV2_2">Nella schermata successiva assicuratevi che ESMira abbia l\'autorizzazione per \"Avvio automatico\" e \"Esegui in background\".</string>
+    <string name="additional_notification_settings_samsung_1">Nella schermata successiva, attendere il completamento della \"Verifica\" e scorrere fino in fondo alla pagina.</string>
+    <string name="additional_notification_settings_samsung_2">In fondo alla pagina selezionare \"Applicazioni non monitorate\".</string>
+    <string name="additional_notification_settings_samsung_3">Nella schermata seguente premere il pulsante \"Aggiungi applicazioni\". Selezionare ESMira nell\'elenco e premere \"OK\".</string>
+    <string name="additional_notification_settings_zte_blade_3_1">Nella schermata successiva selezionare \"Ottimizzazione batteria\".</string>
+    <string name="additional_notification_settings_zte_blade_3_2">Quindi aprire il menu a discesa e selezionare \"Tutte le applicazioni\".</string>
+    <string name="additional_notification_settings_zte_blade_3_3">Ora cercate nell\'elenco \"ESMira\", cliccateci sopra, selezionate \"Non ottimizzare\" e premete \"Fine\".</string>
+    <string name="additional_notification_settings_zte_blade_l110_1">Nella schermata successiva selezionare \"Batteria\".</string>
+    <string name="additional_notification_settings_zte_blade_l110_2">Quindi selezionare \"Impostazioni di sincronizzazione HeartBeat\".</string>
 </resources>
