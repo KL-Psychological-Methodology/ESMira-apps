@@ -200,7 +200,7 @@
 "welcome_qr_instructions" = "Posiziona il codice QR a circa 30 cm di distanza dalla fotocamera dello smartphone in modo che sia visibile sullo schermo.\nESMira scansionerà automaticamente il codice non appena la fotocamera avrà messo a fuoco.";
 "sent_to_whom" = "A chi è stato inviato?";
 "reward_code_description" = "Per noi è importante che tutti i dati forniti tramite ESMira rimangano completamente anonimi. Tuttavia, per ricevere la ricompensa, dovrete fornire alcune informazioni personali che non devono essere collegate al vostro ID utente. Per questo motivo abbiamo un codice di ricompensa che non è collegato al vostro ID utente o ai dati che avete fornito.";
-"user_id" = "ID utente";
+"user_id" = "Id utente";
 "confirm_delete_study" = "Volete cancellare questo studio e tutti i suoi dati (locali)? I dati già trasmessi al server non saranno cancellati. Ma le statistiche personali, i messaggi o il codice premio andranno persi.";
 "about_ESMira_description" = "ESMira è una piattaforma composta da un server e da un'applicazione mobile (Android, iOS) sviluppata per progetti di ricerca \"experience sampling method\" (ESM). ESMira offre un processo di configurazione molto semplice e una grande facilità d'uso, il tutto in modo gratuito, decentralizzato e open source.";
 "info_wrong_access_key" = "La chiave di accesso per questo studio sembra essere cambiata. I dati non verranno caricati se non si fornisce una chiave di accesso corretta.";
