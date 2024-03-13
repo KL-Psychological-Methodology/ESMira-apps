@@ -37,19 +37,22 @@ struct CountdownStruct: View {
 				Image(systemName: "checkmark.circle.fill").foregroundColor(Color.green)
 			}
 			else if(timerIsRunning) {
-				Text(String(ticks)).font(.title)
-					.onReceive(timer!) { time in
-						ticks -= 1
-						if(ticks <= 0) {
-							viewModel.value = "1"
-							timerIsRunning = false
-							if(viewModel.input.playSound) {
-								AudioServicesPlaySystemSound(1322)
+				if(viewModel.input.showValue) {
+					Text(String(ticks)).font(.title)
+						.onReceive(timer!) { time in
+							ticks -= 1
+							if(ticks <= 0) {
+								viewModel.value = "1"
+								timerIsRunning = false
+								if(viewModel.input.playSound) {
+									AudioServicesPlaySystemSound(1322)
+								}
 							}
 						}
-					}
+				} else {
+					Text("countdown_running")
 				}
-			else {
+			} else {
 				DefaultIconButton(icon: "play.circle.fill", label: "start_timer") {
 					timerIsRunning = true
 					viewModel.value = "0"

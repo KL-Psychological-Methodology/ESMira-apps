@@ -212,3 +212,4 @@
 "found_location" = "Found location: %1$@";
 "could_not_determine_location" = "Could not determine location";
 "stop_scanning" = "Stop scanning";
+"countdown_running" = "Countdown running";
