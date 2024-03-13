@@ -298,4 +298,5 @@
     <string name="scanning">Scanne </string>
     <string name="found_location">Gefundener Standort: %1$s</string>
     <string name="could_not_determine_location">Standort konnte nicht bestimmt werden</string>
+    <string name="countdown_running">Countdown läuft</string>
 </resources>
