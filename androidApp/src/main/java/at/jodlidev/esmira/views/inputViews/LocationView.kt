@@ -18,18 +18,21 @@ import android.os.SystemClock
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import android.content.res.Configuration
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
@@ -38,6 +41,7 @@ import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.H3
 import at.jodlidev.esmira.sharedCode.LatLng
+import at.jodlidev.esmira.sharedCode.data_structure.ErrorBox
 import at.jodlidev.esmira.views.DefaultButtonIconLeft
 import kotlinx.coroutines.delay
 import java.security.Security
@@ -49,6 +53,8 @@ const val maxScanMilliS = 60L * 1000L
 const val maxLocationAgeNanoS = 5L * 60L * 1000L * 1000L * 1000L
 const val minResolution = 0
 const val maxResolution = 9
+
+const val h3ViewerBaseURL = "https://wolf-h3-viewer.glitch.me/?h3="
 
 class LocationScanner(val context: Context, private val resolution: Int, private val save: (String) -> Unit): LocationListener {
     private val locationManager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
@@ -158,6 +164,7 @@ class LocationScanner(val context: Context, private val resolution: Int, private
 @Composable
 fun LocationView(input: Input, get: () -> String, save: (String) -> Unit) {
     val context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
     val locationScanner = remember { LocationScanner(context, input.resolution, save) }
 
     val progress = remember { mutableStateOf(0f) }
@@ -205,7 +212,17 @@ fun LocationView(input: Input, get: () -> String, save: (String) -> Unit) {
         } else if(locationScanner.result.value != LocationScanner.ScanResult.NONE) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 when(locationScanner.result.value) {
-                    LocationScanner.ScanResult.SUCCESS -> Text(stringResource(R.string.found_location, locationScanner.index))
+                    LocationScanner.ScanResult.SUCCESS -> DefaultButtonIconLeft(
+                        text = stringResource(R.string.found_location, locationScanner.index),
+                        icon = Icons.Default.Check,
+                        onClick = {
+                            val url = StringBuilder().append(h3ViewerBaseURL)
+                                .append(locationScanner.index).toString()
+                            try { uriHandler.openUri(url) } catch (e: Throwable) {
+                                ErrorBox.warn("LocationView", "$url is not a valid URL!")
+                            }
+                        }
+                    )
                     LocationScanner.ScanResult.FAIL -> Text(stringResource(R.string.could_not_determine_location))
                     else -> {}
                 }
