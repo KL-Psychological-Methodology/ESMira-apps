@@ -52,7 +52,7 @@ const val maxScanSeconds = 60f
 const val maxScanMilliS = 60L * 1000L
 const val maxLocationAgeNanoS = 5L * 60L * 1000L * 1000L * 1000L
 const val minResolution = 0
-const val maxResolution = 9
+const val maxResolution = 15
 
 const val h3ViewerBaseURL = "https://wolf-h3-viewer.glitch.me/?h3="
 
