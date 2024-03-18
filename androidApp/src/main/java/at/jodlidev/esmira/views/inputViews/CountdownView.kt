@@ -81,7 +81,16 @@ fun CountdownView(input: Input, get: () -> String, save: (String) -> Unit) {
 				}
 			}
 			Row(modifier = Modifier.height(30.dp), verticalAlignment = Alignment.CenterVertically) {
-				Text(ticks.value.toString(), fontSize = MaterialTheme.typography.headlineSmall.fontSize)
+				if(input.showValue) {
+					Text(
+						ticks.value.toString(),
+						fontSize = MaterialTheme.typography.headlineSmall.fontSize
+					)
+				} else {
+					Text(
+						stringResource(R.string.countdown_running)
+					)
+				}
 			}
 		}
 		else {

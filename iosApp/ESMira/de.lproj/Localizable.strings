@@ -206,3 +206,9 @@
 "error_report_message" = "Ein Fehlerbericht wurde gesendet. Kommentar:";
 "no_active_questionnaires" = "Keine aktiven Fragebögen";
 "info_wrong_access_key" = "Der Zugangsschlüssel für diese Studie hat sich verändert. Ihre Daten werden nicht hochgeladen bis Sie den korrekten Zugangsschlüssel angeben.";
+"error_gps_disabled" = "GPS ist deaktiviert!";
+"scanning" = "Scanne ";
+"found_location" = "Gefundener Standort: %1$@";
+"could_not_determine_location" = "Standort konnte nicht bestimmt werden";
+"stop_scannig" = "Scannen stoppen";
+"countdown_running" = "Countdown läuft";

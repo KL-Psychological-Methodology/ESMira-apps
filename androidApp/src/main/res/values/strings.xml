@@ -294,4 +294,9 @@
     <string name="error_app_usage_revoked_android_header">ESMira is unable to access app usage</string>
     <string name="error_app_usage_revoked_android_desc">A study you participate in requires permission to access application usage data. Please make sure that ESMira is enabled in the permission screen.</string>
     <string name="no_active_questionnaires">No active questionnaires</string>
+    <string name="error_gps_disabled">GPS is disabled!</string>
+    <string name="scanning">Scanning</string>
+    <string name="found_location">Found location: %1$s</string>
+    <string name="could_not_determine_location">Could not determine location</string>
+    <string name="countdown_running">Countdown running</string>
 </resources>

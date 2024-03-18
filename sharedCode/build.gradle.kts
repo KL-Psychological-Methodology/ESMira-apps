@@ -123,4 +123,5 @@ android {
 		targetSdk = 31
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 	}
+	namespace = "at.jodlidev.esmira.sharedCode"
 }

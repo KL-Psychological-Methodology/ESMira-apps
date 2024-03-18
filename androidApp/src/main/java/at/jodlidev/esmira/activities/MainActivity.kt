@@ -26,6 +26,7 @@ import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.*
 import at.jodlidev.esmira.sharedCode.data_structure.QuestionnaireCache
 import at.jodlidev.esmira.sharedCode.data_structure.DbUser
+import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
 import at.jodlidev.esmira.views.ESMiraDialog
 import at.jodlidev.esmira.views.NextNotificationsView
 import at.jodlidev.esmira.views.main.*
@@ -349,8 +350,8 @@ class MainActivity: ComponentActivity() {
 	
 	@Composable
 	fun PageQuestionnaire(qId: Long, pageNumber: Int, navController: NavHostController) {
-		val questionnaire = remember { DbLogic.getQuestionnaire(qId) } ?: return
-		
+		val questionnaire = remember { getQuestionnaire(qId) } ?: return
+
 		QuestionnaireView(
 			questionnaire = questionnaire,
 			pageNumber = pageNumber,
@@ -437,7 +438,16 @@ class MainActivity: ComponentActivity() {
 	companion object {
 		const val EXTRA_OPEN_MESSAGES = "extra_open_messages"
 		const val EXTRA_OPEN_QUESTIONNAIRE = "extra_open_questionnaire"
-		
+
+		var _questionnaire: Pair<Long, Questionnaire?>? = null
+
+		fun getQuestionnaire(qId: Long): Questionnaire? {
+			if(_questionnaire == null || _questionnaire!!.first != qId) {
+				_questionnaire = Pair(qId, DbLogic.getQuestionnaire(qId))
+			}
+			return _questionnaire!!.second
+		}
+
 		fun start(context: Context) {
 			val intent = Intent(context, MainActivity::class.java)
 			context.startActivity(intent)
