@@ -51,6 +51,16 @@ struct CountdownStruct: View {
 						}
 				} else {
 					Text("countdown_running")
+						.onReceive(timer!) { time in
+							ticks -= 1
+							if(ticks <= 0) {
+								viewModel.value = "1"
+								timerIsRunning = false
+								if(viewModel.input.playSound) {
+									AudioServicesPlaySystemSound(1322)
+								}
+							}
+						}
 				}
 			} else {
 				DefaultIconButton(icon: "play.circle.fill", label: "start_timer") {
