@@ -13,3 +13,4 @@ local.properties
 androidApp/release
 xcuserdata/*
 /iosApp/ESMira.xcodeproj/xcuserdata/*
+*.xcuserstate
