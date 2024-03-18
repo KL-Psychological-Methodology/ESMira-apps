@@ -10,7 +10,7 @@ import CoreLocation
 var maxScanSeconds: Int64 = 60
 var maxLocationAgeSeconds: TimeInterval = 5 * 60
 var minResolution: Int32 = 0
-var maxResolution: Int32 = 9
+var maxResolution: Int32 = 15
 
 open class LocationScanner: NSObject, CLLocationManagerDelegate, ObservableObject {
 	private var locationManager: CLLocationManager! = nil
