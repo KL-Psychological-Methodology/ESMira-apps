@@ -281,4 +281,26 @@
     <string name="select_picture">Оберіть зображення</string>
     <string name="error_gps_disabled">GPS вимкнено!</string>
     <string name="countdown_running">Йде зворотній відлік</string>
+    <string name="server_url">URL-адреса сервера</string>
+    <string name="colon_choose_study">Виберіть дослідження:</string>
+    <string name="schedule_permission_setup_desc">ESMira потрібно дозволити планувати події (наприклад, нагадування для анкет) на певний час.</string>
+    <string name="schedule_permission_check">Будь ласка, натисніть «Увімкнути розклади», потім виберіть ESMira у списку та ввімкніть «Дозволити налаштування будильників і нагадувань».</string>
+    <string name="enable_schedules">Увімкнути розклади</string>
+    <string name="info_schedule_setup_skipped">Це дослідження не буде працювати належним чином!</string>
+    <string name="error_app_usage_revoked_android_header">ESMira не може отримати доступ до використання програми</string>
+    <string name="error_app_usage_revoked_android_desc">Для дослідження, у якому Ви берете участь, потрібен дозвіл на доступ до даних про використання програми. Переконайтеся, що ESMira ввімкнено на екрані дозволів.</string>
+    <string name="from_X">Від %1$s</string>
+    <string name="repeating">Повторюване</string>
+    <string name="one_time">Одноразове</string>
+    <string name="disabled_questionnaires">Відключені опитування</string>
+    <string name="send_email">Відправити лист (Email)</string>
+    <string name="stop_scanning">зупинити сканування</string>
+    <string name="state_checking_device_model">Перевірка моделі пристрою…</string>
+    <string name="pinned">Закріплено</string>
+    <string name="colon_last_filled_out">Останнє заповнення: %1$s</string>
+    <string name="yesterday">Вчора</string>
+    <string name="error_bluetooth_disabled">Bluetooth вимкнено!</string>
+    <string name="found_location">Знайдено місцезнаходження: %1$s</string>
+    <string name="check_phone_model">Перевірити модель телефону</string>
+    <string name="open_device_instructions">Відкрити інструкцію пристрою</string>
 </resources>
