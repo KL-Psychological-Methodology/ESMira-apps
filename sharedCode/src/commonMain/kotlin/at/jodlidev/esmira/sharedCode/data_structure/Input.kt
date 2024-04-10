@@ -49,6 +49,7 @@ class Input internal constructor( ) {
 	var required: Boolean = false
 	var url: String = ""
 	var random: Boolean = false
+	var relevance: String = ""
 	var defaultValue: String = ""
 	var likertSteps: Int = 5
 	var leftSideLabel: String = ""

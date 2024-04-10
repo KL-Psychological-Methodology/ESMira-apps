@@ -1,5 +1,7 @@
 package at.jodlidev.esmira.sharedCode.merlinInterpreter
 
+import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
+
 /*
  * Created by SelinaDev
  *
@@ -8,9 +10,14 @@ package at.jodlidev.esmira.sharedCode.merlinInterpreter
  * The Runner abstracts these intermediate steps and is able to manage the errors that can occur in each step.
  */
 
-class MerlinRunner () {
+object MerlinRunner {
     private val errors = mutableListOf<MerlinError>()
     private val interpreter = MerlinInterpreter()
+    private var questionnaire: Questionnaire? = null
+
+    fun setQuestionnaire(questionnaire: Questionnaire?) {
+        this.questionnaire = questionnaire
+    }
 
     fun run(source: String): MerlinType? {
         // Scanning
@@ -34,12 +41,13 @@ class MerlinRunner () {
         }
 
         // Interpreting
+        interpreter.initialize(questionnaire, MerlinObject())
         try {
-            interpreter.interpret(statements)
-        } catch (r: MerlinReturn) {
-            return r.value
+            return interpreter.interpret(statements)
         } catch (e: MerlinRuntimeError) {
             logRuntimeError(e)
+        } finally {
+            interpreter.cleanup()
         }
         return null
     }

@@ -11,13 +11,19 @@ package at.jodlidev.esmira.sharedCode.merlinInterpreter
  * Functions are always directly defined in the current environment, and can therefore shadow other functions.
  */
 
-class MerlinEnvironment (val enclosing: MerlinEnvironment? = null) {
+class MerlinEnvironment (private val enclosing: MerlinEnvironment? = null) {
     private val values = HashMap<String, MerlinType>()
     private val functions = HashMap<String, MerlinFunction>()
+    var currentReturnValue: MerlinType = MerlinNone
+
 
     fun get(name: MerlinToken): MerlinType {
-        if (values.containsKey(name.lexeme)) {
-            return values[name.lexeme]!!
+        return get(name.lexeme)
+    }
+
+    fun get(name: String): MerlinType {
+        if (values.containsKey(name)) {
+            return values[name]!!
         }
 
         enclosing?.let { return enclosing.get(name) }

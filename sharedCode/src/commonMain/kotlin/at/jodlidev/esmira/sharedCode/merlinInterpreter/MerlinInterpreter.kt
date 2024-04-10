@@ -1,5 +1,7 @@
 package at.jodlidev.esmira.sharedCode.merlinInterpreter
 
+import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
+
 /*
  * Created by SelinaDev
  *
@@ -10,9 +12,32 @@ package at.jodlidev.esmira.sharedCode.merlinInterpreter
  */
 
 class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit> {
-    val globals = MerlinEnvironment()
+    var globals = MerlinEnvironment()
     private var environment = globals
     private var isInitializing = false
+    private var questionnaire: Questionnaire? = null
+
+    fun getQuestionnaire(): Questionnaire? {
+        return questionnaire
+    }
+    fun initialize(questionnaire: Questionnaire?, globalsObject: MerlinObject) {
+        this.questionnaire = questionnaire
+        isInitializing = false
+        globals = MerlinEnvironment()
+        for(func in nativeFunctions) {
+            globals.defineFunction(func.key, func.value)
+        }
+        globals.define("globals", globalsObject)
+        environment = globals
+    }
+
+    fun getGlobalsObject(): MerlinObject? {
+        return globals.get("globals").let { if (it is MerlinObject) it else null }
+    }
+
+    fun cleanup() {
+        questionnaire = null
+    }
 
     fun interpret(statements: List<MerlinStmt>): MerlinType {
         try {
@@ -22,7 +47,7 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
         } catch (e: MerlinReturn) {
             return e.value
         }
-        return MerlinNone
+        return environment.currentReturnValue
     }
 
     private fun execute(stmt: MerlinStmt) {
@@ -200,7 +225,7 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
     }
 
     override fun visitExpressionStmt(stmt: MerlinStmt.Expression) {
-        evaluate(stmt.expression)
+        environment.currentReturnValue = evaluate(stmt.expression)
     }
 
     override fun visitForStmt(stmt: MerlinStmt.For) {
@@ -242,7 +267,7 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
     }
 
     override fun visitReturnStmt(stmt: MerlinStmt.Return) {
-        val returnValue = stmt.value?.let { evaluate(it) } ?: MerlinNone
+        val returnValue = stmt.value?.let { evaluate(it) } ?: environment.currentReturnValue
         throw MerlinReturn(returnValue)
     }
 
@@ -259,5 +284,53 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
         while (evaluate(stmt.condition).isTruthy()) {
             execute(stmt.body)
         }
+    }
+
+    companion object {
+        val nativeFunctions: Map<String, MerlinFunction> = mapOf(
+            "getQuestionnaireVar" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 1
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val questionnaire = interpreter.getQuestionnaire() ?: return MerlinNone
+                    val inputName = arguments[0].stringify()
+                    for(page in questionnaire.pages) {
+                        for(input in page.inputs) {
+                            if(input.name == inputName) {
+                                return MerlinString(input.getValue())
+                            }
+                        }
+                    }
+                    return MerlinNone
+                }
+            },
+            "getQuestionnaireVarAlternative" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 2
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val questionnaire = interpreter.getQuestionnaire() ?: return MerlinNone
+                    val inputName = arguments[0].stringify()
+                    val alternativeKey = arguments[1].stringify()
+                    for(page in questionnaire.pages) {
+                        for(input in page.inputs) {
+                            if(input.name == inputName) {
+                                return input.getAdditional(alternativeKey)?.let { MerlinString(it) } ?: MerlinNone
+                            }
+                        }
+                    }
+                    return MerlinNone
+                }
+            }
+        )
     }
 }

@@ -29,6 +29,6 @@ class MerlinScriptFunction (private val declaration: MerlinStmt.Function): Merli
         } catch (r: MerlinReturn) {
             return r.value
         }
-        return MerlinNone
+        return environment.currentReturnValue
     }
 }
