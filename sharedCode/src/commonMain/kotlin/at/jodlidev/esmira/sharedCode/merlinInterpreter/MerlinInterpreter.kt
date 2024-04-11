@@ -1,6 +1,13 @@
 package at.jodlidev.esmira.sharedCode.merlinInterpreter
 
+import at.jodlidev.esmira.sharedCode.DbLogic
+import at.jodlidev.esmira.sharedCode.NativeLink
+import at.jodlidev.esmira.sharedCode.data_structure.DataSet
+import at.jodlidev.esmira.sharedCode.data_structure.ErrorBox
+import at.jodlidev.esmira.sharedCode.data_structure.Message
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 /*
  * Created by SelinaDev
@@ -288,6 +295,11 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
 
     companion object {
         val nativeFunctions: Map<String, MerlinFunction> = mapOf(
+            //
+            // Accessing questionnaire variables
+            //
+
+            // getQuestionnaireVar(varName)
             "getQuestionnaireVar" to object: MerlinFunction {
                 override fun arity(): Int {
                     return 1
@@ -309,6 +321,7 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                     return MerlinNone
                 }
             },
+            // getQuestionnaireVarAlternative(varName, alternativeKey)
             "getQuestionnaireVarAlternative" to object: MerlinFunction {
                 override fun arity(): Int {
                     return 2
@@ -329,6 +342,95 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                         }
                     }
                     return MerlinNone
+                }
+            },
+
+            //
+            // Triggering Events in ESMira
+            //
+
+            // triggerQuestionnaire(questionnaireId, message, timeout)
+            "triggerQuestionnaire" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 3
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val questionnaireId = arguments[0].asNumber()?.value?.toLong() ?: return MerlinType.createBool(false)
+                    val studyId = interpreter.questionnaire?.studyId ?: return MerlinType.createBool(false)
+                    val questionnaire = DbLogic.getQuestionnaireByInternalId(studyId, questionnaireId)?: return MerlinType.createBool(false)
+                    val message = arguments[1].stringify()
+                    val timeout = arguments[2].asNumber()?.value?.toInt() ?: 0
+
+                    val now = NativeLink.getNowMillis()
+                    questionnaire.updateLastNotification(now)
+                    if (!questionnaire.canBeFilledOut(now)) {
+                        ErrorBox.log(
+                            "Notification",
+                            "Questionnaire (${questionnaire.title}) is not active at ${NativeLink.formatDateTime(now)}. Skippin notification."
+                        )
+                        return MerlinType.createBool(false)
+                    }
+                    NativeLink.notifications.fireQuestionnaireBing(
+                        questionnaire.title,
+                        message,
+                        questionnaire,
+                        timeout,
+                        DataSet.EventTypes.invitation,
+                        now
+                    )
+                    return MerlinType.createBool(true)
+                }
+            },
+            // triggerNotification(message)
+            "triggerNotification" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 1
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val questionnaire = interpreter.questionnaire ?: return MerlinType.createBool(false)
+                    val studyId = questionnaire.studyId
+                    val study = DbLogic.getStudy(studyId)
+                    val message = arguments[0].stringify()
+                    val now = NativeLink.getNowMillis()
+
+                    NativeLink.notifications.fireStudyNotification(
+                        study?.title ?: "Notification",
+                        message,
+                        questionnaire,
+                        now
+                    )
+
+                    return MerlinType.createBool(true)
+                }
+            },
+            // triggerMessage(message)
+            "triggerMessage" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 1
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val questionnaire = interpreter.questionnaire ?: return MerlinType.createBool(false)
+                    val message = arguments[0].stringify()
+                    val now = NativeLink.getNowMillis()
+                    val study = DbLogic.getStudy(questionnaire.studyId) ?: return MerlinType.createBool(false)
+
+                    Message.addMessage(study.id, message, now, true)
+                    NativeLink.notifications.fireMessageNotification(study)
+                    DataSet.createActionSentDataSet(DataSet.EventTypes.message, questionnaire, now)
+
+                    return MerlinType.createBool(true)
                 }
             }
         )

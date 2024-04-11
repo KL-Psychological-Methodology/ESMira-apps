@@ -5,6 +5,7 @@ import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_perData
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_timed
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_perValue
+import at.jodlidev.esmira.sharedCode.merlinInterpreter.MerlinRunner
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
@@ -292,6 +293,11 @@ object DbLogic {
 			DELETE FROM ${ErrorBox.TABLE} WHERE ${ErrorBox.KEY_ID}
 			= (SELECT MIN(${ErrorBox.KEY_ID}) FROM ${ErrorBox.TABLE});
 			END""")
+
+		db.execSQL("""CREATE TABLE IF NOT EXISTS ${MerlinRunner.TABLE} (
+			${MerlinRunner.KEY_STUDY_ID} INTEGER,
+			${MerlinRunner.KEY_GLOBALS_STRING} TEXT,
+			FOREIGN KEY(${MerlinRunner.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}) ON DELETE CASCADE)""")
 	}
 	
 	fun updateFrom(db: SQLiteInterface, oldVersion: Int) {
@@ -731,6 +737,22 @@ object DbLogic {
 			Questionnaire.TABLE,
 			Questionnaire.COLUMNS,
 			"${Questionnaire.KEY_ID} = ?", arrayOf(id.toString()),
+			null,
+			null,
+			null,
+			"1"
+		)
+		var r: Questionnaire? = null
+		if(c.moveToFirst()) r = Questionnaire(c)
+		c.close()
+		return r
+	}
+
+	fun getQuestionnaireByInternalId(studyId: Long, internalId: Long): Questionnaire? {
+		val c = NativeLink.sql.select(
+			Questionnaire.TABLE,
+			Questionnaire.COLUMNS,
+			"${Questionnaire.KEY_STUDY_ID} = ? AND ${Questionnaire.KEY_INTERNAL_ID} = ?", arrayOf(studyId.toString(), internalId.toString()),
 			null,
 			null,
 			null,

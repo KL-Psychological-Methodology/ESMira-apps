@@ -97,7 +97,7 @@ fun MainView(
 	val activeInputs = remember {
 		page.inputs.filter {
 			if (it.relevance.isNotEmpty())
-				MerlinRunner.runForBool(it.relevance, true)
+				MerlinRunner.runForBool(it.relevance, questionnaire, true)
 			else
 				true
 		}

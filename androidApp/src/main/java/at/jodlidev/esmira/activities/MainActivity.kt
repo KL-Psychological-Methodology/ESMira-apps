@@ -206,9 +206,6 @@ class MainActivity: ComponentActivity() {
 		navController: NavHostController
 	) {
 		val context = LocalContext.current
-		LaunchedEffect(Unit) {
-			MerlinRunner.setQuestionnaire(null)
-		}
 		Crossfade(studyId) { currentStudyId ->
 			
 			val study = DbLogic.getStudy(currentStudyId) ?: return@Crossfade //can be null when study was deleted
@@ -355,9 +352,6 @@ class MainActivity: ComponentActivity() {
 	@Composable
 	fun PageQuestionnaire(qId: Long, pageNumber: Int, navController: NavHostController) {
 		val questionnaire = remember { getQuestionnaire(qId) } ?: return
-		LaunchedEffect(questionnaire) {
-			MerlinRunner.setQuestionnaire(questionnaire)
-		}
 		
 		QuestionnaireView(
 			questionnaire = questionnaire,

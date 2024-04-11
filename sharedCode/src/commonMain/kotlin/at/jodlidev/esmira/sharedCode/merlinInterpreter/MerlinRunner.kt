@@ -1,6 +1,10 @@
 package at.jodlidev.esmira.sharedCode.merlinInterpreter
 
+import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 
 /*
  * Created by SelinaDev
@@ -11,15 +15,16 @@ import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
  */
 
 object MerlinRunner {
+    const val TABLE = "merlinCache"
+    const val KEY_ID = "_id"
+    const val KEY_STUDY_ID = "studyId"
+    const val KEY_GLOBALS_STRING = "globalsString"
+
+    private var cachedGlobals: Pair<Long, MerlinObject>? = null
     private val errors = mutableListOf<MerlinError>()
     private val interpreter = MerlinInterpreter()
-    private var questionnaire: Questionnaire? = null
 
-    fun setQuestionnaire(questionnaire: Questionnaire?) {
-        this.questionnaire = questionnaire
-    }
-
-    fun run(source: String): MerlinType? {
+    fun run(source: String, questionnaire: Questionnaire?): MerlinType? {
         // Scanning
         val scanner = MerlinScanner(source)
         val tokens: List<MerlinToken>
@@ -40,24 +45,40 @@ object MerlinRunner {
             return null
         }
 
+        // Get globals
+        val studyId = questionnaire?.studyId ?: -1L
+        val globals: MerlinObject
+        if (studyId == -1L)
+            globals = MerlinObject()
+        else if (cachedGlobals != null && studyId == cachedGlobals!!.first)
+            globals = cachedGlobals!!.second
+        else {
+            globals = retrieveGlobals(questionnaire)
+            cachedGlobals = Pair(studyId, globals)
+        }
+
         // Interpreting
-        interpreter.initialize(questionnaire, MerlinObject())
+        interpreter.initialize(questionnaire, globals)
+        var returnedValue: MerlinType? = null
         try {
-            return interpreter.interpret(statements)
+            returnedValue = interpreter.interpret(statements)
         } catch (e: MerlinRuntimeError) {
             logRuntimeError(e)
         } finally {
+            val storedGlobals = interpreter.getGlobalsObject()?: MerlinObject()
+            cachedGlobals = Pair(studyId, storedGlobals)
+            saveGlobals(storedGlobals, questionnaire)
             interpreter.cleanup()
         }
-        return null
+        return returnedValue
     }
 
-    fun runForBool(source: String, default: Boolean): Boolean {
-        return run(source)?.isTruthy() ?: default
+    fun runForBool(source: String, questionnaire: Questionnaire?, default: Boolean): Boolean {
+        return run(source, questionnaire)?.isTruthy() ?: default
     }
 
-    fun runForString(source: String): String {
-        return run(source)?.stringify() ?: ""
+    fun runForString(source: String, questionnaire: Questionnaire?): String {
+        return run(source, questionnaire)?.stringify() ?: ""
     }
 
 
@@ -71,6 +92,35 @@ object MerlinRunner {
 
     private fun logRuntimeError(error: MerlinRuntimeError) {
         // TODO
+    }
+
+    private fun saveGlobals(obj: MerlinObject, questionnaire: Questionnaire?) {
+        val studyId = questionnaire?.studyId ?: return
+        val db = NativeLink.sql
+        val values = db.getValueBox()
+        values.putLong(KEY_STUDY_ID, studyId)
+        values.putString(KEY_GLOBALS_STRING, Json.encodeToString(obj))
+        db.insert(TABLE, values)
+    }
+    private fun retrieveGlobals(questionnaire: Questionnaire?): MerlinObject {
+        val db = NativeLink.sql
+        val studyId = questionnaire?.studyId ?: MerlinObject()
+        val c = db.select(
+            TABLE,
+            arrayOf(KEY_GLOBALS_STRING),
+            "$KEY_STUDY_ID = ?", arrayOf(studyId.toString()),
+            null,
+            null,
+            null,
+            "1"
+        )
+
+        var r: String? = null
+        if(c.moveToFirst()) {
+            r = c.getString(0)
+        }
+        c.close()
+        return r?.let { Json.decodeFromString<MerlinObject>(it) } ?: MerlinObject()
     }
 }
 
