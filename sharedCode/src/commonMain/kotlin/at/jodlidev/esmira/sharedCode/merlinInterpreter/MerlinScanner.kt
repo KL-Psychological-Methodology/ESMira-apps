@@ -54,10 +54,6 @@ class MerlinScanner (private val source: String) {
             } else {
                 addToken(MerlinTokenType.SLASH)
             }
-            '\\' -> {
-                while (!match('\n') && !isAtEnd()) advance()
-                line++
-            }
             ' ', '\r', '\t' -> {}
             '\n' -> line++
             '"' -> string()
