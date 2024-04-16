@@ -94,6 +94,20 @@ fun MainView(
 	hasRequired: Boolean,
 	clickBtn: () -> Unit
 ) {
+	val isPageActive = remember {
+		if (page.relevance.isEmpty())
+			true
+		else
+			MerlinRunner.runForBool(page.relevance, questionnaire, true)
+
+	}
+	if (!isPageActive) {
+		SideEffect {
+			clickBtn()
+		}
+		return
+	}
+
 	val activeInputs = remember {
 		page.inputs.filter {
 			if (it.relevance.isNotEmpty())

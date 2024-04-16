@@ -16,6 +16,7 @@ class Page internal constructor( ) {
 	var skipAfterSecs = 0
 	var header: String = ""
 	var footer: String = ""
+	var relevance: String = ""
 	@SerialName("inputs") var orderedInputs: List<Input> = ArrayList()
 	
 	@Transient private lateinit var _inputs: List<Input>
