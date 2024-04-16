@@ -1,6 +1,7 @@
 package at.jodlidev.esmira.sharedCode.data_structure
 
 import at.jodlidev.esmira.sharedCode.*
+import at.jodlidev.esmira.sharedCode.merlinInterpreter.MerlinRunner
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Transient
 import kotlinx.serialization.decodeFromString
@@ -42,6 +43,7 @@ class Questionnaire {
 	var limitToGroup = 0
 	var minDataSetsForReward = 0
 	var isBackEnabled = true
+	var endScriptBlock = ""
 
 	
 	@SerialName("actionTriggers") private var jsonActionTriggers: List<ActionTrigger> = ArrayList()
@@ -250,8 +252,12 @@ class Questionnaire {
 	}
 	
 	fun saveQuestionnaire() {
+		if (endScriptBlock.isNotEmpty()) {
+			MerlinRunner.run(endScriptBlock, this)
+		}
+
 		val dataSet = DataSet(DataSet.EventTypes.questionnaire, this)
-		
+
 		for(page in pages) {
 			for(input in page.inputs) {
 				input.fillIntoDataSet(dataSet)
