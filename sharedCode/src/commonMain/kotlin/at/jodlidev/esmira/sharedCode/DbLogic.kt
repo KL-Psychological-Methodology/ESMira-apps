@@ -158,6 +158,8 @@ object DbLogic {
 			${Questionnaire.KEY_SUMSCORES} TEXT,
 			${Questionnaire.KEY_PUBLISHED_ANDROID} INTEGER DEFAULT 1,
 			${Questionnaire.KEY_PUBLISHED_IOS} INTEGER DEFAULT 1,
+			${Questionnaire.KEY_SCRIPT_END_BLOCK} TEXT,
+			${Questionnaire.KEY_VIRTUAL_INPUTS} TEXT,
 			FOREIGN KEY(${Questionnaire.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}) ON DELETE CASCADE)""")
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${QuestionnaireCache.TABLE} (
 			${QuestionnaireCache.KEY_ID} INTEGER PRIMARY KEY,

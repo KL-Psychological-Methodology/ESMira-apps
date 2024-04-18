@@ -95,6 +95,14 @@ class Questionnaire {
 		return _sumScores
 	}
 
+	@SerialName("virtualInputs") @Serializable(with = JsonToStringSerializer::class) var virtualInputsString = "[]"
+	@Transient private lateinit var _virtualInputs: Map<String, VirtualInput>
+	val virtualInputs: Map<String, VirtualInput> get() {
+		if (!this::_virtualInputs.isInitialized) {
+			_virtualInputs = DbLogic.getJsonConfig().decodeFromString<List<String>>(virtualInputsString).associateWith { VirtualInput(it, this) }
+		}
+		return _virtualInputs
+	}
 
 	internal constructor(c: SQLiteCursor) {
 		id = c.getLong(0)
@@ -125,6 +133,9 @@ class Questionnaire {
 		publishedIOS = c.getBoolean(24)
 		minDataSetsForReward = c.getInt(25)
 		isBackEnabled = c.getBoolean(26)
+		endScriptBlock = c.getString(27)
+		virtualInputsString = c.getString(28)
+
 		exists = true
 		fromJsonOrUpdated = false
 	}
@@ -215,6 +226,8 @@ class Questionnaire {
 		values.putBoolean(KEY_PUBLISHED_IOS, publishedIOS)
 		values.putInt(KEY_MIN_DATASETS_FOR_REWARD, minDataSetsForReward)
 		values.putBoolean(KEY_IS_BACK_ENABLED, isBackEnabled)
+		values.putString(KEY_SCRIPT_END_BLOCK, endScriptBlock)
+		values.putString(KEY_VIRTUAL_INPUTS, virtualInputsString)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -264,7 +277,8 @@ class Questionnaire {
 			}
 		}
 		
-		
+		for(virtualInput in virtualInputs.values)
+			virtualInput.fillIntoDataSet(dataSet)
 		
 		dataSet.saveQuestionnaire(this)
 		updateLastCompleted(true) //this needs to be after we store last_notification in dataset
@@ -567,6 +581,8 @@ class Questionnaire {
 		const val KEY_PUBLISHED_IOS = "publishedIOS"
 		const val KEY_MIN_DATASETS_FOR_REWARD = "minDataSetsForReward"
 		const val KEY_IS_BACK_ENABLED = "isBackEnabled"
+		const val KEY_SCRIPT_END_BLOCK = "scriptEndBlock"
+		const val KEY_VIRTUAL_INPUTS = "virtualInputs"
 		
 		val COLUMNS = arrayOf(
 			KEY_ID,
@@ -595,7 +611,9 @@ class Questionnaire {
 			KEY_PUBLISHED_ANDROID,
 			KEY_PUBLISHED_IOS,
 			KEY_MIN_DATASETS_FOR_REWARD,
-			KEY_IS_BACK_ENABLED
+			KEY_IS_BACK_ENABLED,
+			KEY_SCRIPT_END_BLOCK,
+			KEY_VIRTUAL_INPUTS,
 		)
 	}
 }

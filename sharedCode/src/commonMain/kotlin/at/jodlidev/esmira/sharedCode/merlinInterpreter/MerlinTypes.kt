@@ -179,6 +179,10 @@ class MerlinObject (): MerlinType() {
         return fields.getOrElse(name) { MerlinNone }
     }
 
+    fun has(name: String): Boolean {
+        return fields.containsKey(name)
+    }
+
     fun set(name: MerlinToken, value: MerlinType) {
         fields[name.lexeme] = value
     }

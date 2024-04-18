@@ -4,10 +4,15 @@ import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.DataSet
 import at.jodlidev.esmira.sharedCode.data_structure.ErrorBox
+import at.jodlidev.esmira.sharedCode.data_structure.Input
 import at.jodlidev.esmira.sharedCode.data_structure.Message
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 /*
  * Created by SelinaDev
@@ -241,7 +246,7 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
         val previous = this.environment
         try {
             for(element in range.array) {
-                val environment = MerlinEnvironment(previous)
+                environment = MerlinEnvironment(previous)
                 environment.define(stmt.varName.lexeme, element)
                 execute(stmt.body)
             }
@@ -284,7 +289,8 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
         if (obj !is MerlinObject) throw MerlinRuntimeError(expr.name, "Only objects have fields.")
 
         val value = evaluate(expr.value)
-        if (!isInitializing) obj.set(expr.name, value)
+        if (isInitializing && obj.has(expr.name.lexeme)) return
+        obj.set(expr.name, value)
     }
 
     override fun visitWhileStmt(stmt: MerlinStmt.While) {
@@ -310,17 +316,26 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                     arguments: List<MerlinType>
                 ): MerlinType {
                     val questionnaire = interpreter.getQuestionnaire() ?: return MerlinNone
-                    val inputName = arguments[0].stringify()
-                    for(page in questionnaire.pages) {
-                        for(input in page.inputs) {
-                            if(input.name == inputName) {
-                                return MerlinString(input.getValue())
+                    val getSingleValue = { inputName: String ->
+                        var out: MerlinType = MerlinNone
+                        for (page in questionnaire.pages) {
+                            for (input in page.inputs) {
+                                if (input.name == inputName) {
+                                    out = MerlinString(input.getValue())
+                                }
                             }
                         }
+                        out
                     }
-                    return MerlinNone
+                    val arg = arguments[0]
+                    return if (arg is MerlinArray) {
+                        MerlinArray(arg.array.map { getSingleValue(it.stringify()) }.toMutableList())
+                    } else {
+                        getSingleValue(arg.stringify())
+                    }
                 }
             },
+
             // getQuestionnaireVarAlternative(varName, alternativeKey)
             "getQuestionnaireVarAlternative" to object: MerlinFunction {
                 override fun arity(): Int {
@@ -333,15 +348,38 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                 ): MerlinType {
                     val questionnaire = interpreter.getQuestionnaire() ?: return MerlinNone
                     val inputName = arguments[0].stringify()
-                    val alternativeKey = arguments[1].stringify()
-                    for(page in questionnaire.pages) {
-                        for(input in page.inputs) {
-                            if(input.name == inputName) {
-                                return input.getAdditional(alternativeKey)?.let { MerlinString(it) } ?: MerlinNone
-                            }
+                    var input: Input? = null
+                    for(i in questionnaire.pages.map { it.inputs}.flatten())
+                        if(i.name == inputName) {
+                            input = i
+                            break
                         }
+                    input ?: return MerlinNone
+                    val secondArg = arguments[1]
+                    return if(secondArg is MerlinArray) {
+                        MerlinArray(secondArg.array.map { input.getAdditional(it.stringify())?.let {MerlinString(it)} ?: MerlinNone }.toMutableList())
+                    } else {
+                        input.getAdditional(secondArg.stringify())?.let {MerlinString(it)} ?: MerlinNone
                     }
-                    return MerlinNone
+                }
+            },
+
+            // setVirtualItem(itemName, value)
+            "setVirtualItem" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 2
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val questionnaire = interpreter.getQuestionnaire() ?: return MerlinType.createBool(false)
+                    val inputName = arguments[0].stringify()
+                    val value = arguments[1].stringify()
+                    val virtualInput = questionnaire.virtualInputs[inputName] ?: return MerlinType.createBool(false)
+                    virtualInput.setValue(value)
+                    return MerlinType.createBool(true)
                 }
             },
 
@@ -431,6 +469,145 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                     DataSet.createActionSentDataSet(DataSet.EventTypes.message, questionnaire, now)
 
                     return MerlinType.createBool(true)
+                }
+            },
+
+            //
+            // Mathematical Functions
+            //
+
+            // reverse(variables, min, max)
+            "reverse" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 3
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val reverse = {num: MerlinType, offset: Double ->
+                        num.asNumber()?.let { MerlinNumber(offset - it.value) } ?: num
+                    }
+
+                    val variables = arguments[0]
+                    val min = arguments[1].asNumber()?.value ?: return variables
+                    val max = arguments[2].asNumber()?.value ?: return variables
+                    val offset = max + min
+                    return if (variables is MerlinArray)
+                        MerlinArray(variables.array.map { reverse(it, offset) }.toMutableList())
+                    else
+                        reverse(variables, offset)
+                }
+            },
+
+            // sum(arr)
+            "sum" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 1
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val arg = arguments[0]
+                    if (arg !is MerlinArray)
+                        return arg
+                    return arg.array.map { it.asNumber()?.value ?: return MerlinNone }.reduceOrNull {acc, value -> acc + value}?.let {MerlinNumber(it)} ?: MerlinNone
+                }
+            },
+
+            // mean(arr)
+            "mean" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 1
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val arg = arguments[0]
+                    if (arg !is MerlinArray)
+                        return arg
+                    return arg.array.map { it.asNumber()?.value ?: return MerlinNone }.reduceOrNull {acc, value -> acc + value}?.let {MerlinNumber(it/arg.array.size)} ?: MerlinNone
+                }
+            },
+
+            // max(arr)
+            "max" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 1
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val arg = arguments[0]
+                    if (arg !is MerlinArray)
+                        return arg
+                    return arg.array.map { it.asNumber()?.value ?: return MerlinNone }.reduceOrNull {acc, value -> max(acc, value) }?.let { MerlinNumber(it) } ?: MerlinNone
+                }
+            },
+
+            // min(arr)
+            "min" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 1
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val arg = arguments[0]
+                    if (arg !is MerlinArray)
+                        return arg
+                    return arg.array.map { it.asNumber()?.value ?: return MerlinNone }.reduceOrNull {acc, value -> min(acc, value) }?.let { MerlinNumber(it) } ?: MerlinNone
+                }
+            },
+
+            // var(arr)
+            "var" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 1
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val arg = arguments[0]
+                    if (arg !is MerlinArray)
+                        return arg
+                    val numbersArr = arg.array.map { it.asNumber()?.value ?: return MerlinNone }
+                    if (numbersArr.size < 2) return MerlinNone
+                    val mean = numbersArr.reduceOrNull {acc, value -> acc + value}?.let { it / numbersArr.size } ?: return MerlinNone
+                    val variance = numbersArr.map { (it - mean).pow(2) }.reduceOrNull { acc, value -> acc + value }?.let{ it / (numbersArr.size - 1) } ?: return MerlinNone
+                    return MerlinNumber(variance)
+                }
+            },
+
+            // sd(arr)
+            "sd" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 1
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val arg = arguments[0]
+                    if (arg !is MerlinArray)
+                        return arg
+                    val numbersArr = arg.array.map { it.asNumber()?.value ?: return MerlinNone }
+                    if (numbersArr.size < 2) return MerlinNone
+                    val mean = numbersArr.reduceOrNull {acc, value -> acc + value}?.let { it / numbersArr.size } ?: return MerlinNone
+                    val variance = numbersArr.map { (it - mean).pow(2) }.reduceOrNull { acc, value -> acc + value }?.let{ it / (numbersArr.size - 1) } ?: return MerlinNone
+                    return MerlinNumber(sqrt(variance))
                 }
             }
         )

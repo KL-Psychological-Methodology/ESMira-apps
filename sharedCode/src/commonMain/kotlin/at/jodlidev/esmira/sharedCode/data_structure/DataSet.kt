@@ -180,7 +180,7 @@ class DataSet: UploadData {
 			}
 			addResponseData(score.name, sum)
 		}
-		
+
 		for((key, _) in responseTemp) {
 			for(observedVariable in DbLogic.getObservedVariables(studyId, key)) {
 				observedVariable.createStatistic(responseTemp)
