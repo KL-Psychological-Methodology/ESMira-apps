@@ -10,4 +10,5 @@ interface IosCodeInterface {
 	fun formatDate(ms: Long): String
 	fun formatTime(ms: Long): String
 	fun formatDateTime(ms: Long): String
+	fun getDatesDiff(ms1: Long, ms2: Long): Long
 }

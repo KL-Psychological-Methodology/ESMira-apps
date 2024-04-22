@@ -383,6 +383,28 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                 }
             },
 
+            // day()
+            "day" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 0
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val now = NativeLink.getNowMillis()
+                    val questionnaire = interpreter.questionnaire ?: return MerlinNone
+                    val study = DbLogic.getStudy(questionnaire.studyId) ?: return MerlinNone
+                    val joinedTimestamp = study.joinedTimestamp
+                    val dateDiff = NativeLink.getDatesDiff(now, joinedTimestamp)
+                    return if (dateDiff < 0)
+                        MerlinNone
+                    else
+                        MerlinNumber(dateDiff.toDouble())
+                }
+            },
+
             //
             // Triggering Events in ESMira
             //

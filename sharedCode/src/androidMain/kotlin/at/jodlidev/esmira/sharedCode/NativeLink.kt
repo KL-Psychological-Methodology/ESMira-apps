@@ -6,7 +6,11 @@ import java.io.Writer
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicReference
+import kotlin.math.abs
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * Created by JodliDev on 03.06.2020.
@@ -109,5 +113,13 @@ actual object NativeLink {
 	actual fun getTimezone(): String {
 		val cal = Calendar.getInstance()
 		return cal.timeZone.getDisplayName(true, TimeZone.SHORT)
+	}
+
+	actual fun getDatesDiff(ms1: Long, ms2: Long): Long {
+		val formatter: DateFormat = SimpleDateFormat.getDateInstance(DateFormat.SHORT)
+		val date1 = formatter.parse(formatDate(min(ms1, ms2))) ?: return -1
+		val date2 = formatter.parse(formatDate(max(ms1, ms2))) ?: return -1
+		val diff = abs(date2.time - date1.time)
+		return TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS)
 	}
 }
