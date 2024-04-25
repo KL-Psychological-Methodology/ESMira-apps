@@ -321,7 +321,9 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                         for (page in questionnaire.pages) {
                             for (input in page.inputs) {
                                 if (input.name == inputName) {
-                                    out = MerlinString(input.getValue())
+                                    val value = input.getValue()
+                                    out = if (value.isNotEmpty()) MerlinString(value) else MerlinNone
+                                    break
                                 }
                             }
                         }
@@ -630,6 +632,29 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                     val mean = numbersArr.reduceOrNull {acc, value -> acc + value}?.let { it / numbersArr.size } ?: return MerlinNone
                     val variance = numbersArr.map { (it - mean).pow(2) }.reduceOrNull { acc, value -> acc + value }?.let{ it / (numbersArr.size - 1) } ?: return MerlinNone
                     return MerlinNumber(sqrt(variance))
+                }
+            },
+
+            //
+            // Array Functions
+            //
+
+            // any(arr)
+            "any" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 1
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val arg = arguments[0]
+                    if (arg !is MerlinArray)
+                        return arg
+                    return MerlinType.createBool(
+                        arg.array.map { it.isTruthy() }.any { it }
+                    )
                 }
             }
         )
