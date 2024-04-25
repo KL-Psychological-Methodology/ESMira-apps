@@ -462,7 +462,7 @@ internal object Updater {
 		}
 		if(oldVersion <= 44) {
 			db.execSQL("ALTER TABLE questionnaires ADD COLUMN scriptEndBlock TEXT DEFAULT '';")
-			db.execSQL("ALTER TABLE questionnaires ADD COLUMN virtualInputs TEXT DEFAULT '';")
+			db.execSQL("ALTER TABLE questionnaires ADD COLUMN virtualInputs TEXT DEFAULT '[]';")
 			db.execSQL("""CREATE TABLE IF NOT EXISTS merlinCache (
 			studyId INTEGER,
 			globalsString TEXT,
