@@ -880,20 +880,11 @@ object DbLogic {
 	fun getSortedUploadData(studyId: Long): List<UploadData> {
 		var list: List<UploadData> = getDataSets(studyId)
 		list = list.plus(getReadyFileUploads(studyId))
+
 		//we want deletable entries at the top. Apart from that everything should be sorted by timestamp (descending)
-		list = list.sortedWith { a, b ->
-			if(a.synced != b.synced) {
-				if(a.synced == UploadData.States.NOT_SYNCED_ERROR_DELETABLE)
-					-1
-				else if(b.synced == UploadData.States.NOT_SYNCED_ERROR_DELETABLE)
-					1
-				else
-					(b.timestamp - a.timestamp).toInt()
-			}
-			else
-				(b.timestamp - a.timestamp).toInt()
-		}
-		return list
+		val list_deletable = list.filter { it.synced == UploadData.States.NOT_SYNCED_ERROR_DELETABLE }.sortedBy { it.timestamp }.reversed()
+		val list_uploaded = list.filter { it.synced != UploadData.States.NOT_SYNCED_ERROR_DELETABLE }.sortedBy { it.timestamp }.reversed()
+		return list_deletable + list_uploaded
 	}
 	
 	//
