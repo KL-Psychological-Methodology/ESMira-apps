@@ -93,6 +93,7 @@ fun CompassView(input: Input, get: () -> String, save: (String) -> Unit) {
 	val context = LocalContext.current
 	val isScanning = remember { mutableStateOf(false) }
 	val azimuth = remember { mutableStateOf(0F) }
+	val didReceiveReading = remember { mutableStateOf(false) }
 	
 	if(isScanning.value) {
 		val accelerometerReading = FloatArray(3)
@@ -105,6 +106,7 @@ fun CompassView(input: Input, get: () -> String, save: (String) -> Unit) {
 		
 		val sensorListener = object : SensorEventListener {
 			override fun onSensorChanged(event: SensorEvent?) {
+				didReceiveReading.value = true
 				when(event?.sensor?.type) {
 					Sensor.TYPE_ACCELEROMETER -> {
 						lowPassFilter(event.values, accelerometerReading);
@@ -151,10 +153,12 @@ fun CompassView(input: Input, get: () -> String, save: (String) -> Unit) {
 			infoLabel = "${azimuth.value.toInt()}°",
 			buttonLabel = stringResource(R.string.stop_scanning),
 			buttonAction = {
-				if(input.numberHasDecimal) {
-					save(azimuth.value.toString())
-				} else {
-					save(azimuth.value.toInt().toString())
+				if(didReceiveReading.value) {
+					if (input.numberHasDecimal) {
+						save(azimuth.value.toString())
+					} else {
+						save(azimuth.value.toInt().toString())
+					}
 				}
 				isScanning.value = false
 			}
