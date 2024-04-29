@@ -50,6 +50,7 @@ struct CompassStruct: View {
 	
 	@ObservedObject var compassManager = CompassManager()
 	@State private var isScanning = false
+	@State private var didReceiveReading = false
 	
 	init(viewModel: InputViewModel) {
 		self.viewModel = viewModel
@@ -65,10 +66,12 @@ struct CompassStruct: View {
 					buttonLabel: NSLocalizedString("stop_scanning", comment: "stop_scanning"),
 					buttonAction: {
 						compassManager.stop()
-						if viewModel.input.numberHasDecimal {
-							viewModel.value = String(compassManager.degrees)
-						} else {
-							viewModel.value = String(Int(compassManager.degrees))
+						if didReceiveReading {
+							if viewModel.input.numberHasDecimal {
+								viewModel.value = String(compassManager.degrees)
+							} else {
+								viewModel.value = String(Int(compassManager.degrees))
+							}
 						}
 						isScanning = false
 					}
