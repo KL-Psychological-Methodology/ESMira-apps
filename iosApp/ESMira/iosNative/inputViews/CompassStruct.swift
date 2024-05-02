@@ -11,9 +11,11 @@ import CoreLocation
 
 class CompassManager: NSObject, ObservableObject, CLLocationManagerDelegate {
 	var objectWillChange = PassthroughSubject<Void, Never>()
+	var didReceiveValue = false
 	var degrees: Double = .zero {
 		didSet {
 			objectWillChange.send()
+			didReceiveValue = true
 		}
 	}
 	
@@ -50,6 +52,7 @@ struct CompassStruct: View {
 	
 	@ObservedObject var compassManager = CompassManager()
 	@State private var isScanning = false
+	@State private var didReceiveReading = false
 	
 	init(viewModel: InputViewModel) {
 		self.viewModel = viewModel
@@ -65,10 +68,12 @@ struct CompassStruct: View {
 					buttonLabel: NSLocalizedString("stop_scanning", comment: "stop_scanning"),
 					buttonAction: {
 						compassManager.stop()
-						if viewModel.input.numberHasDecimal {
-							viewModel.value = String(compassManager.degrees)
-						} else {
-							viewModel.value = String(Int(compassManager.degrees))
+						if compassManager.didReceiveValue {
+							if viewModel.input.numberHasDecimal {
+								viewModel.value = String(compassManager.degrees)
+							} else {
+								viewModel.value = String(Int(compassManager.degrees))
+							}
 						}
 						isScanning = false
 					}
