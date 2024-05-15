@@ -300,6 +300,19 @@ object DbLogic {
 			${MerlinRunner.KEY_STUDY_ID} INTEGER,
 			${MerlinRunner.KEY_GLOBALS_STRING} TEXT,
 			FOREIGN KEY(${MerlinRunner.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}) ON DELETE CASCADE)""")
+
+		db.execSQL("""CREATE TABLE IF NOT EXISTS ${MerlinLog.TABLE} (
+			${MerlinLog.KEY_ID} INTEGER PRIMARY KEY,
+			${MerlinLog.KEY_STUDY_ID} INTEGER,
+			${MerlinLog.KEY_STUDY_WEB_ID} INTEGER,
+			${MerlinLog.KEY_SERVER_URL} TEXT,
+			${MerlinLog.KEY_SERVER_VERSION} INTEGER,
+			${MerlinLog.KEY_QUESTIONNAIRE_NAME} TEXT,
+			${MerlinLog.KEY_TIMESTAMP} INTEGER,
+			${MerlinLog.KEY_TYPE} INTEGER,
+			${MerlinLog.KEY_MSG} TEXT,
+			${MerlinLog.KEY_SYNCED} INTEGER,
+			FOREIGN KEY(${MerlinLog.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}))""")
 	}
 	
 	fun updateFrom(db: SQLiteInterface, oldVersion: Int) {
@@ -880,11 +893,12 @@ object DbLogic {
 	fun getSortedUploadData(studyId: Long): List<UploadData> {
 		var list: List<UploadData> = getDataSets(studyId)
 		list = list.plus(getReadyFileUploads(studyId))
+		list = list.plus(getMerlinLogs(studyId))
 
 		//we want deletable entries at the top. Apart from that everything should be sorted by timestamp (descending)
-		val list_deletable = list.filter { it.synced == UploadData.States.NOT_SYNCED_ERROR_DELETABLE }.sortedBy { it.timestamp }.reversed()
-		val list_uploaded = list.filter { it.synced != UploadData.States.NOT_SYNCED_ERROR_DELETABLE }.sortedBy { it.timestamp }.reversed()
-		return list_deletable + list_uploaded
+		val listDeletable = list.filter { it.synced == UploadData.States.NOT_SYNCED_ERROR_DELETABLE }.sortedBy { it.timestamp }.reversed()
+		val listUploaded = list.filter { it.synced != UploadData.States.NOT_SYNCED_ERROR_DELETABLE }.sortedBy { it.timestamp }.reversed()
+		return listDeletable + listUploaded
 	}
 	
 	//
@@ -934,6 +948,21 @@ object DbLogic {
 			r = c.moveToFirst()
 			c.close()
 		}
+
+		if(!r) {
+			c = NativeLink.sql.select(
+				MerlinLog.TABLE,
+				MerlinLog.COLUMNS,
+				"${MerlinLog.KEY_STUDY_ID} = ? AND ${MerlinLog.KEY_SYNCED} IS NOT ${UploadData.States.SYNCED.ordinal}", arrayOf(studyId.toString()),
+				null,
+				null,
+				null,
+				null
+			)
+			r = c.moveToNext()
+			c.close()
+		}
+
 		return r
 	}
 	fun getUnSyncedDataSetCount(): Int {
@@ -1007,6 +1036,7 @@ object DbLogic {
 		c.close()
 		return container
 	}
+
 	fun getDataSet(id: Long): DataSet? {
 		val c = NativeLink.sql.select(
 			DataSet.TABLE_JOINED,
@@ -1116,6 +1146,50 @@ object DbLogic {
 		c.close()
 		return container
 	}
+
+	//
+	// MerlinLogs
+	//
+
+	fun getUnSyncedMerlinLogs(): List<MerlinLog> {
+		val c = NativeLink.sql.select(
+			MerlinLog.TABLE,
+			MerlinLog.COLUMNS,
+			"${MerlinLog.KEY_SYNCED} IS NOT ${UploadData.States.SYNCED.ordinal}",
+			null,
+			null,
+			null,
+			"${DataSet.KEY_SYNCED} ASC",
+			null
+		)
+		val container = ArrayList<MerlinLog>()
+		while(c.moveToNext()) {
+			val merlinLog = MerlinLog(c)
+			container.add(merlinLog)
+		}
+		c.close()
+		return container
+	}
+
+	fun getMerlinLogs(studyId: Long): List<MerlinLog> {
+		val c = NativeLink.sql.select(
+			MerlinLog.TABLE,
+			MerlinLog.COLUMNS,
+			"${MerlinLog.KEY_STUDY_ID} = ?", arrayOf(studyId.toString()),
+			null,
+			null,
+			"${MerlinLog.TABLE}.${MerlinLog.KEY_TIMESTAMP} DESC",
+			null
+		)
+		val list = ArrayList<MerlinLog>()
+		while (c.moveToNext()) {
+			list.add(MerlinLog(c))
+		}
+		c.close()
+
+		return list
+	}
+
 	
 	//
 	//Errors

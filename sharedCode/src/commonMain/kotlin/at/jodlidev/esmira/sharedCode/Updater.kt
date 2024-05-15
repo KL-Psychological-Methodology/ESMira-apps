@@ -14,7 +14,8 @@ internal object Updater {
 	const val EXPECTED_SERVER_VERSION: Int = 12
 	const val DATABASE_VERSION = 44
 	const val LIBRARY_VERSION = 19 //this is mainly used for iOS so we can check that changes in the library have been used in the C library
-	
+	const val MERLIN_VERSION = 1
+
 	fun updateSQL(db: SQLiteInterface, oldVersion: Int) {
 		if(oldVersion >= DATABASE_VERSION)
 			return
@@ -466,6 +467,18 @@ internal object Updater {
 			db.execSQL("""CREATE TABLE IF NOT EXISTS merlinCache (
 			studyId INTEGER,
 			globalsString TEXT,
+			FOREIGN KEY(studyId) REFERENCES studies(_id) ON DELETE CASCADE)""")
+			db.execSQL("""CREATE TABLE IF NOT EXISTS merlinLogs (
+			_id INTEGER PRIMARY KEY,
+			study_id INTEGER,
+			study_webId INTEGER,
+			server_url TEXT,
+			server_version INTEGER,
+			questionnaireName TEXT,
+			time_ms INTEGER,
+			logType INTEGER,
+			msg TEXT,
+			is_synced INTEGER,
 			FOREIGN KEY(studyId) REFERENCES studies(_id) ON DELETE CASCADE)""")
 		}
 	}

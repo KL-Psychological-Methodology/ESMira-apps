@@ -16,6 +16,7 @@ sealed class MerlinType {
     abstract fun stringify(): String
     abstract fun binary(other: MerlinType, operator: MerlinToken): Result<MerlinType>
     abstract fun unary(operator:MerlinToken): Result<MerlinType>
+    abstract fun getDebugString(): String
 
     fun wrapped(): MerlinArray {
         return if (this is MerlinArray) this else MerlinArray(mutableListOf(this))
@@ -80,6 +81,10 @@ class MerlinArray (val array: MutableList<MerlinType> = mutableListOf()): Merlin
         }
     }
 
+    override fun getDebugString(): String {
+        return "[" + stringify() + "]"
+    }
+
     fun isIndexInRange(index: Int): Boolean {
         return index >= 0 && index < array.size
     }
@@ -117,6 +122,10 @@ class MerlinString (val value: String): MerlinType() {
 
     override fun unary(operator: MerlinToken): Result<MerlinType> {
         return asNumber()?.unary(operator) ?: Result.failure(MerlinRuntimeError(operator, "Invalid string operation."))
+    }
+
+    override fun getDebugString(): String {
+        return "\"" + stringify() + "\""
     }
 }
 
@@ -165,6 +174,10 @@ class MerlinNumber (val value: Double): MerlinType() {
             else -> Result.failure(MerlinRuntimeError(operator, "Invalid unary operator."))
         }
     }
+
+    override fun getDebugString(): String {
+        return stringify()
+    }
 }
 
 @Serializable
@@ -195,7 +208,7 @@ class MerlinObject (): MerlinType() {
         val objectString = StringBuilder()
         objectString.append("{")
         objectString.append(
-            fields.entries.joinToString(", ") { "${it.key}: ${it.value}" }
+            fields.entries.joinToString(", ") { "${it.key}: ${it.value.stringify()}" }
         )
         objectString.append("}")
         return objectString.toString()
@@ -207,6 +220,16 @@ class MerlinObject (): MerlinType() {
 
     override fun unary(operator: MerlinToken): Result<MerlinType> {
         return Result.failure(MerlinRuntimeError(operator, "Invalid operand for operation."))
+    }
+
+    override fun getDebugString(): String {
+        val objectString = StringBuilder()
+        objectString.append("{")
+        objectString.append(
+            fields.entries.joinToString(", ") { "\"${it.key}\": ${it.value.getDebugString()}" }
+        )
+        objectString.append("}")
+        return objectString.toString()
     }
 }
 
@@ -235,5 +258,9 @@ object MerlinNone: MerlinType() {
 
     override fun unary(operator: MerlinToken): Result<MerlinType> {
         return Result.success(MerlinNone)
+    }
+
+    override fun getDebugString(): String {
+        return "NONE"
     }
 }

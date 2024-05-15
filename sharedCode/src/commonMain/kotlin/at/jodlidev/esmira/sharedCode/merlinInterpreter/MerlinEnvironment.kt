@@ -16,6 +16,20 @@ class MerlinEnvironment (private val enclosing: MerlinEnvironment? = null) {
     private val functions = HashMap<String, MerlinFunction>()
     var currentReturnValue: MerlinType = MerlinNone
 
+    override fun toString(): String {
+        val envString = StringBuilder()
+        enclosing?.let { envString.append(it) }
+        envString.append(if (enclosing == null) "***** ENVIRONMENT *****\n" else "***** ENVIRONMENT (enclosed by previous)*****\n")
+        envString.append("current return value: ")
+        envString.append(currentReturnValue.getDebugString())
+        envString.append("\nenvironment variables:\n\n")
+        envString.append(
+            values.entries.joinToString(separator = "\n", prefix = "-- ") { "${it.key}: ${it.value.getDebugString()}" }
+        )
+        envString.append("***********************\n")
+
+        return envString.toString()
+    }
 
     fun get(name: MerlinToken): MerlinType {
         return get(name.lexeme)

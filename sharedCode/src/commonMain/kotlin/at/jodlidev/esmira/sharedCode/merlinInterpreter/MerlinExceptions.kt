@@ -8,10 +8,22 @@ package at.jodlidev.esmira.sharedCode.merlinInterpreter
  * MerlinScanningError, MerlinParseError, and MerlinRuntimeError represent any errors chat can happen during the respective stages of the script.
  */
 
-class MerlinScanningError (val char: Char, val line: Int, message: String): RuntimeException(message)
+class MerlinScanningError (val char: Char, val line: Int, message: String): RuntimeException(message) {
+    fun getFormattedError(): String {
+        return "At char '${char}' on line ${line}: ${message ?: ""}"
+    }
+}
 
-class MerlinParseError (val token: MerlinToken, message: String): RuntimeException(message)
+class MerlinParseError (val token: MerlinToken, message: String): RuntimeException(message) {
+    fun getFormattedError(): String {
+        return "At token '${token.lexeme}' on line ${token.line}: ${message ?: ""}"
+    }
+}
 
-class MerlinRuntimeError (val token: MerlinToken, message: String): RuntimeException(message)
+class MerlinRuntimeError (val token: MerlinToken, message: String): RuntimeException(message) {
+    fun getFormattedError(): String {
+        return "At token '${token.lexeme}' on line ${token.line}: ${message ?: ""}"
+    }
+}
 
 class MerlinReturn (val value: MerlinType): RuntimeException()

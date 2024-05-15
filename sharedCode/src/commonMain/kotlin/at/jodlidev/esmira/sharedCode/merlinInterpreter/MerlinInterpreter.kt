@@ -5,10 +5,9 @@ import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.DataSet
 import at.jodlidev.esmira.sharedCode.data_structure.ErrorBox
 import at.jodlidev.esmira.sharedCode.data_structure.Input
+import at.jodlidev.esmira.sharedCode.data_structure.MerlinLog
 import at.jodlidev.esmira.sharedCode.data_structure.Message
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
@@ -45,6 +44,10 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
 
     fun getGlobalsObject(): MerlinObject? {
         return globals.get("globals").let { if (it is MerlinObject) it else null }
+    }
+
+    fun getEnvironmentString(): String {
+        return environment.toString()
     }
 
     fun cleanup() {
@@ -493,6 +496,21 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                     DataSet.createActionSentDataSet(DataSet.EventTypes.message, questionnaire, now)
 
                     return MerlinType.createBool(true)
+                }
+            },
+
+            // log(message)
+            "log" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 1
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    MerlinLog.logUserLog(interpreter.questionnaire, arguments[0].stringify())
+                    return MerlinNone
                 }
             },
 

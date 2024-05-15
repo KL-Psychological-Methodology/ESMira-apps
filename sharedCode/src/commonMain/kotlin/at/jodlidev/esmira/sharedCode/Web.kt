@@ -287,6 +287,7 @@ class Web {
 			}
 			
 			error = syncFiles() || error
+			error = syncMerlinLogs() || error
 			close()
 		}
 		catch(e: Throwable) {
@@ -318,6 +319,31 @@ class Web {
 			fileUpload.delete()
 		}
 		
+		return error
+	}
+
+	private suspend fun syncMerlinLogs(): Boolean {
+		val merlinLogs = DbLogic.getUnSyncedMerlinLogs()
+		ErrorBox.log("MerlinLogUpload", "Found ${merlinLogs.size} merlin logs for uploading")
+
+		for(merlinLog in merlinLogs) {
+			val url = merlinLog.serverUrl
+			try {
+				postJson("$url$URL_UPLOAD_MERLIN_LOG", PostStructure.MerlinLogStructure(merlinLog.studyWebId, merlinLog.getLogString()))
+				merlinLog.synced = UploadData.States.SYNCED
+			} catch (e: Throwable) {
+				ErrorBox.warn(
+					"Syncing failed",
+					"Could not sync log to $url (studyId: ${merlinLog.studyId}",
+					e
+				)
+				if (merlinLog.synced != UploadData.States.SYNCED)
+					merlinLog.synced = UploadData.States.NOT_SYNCED_ERROR
+				error = true
+				continue
+			}
+		}
+
 		return error
 	}
 	
@@ -371,6 +397,7 @@ class Web {
 		private const val URL_UPLOAD_FILE: String = "/api/file_uploads.php"
 		private const val URL_UPLOAD_ERRORBOX: String = "/api/save_errors.php"
 		private const val URL_UPLOAD_MESSAGE: String = "/api/save_message.php?lang=%s"
+		private const val URL_UPLOAD_MERLIN_LOG: String = "/api/save_merlin_log.php"
 		private const val URL_REWARD: String = "/api/reward.php"
 		
 		private const val DOMAIN_DONT_KILL_MY_APP: String = "https://dontkillmyapp.com"
@@ -472,6 +499,12 @@ class Web {
 			@Serializable
 			class RewardRequestStructure(
 				val studyId: Long
+			) : PostStructure()
+
+			@Serializable
+			class MerlinLogStructure(
+				val studyId: Long,
+				val content: String
 			) : PostStructure()
 		}
 		

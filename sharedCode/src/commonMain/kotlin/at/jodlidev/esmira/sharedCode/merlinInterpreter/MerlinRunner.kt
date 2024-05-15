@@ -1,6 +1,8 @@
 package at.jodlidev.esmira.sharedCode.merlinInterpreter
 
 import at.jodlidev.esmira.sharedCode.NativeLink
+import at.jodlidev.esmira.sharedCode.Updater
+import at.jodlidev.esmira.sharedCode.data_structure.MerlinLog
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -15,13 +17,14 @@ import kotlinx.serialization.json.Json
  */
 
 object MerlinRunner {
+    const val MERLIN_VERSION = Updater.MERLIN_VERSION
+
     const val TABLE = "merlinCache"
     const val KEY_ID = "_id"
     const val KEY_STUDY_ID = "studyId"
     const val KEY_GLOBALS_STRING = "globalsString"
 
     private var cachedGlobals: Pair<Long, MerlinObject>? = null
-    private val errors = mutableListOf<MerlinError>()
     private val interpreter = MerlinInterpreter()
 
     fun run(source: String, questionnaire: Questionnaire?): MerlinType? {
@@ -31,7 +34,7 @@ object MerlinRunner {
         try {
             tokens = scanner.scanTokens()
         } catch (e: MerlinScanningError) {
-            logScanningError(e)
+            MerlinLog.logScanningError(questionnaire, e)
             return null
         }
 
@@ -41,7 +44,7 @@ object MerlinRunner {
         try {
             statements = parser.parse()
         } catch (e: MerlinParseError) {
-            logParsingError(e)
+            MerlinLog.logParseError(questionnaire,e)
             return null
         }
 
@@ -63,7 +66,7 @@ object MerlinRunner {
         try {
             returnedValue = interpreter.interpret(statements)
         } catch (e: MerlinRuntimeError) {
-            logRuntimeError(e)
+            MerlinLog.logRuntimeError(questionnaire, e, interpreter.getEnvironmentString())
         } finally {
             val storedGlobals = interpreter.getGlobalsObject()?: MerlinObject()
             cachedGlobals = Pair(studyId, storedGlobals)
@@ -79,19 +82,6 @@ object MerlinRunner {
 
     fun runForString(source: String, questionnaire: Questionnaire?): String {
         return run(source, questionnaire)?.stringify() ?: ""
-    }
-
-
-    private fun logScanningError(error: MerlinScanningError) {
-        // TODO
-    }
-
-    private fun logParsingError(error: MerlinParseError) {
-        // TODO
-    }
-
-    private fun logRuntimeError(error: MerlinRuntimeError) {
-        // TODO
     }
 
     private fun saveGlobals(obj: MerlinObject, questionnaire: Questionnaire?) {
@@ -116,12 +106,10 @@ object MerlinRunner {
         )
 
         var r: String? = null
-        if(c.moveToFirst()) {
+        if (c.moveToFirst()) {
             r = c.getString(0)
         }
         c.close()
         return r?.let { Json.decodeFromString<MerlinObject>(it) } ?: MerlinObject()
     }
 }
-
-class MerlinError (val type: String, val message: String)
