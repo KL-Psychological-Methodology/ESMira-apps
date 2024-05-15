@@ -105,4 +105,8 @@ actual object NativeLink {
 	actual fun formatDateTime(ms: Long): String {
 		return iosCode.formatDateTime(ms)
 	}
+
+	actual fun getDatesDiff(ms1: Long, ms2: Long): Long {
+		return iosCode.getDatesDiff(ms1, ms2)
+	}
 }

@@ -27,6 +27,7 @@ import at.jodlidev.esmira.sharedCode.*
 import at.jodlidev.esmira.sharedCode.data_structure.QuestionnaireCache
 import at.jodlidev.esmira.sharedCode.data_structure.DbUser
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
+import at.jodlidev.esmira.sharedCode.merlinInterpreter.MerlinRunner
 import at.jodlidev.esmira.views.ESMiraDialog
 import at.jodlidev.esmira.views.NextNotificationsView
 import at.jodlidev.esmira.views.main.*
@@ -351,7 +352,7 @@ class MainActivity: ComponentActivity() {
 	@Composable
 	fun PageQuestionnaire(qId: Long, pageNumber: Int, navController: NavHostController) {
 		val questionnaire = remember { getQuestionnaire(qId) } ?: return
-
+		
 		QuestionnaireView(
 			questionnaire = questionnaire,
 			pageNumber = pageNumber,

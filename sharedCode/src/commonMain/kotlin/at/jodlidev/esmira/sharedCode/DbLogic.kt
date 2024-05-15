@@ -5,6 +5,7 @@ import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_perData
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_timed
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_perValue
+import at.jodlidev.esmira.sharedCode.merlinInterpreter.MerlinRunner
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 
@@ -157,6 +158,8 @@ object DbLogic {
 			${Questionnaire.KEY_SUMSCORES} TEXT,
 			${Questionnaire.KEY_PUBLISHED_ANDROID} INTEGER DEFAULT 1,
 			${Questionnaire.KEY_PUBLISHED_IOS} INTEGER DEFAULT 1,
+			${Questionnaire.KEY_SCRIPT_END_BLOCK} TEXT,
+			${Questionnaire.KEY_VIRTUAL_INPUTS} TEXT,
 			FOREIGN KEY(${Questionnaire.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}) ON DELETE CASCADE)""")
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${QuestionnaireCache.TABLE} (
 			${QuestionnaireCache.KEY_ID} INTEGER PRIMARY KEY,
@@ -292,6 +295,24 @@ object DbLogic {
 			DELETE FROM ${ErrorBox.TABLE} WHERE ${ErrorBox.KEY_ID}
 			= (SELECT MIN(${ErrorBox.KEY_ID}) FROM ${ErrorBox.TABLE});
 			END""")
+
+		db.execSQL("""CREATE TABLE IF NOT EXISTS ${MerlinRunner.TABLE} (
+			${MerlinRunner.KEY_STUDY_ID} INTEGER,
+			${MerlinRunner.KEY_GLOBALS_STRING} TEXT,
+			FOREIGN KEY(${MerlinRunner.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}) ON DELETE CASCADE)""")
+
+		db.execSQL("""CREATE TABLE IF NOT EXISTS ${MerlinLog.TABLE} (
+			${MerlinLog.KEY_ID} INTEGER PRIMARY KEY,
+			${MerlinLog.KEY_STUDY_ID} INTEGER,
+			${MerlinLog.KEY_STUDY_WEB_ID} INTEGER,
+			${MerlinLog.KEY_SERVER_URL} TEXT,
+			${MerlinLog.KEY_SERVER_VERSION} INTEGER,
+			${MerlinLog.KEY_QUESTIONNAIRE_NAME} TEXT,
+			${MerlinLog.KEY_TIMESTAMP} INTEGER,
+			${MerlinLog.KEY_TYPE} INTEGER,
+			${MerlinLog.KEY_MSG} TEXT,
+			${MerlinLog.KEY_SYNCED} INTEGER,
+			FOREIGN KEY(${MerlinLog.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}))""")
 	}
 	
 	fun updateFrom(db: SQLiteInterface, oldVersion: Int) {
@@ -741,6 +762,22 @@ object DbLogic {
 		c.close()
 		return r
 	}
+
+	fun getQuestionnaireByInternalId(studyId: Long, internalId: Long): Questionnaire? {
+		val c = NativeLink.sql.select(
+			Questionnaire.TABLE,
+			Questionnaire.COLUMNS,
+			"${Questionnaire.KEY_STUDY_ID} = ? AND ${Questionnaire.KEY_INTERNAL_ID} = ?", arrayOf(studyId.toString(), internalId.toString()),
+			null,
+			null,
+			null,
+			"1"
+		)
+		var r: Questionnaire? = null
+		if(c.moveToFirst()) r = Questionnaire(c)
+		c.close()
+		return r
+	}
 	
 	fun getHiddenQuestionnaires(studyId: Long): List<Questionnaire> {
 		val study = getStudy(studyId) ?: return ArrayList()
@@ -856,11 +893,12 @@ object DbLogic {
 	fun getSortedUploadData(studyId: Long): List<UploadData> {
 		var list: List<UploadData> = getDataSets(studyId)
 		list = list.plus(getReadyFileUploads(studyId))
+		list = list.plus(getMerlinLogs(studyId))
 
 		//we want deletable entries at the top. Apart from that everything should be sorted by timestamp (descending)
-		val list_deletable = list.filter { it.synced == UploadData.States.NOT_SYNCED_ERROR_DELETABLE }.sortedBy { it.timestamp }.reversed()
-		val list_uploaded = list.filter { it.synced != UploadData.States.NOT_SYNCED_ERROR_DELETABLE }.sortedBy { it.timestamp }.reversed()
-		return list_deletable + list_uploaded
+		val listDeletable = list.filter { it.synced == UploadData.States.NOT_SYNCED_ERROR_DELETABLE }.sortedBy { it.timestamp }.reversed()
+		val listUploaded = list.filter { it.synced != UploadData.States.NOT_SYNCED_ERROR_DELETABLE }.sortedBy { it.timestamp }.reversed()
+		return listDeletable + listUploaded
 	}
 	
 	//
@@ -910,6 +948,21 @@ object DbLogic {
 			r = c.moveToFirst()
 			c.close()
 		}
+
+		if(!r) {
+			c = NativeLink.sql.select(
+				MerlinLog.TABLE,
+				MerlinLog.COLUMNS,
+				"${MerlinLog.KEY_STUDY_ID} = ? AND ${MerlinLog.KEY_SYNCED} IS NOT ${UploadData.States.SYNCED.ordinal}", arrayOf(studyId.toString()),
+				null,
+				null,
+				null,
+				null
+			)
+			r = c.moveToNext()
+			c.close()
+		}
+
 		return r
 	}
 	fun getUnSyncedDataSetCount(): Int {
@@ -983,6 +1036,7 @@ object DbLogic {
 		c.close()
 		return container
 	}
+
 	fun getDataSet(id: Long): DataSet? {
 		val c = NativeLink.sql.select(
 			DataSet.TABLE_JOINED,
@@ -1092,6 +1146,50 @@ object DbLogic {
 		c.close()
 		return container
 	}
+
+	//
+	// MerlinLogs
+	//
+
+	fun getUnSyncedMerlinLogs(): List<MerlinLog> {
+		val c = NativeLink.sql.select(
+			MerlinLog.TABLE,
+			MerlinLog.COLUMNS,
+			"${MerlinLog.KEY_SYNCED} IS NOT ${UploadData.States.SYNCED.ordinal}",
+			null,
+			null,
+			null,
+			"${DataSet.KEY_SYNCED} ASC",
+			null
+		)
+		val container = ArrayList<MerlinLog>()
+		while(c.moveToNext()) {
+			val merlinLog = MerlinLog(c)
+			container.add(merlinLog)
+		}
+		c.close()
+		return container
+	}
+
+	fun getMerlinLogs(studyId: Long): List<MerlinLog> {
+		val c = NativeLink.sql.select(
+			MerlinLog.TABLE,
+			MerlinLog.COLUMNS,
+			"${MerlinLog.KEY_STUDY_ID} = ?", arrayOf(studyId.toString()),
+			null,
+			null,
+			"${MerlinLog.TABLE}.${MerlinLog.KEY_TIMESTAMP} DESC",
+			null
+		)
+		val list = ArrayList<MerlinLog>()
+		while (c.moveToNext()) {
+			list.add(MerlinLog(c))
+		}
+		c.close()
+
+		return list
+	}
+
 	
 	//
 	//Errors

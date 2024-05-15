@@ -26,6 +26,7 @@ import at.jodlidev.esmira.androidNative.ChooseInputView
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.data_structure.Page
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
+import at.jodlidev.esmira.sharedCode.merlinInterpreter.MerlinRunner
 import at.jodlidev.esmira.views.TextButtonIconLeft
 import at.jodlidev.esmira.views.TextButtonIconRight
 import at.jodlidev.esmira.views.main.DefaultScaffoldView
@@ -93,6 +94,29 @@ fun MainView(
 	hasRequired: Boolean,
 	clickBtn: () -> Unit
 ) {
+	val isPageActive = remember {
+		if (page.relevance.isEmpty())
+			true
+		else
+			MerlinRunner.runForBool(page.relevance, questionnaire, true)
+
+	}
+	if (!isPageActive) {
+		SideEffect {
+			clickBtn()
+		}
+		return
+	}
+
+	val activeInputs = remember {
+		page.inputs.filter {
+			if (it.relevance.isNotEmpty())
+				MerlinRunner.runForBool(it.relevance, questionnaire, true)
+			else
+				true
+		}
+	}
+
 	LazyColumn(state = listState) {
 		if(page.header.isNotEmpty()) {
 			item {
@@ -102,8 +126,8 @@ fun MainView(
 				)
 			}
 		}
-		
-		itemsIndexed(page.inputs, { i, _ -> i }) { i, input ->
+
+		itemsIndexed(activeInputs, { i, _ -> i }) { i, input ->
 			ChooseInputView(
 				questionnaire,
 				input,
@@ -114,7 +138,7 @@ fun MainView(
 			)
 		}
 		
-		var colorCount = page.inputs.size
+		var colorCount = activeInputs.size
 		if(page.footer.isNotEmpty()) {
 			item {
 				HtmlHandler.HtmlText(html = page.footer, modifier = Modifier

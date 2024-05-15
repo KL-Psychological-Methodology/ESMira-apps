@@ -25,6 +25,7 @@ android {
         targetSdk = 33
         versionCode = 181
         versionName = "2.13.2"
+
         multiDexEnabled = true //project became too big. See: https://stackoverflow.com/a/59308589
     
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
