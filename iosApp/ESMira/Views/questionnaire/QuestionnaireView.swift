@@ -58,6 +58,14 @@ struct QuestionnaireView: View {
 //	private func drawInnerQuestionnaire(page: Page, width: CGFloat) -> some View {
 	private func drawInnerQuestionnaire(page: Page) -> some View {
 		let inputs = page.inputs
+		@State var activeInputs = inputs.filter { input in
+			if(input.relevance.isEmpty) {
+				return true
+			} else {
+				return MerlinRunner().runForBool(source: input.relevance, questionnaire: questionnaire, default: true)
+			}
+		}
+		
 		return VStack {
 			if(!page.header.isEmpty) {
 				HtmlTextView(html: page.header)
@@ -66,8 +74,8 @@ struct QuestionnaireView: View {
 					.background(Color("ListColor1"))
 			}
 
-			ForEach(0..<inputs.count, id: \.self) { i in
-				InputView(input: inputs[i])
+			ForEach(0..<activeInputs.count, id: \.self) { i in
+				InputView(input: activeInputs[i])
 					.padding()
 //					.frame(width: width)
 					.uiTag(i)
@@ -132,7 +140,7 @@ struct QuestionnaireView: View {
 
 	func drawQuestionnaire() -> some View {
 		let page = self.questionnaire.getPage(pageNumber: Int32(self.pageIndex))
-
+		
 		return ScrollView {
 			self.drawInnerQuestionnaire(page: page)
 		}

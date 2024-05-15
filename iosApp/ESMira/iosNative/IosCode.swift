@@ -49,6 +49,16 @@ class IosCode: IosCodeInterface {
 		)
 	}
 	
+	func getDatesDiff(ms1: Int64, ms2: Int64) -> Int64 {
+		let formatter = DateFormatter()
+		formatter.dateStyle = .short
+		formatter.timeStyle = .none
+		let date1 = formatter.date(from: formatter.string(from: Date(timeIntervalSince1970: Double(ms1)/1000))) ?? Date(timeIntervalSince1970: 0)
+		let date2 = formatter.date(from: formatter.string(from: Date(timeIntervalSince1970: Double(ms2)/1000))) ?? Date(timeIntervalSince1970: 0)
+		let diff = Calendar.current.dateComponents([.day], from: date1, to: date2)
+		return Int64(diff.day!)
+	}
+	
 	/**
 	 * For background service.
 	  * Does nothing if already initialized. WIll be overwritten as soon as app is opened by user
