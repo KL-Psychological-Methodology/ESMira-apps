@@ -461,7 +461,7 @@ internal object Updater {
 		if(oldVersion <= 42) {
 			db.execSQL("ALTER TABLE studies ADD COLUMN faultyAccessKey INTEGER DEFAULT 0;")
 		}
-		if(oldVersion <= 44) {
+		if(oldVersion <= 43) {
 			db.execSQL("ALTER TABLE questionnaires ADD COLUMN scriptEndBlock TEXT DEFAULT '';")
 			db.execSQL("ALTER TABLE questionnaires ADD COLUMN virtualInputs TEXT DEFAULT '[]';")
 			db.execSQL("""CREATE TABLE IF NOT EXISTS merlinCache (
