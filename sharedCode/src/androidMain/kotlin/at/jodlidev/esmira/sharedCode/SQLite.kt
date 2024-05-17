@@ -15,8 +15,10 @@ import at.jodlidev.esmira.sharedCode.SQLiteValues
  * Created by JodliDev on 05.05.2020.
  */
 
-class SQLite constructor(context: Context?, name: String? = DbLogic.DATABASE_NAME) : SQLiteInterface, SQLiteOpenHelper(context, name, null, DbLogic.DATABASE_VERSION) {
-	
+class SQLite : SQLiteInterface, SQLiteOpenHelper {
+	public constructor(context: Context?, name: String? = DbLogic.DATABASE_NAME, version: Int = DbLogic.DATABASE_VERSION):
+			super(context, name, null, version) {}
+
 	private class DirectWrapper(private val db: SQLiteDatabase) : SQLiteInterface {
 		override fun select(
 			table: String,

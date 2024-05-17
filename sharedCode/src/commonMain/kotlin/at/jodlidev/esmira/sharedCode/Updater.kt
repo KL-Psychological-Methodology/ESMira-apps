@@ -462,8 +462,14 @@ internal object Updater {
 			db.execSQL("ALTER TABLE studies ADD COLUMN faultyAccessKey INTEGER DEFAULT 0;")
 		}
 		if(oldVersion <= 45) {
-			db.execSQL("ALTER TABLE questionnaires ADD COLUMN scriptEndBlock TEXT DEFAULT '';")
-			db.execSQL("ALTER TABLE questionnaires ADD COLUMN virtualInputs TEXT DEFAULT '[]';")
+			try {
+				db.execSQL("ALTER TABLE questionnaires ADD COLUMN scriptEndBlock TEXT DEFAULT '';")
+			} catch (_: Throwable) {}
+			try {
+				db.execSQL("ALTER TABLE questionnaires ADD COLUMN virtualInputs TEXT DEFAULT '[]';")
+			} catch (_: Throwable) {}
+			db.execSQL("DROP TABLE IF EXISTS merlinCache;")
+			db.execSQL("DROP TABLE IF EXISTS merlinLogs;")
 			db.execSQL("""CREATE TABLE IF NOT EXISTS merlinCache (
 			studyId INTEGER,
 			globalsString TEXT,
@@ -474,12 +480,12 @@ internal object Updater {
 			study_webId INTEGER,
 			server_url TEXT,
 			server_version INTEGER,
-			questionnaireName TEXT,
+			questionnaire_name TEXT,
 			time_ms INTEGER,
-			logType INTEGER,
+			log_type INTEGER,
 			msg TEXT,
 			is_synced INTEGER,
-			FOREIGN KEY(studyId) REFERENCES studies(_id))""")
+			FOREIGN KEY(study_id) REFERENCES studies(_id))""")
 		}
 	}
 	
