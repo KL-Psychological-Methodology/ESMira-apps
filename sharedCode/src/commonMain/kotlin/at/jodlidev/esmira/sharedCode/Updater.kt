@@ -486,6 +486,8 @@ internal object Updater {
 			msg TEXT,
 			is_synced INTEGER,
 			FOREIGN KEY(study_id) REFERENCES studies(_id))""")
+
+			Web.updateStudiesAsync(true)
 		}
 	}
 	
