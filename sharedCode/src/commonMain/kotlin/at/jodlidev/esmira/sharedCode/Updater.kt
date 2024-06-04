@@ -480,12 +480,14 @@ internal object Updater {
 			study_webId INTEGER,
 			server_url TEXT,
 			server_version INTEGER,
-			questionnaireName TEXT,
+			questionnaire_name TEXT,
 			time_ms INTEGER,
-			logType INTEGER,
+			log_type INTEGER,
 			msg TEXT,
 			is_synced INTEGER,
 			FOREIGN KEY(study_id) REFERENCES studies(_id))""")
+
+			Web.updateStudiesAsync(true)
 		}
 	}
 	

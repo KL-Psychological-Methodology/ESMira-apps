@@ -99,7 +99,12 @@ class Questionnaire {
 	@Transient private lateinit var _virtualInputs: Map<String, VirtualInput>
 	val virtualInputs: Map<String, VirtualInput> get() {
 		if (!this::_virtualInputs.isInitialized) {
-			_virtualInputs = DbLogic.getJsonConfig().decodeFromString<List<String>>(virtualInputsString).associateWith { VirtualInput(it, this) }
+			_virtualInputs = try {
+				DbLogic.getJsonConfig().decodeFromString<List<String>>(virtualInputsString).associateWith { VirtualInput(it, this) }
+			} catch (e: Throwable) {
+				ErrorBox.warn("Questionnaire", "Questionnaire $title is faulty\n$virtualInputsString", e)
+				mapOf()
+			}
 		}
 		return _virtualInputs
 	}
