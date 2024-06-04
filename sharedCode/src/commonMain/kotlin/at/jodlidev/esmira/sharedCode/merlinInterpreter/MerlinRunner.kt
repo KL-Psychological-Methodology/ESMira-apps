@@ -90,7 +90,7 @@ object MerlinRunner {
         val values = db.getValueBox()
         values.putLong(KEY_STUDY_ID, studyId)
         values.putString(KEY_GLOBALS_STRING, Json.encodeToString(obj))
-        db.insert(TABLE, values)
+        db.update(TABLE, values, "$KEY_STUDY_ID=?", arrayOf(studyId.toString()))
     }
     private fun retrieveGlobals(questionnaire: Questionnaire?): MerlinObject {
         val db = NativeLink.sql
