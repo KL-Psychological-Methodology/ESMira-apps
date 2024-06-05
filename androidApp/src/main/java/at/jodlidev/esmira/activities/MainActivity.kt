@@ -360,7 +360,8 @@ class MainActivity: ComponentActivity() {
 				onBackPressedDispatcher.onBackPressed()
 			},
 			goNext = {
-				if(questionnaire.isLastPage(pageNumber)) {
+				val nextRelevantPageIndex = questionnaire.getNextRelevantPageIndex(pageNumber)
+				if(nextRelevantPageIndex == -1 || questionnaire.isLastPage(pageNumber)) {
 					questionnaire.saveQuestionnaire()
 					navController.popBackStack("entrance", false)
 					navController.navigate("finishedQuestionnaire") {
@@ -372,7 +373,7 @@ class MainActivity: ComponentActivity() {
 						navController.popBackStack("entrance", false)
 					}
 					QuestionnaireCache.savePage(questionnaire.id, pageNumber + 1)
-					navController.navigate("questionnaire/${questionnaire.id}/${pageNumber + 1}")
+					navController.navigate("questionnaire/${questionnaire.id}/${nextRelevantPageIndex}")
 				}
 			}
 		)
