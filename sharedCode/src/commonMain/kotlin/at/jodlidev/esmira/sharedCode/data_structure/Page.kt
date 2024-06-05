@@ -1,5 +1,6 @@
 package at.jodlidev.esmira.sharedCode.data_structure
 
+import at.jodlidev.esmira.sharedCode.merlinInterpreter.MerlinRunner
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Transient
 import kotlinx.serialization.Serializable
@@ -43,5 +44,14 @@ class Page internal constructor( ) {
 				return true
 		}
 		return false
+	}
+
+	fun getActiveInputs(questionnaire: Questionnaire): List<Input> {
+		return inputs.filter {
+			if(it.relevance.isNotEmpty())
+				MerlinRunner.runForBool(it.relevance, questionnaire, true)
+			else
+				true
+		}
 	}
 }

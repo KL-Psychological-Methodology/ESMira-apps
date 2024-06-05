@@ -190,9 +190,34 @@ class Questionnaire {
 		else
 			QuestionnaireCache.getPage(id)
 	}
+
 	fun getPage(pageNumber: Int): Page {
 		return pages[pageNumber]
 	}
+
+	fun getNextRelevantPageIndex(fromPageIndex: Int): Int {
+		if (isLastPage(fromPageIndex))
+			return -1
+		var currentIndex = fromPageIndex + 1
+		while (true) {
+			val page = getPage(currentIndex)
+			if (
+				page.relevance.isNotEmpty() && MerlinRunner.runForBool(
+					page.relevance,
+					this,
+					true
+				)
+			) {
+				return currentIndex
+			}
+			if (isLastPage(currentIndex)) {
+				return -1
+			} else {
+				currentIndex += 1
+			}
+		}
+	}
+
 	fun isLastPage(pageNumber: Int): Boolean {
 		return pageNumber == pages.size - 1
 	}
