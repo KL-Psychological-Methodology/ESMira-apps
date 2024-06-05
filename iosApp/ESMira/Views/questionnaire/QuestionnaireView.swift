@@ -58,13 +58,7 @@ struct QuestionnaireView: View {
 //	private func drawInnerQuestionnaire(page: Page, width: CGFloat) -> some View {
 	private func drawInnerQuestionnaire(page: Page) -> some View {
 		let inputs = page.inputs
-		@State var activeInputs = inputs.filter { input in
-			if(input.relevance.isEmpty) {
-				return true
-			} else {
-				return MerlinRunner().runForBool(source: input.relevance, questionnaire: questionnaire, default: true)
-			}
-		}
+		@State var activeInputs = page.getActiveInputs(questionnaire: self.questionnaire)
 		
 		return VStack {
 			if(!page.header.isEmpty) {
@@ -98,7 +92,7 @@ struct QuestionnaireView: View {
 				}
 				if(!self.questionnaire.isLastPage(pageNumber: Int32(pageIndex))) {
 					NavigationLink(
-						destination: QuestionnaireView(questionnaire: self.questionnaire, pageIndex: self.pageIndex + 1),
+						destination: QuestionnaireView(questionnaire: self.questionnaire, pageIndex: self.pageIndex),
 						isActive: self.$nextPage,
 						label: { EmptyView() }
 					)
@@ -196,8 +190,10 @@ struct QuestionnaireView: View {
 	}
 	
 	private func goNext() {
-		if(!self.questionnaire.isLastPage(pageNumber: Int32(pageIndex))) {
-			QuestionnaireCache().savePage(questionnaireId: questionnaire.id, pageNumber: Int32(self.pageIndex + 1))
+		let nextRelevantPageIndex = self.questionnaire.getNextRelevantPageIndex(fromPageIndex: Int32(pageIndex))
+		if(nextRelevantPageIndex >= 0 && !self.questionnaire.isLastPage(pageNumber: Int32(pageIndex))) {
+			self.pageIndex = Int(nextRelevantPageIndex)
+			QuestionnaireCache().savePage(questionnaireId: questionnaire.id, pageNumber: Int32(self.pageIndex))
 			if(questionnaire.isBackEnabled) {
 				self.nextPage = true
 			}
