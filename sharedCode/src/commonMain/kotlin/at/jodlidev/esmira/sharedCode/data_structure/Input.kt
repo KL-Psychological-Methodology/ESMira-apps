@@ -62,6 +62,7 @@ class Input internal constructor( ) {
 	var showValue: Boolean = false //for compass, vas
 	var maxValue: Float = 0F //for vas
 	var resolution: Int = 0 //for location
+	var vertical: Boolean = false //for likert scale
 	
 	var forceInt: Boolean = false
 	

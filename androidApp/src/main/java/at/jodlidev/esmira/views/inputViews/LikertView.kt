@@ -21,6 +21,16 @@ import at.jodlidev.esmira.sharedCode.data_structure.Input
 
 @Composable
 fun LikertView(input: Input, get: () -> String, save: (String) -> Unit) {
+	if (input.vertical) {
+		LikertViewVertical(input = input, get = get, save = save)
+	} else {
+		LikertViewHorizontal(input = input, get = get, save = save)
+	}
+}
+
+
+@Composable
+fun LikertViewHorizontal(input: Input, get: () -> String, save: (String) -> Unit) {
 	Column(modifier = Modifier.fillMaxWidth()) {
 		Row(modifier = Modifier
 			.fillMaxWidth()
@@ -51,12 +61,58 @@ fun LikertView(input: Input, get: () -> String, save: (String) -> Unit) {
 	}
 }
 
+@Composable
+fun LikertViewVertical(input: Input, get: () -> String, save: (String) -> Unit) {
+	Column(modifier = Modifier.fillMaxWidth()) {
+		Row(modifier = Modifier
+			.fillMaxWidth()
+			.padding(horizontal = 5.dp),
+			horizontalArrangement = Arrangement.Center) {
+			Text(input.leftSideLabel,
+				textAlign = TextAlign.Center,
+				fontSize = MaterialTheme.typography.labelMedium.fontSize,
+				modifier = Modifier.weight(1F)
+			)
+		}
+		for(i in 1..input.likertSteps) {
+			Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+				RadioButton(selected = get() == i.toString(),
+					onClick = {
+						save(i.toString())
+					}
+				)
+			}
+		}
+		Row(modifier = Modifier
+			.fillMaxWidth()
+			.padding(horizontal = 5.dp)) {
+			Text(input.rightSideLabel,
+				textAlign = TextAlign.Center,
+				fontSize = MaterialTheme.typography.labelMedium.fontSize,
+				modifier = Modifier.weight(1F)
+			)
+		}
+	}
+}
+
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun PreviewLikertView() {
+fun PreviewLikertViewHorizontal() {
 	val input = DbLogic.createJsonObj<Input>("""
-		{"leftSideLabel": "left", "rightSideLabel": "right", "likertSteps": "5"}
+		{"leftSideLabel": "left", "rightSideLabel": "right", "likertSteps": "5", "vertical": false}
+	""")
+	ESMiraSurface {
+		LikertView(input, {"1"}) {}
+	}
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+fun PreviewLikertViewVertical() {
+	val input = DbLogic.createJsonObj<Input>("""
+		{"leftSideLabel": "left", "rightSideLabel": "right", "likertSteps": "5", "vertical": true}
 	""")
 	ESMiraSurface {
 		LikertView(input, {"1"}) {}
