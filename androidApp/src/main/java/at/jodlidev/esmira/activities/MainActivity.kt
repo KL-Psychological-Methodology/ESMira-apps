@@ -352,7 +352,8 @@ class MainActivity: ComponentActivity() {
 	@Composable
 	fun PageQuestionnaire(qId: Long, pageNumber: Int, navController: NavHostController) {
 		val questionnaire = remember { getQuestionnaire(qId) } ?: return
-		
+		val context = LocalContext.current
+
 		QuestionnaireView(
 			questionnaire = questionnaire,
 			pageNumber = pageNumber,
@@ -361,7 +362,12 @@ class MainActivity: ComponentActivity() {
 			},
 			goNext = {
 				val nextRelevantPageIndex = questionnaire.getNextRelevantPageIndex(pageNumber)
+				if(nextRelevantPageIndex > 0 && nextRelevantPageIndex - pageNumber > 1) {
+					val skippedPages = nextRelevantPageIndex - pageNumber - 1
+					Toast.makeText(context, getString(R.string.toast_skipped_pages, skippedPages), Toast.LENGTH_LONG).show()
+				}
 				if(nextRelevantPageIndex == -1 || questionnaire.isLastPage(pageNumber)) {
+					Toast.makeText(context, getString(R.string.toast_skipped_to_end), Toast.LENGTH_LONG).show()
 					questionnaire.saveQuestionnaire()
 					navController.popBackStack("entrance", false)
 					navController.navigate("finishedQuestionnaire") {
