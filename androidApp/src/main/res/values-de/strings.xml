@@ -300,5 +300,6 @@
     <string name="could_not_determine_location">Standort konnte nicht bestimmt werden</string>
     <string name="countdown_running">Countdown läuft</string>
     <string name="toast_skipped_pages">%1$d Seiten übersprungen</string>
+    <string name="toast_skipped_one_page">1 Seite übersprungen</string>
     <string name="toast_skipped_to_end">Restliche Seiten übersprungen</string>
 </resources>

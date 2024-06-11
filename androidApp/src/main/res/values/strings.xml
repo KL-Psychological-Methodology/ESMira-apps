@@ -300,5 +300,6 @@
     <string name="could_not_determine_location">Could not determine location</string>
     <string name="countdown_running">Countdown running</string>
     <string name="toast_skipped_pages">Skipped %1$d pages</string>
+    <string name="toast_skipped_one_page">Skipped 1 page</string>
     <string name="toast_skipped_to_end">Skipped remaining pages</string>
 </resources>
