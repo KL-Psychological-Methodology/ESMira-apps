@@ -200,6 +200,10 @@ class MerlinObject (): MerlinType() {
         fields[name.lexeme] = value
     }
 
+    fun size(): Int {
+        return fields.size
+    }
+
     override fun isTruthy(): Boolean {
         return fields.isNotEmpty()
     }
