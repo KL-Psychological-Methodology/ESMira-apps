@@ -30,7 +30,7 @@ fun LikertView(input: Input, get: () -> String, save: (String) -> Unit) {
 
 
 @Composable
-fun LikertViewHorizontal(input: Input, get: () -> String, save: (String) -> Unit) {
+private fun LikertViewHorizontal(input: Input, get: () -> String, save: (String) -> Unit) {
 	Column(modifier = Modifier.fillMaxWidth()) {
 		Row(modifier = Modifier
 			.fillMaxWidth()
@@ -62,7 +62,7 @@ fun LikertViewHorizontal(input: Input, get: () -> String, save: (String) -> Unit
 }
 
 @Composable
-fun LikertViewVertical(input: Input, get: () -> String, save: (String) -> Unit) {
+private fun LikertViewVertical(input: Input, get: () -> String, save: (String) -> Unit) {
 	Column(modifier = Modifier.fillMaxWidth()) {
 		Row(modifier = Modifier
 			.fillMaxWidth()
