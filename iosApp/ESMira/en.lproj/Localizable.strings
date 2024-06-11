@@ -212,3 +212,6 @@
 "could_not_determine_location" = "Could not determine location";
 "stop_scanning" = "Stop scanning";
 "countdown_running" = "Countdown running";
+"toast_skipped_one_page" = "Skipped 1 page";
+"toast_skipped_pages" = "Skipped %1$d pages";
+"toast_skipped_to_end" = "Skipped remaining pages";

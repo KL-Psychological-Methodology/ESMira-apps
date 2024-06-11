@@ -100,7 +100,7 @@ struct LocationStruct: View {
 				Text("\(scanningString)").onReceive(timer) { timer in
 					self.ellipsisDots = (self.ellipsisDots + 1) % 3
 					self.scanningString = NSLocalizedString("scanning", comment: "")
-					for i in 0...ellipsisDots {
+					for _ in 0...ellipsisDots {
 						self.scanningString += "."
 					}
 					self.progress.completedUnitCount += 1

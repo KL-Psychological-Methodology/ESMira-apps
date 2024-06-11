@@ -82,7 +82,7 @@ struct QuestionnaireView: View {
 				HtmlTextView(html: page.footer)
 					.padding()
 //					.frame(width: width)
-					.background(getBackgroundColor(inputs.count))
+					.background(getBackgroundColor(activeInputs.count))
 			}
 			
 			VStack(alignment: .leading) {
@@ -92,7 +92,7 @@ struct QuestionnaireView: View {
 				}
 				if(!self.questionnaire.isLastPage(pageNumber: Int32(pageIndex))) {
 					NavigationLink(
-						destination: QuestionnaireView(questionnaire: self.questionnaire, pageIndex: self.pageIndex),
+						destination: QuestionnaireView(questionnaire: self.questionnaire, pageIndex: self.pageIndex + 1),
 						isActive: self.$nextPage,
 						label: { EmptyView() }
 					)
@@ -127,7 +127,7 @@ struct QuestionnaireView: View {
 				}
 			}
 				.padding(.vertical, 30)
-				.background(getBackgroundColor(page.footer.isEmpty ? inputs.count : inputs.count + 1))
+				.background(getBackgroundColor(page.footer.isEmpty ? activeInputs.count : activeInputs.count + 1))
 		}
 			.animation(.none)
 	}
@@ -191,9 +191,17 @@ struct QuestionnaireView: View {
 	
 	private func goNext() {
 		let nextRelevantPageIndex = self.questionnaire.getNextRelevantPageIndex(fromPageIndex: Int32(pageIndex))
-		if(nextRelevantPageIndex >= 0 && !self.questionnaire.isLastPage(pageNumber: Int32(pageIndex))) {
-			self.pageIndex = Int(nextRelevantPageIndex)
-			QuestionnaireCache().savePage(questionnaireId: questionnaire.id, pageNumber: Int32(self.pageIndex))
+		if(nextRelevantPageIndex > 0 && nextRelevantPageIndex - Int32(pageIndex) > 1) {
+			let skippedPages = nextRelevantPageIndex - Int32(pageIndex) - 1
+			if skippedPages == 1 {
+				self.appState.showTranslatedToast(NSLocalizedString("toast_skipped_one_page", comment: ""))
+			} else {
+				self.appState.showTranslatedToast(String(format: NSLocalizedString("toast_skipped_pages", comment: ""), skippedPages))
+			}
+		}
+		if(nextRelevantPageIndex >= 0) {
+			self.pageIndex = Int(nextRelevantPageIndex - 1)
+			QuestionnaireCache().savePage(questionnaireId: questionnaire.id, pageNumber: Int32(self.pageIndex + 1))
 			if(questionnaire.isBackEnabled) {
 				self.nextPage = true
 			}
@@ -202,6 +210,9 @@ struct QuestionnaireView: View {
 			}
 		}
 		else {
+			if(!self.questionnaire.isLastPage(pageNumber: Int32(self.pageIndex))) {
+				self.appState.showTranslatedToast(NSLocalizedString("toast_skipped_to_end", comment: ""))
+			}
 			self.questionnaire.saveQuestionnaire()
 			self.navigationState.questionnaireOpened = false
 			self.navigationState.questionnaireSuccessfullOpened = true

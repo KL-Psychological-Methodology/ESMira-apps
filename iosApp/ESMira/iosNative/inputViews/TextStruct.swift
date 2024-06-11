@@ -10,6 +10,6 @@ struct TextStruct: View {
 	@ObservedObject var viewModel: InputViewModel
 	
 	var body: some View {
-		HtmlTextView(html: self.viewModel.input.desc)
+			HtmlTextView(html: self.viewModel.input.desc)
 	}
 }
