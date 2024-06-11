@@ -299,4 +299,6 @@
     <string name="found_location">Found location: %1$s</string>
     <string name="could_not_determine_location">Could not determine location</string>
     <string name="countdown_running">Countdown running</string>
+    <string name="toast_skipped_pages">Skipped %1$d pages</string>
+    <string name="toast_skipped_to_end">Skipped remaining pages</string>
 </resources>
