@@ -374,8 +374,14 @@ class MainActivity: ComponentActivity() {
 						).show()
 					}
 				}
-				if(nextRelevantPageIndex == -1 || questionnaire.isLastPage(pageNumber)) {
-					Toast.makeText(context, getString(R.string.toast_skipped_to_end), Toast.LENGTH_LONG).show()
+				if(nextRelevantPageIndex == -1) {
+					if(!questionnaire.isLastPage(pageNumber)) {
+						Toast.makeText(
+							context,
+							getString(R.string.toast_skipped_to_end),
+							Toast.LENGTH_LONG
+						).show()
+					}
 					questionnaire.saveQuestionnaire()
 					navController.popBackStack("entrance", false)
 					navController.navigate("finishedQuestionnaire") {
