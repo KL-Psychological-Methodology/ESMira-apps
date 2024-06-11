@@ -63,6 +63,7 @@ class Input internal constructor( ) {
 	var maxValue: Float = 0F //for vas
 	var resolution: Int = 0 //for location
 	var vertical: Boolean = false //for likert scale
+	var textScript: String = ""
 	
 	var forceInt: Boolean = false
 	

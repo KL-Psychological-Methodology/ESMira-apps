@@ -201,8 +201,9 @@ class Questionnaire {
 		var currentIndex = fromPageIndex + 1
 		while (true) {
 			val page = getPage(currentIndex)
-			if (
-				page.relevance.isNotEmpty() && MerlinRunner.runForBool(
+			if (page.relevance.isEmpty()) {
+					return currentIndex
+			} else if(MerlinRunner.runForBool(
 					page.relevance,
 					this,
 					true
