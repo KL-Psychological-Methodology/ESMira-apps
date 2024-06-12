@@ -383,6 +383,7 @@ class MainActivity: ComponentActivity() {
 						).show()
 					}
 					questionnaire.saveQuestionnaire()
+					burnQuestionnaire()
 					navController.popBackStack("entrance", false)
 					navController.navigate("finishedQuestionnaire") {
 						popUpTo("entrance") { inclusive = false }
@@ -461,13 +462,17 @@ class MainActivity: ComponentActivity() {
 		const val EXTRA_OPEN_MESSAGES = "extra_open_messages"
 		const val EXTRA_OPEN_QUESTIONNAIRE = "extra_open_questionnaire"
 
-		var _questionnaire: Pair<Long, Questionnaire?>? = null
+		private var _questionnaire: Pair<Long, Questionnaire?>? = null
 
 		fun getQuestionnaire(qId: Long): Questionnaire? {
 			if(_questionnaire == null || _questionnaire!!.first != qId) {
 				_questionnaire = Pair(qId, DbLogic.getQuestionnaire(qId))
 			}
 			return _questionnaire!!.second
+		}
+
+		fun burnQuestionnaire() {
+			_questionnaire = null
 		}
 
 		fun start(context: Context) {

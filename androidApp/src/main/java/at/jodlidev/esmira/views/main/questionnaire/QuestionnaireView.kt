@@ -94,14 +94,7 @@ fun MainView(
 	hasRequired: Boolean,
 	clickBtn: () -> Unit
 ) {
-	val activeInputs = remember {
-		page.inputs.filter {
-			if (it.relevance.isNotEmpty())
-				MerlinRunner.runForBool(it.relevance, questionnaire, true)
-			else
-				true
-		}
-	}
+	val activeInputs = page.activeInputs
 
 	LazyColumn(state = listState) {
 		if(page.header.isNotEmpty()) {

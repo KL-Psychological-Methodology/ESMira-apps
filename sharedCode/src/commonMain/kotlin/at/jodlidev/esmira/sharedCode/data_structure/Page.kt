@@ -30,6 +30,19 @@ class Page internal constructor( ) {
 		}
 		return _inputs
 	}
+
+	@Transient private lateinit var _activeInputs: List<Input>
+	val activeInputs: List<Input> get() {
+		if(!this::_activeInputs.isInitialized) {
+			_activeInputs = inputs.filter { input ->
+				if (input.relevance.isNotEmpty())
+					MerlinRunner.runForBool(input.relevance, input.questionnaire, true)
+				else
+					true
+			}
+		}
+		return _activeInputs
+	}
 	
 	fun hasScreenTracking(): Boolean {
 		for(input in inputs) {
@@ -44,14 +57,5 @@ class Page internal constructor( ) {
 				return true
 		}
 		return false
-	}
-
-	fun getActiveInputs(questionnaire: Questionnaire): List<Input> {
-		return inputs.filter {
-			if(it.relevance.isNotEmpty())
-				MerlinRunner.runForBool(it.relevance, questionnaire, true)
-			else
-				true
-		}
 	}
 }
