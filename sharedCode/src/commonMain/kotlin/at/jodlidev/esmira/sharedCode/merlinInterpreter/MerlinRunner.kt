@@ -94,7 +94,7 @@ object MerlinRunner {
     }
     private fun retrieveGlobals(questionnaire: Questionnaire?): MerlinObject {
         val db = NativeLink.sql
-        val studyId = questionnaire?.studyId ?: MerlinObject()
+        val studyId = questionnaire?.studyId ?: return MerlinObject()
         val c = db.select(
             TABLE,
             arrayOf(KEY_GLOBALS_STRING),
@@ -108,8 +108,24 @@ object MerlinRunner {
         var r: String? = null
         if (c.moveToFirst()) {
             r = c.getString(0)
+        } else {
+            initializeGlobals(studyId)
         }
         c.close()
         return r?.let { Json.decodeFromString<MerlinObject>(it) } ?: MerlinObject()
+    }
+
+    private fun initializeGlobals(studyId: Long) {
+        val db = NativeLink.sql
+        val values = db.getValueBox()
+        values.putLong(KEY_STUDY_ID, studyId)
+        values.putString(KEY_GLOBALS_STRING, Json.encodeToString(MerlinObject()))
+        db.insert(TABLE, values)
+    }
+
+    fun clearGlobals(studyId: Long) {
+        val db = NativeLink.sql
+        db.delete(TABLE, "${KEY_STUDY_ID} = ?", arrayOf(studyId.toString()))
+        cachedGlobals = null
     }
 }
