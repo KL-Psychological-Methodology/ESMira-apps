@@ -57,8 +57,7 @@ struct QuestionnaireView: View {
 	
 //	private func drawInnerQuestionnaire(page: Page, width: CGFloat) -> some View {
 	private func drawInnerQuestionnaire(page: Page) -> some View {
-		let inputs = page.inputs
-		@State var activeInputs = page.getActiveInputs(questionnaire: self.questionnaire)
+		let activeInputs = page.activeInputs
 		
 		return VStack {
 			if(!page.header.isEmpty) {
