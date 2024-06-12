@@ -15,14 +15,7 @@ import at.jodlidev.esmira.sharedCode.merlinInterpreter.MerlinRunner
  */
 @Composable
 fun TextElView(input: Input, modifier: Modifier = Modifier) {
-	if(input.textScript.isNotEmpty()) {
-		MerlinRunner.runForString(input.textScript, input.questionnaire).let {
-			HtmlHandler.HtmlText(html = it, modifier = modifier)
-		}
-	}
-	else if(input.desc.isNotEmpty()) {
-		HtmlHandler.HtmlText(html = input.desc, modifier = modifier)
-	}
+	HtmlHandler.HtmlText(html = input.displayText, modifier = modifier)
 }
 
 @Preview
