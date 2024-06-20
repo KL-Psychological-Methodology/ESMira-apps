@@ -36,7 +36,12 @@ class Page internal constructor( ) {
 		if(!this::_activeInputs.isInitialized) {
 			_activeInputs = inputs.filter { input ->
 				if (input.relevance.isNotEmpty())
-					MerlinRunner.runForBool(input.relevance, input.questionnaire, true)
+					MerlinRunner.runForBool(
+						input.relevance,
+						input.questionnaire,
+						"item relevance script of item ${input.name}",
+						true
+					)
 				else
 					true
 			}

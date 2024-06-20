@@ -206,6 +206,7 @@ class Questionnaire {
 			} else if(MerlinRunner.runForBool(
 					page.relevance,
 					this,
+					"page relevance script (page $currentIndex)",
 					true
 				)
 			) {
@@ -297,7 +298,7 @@ class Questionnaire {
 	
 	fun saveQuestionnaire() {
 		if (endScriptBlock.isNotEmpty()) {
-			MerlinRunner.run(endScriptBlock, this)
+			MerlinRunner.run(endScriptBlock, this, "end script block")
 		}
 
 		val dataSet = DataSet(DataSet.EventTypes.questionnaire, this)

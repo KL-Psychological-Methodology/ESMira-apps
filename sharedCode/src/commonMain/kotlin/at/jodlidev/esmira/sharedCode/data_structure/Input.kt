@@ -96,7 +96,11 @@ class Input internal constructor( ) {
 	val displayText: String get() {
 		if(!this::_displayText.isInitialized) {
 			_displayText = if(textScript.isNotEmpty()) {
-				MerlinRunner.runForString(textScript, questionnaire)
+				MerlinRunner.runForString(
+					textScript,
+					questionnaire,
+					"text script of item $name"
+				)
 			} else {
 				desc
 			}
