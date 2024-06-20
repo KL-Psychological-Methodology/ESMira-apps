@@ -10,6 +10,13 @@ struct TextStruct: View {
 	@ObservedObject var viewModel: InputViewModel
 	
 	var body: some View {
-			HtmlTextView(html: self.viewModel.input.displayText)
+		HtmlTextView(html: getText(text: self.viewModel.input.displayText))
+	}
+	
+	func getText(text: String) -> String {
+		if(text == MerlinRunner().ERROR_MARKER) {
+			return NSLocalizedString("text_script_error", comment: "")
+		}
+		return text
 	}
 }
