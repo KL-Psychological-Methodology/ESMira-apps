@@ -302,4 +302,5 @@
     <string name="toast_skipped_pages">%1$d Seiten übersprungen</string>
     <string name="toast_skipped_one_page">1 Seite übersprungen</string>
     <string name="toast_skipped_to_end">Restliche Seiten übersprungen</string>
+    <string name="text_script_error">!! Bei der Darstellung dieses Textes ist ein Problem aufgetreten !!</string>
 </resources>

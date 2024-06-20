@@ -23,6 +23,7 @@ object MerlinRunner {
     const val KEY_ID = "_id"
     const val KEY_STUDY_ID = "studyId"
     const val KEY_GLOBALS_STRING = "globalsString"
+    const val ERROR_MARKER = "<<3141ERROR>>"
 
     private var cachedGlobals: Pair<Long, MerlinObject>? = null
     private val interpreter = MerlinInterpreter()
@@ -81,7 +82,10 @@ object MerlinRunner {
     }
 
     fun runForString(source: String, questionnaire: Questionnaire?): String {
-        return run(source, questionnaire)?.stringify() ?: ""
+        // The way this is used with text scripts for input texts makes it hard to work with nullable or other optional types.
+        // We also don't want to insert a warning if a user leaves that text field empty. Therefore we return a marker that we may
+        // replace with a translated warning (can't translate within shared code, unfortunately)
+        return run(source, questionnaire)?.stringify() ?: ERROR_MARKER
     }
 
     private fun saveGlobals(obj: MerlinObject, questionnaire: Questionnaire?) {
