@@ -509,7 +509,7 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                     interpreter: MerlinInterpreter,
                     arguments: List<MerlinType>
                 ): MerlinType {
-                    MerlinLog.logUserLog(interpreter.questionnaire, arguments[0].stringify())
+                    MerlinLog.logUserLog(interpreter.questionnaire, "user log", arguments[0].stringify())
                     return MerlinNone
                 }
             },
