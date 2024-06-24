@@ -23,8 +23,8 @@ android {
         applicationId = "at.jodlidev.esmira"
         minSdk = 21
         targetSdk = 33
-        versionCode = 189
-        versionName = "2.14.0"
+        versionCode = 192
+        versionName = "2.14.3"
 
         multiDexEnabled = true //project became too big. See: https://stackoverflow.com/a/59308589
     
@@ -37,6 +37,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = composeVersion
