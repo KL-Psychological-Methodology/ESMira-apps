@@ -2,6 +2,7 @@ package at.jodlidev.esmira.views.inputViews
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -17,11 +18,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.graphics.scale
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.data_structure.Input
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
 import at.jodlidev.esmira.views.DefaultButtonIconLeft
 import java.io.File
+import java.io.FileOutputStream
+import kotlin.math.max
+import kotlin.math.min
 
 /**
  * Created by JodliDev on 23.01.2023.
@@ -57,6 +62,16 @@ fun PhotoView(input: Input, get: () -> String, save: (String) -> Unit) {
 			println("onResult $success")
 			if(success) {
 				if(tempFile.exists()) {
+
+					val size = max(1, min(100, input.size)) / 100.0
+					val bitmap = BitmapFactory.decodeFile(tempFile.path)
+					FileOutputStream(tempFile).use { out ->
+						bitmap.scale(
+							(bitmap.width * size).toInt(),
+							(bitmap.height * size).toInt()
+						).compress(Bitmap.CompressFormat.PNG, 0, out)
+					}
+
 					if(file.exists()) {
 						file.delete()
 					}
