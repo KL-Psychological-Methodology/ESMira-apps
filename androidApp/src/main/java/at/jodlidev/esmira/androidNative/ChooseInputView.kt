@@ -46,6 +46,7 @@ fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifi
 			Input.TYPES.compass -> CompassView(input, get, setValue)
 			Input.TYPES.countdown -> CountdownView(input, get, setValue)
 			Input.TYPES.date -> DateView(input, get, setValue)
+			Input.TYPES.duration -> DurationView(input, get, setValue)
 			Input.TYPES.dynamic_input -> DynamicView(input)
 			Input.TYPES.image -> ImageView(input, get, setValue)
 			Input.TYPES.likert -> LikertView(input, get, setValue)

@@ -33,6 +33,7 @@ class Input internal constructor( ) {
 		countdown,
 		date,
 		datetime,
+		duration,
 		dynamic_input,
 		file_upload,
 		image,
