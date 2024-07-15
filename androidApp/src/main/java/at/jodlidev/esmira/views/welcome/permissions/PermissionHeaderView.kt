@@ -32,8 +32,8 @@ import at.jodlidev.esmira.views.ESMiraDialog
 @Composable
 fun PermissionHeaderView(
 	num: Int,
-	currentNum: MutableState<Int>,
-	success: MutableState<Boolean>,
+	isActive: () -> Boolean,
+	state: MutableState<DefaultPermissionState>,
 	header: String,
 	modifier: Modifier = Modifier,
 	whatFor: String = ""
@@ -43,16 +43,16 @@ fun PermissionHeaderView(
 	if(openWhatForDialog.value)
 		WhatForDialog(openWhatForDialog, whatFor)
 	
-	Column(modifier = modifier.fillMaxWidth().alpha(if(currentNum.value < num) 0.3f else 1f)) {
+	Column(modifier = modifier.fillMaxWidth().alpha(if(isActive()) 1f else 0.3f)) {
 		Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
 			Text("$num.", fontSize = MaterialTheme.typography.titleLarge.fontSize)
 			Spacer(modifier = Modifier.width(10.dp))
 			Text(header, fontSize = MaterialTheme.typography.titleLarge.fontSize)
 			Spacer(modifier = Modifier.width(10.dp))
 			
-			if(!success.value)
+			if(state.value == DefaultPermissionState.FAILED || state.value == DefaultPermissionState.SKIPPED)
 				Icon(Icons.Default.Cancel, "Failed", tint = colorRed)
-			else if(currentNum.value > num)
+			else if(state.value == DefaultPermissionState.SUCCESS)
 				Icon(Icons.Default.CheckCircle, "Finished", tint = colorGreen)
 			
 			if(whatFor.isNotEmpty()) {
@@ -86,12 +86,11 @@ fun WhatForDialog(openState: MutableState<Boolean>, whatFor: String) {
 @Composable
 fun PreviewPermissionHeaderDisabledView() {
 	ESMiraSurface {
-		val currentNum = remember { mutableStateOf(1) }
-		val success = remember { mutableStateOf(false) }
+		val state = remember { mutableStateOf(DefaultPermissionState.PERMISSION) }
 		PermissionHeaderView(
 			num = 2,
-			currentNum = currentNum,
-			success = success,
+			isActive = { false },
+			state = state,
 			header = "Header",
 			modifier = Modifier,
 			whatFor = "Explanation"
@@ -103,12 +102,11 @@ fun PreviewPermissionHeaderDisabledView() {
 @Composable
 fun PreviewPermissionHeaderEnabledView() {
 	ESMiraSurface {
-		val currentNum = remember { mutableStateOf(2) }
-		val success = remember { mutableStateOf(false) }
+		val state = remember { mutableStateOf(DefaultPermissionState.PERMISSION) }
 		PermissionHeaderView(
 			num = 2,
-			currentNum = currentNum,
-			success = success,
+			isActive = { true },
+			state = state,
 			header = "Header",
 			modifier = Modifier,
 			whatFor = "Explanation"
@@ -121,12 +119,11 @@ fun PreviewPermissionHeaderEnabledView() {
 @Composable
 fun PreviewPermissionFinishedHeaderView() {
 	ESMiraSurface {
-		val currentNum = remember { mutableStateOf(2) }
-		val success = remember { mutableStateOf(true) }
+		val state = remember { mutableStateOf(DefaultPermissionState.SUCCESS) }
 		PermissionHeaderView(
 			num = 1,
-			currentNum = currentNum,
-			success = success,
+			isActive = { true },
+			state = state,
 			header = "Header",
 			modifier = Modifier,
 			whatFor = "Explanation"
@@ -139,12 +136,11 @@ fun PreviewPermissionFinishedHeaderView() {
 @Composable
 fun PreviewPermissionFailedHeaderView() {
 	ESMiraSurface {
-		val currentNum = remember { mutableStateOf(2) }
-		val success = remember { mutableStateOf(false) }
+		val state = remember { mutableStateOf(DefaultPermissionState.FAILED) }
 		PermissionHeaderView(
 			num = 1,
-			currentNum = currentNum,
-			success = success,
+			isActive = { true },
+			state = state,
 			header = "Header",
 			modifier = Modifier
 		)
