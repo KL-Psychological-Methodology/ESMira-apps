@@ -18,11 +18,11 @@ repositories {
 }
 
 android {
-    compileSdk = 33
+    compileSdk = 34
     defaultConfig {
         applicationId = "at.jodlidev.esmira"
         minSdk = 21
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 192
         versionName = "2.14.3"
 
@@ -76,7 +76,7 @@ dependencies {
     //to access from outside, command for windows: C:\Users\[USERNAME]\AppData\Local\Android\sdk\platform-tools\adb forward tcp:8080 tcp:8080
     debugImplementation("com.amitshekhar.android:debug-db:1.0.4") // https://github.com/amitshekhariitbhu/Android-Debug-Database
     
-    implementation("androidx.work:work-runtime:2.7.1") //WorkManager
+    implementation("androidx.work:work-runtime:2.9.0") //WorkManager
     implementation("com.journeyapps:zxing-android-embedded:4.3.0") //qr scanner
     
     implementation("androidx.preference:preference:1.2.0") //PreferenceManager

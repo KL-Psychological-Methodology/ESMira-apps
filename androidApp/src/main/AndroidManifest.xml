@@ -46,7 +46,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-    
+
         <activity
             android:name="com.journeyapps.barcodescanner.CaptureActivity"
             android:screenOrientation="unspecified"
@@ -101,7 +101,7 @@
             android:theme="@style/AppTheme.ActivityDialog"
             android:excludeFromRecents="true">
         </activity>
-    
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="at.jodlidev.esmira.provider"
@@ -122,9 +122,41 @@
                 <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
             </intent-filter>
         </receiver>
-    
-        <service android:name=".ScreenTrackingService" android:exported="false" />
 
+        <service android:name=".ScreenTrackingService" android:foregroundServiceType="specialUse" android:exported="false">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="This service is only used / needed in Android <= 9. Records the amount and count of screen uses for certain studies. This data will be displayed in questionnaires and will only be sent if confirmed by the user." />
+        </service>
+
+        <!--
+        The following service declarations are not needed since they are managed by Android libraries.
+        But we add them for the sake of completeness:
+        -->
+
+        <!--Used in at/jodlidev/esmira/WorkerBox :-->
+        <service
+            android:name="androidx.work.impl.foreground.SystemForegroundService"
+            android:foregroundServiceType="dataSync"
+            tools:node="merge" />
+
+        <!--Used in at/jodlidev/esmira/androidNative/PostponedActions.schduleAlarm() :-->
+        <service
+            android:name="androidx.work.impl.background.systemalarm.SystemAlarmService"
+            android:foregroundServiceType="shortService"
+            tools:node="merge" />
+
+        <!--Used in at/jodlidev/esmira/androidNative/PostponedActions.schduleAlarm() :-->
+        <service
+            android:name="androidx.work.impl.background.systemjob.SystemJobService"
+            android:foregroundServiceType="shortService"
+            tools:node="merge" />
+
+        <!--Used by WorkManager (at/jodlidev/esmira/WorkerBox)? :-->
+        <service
+            android:name="androidx.room.MultiInstanceInvalidationService"
+            android:foregroundServiceType="shortService"
+            tools:node="merge" />
     </application>
 
 </manifest>
