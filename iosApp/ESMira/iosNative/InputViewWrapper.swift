@@ -74,6 +74,8 @@ struct InputView: View {
 				return AnyView(CompassStruct(viewModel: self.viewModel))
 			case Input.TYPES.date:
 				return AnyView(DateStruct(viewModel: self.viewModel))
+			case Input.TYPES.duration:
+				return AnyView(DurationStruct(viewModel: self.viewModel))
 			case Input.TYPES.fileUpload:
 				return AnyView(FileUploadStruct(viewModel: self.viewModel))
 			case Input.TYPES.dynamicInput:
