@@ -216,3 +216,5 @@
 "toast_skipped_pages" = "%1$d Seiten übersprungen";
 "toast_skipped_to_end" = "Restliche Seiten übersprungen";
 "text_script_error" = "!! Bei der Darstellung des Textes ist ein Problem aufgetreten !!";
+"duration_hours_abbreviation" = "H:";
+"duration_minutes_abbreviation" = "M:";
