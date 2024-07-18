@@ -51,7 +51,7 @@ fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifi
 			Input.TYPES.image -> ImageView(input, get, setValue)
 			Input.TYPES.likert -> LikertView(input, get, setValue)
 			Input.TYPES.list_multiple -> ListMultipleView(input, get, setAdditionalValue)
-			Input.TYPES.list_single -> ListSingleView(input, get, setValue)
+			Input.TYPES.list_single -> ListSingleView(input, get, setAdditionalValue)
 			Input.TYPES.location -> LocationView(input, get, setValue)
 			Input.TYPES.number -> NumberView(input, get, setValue)
 			Input.TYPES.photo -> PhotoView(input, get, setFilePath)

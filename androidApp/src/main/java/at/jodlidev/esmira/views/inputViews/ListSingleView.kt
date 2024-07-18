@@ -21,13 +21,15 @@ import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.data_structure.Input
+import kotlinx.coroutines.selects.select
 
 /**
  * Created by JodliDev on 23.01.2023.
  */
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RadioButtonLine(text: String, isSelected: () -> Boolean, onSelected: () -> Unit) {
+fun RadioButtonLine(text: String, isOther: Boolean, getOther: () -> String, saveOther: (String) -> Unit, isSelected: () -> Boolean, onSelected: () -> Unit) {
 	Row(
 		verticalAlignment = Alignment.CenterVertically,
 		modifier = Modifier
@@ -44,34 +46,65 @@ fun RadioButtonLine(text: String, isSelected: () -> Boolean, onSelected: () -> U
 		)
 		Spacer(modifier = Modifier.width(10.dp))
 		Text(text)
+		if(isOther) {
+			Spacer(modifier = Modifier.width(10.dp))
+			TextField(
+				value = getOther(),
+				onValueChange = {
+					saveOther(it)
+				}
+			)
+		}
 	}
 }
 
 @Composable
-fun ListSingleView(input: Input, get: () -> String, save: (String) -> Unit) {
+fun ListSingleView(input: Input, get: () -> String, save: (String, Map<String, String>) -> Unit) {
 	if(input.asDropDown)
 		ListSingleAsDropdownView(input, get, save)
 	else
 		ListSingleAsListView(input, get, save)
 }
 @Composable
-fun ListSingleAsListView(input: Input, get: () -> String, save: (String) -> Unit) {
+fun ListSingleAsListView(input: Input, get: () -> String, save: (String, Map<String, String>) -> Unit) {
+	val otherText = remember{mutableStateOf(input.getAdditional("other") ?: "")}
 	Column {
 		for((i, value) in input.listChoices.withIndex()) {
 			val actualValue = if(input.forceInt) (i+1).toString() else value
 			
 			RadioButtonLine(
 				text = value,
+				isOther = false,
+				getOther = { "" },
+				saveOther = {},
 				isSelected = { actualValue == get() },
 				onSelected = {
-					save(actualValue)
+					save( actualValue, mapOf("other" to ""))
+				}
+			)
+		}
+		if(input.other) {
+			val actualValue = if(input.forceInt) (input.listChoices.size + 1).toString() else "other"
+
+			RadioButtonLine(
+				text = stringResource(id = R.string.option_other),
+				isOther = true,
+				getOther = { otherText.value },
+				saveOther = {
+					otherText.value = it
+					if(actualValue == get())
+						save(get(), mapOf("other" to otherText.value))
+							},
+				isSelected = { actualValue == get() },
+				onSelected = {
+					save( actualValue, mapOf("other" to otherText.value))
 				}
 			)
 		}
 	}
 }
 @Composable
-fun ListSingleAsDropdownView(input: Input, get: () -> String, save: (String) -> Unit) {
+fun ListSingleAsDropdownView(input: Input, get: () -> String, save: (String, Map<String, String>) -> Unit) {
 	val expanded = remember { mutableStateOf(false) }
 	Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 		Box {
@@ -86,7 +119,9 @@ fun ListSingleAsDropdownView(input: Input, get: () -> String, save: (String) -> 
 				onClick = {
 					expanded.value = true
 				},
-				modifier = Modifier.padding(horizontal = 20.dp).defaultMinSize(200.dp),
+				modifier = Modifier
+					.padding(horizontal = 20.dp)
+					.defaultMinSize(200.dp),
 //				textModifier = Modifier.fillMaxSize()
 				textModifier = Modifier.align(Alignment.CenterStart)
 			)
@@ -106,7 +141,7 @@ fun ListSingleAsDropdownView(input: Input, get: () -> String, save: (String) -> 
 							Text(value)
 						},
 						onClick = {
-							save(actualValue)
+							save(actualValue, mapOf())
 							expanded.value = false
 						},
 						enabled = actualValue != get()
@@ -125,7 +160,7 @@ fun PreviewListSingleAsListView() {
 		{"listChoices": ["aaa", "bbb", "ccc", "ddd"]}
 	""")
 	ESMiraSurface {
-		ListSingleAsListView(input, {"bbb"}) {}
+		ListSingleAsListView(input, {"bbb"}) { _: String, _: Map<String, String> -> }
 	}
 }
 
@@ -137,6 +172,6 @@ fun PreviewListSingleAsDropdownView() {
 		{"listChoices": ["aaa", "bbb", "ccc", "ddd"]}
 	""")
 	ESMiraSurface {
-		ListSingleAsDropdownView(input, {"ccc"}) {}
+		ListSingleAsDropdownView(input, {"ccc"}) { _: String, _: Map<String, String> -> }
 	}
 }
