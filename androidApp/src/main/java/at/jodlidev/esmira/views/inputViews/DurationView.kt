@@ -58,6 +58,11 @@ fun DurationView(input: Input, get: () -> String, save: (String) -> Unit) {
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
                 onValueChange = {
                     val newValue = try {
+                        val newHours = it.toIntOrNull()
+                        if(newHours != null && newHours < 0)
+                            get()
+                        else
+                            valueFromHM(newHours, minutes)
                         valueFromHM(it.toIntOrNull(), minutes)
                     } catch (e: Throwable) {
                         get()
@@ -80,7 +85,7 @@ fun DurationView(input: Input, get: () -> String, save: (String) -> Unit) {
                 onValueChange =  {
                     val newValue = try {
                         val newMinutes = it.toIntOrNull()
-                        if(newMinutes != null && newMinutes >= 60)
+                        if(newMinutes != null && (newMinutes >= 60 || newMinutes < 0))
                             get()
                         else
                             valueFromHM(hours, it.toIntOrNull())
