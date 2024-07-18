@@ -73,6 +73,7 @@ class Input internal constructor( ) {
 	var vertical: Boolean = false //for likert scale
 	var textScript: String = ""
 	var size: Int = 100 //for image compression
+	var other: Boolean = false // for lists
 	
 	var forceInt: Boolean = false
 	
