@@ -29,7 +29,7 @@ import kotlinx.coroutines.selects.select
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RadioButtonLine(text: String, isOther: Boolean, getOther: () -> String, saveOther: (String) -> Unit, isSelected: () -> Boolean, onSelected: () -> Unit) {
+fun RadioButtonLine(text: String, isSelected: () -> Boolean, onSelected: () -> Unit) {
 	Row(
 		verticalAlignment = Alignment.CenterVertically,
 		modifier = Modifier
@@ -46,15 +46,6 @@ fun RadioButtonLine(text: String, isOther: Boolean, getOther: () -> String, save
 		)
 		Spacer(modifier = Modifier.width(10.dp))
 		Text(text)
-		if(isOther) {
-			Spacer(modifier = Modifier.width(10.dp))
-			TextField(
-				value = getOther(),
-				onValueChange = {
-					saveOther(it)
-				}
-			)
-		}
 	}
 }
 
@@ -65,47 +56,54 @@ fun ListSingleView(input: Input, get: () -> String, save: (String, Map<String, S
 	else
 		ListSingleAsListView(input, get, save)
 }
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListSingleAsListView(input: Input, get: () -> String, save: (String, Map<String, String>) -> Unit) {
-	val otherText = remember{mutableStateOf(input.getAdditional("other") ?: "")}
+	val otherText = remember{ mutableStateOf(input.getAdditional("other") ?: "") }
+	val otherSelected = remember{ mutableStateOf(false) }
+
 	Column {
 		for((i, value) in input.listChoices.withIndex()) {
 			val actualValue = if(input.forceInt) (i+1).toString() else value
 			
 			RadioButtonLine(
 				text = value,
-				isOther = false,
-				getOther = { "" },
-				saveOther = {},
 				isSelected = { actualValue == get() },
 				onSelected = {
 					save( actualValue, mapOf("other" to ""))
+					otherSelected.value = false
 				}
 			)
 		}
 		if(input.other) {
 			val actualValue = if(input.forceInt) (input.listChoices.size + 1).toString() else "other"
-
 			RadioButtonLine(
 				text = stringResource(id = R.string.option_other),
-				isOther = true,
-				getOther = { otherText.value },
-				saveOther = {
-					otherText.value = it
-					if(actualValue == get())
-						save(get(), mapOf("other" to otherText.value))
-							},
 				isSelected = { actualValue == get() },
 				onSelected = {
 					save( actualValue, mapOf("other" to otherText.value))
+					otherSelected.value = true
 				}
 			)
+			if(otherSelected.value)
+				TextField(
+					value = otherText.value,
+					placeholder = { Text(stringResource(id = R.string.option_other)) },
+					onValueChange = {
+						otherText.value = it
+						save (actualValue, mapOf("other" to otherText.value))
+					},
+					modifier = Modifier.padding(20.dp).fillMaxWidth()
+				)
 		}
 	}
 }
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListSingleAsDropdownView(input: Input, get: () -> String, save: (String, Map<String, String>) -> Unit) {
 	val expanded = remember { mutableStateOf(false) }
+	val otherText = remember { mutableStateOf(input.getAdditional("other") ?: "")}
+	val otherSelected = remember { mutableStateOf(false) }
 	Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 		Box {
 			val shownValue =  if(input.forceInt)
@@ -141,13 +139,39 @@ fun ListSingleAsDropdownView(input: Input, get: () -> String, save: (String, Map
 							Text(value)
 						},
 						onClick = {
-							save(actualValue, mapOf())
+							save(actualValue, mapOf("other" to ""))
 							expanded.value = false
+							otherSelected.value = false
 						},
 						enabled = actualValue != get()
 					)
 				}
+				if(input.other) {
+					val actualValue = if(input.forceInt) input.listChoices.size.toString() else "other"
+					DropdownMenuItem(
+						text = { Text(stringResource(id = R.string.option_other)) },
+						onClick = {
+							save(actualValue, mapOf("other" to otherText.value))
+							expanded.value = false
+							otherSelected.value = true
+						}
+						)
+				}
 			}
+		}
+		if(otherSelected.value) {
+			TextField(
+				value = otherText.value,
+				placeholder = { Text(stringResource(id = R.string.option_other)) } ,
+				onValueChange = {
+					otherText.value = it
+					save(
+						if(input.forceInt) input.listChoices.size.toString() else "other",
+						mapOf("other" to otherText.value)
+					)
+				},
+				modifier = Modifier.padding(20.dp).fillMaxWidth()
+			)
 		}
 	}
 }
