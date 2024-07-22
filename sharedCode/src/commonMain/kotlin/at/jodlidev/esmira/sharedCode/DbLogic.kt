@@ -311,6 +311,7 @@ object DbLogic {
 			${MerlinLog.KEY_TIMESTAMP} INTEGER,
 			${MerlinLog.KEY_TYPE} INTEGER,
 			${MerlinLog.KEY_MSG} TEXT,
+			${MerlinLog.KEY_CONTEXT} TEXT,
 			${MerlinLog.KEY_SYNCED} INTEGER,
 			FOREIGN KEY(${MerlinLog.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}))""")
 	}

@@ -6,6 +6,7 @@ import at.jodlidev.esmira.sharedCode.data_structure.statistics.ChartInfo
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticBox
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_timed
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_perValue
+import at.jodlidev.esmira.sharedCode.merlinInterpreter.MerlinRunner
 import kotlinx.serialization.*
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.Serializable
@@ -659,6 +660,7 @@ class Study internal constructor(
 		DataSet.createShortDataSet(DataSet.EventTypes.quit, this)
 		
 		db.delete(ObservedVariable.TABLE, "${ObservedVariable.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
+		MerlinRunner.clearGlobals(id)
 		for(q in questionnaires) {
 			q.delete()
 		}

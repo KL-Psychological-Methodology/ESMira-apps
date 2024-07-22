@@ -509,7 +509,7 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                     interpreter: MerlinInterpreter,
                     arguments: List<MerlinType>
                 ): MerlinType {
-                    MerlinLog.logUserLog(interpreter.questionnaire, arguments[0].stringify())
+                    MerlinLog.logUserLog(interpreter.questionnaire, "user log", arguments[0].stringify())
                     return MerlinNone
                 }
             },
@@ -673,6 +673,64 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                     return MerlinType.createBool(
                         arg.array.map { it.isTruthy() }.any { it }
                     )
+                }
+            },
+
+            // size(arr)
+            "size" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 1
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val arrSize = when (val arg = arguments[0]) {
+                        is MerlinNone -> 0
+                        is MerlinArray -> arg.array.size
+                        is MerlinObject -> arg.size()
+                        else -> 1
+                    }
+                    return MerlinNumber(arrSize.toDouble())
+                }
+            },
+
+            //
+            // Random Functions
+            //
+
+            // random(from, to)
+            "random" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 2
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val start = arguments[0].asNumber()?.value?.toInt() ?: return MerlinNone
+                    val end = arguments[1].asNumber()?.value?.toInt() ?: return MerlinNone
+                    return MerlinNumber((start..end).random().toDouble())
+                }
+            },
+
+            //
+            // Lang Functions
+            //
+
+            // lang()
+            "lang" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 0
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    return MerlinString(NativeLink.smartphoneData.lang)
                 }
             }
         )

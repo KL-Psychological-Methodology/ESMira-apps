@@ -3,6 +3,7 @@ package at.jodlidev.esmira.sharedCode.data_structure
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.H3
 import at.jodlidev.esmira.sharedCode.LatLng
+import at.jodlidev.esmira.sharedCode.merlinInterpreter.MerlinRunner
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Transient
 import kotlinx.serialization.Serializable
@@ -62,6 +63,8 @@ class Input internal constructor( ) {
 	var showValue: Boolean = false //for compass, vas
 	var maxValue: Float = 0F //for vas
 	var resolution: Int = 0 //for location
+	var vertical: Boolean = false //for likert scale
+	var textScript: String = ""
 	
 	var forceInt: Boolean = false
 	
@@ -88,12 +91,28 @@ class Input internal constructor( ) {
 	
 	
 	@Transient lateinit var questionnaire: Questionnaire
-	
+
+	@Transient private lateinit var _displayText: String
+	val displayText: String get() {
+		if(!this::_displayText.isInitialized) {
+			_displayText = if(textScript.isNotEmpty()) {
+				MerlinRunner.runForString(
+					textScript,
+					questionnaire,
+					"text script of item $name"
+				)
+			} else {
+				desc
+			}
+		}
+		return _displayText
+	}
+
 	@Transient private val additionalValues: HashMap<String, String> = HashMap()
 	@Transient private val addedFiles : MutableList<FileUpload> = ArrayList()
 	
 	@Transient private lateinit var _value: String
-	
+
 	/**
 	 * Loads input data from [QuestionnaireCache.loadCacheValue] and returns [_value]
 	 */

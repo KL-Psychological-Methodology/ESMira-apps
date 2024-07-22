@@ -1,5 +1,6 @@
 package at.jodlidev.esmira.sharedCode.data_structure
 
+import at.jodlidev.esmira.sharedCode.merlinInterpreter.MerlinRunner
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Transient
 import kotlinx.serialization.Serializable
@@ -28,6 +29,24 @@ class Page internal constructor( ) {
 				orderedInputs
 		}
 		return _inputs
+	}
+
+	@Transient private lateinit var _activeInputs: List<Input>
+	val activeInputs: List<Input> get() {
+		if(!this::_activeInputs.isInitialized) {
+			_activeInputs = inputs.filter { input ->
+				if (input.relevance.isNotEmpty())
+					MerlinRunner.runForBool(
+						input.relevance,
+						input.questionnaire,
+						"item relevance script of item ${input.name}",
+						true
+					)
+				else
+					true
+			}
+		}
+		return _activeInputs
 	}
 	
 	fun hasScreenTracking(): Boolean {

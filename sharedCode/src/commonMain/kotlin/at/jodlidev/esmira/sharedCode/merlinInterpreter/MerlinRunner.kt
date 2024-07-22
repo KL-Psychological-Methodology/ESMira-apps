@@ -23,18 +23,19 @@ object MerlinRunner {
     const val KEY_ID = "_id"
     const val KEY_STUDY_ID = "studyId"
     const val KEY_GLOBALS_STRING = "globalsString"
+    const val ERROR_MARKER = "<<3141ERROR>>"
 
     private var cachedGlobals: Pair<Long, MerlinObject>? = null
     private val interpreter = MerlinInterpreter()
 
-    fun run(source: String, questionnaire: Questionnaire?): MerlinType? {
+    fun run(source: String, questionnaire: Questionnaire?, context: String): MerlinType? {
         // Scanning
         val scanner = MerlinScanner(source)
         val tokens: List<MerlinToken>
         try {
             tokens = scanner.scanTokens()
         } catch (e: MerlinScanningError) {
-            MerlinLog.logScanningError(questionnaire, e)
+            MerlinLog.logScanningError(questionnaire, context, e)
             return null
         }
 
@@ -44,7 +45,7 @@ object MerlinRunner {
         try {
             statements = parser.parse()
         } catch (e: MerlinParseError) {
-            MerlinLog.logParseError(questionnaire,e)
+            MerlinLog.logParseError(questionnaire, context, e)
             return null
         }
 
@@ -66,7 +67,7 @@ object MerlinRunner {
         try {
             returnedValue = interpreter.interpret(statements)
         } catch (e: MerlinRuntimeError) {
-            MerlinLog.logRuntimeError(questionnaire, e, interpreter.getEnvironmentString())
+            MerlinLog.logRuntimeError(questionnaire, context, e, interpreter.getEnvironmentString())
         } finally {
             val storedGlobals = interpreter.getGlobalsObject()?: MerlinObject()
             cachedGlobals = Pair(studyId, storedGlobals)
@@ -76,12 +77,15 @@ object MerlinRunner {
         return returnedValue
     }
 
-    fun runForBool(source: String, questionnaire: Questionnaire?, default: Boolean): Boolean {
-        return run(source, questionnaire)?.isTruthy() ?: default
+    fun runForBool(source: String, questionnaire: Questionnaire?, context: String, default: Boolean): Boolean {
+        return run(source, questionnaire, context)?.isTruthy() ?: default
     }
 
-    fun runForString(source: String, questionnaire: Questionnaire?): String {
-        return run(source, questionnaire)?.stringify() ?: ""
+    fun runForString(source: String, questionnaire: Questionnaire?, context: String): String {
+        // The way this is used with text scripts for input texts makes it hard to work with nullable or other optional types.
+        // We also don't want to insert a warning if a user leaves that text field empty. Therefore we return a marker that we may
+        // replace with a translated warning (can't translate within shared code, unfortunately)
+        return run(source, questionnaire, context)?.stringify() ?: ERROR_MARKER
     }
 
     private fun saveGlobals(obj: MerlinObject, questionnaire: Questionnaire?) {
@@ -94,7 +98,7 @@ object MerlinRunner {
     }
     private fun retrieveGlobals(questionnaire: Questionnaire?): MerlinObject {
         val db = NativeLink.sql
-        val studyId = questionnaire?.studyId ?: MerlinObject()
+        val studyId = questionnaire?.studyId ?: return MerlinObject()
         val c = db.select(
             TABLE,
             arrayOf(KEY_GLOBALS_STRING),
@@ -108,8 +112,24 @@ object MerlinRunner {
         var r: String? = null
         if (c.moveToFirst()) {
             r = c.getString(0)
+        } else {
+            initializeGlobals(studyId)
         }
         c.close()
         return r?.let { Json.decodeFromString<MerlinObject>(it) } ?: MerlinObject()
+    }
+
+    private fun initializeGlobals(studyId: Long) {
+        val db = NativeLink.sql
+        val values = db.getValueBox()
+        values.putLong(KEY_STUDY_ID, studyId)
+        values.putString(KEY_GLOBALS_STRING, Json.encodeToString(MerlinObject()))
+        db.insert(TABLE, values)
+    }
+
+    fun clearGlobals(studyId: Long) {
+        val db = NativeLink.sql
+        db.delete(TABLE, "${KEY_STUDY_ID} = ?", arrayOf(studyId.toString()))
+        cachedGlobals = null
     }
 }

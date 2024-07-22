@@ -352,7 +352,8 @@ class MainActivity: ComponentActivity() {
 	@Composable
 	fun PageQuestionnaire(qId: Long, pageNumber: Int, navController: NavHostController) {
 		val questionnaire = remember { getQuestionnaire(qId) } ?: return
-		
+		val context = LocalContext.current
+
 		QuestionnaireView(
 			questionnaire = questionnaire,
 			pageNumber = pageNumber,
@@ -360,8 +361,29 @@ class MainActivity: ComponentActivity() {
 				onBackPressedDispatcher.onBackPressed()
 			},
 			goNext = {
-				if(questionnaire.isLastPage(pageNumber)) {
+				val nextRelevantPageIndex = questionnaire.getNextRelevantPageIndex(pageNumber)
+				if(nextRelevantPageIndex > 0 && nextRelevantPageIndex - pageNumber > 1) {
+					val skippedPages = nextRelevantPageIndex - pageNumber - 1
+					if(skippedPages == 1) {
+						Toast.makeText(context, getString(R.string.toast_skipped_one_page), Toast.LENGTH_LONG).show()
+					} else {
+						Toast.makeText(
+							context,
+							getString(R.string.toast_skipped_pages, skippedPages),
+							Toast.LENGTH_LONG
+						).show()
+					}
+				}
+				if(nextRelevantPageIndex == -1) {
+					if(!questionnaire.isLastPage(pageNumber)) {
+						Toast.makeText(
+							context,
+							getString(R.string.toast_skipped_to_end),
+							Toast.LENGTH_LONG
+						).show()
+					}
 					questionnaire.saveQuestionnaire()
+					burnQuestionnaire()
 					navController.popBackStack("entrance", false)
 					navController.navigate("finishedQuestionnaire") {
 						popUpTo("entrance") { inclusive = false }
@@ -371,8 +393,8 @@ class MainActivity: ComponentActivity() {
 					if(!questionnaire.isBackEnabled) {
 						navController.popBackStack("entrance", false)
 					}
-					QuestionnaireCache.savePage(questionnaire.id, pageNumber + 1)
-					navController.navigate("questionnaire/${questionnaire.id}/${pageNumber + 1}")
+					QuestionnaireCache.savePage(questionnaire.id, nextRelevantPageIndex)
+					navController.navigate("questionnaire/${questionnaire.id}/${nextRelevantPageIndex}")
 				}
 			}
 		)
@@ -440,13 +462,17 @@ class MainActivity: ComponentActivity() {
 		const val EXTRA_OPEN_MESSAGES = "extra_open_messages"
 		const val EXTRA_OPEN_QUESTIONNAIRE = "extra_open_questionnaire"
 
-		var _questionnaire: Pair<Long, Questionnaire?>? = null
+		private var _questionnaire: Pair<Long, Questionnaire?>? = null
 
 		fun getQuestionnaire(qId: Long): Questionnaire? {
 			if(_questionnaire == null || _questionnaire!!.first != qId) {
 				_questionnaire = Pair(qId, DbLogic.getQuestionnaire(qId))
 			}
 			return _questionnaire!!.second
+		}
+
+		fun burnQuestionnaire() {
+			_questionnaire = null
 		}
 
 		fun start(context: Context) {

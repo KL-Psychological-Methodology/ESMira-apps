@@ -212,3 +212,7 @@
 "could_not_determine_location" = "Standort konnte nicht bestimmt werden";
 "stop_scannig" = "Scannen stoppen";
 "countdown_running" = "Countdown läuft";
+"toast_skipped_one_page" = "1 Seite übersprungen";
+"toast_skipped_pages" = "%1$d Seiten übersprungen";
+"toast_skipped_to_end" = "Restliche Seiten übersprungen";
+"text_script_error" = "!! Bei der Darstellung des Textes ist ein Problem aufgetreten !!";

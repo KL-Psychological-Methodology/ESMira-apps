@@ -190,9 +190,36 @@ class Questionnaire {
 		else
 			QuestionnaireCache.getPage(id)
 	}
+
 	fun getPage(pageNumber: Int): Page {
 		return pages[pageNumber]
 	}
+
+	fun getNextRelevantPageIndex(fromPageIndex: Int): Int {
+		if (isLastPage(fromPageIndex))
+			return -1
+		var currentIndex = fromPageIndex + 1
+		while (true) {
+			val page = getPage(currentIndex)
+			if (page.relevance.isEmpty()) {
+					return currentIndex
+			} else if(MerlinRunner.runForBool(
+					page.relevance,
+					this,
+					"page relevance script (page $currentIndex)",
+					true
+				)
+			) {
+				return currentIndex
+			}
+			if (isLastPage(currentIndex)) {
+				return -1
+			} else {
+				currentIndex += 1
+			}
+		}
+	}
+
 	fun isLastPage(pageNumber: Int): Boolean {
 		return pageNumber == pages.size - 1
 	}
@@ -271,7 +298,7 @@ class Questionnaire {
 	
 	fun saveQuestionnaire() {
 		if (endScriptBlock.isNotEmpty()) {
-			MerlinRunner.run(endScriptBlock, this)
+			MerlinRunner.run(endScriptBlock, this, "end script block")
 		}
 
 		val dataSet = DataSet(DataSet.EventTypes.questionnaire, this)

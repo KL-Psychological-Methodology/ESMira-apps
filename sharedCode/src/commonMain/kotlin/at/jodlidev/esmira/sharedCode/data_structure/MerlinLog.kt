@@ -35,6 +35,7 @@ class MerlinLog: UploadData {
         get() = logType.toString()
 
     var msg: String
+    var context: String
 
     private var _synced = States.NOT_SYNCED
     override var synced: States
@@ -47,7 +48,7 @@ class MerlinLog: UploadData {
                 val db = NativeLink.sql
                 val values = db.getValueBox()
                 values.putInt(KEY_SYNCED, _synced.ordinal)
-                db.update(TABLE, values, "${KEY_ID} = ?", arrayOf(id.toString()))
+                db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
             }
         }
 
@@ -61,13 +62,15 @@ class MerlinLog: UploadData {
         timestamp = c.getLong(6)
         logType = LogType.valueOf(c.getInt(7)) ?: LogType.None
         msg = c.getString(8)
-        _synced = States.values()[c.getInt(9)]
+        context = c.getString(9)
+        _synced = States.values()[c.getInt(10)]
     }
     constructor(
         type: LogType,
         study: Study,
         questionnaireName: String,
-        msg: String
+        msg: String,
+        context: String
     ) {
         this.studyId = study.id
         this.studyWebId = study.webId
@@ -77,6 +80,7 @@ class MerlinLog: UploadData {
         this.timestamp = NativeLink.getNowMillis()
         this.logType = type
         this.msg = msg
+        this.context = context
     }
 
     fun getLogString(): String {
@@ -114,7 +118,13 @@ class MerlinLog: UploadData {
         //questionnaire:
         output.append("Questionnaire: ")
         output.appendLine(questionnaireName)
+
+        //context:
+        output.append("Context: ")
+        output.appendLine(context)
+
         output.appendLine()
+
 
         //message:
         output.append(msg)
@@ -136,6 +146,7 @@ class MerlinLog: UploadData {
         values.putLong(KEY_TIMESTAMP, timestamp)
         values.putInt(KEY_TYPE, logType.value)
         values.putString(KEY_MSG, msg)
+        values.putString(KEY_CONTEXT, context)
         values.putInt(KEY_SYNCED, _synced.ordinal)
         id = db.insert(TABLE, values)
     }
@@ -156,6 +167,7 @@ class MerlinLog: UploadData {
         const val KEY_TIMESTAMP = "time_ms"
         const val KEY_TYPE = "log_type"
         const val KEY_MSG = "msg"
+        const val KEY_CONTEXT = "context"
         const val KEY_SYNCED = UploadData.KEY_SYNCED
 
         val COLUMNS = arrayOf(
@@ -168,10 +180,11 @@ class MerlinLog: UploadData {
             "$TABLE.$KEY_TIMESTAMP",
             "$TABLE.$KEY_TYPE",
             "$TABLE.$KEY_MSG",
+            "$TABLE.$KEY_CONTEXT",
             "$TABLE.$KEY_SYNCED"
         )
 
-        private fun makeLog(type: LogType, questionnaire: Questionnaire?, msg: String) {
+        private fun makeLog(type: LogType, questionnaire: Questionnaire?, context: String, msg: String) {
             if (questionnaire == null) {
                 ErrorBox.error("MerlinLogger", "Questionnaire is null.")
                 return
@@ -186,25 +199,26 @@ class MerlinLog: UploadData {
                 type,
                 study,
                 questionnaire.title,
-                msg
+                msg,
+                context
             ).save()
 
         }
 
-        fun logScanningError(questionnaire: Questionnaire?, error: MerlinScanningError) {
-            makeLog(LogType.ScanningError, questionnaire, error.getFormattedError())
+        fun logScanningError(questionnaire: Questionnaire?, context: String, error: MerlinScanningError) {
+            makeLog(LogType.ScanningError, questionnaire, context, error.getFormattedError())
         }
 
-        fun logParseError(questionnaire: Questionnaire?, error: MerlinParseError) {
-            makeLog(LogType.ParseError, questionnaire, error.getFormattedError())
+        fun logParseError(questionnaire: Questionnaire?, context: String, error: MerlinParseError) {
+            makeLog(LogType.ParseError, questionnaire, context, error.getFormattedError())
         }
 
-        fun logRuntimeError(questionnaire: Questionnaire?, error: MerlinRuntimeError, environmentString: String) {
-            makeLog(LogType.RuntimeError, questionnaire, error.getFormattedError() + "\n" + environmentString)
+        fun logRuntimeError(questionnaire: Questionnaire?, context: String, error: MerlinRuntimeError, environmentString: String) {
+            makeLog(LogType.RuntimeError, questionnaire, context, error.getFormattedError() + "\n" + environmentString)
         }
 
-        fun logUserLog(questionnaire: Questionnaire?, logMsg: String) {
-            makeLog(LogType.UserLog, questionnaire, logMsg)
+        fun logUserLog(questionnaire: Questionnaire?, context: String, logMsg: String) {
+            makeLog(LogType.UserLog, questionnaire, context, logMsg)
         }
     }
 }

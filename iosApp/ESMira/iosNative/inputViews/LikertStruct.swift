@@ -9,9 +9,9 @@ import sharedCode
 struct LikertStruct: View {
 	@ObservedObject var viewModel: InputViewModel
 	@State var value: String = ""
-	
-	var body: some View {
-		VStack {
+
+	private func drawLikertHorizontal() -> some View {
+		return VStack {
 			HStack(alignment: .top) {
 				Text(self.viewModel.input.leftSideLabel)
 					.font(.system(size: 14))
@@ -33,6 +33,36 @@ struct LikertStruct: View {
 		}
 		.onAppear {
 			self.value = self.viewModel.value
+		}
+	}
+
+	private func drawLikertVertical() -> some View {
+		return VStack {
+			Text(self.viewModel.input.leftSideLabel)
+				.font(.system(size: 14))
+				.multilineTextAlignment(.center)
+			VStack(alignment: .center, spacing: 15) {
+				ForEach(1...self.viewModel.input.likertSteps, id: \.self) { index in
+					HStack(alignment: .center) {
+						RadioButtonView(state: self.$value, label: "", value: String(index)) { value in
+							self.viewModel.value = value}
+					}
+				}
+			}
+			Text(self.viewModel.input.rightSideLabel)
+				.font(.system(size: 14))
+				.multilineTextAlignment(.center)
+		}
+		.onAppear {
+			self.value = self.viewModel.value
+		}
+	}
+	
+	var body: some View {
+		if (self.viewModel.input.vertical) {
+			drawLikertVertical()
+		} else {
+			drawLikertHorizontal()
 		}
 	}
 }
