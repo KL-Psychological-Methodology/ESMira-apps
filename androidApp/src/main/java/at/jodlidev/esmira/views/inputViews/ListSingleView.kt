@@ -60,7 +60,7 @@ fun ListSingleView(input: Input, get: () -> String, save: (String, Map<String, S
 @Composable
 fun ListSingleAsListView(input: Input, get: () -> String, save: (String, Map<String, String>) -> Unit) {
 	val otherText = remember{ mutableStateOf(input.getAdditional("other") ?: "") }
-	val otherSelected = remember{ mutableStateOf(false) }
+	val otherSelected = remember{ mutableStateOf( get() == if(input.forceInt) (input.listChoices.size + 1).toString() else "other") }
 
 	Column {
 		for((i, value) in input.listChoices.withIndex()) {
