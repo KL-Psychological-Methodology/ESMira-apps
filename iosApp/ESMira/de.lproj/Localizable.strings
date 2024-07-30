@@ -218,3 +218,4 @@
 "text_script_error" = "!! Bei der Darstellung des Textes ist ein Problem aufgetreten !!";
 "duration_hours_abbreviation" = "H:";
 "duration_minutes_abbreviation" = "M:";
+"option_other" = "Anderes";

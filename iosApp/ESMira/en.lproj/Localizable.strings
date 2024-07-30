@@ -218,3 +218,4 @@
 "text_script_error" = "!! ESMira encountered a problem when trying to display this text !!";
 "duration_hours_abbreviation" = "H:";
 "duration_minutes_abbreviation" = "M:";
+"option_other" = "Other";
