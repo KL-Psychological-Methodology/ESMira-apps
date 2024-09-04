@@ -154,6 +154,12 @@ class LocationScanner(val context: Context, private val resolution: Int, private
         setLocation(location)
     }
 
+    override fun onProviderDisabled(provider: String) {
+    }
+
+    override fun onProviderEnabled(provider: String) {
+    }
+    
     enum class ScanResult {
         NONE,
         SUCCESS,
