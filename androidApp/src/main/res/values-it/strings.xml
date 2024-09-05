@@ -294,4 +294,9 @@
     <string name="about_ESMira_description">ESMira è una piattaforma composta da un server e da un\'applicazione mobile (Android, iOS) sviluppata per progetti di ricerca \"experience sampling method\" (ESM). ESMira offre un processo di configurazione molto semplice e una grande facilità d\'uso, il tutto in modo gratuito, decentralizzato e open source.</string>
     <string name="schedule_permission_setup_desc">ESMira deve essere abilitato a programmare gli eventi (come i promemoria per i questionari) in momenti specifici.</string>
     <string name="error_app_usage_revoked_android_desc">Uno studio a cui si partecipi richiede l\'autorizzazione ad accedere ai dati di utilizzo dell\'applicazione. Assicurarsi che ESMira sia abilitato nella schermata delle autorizzazioni.</string>
+    <string name="error_gps_disabled">Il GPS è disattivato!</string>
+    <string name="scanning">Scansione</string>
+    <string name="could_not_determine_location">Impossibile determinare la posizione</string>
+    <string name="found_location">Luogo di ritrovamento: %1$s</string>
+    <string name="countdown_running">Conto alla rovescia in corso</string>
 </resources>
