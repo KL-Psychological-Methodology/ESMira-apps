@@ -18,6 +18,7 @@ import android.os.SystemClock
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import android.content.res.Configuration
+import android.os.Bundle
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -152,6 +153,9 @@ class LocationScanner(val context: Context, private val resolution: Int, private
 
     override fun onLocationChanged(location: Location) {
         setLocation(location)
+    }
+
+    override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
     }
 
     override fun onProviderDisabled(provider: String) {
