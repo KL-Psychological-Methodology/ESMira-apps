@@ -13,11 +13,13 @@ struct InactiveQuestionnairesView: View {
 	let questionnaires: [Questionnaire]
 	
 	var body: some View {
-		if(self.questionnaires.count == 0) {
+		if self.questionnaires.count == 0 {
 			Text("info_no_questionnaires").padding(20)
 		}
 		List(self.questionnaires, id: \.id) { questionnaire in
-			QuestionnaireLineView(questionnaire: questionnaire)
+			if questionnaire.showInDisabledList {
+				QuestionnaireLineView(questionnaire: questionnaire)
+			}
 		}
 	}
 }

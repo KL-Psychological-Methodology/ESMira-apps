@@ -6,7 +6,6 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Transient
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.*
 
 /**
  * Created by JodliDev on 04.05.2020.
@@ -44,6 +43,7 @@ class Questionnaire {
 	var minDataSetsForReward = 0
 	var isBackEnabled = true
 	var endScriptBlock = ""
+	var showInDisabledList = true
 
 	
 	@SerialName("actionTriggers") private var jsonActionTriggers: List<ActionTrigger> = ArrayList()
@@ -140,6 +140,7 @@ class Questionnaire {
 		isBackEnabled = c.getBoolean(26)
 		endScriptBlock = c.getString(27)
 		virtualInputsString = c.getString(28)
+		showInDisabledList = c.getBoolean(29)
 
 		exists = true
 		fromJsonOrUpdated = false
@@ -260,6 +261,7 @@ class Questionnaire {
 		values.putBoolean(KEY_IS_BACK_ENABLED, isBackEnabled)
 		values.putString(KEY_SCRIPT_END_BLOCK, endScriptBlock)
 		values.putString(KEY_VIRTUAL_INPUTS, virtualInputsString)
+		values.putBoolean(KEY_SHOW_IN_DISABLED_LIST, showInDisabledList)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -615,6 +617,7 @@ class Questionnaire {
 		const val KEY_IS_BACK_ENABLED = "isBackEnabled"
 		const val KEY_SCRIPT_END_BLOCK = "scriptEndBlock"
 		const val KEY_VIRTUAL_INPUTS = "virtualInputs"
+		const val KEY_SHOW_IN_DISABLED_LIST = "showInDisabledList"
 		
 		val COLUMNS = arrayOf(
 			KEY_ID,
@@ -646,6 +649,7 @@ class Questionnaire {
 			KEY_IS_BACK_ENABLED,
 			KEY_SCRIPT_END_BLOCK,
 			KEY_VIRTUAL_INPUTS,
+			KEY_SHOW_IN_DISABLED_LIST
 		)
 	}
 }
