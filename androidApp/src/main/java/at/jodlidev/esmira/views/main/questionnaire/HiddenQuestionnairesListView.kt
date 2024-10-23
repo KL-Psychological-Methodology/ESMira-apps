@@ -34,10 +34,12 @@ fun HiddenQuestionnairesListView(
 		) {
 			if(questionnaires.isNotEmpty()) {
 				items(questionnaires) { questionnaire ->
-					QuestionnaireLine(
-						questionnaire = questionnaire,
-						gotoQuestionnaire = gotoQuestionnaire,
-					)
+					if(questionnaire.showInDisabledList) {
+						QuestionnaireLine(
+							questionnaire = questionnaire,
+							gotoQuestionnaire = gotoQuestionnaire,
+						)
+					}
 				}
 			}
 			else {
@@ -59,12 +61,15 @@ fun PreviewDisabledQuestionnairesListView() {
 		justFilledOutQuestionnaire.lastCompleted = NativeLink.getNowMillis()
 		val completedQuestionnaire = DbLogic.createJsonObj<Questionnaire>("""{"title": "Questionnaire Katara"}""")
 		completedQuestionnaire.lastCompleted = NativeLink.getNowMillis() - 1000 * 60 * 60 * 24
+		val hiddenQuestionnaire = DbLogic.createJsonObj<Questionnaire>("""{"title": "Should not be visible!"}""")
+		hiddenQuestionnaire.showInDisabledList = false
 		HiddenQuestionnairesListView(
 			questionnaires = listOf(
 				completedQuestionnaire,
 				DbLogic.createJsonObj("""{"title": "Questionnaire Zuko"}"""),
 				justFilledOutQuestionnaire,
-				DbLogic.createJsonObj("""{"title": "Questionnaire Toph"}""")
+				DbLogic.createJsonObj("""{"title": "Questionnaire Toph"}"""),
+				hiddenQuestionnaire
 			),
 			{}, {})
 	}

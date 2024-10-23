@@ -21,11 +21,13 @@ import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.data_structure.Input
+import kotlinx.coroutines.selects.select
 
 /**
  * Created by JodliDev on 23.01.2023.
  */
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RadioButtonLine(text: String, isSelected: () -> Boolean, onSelected: () -> Unit) {
 	Row(
@@ -48,14 +50,18 @@ fun RadioButtonLine(text: String, isSelected: () -> Boolean, onSelected: () -> U
 }
 
 @Composable
-fun ListSingleView(input: Input, get: () -> String, save: (String) -> Unit) {
+fun ListSingleView(input: Input, get: () -> String, save: (String, Map<String, String>) -> Unit) {
 	if(input.asDropDown)
 		ListSingleAsDropdownView(input, get, save)
 	else
 		ListSingleAsListView(input, get, save)
 }
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListSingleAsListView(input: Input, get: () -> String, save: (String) -> Unit) {
+fun ListSingleAsListView(input: Input, get: () -> String, save: (String, Map<String, String>) -> Unit) {
+	val otherText = remember{ mutableStateOf(input.getAdditional("other") ?: "") }
+	val otherSelected = remember{ mutableStateOf( get() == if(input.forceInt) (input.listChoices.size + 1).toString() else "other") }
+
 	Column {
 		for((i, value) in input.listChoices.withIndex()) {
 			val actualValue = if(input.forceInt) (i+1).toString() else value
@@ -64,15 +70,40 @@ fun ListSingleAsListView(input: Input, get: () -> String, save: (String) -> Unit
 				text = value,
 				isSelected = { actualValue == get() },
 				onSelected = {
-					save(actualValue)
+					save( actualValue, mapOf("other" to ""))
+					otherSelected.value = false
 				}
 			)
 		}
+		if(input.other) {
+			val actualValue = if(input.forceInt) (input.listChoices.size + 1).toString() else "other"
+			RadioButtonLine(
+				text = stringResource(id = R.string.option_other),
+				isSelected = { actualValue == get() },
+				onSelected = {
+					save( actualValue, mapOf("other" to otherText.value))
+					otherSelected.value = true
+				}
+			)
+			if(otherSelected.value)
+				TextField(
+					value = otherText.value,
+					placeholder = { Text(stringResource(id = R.string.option_other)) },
+					onValueChange = {
+						otherText.value = it
+						save (actualValue, mapOf("other" to otherText.value))
+					},
+					modifier = Modifier.padding(20.dp).fillMaxWidth()
+				)
+		}
 	}
 }
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ListSingleAsDropdownView(input: Input, get: () -> String, save: (String) -> Unit) {
+fun ListSingleAsDropdownView(input: Input, get: () -> String, save: (String, Map<String, String>) -> Unit) {
 	val expanded = remember { mutableStateOf(false) }
+	val otherText = remember { mutableStateOf(input.getAdditional("other") ?: "")}
+	val otherSelected = remember { mutableStateOf(false) }
 	Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 		Box {
 			val shownValue =  if(input.forceInt)
@@ -86,7 +117,9 @@ fun ListSingleAsDropdownView(input: Input, get: () -> String, save: (String) -> 
 				onClick = {
 					expanded.value = true
 				},
-				modifier = Modifier.padding(horizontal = 20.dp).defaultMinSize(200.dp),
+				modifier = Modifier
+					.padding(horizontal = 20.dp)
+					.defaultMinSize(200.dp),
 //				textModifier = Modifier.fillMaxSize()
 				textModifier = Modifier.align(Alignment.CenterStart)
 			)
@@ -106,13 +139,39 @@ fun ListSingleAsDropdownView(input: Input, get: () -> String, save: (String) -> 
 							Text(value)
 						},
 						onClick = {
-							save(actualValue)
+							save(actualValue, mapOf("other" to ""))
 							expanded.value = false
+							otherSelected.value = false
 						},
 						enabled = actualValue != get()
 					)
 				}
+				if(input.other) {
+					val actualValue = if(input.forceInt) input.listChoices.size.toString() else "other"
+					DropdownMenuItem(
+						text = { Text(stringResource(id = R.string.option_other)) },
+						onClick = {
+							save(actualValue, mapOf("other" to otherText.value))
+							expanded.value = false
+							otherSelected.value = true
+						}
+						)
+				}
 			}
+		}
+		if(otherSelected.value) {
+			TextField(
+				value = otherText.value,
+				placeholder = { Text(stringResource(id = R.string.option_other)) } ,
+				onValueChange = {
+					otherText.value = it
+					save(
+						if(input.forceInt) input.listChoices.size.toString() else "other",
+						mapOf("other" to otherText.value)
+					)
+				},
+				modifier = Modifier.padding(20.dp).fillMaxWidth()
+			)
 		}
 	}
 }
@@ -125,7 +184,7 @@ fun PreviewListSingleAsListView() {
 		{"listChoices": ["aaa", "bbb", "ccc", "ddd"]}
 	""")
 	ESMiraSurface {
-		ListSingleAsListView(input, {"bbb"}) {}
+		ListSingleAsListView(input, {"bbb"}) { _: String, _: Map<String, String> -> }
 	}
 }
 
@@ -137,6 +196,6 @@ fun PreviewListSingleAsDropdownView() {
 		{"listChoices": ["aaa", "bbb", "ccc", "ddd"]}
 	""")
 	ESMiraSurface {
-		ListSingleAsDropdownView(input, {"ccc"}) {}
+		ListSingleAsDropdownView(input, {"ccc"}) { _: String, _: Map<String, String> -> }
 	}
 }

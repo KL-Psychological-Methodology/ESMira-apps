@@ -12,7 +12,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
@@ -44,78 +43,69 @@ fun checkPermission(context: Context) : Boolean {
 }
 
 @Composable
-fun AppTrackingView(num: Int, currentNum: MutableState<Int>) {
-	val success = rememberSaveable { mutableStateOf(true) }
+fun AppTrackingView(num: Int, isActive: () -> Boolean, isCurrent: () -> Boolean, goNext: () -> Unit, buildVersion: Int = Build.VERSION.SDK_INT) {
+	val state = rememberSaveable { mutableStateOf(DefaultPermissionState.PERMISSION) }
 	val context = LocalContext.current
 	val launcher = rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
 		if(checkPermission(context)) {
-			success.value = true
-			++currentNum.value
+			state.value = DefaultPermissionState.SUCCESS
+			goNext()
 		}
 		else {
-			success.value = false
-			++currentNum.value
+			state.value = DefaultPermissionState.FAILED
+			goNext()
 		}
 	}
-	
-	Column(horizontalAlignment = Alignment.CenterHorizontally) {
-		PermissionHeaderView(
-			num = num,
-			currentNum = currentNum,
-			success = success,
-			header = stringResource(id = R.string.app_usage),
-			whatFor = stringResource(id = R.string.app_usage_whatFor),
-			modifier = Modifier.fillMaxWidth()
-		)
-		
-		if(currentNum.value == num) {
-			Spacer(modifier = Modifier.width(10.dp))
-			
-			if(Build.VERSION.SDK_INT <= Build.VERSION_CODES.LOLLIPOP) {
-				AppTrackingContentScaffold(R.string.feature_is_not_supported, R.string.continue_) {
-					success.value = false
-					++currentNum.value
-				}
+
+	DefaultPermissionView(
+		num = num,
+		header = stringResource(id = R.string.app_usage),
+		whatFor = stringResource(id = R.string.app_usage_whatFor),
+		description = stringResource(id = R.string.app_usage_desc),
+		buttonLabel = stringResource(id = R.string.open_settings),
+		state = state,
+		isActive = isActive,
+		isCurrent = isCurrent,
+		goNext = goNext,
+		onClick = {
+			if(checkPermission(context)) {
+				state.value = DefaultPermissionState.SUCCESS
+				goNext()
 			}
-			else {
-				AppTrackingContentScaffold(R.string.app_usage_desc, R.string.open_settings) {
-					if(checkPermission(context)) {
-						success.value = true
-						++currentNum.value
-					}
-					else
-						launcher.launch(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
-				}
+			else
+				launcher.launch(Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS))
+		},
+		overrideView = {
+			if(buildVersion > Build.VERSION_CODES.LOLLIPOP)
+				return@DefaultPermissionView false
+
+			Column(horizontalAlignment = Alignment.CenterHorizontally) {
+				Text(stringResource(R.string.feature_is_not_supported))
+				Spacer(modifier = Modifier.width(10.dp))
+				DefaultButton(stringResource(R.string.continue_), onClick = {
+					state.value = DefaultPermissionState.FAILED
+					goNext()
+				})
 			}
+			return@DefaultPermissionView true
 		}
-		
-	}
+	)
 }
-
-@Composable
-fun AppTrackingContentScaffold(desc: Int, btnLabel: Int, onContinue: () -> Unit) {
-	Column(horizontalAlignment = Alignment.CenterHorizontally) {
-		Text(stringResource(id = desc))
-		Spacer(modifier = Modifier.width(10.dp))
-		DefaultButton(stringResource(btnLabel), onClick = onContinue)
-	}
-}
-
 
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun PreviewAppTrackingNotSupported() {
+fun PreviewAppTrackingView() {
 	ESMiraSurface {
-		AppTrackingContentScaffold(R.string.feature_is_not_supported, R.string.continue_) {}
+		AppTrackingView(1, { true }, { true }, {}, Build.VERSION_CODES.LOLLIPOP+1)
 	}
 }
 
 @Preview
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
 @Composable
-fun PreviewAppTrackingSupported() {
+fun PreviewOutdatedAppTrackingView() {
 	ESMiraSurface {
-		AppTrackingContentScaffold(R.string.app_usage_desc, R.string.open_settings) {}
+		AppTrackingView(1, { true }, { true }, {}, Build.VERSION_CODES.LOLLIPOP)
 	}
 }

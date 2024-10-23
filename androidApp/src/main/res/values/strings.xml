@@ -303,4 +303,7 @@
     <string name="toast_skipped_one_page">Skipped 1 page</string>
     <string name="toast_skipped_to_end">Skipped remaining pages</string>
     <string name="text_script_error">!! ESMira encountered a problem when trying to display this text !!</string>
+    <string name="duration_hours_abbreviation">H:</string>
+    <string name="duration_minutes_abbreviation">M:</string>
+    <string name="option_other">Other</string>
 </resources>

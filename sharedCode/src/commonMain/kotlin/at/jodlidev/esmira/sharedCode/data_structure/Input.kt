@@ -1,14 +1,20 @@
 package at.jodlidev.esmira.sharedCode.data_structure
 
 import at.jodlidev.esmira.sharedCode.DbLogic
-import at.jodlidev.esmira.sharedCode.H3
-import at.jodlidev.esmira.sharedCode.LatLng
 import at.jodlidev.esmira.sharedCode.merlinInterpreter.MerlinRunner
 import kotlinx.serialization.SerialName
-import kotlinx.serialization.Transient
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
 import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.*
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.add
+import kotlinx.serialization.json.buildJsonArray
+import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.long
+import kotlinx.serialization.json.put
 import kotlin.math.pow
 
 
@@ -27,6 +33,7 @@ class Input internal constructor( ) {
 		countdown,
 		date,
 		datetime,
+		duration,
 		dynamic_input,
 		file_upload,
 		image,
@@ -65,6 +72,8 @@ class Input internal constructor( ) {
 	var resolution: Int = 0 //for location
 	var vertical: Boolean = false //for likert scale
 	var textScript: String = ""
+	var size: Int = 100 //for image compression
+	var other: Boolean = false // for lists
 	
 	var forceInt: Boolean = false
 	
@@ -131,7 +140,7 @@ class Input internal constructor( ) {
 		else
 			_value
 	}
-	
+
 	fun getAdditional(key: String): String? {
 		getValue() //make sure cache has been initialized
 		return additionalValues[key]
@@ -212,7 +221,7 @@ class Input internal constructor( ) {
 		
 		
 //		value = dynamicIndex.toString()
-		additionalValues["index"] = dynamicIndex.toString();
+		additionalValues["index"] = dynamicIndex.toString()
 		dynamicInput = subInputs[dynamicIndex]
 		dynamicInput.questionnaire = questionnaire
 		dynamicInput.name = name

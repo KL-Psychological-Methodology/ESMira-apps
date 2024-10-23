@@ -25,6 +25,22 @@ import at.jodlidev.esmira.views.welcome.permissions.*
  * Created by JodliDev on 15.12.2022.
  */
 
+@Composable
+fun PermissionWrapper(
+	num: Int,
+	currentNum: MutableState<Int>,
+	createPermission: @Composable (num: Int, isActive: () -> Boolean, isCurrent: () -> Boolean, goNext: () -> Unit) -> Unit
+) {
+	createPermission(
+		num,
+		{ currentNum.value >= num },
+		{ currentNum.value == num },
+		{
+			if(currentNum.value == num)
+				++currentNum.value
+		}
+	)
+}
 
 @Composable
 fun StudyPermissionsView(study: Study, gotoPrevious: () -> Unit, gotoNext: () -> Unit) {
@@ -50,16 +66,25 @@ fun StudyPermissionsView(study: Study, gotoPrevious: () -> Unit, gotoNext: () ->
 			}
 		) {
 			if(study.hasInformedConsent())
-				InformedConsentView(study, ++num, currentNum)
+				PermissionWrapper(++num, currentNum) { num, isActive, isCurrent, goNext ->
+					InformedConsentView(study, num, isActive, isCurrent, goNext)
+				}
 			
 			if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && (study.hasSchedules() || study.hasDelayedEvents()))
-				SchedulesPermissionView(++num, currentNum)
+				PermissionWrapper(++num, currentNum) { num, isActive, isCurrent, goNext ->
+					SchedulesPermissionView(num, isActive, isCurrent, goNext)
+				}
 			
 			if(study.usesPostponedActions() || study.hasNotifications())
-				NotificationsView(++num, currentNum)
+				PermissionWrapper(++num, currentNum) { num, isActive, isCurrent, goNext ->
+					NotificationsView(num, isActive, isCurrent, goNext)
+				}
 			
 			if(study.hasScreenOrAppTracking())
-				AppTrackingView(++num, currentNum)
+				PermissionWrapper(++num, currentNum) { num, isActive, isCurrent, goNext ->
+					AppTrackingView(num, isActive, isCurrent, goNext)
+				}
+
 			
 			
 			
