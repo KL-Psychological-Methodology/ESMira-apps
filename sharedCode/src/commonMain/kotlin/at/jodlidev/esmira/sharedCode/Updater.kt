@@ -522,11 +522,13 @@ internal object Updater {
 				val lastNotification = c.getLong(2)
 				val lastCompleted = c.getLong(3)
 
-				val metadata = QuestionnaireMetadata(studyId, internalId)
-				metadata.lastNotification = lastNotification
-				metadata.lastCompleted = lastCompleted
-				metadata.timesCompleted = if(lastCompleted == 0L) 0 else 1
-				metadata.save()
+				val values = db.getValueBox()
+				values.putLong("study_id", studyId)
+				values.putLong("questionnaire_id", internalId)
+				values.putInt("times_completed", if(lastCompleted == 0L) 0 else 1)
+				values.putLong("last_completed", lastCompleted)
+				values.putLong("last_notification", lastNotification)
+				db.insert("questionnaire_metadata", values)
 			}
 
 			db.execSQL("ALTER TABLE questionnaires DROP COLUMN last_notification;")
