@@ -21,7 +21,7 @@ class Questionnaire {
 	@Transient var enabled = true
 	@Transient var lastNotification: Long = 0
 	@Transient var lastCompleted: Long = 0
-	
+
 	var title: String = "Error"
 	var internalId: Long = -1
 	private var durationPeriodDays: Int = 0
@@ -45,7 +45,7 @@ class Questionnaire {
 	var endScriptBlock = ""
 	var showInDisabledList = true
 
-	
+
 	@SerialName("actionTriggers") private var jsonActionTriggers: List<ActionTrigger> = ArrayList()
 	@Transient private lateinit var _actionTriggers: List<ActionTrigger>
 	val actionTriggers: List<ActionTrigger> get() {
@@ -317,6 +317,7 @@ class Questionnaire {
 		dataSet.saveQuestionnaire(this)
 		updateLastCompleted(true) //this needs to be after we store last_notification in dataset
 		QuestionnaireCache.clearCache(id)
+		incrementCompletionCount()
 		execMissingAlarms() //for iOS when the notification was ignored and the app was opened directly
 
 
@@ -380,7 +381,15 @@ class Questionnaire {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
 		}
 	}
-	
+
+	fun incrementCompletionCount() {
+		val questionnaireMetadata = DbLogic.getQuestionnaireMetadataByInternalId(studyId, internalId)
+		if(questionnaireMetadata != null){
+			questionnaireMetadata.times_completed += 1
+			questionnaireMetadata.save()
+		}
+	}
+
 	fun delete() {
 		val db = NativeLink.sql
 		empty()
@@ -491,7 +500,8 @@ class Questionnaire {
 	
 	fun isActive(now: Long = NativeLink.getNowMillis()): Boolean { //if study is active in general
 		val study: Study? = DbLogic.getStudy(studyId) //study can be null when we test for a study that we have not joined yet
-		
+		val questionnaireMetadata: QuestionnaireMetadata? = DbLogic.getQuestionnaireMetadataByInternalId(studyId, internalId)
+
 		val durationCheck = study == null || (
 			(durationPeriodDays == 0 || now <= study.joinedTimestamp + durationPeriodDays.toLong() * ONE_DAY_MS)
 				&& (durationStartingAfterDays == 0 || now >= study.joinedTimestamp + durationStartingAfterDays.toLong() * ONE_DAY_MS)
@@ -502,7 +512,7 @@ class Questionnaire {
 			&& (limitToGroup == 0 || study == null || limitToGroup == study.group)
 			&& ((durationStart == 0L || now >= durationStart)
 			&& (durationEnd == 0L || now <= durationEnd))
-			&& (!completableOnce || lastCompleted == 0L)
+			&& (!completableOnce || (questionnaireMetadata?.times_completed ?: 0) < 1)
 	}
 	
 	/**
@@ -567,10 +577,10 @@ class Questionnaire {
 				(NativeLink.smartphoneData.phoneType != PhoneType.Android || publishedAndroid)
 	}
 	fun questionnairePageHasRequired(index: Int): Boolean {
-		if(index >= pages.size)
+		if (index >= pages.size)
 			return false
-		for(input in pages[index].inputs) {
-			if(input.required)
+		for (input in pages[index].inputs) {
+			if (input.required)
 				return true
 		}
 		return false

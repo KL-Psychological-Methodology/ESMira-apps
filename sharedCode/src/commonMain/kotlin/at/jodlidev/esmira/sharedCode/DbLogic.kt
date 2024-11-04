@@ -315,6 +315,13 @@ object DbLogic {
 			${MerlinLog.KEY_CONTEXT} TEXT,
 			${MerlinLog.KEY_SYNCED} INTEGER,
 			FOREIGN KEY(${MerlinLog.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}))""")
+
+		db.execSQL("""CREATE TABLE IF NOT EXISTS ${QuestionnaireMetadata.TABLE} (
+			${QuestionnaireMetadata.KEY_ID} INTEGER PRIMARY KEY,
+			${QuestionnaireMetadata.KEY_STUDY_ID} INTEGER,
+			${QuestionnaireMetadata.KEY_QUESTIONNAIRE_ID} INTEGER,
+			${QuestionnaireMetadata.KEY_TIMES_COMPLETED} INTEGER,
+			FOREIGN KEY(${QuestionnaireMetadata.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}) ON DELETE CASCADE)""")
 	}
 	
 	fun updateFrom(db: SQLiteInterface, oldVersion: Int) {
@@ -777,6 +784,22 @@ object DbLogic {
 		)
 		var r: Questionnaire? = null
 		if(c.moveToFirst()) r = Questionnaire(c)
+		c.close()
+		return r
+	}
+
+	fun getQuestionnaireMetadataByInternalId(studyId: Long, internalId: Long): QuestionnaireMetadata? {
+		val c = NativeLink.sql.select(
+			QuestionnaireMetadata.TABLE,
+			QuestionnaireMetadata.COLUMNS,
+			"${QuestionnaireMetadata.KEY_STUDY_ID} = ? AND ${QuestionnaireMetadata.KEY_QUESTIONNAIRE_ID} = ?", arrayOf(studyId.toString(),  internalId.toString()),
+			null,
+			null,
+			null,
+			"1"
+		)
+		var r: QuestionnaireMetadata? = QuestionnaireMetadata(studyId, internalId)
+		if(c.moveToFirst()) r = QuestionnaireMetadata(c)
 		c.close()
 		return r
 	}

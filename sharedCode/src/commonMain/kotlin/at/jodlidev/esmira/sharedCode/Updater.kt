@@ -12,7 +12,7 @@ import kotlinx.serialization.json.*
  */
 internal object Updater {
 	const val EXPECTED_SERVER_VERSION: Int = 13
-	const val DATABASE_VERSION = 48
+	const val DATABASE_VERSION = 49
 	const val LIBRARY_VERSION = 19 //this is mainly used for iOS so we can check that changes in the library have been used in the C library
 	const val MERLIN_VERSION = 1
 
@@ -494,6 +494,14 @@ internal object Updater {
 		}
 		if(oldVersion <= 47) {
 			db.execSQL("ALTER TABLE questionnaires ADD COLUMN showInDisabledList INTEGER DEFAULT 1;")
+		}
+		if(oldVersion <= 48) {
+			db.execSQL("""CREATE TABLE IF NOT EXISTS questionnaire_metadata (
+			_id INTEGER PRIMARY KEY,
+			study_id INTEGER,
+			questionnaire_id INTEGER,
+			times_completed INTEGER,
+			FOREIGN KEY(study_id) REFERENCES studies(_id) ON DELETE CASCADE)""")
 		}
 	}
 	
