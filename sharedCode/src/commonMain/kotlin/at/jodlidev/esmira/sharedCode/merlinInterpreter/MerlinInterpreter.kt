@@ -696,6 +696,25 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                 }
             },
 
+            // filterNone(arr)
+            "filterNone" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 1
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val arg = arguments[0]
+                    if (arg !is MerlinArray)
+                        return arg
+                    return MerlinArray(
+                        arg.array.filter { value: MerlinType -> value !is MerlinNone }.toMutableList()
+                    )
+                }
+            },
+
             //
             // Random Functions
             //
