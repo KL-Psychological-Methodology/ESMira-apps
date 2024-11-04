@@ -501,7 +501,36 @@ internal object Updater {
 			study_id INTEGER,
 			questionnaire_id INTEGER,
 			times_completed INTEGER,
+			last_completed INTEGER,
+			last_notification INTEGER,
 			FOREIGN KEY(study_id) REFERENCES studies(_id) ON DELETE CASCADE)""")
+
+			val c = db.select(
+				"questionnaires",
+				arrayOf("study_id", "internal_id", "last_notification", "last_completed"),
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			)
+
+			while(c.moveToNext()) {
+				val studyId = c.getLong(0)
+				val internalId = c.getLong(1)
+				val lastNotification = c.getLong(2)
+				val lastCompleted = c.getLong(3)
+
+				val metadata = QuestionnaireMetadata(studyId, internalId)
+				metadata.lastNotification = lastNotification
+				metadata.lastCompleted = lastCompleted
+				metadata.timesCompleted = if(lastCompleted == 0L) 0 else 1
+				metadata.save()
+			}
+
+			db.execSQL("ALTER TABLE questionnaires DROP COLUMN last_notification;")
+			db.execSQL("ALTER TABLE questionnaires DROP COLUMN last_completed;")
 		}
 	}
 	

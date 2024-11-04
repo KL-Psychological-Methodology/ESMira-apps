@@ -131,8 +131,6 @@ object DbLogic {
 			${Questionnaire.KEY_STUDY_ID} INTEGER,
 			${Questionnaire.KEY_STUDY_WEB_ID} INTEGER,
 			${Questionnaire.KEY_ENABLED} INTEGER,
-			${Questionnaire.KEY_LAST_NOTIFICATION} INTEGER DEFAULT 0,
-			${Questionnaire.KEY_LAST_COMPLETED} INTEGER DEFAULT 0,
 			${Questionnaire.KEY_COMPLETE_REPEAT_TYPE} INTEGER,
 			${Questionnaire.KEY_COMPLETE_REPEAT_MINUTES} INTEGER,
 			${Questionnaire.KEY_DURATION_PERIOD_DAYS} INTEGER,
@@ -321,6 +319,8 @@ object DbLogic {
 			${QuestionnaireMetadata.KEY_STUDY_ID} INTEGER,
 			${QuestionnaireMetadata.KEY_QUESTIONNAIRE_ID} INTEGER,
 			${QuestionnaireMetadata.KEY_TIMES_COMPLETED} INTEGER,
+			${QuestionnaireMetadata.KEY_LAST_COMPLETED} INTEGER,
+			${QuestionnaireMetadata.KEY_LAST_NOTIFICATION} INTEGER,
 			FOREIGN KEY(${QuestionnaireMetadata.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}) ON DELETE CASCADE)""")
 	}
 	
@@ -788,7 +788,7 @@ object DbLogic {
 		return r
 	}
 
-	fun getQuestionnaireMetadataByInternalId(studyId: Long, internalId: Long): QuestionnaireMetadata? {
+	fun getQuestionnaireMetadataByInternalId(studyId: Long, internalId: Long): QuestionnaireMetadata {
 		val c = NativeLink.sql.select(
 			QuestionnaireMetadata.TABLE,
 			QuestionnaireMetadata.COLUMNS,
@@ -798,7 +798,7 @@ object DbLogic {
 			null,
 			"1"
 		)
-		var r: QuestionnaireMetadata? = QuestionnaireMetadata(studyId, internalId)
+		var r = QuestionnaireMetadata(studyId, internalId)
 		if(c.moveToFirst()) r = QuestionnaireMetadata(c)
 		c.close()
 		return r

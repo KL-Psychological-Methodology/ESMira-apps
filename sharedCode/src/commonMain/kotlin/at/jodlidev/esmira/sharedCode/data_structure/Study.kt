@@ -632,6 +632,7 @@ class Study internal constructor(
 		db.delete(StatisticData_perValue.TABLE, "${StatisticData_perValue.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(DataSet.TABLE, "${DataSet.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StudyToken.TABLE, "${StudyToken.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
+		db.delete(QuestionnaireMetadata.TABLE, "${QuestionnaireMetadata.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(TABLE, "$KEY_ID = ?", arrayOf(id.toString()))
 		DbUser.setCurrentStudyId(DbLogic.getFirstStudy()?.id ?: 0L)
 		

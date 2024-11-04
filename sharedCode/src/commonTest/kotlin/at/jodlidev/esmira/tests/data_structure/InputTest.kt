@@ -83,8 +83,8 @@ class InputTest : BaseCommonTest() {
 			// get next input; make sure that it was not selected yet (previousNames); "fill out" questionnaire; repeat
 			for(i in 0 until input.subInputs.size) {
 				val loadedQuestionnaire = DbLogic.getQuestionnaire(questionnaire.id) ?: throw Exception()
-				loadedQuestionnaire.saveQuestionnaire(NativeLink.getNowMillis())
-				loadedQuestionnaire.lastCompleted += 1000 // getDynamicInput() needs happen after last completion or it will return the same value. And sometimes kotlin is too fast
+				loadedQuestionnaire.saveQuestionnaire()
+				loadedQuestionnaire.metadata.lastCompleted += 1000 // getDynamicInput() needs happen after last completion or it will return the same value. And sometimes kotlin is too fast
 				val currentInput = loadedQuestionnaire.pages[0].inputs[0]
 				subInputValue = currentInput.getDynamicInput().defaultValue
 				assertEquals(
@@ -95,8 +95,8 @@ class InputTest : BaseCommonTest() {
 				previousValues.add(subInputValue)
 			}
 			val loadedQuestionnaire = DbLogic.getQuestionnaire(questionnaire.id) ?: throw Exception()
-			loadedQuestionnaire.saveQuestionnaire(NativeLink.getNowMillis())
-			loadedQuestionnaire.lastCompleted += 1000 // getDynamicInput() needs happen after last completion or it will return the same value. And sometimes kotlin is too fast
+			loadedQuestionnaire.saveQuestionnaire()
+			loadedQuestionnaire.metadata.lastCompleted += 1000 // getDynamicInput() needs happen after last completion or it will return the same value. And sometimes kotlin is too fast
 			val currentInput = loadedQuestionnaire.pages[0].inputs[0]
 			subInputValue = currentInput.getDynamicInput().defaultValue
 			assertNotEquals(-1, previousValues.indexOf(subInputValue)) //all subInputs have been used. So now we get one we already had

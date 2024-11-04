@@ -19,8 +19,6 @@ class Questionnaire {
 	@Transient var studyId: Long = -1
 	@Transient var studyWebId: Long = -2
 	@Transient var enabled = true
-	@Transient var lastNotification: Long = 0
-	@Transient var lastCompleted: Long = 0
 
 	var title: String = "Error"
 	var internalId: Long = -1
@@ -44,6 +42,14 @@ class Questionnaire {
 	var isBackEnabled = true
 	var endScriptBlock = ""
 	var showInDisabledList = true
+
+	@Transient private lateinit var _metadata: QuestionnaireMetadata
+	val metadata: QuestionnaireMetadata get() {
+		if(!this::_metadata.isInitialized) {
+			_metadata = QuestionnaireMetadata.getFromQuestionnaire(this)
+		}
+		return _metadata
+	}
 
 
 	@SerialName("actionTriggers") private var jsonActionTriggers: List<ActionTrigger> = ArrayList()
@@ -114,33 +120,30 @@ class Questionnaire {
 		studyId = c.getLong(1)
 		studyWebId = c.getLong(2)
 		enabled = c.getBoolean(3)
-		lastNotification = c.getLong(4)
-		lastCompleted = c.getLong(5)
-		
-		durationPeriodDays = c.getInt(6)
-		durationStartingAfterDays = c.getInt(7)
-		durationStart = c.getLong(8)
-		durationEnd = c.getLong(9)
-		completableOnce = c.getBoolean(10)
-		completableOncePerNotification = c.getBoolean(11)
-		completableMinutesAfterNotification = c.getInt(12)
-		limitCompletionFrequency = c.getBoolean(13)
-		completionFrequencyMinutes = c.getInt(14)
-		completableAtSpecificTime = c.getBoolean(15)
-		completableAtSpecificTimeStart = c.getInt(16)
-		completableAtSpecificTimeEnd = c.getInt(17)
-		limitToGroup = c.getInt(18)
-		title = c.getString(19)
-		internalId = c.getLong(20)
-		pagesString = c.getString(21)
-		sumScoresString = c.getString(22)
-		publishedAndroid = c.getBoolean(23)
-		publishedIOS = c.getBoolean(24)
-		minDataSetsForReward = c.getInt(25)
-		isBackEnabled = c.getBoolean(26)
-		endScriptBlock = c.getString(27)
-		virtualInputsString = c.getString(28)
-		showInDisabledList = c.getBoolean(29)
+		durationPeriodDays = c.getInt(4)
+		durationStartingAfterDays = c.getInt(5)
+		durationStart = c.getLong(6)
+		durationEnd = c.getLong(7)
+		completableOnce = c.getBoolean(8)
+		completableOncePerNotification = c.getBoolean(9)
+		completableMinutesAfterNotification = c.getInt(10)
+		limitCompletionFrequency = c.getBoolean(11)
+		completionFrequencyMinutes = c.getInt(12)
+		completableAtSpecificTime = c.getBoolean(13)
+		completableAtSpecificTimeStart = c.getInt(14)
+		completableAtSpecificTimeEnd = c.getInt(15)
+		limitToGroup = c.getInt(16)
+		title = c.getString(17)
+		internalId = c.getLong(18)
+		pagesString = c.getString(19)
+		sumScoresString = c.getString(20)
+		publishedAndroid = c.getBoolean(21)
+		publishedIOS = c.getBoolean(22)
+		minDataSetsForReward = c.getInt(23)
+		isBackEnabled = c.getBoolean(24)
+		endScriptBlock = c.getString(25)
+		virtualInputsString = c.getString(26)
+		showInDisabledList = c.getBoolean(27)
 
 		exists = true
 		fromJsonOrUpdated = false
@@ -155,7 +158,7 @@ class Questionnaire {
 		if(!hasNotifications())
 			return false
 		
-		return (completableOnce != other.completableOnce && lastCompleted != 0L)
+		return (completableOnce != other.completableOnce && metadata.lastCompleted != 0L)
 			|| durationStartingAfterDays != other.durationStartingAfterDays
 			|| durationStart != other.durationStart
 			|| durationPeriodDays != other.durationPeriodDays
@@ -265,7 +268,8 @@ class Questionnaire {
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
-			
+			metadata.save()
+
 			if(fromJsonOrUpdated) {
 				val dbActionTrigger = loadActionTriggerDB()
 				if(dbActionTrigger.size != jsonActionTriggers.size) {
@@ -317,7 +321,7 @@ class Questionnaire {
 		dataSet.saveQuestionnaire(this)
 		updateLastCompleted(true) //this needs to be after we store last_notification in dataset
 		QuestionnaireCache.clearCache(id)
-		incrementCompletionCount()
+		incrementTimesCompleted()
 		execMissingAlarms() //for iOS when the notification was ignored and the app was opened directly
 
 
@@ -359,35 +363,25 @@ class Questionnaire {
 	}
 	
 	fun updateLastNotification(timestamp: Long = NativeLink.getNowMillis()) { //we need this because we don't want to recreate all triggers again
-		lastNotification = timestamp
+		metadata.lastNotification = timestamp
 		if(exists) {
-			val db = NativeLink.sql
-			val values = db.getValueBox()
-			values.putLong(KEY_LAST_NOTIFICATION, lastNotification)
-			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
+			metadata.save()
 		}
 	}
 	
-	fun updateLastCompleted(reset_last_notification: Boolean) { //we need this because we dont want to recreate all triggers again
-		lastCompleted = NativeLink.getNowMillis()
+	fun updateLastCompleted(resetLastNotification: Boolean) { //we need this because we dont want to recreate all triggers again
+		metadata.lastCompleted = NativeLink.getNowMillis()
 		if(exists) {
-			val db = NativeLink.sql
-			val values = db.getValueBox()
-			values.putLong(KEY_LAST_COMPLETED, lastCompleted)
-			if(reset_last_notification) {
-				lastNotification = 0L
-				values.putLong(KEY_LAST_NOTIFICATION, 0L)
+			if(resetLastNotification) {
+				metadata.lastNotification = 0L
 			}
-			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
+			metadata.save()
 		}
 	}
 
-	fun incrementCompletionCount() {
-		val questionnaireMetadata = DbLogic.getQuestionnaireMetadataByInternalId(studyId, internalId)
-		if(questionnaireMetadata != null){
-			questionnaireMetadata.timesCompleted += 1
-			questionnaireMetadata.save()
-		}
+	fun incrementTimesCompleted() {
+		metadata.timesCompleted += 1
+		metadata.save()
 	}
 
 	fun delete() {
@@ -491,17 +485,15 @@ class Questionnaire {
 	}
 	
 	fun showLastCompleted(): Boolean {
-		return lastCompleted != 0L
+		return metadata.lastCompleted != 0L
 	}
 	fun showJustFinishedBadge(): Boolean {
-		return NativeLink.getNowMillis() - lastCompleted < 180000
+		return NativeLink.getNowMillis() - metadata.lastCompleted < 180000
 	}
 	
 	
 	fun isActive(now: Long = NativeLink.getNowMillis()): Boolean { //if study is active in general
 		val study: Study? = DbLogic.getStudy(studyId) //study can be null when we test for a study that we have not joined yet
-		val questionnaireMetadata: QuestionnaireMetadata? = DbLogic.getQuestionnaireMetadataByInternalId(studyId, internalId)
-		val timesCompleted = questionnaireMetadata?.timesCompleted ?: 0
 
 		val durationCheck = study == null || (
 			(durationPeriodDays == 0 || now <= study.joinedTimestamp + durationPeriodDays.toLong() * ONE_DAY_MS)
@@ -512,7 +504,7 @@ class Questionnaire {
 			&& (limitToGroup == 0 || study == null || limitToGroup == study.group)
 			&& ((durationStart == 0L || now >= durationStart)
 			&& (durationEnd == 0L || now <= durationEnd))
-			&& (!completableOnce || timesCompleted < 1)
+			&& (!completableOnce || metadata.timesCompleted < 1)
 	}
 	
 	/**
@@ -546,9 +538,9 @@ class Questionnaire {
 	fun canBeFilledOut(now: Long = NativeLink.getNowMillis()): Boolean { //if there are any questionnaires at the current time
 		val fromMidnight = now - NativeLink.getMidnightMillis(now)
 		
-		val lastNotification = (DbLogic.getLastAlarmBefore(now, id)?.timestamp ?: 0).coerceAtLeast(lastNotification)
+		val lastNotification = (DbLogic.getLastAlarmBefore(now, id)?.timestamp ?: 0).coerceAtLeast(metadata.lastNotification)
 		val oncePerNotification = (!completableOncePerNotification ||
-				(lastNotification != 0L && lastNotification >= lastCompleted &&
+				(lastNotification != 0L && lastNotification >= metadata.lastCompleted &&
 						(completableMinutesAfterNotification == 0 || now - lastNotification <= completableMinutesAfterNotification * 60 * 1000)
 						)
 				)
@@ -567,7 +559,7 @@ class Questionnaire {
 					fromMidnight <= completableAtSpecificTimeEnd
 				else
 					true
-		val completionFrequency = (!limitCompletionFrequency || (now >= lastCompleted + completionFrequencyMinutes * 60 * 1000))
+		val completionFrequency = (!limitCompletionFrequency || (now >= metadata.lastCompleted + completionFrequencyMinutes * 60 * 1000))
 
 		return hasQuestionnaire() && isActive() &&
 				oncePerNotification &&
@@ -594,8 +586,6 @@ class Questionnaire {
 		const val KEY_STUDY_ID = "study_id"
 		const val KEY_STUDY_WEB_ID = "study_webid"
 		const val KEY_ENABLED = "enabled"
-		const val KEY_LAST_NOTIFICATION = "last_notification"
-		const val KEY_LAST_COMPLETED = "last_completed"
 		const val KEY_COMPLETE_REPEAT_TYPE = "complete_repeat_type"
 		const val KEY_COMPLETE_REPEAT_MINUTES = "complete_repeat_minutes"
 		const val KEY_DURATION_PERIOD_DAYS = "period"
@@ -634,8 +624,6 @@ class Questionnaire {
 			KEY_STUDY_ID,
 			KEY_STUDY_WEB_ID,
 			KEY_ENABLED,
-			KEY_LAST_NOTIFICATION,
-			KEY_LAST_COMPLETED,
 			KEY_DURATION_PERIOD_DAYS,
 			KEY_DURATION_STARTING_AFTER_DAYS,
 			KEY_DURATION_START,

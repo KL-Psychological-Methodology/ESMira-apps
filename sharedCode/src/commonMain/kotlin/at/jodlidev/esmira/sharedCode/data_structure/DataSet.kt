@@ -165,7 +165,7 @@ class DataSet: UploadData {
 		
 		addResponseData("formDuration", responseTime - formStarted)
 		addResponseData("pageDurations", pageDurations.joinToString(","))
-		addResponseData("lastInvitation", questionnaire.lastNotification)
+		addResponseData("lastInvitation", questionnaire.metadata.lastNotification)
 		
 		for(score in questionnaire.sumScores) { //needs to happen before we create statistics in case it is used for a statistic
 			var sum = 0

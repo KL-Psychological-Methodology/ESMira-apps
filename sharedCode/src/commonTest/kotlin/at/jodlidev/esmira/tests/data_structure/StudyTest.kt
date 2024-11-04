@@ -300,7 +300,7 @@ class StudyTest : BaseCommonTest() {
 		val study = createStudy(
 			"""{"id":$studyWebId, "questionnaires": [{"completableOnce": true}]}"""
 		)
-		study.questionnaires[0].lastCompleted = timestamp
+		study.questionnaires[0].metadata.lastCompleted = timestamp
 		assertEquals(false, study.isActive())
 	}
 	
