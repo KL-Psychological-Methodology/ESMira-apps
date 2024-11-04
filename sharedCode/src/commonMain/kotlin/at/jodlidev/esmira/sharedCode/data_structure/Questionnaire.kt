@@ -385,7 +385,7 @@ class Questionnaire {
 	fun incrementCompletionCount() {
 		val questionnaireMetadata = DbLogic.getQuestionnaireMetadataByInternalId(studyId, internalId)
 		if(questionnaireMetadata != null){
-			questionnaireMetadata.times_completed += 1
+			questionnaireMetadata.timesCompleted += 1
 			questionnaireMetadata.save()
 		}
 	}
@@ -501,18 +501,18 @@ class Questionnaire {
 	fun isActive(now: Long = NativeLink.getNowMillis()): Boolean { //if study is active in general
 		val study: Study? = DbLogic.getStudy(studyId) //study can be null when we test for a study that we have not joined yet
 		val questionnaireMetadata: QuestionnaireMetadata? = DbLogic.getQuestionnaireMetadataByInternalId(studyId, internalId)
+		val timesCompleted = questionnaireMetadata?.timesCompleted ?: 0
 
 		val durationCheck = study == null || (
 			(durationPeriodDays == 0 || now <= study.joinedTimestamp + durationPeriodDays.toLong() * ONE_DAY_MS)
 				&& (durationStartingAfterDays == 0 || now >= study.joinedTimestamp + durationStartingAfterDays.toLong() * ONE_DAY_MS)
 			)
-			
 		
 		return durationCheck
 			&& (limitToGroup == 0 || study == null || limitToGroup == study.group)
 			&& ((durationStart == 0L || now >= durationStart)
 			&& (durationEnd == 0L || now <= durationEnd))
-			&& (!completableOnce || (questionnaireMetadata?.times_completed ?: 0) < 1)
+			&& (!completableOnce || timesCompleted < 1)
 	}
 	
 	/**
