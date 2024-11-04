@@ -74,7 +74,7 @@ dependencies {
     
     //debug db and sharedPreferences with browser (http://localhost:8080)
     //to access from outside, command for windows: C:\Users\[USERNAME]\AppData\Local\Android\sdk\platform-tools\adb forward tcp:8080 tcp:8080
-    debugImplementation("com.amitshekhar.android:debug-db:1.0.4") // https://github.com/amitshekhariitbhu/Android-Debug-Database
+    debugImplementation("com.github.amitshekhariitbhu.Android-Debug-Database:debug-db:1.0.7") // https://github.com/amitshekhariitbhu/Android-Debug-Database
     
     implementation("androidx.work:work-runtime:2.9.0") //WorkManager
     implementation("com.journeyapps:zxing-android-embedded:4.3.0") //qr scanner
