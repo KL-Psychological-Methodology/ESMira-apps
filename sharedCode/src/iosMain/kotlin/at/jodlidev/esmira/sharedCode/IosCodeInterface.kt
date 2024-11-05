@@ -6,6 +6,7 @@ package at.jodlidev.esmira.sharedCode
 interface IosCodeInterface {
 	fun currentTimeMillis(): Long
 	fun getTimezone(): String
+	fun getTimezoneOffsetMillis(): Int
 	fun getMidnightMillis(timestamp: Long): Long
 	fun formatDate(ms: Long): String
 	fun formatTime(ms: Long): String
