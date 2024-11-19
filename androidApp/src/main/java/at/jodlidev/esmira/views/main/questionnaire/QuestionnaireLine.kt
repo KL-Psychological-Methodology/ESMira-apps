@@ -67,7 +67,7 @@ fun QuestionnaireLine(
 			}
 			if(questionnaire.showLastCompleted()) {
 				Text(
-					stringResource(R.string.colon_last_filled_out, NativeLink.formatDateTime(questionnaire.lastCompleted)),
+					stringResource(R.string.colon_last_filled_out, NativeLink.formatDateTime(questionnaire.metadata.lastCompleted)),
 					fontSize = MaterialTheme.typography.labelMedium.fontSize,
 					fontWeight = FontWeight.Normal,
 					color = MaterialTheme.colorScheme.onSurface,
@@ -84,7 +84,7 @@ fun QuestionnaireLine(
 fun PreviewQuestionnaireLine() {
 	ESMiraSurface {
 		val justFilledOutQuestionnaire = DbLogic.createJsonObj<Questionnaire>("""{"title": "Questionnaire 3"}""")
-		justFilledOutQuestionnaire.lastCompleted = NativeLink.getNowMillis()
+		justFilledOutQuestionnaire.metadata.lastCompleted = NativeLink.getNowMillis()
 		QuestionnaireLine(justFilledOutQuestionnaire) {}
 	}
 }

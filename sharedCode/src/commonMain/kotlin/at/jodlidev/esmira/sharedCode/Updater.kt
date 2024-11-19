@@ -12,7 +12,7 @@ import kotlinx.serialization.json.*
  */
 internal object Updater {
 	const val EXPECTED_SERVER_VERSION: Int = 13
-	const val DATABASE_VERSION = 48
+	const val DATABASE_VERSION = 49
 	const val LIBRARY_VERSION = 19 //this is mainly used for iOS so we can check that changes in the library have been used in the C library
 	const val MERLIN_VERSION = 1
 
@@ -494,6 +494,48 @@ internal object Updater {
 		}
 		if(oldVersion <= 47) {
 			db.execSQL("ALTER TABLE questionnaires ADD COLUMN showInDisabledList INTEGER DEFAULT 1;")
+		}
+		if(oldVersion <= 48) {
+			db.execSQL("""CREATE TABLE IF NOT EXISTS questionnaire_metadata (
+			_id INTEGER PRIMARY KEY,
+			study_id INTEGER,
+			questionnaire_id INTEGER,
+			times_completed INTEGER,
+			last_completed INTEGER,
+			last_notification INTEGER,
+			FOREIGN KEY(study_id) REFERENCES studies(_id) ON DELETE CASCADE)""")
+
+			val c = db.select(
+				"questionnaires",
+				arrayOf("study_id", "internal_id", "last_notification", "last_completed"),
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			)
+
+			while(c.moveToNext()) {
+				val studyId = c.getLong(0)
+				val internalId = c.getLong(1)
+				val lastNotification = c.getLong(2)
+				val lastCompleted = c.getLong(3)
+
+				val values = db.getValueBox()
+				values.putLong("study_id", studyId)
+				values.putLong("questionnaire_id", internalId)
+				values.putInt("times_completed", if(lastCompleted == 0L) 0 else 1)
+				values.putLong("last_completed", lastCompleted)
+				values.putLong("last_notification", lastNotification)
+				db.insert("questionnaire_metadata", values)
+			}
+
+			db.execSQL("ALTER TABLE questionnaires DROP COLUMN last_notification;")
+			db.execSQL("ALTER TABLE questionnaires DROP COLUMN last_completed;")
+
+			db.execSQL("ALTER TABLE dataSets ADD COLUMN timezone_offset INTEGER DEFAULT 0;")
+			db.execSQL("ALTER TABLE dataSets ADD COLUMN local_datetime TEXT DEFAULT '';")
 		}
 	}
 	

@@ -114,6 +114,10 @@ actual object NativeLink {
 		val cal = Calendar.getInstance()
 		return cal.timeZone.getDisplayName(true, TimeZone.SHORT)
 	}
+	actual fun getTimezoneOffsetMillis(): Int {
+		val cal = Calendar.getInstance()
+		return cal.timeZone.getOffset(System.currentTimeMillis())
+	}
 
 	actual fun getDatesDiff(ms1: Long, ms2: Long): Long {
 		val formatter: DateFormat = SimpleDateFormat.getDateInstance(DateFormat.SHORT)

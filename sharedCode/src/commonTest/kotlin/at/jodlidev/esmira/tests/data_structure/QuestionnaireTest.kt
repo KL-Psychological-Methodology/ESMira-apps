@@ -79,17 +79,17 @@ class QuestionnaireTest : BaseCommonTest() {
 		val input = questionnaire.pages[0].inputs[0]
 		input.setValue(testValue)
 		
-		val lastCompleted = questionnaire.lastCompleted
+		val lastCompleted = questionnaire.metadata.lastCompleted
 		questionnaire.save(true) // so updateLastCompleted() is run completely
-		questionnaire.saveQuestionnaire(0)
+		questionnaire.saveQuestionnaire()
 		
 		//check if inputs are saved:
 		val value = getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
 		assertNotEquals(-1, value.indexOf(testValue))
 		
 		//check if lastCompleted was updated:
-		assertNotEquals(lastCompleted, questionnaire.lastCompleted)
-		assertSqlWasUpdated(Questionnaire.TABLE, Questionnaire.KEY_LAST_COMPLETED, questionnaire.lastCompleted)
+		assertNotEquals(lastCompleted, questionnaire.metadata.lastCompleted)
+		assertSqlWasUpdated(QuestionnaireMetadata.TABLE, QuestionnaireMetadata.KEY_LAST_COMPLETED, questionnaire.metadata.lastCompleted)
 		
 		//check if notifications were removed:
 		assertEquals(1, notifications.removeQuestionnaireBingList.size)
@@ -142,25 +142,25 @@ class QuestionnaireTest : BaseCommonTest() {
 		questionnaire.exists = true
 		
 		questionnaire.updateLastNotification(timestamp)
-		assertEquals(timestamp, questionnaire.lastNotification)
-		assertSqlWasUpdated(Questionnaire.TABLE, Questionnaire.KEY_LAST_NOTIFICATION, timestamp)
+		assertEquals(timestamp, questionnaire.metadata.lastNotification)
+		assertSqlWasUpdated(QuestionnaireMetadata.TABLE, QuestionnaireMetadata.KEY_LAST_NOTIFICATION, timestamp)
 	}
 	
 	@Test
 	fun updateLastCompleted() {
 		val timestamp = 1001L
 		val questionnaire = createJsonObj<Questionnaire>()
-		questionnaire.lastCompleted = timestamp
+		questionnaire.metadata.lastCompleted = timestamp
 		questionnaire.exists = true
 		
 		questionnaire.updateLastCompleted(false)
-		assertNotEquals(timestamp, questionnaire.lastCompleted)
-		assertSqlWasUpdated(Questionnaire.TABLE, Questionnaire.KEY_LAST_COMPLETED, questionnaire.lastCompleted)
+		assertNotEquals(timestamp, questionnaire.metadata.lastCompleted)
+		assertSqlWasUpdated(QuestionnaireMetadata.TABLE, QuestionnaireMetadata.KEY_LAST_COMPLETED, questionnaire.metadata.lastCompleted)
 		
 		
 		questionnaire.updateLastCompleted(true)
-		assertEquals(0, questionnaire.lastNotification)
-		assertSqlWasUpdated(Questionnaire.TABLE, Questionnaire.KEY_LAST_NOTIFICATION, 0)
+		assertEquals(0, questionnaire.metadata.lastNotification)
+		assertSqlWasUpdated(QuestionnaireMetadata.TABLE, QuestionnaireMetadata.KEY_LAST_NOTIFICATION, 0)
 	}
 	
 	@Test
@@ -273,7 +273,7 @@ class QuestionnaireTest : BaseCommonTest() {
 		//test completableOnce
 		questionnaire = createJsonObj<Questionnaire>("{\"completableOnce\": true}")
 		assertTrue(questionnaire.isActive())
-		questionnaire.lastCompleted = now
+		questionnaire.metadata.lastCompleted = now
 		assertFalse(questionnaire.isActive())
 	}
 	
@@ -316,10 +316,10 @@ class QuestionnaireTest : BaseCommonTest() {
 			"{\"completableOncePerNotification\": true, \"pages\":[{\"items\":[{}]}]}"
 		)
 		assertFalse(questionnaire.canBeFilledOut(now)) //no notification
-		questionnaire.lastNotification = now
-		questionnaire.lastCompleted = now-1 //completed before notification
+		questionnaire.metadata.lastNotification = now
+		questionnaire.metadata.lastCompleted = now-1 //completed before notification
 		assertTrue(questionnaire.canBeFilledOut(now))
-		questionnaire.lastCompleted = now+1
+		questionnaire.metadata.lastCompleted = now+1
 		assertFalse(questionnaire.canBeFilledOut(now)) // was completed after notification
 		
 		//
@@ -330,10 +330,10 @@ class QuestionnaireTest : BaseCommonTest() {
 			"{\"completableOncePerNotification\": true, \"completableMinutesAfterNotification\": 2, \"pages\":[{\"items\":[{}]}]}"
 		)
 		assertFalse(questionnaire.canBeFilledOut(now)) //no notification
-		questionnaire.lastNotification = now
-		questionnaire.lastCompleted = now - 1000*60*2 - 2 //completed before notification
+		questionnaire.metadata.lastNotification = now
+		questionnaire.metadata.lastCompleted = now - 1000*60*2 - 2 //completed before notification
 		assertTrue(questionnaire.canBeFilledOut(now))
-		questionnaire.lastNotification = now - 1000*60*2 - 1
+		questionnaire.metadata.lastNotification = now - 1000*60*2 - 1
 		assertFalse(questionnaire.canBeFilledOut(now)) //notification was longer than completableMinutesAfterNotification
 		
 		//
@@ -376,9 +376,9 @@ class QuestionnaireTest : BaseCommonTest() {
 			"{\"limitCompletionFrequency\": true, \"completionFrequencyMinutes\": 60, \"pages\":[{\"items\":[{}]}]}"
 		)
 		assertTrue(questionnaire.canBeFilledOut(now))
-		questionnaire.lastCompleted = now - (oneHour-1) //completed less than an hour ago
+		questionnaire.metadata.lastCompleted = now - (oneHour-1) //completed less than an hour ago
 		assertFalse(questionnaire.canBeFilledOut(now))
-		questionnaire.lastCompleted = now - (oneHour+1) //completed more than an hour ago
+		questionnaire.metadata.lastCompleted = now - (oneHour+1) //completed more than an hour ago
 		assertTrue(questionnaire.canBeFilledOut(now))
 		
 		//

@@ -38,6 +38,10 @@ class IosCode: IosCodeInterface {
 		TimeZone.current.abbreviation() ?? ""
 	}
 	
+	func getTimezoneOffsetMillis() -> Int32 {
+		Int32(TimeZone.current.secondsFromGMT() * 1000)
+	}
+	
 	static func initNativeLink(_ appState: AppState, _ navigationState: NavigationState) {
 		NativeLink().doInit(
 			sql: SQLiteHelper(),

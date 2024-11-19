@@ -89,6 +89,10 @@ actual object NativeLink {
 	actual fun getTimezone(): String {
 		return iosCode.getTimezone()
 	}
+
+	actual fun getTimezoneOffsetMillis(): Int {
+		return iosCode.getTimezoneOffsetMillis()
+	}
 	
 	actual fun getMidnightMillis(timestamp: Long): Long {
 		return iosCode.getMidnightMillis(timestamp)

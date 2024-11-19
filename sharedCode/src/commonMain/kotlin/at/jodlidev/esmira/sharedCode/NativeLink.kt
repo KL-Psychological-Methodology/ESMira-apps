@@ -20,6 +20,7 @@ expect object NativeLink {
 	
 	fun getNowMillis(): Long
 	fun getTimezone(): String
+	fun getTimezoneOffsetMillis(): Int
 	fun getMidnightMillis(timestamp: Long = -1L): Long
 	fun formatDate(ms: Long): String
 	fun formatTime(ms: Long): String

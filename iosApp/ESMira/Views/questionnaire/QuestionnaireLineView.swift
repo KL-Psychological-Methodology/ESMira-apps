@@ -46,7 +46,7 @@ struct QuestionnaireLineView: View {
 				if(questionnaire.showLastCompleted()) {
 					HStack {
 						Spacer()
-						Text(String(format: NSLocalizedString("colon_last_filled_out", comment: ""), NativeLink().formatDateTime(ms: questionnaire.lastCompleted)))
+						Text(String(format: NSLocalizedString("colon_last_filled_out", comment: ""), NativeLink().formatDateTime(ms: questionnaire.metadata.lastCompleted)))
 							.font(.caption)
 					}
 					.padding(.horizontal, 5)

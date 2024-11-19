@@ -51,7 +51,9 @@ class DataSet: UploadData {
 	private val accessKey: String
 	private val questionnaireInternalId: Long
 	private val timezone: String
+	private val timezoneOffset: Int
 	private var responseTime: Long = 0
+	private var localDateTime: String
 	@SerialName("responses") private var responseTemp: MutableMap<String, JsonElement> = HashMap() //not in db. Just used to fill data and then create a response-string
 	
 	@Transient private var questionnaireId: Long = -1 //not in db
@@ -89,11 +91,13 @@ class DataSet: UploadData {
 		studyLang = c.getString(10)
 		group = c.getInt(11)
 		timezone = c.getString(12)
-		responseTime = c.getLong(13)
-		eventType = EventTypes.valueOf(c.getString(14))
-		setResponses(c.getString(15))
-		_synced = States.values()[c.getInt(16)]
-		token = c.getLong(17)
+		timezoneOffset = c.getInt(13)
+		responseTime = c.getLong(14)
+		localDateTime = c.getString(15)
+		eventType = EventTypes.valueOf(c.getString(16))
+		setResponses(c.getString(17))
+		_synced = States.values()[c.getInt(18)]
+		token = c.getLong(19)
 		reupload = _synced == States.NOT_SYNCED_ERROR_DELETABLE
 	}
 	
@@ -119,7 +123,9 @@ class DataSet: UploadData {
 		this.studyLang = study.lang
 		this.group = study.group
 		this.responseTime = NativeLink.getNowMillis()
+		this.localDateTime = NativeLink.formatDateTime(NativeLink.getNowMillis())
 		this.timezone = NativeLink.getTimezone()
+		this.timezoneOffset = NativeLink.getTimezoneOffsetMillis()
 	}
 	
 	constructor(eventType: EventTypes, study: Study): this(
@@ -165,7 +171,7 @@ class DataSet: UploadData {
 		
 		addResponseData("formDuration", responseTime - formStarted)
 		addResponseData("pageDurations", pageDurations.joinToString(","))
-		addResponseData("lastInvitation", questionnaire.lastNotification)
+		addResponseData("lastInvitation", questionnaire.metadata.lastNotification)
 		
 		for(score in questionnaire.sumScores) { //needs to happen before we create statistics in case it is used for a statistic
 			var sum = 0
@@ -215,7 +221,9 @@ class DataSet: UploadData {
 			values.putString(KEY_STUDY_LANG, studyLang)
 			values.putInt(KEY_STUDY_GROUP, group)
 			values.putString(KEY_TIMEZONE, timezone)
+			values.putInt(KEY_TIMEZONE_OFFSET, timezoneOffset)
 			values.putLong(KEY_RESPONSE_TIME, responseTime)
+			values.putString(KEY_LOCAL_DATETIME, localDateTime)
 			values.putString(KEY_TYPE, eventType.toString())
 			values.putString(KEY_RESPONSES, responses)
 			values.putInt(KEY_SYNCED, _synced.ordinal)
@@ -255,7 +263,9 @@ class DataSet: UploadData {
 		const val KEY_STUDY_LANG = "study_lang"
 		const val KEY_STUDY_GROUP = "study_group"
 		const val KEY_TIMEZONE = "timezone"
+		const val KEY_TIMEZONE_OFFSET = "timezone_offset"
 		const val KEY_RESPONSE_TIME = "response_time"
+		const val KEY_LOCAL_DATETIME = "local_datetime"
 		const val KEY_TYPE = "event_type"
 		const val KEY_RESPONSES = "responses"
 		const val KEY_SYNCED = UploadData.KEY_SYNCED
@@ -276,7 +286,9 @@ class DataSet: UploadData {
 			"$TABLE.$KEY_STUDY_LANG",
 			"$TABLE.$KEY_STUDY_GROUP",
 			"$TABLE.$KEY_TIMEZONE",
+			"$TABLE.$KEY_TIMEZONE_OFFSET",
 			"$TABLE.$KEY_RESPONSE_TIME",
+			"$TABLE.$KEY_LOCAL_DATETIME",
 			"$TABLE.$KEY_TYPE",
 			"$TABLE.$KEY_RESPONSES",
 			"$TABLE.$KEY_SYNCED",

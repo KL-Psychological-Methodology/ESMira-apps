@@ -313,10 +313,10 @@ fun PreviewStudyDashboardView() {
 		study.finishJSON("https://jodli.dev", "accessKey")
 		
 		val justFilledOutQuestionnaire = DbLogic.createJsonObj<Questionnaire>("""{"title": "Questionnaire 1"}""")
-		justFilledOutQuestionnaire.lastCompleted = NativeLink.getNowMillis()
+		justFilledOutQuestionnaire.metadata.lastCompleted = NativeLink.getNowMillis()
 		
 		val finishedQuestionnaire = DbLogic.createJsonObj<Questionnaire>("""{"title": "Questionnaire 2"}""")
-		finishedQuestionnaire.lastCompleted = NativeLink.getNowMillis() - 1000 * 60 * 60 * 24
+		finishedQuestionnaire.metadata.lastCompleted = NativeLink.getNowMillis() - 1000 * 60 * 60 * 24
 		
 		StudyDashboardGrid(
 			getStudy = { study },

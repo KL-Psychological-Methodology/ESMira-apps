@@ -58,9 +58,9 @@ fun HiddenQuestionnairesListView(
 fun PreviewDisabledQuestionnairesListView() {
 	ESMiraSurface {
 		val justFilledOutQuestionnaire = DbLogic.createJsonObj<Questionnaire>("""{"title": "Questionnaire Aang"}""")
-		justFilledOutQuestionnaire.lastCompleted = NativeLink.getNowMillis()
+		justFilledOutQuestionnaire.metadata.lastCompleted = NativeLink.getNowMillis()
 		val completedQuestionnaire = DbLogic.createJsonObj<Questionnaire>("""{"title": "Questionnaire Katara"}""")
-		completedQuestionnaire.lastCompleted = NativeLink.getNowMillis() - 1000 * 60 * 60 * 24
+		completedQuestionnaire.metadata.lastCompleted = NativeLink.getNowMillis() - 1000 * 60 * 60 * 24
 		val hiddenQuestionnaire = DbLogic.createJsonObj<Questionnaire>("""{"title": "Should not be visible!"}""")
 		hiddenQuestionnaire.showInDisabledList = false
 		HiddenQuestionnairesListView(
@@ -82,7 +82,7 @@ fun PreviewDisabledQuestionnairesListView() {
 fun PreviewDisabledQuestionnairesListViewWithNoQuestionnaires() {
 	ESMiraSurface {
 		val justFilledOutQuestionnaire = DbLogic.createJsonObj<Questionnaire>("""{"title": "Questionnaire 3"}""")
-		justFilledOutQuestionnaire.lastCompleted = NativeLink.getNowMillis()
+		justFilledOutQuestionnaire.metadata.lastCompleted = NativeLink.getNowMillis()
 		HiddenQuestionnairesListView(ArrayList(), {}, {})
 	}
 }

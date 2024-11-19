@@ -131,8 +131,6 @@ object DbLogic {
 			${Questionnaire.KEY_STUDY_ID} INTEGER,
 			${Questionnaire.KEY_STUDY_WEB_ID} INTEGER,
 			${Questionnaire.KEY_ENABLED} INTEGER,
-			${Questionnaire.KEY_LAST_NOTIFICATION} INTEGER DEFAULT 0,
-			${Questionnaire.KEY_LAST_COMPLETED} INTEGER DEFAULT 0,
 			${Questionnaire.KEY_COMPLETE_REPEAT_TYPE} INTEGER,
 			${Questionnaire.KEY_COMPLETE_REPEAT_MINUTES} INTEGER,
 			${Questionnaire.KEY_DURATION_PERIOD_DAYS} INTEGER,
@@ -254,7 +252,9 @@ object DbLogic {
 			${DataSet.KEY_STUDY_LANG} TEXT DEFAULT '',
 			${DataSet.KEY_STUDY_GROUP} INTEGER DEFAULT 0,
 			${DataSet.KEY_TIMEZONE} TEXT,
+			${DataSet.KEY_TIMEZONE_OFFSET} INTEGER,
 			${DataSet.KEY_RESPONSE_TIME} INTEGER,
+			${DataSet.KEY_LOCAL_DATETIME} TEXT,
 			${DataSet.KEY_TYPE} TEXT,
 			${DataSet.KEY_RESPONSES} INTEGER,
 			${DataSet.KEY_SYNCED} INTEGER DEFAULT 0,
@@ -315,6 +315,15 @@ object DbLogic {
 			${MerlinLog.KEY_CONTEXT} TEXT,
 			${MerlinLog.KEY_SYNCED} INTEGER,
 			FOREIGN KEY(${MerlinLog.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}))""")
+
+		db.execSQL("""CREATE TABLE IF NOT EXISTS ${QuestionnaireMetadata.TABLE} (
+			${QuestionnaireMetadata.KEY_ID} INTEGER PRIMARY KEY,
+			${QuestionnaireMetadata.KEY_STUDY_ID} INTEGER,
+			${QuestionnaireMetadata.KEY_QUESTIONNAIRE_ID} INTEGER,
+			${QuestionnaireMetadata.KEY_TIMES_COMPLETED} INTEGER,
+			${QuestionnaireMetadata.KEY_LAST_COMPLETED} INTEGER,
+			${QuestionnaireMetadata.KEY_LAST_NOTIFICATION} INTEGER,
+			FOREIGN KEY(${QuestionnaireMetadata.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}) ON DELETE CASCADE)""")
 	}
 	
 	fun updateFrom(db: SQLiteInterface, oldVersion: Int) {
@@ -777,6 +786,22 @@ object DbLogic {
 		)
 		var r: Questionnaire? = null
 		if(c.moveToFirst()) r = Questionnaire(c)
+		c.close()
+		return r
+	}
+
+	fun getQuestionnaireMetadataByInternalId(studyId: Long, internalId: Long): QuestionnaireMetadata {
+		val c = NativeLink.sql.select(
+			QuestionnaireMetadata.TABLE,
+			QuestionnaireMetadata.COLUMNS,
+			"${QuestionnaireMetadata.KEY_STUDY_ID} = ? AND ${QuestionnaireMetadata.KEY_QUESTIONNAIRE_ID} = ?", arrayOf(studyId.toString(),  internalId.toString()),
+			null,
+			null,
+			null,
+			"1"
+		)
+		var r = QuestionnaireMetadata(studyId, internalId)
+		if(c.moveToFirst()) r = QuestionnaireMetadata(c)
 		c.close()
 		return r
 	}
