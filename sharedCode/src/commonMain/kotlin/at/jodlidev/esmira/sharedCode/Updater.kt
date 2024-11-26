@@ -531,8 +531,8 @@ internal object Updater {
 				db.insert("questionnaire_metadata", values)
 			}
 
-			db.execSQL("ALTER TABLE questionnaires DROP COLUMN last_notification;")
-			db.execSQL("ALTER TABLE questionnaires DROP COLUMN last_completed;")
+			//db.execSQL("ALTER TABLE questionnaires DROP COLUMN last_notification;")
+			//db.execSQL("ALTER TABLE questionnaires DROP COLUMN last_completed;")
 
 			db.execSQL("ALTER TABLE dataSets ADD COLUMN timezone_offset INTEGER DEFAULT 0;")
 			db.execSQL("ALTER TABLE dataSets ADD COLUMN local_datetime TEXT DEFAULT '';")
