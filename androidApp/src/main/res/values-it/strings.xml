@@ -299,4 +299,5 @@
     <string name="could_not_determine_location">Impossibile determinare la posizione</string>
     <string name="found_location">Luogo di ritrovamento: %1$s</string>
     <string name="countdown_running">Conto alla rovescia in corso</string>
+    <string name="toast_skipped_one_page">Saltato 1 pagina</string>
 </resources>
