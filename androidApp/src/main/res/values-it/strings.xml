@@ -302,4 +302,8 @@
     <string name="toast_skipped_one_page">Saltata 1 pagina</string>
     <string name="toast_skipped_to_end">Salta le pagine rimanenti</string>
     <string name="text_script_error">!! ESMira ha riscontrato un problema durante il tentativo di visualizzare questo testo !!!</string>
+    <string name="toast_skipped_pages">Pagine saltate %1$d</string>
+    <string name="duration_hours_abbreviation">H:</string>
+    <string name="duration_minutes_abbreviation">M:</string>
+    <string name="option_other">Altro</string>
 </resources>
