@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
@@ -31,9 +32,9 @@ import at.jodlidev.esmira.sharedCode.Web
 import at.jodlidev.esmira.sharedCode.data_structure.Study
 import at.jodlidev.esmira.views.ESMiraDialog
 import at.jodlidev.esmira.views.welcome.*
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.rememberNavController
 import kotlinx.parcelize.Parcelize
 
 
@@ -68,7 +69,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 		setContent {
 			ESMiraSurface {
 				val context = LocalContext.current
-				val navController = rememberAnimatedNavController()
+				val navController = rememberNavController()
 				
 				val studyLoadingData = rememberSaveable {
 					if(isOpenedFromLink) {
@@ -195,26 +196,26 @@ class WelcomeScreenActivity: ComponentActivity() {
 			studyId: Long,
 			qId: Long
 		) -> Unit,
-		navController: NavHostController = rememberAnimatedNavController()
+		navController: NavHostController = rememberNavController()
 	) {
 		val serverUrl = rememberSaveable { mutableStateOf("") }
 		val accessKey = rememberSaveable { mutableStateOf("") }
 		
 		
-		AnimatedNavHost(
+		NavHost(
 			navController,
 			startDestination = startDestination,
 			enterTransition = {
-				slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(300))
+				slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, animationSpec = tween(300))
 			},
 			exitTransition = {
-				slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(300))
+				slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, animationSpec = tween(300))
 			},
 			popEnterTransition = {
-				slideIntoContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(300))
+				slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, animationSpec = tween(300))
 			},
 			popExitTransition  = {
-				slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(300))
+				slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, animationSpec = tween(300))
 			}
 		) {
 			composable("entrance") {

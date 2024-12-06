@@ -9,6 +9,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+.kotlin/*
 
 androidApp/release
 xcuserdata/*
