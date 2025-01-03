@@ -51,4 +51,11 @@
     <string name="continue_">Pokračovat</string>
     <string name="consent">Souhlas</string>
     <string name="contact_researcher">Kontakt na výzkumného pracovníka</string>
+    <string name="colon_accessCode">Přístupový kód:</string>
+    <string name="colon_enter_manually">Zadejte ručně:</string>
+    <string name="colon_next_expected_notification">Další očekávané oznámení:</string>
+    <string name="colon_password">Heslo:</string>
+    <string name="delete_statistics">Odstranění statistik</string>
+    <string name="delete_">Odstranit</string>
+    <string name="desc_update_schedules">Změna studijních plánů</string>
 </resources>
