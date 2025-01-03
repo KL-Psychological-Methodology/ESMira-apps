@@ -5,4 +5,23 @@
 \nPo dokončení se stisknutím tlačítka zpět na telefonu vraťte na tuto obrazovku.</string>
     <string name="app_name">ESMira</string>
     <string name="add_a_study">Zapojte se do nové studie</string>
+    <string name="add">Přidat</string>
+    <string name="informed_consent">Informovaný souhlas</string>
+    <string name="messages">Zprávy</string>
+    <string name="no">Ne</string>
+    <string name="save">Uložit</string>
+    <string name="send">Odeslat</string>
+    <string name="statistics">Statistiky</string>
+    <string name="user_id">ID uživatele</string>
+    <string name="yes">Ano</string>
+    <string name="study_description">Popis studie</string>
+    <string name="yesterday">Včera</string>
+    <string name="i_agree">Souhlasím</string>
+    <string name="please_select">Vyberte prosím</string>
+    <string name="today">Dnes</string>
+    <string name="delete_study">Vymazat studii</string>
+    <string name="questionnaires">Dotazníky</string>
+    <string name="info_required">* požadovaný vstup</string>
+    <string name="settings">Nastavení</string>
+    <string name="reload">Znovu načíst</string>
 </resources>
