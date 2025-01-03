@@ -93,3 +93,6 @@
 "notifications" = "Oznámení";
 "ok_" = "OK";
 "notification_permission_check" = "Stisknutím tlačítka \"Povolit oznámení\" zkontrolujte, zda má ESMira oprávnění k zasílání oznámení.";
+"open_sound_settings" = "Otevření nastavení zvuku";
+"participate" = "Zúčastněte se";
+"open_settings" = "Otevřít nastavení";
