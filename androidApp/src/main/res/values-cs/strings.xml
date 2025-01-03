@@ -65,4 +65,26 @@
     <string name="dialogDesc_leave_study">Chcete tuto studii opustit? Ztratíte veškerý pokrok ve studii.</string>
     <string name="android_email_study_subject">Pokud jde o vaši studii: %1$s</string>
     <string name="enter_manually">Zadejte ručně</string>
+    <string name="error_notifications_broken_android_desc">Některé modely smartphonů mají bohužel také skrytá nastavení, která jsou nutná k povolení oznámení na pozadí.</string>
+    <string name="error_notifications_broken_android_dontkillmyapp">Pokud vám tento dialog nepomůže, můžete také navštívit <a href="https://dontkillmyapp.com/">dontkillmyapp.com</a>, kde najdete další informace.</string>
+    <string name="enable">Povolit</string>
+    <string name="enable_notifications">Povolení oznámení</string>
+    <string name="error_app_update_needed_title">Aktualizace ESMira.</string>
+    <string name="android_error_general">Chyba: %1$s</string>
+    <string name="error_loading_failed">Načítání se nezdařilo…</string>
+    <string name="error_missing_fields">Vyplňte prosím všechna povinná pole!</string>
+    <string name="error_no_email_client">Nepodařilo se najít e-mailovou aplikaci…</string>
+    <string name="error_no_images_to_upload">Nevybrali jste žádné obrázky, které chcete nahrát.</string>
+    <string name="error_notifications_broken_android_header">ESMira není schopna neodesílat oznámení!</string>
+    <string name="error_notifications_broken_android_footer">Potřebujete další pomoc nebo nám chcete pomoci začlenit více informací (snímky obrazovky, popisy) o vašem modelu zařízení do systému ESMira? Napište nám e-mail na adresu: <a href="mailto:esmira@kl.ac.at">esmira@kl.ac.at</a>.</string>
+    <string name="error_notifications_broken_android_model_settings">Pro váš telefon byla nalezena následující nastavení zařízení:</string>
+    <string name="error_schedule_time_window_too_small">Zvolte prosím větší časové okno!</string>
+    <string name="error_settings_not_opened">Nelze otevřít nastavení!</string>
+    <string name="hint_error_comment">S jakým problémem jste se setkali?</string>
+    <string name="hint_message">Zpráva</string>
+    <string name="hint_server">example.com</string>
+    <string name="https">https://</string>
+    <string name="ignore">Ignorovat</string>
+    <string name="in_x_days">na %1$d dny</string>
+    <string name="error_app_update_needed_msg">Byla nalezena kritická aktualizace. Aktualizujte ESMira v obchodě s aplikacemi.</string>
 </resources>
