@@ -109,4 +109,9 @@
 \n[1] telefon není ztlumený,
 \n[2] jsou povolena oznámení pro ESMira a
 \n[3] režim \"Nerušit\" (pokud je v telefonu k dispozici) je vypnutý:</string>
+    <string name="info_notification_setup_failed">Je velmi pravděpodobné, že váš telefon nebude moci přijímat oznámení o této studii. Váš telefon může mít speciální nastavení, o kterém nevíme. Obraťte se prosím na výzkumného pracovníka studie nebo na vývojáře aplikace (a uveďte model telefonu, který používáte), abyste našli řešení vašeho problému.</string>
+    <string name="info_number_to_sync">Máte %1$d nesynchronizované datové sady.</string>
+    <string name="info_questionnaire_success">Vaše záznamy byly úspěšně uloženy!</string>
+    <string name="info_schedule_changed_after_one_day">Změny se projeví po jednom dni.</string>
+    <string name="info_study_permissionSetup_ended">Konfigurace byla dokončena. Nyní můžete kliknout na \"Participate\" a připojit se ke studii.</string>
 </resources>
