@@ -19,3 +19,13 @@
 "info_required" = "* požadovaný vstup";
 "messages" = "Zprávy";
 "settings" = "Nastavení";
+"back" = "Zpět";
+"backup" = "Záloha";
+"cancel" = "Zrušit";
+"change_schedules" = "Změny plánů";
+"close" = "Zavřít";
+"complete" = "Kompletní";
+"contentDesc_more_studies" = "Otevře nabídku možností pro tuto studii.";
+"continue_" = "Pokračovat";
+"consent" = "Souhlas";
+"contact_researcher" = "Kontakt na výzkumného pracovníka";
