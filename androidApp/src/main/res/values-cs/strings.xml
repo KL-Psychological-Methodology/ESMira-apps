@@ -57,5 +57,5 @@
     <string name="colon_password">Heslo:</string>
     <string name="delete_statistics">Odstranění statistik</string>
     <string name="delete_">Odstranit</string>
-    <string name="desc_update_schedules">Změna studijních plánů</string>
+    <string name="desc_update_schedules">Změna plánů studií</string>
 </resources>
