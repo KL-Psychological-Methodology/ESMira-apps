@@ -36,4 +36,19 @@
     <string name="additional_notification_settings_zte_blade_l110_1">Na nadcházející obrazovce vyberte možnost \"Baterie\".</string>
     <string name="additional_notification_settings_zte_blade_l110_2">Poté vyberte možnost \"Nastavení synchronizace srdečního tepu\" (\"HeartBeat Sync Settings\").</string>
     <string name="change_schedules">Změny plánů</string>
+    <string name="additional_notification_settings_zte_blade_l110_3">Nyní v seznamu vyhledejte položku \"ESMira\" a ujistěte se, že je políčko zaškrtnuto.</string>
+    <string name="additional_notification_settings_finish">Po dokončení se stisknutím tlačítka zpět na telefonu vraťte na tuto obrazovku.</string>
+    <string name="android_version">Verze: %1$s, %2$s</string>
+    <string name="ask_model_settings_correct">Podařilo se vám upravit nastavení podle pokynů?</string>
+    <string name="ask_notification_posted">Obdrželi jste oznámení?</string>
+    <string name="back">Zpět</string>
+    <string name="backup">Záloha</string>
+    <string name="cancel">Zrušit</string>
+    <string name="close">Zavřít</string>
+    <string name="complete">Kompletní</string>
+    <string name="android_contact_email">Kontakt %1$s</string>
+    <string name="contentDesc_more_studies">Otevře nabídku možností pro tuto studii.</string>
+    <string name="continue_">Pokračovat</string>
+    <string name="consent">Souhlas</string>
+    <string name="contact_researcher">Kontakt na výzkumného pracovníka</string>
 </resources>
