@@ -148,4 +148,9 @@
     <string name="load_backup">Načíst zálohu</string>
     <string name="notification_test_name">Test oznámení</string>
     <string name="notificationChannel_studyMessages_name">Zprávy ze studie</string>
+    <string name="open_doNotDisturb_settings">Otevření nastavení \"Nerušit\"</string>
+    <string name="open_notification_settings">Otevření nastavení oznámení</string>
+    <string name="open_settings">Otevřít nastavení</string>
+    <string name="open_sound_settings">Otevření nastavení zvuku</string>
+    <string name="participate">Zúčastněte se</string>
 </resources>
