@@ -56,4 +56,5 @@
 "hint_server" = "example.com";
 "https" = "https://";
 "ignore" = "Ignorovat";
-"in_x_days" = "na %1$d dny";
+"in_x_days" = "za %1$d dny/dní";
+"info_model_settings" = "Aby ESMira mohla vydávat oznámení z pozadí, je nutné provést některá speciální nastavení pro váš model telefonu. Klepnutím na \"Open device specific setup\" níže otevřete nastavení telefonu.";
