@@ -24,4 +24,6 @@
     <string name="info_required">* požadovaný vstup</string>
     <string name="settings">Nastavení</string>
     <string name="reload">Znovu načíst</string>
+    <string name="additional_notification_settings_esmi">Na nadcházející obrazovce najděte ESMira v seznamu aplikací a ujistěte se, že má povolení k automatickému spuštění.</string>
+    <string name="additional_notification_settings_huaweiV2_1">Na následující obrazovce najděte v seznamu aplikací položku ESMira a ujistěte se, že je \"Ručně spravovaná\".</string>
 </resources>
