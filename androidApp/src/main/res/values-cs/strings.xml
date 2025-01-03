@@ -100,5 +100,6 @@
     <string name="info_no_model_settings">Nebylo nalezeno žádné nastavení zařízení.</string>
     <string name="info_no_studies_noAccessKey">Na tomto serveru se nepodařilo najít veřejné studie.</string>
     <string name="android_info_no_studies_withAccessKey">Na tomto serveru se nepodařilo najít studie s přístupovým klíčem \"%1$s\".</string>
-    <string name="info_no_schedules">Žádné změny rozvrhu.</string>
+    <string name="info_no_schedules">Žádné plány ke změně.</string>
+    <string name="info_no_statistics">Žádné statistiky k zobrazení.</string>
 </resources>
