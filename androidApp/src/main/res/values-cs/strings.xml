@@ -62,4 +62,5 @@
     <string name="dialogTitle_delete_statistics">Vymazat statistiky?</string>
     <string name="dialogDesc_delete_statistics">Chcete vymazat všechny statistiky této studie?</string>
     <string name="dialogTitle_leave_study">Odejít ze studie?</string>
+    <string name="dialogDesc_leave_study">Chcete tuto studii opustit? Ztratíte veškerý pokrok ve studiu.</string>
 </resources>
