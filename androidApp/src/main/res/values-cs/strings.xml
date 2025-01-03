@@ -102,4 +102,5 @@
     <string name="android_info_no_studies_withAccessKey">Na tomto serveru se nepodařilo najít studie s přístupovým klíčem \"%1$s\".</string>
     <string name="info_no_schedules">Žádné plány ke změně.</string>
     <string name="info_no_statistics">Žádné statistiky k zobrazení.</string>
+    <string name="info_no_studies_joined">Nepřipojili jste se k žádnému studiu.</string>
 </resources>
