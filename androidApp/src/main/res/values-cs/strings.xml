@@ -94,4 +94,11 @@
         <item quantity="other">%1$d zmeškaných oznámení.</item>
     </plurals>
     <string name="info_model_settings">Aby ESMira mohla vydávat oznámení z pozadí, je nutné provést některá speciální nastavení pro váš model telefonu. Klepnutím na \"Otevřít nastavení zařízení\" níže otevřete nastavení telefonu.</string>
+    <string name="info_new_message">Dostali jste novou zprávu!</string>
+    <string name="info_no_errors">Žádné chyby k nahlášení</string>
+    <string name="info_no_messages">Nejsou zde žádné zprávy.</string>
+    <string name="info_no_model_settings">Nebylo nalezeno žádné nastavení zařízení.</string>
+    <string name="info_no_studies_noAccessKey">Na tomto serveru se nepodařilo najít veřejné studie.</string>
+    <string name="android_info_no_studies_withAccessKey">Na tomto serveru se nepodařilo najít studie s přístupovým klíčem \"%1$s\".</string>
+    <string name="info_no_schedules">Žádné změny rozvrhu.</string>
 </resources>
