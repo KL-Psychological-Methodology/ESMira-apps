@@ -213,8 +213,8 @@
     <string name="sent_to_whom">Posláno komu?</string>
     <string name="rewards">Odměny</string>
     <plurals name="info_reward_is_not_active_yet">
-        <item quantity="one">Odměny za tuto studii zatím nejsou aktivní. Budou k dispozici během jednoho dne.</item>
-        <item quantity="few"/>
+        <item quantity="one">%1$d%1$dOdměny za tuto studii zatím nejsou aktivní. Budou k dispozici během jednoho dne.</item>
+        <item quantity="few">Odměny za tuto studii zatím nejsou aktivní. Budou k dispozici za %1$d dny.</item>
         <item quantity="other">Odměny za tuto studii zatím nejsou aktivní. Budou k dispozici za %1$d dní.</item>
     </plurals>
     <string name="qrCodeInvalid">QR kód není platný</string>
