@@ -34,5 +34,6 @@
     <string name="additional_notification_settings_zte_blade_3_2">Poté otevřete rozevírací nabídku a vyberte možnost \"Všechny aplikace\".</string>
     <string name="additional_notification_settings_zte_blade_3_3">Nyní v seznamu vyhledejte položku \"ESMira\", klikněte na ni, vyberte možnost \"Neoptimalizovat\" a stiskněte tlačítko \"Hotovo\".</string>
     <string name="additional_notification_settings_zte_blade_l110_1">Na nadcházející obrazovce vyberte možnost \"Baterie\".</string>
-    <string name="additional_notification_settings_zte_blade_l110_2">Poté vyberte možnost \"HeartBeat Sync Settings\".</string>
+    <string name="additional_notification_settings_zte_blade_l110_2">Poté vyberte možnost \"Nastavení synchronizace srdečního tepu\" (\"HeartBeat Sync Settings\").</string>
+    <string name="change_schedules">Změny plánů</string>
 </resources>
