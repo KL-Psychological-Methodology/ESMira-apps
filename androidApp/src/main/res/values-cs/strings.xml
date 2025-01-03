@@ -29,4 +29,10 @@
     <string name="additional_notification_settings_huaweiV2_2">Na nadcházející obrazovce se ujistěte, že má ESMira oprávnění pro \"Automatické spuštění\" a \"Spustit na pozadí\".</string>
     <string name="additional_notification_settings_samsung_1">Na nadcházející obrazovce počkejte, dokud nebude dokončena \"Kontrola\", a sjeďte dolů na konec stránky.</string>
     <string name="additional_notification_settings_samsung_2">V dolní části stránky vyberte možnost \"Nesledované aplikace\".</string>
+    <string name="additional_notification_settings_samsung_3">Na následující obrazovce stiskněte tlačítko \"Přidat aplikace\". Poté v seznamu vyberte ESMira a stiskněte tlačítko \"OK\".</string>
+    <string name="additional_notification_settings_zte_blade_3_1">Na nadcházející obrazovce vyberte možnost \"Optimalizace baterie\".</string>
+    <string name="additional_notification_settings_zte_blade_3_2">Poté otevřete rozevírací nabídku a vyberte možnost \"Všechny aplikace\".</string>
+    <string name="additional_notification_settings_zte_blade_3_3">Nyní v seznamu vyhledejte položku \"ESMira\", klikněte na ni, vyberte možnost \"Neoptimalizovat\" a stiskněte tlačítko \"Hotovo\".</string>
+    <string name="additional_notification_settings_zte_blade_l110_1">Na nadcházející obrazovce vyberte možnost \"Baterie\".</string>
+    <string name="additional_notification_settings_zte_blade_l110_2">Poté vyberte možnost \"HeartBeat Sync Settings\".</string>
 </resources>
