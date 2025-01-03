@@ -35,4 +35,8 @@
 "colon_password" = "Heslo:";
 "delete_statistics" = "Odstranění statistik";
 "delete_" = "Odstranit";
-"desc_update_schedules" = "Změna studijních plánů";
+"desc_update_schedules" = "Změna plánů studií";
+"desc_update_studies" = "Aktualizujte nastavení svých studií";
+"dialogTitle_delete_statistics" = "Vymazat statistiky?";
+"dialogDesc_delete_statistics" = "Chcete vymazat všechny statistiky této studie?";
+"dialogTitle_leave_study" = "Odejít ze studia?";
