@@ -40,3 +40,4 @@
 "dialogTitle_delete_statistics" = "Vymazat statistiky?";
 "dialogDesc_delete_statistics" = "Chcete vymazat všechny statistiky této studie?";
 "dialogTitle_leave_study" = "Odejít ze studie?";
+"enter_manually" = "Zadejte ručně";
