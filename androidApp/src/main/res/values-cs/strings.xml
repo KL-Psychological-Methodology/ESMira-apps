@@ -174,4 +174,25 @@
     <string name="tomorrow">Zítra</string>
     <string name="try_again">Zkuste to znovu</string>
     <string name="understood">rozumí</string>
+    <string name="welcome_qr_instructions">Umístěte kód QR asi 30 cm před fotoaparát chytrého telefonu tak, aby byl viditelný na obrazovce.
+\nESMira kód automaticky naskenuje, jakmile fotoaparát zaostří.</string>
+    <string name="upload">Nahrát</string>
+    <string name="upload_screenshots">Nahrát snímky obrazovky</string>
+    <string name="visible_when_study_finished">Viditelné pouze po ukončení studie.</string>
+    <string name="welcome_accessKey_question">Máte přístupový klíč?</string>
+    <string name="welcome_exit_questionTitle">Opravdu to chcete zrušit?</string>
+    <string name="welcome_first_instructions">Vítejte v ESMira, anonymním dotazníkovém asistentovi.
+\n
+\nChcete-li začít, vyberte si prosím studii a připojte se.
+\nTento dialog vám pomůže.</string>
+    <string name="welcome_hello">Dobrý den!</string>
+    <string name="welcome_join_public_study">Ne, připojte se k veřejné studii</string>
+    <string name="welcome_qr_question">Máte QR kód pro studii?</string>
+    <string name="welcome_server_question">Na kterém serveru je studie umístěna?</string>
+    <string name="what_for">K čemu?</string>
+    <string name="what_is_sent">Co se posílá?</string>
+    <string name="word_and">a</string>
+    <string name="app_usage">Používání aplikace</string>
+    <string name="app_usage_desc">Tato studie potřebuje povolení pro přístup k použití. Ujistěte se, že je ESMira povolena na obrazovce oprávnění, a poté stiskněte tlačítko zpět na telefonu.</string>
+    <string name="welcome_exit_questionDesc">Abyste mohli ESMiru používat, musíte se nejprve zapojit do studie.</string>
 </resources>
