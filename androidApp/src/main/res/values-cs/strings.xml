@@ -58,4 +58,8 @@
     <string name="delete_statistics">Odstranění statistik</string>
     <string name="delete_">Odstranit</string>
     <string name="desc_update_schedules">Změna plánů studií</string>
+    <string name="desc_update_studies">Aktualizujte nastavení svých studií</string>
+    <string name="dialogTitle_delete_statistics">Vymazat statistiky?</string>
+    <string name="dialogDesc_delete_statistics">Chcete vymazat všechny statistiky této studie?</string>
+    <string name="dialogTitle_leave_study">Odejít ze studia?</string>
 </resources>
