@@ -137,8 +137,8 @@
     <string name="notifications">Oznámení</string>
     <string name="notifications_not_working">Oznámení nefungují?</string>
     <string name="ok_">OK</string>
-    <string name="open_device_specific_settings">Otevření specifických nastavení zařízení</string>
-    <string name="open_device_specific_settings_numbered">Otevření specifických nastavení zařízení %1$d</string>
+    <string name="open_device_specific_settings">Otevřít nastavení zařízení</string>
+    <string name="open_device_specific_settings_numbered">Otevřít nastavení zařízení %1$d</string>
     <string name="notificationChannel_studyMessages_desc">Odešle oznámení, když vám výzkumný pracovník zašle novou zprávu týkající se probíhající studie.</string>
     <string name="notification_test_desc">Jedná se o testovací oznámení, které má ověřit, zda ESMira skutečně dokáže odesílat oznámení.</string>
     <string name="notificationChannel_generalNotifications_name">Obecná oznámení</string>
