@@ -67,3 +67,8 @@
 "info_no_studies_joined" = "Nepřipojili jste se k žádné studii.";
 "info_no_questionnaires" = "V současné době nejsou k dispozici žádné dotazníky…";
 "info_nothing_to_sync" = "Nic k synchronizaci";
+"info_number_to_sync" = "Máte %1$d nesynchronizované datové sady.";
+"info_questionnaire_success" = "Vaše záznamy byly úspěšně uloženy!";
+"info_schedule_changed_after_one_day" = "Změny se projeví po jednom dni.";
+"info_study_permissionSetup_ended" = "Konfigurace byla dokončena. Nyní můžete kliknout na \"Participate\" a připojit se ke studii.";
+"info_notification_setup_failed" = "Je velmi pravděpodobné, že váš telefon nebude moci přijímat oznámení o této studii. Váš telefon může mít speciální nastavení, o kterém nevíme. Obraťte se prosím na výzkumného pracovníka studie nebo na vývojáře aplikace (a uveďte model telefonu, který používáte), abyste našli řešení vašeho problému.";
