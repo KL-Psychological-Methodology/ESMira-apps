@@ -135,3 +135,9 @@
 "just_finished" = "Právě dokončeno";
 "rewards" = "Odměny";
 "sent_to_whom" = "Posláno komu?";
+"error_reward_conditions_not_met" = "Na odměnu zatím nemáte nárok.";
+"error_already_generated" = "Kód odměny byl již vygenerován na jiném zařízení. Kontaktujte prosím výzkumného pracovníka ohledně tohoto problému.";
+"error_reward_questionnaires_not_finished" = "Některé dotazníky nebyly vyplňovány dostatečně často:";
+"colon_reward_code_header" = "Toto je váš kód odměny:";
+"reward_code_send_email" = "Odeslat e-mailem";
+"reward_code_share" = "Sdílení prostřednictvím aplikace";
