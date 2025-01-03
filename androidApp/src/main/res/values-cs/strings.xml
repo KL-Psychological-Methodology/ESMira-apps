@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="additional_notification_settings_general_android">Na následující obrazovce se ujistěte, že je povolen běh programu ESMira na pozadí a že se může spustit při restartování telefonu. Bohužel názvy nastavení (a to, která nastavení skutečně existují) se u jednotlivých modelů telefonů značně liší a pro tento model telefonu nemáme k dispozici žádné snímky obrazovky, které by vám mohly dále pomoci. Zkuste si tedy příslušná nastavení domyslet. Pokud nám chcete pomoci a poslat nám nějaké snímky obrazovky, kontaktujte prosím vývojáře aplikace (esmira@kl.ac.at).
+    <string name="additional_notification_settings_general_android">Na následující obrazovce se ujistěte, že je povoleno, aby aplikace ESMira mohla běžet na pozadí a že se může spustit při restartování telefonu. Bohužel název nastavení (a to, která nastavení skutečně existují) se u jednotlivých modelů telefonů značně liší. Pro váš model telefonu nemáme k dispozici žádné snímky obrazovky, které by vám mohly dále pomoci. Zkuste tedy příslušná nastavení najít sami. Pokud nám chcete pomoci a poslat nám nějaké snímky obrazovky, kontaktujte prosím vývojáře aplikace (esmira@kl.ac.at).
 \n
 \nPo dokončení se stisknutím tlačítka zpět na telefonu vraťte na tuto obrazovku.</string>
     <string name="app_name">ESMira</string>
