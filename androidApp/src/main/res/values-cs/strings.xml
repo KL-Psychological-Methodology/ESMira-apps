@@ -93,4 +93,5 @@
         <item quantity="few">%1$d zmeškaná oznámení.</item>
         <item quantity="other">%1$d zmeškaných oznámení.</item>
     </plurals>
+    <string name="info_model_settings">Aby ESMira mohla vydávat oznámení z pozadí, je nutné provést některá speciální nastavení pro váš model telefonu. Klepnutím na \"Open device specific setup\" níže otevřete nastavení telefonu.</string>
 </resources>
