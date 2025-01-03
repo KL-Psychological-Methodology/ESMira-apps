@@ -94,5 +94,14 @@
 "ok_" = "OK";
 "notification_permission_check" = "Stisknutím tlačítka \"Povolit oznámení\" zkontrolujte, zda má ESMira oprávnění k zasílání oznámení.";
 "open_sound_settings" = "Otevření nastavení zvuku";
-"participate" = "Zúčastněte se";
+"participate" = "Zúčastnit se";
 "open_settings" = "Otevřít nastavení";
+"problems_with_notifications" = "Problémy s oznámeními";
+"questionMark" = "?";
+"scan_a_qrcode" = "Naskenování kódu QR";
+"schedules" = "Plány";
+"search_manually" = "Ruční vyhledávání";
+"send_error_report" = "Odeslat chybové hlášení";
+"send_test_notification" = "Odeslání oznámení o testu";
+"error_report_message" = "Bylo odesláno hlášení o chybě. Komentář:";
+"send_error_report_to_researcher" = "Tuto zprávu zašlete výzkumnému pracovníkovi také jako anonymní zprávu.";
