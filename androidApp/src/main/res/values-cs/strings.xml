@@ -85,7 +85,12 @@
     <string name="hint_server">example.com</string>
     <string name="https">https://</string>
     <string name="ignore">Ignorovat</string>
-    <string name="in_x_days">na %1$d dny</string>
+    <string name="in_x_days">za %1$d dny/dní</string>
     <string name="error_app_update_needed_msg">Byla nalezena kritická aktualizace. Aktualizujte ESMira v obchodě s aplikacemi.</string>
     <string name="error_input">Nefunkční vstup</string>
+    <plurals name="android_info_missed_notifications" comment="Needs to be short">
+        <item quantity="one">1 zmeškané oznámení.</item>
+        <item quantity="few">%1$d zmeškaná oznámení.</item>
+        <item quantity="other">%1$d zmeškaných oznámení.</item>
+    </plurals>
 </resources>
