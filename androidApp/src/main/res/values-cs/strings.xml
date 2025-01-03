@@ -114,4 +114,6 @@
     <string name="info_questionnaire_success">Vaše záznamy byly úspěšně uloženy!</string>
     <string name="info_schedule_changed_after_one_day">Změny se projeví po jednom dni.</string>
     <string name="info_study_permissionSetup_ended">Konfigurace byla dokončena. Nyní můžete kliknout na \"Participate\" a připojit se ke studii.</string>
+    <string name="android_info_study_updated">%1$s byl aktualizován!</string>
+    <string name="info_study_updated_desc">Vaše rozvrhy byly resetovány kvůli aktualizaci studie.</string>
 </resources>
