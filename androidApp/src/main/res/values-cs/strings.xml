@@ -63,4 +63,6 @@
     <string name="dialogDesc_delete_statistics">Chcete vymazat všechny statistiky této studie?</string>
     <string name="dialogTitle_leave_study">Odejít ze studie?</string>
     <string name="dialogDesc_leave_study">Chcete tuto studii opustit? Ztratíte veškerý pokrok ve studii.</string>
+    <string name="android_email_study_subject">Pokud jde o vaši studii: %1$s</string>
+    <string name="enter_manually">Zadejte ručně</string>
 </resources>
