@@ -102,6 +102,16 @@
 "schedules" = "Plány";
 "search_manually" = "Ruční vyhledávání";
 "send_error_report" = "Odeslat chybové hlášení";
-"send_test_notification" = "Odeslání oznámení o testu";
+"send_test_notification" = "Odeslání testovacího oznámení";
 "error_report_message" = "Bylo odesláno hlášení o chybě. Komentář:";
 "send_error_report_to_researcher" = "Tuto zprávu zašlete výzkumnému pracovníkovi také jako anonymní zprávu.";
+"show_informed_consent" = "Ukázat informovaný souhlas";
+"show_welcome_screen" = "Zobrazit uvítací obrazovku";
+"soon" = "Brzy";
+"start" = "Start";
+"state_loading_public_statistics" = "Načítání veřejných statistik…";
+"statistics_personal" = "Osobní";
+"statistics_public" = "Veřejnost";
+"tomorrow" = "Zítra";
+"try_again" = "Zkuste to znovu";
+"understood" = "rozumí";
