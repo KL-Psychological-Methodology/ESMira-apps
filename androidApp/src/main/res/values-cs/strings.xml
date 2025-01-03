@@ -199,4 +199,23 @@
     <string name="failed">Neúspěšné</string>
     <string name="feature_is_not_supported">Tato funkce není v telefonu podporována</string>
     <string name="app_usage_whatFor">Některé dotazníky této studie sledují dobu používání konkrétních aplikací (nebo smartphonu obecně) v průběhu posledního dne. Tyto údaje NEJSOU přístupné na pozadí a ukládají se POUZE při odeslání příslušného dotazníku. Před odesláním dotazníku budete informováni, zda a které údaje se odesílají.</string>
+    <string name="info_screen_tracking_notification_content">Měření času stráveného u obrazovky…</string>
+    <string name="not_installed">Není nainstalováno</string>
+    <string name="data_will_be_sent_to_app_developer">Zpráva o chybě bude odeslána vývojáři aplikace (%1$s). Chceme zdůraznit, že chybové hlášení neobsahuje žádné osobní údaje ani údaje z dotazníků!</string>
+    <string name="colon_total_screenTime">Celkový čas na obrazovce:</string>
+    <string name="colon_app_usage">Používání aplikace:</string>
+    <string name="colon_usageTime">Doba použití:</string>
+    <string name="colon_usageCount">Počet použití:</string>
+    <string name="error_no_cameraApp">Nepodařilo se najít aplikaci fotoaparátu!</string>
+    <string name="notificationChannel_screen_tracking">Oznámení o službě Screen time.</string>
+    <string name="notificationChannel_screen_tracking_desc">Některé studie měří čas strávený u obrazovky, což vyžaduje službu na pozadí.</string>
+    <string name="just_finished">Právě dokončeno</string>
+    <string name="sent_to_whom">Posláno komu?</string>
+    <string name="rewards">Odměny</string>
+    <plurals name="info_reward_is_not_active_yet">
+        <item quantity="one">Odměny za tuto studii zatím nejsou aktivní. Budou k dispozici během jednoho dne.</item>
+        <item quantity="few"></item>
+        <item quantity="other">Odměny za tuto studii zatím nejsou aktivní. Budou k dispozici za %1$d dní.</item>
+    </plurals>
+    <string name="qrCodeInvalid">QR kód není platný</string>
 </resources>
