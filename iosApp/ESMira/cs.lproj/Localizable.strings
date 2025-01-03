@@ -28,4 +28,11 @@
 "contentDesc_more_studies" = "Otevře nabídku možností pro tuto studii.";
 "continue_" = "Pokračovat";
 "consent" = "Souhlas";
-"contact_researcher" = "Kontakt na výzkumného pracovníka";
+"contact_researcher" = "Kontakt na výzkumníka";
+"colon_accessCode" = "Přístupový kód:";
+"colon_enter_manually" = "Zadejte ručně:";
+"colon_next_expected_notification" = "Další očekávané oznámení:";
+"colon_password" = "Heslo:";
+"delete_statistics" = "Odstranění statistik";
+"delete_" = "Odstranit";
+"desc_update_schedules" = "Změna studijních plánů";
