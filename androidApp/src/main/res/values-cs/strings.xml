@@ -153,4 +153,13 @@
     <string name="open_settings">Otevřít nastavení</string>
     <string name="open_sound_settings">Otevření nastavení zvuku</string>
     <string name="participate">Zúčastněte se</string>
+    <string name="problems_with_notifications">Problémy s oznámeními</string>
+    <string name="questionMark">\?</string>
+    <string name="scan_a_qrcode">Naskenování kódu QR</string>
+    <string name="search_manually">Ruční vyhledávání</string>
+    <string name="send_error_report_to_researcher">Tuto zprávu zašlete výzkumnému pracovníkovi také jako anonymní zprávu.</string>
+    <string name="error_report_message">Bylo odesláno hlášení o chybě. Komentář:</string>
+    <string name="send_test_notification">Odeslání oznámení o testu</string>
+    <string name="send_error_report">Odeslat chybové hlášení</string>
+    <string name="send_message_to_researcher">Odeslat anonymní zprávu výzkumníkovi</string>
 </resources>
