@@ -25,7 +25,7 @@
     <string name="settings">Nastavení</string>
     <string name="reload">Znovu načíst</string>
     <string name="additional_notification_settings_esmi">Na nadcházející obrazovce najděte ESMira v seznamu aplikací a ujistěte se, že má povolení k automatickému spuštění.</string>
-    <string name="additional_notification_settings_huaweiV2_1">Na následující obrazovce najděte v seznamu aplikací položku ESMira a ujistěte se, že je \"Ručně spravovaná\".</string>
+    <string name="additional_notification_settings_huaweiV2_1">Na následující obrazovce najděte v seznamu aplikací položku ESMira a ujistěte se, že je \"Manuálně spravovaná\" (\"Manually managed\").</string>
     <string name="additional_notification_settings_huaweiV2_2">Na nadcházející obrazovce se ujistěte, že má ESMira oprávnění pro \"Automatické spuštění\" a \"Spustit na pozadí\".</string>
     <string name="additional_notification_settings_samsung_1">Na nadcházející obrazovce počkejte, dokud nebude dokončena \"Kontrola\", a sjeďte dolů na konec stránky.</string>
     <string name="additional_notification_settings_samsung_2">V dolní části stránky vyberte možnost \"Nesledované aplikace\".</string>
