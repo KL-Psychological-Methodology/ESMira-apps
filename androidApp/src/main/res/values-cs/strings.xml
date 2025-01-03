@@ -163,4 +163,15 @@
     <string name="send_error_report">Odeslat chybové hlášení</string>
     <string name="send_message_to_researcher">Odeslat anonymní zprávu výzkumníkovi</string>
     <string name="schedules">Plány</string>
+    <string name="show_informed_consent">Ukázat informovaný souhlas</string>
+    <string name="show_welcome_screen">Zobrazit uvítací obrazovku</string>
+    <string name="soon">Brzy</string>
+    <string name="start">Start</string>
+    <string name="state_loading_public_statistics">Načítání veřejných statistik…</string>
+    <string name="statistics_personal">Osobní</string>
+    <string name="statistics_public">Veřejnost</string>
+    <string name="sync_data">Synchronizace dat</string>
+    <string name="tomorrow">Zítra</string>
+    <string name="try_again">Zkuste to znovu</string>
+    <string name="understood">rozumí</string>
 </resources>
