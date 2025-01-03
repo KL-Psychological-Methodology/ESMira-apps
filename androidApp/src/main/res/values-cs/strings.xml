@@ -195,4 +195,5 @@
     <string name="app_usage">Používání aplikace</string>
     <string name="app_usage_desc">Tato studie potřebuje povolení pro přístup k použití. Ujistěte se, že je ESMira povolena na obrazovce oprávnění, a poté stiskněte tlačítko zpět na telefonu.</string>
     <string name="welcome_exit_questionDesc">Abyste mohli ESMiru používat, musíte se nejprve zapojit do studie.</string>
+    <string name="update_studies">Aktualizovat studie</string>
 </resources>
