@@ -64,4 +64,6 @@
 "info_no_schedules" = "Žádné plány ke změně.";
 "info_new_message" = "Dostali jste novou zprávu!";
 "info_no_statistics" = "Žádné statistiky k zobrazení.";
-"info_no_studies_joined" = "Nepřipojili jste se k žádnému studiu.";
+"info_no_studies_joined" = "Nepřipojili jste se k žádné studii.";
+"info_no_questionnaires" = "V současné době nejsou k dispozici žádné dotazníky…";
+"info_nothing_to_sync" = "Nic k synchronizaci";
