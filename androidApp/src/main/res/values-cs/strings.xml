@@ -103,4 +103,10 @@
     <string name="info_no_schedules">Žádné plány ke změně.</string>
     <string name="info_no_statistics">Žádné statistiky k zobrazení.</string>
     <string name="info_no_studies_joined">Nepřipojili jste se k žádnému studiu.</string>
+    <string name="info_no_questionnaires">V současné době nejsou k dispozici žádné dotazníky…</string>
+    <string name="info_nothing_to_sync">Nic k synchronizaci</string>
+    <string name="info_notification_additional_settings">Ujistěte se, že
+\n[1] telefon není ztlumený,
+\n[2] jsou povolena oznámení pro ESMira a
+\n[3] režim \"Nerušit\" (pokud je v telefonu k dispozici) je vypnutý:</string>
 </resources>
