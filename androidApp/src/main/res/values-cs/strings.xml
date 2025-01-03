@@ -115,7 +115,7 @@
     <string name="info_schedule_changed_after_one_day">Změny se projeví po jednom dni.</string>
     <string name="info_study_permissionSetup_ended">Konfigurace byla dokončena. Nyní můžete kliknout na \"Zúčastnit se\" a připojit se ke studii.</string>
     <string name="android_info_study_updated">%1$s byl aktualizován!</string>
-    <string name="info_study_updated_desc">Vaše rozvrhy byly resetovány kvůli aktualizaci studie.</string>
+    <string name="info_study_updated_desc">Vaše plány byly resetovány kvůli aktualizaci studie.</string>
     <string name="notification_setup_desc">Oznámení slouží k tomu, abyste byli ve stanovených časech vyzváni k vyplnění dotazníků. Po ukončení studie již nebudete dostávat žádná oznámení.</string>
     <string name="notificationChannel_generalNotifications_desc">Obecná oznámení pro různé účely.</string>
     <string name="notificationChannel_questionnaire_desc">Studie mohou zasílat upomínky na vyplnění dotazníků v určitou denní dobu. Většinou jsou tato upozornění důležitá pro správné fungování studií. Nevypínejte tento oznamovací kanál.</string>
@@ -143,4 +143,9 @@
     <string name="notification_test_desc">Jedná se o testovací oznámení, které má ověřit, zda ESMira skutečně dokáže odesílat oznámení.</string>
     <string name="notificationChannel_generalNotifications_name">Obecná oznámení</string>
     <string name="notification_permission_check">Stisknutím tlačítka \"Povolit oznámení\" zkontrolujte, zda má ESMira oprávnění k zasílání oznámení.</string>
+    <string name="leave">Odejít</string>
+    <string name="leave_study">Odejít ze studie</string>
+    <string name="load_backup">Načíst zálohu</string>
+    <string name="notification_test_name">Test oznámení</string>
+    <string name="notificationChannel_studyMessages_name">Zprávy ze studie</string>
 </resources>
