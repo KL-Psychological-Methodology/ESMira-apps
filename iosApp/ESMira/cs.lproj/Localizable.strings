@@ -167,3 +167,5 @@
 "colon_used_libraries" = "Použité knihovny:";
 "colon_homepage" = "Domovská stránka:";
 "colon_github" = "GitHub:";
+"show_inactive_questionnaires" = "Zobrazit neaktivní dotazníky";
+"info_unsynced_datasets" = "Některá data je ještě třeba synchronizovat.";
