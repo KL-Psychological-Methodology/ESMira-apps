@@ -260,4 +260,5 @@
     <string name="quit_at">Odejít v</string>
     <string name="info_study_not_active_anymore">Tato studie již není aktivní.</string>
     <string name="are_you_sure">Jste si jistí?</string>
+    <string name="about_ESMira_description">ESMira je platforma sestávající ze serveru a mobilní aplikace (Android, iOS) vyvinutá pro výzkumné projekty zaměřené na metodu výběru zkušeností (ESM). ESMira nabízí velmi jednoduchý proces nastavení a snadné používání - to vše zdarma, decentralizovaně a s otevřeným zdrojovým kódem.</string>
 </resources>
