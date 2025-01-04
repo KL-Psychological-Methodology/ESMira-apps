@@ -294,4 +294,5 @@
     <string name="info_schedule_setup_skipped">Tato studie nebude fungovat správně!</string>
     <string name="info_wrong_access_key">Zdá se, že přístupový klíč pro tuto studii se změnil. Vaše data nebudou nahrána, pokud nezadáte správný přístupový klíč.</string>
     <string name="error_app_usage_revoked_android_header">ESMira nemá přístup k používání aplikace</string>
+    <string name="error_app_usage_revoked_android_desc">Studie, které se účastníte, vyžaduje povolení k přístupu k údajům o používání aplikace. Ujistěte se, že je na obrazovce oprávnění povoleno používání systému ESMira.</string>
 </resources>
