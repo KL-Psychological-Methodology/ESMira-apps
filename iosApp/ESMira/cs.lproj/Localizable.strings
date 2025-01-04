@@ -209,4 +209,4 @@
 "ios_info_missed_notifications" = "%1$d zmeškaná oznámení.";
 "ios_info_no_studies_withAccessKey" = "Na tomto serveru se nepodařilo najít studie s přístupovým klíčem \"%1$@\".";
 "ios_info_study_updated" = "%1$@ byl aktualizován!";
-"ios_backgroundRefresh_desc" = "ESMira na pozadí pravidelně kontroluje aktualizace studie a zajišťuje, aby byla naplánována všechna požadovaná oznámení. K tomu je zapotřebí oprávnění \"Obnovení aplikace na pozadí\".";
+"ios_backgroundRefresh_desc" = "ESMira na pozadí pravidelně kontroluje aktualizace studie a zajišťuje, aby byla naplánována všechna požadovaná oznámení. K tomu je zapotřebí oprávnění \"Aktualizace na pozadí\".";
