@@ -226,4 +226,8 @@
     <string name="colon_reward_code_header">Toto je váš kód odměny:</string>
     <string name="reward_code_send_email">Odeslat e-mailem</string>
     <string name="reward_code_share">Sdílení prostřednictvím aplikace</string>
+    <string name="android_info_copied_x_to_clipboard">Zkopírováno \"%1$s\" do schránky</string>
+    <string name="info_detected_x_errors">Celkem zjištěno %1$d chyb</string>
+    <string name="info_dev_active">Nyní jste vývojářem!</string>
+    <string name="info_dev_inactive">Vypnutý režim pro vývojáře</string>
 </resources>
