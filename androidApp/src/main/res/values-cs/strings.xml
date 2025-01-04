@@ -303,5 +303,6 @@
     <string name="scanning">Skenování</string>
     <string name="countdown_running">Odpočítávání běží</string>
     <string name="toast_skipped_one_page">Přeskočena 1 stránka</string>
-    <string name="toast_skipped_to_end">Přeskočení zbývajících stránek</string>
+    <string name="toast_skipped_to_end">Přeskočeny zbývající stránky</string>
+    <string name="option_other">Jiné</string>
 </resources>
