@@ -218,3 +218,5 @@
 "error_no_camera" = "Nepodařilo se najít fotoaparát";
 "error_qr_faulty" = "Kód QR je chybný.";
 "colon_last_filled_out" = "Naposledy vyplněno: %1$@";
+"data_will_be_sent_to_app_developer" = "Chybové hlášení bude odesláno vývojáři aplikace (%1$@). Chceme zdůraznit, že chybové hlášení neobsahuje žádné osobní údaje ani údaje z dotazníků!";
+"stop_scanning" = "Zastavení skenování";
