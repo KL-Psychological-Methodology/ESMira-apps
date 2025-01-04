@@ -203,3 +203,10 @@
 "ios_contact_email" = "Kontakt %1$@";
 "dialogDesc_leave_study" = "Chcete tuto studii opustit? Budete-li se do ní chtít znovu zapojit, musíte znovu zadat její přihlašovací údaje.";
 "ios_backgroundRefresh" = "Aktualizace na pozadí";
+"ios_info_copied_x_to_clipboard" = "Zkopírováno \"%1$@\" do schránky";
+
+/* Needs to be short */
+"ios_info_missed_notifications" = "%1$d zmeškaná oznámení.";
+"ios_info_no_studies_withAccessKey" = "Na tomto serveru se nepodařilo najít studie s přístupovým klíčem \"%1$@\".";
+"ios_info_study_updated" = "%1$@ byl aktualizován!";
+"ios_backgroundRefresh_desc" = "ESMira na pozadí pravidelně kontroluje aktualizace studie a zajišťuje, aby byla naplánována všechna požadovaná oznámení. K tomu je zapotřebí oprávnění \"Obnovení aplikace na pozadí\".";
