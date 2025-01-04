@@ -201,4 +201,5 @@
 "option_other" = "Jiné";
 "ios_version" = "Verze: %1$@, %2$@";
 "ios_contact_email" = "Kontakt %1$@";
-"dialogDesc_leave_study" = "Chcete tuto studii opustit? Chcete-li se do ní znovu zapojit, musíte znovu zadat její přihlašovací údaje.";
+"dialogDesc_leave_study" = "Chcete tuto studii opustit? Budete-li se do ní chtít znovu zapojit, musíte znovu zadat její přihlašovací údaje.";
+"ios_backgroundRefresh" = "Aktualizace na pozadí";
