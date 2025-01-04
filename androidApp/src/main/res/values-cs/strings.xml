@@ -259,5 +259,5 @@
     <string name="confirm_delete_study">Chcete odstranit tuto studii a všechna její (lokální) data? Data, která již byla přenesena na server, nebudou smazána. Vaše osobní statistiky, zprávy nebo kód odměny však budou ztraceny.</string>
     <string name="quit_at">Odejít v</string>
     <string name="info_study_not_active_anymore">Tato studie již není aktivní.</string>
-    <string name="are_you_sure">Jste si jistý?</string>
+    <string name="are_you_sure">Jste si jistí?</string>
 </resources>
