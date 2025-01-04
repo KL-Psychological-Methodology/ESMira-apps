@@ -22,5 +22,21 @@
 			<string>Odměny za tuto studii zatím nejsou aktivní. Budou k dispozici za %1$d dní.</string>
 		</dict>
 	</dict>
+	<key>ios_info_missed_notifications</key>
+	<dict>
+		<key>notifications</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>1 zmeškané oznámení.</string>
+			<key>one</key>
+			<string>Žádná zmeškaná oznámení.</string>
+			<key>other</key>
+			<string>%1$d zmeškaná oznámení.</string>
+		</dict>
+	</dict>
 </dict>
 </plist>
