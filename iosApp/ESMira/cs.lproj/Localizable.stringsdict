@@ -13,9 +13,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>1$d</string>
 			<key>zero</key>
-			<string>Odměny za tuto studii zatím nejsou aktivní. Budou k dispozici během jednoho dne.</string>
-			<key>one</key>
 			<string>Odměny za tuto studii zatím nejsou aktivní. Měly by být brzy k dispozici.</string>
+			<key>one</key>
+			<string>Odměny za tuto studii zatím nejsou aktivní. Budou k dispozici během jednoho dne.</string>
+			<key>few</key>
+			<string>Odměny za tuto studii zatím nejsou aktivní. Budou k dispozici během několika dní.</string>
 			<key>other</key>
 			<string>Odměny za tuto studii zatím nejsou aktivní. Budou k dispozici za %1$d dní.</string>
 		</dict>
