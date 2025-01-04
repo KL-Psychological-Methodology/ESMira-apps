@@ -290,4 +290,5 @@
     <string name="server_url">url adresa serveru</string>
     <string name="schedule_permission_check">Stiskněte tlačítko \"Povolit plány\" (\"Enable schedules\"), poté v seznamu vyberte ESMira a povolte \"Povolit nastavení budíků a připomínek\" (\"Allow setting alarms and reminders\").</string>
     <string name="schedule_permission_setup_desc">ESMira musí mít možnost naplánovat události (například připomenutí dotazníků) na určitý čas.</string>
+    <string name="enable_schedules">Povolení plánů</string>
 </resources>
