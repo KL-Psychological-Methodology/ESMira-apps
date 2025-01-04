@@ -141,3 +141,6 @@
 "colon_reward_code_header" = "Toto je váš kód odměny:";
 "reward_code_send_email" = "Odeslat e-mailem";
 "reward_code_share" = "Sdílení prostřednictvím aplikace";
+"info_detected_x_errors" = "Celkem zjištěno %1$d chyb";
+"info_dev_active" = "Nyní jste vývojářem!";
+"info_dev_inactive" = "Vypnutý režim pro vývojáře";
