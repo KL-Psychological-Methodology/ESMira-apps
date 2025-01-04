@@ -158,4 +158,5 @@
 "extras" = "Doplňky";
 "none" = "Žádné";
 "colon_between" = "Mezi:";
-"rejoin_study" = "Znovu se připojte ke studiu";
+"rejoin_study" = "Znovu se připojte ke studii";
+"confirm_delete_study" = "Chcete odstranit tuto studii a všechna její (místní) data? Data, která již byla přenesena na server, nebudou smazána. Vaše osobní statistiky, zprávy nebo kód odměny však budou ztraceny.";
