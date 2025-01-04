@@ -265,4 +265,6 @@
     <string name="colon_homepage">Domovská stránka:</string>
     <string name="colon_github">GitHub:</string>
     <string name="disabled_questionnaires">Dotazníky pro zdravotně postižené</string>
+    <string name="show_inactive_questionnaires">Zobrazit neaktivní dotazníky</string>
+    <string name="info_unsynced_datasets">Některá data je ještě třeba synchronizovat.</string>
 </resources>
