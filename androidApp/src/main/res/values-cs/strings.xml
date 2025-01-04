@@ -288,6 +288,6 @@
     <string name="distance_rssi">Vzdálenost (RSSI)</string>
     <string name="distance_rssi_content">~%1$.1fm (%2$d)</string>
     <string name="server_url">url adresa serveru</string>
-    <string name="schedule_permission_check">Stiskněte tlačítko \"Enable schedules\", poté v seznamu vyberte ESMira a povolte \"Allow setting alarms and reminders\".</string>
+    <string name="schedule_permission_check">Stiskněte tlačítko \"Povolit plány\" (\"Enable schedules\"), poté v seznamu vyberte ESMira a povolte \"Povolit nastavení budíků a připomínek\" (\"Allow setting alarms and reminders\").</string>
     <string name="schedule_permission_setup_desc">ESMira musí mít možnost naplánovat události (například připomenutí dotazníků) na určitý čas.</string>
 </resources>
