@@ -211,3 +211,10 @@
 "ios_info_study_updated" = "%1$@ byl aktualizován!";
 "ios_backgroundRefresh_desc" = "ESMira na pozadí pravidelně kontroluje aktualizace studie a zajišťuje, aby byla naplánována všechna požadovaná oznámení. K tomu je zapotřebí oprávnění \"Aktualizace na pozadí\".";
 "ios_dialogDesc_backgroundRefresh_disabled" = "Povolte funkci \"Aktualizace na pozadí\". v následujících nastaveních. Poté se ujistěte, že je povolena i globálně, a to tak, že přejdete zpět nahoru do \"Nastavení\" a poté na: \"Globální\" > \"Aktualizace na pozadí\" a nahoře povolíte \"Aktualizace na pozadí\".";
+"ios_dialogDesc_notifications_disabled" = "Tato studie nebude fungovat správně. Než budete pokračovat, zvažte prosím povolení oznámení. To můžete provést povolením možnosti \"Povolit oznámení\" v nastavení. Poté se přepněte zpět do systému ESMira.";
+"notifications_not_working" = "Oznámení nefungují";
+"sync_now" = "Synchronizovat nyní";
+"write_message_to_researcher" = "Napište zprávu výzkumnému pracovníkovi";
+"error_no_camera" = "Nepodařilo se najít fotoaparát";
+"error_qr_faulty" = "Kód QR je chybný.";
+"colon_last_filled_out" = "Naposledy vyplněno: %1$@";
