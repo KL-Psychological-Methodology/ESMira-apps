@@ -183,3 +183,6 @@
 "open_url" = "Otevřít url adresu";
 "select_picture" = "Vybrat obrázek";
 "list_devices" = "Seznam %1$d zařízení";
+"anonymised_device" = "Anonymizované zařízení";
+"distance_rssi" = "Vzdálenost (RSSI)";
+"distance_rssi_content" = "~%1$.1fm (%2$d)";
