@@ -264,7 +264,7 @@
     <string name="colon_used_libraries">Použité knihovny:</string>
     <string name="colon_homepage">Domovská stránka:</string>
     <string name="colon_github">GitHub:</string>
-    <string name="disabled_questionnaires">Dotazníky pro zdravotně postižené</string>
+    <string name="disabled_questionnaires">Vypnuté dotazníky</string>
     <string name="show_inactive_questionnaires">Zobrazit neaktivní dotazníky</string>
     <string name="info_unsynced_datasets">Některá data je ještě třeba synchronizovat.</string>
 </resources>
