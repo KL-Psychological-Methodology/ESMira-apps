@@ -266,5 +266,6 @@
     <string name="colon_github">GitHub:</string>
     <string name="disabled_questionnaires">Vypnuté dotazníky</string>
     <string name="show_inactive_questionnaires">Zobrazit neaktivní dotazníky</string>
-    <string name="info_unsynced_datasets">Některá data je ještě třeba synchronizovat.</string>
+    <string name="info_unsynced_datasets">Některá data je ještě potřeba synchronizovat.</string>
+    <string name="stop_playing_audio">Zastavit</string>
 </resources>
