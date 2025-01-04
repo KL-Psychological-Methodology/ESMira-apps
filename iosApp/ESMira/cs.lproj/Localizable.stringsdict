@@ -1,6 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-    <dict>
-    </dict>
+<dict>
+	<key>info_reward_is_not_active_yet</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Odměny za tuto studii zatím nejsou aktivní. Měly by být brzy k dispozici.</string>
+		<key>days</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>Odměny za tuto studii zatím nejsou aktivní. Budou k dispozici během jednoho dne.</string>
+			<key>one</key>
+			<string>Odměny za tuto studii zatím nejsou aktivní. Měly by být brzy k dispozici.</string>
+			<key>other</key>
+			<string>Odměny za tuto studii zatím nejsou aktivní. Budou k dispozici za %1$d dní.</string>
+		</dict>
+	</dict>
+</dict>
 </plist>
