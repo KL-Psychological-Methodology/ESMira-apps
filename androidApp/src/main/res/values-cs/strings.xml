@@ -243,7 +243,7 @@
     <string name="from_X">Z %1$s</string>
     <string name="check_phone_model">Zkontrolujte model telefonu</string>
     <string name="state_checking_device_model">Kontrola modelu zařízení…</string>
-    <string name="open_device_instructions">Pokyny pro otevření zařízení</string>
+    <string name="open_device_instructions">Otevřít pokyny pro zařízení</string>
     <string name="pinned">Připnuté</string>
     <string name="repeating">Opakování</string>
     <string name="one_time">Jednorázově</string>
@@ -253,4 +253,7 @@
     <string name="colon_between">Mezi:</string>
     <string name="rejoin_study">Znovu se připojte ke studiu</string>
     <string name="completed_questionnaires">Vyplněné dotazníky</string>
+    <string name="about_ESMira">O ESMira</string>
+    <string name="joined_at">Připojeno</string>
+    <string name="upload_protocol">Nahrát protokol</string>
 </resources>
