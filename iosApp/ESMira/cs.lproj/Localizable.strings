@@ -182,4 +182,4 @@
 "stop_playing_audio" = "Zastavit";
 "open_url" = "Otevřít url adresu";
 "select_picture" = "Vybrat obrázek";
-"list_devices" = "Seznam zařízení %1$d";
+"list_devices" = "Seznam %1$d zařízení";
