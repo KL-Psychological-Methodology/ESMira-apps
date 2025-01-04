@@ -31,9 +31,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>1$d</string>
 			<key>zero</key>
-			<string>1 zmeškané oznámení.</string>
-			<key>one</key>
 			<string>Žádná zmeškaná oznámení.</string>
+			<key>one</key>
+			<string>1 zmeškané oznámení.</string>
 			<key>other</key>
 			<string>%1$d zmeškaná oznámení.</string>
 		</dict>
