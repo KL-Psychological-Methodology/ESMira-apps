@@ -244,4 +244,13 @@
     <string name="check_phone_model">Zkontrolujte model telefonu</string>
     <string name="state_checking_device_model">Kontrola modelu zařízení…</string>
     <string name="open_device_instructions">Pokyny pro otevření zařízení</string>
+    <string name="pinned">Připnuté</string>
+    <string name="repeating">Opakování</string>
+    <string name="one_time">Jednorázově</string>
+    <string name="extras">Doplňky</string>
+    <string name="none">Žádné</string>
+    <string name="colon_last_filled_out">Naposledy vyplněno: %1$s</string>
+    <string name="colon_between">Mezi:</string>
+    <string name="rejoin_study">Znovu se připojte ke studiu</string>
+    <string name="completed_questionnaires">Vyplněné dotazníky</string>
 </resources>
