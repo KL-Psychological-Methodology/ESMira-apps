@@ -143,4 +143,11 @@
 "reward_code_share" = "Sdílení prostřednictvím aplikace";
 "info_detected_x_errors" = "Celkem zjištěno %1$d chyb";
 "info_dev_active" = "Nyní jste vývojářem!";
-"info_dev_inactive" = "Vypnutý režim pro vývojáře";
+"info_dev_inactive" = "Režim pro vývojáře je vypnutý";
+"info_error_report_desc" = "Pomozte nám prosím vyřešit váš problém a pošlete nám toto hlášení o chybě. Děkujeme!";
+"info_error_report_header" = "Byla zjištěna kritická chyba!";
+"info_leave_empty_if_unsure" = "(lze ponechat prázdné)";
+"info_loading" = "Načítání…";
+"info_message_sent" = "Zpráva byla odeslána";
+"reward_code_content" = "Dobrý den,\nZde je můj kód odměny: [[KÓD]].\nMoje informace:";
+"reward_code_description" = "Je pro nás důležité, aby všechny údaje poskytnuté prostřednictvím ESMira zůstaly zcela anonymní. Abyste však mohli získat odměnu, budete muset poskytnout některé osobní údaje, které by neměly být spojeny s vaším uživatelským ID. Z tohoto důvodu máme k dispozici kód odměny, který není spojen s vaším uživatelským ID ani s žádnými údaji, které jste poskytli.";
