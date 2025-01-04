@@ -305,4 +305,7 @@
     <string name="toast_skipped_one_page">Přeskočena 1 stránka</string>
     <string name="toast_skipped_to_end">Přeskočeny zbývající stránky</string>
     <string name="option_other">Jiné</string>
+    <string name="text_script_error">!! ESMira narazila na problém při pokusu o zobrazení tohoto textu !!</string>
+    <string name="duration_hours_abbreviation">H:</string>
+    <string name="duration_minutes_abbreviation">M:</string>
 </resources>
