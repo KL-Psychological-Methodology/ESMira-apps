@@ -162,4 +162,5 @@
 "confirm_delete_study" = "Chcete odstranit tuto studii a všechna její (lokální) data? Data, která již byla přenesena na server, nebudou smazána. Vaše osobní statistiky, zprávy nebo kód odměny však budou ztraceny.";
 "info_study_not_active_anymore" = "Tato studie již není aktivní.";
 "quit_at" = "Odejít v";
-"are_you_sure" = "Jste si jistý?";
+"are_you_sure" = "Jste si jistí?";
+"about_ESMira_description" = "ESMira je platforma sestávající ze serveru a mobilní aplikace (Android, iOS) vyvinutá pro výzkumné projekty zaměřené na metodu výběru zkušeností (ESM). ESMira nabízí velmi jednoduchý proces nastavení a snadné používání - to vše zdarma, decentralizovaně a s otevřeným zdrojovým kódem.";
