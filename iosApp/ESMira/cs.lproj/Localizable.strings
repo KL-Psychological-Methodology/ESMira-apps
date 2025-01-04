@@ -194,4 +194,8 @@
 "could_not_determine_location" = "Nelze určit lokaci";
 "toast_skipped_pages" = "Přeskočeno %1$d stránek";
 "toast_skipped_one_page" = "Přeskočena 1 stránka";
-"toast_skipped_to_end" = "Přeskočení zbývajících stránek";
+"toast_skipped_to_end" = "Přeskočeny zbývající stránky";
+"text_script_error" = "!! ESMira narazila na problém při pokusu o zobrazení tohoto textu !!";
+"duration_hours_abbreviation" = "H:";
+"duration_minutes_abbreviation" = "M:";
+"option_other" = "Jiné";
