@@ -186,3 +186,4 @@
 "anonymised_device" = "Anonymizované zařízení";
 "distance_rssi" = "Vzdálenost (RSSI)";
 "distance_rssi_content" = "~%1$.1fm (%2$d)";
+"info_wrong_access_key" = "Zdá se, že přístupový klíč pro tuto studii se změnil. Vaše data nebudou nahrána, pokud nezadáte správný přístupový klíč.";
