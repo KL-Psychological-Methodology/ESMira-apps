@@ -298,4 +298,10 @@
     <string name="found_location">Nalezena lokace: %1$s</string>
     <string name="could_not_determine_location">Nelze určit lokaci</string>
     <string name="toast_skipped_pages">Přeskočeno %1$d stránek</string>
+    <string name="no_active_questionnaires">Žádné aktivní dotazníky</string>
+    <string name="error_gps_disabled">GPS je vypnutá!</string>
+    <string name="scanning">Skenování</string>
+    <string name="countdown_running">Odpočítávání běží</string>
+    <string name="toast_skipped_one_page">Přeskočena 1 stránka</string>
+    <string name="toast_skipped_to_end">Přeskočení zbývajících stránek</string>
 </resources>
