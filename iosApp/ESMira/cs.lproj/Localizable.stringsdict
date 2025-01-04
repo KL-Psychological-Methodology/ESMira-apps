@@ -37,6 +37,8 @@
 			<key>other</key>
 			<string>%1$d zmeškaná oznámení.</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@notifications@</string>
 	</dict>
 </dict>
 </plist>
