@@ -163,4 +163,7 @@
 "info_study_not_active_anymore" = "Tato studie již není aktivní.";
 "quit_at" = "Odejít v";
 "are_you_sure" = "Jste si jistí?";
-"about_ESMira_description" = "ESMira je platforma sestávající ze serveru a mobilní aplikace (Android, iOS) vyvinutá pro výzkumné projekty zaměřené na metodu výběru zkušeností (ESM). ESMira nabízí velmi jednoduchý proces nastavení a snadné používání - to vše zdarma, decentralizovaně a s otevřeným zdrojovým kódem.";
+"about_ESMira_description" = "ESMira je platforma sestávající ze serveru a mobilní aplikace (Android, iOS) vyvinutá pro výzkumné projekty zaměřené na metodu zaznamenávání zkušeností (Experience Sampling Methodology - ESM). ESMira nabízí velmi jednoduchý proces nastavení a snadné používání - to vše zdarma, decentralizovaně a s otevřeným zdrojovým kódem.";
+"colon_used_libraries" = "Použité knihovny:";
+"colon_homepage" = "Domovská stránka:";
+"colon_github" = "GitHub:";
