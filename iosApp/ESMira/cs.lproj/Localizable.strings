@@ -210,3 +210,4 @@
 "ios_info_no_studies_withAccessKey" = "Na tomto serveru se nepodařilo najít studie s přístupovým klíčem \"%1$@\".";
 "ios_info_study_updated" = "%1$@ byl aktualizován!";
 "ios_backgroundRefresh_desc" = "ESMira na pozadí pravidelně kontroluje aktualizace studie a zajišťuje, aby byla naplánována všechna požadovaná oznámení. K tomu je zapotřebí oprávnění \"Aktualizace na pozadí\".";
+"ios_dialogDesc_backgroundRefresh_disabled" = "Povolte funkci \"Obnovení aplikace na pozadí\". v následujících nastaveních. Poté se ujistěte, že je povolena i globálně, a to tak, že přejdete zpět nahoru do \"Nastavení\" a poté na: \"Globální\" > \"Obnovení aplikací na pozadí\" a nahoře povolíte \"Obnovení aplikací na pozadí\".";
