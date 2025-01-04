@@ -283,4 +283,5 @@
     <string name="open_url">Otevřít url adresu</string>
     <string name="select_picture">Vybrat obrázek</string>
     <string name="list_devices">Seznam zařízení %1$d</string>
+    <string name="error_bluetooth_disabled">Funkce Bluetooth je vypnutá!</string>
 </resources>
