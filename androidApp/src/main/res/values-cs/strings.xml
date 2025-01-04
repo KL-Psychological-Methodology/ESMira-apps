@@ -268,4 +268,19 @@
     <string name="show_inactive_questionnaires">Zobrazit neaktivní dotazníky</string>
     <string name="info_unsynced_datasets">Některá data je ještě potřeba synchronizovat.</string>
     <string name="stop_playing_audio">Zastavit</string>
+    <string name="send_email">Odeslat e-mail</string>
+    <string name="study_information">Informace o studii</string>
+    <string name="north_abr">N</string>
+    <string name="east_abr">E</string>
+    <string name="south_abr">S</string>
+    <string name="west_abr">W</string>
+    <string name="start_scanning">Zahájení skenování</string>
+    <string name="stop_scanning">zastavit skenování</string>
+    <string name="start_timer">Spuštění časovače</string>
+    <string name="start_audio_record">Spuštění nahrávání</string>
+    <string name="stop_audio_record">Zastavení nahrávání</string>
+    <string name="start_playing_audio">Přehrát</string>
+    <string name="open_url">Otevřít url adresu</string>
+    <string name="select_picture">Vybrat obrázek</string>
+    <string name="list_devices">Seznam zařízení %1$d</string>
 </resources>
