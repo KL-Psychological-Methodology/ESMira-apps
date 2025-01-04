@@ -187,3 +187,11 @@
 "distance_rssi" = "Vzdálenost (RSSI)";
 "distance_rssi_content" = "~%1$.1fm (%2$d)";
 "info_wrong_access_key" = "Zdá se, že přístupový klíč pro tuto studii se změnil. Vaše data nebudou nahrána, pokud nezadáte správný přístupový klíč.";
+"countdown_running" = "Odpočítávání běží";
+"no_active_questionnaires" = "Žádné aktivní dotazníky";
+"error_gps_disabled" = "GPS je vypnutá!";
+"scanning" = "Skenování";
+"could_not_determine_location" = "Nelze určit lokaci";
+"toast_skipped_pages" = "Přeskočeno %1$d stránek";
+"toast_skipped_one_page" = "Přeskočena 1 stránka";
+"toast_skipped_to_end" = "Přeskočení zbývajících stránek";
