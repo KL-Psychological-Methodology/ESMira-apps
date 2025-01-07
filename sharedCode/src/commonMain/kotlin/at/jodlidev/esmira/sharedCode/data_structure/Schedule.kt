@@ -5,6 +5,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Transient
 import kotlinx.serialization.Serializable
 import kotlin.math.ceil
+import kotlin.math.max
 
 /**
  * Created by JodliDev on 29.05.2019.
@@ -31,6 +32,7 @@ class Schedule {
 	}
 	
 	var dailyRepeatRate: Int = 1
+		get() = max(1, field)
 	var weekdays: Int = 0
 	var dayOfMonth: Int = 0
 	var userEditable: Boolean = true
