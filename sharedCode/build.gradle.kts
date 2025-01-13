@@ -92,13 +92,32 @@ kotlin {
 				implementation("androidx.test.espresso:espresso-core:3.4.0")
 			}
 		}
-		val iosX64Main by getting
-		val iosArm64Main by getting
-		val iosSimulatorArm64Main by getting
+		val iosX64Main by getting {
+			languageSettings {
+				optIn("kotlinx.cinterop.ExperimentalForeignApi")
+				optIn("kotlin.experimental.ExperimentalNativeApi")
+			}
+		}
+		val iosArm64Main by getting {
+			languageSettings {
+				optIn("kotlinx.cinterop.ExperimentalForeignApi")
+				optIn("kotlin.experimental.ExperimentalNativeApi")
+			}
+		}
+		val iosSimulatorArm64Main by getting {
+			languageSettings {
+				optIn("kotlinx.cinterop.ExperimentalForeignApi")
+				optIn("kotlin.experimental.ExperimentalNativeApi")
+			}
+		}
 		val iosMain by creating {
 			dependencies {
 				implementation("io.ktor:ktor-client-darwin:$ktorVersion")
 //				implementation("io.ktor:ktor-client-ios:$ktorVersion")
+			}
+			languageSettings {
+				optIn("kotlinx.cinterop.ExperimentalForeignApi")
+				optIn("kotlin.experimental.ExperimentalNativeApi")
 			}
 			dependsOn(commonMain)
 			iosX64Main.dependsOn(this)
