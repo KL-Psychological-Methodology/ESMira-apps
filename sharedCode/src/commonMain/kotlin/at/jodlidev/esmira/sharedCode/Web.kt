@@ -11,10 +11,13 @@ import io.ktor.serialization.kotlinx.json.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.utils.io.core.toByteArray
 import kotlinx.coroutines.*
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.Serializable
+import kotlin.io.encoding.Base64
+import kotlin.io.encoding.ExperimentalEncodingApi
 import kotlin.jvm.Synchronized
 
 /**
@@ -387,10 +390,12 @@ class Web {
 	companion object {
 		const val DEV_SERVER = "https://esmira.kl.ac.at"
 		//private const val DEBUG_EMULATOR_SERVER = "http://10.0.2.2/smartphones/ESMira/git/ESMira-web/dist"
-		private const val DEBUG_EMULATOR_SERVER = "http://10.0.2.2/esmira"
+		private const val DEBUG_EMULATOR_SERVER = "http://10.0.2.2"
 
 		private const val URL_LIST_STUDIES: String = "/api/studies.php?lang=%s"
 		private const val URL_LIST_STUDIES_PASSWORD: String = "/api/studies.php?access_key=%s1&lang=%s2"
+		private const val URL_LIST_STUDIES_FALLBACK: String = "/api/studies_fallback.php?lang=%s1&fromUrl=%s2"
+		private const val URL_LIST_STUDIES_PASSWORD_FALLBACK: String = "/api/studies_fallback.php?lang=%s1&access_key=%s2&fromUrl=%s3"
 		private const val URL_PUBLIC_STATISTICS: String = "/api/statistics.php?id=%d&access_key=%s"
 		private const val URL_UPDATE_STUDY: String = "/api/update.php?lang=%s"
 		private const val URL_UPLOAD_DATASET: String = "/api/datasets.php"
@@ -518,10 +523,27 @@ class Web {
 			val domain: String = DOMAIN_DONT_KILL_MY_APP
 		)
 		
-		
+		private fun formatUrl(url: String): String {
+			var urlFormatted = url;
+			if(urlFormatted.endsWith("/"))
+				urlFormatted = urlFormatted.substring(0, urlFormatted.length - 1)
+			if(urlFormatted.startsWith("http://")) {
+				if(!DbUser.isDev())
+					urlFormatted = "https" + urlFormatted.substring(4)
+			}
+			else if(!urlFormatted.startsWith("https://"))
+				urlFormatted = "https://$urlFormatted"
+			return urlFormatted
+		}
+
+		private fun checkUrl(url: String): Boolean {
+			return url.length > 2 && url.contains('.')
+		}
+
 		fun loadStudies(
 			serverUrl: String,
 			accessKey: String,
+			fallbackUrl: String?,
 			onError: (msg: String, e: Throwable?) -> Unit,
 			onSuccess: (studyString: String, urlFormatted: String) -> Unit
 		): Web {
@@ -529,21 +551,12 @@ class Web {
 			var urlFormatted: String
 			if(serverUrl.isEmpty())
 				urlFormatted = DEV_SERVER
-			else if(serverUrl.length <= 2 || !serverUrl.contains('.')) {
+			else if(!checkUrl(serverUrl)) {
 				onError("\"$serverUrl\" is not a valid server address.", null)
 				return web
 			}
 			else {
-				urlFormatted = serverUrl
-				if(urlFormatted.endsWith("/"))
-					urlFormatted = urlFormatted.substring(0, urlFormatted.length - 1)
-				
-				if(urlFormatted.startsWith("http://")) {
-					if(!DbUser.isDev())
-						urlFormatted = "https" + urlFormatted.substring(4)
-				}
-				else if(!urlFormatted.startsWith("https://"))
-					urlFormatted = "https://$urlFormatted"
+				urlFormatted = formatUrl(serverUrl)
 			}
 			
 			val correctedAccessKey = accessKey.trim().lowercase()
@@ -563,14 +576,76 @@ class Web {
 				}
 				catch(e: SuccessFailedException) {
 					ErrorBox.warn("Loading Studies", "Failed to load studies", e)
+
+
 					kotlinRunOnUiThread {
 						onError(e.message ?: "Unknown error", e)
 					}
+
 				}
 				catch(e: ClientEngineClosedException) {
 					println("ClientEngineClosedException: Cancelled by user")
 				}
 				catch(e: Throwable) {
+					ErrorBox.warn("Loading Studies", "Failed to load studies", e)
+
+					// Try Fallback
+					if(fallbackUrl != null) {
+						loadStudiesFallback(urlFormatted, fallbackUrl, correctedAccessKey, onError, onSuccess)
+					} else {
+						kotlinRunOnUiThread {
+							onError(e.message ?: "Unknown error", e)
+						}
+					}
+				}
+				web.close()
+			}
+			return web
+		}
+
+		@OptIn(ExperimentalEncodingApi::class)
+		fun loadStudiesFallback(
+			serverUrl: String,
+			fallbackUrl: String,
+			accessKey: String,
+			onError: (msg: String, e: Throwable?) -> Unit,
+			onSuccess: (studyString: String, urlFormatted: String) -> Unit
+		) {
+			val web = Web()
+			val urlFormatted: String
+			if(!checkUrl(fallbackUrl)) {
+				onError("\"$fallbackUrl\" is not a valid server address.", null)
+				return
+			} else {
+				urlFormatted = formatUrl(fallbackUrl)
+			}
+			val encodedOrigin = Base64.Default.encode("$serverUrl/".toByteArray())
+			println("Getting studies fallback from: $urlFormatted with accessKey \"$accessKey\"")
+			nativeAsync {
+				try {
+					val path = urlFormatted + (
+							if (accessKey.isNotEmpty())
+								URL_LIST_STUDIES_PASSWORD_FALLBACK
+									.replace("%s1", NativeLink.smartphoneData.lang)
+									.replace("%s2", accessKey)
+									.replace("%s3", encodedOrigin)
+							else
+								URL_LIST_STUDIES_FALLBACK
+									.replace("%s1", NativeLink.smartphoneData.lang)
+									.replace("%s2", encodedOrigin)
+							)
+					val response = web.get(path)
+					kotlinRunOnUiThread {
+						onSuccess(response, serverUrl)
+					}
+				} catch(e: SuccessFailedException) {
+					ErrorBox.warn("Loading Studies", "Failed to load studies from fallback", e)
+					kotlinRunOnUiThread {
+						onError(e.message ?: "Unknown error", e)
+					}
+				} catch(e: ClientEngineClosedException) {
+					println("ClientEngineClosedException: Cancelled by user")
+				} catch(e: Throwable) {
 					ErrorBox.warn("Loading Studies", "Failed to load studies", e)
 					kotlinRunOnUiThread {
 						onError(e.message ?: "Unknown error", e)
@@ -578,7 +653,6 @@ class Web {
 				}
 				web.close()
 			}
-			return web
 		}
 		
 		fun updateStudiesBlocking(forceStudyUpdate: Boolean = false): Int {

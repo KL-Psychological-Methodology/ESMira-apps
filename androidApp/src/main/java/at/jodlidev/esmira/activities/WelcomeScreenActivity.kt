@@ -47,6 +47,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 	data class StudyLoadingData(
 		var serverUrl: String, // needs to be changed when formatting is different. A change will not trigger a reload - which is what we want
 		val accessKey: String,
+		val fallbackUrl: String?,
 		val studyId: Long,
 		val qId: Long,
 		val loadedTimestamp: Long = NativeLink.getNowMillis() // just exists to force reloads of the same data
@@ -79,10 +80,10 @@ class WelcomeScreenActivity: ComponentActivity() {
 							mutableStateOf<StudyLoadingData?>(null)
 						}
 						else
-							mutableStateOf<StudyLoadingData?>(StudyLoadingData(urlData.url, urlData.accessKey, urlData.studyId, urlData.qId))
+							mutableStateOf<StudyLoadingData?>(StudyLoadingData(urlData.url, urlData.accessKey, urlData.fallbackUrl, urlData.studyId, urlData.qId))
 					}
 					else if(hasStudyData)
-						mutableStateOf<StudyLoadingData?>(StudyLoadingData(serverUrl, accessKey, studyWebId, 0))
+						mutableStateOf<StudyLoadingData?>(StudyLoadingData(serverUrl, accessKey, null, studyWebId, 0))
 					else
 						mutableStateOf<StudyLoadingData?>(null)
 				}
@@ -115,7 +116,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 					
 					val loadData = studyLoadingData.value ?: return@DisposableEffect onDispose {}
 					
-					val web = Web.loadStudies(loadData.serverUrl, loadData.accessKey, onError = { msg, e ->
+					val web = Web.loadStudies(loadData.serverUrl, loadData.accessKey, loadData.fallbackUrl, onError = { msg, e ->
 						runOnUiThread {
 							showStudyLoader.value = false
 							studyLoadingData.value = null
@@ -129,7 +130,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 						studyList.value = getStudyList()
 						runOnUiThread {
 							showStudyLoader.value = false
-							
+
 							gotoStudies()
 						}
 					})
@@ -151,9 +152,9 @@ class WelcomeScreenActivity: ComponentActivity() {
 						Web.serverList
 					},
 					studyList = { studyList.value },
-					loadStudies = { serverUrl: String, accessKey: String, studyId: Long, qId: Long ->
+					loadStudies = { serverUrl: String, accessKey: String, studyId: Long, qId: Long, fallbackUrl: String? ->
 						showStudyLoader.value = true
-						studyLoadingData.value = StudyLoadingData(serverUrl, accessKey, studyId, qId)
+						studyLoadingData.value = StudyLoadingData(serverUrl, accessKey, fallbackUrl, studyId, qId)
 					},
 					navController = navController
 				)
@@ -194,7 +195,8 @@ class WelcomeScreenActivity: ComponentActivity() {
 			serverUrl: String,
 			accessKey: String,
 			studyId: Long,
-			qId: Long
+			qId: Long,
+			fallbackUrl: String?
 		) -> Unit,
 		navController: NavHostController = rememberNavController()
 	) {
@@ -241,10 +243,10 @@ class WelcomeScreenActivity: ComponentActivity() {
 					gotoPrevious = {
 						onBackPressedDispatcher.onBackPressed()
 					},
-					gotoNext = { _serverUrl: String, _accessKey: String, studyId: Long, qId: Long ->
+					gotoNext = { _serverUrl: String, _accessKey: String, studyId: Long, qId: Long, fallbackUrl: String? ->
 						serverUrl.value = _serverUrl
 						accessKey.value = _accessKey
-						loadStudies(serverUrl.value, _accessKey, studyId, qId)
+						loadStudies(serverUrl.value, _accessKey, studyId, qId, fallbackUrl)
 					}
 				)
 			}
@@ -269,7 +271,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 					},
 					gotoNext = { _accessKey: String ->
 						accessKey.value = _accessKey
-						loadStudies(serverUrl.value, _accessKey, 0, 0)
+						loadStudies(serverUrl.value, _accessKey, 0, 0, null)
 					},
 				)
 			}
