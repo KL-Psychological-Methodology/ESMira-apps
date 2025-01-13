@@ -28,6 +28,7 @@ struct StudyLoaderView: View {
 		self.web = Web.Companion().loadStudies(
 			serverUrl: self.addStudyState.serverUrl,
 			accessKey: self.addStudyState.accessKey,
+			fallbackUrl: self.addStudyState.fallbackUrl,
 			onError: { msg, e in
 				self.loadingMessage = msg
 				self.loadingState = .error

@@ -363,6 +363,7 @@ struct StudyDashboard: View {
 							url: self.study.serverUrl,
 							accessKey: self.study.accessKey,
 							studyId: self.study.webId,
+							fallbackUrl: nil,
 							qId: 0
 						)
 					)
