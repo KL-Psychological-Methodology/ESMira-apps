@@ -192,10 +192,12 @@ struct QuestionnaireView: View {
 		let nextRelevantPageIndex = self.questionnaire.getNextRelevantPageIndex(fromPageIndex: Int32(pageIndex))
 		if(nextRelevantPageIndex > 0 && nextRelevantPageIndex - Int32(pageIndex) > 1) {
 			let skippedPages = nextRelevantPageIndex - Int32(pageIndex) - 1
-			if skippedPages == 1 {
-				self.appState.showTranslatedToast(NSLocalizedString("toast_skipped_one_page", comment: ""))
-			} else {
-				self.appState.showTranslatedToast(String(format: NSLocalizedString("toast_skipped_pages", comment: ""), skippedPages))
+			if self.questionnaire.showSkipToast {
+				if skippedPages == 1 {
+					self.appState.showTranslatedToast(NSLocalizedString("toast_skipped_one_page", comment: ""))
+				} else {
+					self.appState.showTranslatedToast(String(format: NSLocalizedString("toast_skipped_pages", comment: ""), skippedPages))
+				}
 			}
 		}
 		if(nextRelevantPageIndex >= 0) {
