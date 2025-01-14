@@ -120,6 +120,7 @@ fun CompassView(input: Input, get: () -> String, save: (String) -> Unit) {
 				if(SensorManager.getRotationMatrix(r, i, accelerometerReading, magnetometerReading)) {
 					val orientation = FloatArray(3)
 					SensorManager.getOrientation(r, orientation)
+					didReceiveReading.value = true
 					azimuth.value = (Math.toDegrees(orientation[0].toDouble()).toFloat() + 360) % 360
 				}
 			}

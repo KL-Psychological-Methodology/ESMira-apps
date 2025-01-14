@@ -34,9 +34,9 @@ import at.jodlidev.esmira.views.main.*
 import at.jodlidev.esmira.views.main.questionnaire.QuestionnaireFinishedView
 import at.jodlidev.esmira.views.main.questionnaire.HiddenQuestionnairesListView
 import at.jodlidev.esmira.views.main.questionnaire.QuestionnaireView
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import kotlinx.coroutines.delay
 import java.io.*
 
@@ -85,7 +85,7 @@ class MainActivity: ComponentActivity() {
 		
 		setContent {
 			ESMiraSurface {
-				val navController = rememberAnimatedNavController()
+				val navController = rememberNavController()
 				MainView(
 					startDestination = startDestination,
 					navController = navController,
@@ -104,27 +104,27 @@ class MainActivity: ComponentActivity() {
 	@Composable
 	fun MainView(
 		startDestination: String,
-		navController: NavHostController = rememberAnimatedNavController()
+		navController: NavHostController = rememberNavController()
 	) {
 		val studyId = remember(reloadState.value) { mutableStateOf(DbUser.getCurrentStudyId()) }
 		if(studyId.value == 0L) {
 			WelcomeScreenActivity.start(LocalContext.current)
 			return
 		}
-		AnimatedNavHost(
+		NavHost(
 			navController,
 			startDestination = "entrance",
 			enterTransition = {
-				slideIntoContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(300))
+				slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Left, animationSpec = tween(300))
 			},
 			exitTransition = {
-				slideOutOfContainer(AnimatedContentScope.SlideDirection.Left, animationSpec = tween(300))
+				slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Left, animationSpec = tween(300))
 			},
 			popEnterTransition = {
-				slideIntoContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(300))
+				slideIntoContainer(AnimatedContentTransitionScope.SlideDirection.Right, animationSpec = tween(300))
 			},
 			popExitTransition = {
-				slideOutOfContainer(AnimatedContentScope.SlideDirection.Right, animationSpec = tween(300))
+				slideOutOfContainer(AnimatedContentTransitionScope.SlideDirection.Right, animationSpec = tween(300))
 			}
 		) {
 			composable("entrance") {
@@ -364,14 +364,16 @@ class MainActivity: ComponentActivity() {
 				val nextRelevantPageIndex = questionnaire.getNextRelevantPageIndex(pageNumber)
 				if(nextRelevantPageIndex > 0 && nextRelevantPageIndex - pageNumber > 1) {
 					val skippedPages = nextRelevantPageIndex - pageNumber - 1
-					if(skippedPages == 1) {
-						Toast.makeText(context, getString(R.string.toast_skipped_one_page), Toast.LENGTH_LONG).show()
-					} else {
-						Toast.makeText(
-							context,
-							getString(R.string.toast_skipped_pages, skippedPages),
-							Toast.LENGTH_LONG
-						).show()
+					if(questionnaire.showSkipToast){
+						if(skippedPages == 1) {
+							Toast.makeText(context, getString(R.string.toast_skipped_one_page), Toast.LENGTH_LONG).show()
+						} else {
+							Toast.makeText(
+								context,
+								getString(R.string.toast_skipped_pages, skippedPages),
+								Toast.LENGTH_LONG
+							).show()
+						}
 					}
 				}
 				if(nextRelevantPageIndex == -1) {

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ESMira</string>
+    <string name="additional_notification_settings_huaweiV2_1">Sa mga sumusunod na screen hanapın ang ESMira sa listahan ng apps at siguraduhin na ito ay \"mano-manong pinamamahalaan\".</string>
+    <string name="additional_notification_settings_esmi">Sa mga sumusunod na screen hanapın ang ESMira sa listahan ng apps at siguraduhin na may permisiyon ng Autostart.</string>
+    <string name="back">pabalik</string>
+    <string name="add">idagdag</string>
+    <string name="add_a_study">Sumali sa isang bagong pag-aaral</string>
+    <string name="backup">itaguyod</string>
+    <string name="cancel">kanselahin</string>
+    <string name="additional_notification_settings_huaweiV2_2">Siguraduhin na</string>
+</resources>

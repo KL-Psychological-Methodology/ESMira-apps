@@ -11,13 +11,13 @@
 //val coroutinesVersion = "1.6.1" //for multiple threads (used for web-requests)
 
 val ktorVersion = "2.1.0" //for web requests (combined with JSON serialisation)
-val serializationVersion = "1.3.2" //for JSON; https://github.com/Kotlin/kotlinx.serialization
+val serializationVersion = "1.6.3" //for JSON; https://github.com/Kotlin/kotlinx.serialization
 val coroutinesVersion = "1.6.4" //for multiple threads (used for web-requests)
 
 plugins {
 	kotlin("multiplatform")
 	id("com.android.library")
-	kotlin("plugin.serialization") version "1.6.10"
+	kotlin("plugin.serialization") version "2.1.0"
 }
 
 allprojects {
@@ -28,8 +28,10 @@ allprojects {
 }
 
 kotlin {
-	android()
-	
+	androidTarget()
+
+	jvmToolchain(17)
+
 	listOf(
 		iosX64(),
 		iosArm64(),
@@ -74,14 +76,14 @@ kotlin {
 //				implementation("io.ktor:ktor-client-android:$ktorVersion")
 			}
 		}
-		val androidTest by getting {
+		val androidUnitTest by getting {
 			//this is for unit tests - used by commonTest
 //			dependencies {
 //				implementation(kotlin("test-junit"))
 //				implementation("junit:junit:4.13.2")
 //			}
 		}
-		val androidAndroidTest by getting {
+		val androidInstrumentedTest by getting {
 			//this is for instrumented testing (sqlite on android using an emulator)
 			//see: https://touchlab.co/understanding-and-configuring-your-kmm-test-suite/
 			dependencies {
@@ -116,11 +118,10 @@ kotlin {
 }
 
 android {
-	compileSdk = 31
+	compileSdk = 34
 	sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 	defaultConfig {
 		minSdk = 16
-		targetSdk = 31
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 	}
 	namespace = "at.jodlidev.esmira.sharedCode"

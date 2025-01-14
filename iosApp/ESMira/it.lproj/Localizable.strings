@@ -1,4 +1,3 @@
-
 "enable_notifications" = "Abilitare le notifiche";
 "error_loading_failed" = "Caricamento fallito …";
 "error_schedule_time_window_too_small" = "Scegliere una finestra temporale più ampia!";
@@ -207,3 +206,9 @@
 "ios_dialogDesc_backgroundRefresh_disabled" = "Abilita \"Aggiornamento app in background\" nelle seguenti impostazioni. Assicurati poi che sia abilitato anche a livello globale tornando su \"Impostazioni\" e quindi su: \"Globale\" > \"Aggiornamento app in background\" e abilitando \"Aggiornamento app in background\" in alto.";
 "notifications_not_working" = "Le notifiche non funzionano";
 "list_devices" = "Elenco dei dispositivi %1$d";
+"scanning" = "Scansione";
+"error_gps_disabled" = "Il GPS è disattivato!";
+"found_location" = "Posizione trovata: %1$@";
+"could_not_determine_location" = "Impossibile determinare la posizione";
+"stop_scanning" = "fermare la scansione";
+"countdown_running" = "Conto alla rovescia in corso";

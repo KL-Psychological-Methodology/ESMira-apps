@@ -1,5 +1,5 @@
-val composeVersion = "1.3.1"
-val m3Version = "1.0.1"
+val composeVersion = "1.7.5"
+val m3Version = "1.3.1"
 val markwonVersion = "4.6.2"
 val accompanistVersion = "0.28.0"
 
@@ -7,6 +7,7 @@ plugins {
     id("com.android.application")
     id("kotlin-parcelize")
     kotlin("android")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 repositories {
@@ -17,14 +18,18 @@ repositories {
     mavenCentral()
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 android {
     compileSdk = 34
     defaultConfig {
         applicationId = "at.jodlidev.esmira"
         minSdk = 21
         targetSdk = 34
-        versionCode = 192
-        versionName = "2.14.3"
+        versionCode = 201
+        versionName = "2.15.1"
 
         multiDexEnabled = true //project became too big. See: https://stackoverflow.com/a/59308589
     
@@ -47,9 +52,9 @@ android {
 
 dependencies {
     implementation(project(":sharedCode"))
-    implementation("com.google.android.material:material:1.6.1")
+    implementation("com.google.android.material:material:1.12.0")
 //    implementation("androidx.appcompat:appcompat:1.4.2")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation("androidx.constraintlayout:constraintlayout:2.2.0")
     
     implementation("androidx.compose.material3:material3:$m3Version")
     implementation("androidx.compose.ui:ui:$composeVersion")
@@ -62,12 +67,13 @@ dependencies {
     implementation("androidx.compose.runtime:runtime:$composeVersion") // Integration with observables
     implementation("androidx.compose.runtime:runtime-livedata:$composeVersion") // Integration with observables
     implementation("androidx.compose.foundation:foundation-layout:$composeVersion")
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1") //ConstraintLayout (different versioning)
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.1.0") //ConstraintLayout (different versioning)
     
     //Custom transitions in compose are not implemented yet, so we need the experimental library:
     //https://issuetracker.google.com/issues/172112072
     //https://issuetracker.google.com/issues/197140101
-    implementation("com.google.accompanist:accompanist-navigation-animation:$accompanistVersion")
+    //implementation("com.google.accompanist:accompanist-navigation-animation:$accompanistVersion")
+    implementation("androidx.navigation:navigation-compose:2.8.4")
 //    implementation("androidx.navigation:navigation-compose:2.5.2") // Navigation
     
     implementation("androidx.multidex:multidex:2.0.1") //project became too big. Needed for SdK<21 See: https://stackoverflow.com/a/59308589)
@@ -79,7 +85,7 @@ dependencies {
     implementation("androidx.work:work-runtime:2.9.0") //WorkManager
     implementation("com.journeyapps:zxing-android-embedded:4.3.0") //qr scanner
     
-    implementation("androidx.preference:preference:1.2.0") //PreferenceManager
+    implementation("androidx.preference:preference:1.2.1") //PreferenceManager
 //    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0") //https://github.com/PhilJay/MPAndroidChart
     //Unfortunately the original MPAndroidChart is dead. Using an updated fork instead:
     implementation("com.github.AppDevNext:AndroidChart:3.1.0.15")
