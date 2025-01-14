@@ -364,14 +364,16 @@ class MainActivity: ComponentActivity() {
 				val nextRelevantPageIndex = questionnaire.getNextRelevantPageIndex(pageNumber)
 				if(nextRelevantPageIndex > 0 && nextRelevantPageIndex - pageNumber > 1) {
 					val skippedPages = nextRelevantPageIndex - pageNumber - 1
-					if(skippedPages == 1) {
-						Toast.makeText(context, getString(R.string.toast_skipped_one_page), Toast.LENGTH_LONG).show()
-					} else {
-						Toast.makeText(
-							context,
-							getString(R.string.toast_skipped_pages, skippedPages),
-							Toast.LENGTH_LONG
-						).show()
+					if(questionnaire.showSkipToast){
+						if(skippedPages == 1) {
+							Toast.makeText(context, getString(R.string.toast_skipped_one_page), Toast.LENGTH_LONG).show()
+						} else {
+							Toast.makeText(
+								context,
+								getString(R.string.toast_skipped_pages, skippedPages),
+								Toast.LENGTH_LONG
+							).show()
+						}
 					}
 				}
 				if(nextRelevantPageIndex == -1) {

@@ -43,6 +43,7 @@ class Questionnaire {
 	var endScriptBlock = ""
 	var showInDisabledList = true
 	var showPagination = true
+	var showSkipToast = true
 
 	@Transient private lateinit var _metadata: QuestionnaireMetadata
 	val metadata: QuestionnaireMetadata get() {
