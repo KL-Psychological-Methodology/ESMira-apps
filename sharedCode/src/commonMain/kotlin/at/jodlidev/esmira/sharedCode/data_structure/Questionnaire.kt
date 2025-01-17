@@ -42,6 +42,8 @@ class Questionnaire {
 	var isBackEnabled = true
 	var endScriptBlock = ""
 	var showInDisabledList = true
+	var showPagination = true
+	var showSkipToast = true
 
 	@Transient private lateinit var _metadata: QuestionnaireMetadata
 	val metadata: QuestionnaireMetadata get() {
@@ -228,7 +230,7 @@ class Questionnaire {
 		return pageNumber == pages.size - 1
 	}
 	fun getQuestionnaireTitle(pageIndex: Int): String {
-		return if(pages.size > 1)
+		return if(showPagination && pages.size > 1)
 			"$title ${(pageIndex + 1)}/${pages.size}"
 		else
 			title
