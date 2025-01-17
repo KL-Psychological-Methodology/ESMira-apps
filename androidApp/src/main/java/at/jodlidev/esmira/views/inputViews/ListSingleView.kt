@@ -107,7 +107,7 @@ fun ListSingleAsDropdownView(input: Input, get: () -> String, save: (String, Map
 	Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 		Box {
 			val shownValue =  if(input.forceInt)
-				get().toIntOrNull()?.let { if(it < input.listChoices.size) input.listChoices[it-1] else ""} ?: ""
+				get().toIntOrNull()?.let { if(it <= input.listChoices.size) input.listChoices[it-1] else ""} ?: ""
 			else
 				get()
 			
