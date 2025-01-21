@@ -29,7 +29,7 @@ import com.journeyapps.barcodescanner.ScanOptions
  */
 
 @Composable
-fun QrScanningView(gotoPrevious: () -> Unit, gotoNext: (serverUrl: String, accessKey: String, studyId: Long, qId: Long) -> Unit) {
+fun QrScanningView(gotoPrevious: () -> Unit, gotoNext: (serverUrl: String, accessKey: String, studyId: Long, qId: Long, fallbackUrl: String?) -> Unit) {
 	val context = LocalContext.current
 	val scanLauncher = rememberLauncherForActivityResult(
 		contract = ScanContract(),
@@ -38,7 +38,7 @@ fun QrScanningView(gotoPrevious: () -> Unit, gotoNext: (serverUrl: String, acces
 				val interpreter = QrInterpreter()
 				val data = interpreter.check(result.contents)
 				if(data != null)
-					gotoNext(data.url, data.accessKey, data.studyId, data.qId)
+					gotoNext(data.url, data.accessKey, data.studyId, data.qId, data.fallbackUrl)
 				else
 					Toast.makeText(context, R.string.qrCodeInvalid, Toast.LENGTH_SHORT).show()
 			}
@@ -101,6 +101,6 @@ fun QrScanningView(gotoPrevious: () -> Unit, gotoNext: (serverUrl: String, acces
 @Composable
 fun PreviewQrScanningView() {
 	ESMiraSurface {
-		QrScanningView({}, { _, _, _, _, -> })
+		QrScanningView({}, { _, _, _, _, _ -> })
 	}
 }

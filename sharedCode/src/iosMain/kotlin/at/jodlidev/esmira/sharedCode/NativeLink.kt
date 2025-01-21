@@ -1,6 +1,6 @@
 package at.jodlidev.esmira.sharedCode
 
-import kotlin.native.concurrent.AtomicReference
+import kotlin.concurrent.AtomicReference
 
 /**
  * Created by JodliDev on 03.06.2020.

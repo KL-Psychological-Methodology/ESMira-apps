@@ -43,6 +43,7 @@ struct QrStartView: View {
 						self.addStudyState.serverUrl = r!.url
 						self.addStudyState.accessKey = r!.accessKey
 						self.addStudyState.studyWebId = r!.studyId
+						self.addStudyState.fallbackUrl = r!.fallbackUrl
 						self.addStudyState.qId = r!.qId
 						self.gotoStudyLoader = true
 					}
