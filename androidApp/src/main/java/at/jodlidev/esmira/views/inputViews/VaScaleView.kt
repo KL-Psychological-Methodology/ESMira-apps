@@ -5,6 +5,10 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.internal.isLiveLiteralsEnabled
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -25,6 +29,24 @@ import kotlin.math.roundToInt
 @Composable
 fun VaScaleView(input: Input, get: () -> String, save: (String) -> Unit) {
 	val showThumb = remember { mutableStateOf(get().isNotEmpty()) }
+	val sliderValue = remember { mutableFloatStateOf(try {get().toFloat()} catch (_:Throwable) {0F}) }
+	val sliderState = remember {
+		SliderState(
+			valueRange = 1F..(if(input.maxValue > 1) input.maxValue else 100F),
+			value = sliderValue.floatValue
+		)
+	}
+	// Lambda declaration needs to be outside of constructor for access to sliderState variable
+	sliderState.onValueChangeFinished = {
+		save(sliderState.value.roundToInt().toString())
+		showThumb.value = true
+	}
+	val colors = SliderDefaults.colors(
+		inactiveTrackColor = MaterialTheme.colorScheme.primary,
+		activeTrackColor = MaterialTheme.colorScheme.primary,
+	)
+
+
 	Column(modifier = Modifier.fillMaxWidth()) {
 		Row(modifier = Modifier
 			.fillMaxWidth()
@@ -41,30 +63,37 @@ fun VaScaleView(input: Input, get: () -> String, save: (String) -> Unit) {
 				modifier = Modifier.weight(1F)
 			)
 		}
-		
+
 		if(input.showValue) {
 			Text(get(), modifier = Modifier.fillMaxWidth(), textAlign = TextAlign.Center)
 		}
-		
+
 		Slider(
-			value = try { get().toFloat() } catch(_: Throwable) { 50F },
-			valueRange = 1F .. (if(input.maxValue > 1) input.maxValue else 100F),
-			onValueChange = { value ->
-				save(value.roundToInt().toString())
-				showThumb.value = true
-			},
-			colors = SliderDefaults.colors(
-				inactiveTrackColor = MaterialTheme.colorScheme.primary,
-				activeTrackColor = MaterialTheme.colorScheme.primary,
-			),
+			state = sliderState,
 			thumb = {
 				if(showThumb.value) {
 					SliderDefaults.Thumb(
-						interactionSource = remember { MutableInteractionSource() },
+						interactionSource = remember {MutableInteractionSource()},
+						colors = colors
 					)
 				}
 			},
-			modifier = Modifier.fillMaxWidth().padding(horizontal = 15.dp))
+			track = {
+				if(!showThumb.value) { // Hide the gap if thumb is not shown
+					SliderDefaults.Track(
+						sliderState = sliderState,
+						thumbTrackGapSize = 0.dp,
+						trackInsideCornerSize = 8.dp,
+						colors = colors
+					)
+				} else {
+					SliderDefaults.Track(sliderState = sliderState, colors = colors)
+				}
+			},
+			modifier = Modifier
+				.fillMaxWidth()
+				.padding(horizontal = 15.dp)
+		)
 	}
 }
 
@@ -77,6 +106,18 @@ fun PreviewVaScaleView() {
 	""")
 	ESMiraSurface {
 		VaScaleView(input, {"70"}) {}
+	}
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+fun PreviewVaScaleViewUninitialized() {
+	val input = DbLogic.createJsonObj<Input>("""
+		{"leftSideLabel": "left", "rightSideLabel": "right"}
+	""")
+	ESMiraSurface {
+		VaScaleView(input, {""}) {}
 	}
 }
 
