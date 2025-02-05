@@ -25,6 +25,8 @@ class Study internal constructor(
 	enum class STATES {
 		Pending, Joined, Quit
 	}
+
+	class StudyList(var filteredStudies: List<Study> = ArrayList(), var joinedStudies: List<Study> = ArrayList())
 	
 	@Transient var exists = false
 	@Transient var id = -1L
@@ -786,10 +788,10 @@ class Study internal constructor(
 			return study
 		}
 		
-		fun getFilteredStudyList(json: String, url: String, accessKey: String, studyWebId: Long = 0, qId: Long = 0): List<Study> {
+		fun getFilteredStudyList(json: String, url: String, accessKey: String, studyWebId: Long = 0, qId: Long = 0): StudyList {
 			val jsonList = DbLogic.getJsonConfig().decodeFromString<List<JsonObject>>(json)
-			val list = ArrayList<Study>()
-			
+			val filteredStudies = ArrayList<Study>()
+			val joinedStudies = ArrayList<Study>()
 			
 			val searchQuestionnaire = qId != 0L
 			for(jsonStudy in jsonList) {
@@ -797,18 +799,20 @@ class Study internal constructor(
 					val study = newInstance(url, accessKey, jsonStudy.toString())
 					if(((NativeLink.smartphoneData.phoneType == PhoneType.Android && study.publishedAndroid)
 							|| (NativeLink.smartphoneData.phoneType == PhoneType.IOS && study.publishedIOS))
-						&& !study.alreadyExists() && study.isActive()) {
-						if(study.webId == studyWebId)
-							return arrayListOf(study)
+						&& study.isActive()) {
+						if(study.alreadyExists()) {
+							joinedStudies.add(study)
+						} else if(study.webId == studyWebId)
+							return StudyList(arrayListOf(study))
 						else {
 							if(searchQuestionnaire) {
 								for(questionnaire in study.questionnaires) {
 									if(questionnaire.internalId == qId)
-										return arrayListOf(study)
+										return StudyList(arrayListOf(study))
 								}
 							}
 							else
-								list.add(study)
+								filteredStudies.add(study)
 						}
 					}
 				}
@@ -816,7 +820,7 @@ class Study internal constructor(
 					ErrorBox.warn("New Study list", "Format error: $jsonStudy", e)
 				}
 			}
-			return list
+			return StudyList(filteredStudies, joinedStudies)
 		}
 	}
 }

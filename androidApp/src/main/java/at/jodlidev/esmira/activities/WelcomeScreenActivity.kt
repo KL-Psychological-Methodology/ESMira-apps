@@ -35,6 +35,7 @@ import at.jodlidev.esmira.views.welcome.*
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import at.jodlidev.esmira.sharedCode.data_structure.DbUser
 import kotlinx.parcelize.Parcelize
 
 
@@ -96,15 +97,19 @@ class WelcomeScreenActivity: ComponentActivity() {
 					if(loadData != null && studiesJson.isNotEmpty())
 						Study.getFilteredStudyList(studiesJson, loadData.serverUrl, loadData.accessKey, loadData.studyId, loadData.qId)
 					else
-						ArrayList()
+						Study.StudyList()
 				}
 				val studyList = remember { mutableStateOf(getStudyList()) }
 				
 				val gotoStudies = {
-					if(studyList.value.size == 1) {
+					if(studyList.value.filteredStudies.size == 1) {
 						if(openStudyDirectly)
 							navController.popBackStack()
 						navController.navigate("studyInfo/0")
+					} else if (studyList.value.joinedStudies.size == 1) {
+						val firstJoinedStudy = studyList.value.joinedStudies.first()
+						DbLogic.getStudy(firstJoinedStudy.serverUrl, firstJoinedStudy.webId)?.id?.let{ DbUser.setCurrentStudyId(it) }
+						finish()
 					}
 					else if(navController.currentDestination?.route != "studyList")
 						navController.navigate("studyList")
@@ -151,7 +156,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 					getServerList = {
 						Web.serverList
 					},
-					studyList = { studyList.value },
+					studyList = { studyList.value.filteredStudies },
 					loadStudies = { serverUrl: String, accessKey: String, studyId: Long, qId: Long, fallbackUrl: String? ->
 						showStudyLoader.value = true
 						studyLoadingData.value = StudyLoadingData(serverUrl, accessKey, fallbackUrl, studyId, qId)
