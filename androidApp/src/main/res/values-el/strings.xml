@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">ESMira</string>
+    <string name="add">προσθήκη</string>
+    <string name="add_a_study">Λάβετε μέρος σε μια νέα έρευνα</string>
+    <string name="additional_notification_settings_general_android"></string>
+</resources>
