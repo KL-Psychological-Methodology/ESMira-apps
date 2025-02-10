@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>info_reward_is_not_active_yet</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Las recompensas para este estudio aún no están activas. Deberían estar disponibles pronto.</string>
+		<key>days</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>Las recompensas para este estudio aún no están activas. Deberían estar disponibles pronto.</string>
+			<key>one</key>
+			<string>Las recompensas para este estudio aún no están activas. Estarán disponibles en un día.</string>
+			<key>many</key>
+			<string>Las recompensas para este estudio aún no están activas. Estarán disponibles en %1$d días.</string>
+			<key>other</key>
+			<string>Las recompensas para este estudio aún no están activas. Estarán disponibles en %1$d días.</string>
+		</dict>
+	</dict>
+	<key>ios_info_missed_notifications</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@notifications@</string>
+		<key>notifications</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>No hay notificaciones perdidas.</string>
+			<key>one</key>
+			<string>1 notificación perdida.</string>
+			<key>many</key>
+			<string>%1$d notificaciones perdidas.</string>
+			<key>other</key>
+			<string>%1$d notificaciones perdidas.</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

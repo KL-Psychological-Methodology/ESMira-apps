@@ -20,9 +20,5 @@ https://github.com/material-components/material-components-android/blob/master/d
 	</style>
 	<style name="AppTheme.PickerDialog" parent="Theme.Material3.DayNight.Dialog">
 		<item name="colorAccent">@color/colorPrimaryDark</item>
-		<item name="android:timePickerStyle">@style/AppTheme.TimePickerSpinner</item>
-	</style>
-	<style name="AppTheme.TimePickerSpinner" parent="ThemeOverlay.Material3.MaterialTimePicker">
-		<item name="android:timePickerMode">spinner</item>
 	</style>
 </resources>

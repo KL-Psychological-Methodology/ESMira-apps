@@ -212,3 +212,10 @@
 "could_not_determine_location" = "Impossibile determinare la posizione";
 "stop_scanning" = "fermare la scansione";
 "countdown_running" = "Conto alla rovescia in corso";
+"toast_skipped_one_page" = "Saltata 1 pagina";
+"toast_skipped_to_end" = "Salta le pagine rimanenti";
+"text_script_error" = "!! ESMira ha riscontrato un problema durante il tentativo di visualizzare questo testo !!!";
+"toast_skipped_pages" = "Pagine saltate %1$d";
+"duration_hours_abbreviation" = "H:";
+"duration_minutes_abbreviation" = "M:";
+"option_other" = "Altro";
