@@ -26,6 +26,7 @@ import kotlin.math.pow
 @Serializable
 class Input internal constructor( ) {
 	enum class TYPES {
+		ambient_light,
 		app_usage,
 		binary,
 		bluetooth_devices,
