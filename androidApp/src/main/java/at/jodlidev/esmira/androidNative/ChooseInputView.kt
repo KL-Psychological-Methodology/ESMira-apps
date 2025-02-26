@@ -40,6 +40,7 @@ fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifi
 		TextElView(input)
 		Spacer(modifier = Modifier.height(10.dp))
 		when(input.type) {
+			Input.TYPES.ambient_light -> AmbientLightView(input, get, setValue)
 			Input.TYPES.app_usage -> AppUsageView(input, get, setAdditionalValue)
 			Input.TYPES.binary -> BinaryView(input, get, setValue)
 			Input.TYPES.bluetooth_devices -> BluetoothDevicesView(input, get, setAdditionalValue)

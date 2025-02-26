@@ -12,6 +12,7 @@ import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
 import kotlin.math.sqrt
+import kotlin.math.truncate
 
 /*
  * Created by SelinaDev
@@ -407,6 +408,51 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                         MerlinNone
                     else
                         MerlinNumber(dateDiff.toDouble())
+                }
+            },
+
+            // seconds()
+            "seconds" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 0
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val now = NativeLink.getNowMillis()
+                    return MerlinNumber(truncate((now/1000).toDouble()))
+                }
+            },
+
+            // minutes()
+            "minutes" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 0
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val now = NativeLink.getNowMillis()
+                    return MerlinNumber(truncate((now/60000).toDouble()))
+                }
+            },
+
+            // hours()
+            "hours" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 0
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val now = NativeLink.getNowMillis()
+                    return MerlinNumber(truncate((now/3600000).toDouble()))
                 }
             },
 
