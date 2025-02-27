@@ -211,7 +211,7 @@ class MerlinParser (private val tokens: List<MerlinToken>) {
     private fun factor(): MerlinExpr {
         var expr = sequence()
 
-        while (match(MerlinTokenType.SLASH, MerlinTokenType.STAR)) {
+        while (match(MerlinTokenType.SLASH, MerlinTokenType.STAR, MerlinTokenType.MODULO)) {
             val operator = previous()
             val right = sequence()
             expr = MerlinExpr.Binary(expr, operator, right)
