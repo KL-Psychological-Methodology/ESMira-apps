@@ -28,6 +28,7 @@ class Input internal constructor( ) {
 	enum class TYPES {
 		ambient_light,
 		app_usage,
+		battery_level,
 		binary,
 		bluetooth_devices,
 		compass,
