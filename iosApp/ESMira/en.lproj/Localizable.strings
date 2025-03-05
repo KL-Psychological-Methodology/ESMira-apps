@@ -219,3 +219,5 @@
 "duration_hours_abbreviation" = "H:";
 "duration_minutes_abbreviation" = "M:";
 "option_other" = "Other";
+"measure" = "Measure";
+"charging" = "charging";
