@@ -16,7 +16,7 @@ struct StudyLoaderView: View {
 	@State private var loadingStarted = false
 	
 	@State var web: Web? = nil
-	@State private var studiesList: [Study] = []
+	@State private var studiesList: Study.StudyList = Study.StudyList(filteredStudies: [], joinedStudies: [])
 	@State private var openStudyList: Bool = false
 	
 	
@@ -56,7 +56,7 @@ struct StudyLoaderView: View {
 	var body: some View {
 		if(self.openStudyList) {
 			VStack {
-				if(studiesList.count == 0) {
+				if(studiesList.filteredStudies.count == 0) {
 					if(self.addStudyState.accessKey.isEmpty) {
 						Text("info_no_studies_noAccessKey").padding()
 					}
@@ -64,11 +64,11 @@ struct StudyLoaderView: View {
 						Text(String(format: NSLocalizedString("ios_info_no_studies_withAccessKey", comment: ""), self.addStudyState.accessKey)).padding()
 					}
 				}
-				else if(self.studiesList.count == 1) {
-					StudyDetailView(study: self.studiesList[0])
+				else if(self.studiesList.filteredStudies.count == 1) {
+					StudyDetailView(study: self.studiesList.filteredStudies[0])
 				}
 				else {
-					List(self.studiesList, id: \.webId) { study in
+					List(self.studiesList.filteredStudies, id: \.webId) { study in
 						NavigationLink(destination: StudyDetailView(study: study)) {
 							VStack(alignment: .leading) {
 								Text(study.title).bold()

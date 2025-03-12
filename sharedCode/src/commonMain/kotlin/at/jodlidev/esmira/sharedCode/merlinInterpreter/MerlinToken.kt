@@ -29,6 +29,7 @@ enum class MerlinTokenType {
     PLUS,
     SLASH,
     STAR,
+    MODULO,
 
     // One and two character tokens
     DOT_DOT,

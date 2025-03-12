@@ -64,6 +64,8 @@ struct InputView: View {
 	
 	func getInput() -> some View {
 		switch (input.type) {
+			case Input.TYPES.batteryLevel:
+				return AnyView(BatteryLevelStruct(viewModel: self.viewModel))
 			case Input.TYPES.binary:
 				return AnyView(BinaryStruct(viewModel: self.viewModel))
 			case Input.TYPES.bluetoothDevices:
