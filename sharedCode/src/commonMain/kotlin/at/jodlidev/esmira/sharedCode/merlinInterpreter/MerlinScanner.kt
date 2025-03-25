@@ -37,6 +37,7 @@ class MerlinScanner (private val source: String) {
             '-' -> addToken(MerlinTokenType.MINUS)
             '+' -> addToken(MerlinTokenType.PLUS)
             '*' -> addToken(MerlinTokenType.STAR)
+            '%' -> addToken(MerlinTokenType.MODULO)
             '.' -> addToken(if (match('.')) MerlinTokenType.DOT_DOT else MerlinTokenType.DOT)
             '!' -> addToken(if (match('=')) MerlinTokenType.EXCLAMATION_EQUAL else MerlinTokenType.EXCLAMATION)
             '=' -> addToken(if (match('=')) MerlinTokenType.EQUAL_EQUAL else MerlinTokenType.EQUAL)

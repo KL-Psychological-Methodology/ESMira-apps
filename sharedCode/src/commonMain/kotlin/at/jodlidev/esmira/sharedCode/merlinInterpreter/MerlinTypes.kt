@@ -150,6 +150,7 @@ class MerlinNumber (val value: Double): MerlinType() {
                 MerlinTokenType.MINUS -> Result.success(MerlinNumber(value - other.value))
                 MerlinTokenType.STAR -> Result.success(MerlinNumber(value * other.value))
                 MerlinTokenType.SLASH -> Result.success(MerlinNumber(value / other.value))
+                MerlinTokenType.MODULO -> Result.success(MerlinNumber(value % other.value))
                 MerlinTokenType.EQUAL_EQUAL -> Result.success(createBool(value == other.value))
                 MerlinTokenType.EXCLAMATION_EQUAL -> Result.success(createBool(value != other.value))
                 MerlinTokenType.GREATER -> Result.success(createBool(value > other.value))

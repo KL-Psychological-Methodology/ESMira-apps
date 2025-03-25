@@ -1,6 +1,7 @@
 package at.jodlidev.esmira.views.inputViews
 
 import android.content.Context
+import android.content.res.Configuration
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -16,9 +17,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
+import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
+import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.data_structure.Input
 import at.jodlidev.esmira.views.DefaultButton
 
@@ -63,5 +67,29 @@ fun AmbientLightView(input: Input, get: () -> String, save: (String) -> Unit) {
         Text(value)
         DefaultButton(text = stringResource(R.string.measure), onClick =  { isScanning.value = true })
 
+    }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+fun PreviewNoValueAmbientLightView() {
+    val input = DbLogic.createJsonObj<Input>("""
+        {}
+    """.trimIndent())
+    ESMiraSurface {
+        AmbientLightView(input, {""}) { }
+    }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+fun PreviewAmbientLightView() {
+    val input = DbLogic.createJsonObj<Input>("""
+        {}
+    """)
+    ESMiraSurface {
+        AmbientLightView(input, {"3141"}) { }
     }
 }

@@ -8,6 +8,8 @@ import at.jodlidev.esmira.sharedCode.data_structure.Input
 import at.jodlidev.esmira.sharedCode.data_structure.MerlinLog
 import at.jodlidev.esmira.sharedCode.data_structure.Message
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
+import kotlin.math.ceil
+import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
@@ -421,7 +423,7 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                     interpreter: MerlinInterpreter,
                     arguments: List<MerlinType>
                 ): MerlinType {
-                    val now = NativeLink.getNowMillis()
+                    val now = NativeLink.getMidnightMillis(NativeLink.getNowMillis())
                     return MerlinNumber(truncate((now/1000).toDouble()))
                 }
             },
@@ -436,7 +438,7 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                     interpreter: MerlinInterpreter,
                     arguments: List<MerlinType>
                 ): MerlinType {
-                    val now = NativeLink.getNowMillis()
+                    val now = NativeLink.getMidnightMillis(NativeLink.getNowMillis())
                     return MerlinNumber(truncate((now/60000).toDouble()))
                 }
             },
@@ -451,8 +453,23 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                     interpreter: MerlinInterpreter,
                     arguments: List<MerlinType>
                 ): MerlinType {
-                    val now = NativeLink.getNowMillis()
+                    val now = NativeLink.getMidnightMillis(NativeLink.getNowMillis())
                     return MerlinNumber(truncate((now/3600000).toDouble()))
+                }
+            },
+
+            // timestamp()
+            "timestamp" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 0
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val now = NativeLink.getNowMillis()
+                    return MerlinNumber(truncate((now/1000).toDouble()))
                 }
             },
 
@@ -696,6 +713,36 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                     val mean = numbersArr.reduceOrNull {acc, value -> acc + value}?.let { it / numbersArr.size } ?: return MerlinNone
                     val variance = numbersArr.map { (it - mean).pow(2) }.reduceOrNull { acc, value -> acc + value }?.let{ it / (numbersArr.size - 1) } ?: return MerlinNone
                     return MerlinNumber(sqrt(variance))
+                }
+            },
+
+            // floor(num)
+            "floor" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 1
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val arg = arguments[0]
+                    return arg.asNumber()?.let { MerlinNumber(floor(it.value)) } ?: arg
+                }
+            },
+
+            // ceiling(num)
+            "ceil" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 1
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val arg = arguments[0]
+                    return arg.asNumber()?.let { MerlinNumber(ceil(it.value)) } ?: arg
                 }
             },
 
