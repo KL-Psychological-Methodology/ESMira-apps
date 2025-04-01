@@ -192,6 +192,7 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
         do {
             currentNum = start + step * counted
             counted += 1
+            sequenceArray.add(MerlinNumber(currentNum))
         } while (if (countingDown) currentNum > end else currentNum < end)
         return MerlinArray(sequenceArray)
     }
