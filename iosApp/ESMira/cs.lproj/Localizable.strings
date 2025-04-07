@@ -221,3 +221,5 @@
 "data_will_be_sent_to_app_developer" = "Chybové hlášení bude odesláno vývojáři aplikace (%1$@). Chceme zdůraznit, že chybové hlášení neobsahuje žádné osobní údaje ani údaje z dotazníků!";
 "stop_scanning" = "Zastavení skenování";
 "found_location" = "Nalezena lokace: %1$@";
+"measure" = "Měřit";
+"charging" = "nabíjení";
