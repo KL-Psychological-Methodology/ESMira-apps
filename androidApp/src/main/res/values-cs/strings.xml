@@ -308,4 +308,6 @@
     <string name="text_script_error">!! ESMira narazila na problém při pokusu o zobrazení tohoto textu !!</string>
     <string name="duration_hours_abbreviation">H:</string>
     <string name="duration_minutes_abbreviation">M:</string>
+    <string name="measure">Měřit</string>
+    <string name="charging">nabíjení</string>
 </resources>
