@@ -1,2 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="app_name">ESMira</string>
+    <string name="add_a_study">Pridružite se novom istraživanju</string>
+    <string name="add">Dodati</string>
+</resources>
