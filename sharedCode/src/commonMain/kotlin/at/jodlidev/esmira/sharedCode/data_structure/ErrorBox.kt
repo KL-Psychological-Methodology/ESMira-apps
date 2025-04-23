@@ -78,7 +78,7 @@ class ErrorBox {
 		private const val MAX_TITLE_SIZE = 1000
 		private const val MAX_MSG_SIZE = 5000
 		
-		fun getReportHeader(comment: String?): StringBuilder {
+		fun getReportHeader(comment: String?, commentSentToResearcher: Boolean = true): StringBuilder {
 			val output = StringBuilder()
 			
 			//additional data:
@@ -132,6 +132,10 @@ class ErrorBox {
 				output.append("\nComment: ")
 				output.append(comment)
 			}
+
+			//Whether the Comment was sent as a Message to the researcher
+			output.append("\nComment sent as message to researcher: ")
+			output.append(if(commentSentToResearcher){"yes"}else{"no"})
 			
 			output.append("\nCurrent study: ")
 			output.append(DbUser.getCurrentStudyId())

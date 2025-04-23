@@ -365,8 +365,8 @@ class Web {
 		Message.addMessage(study.id, content, NativeLink.getNowMillis())
 		return null
 	}
-	private suspend fun sendErrorReport(comment: String?): String? {
-		val output = ErrorBox.getReportHeader(comment)
+	private suspend fun sendErrorReport(comment: String?, commentSentToResearcher: Boolean): String? {
+		val output = ErrorBox.getReportHeader(comment, commentSentToResearcher)
 		
 		output.append("\n\n")
 		
@@ -699,11 +699,12 @@ class Web {
 		fun sendErrorReportAsync(
 			comment: String?,
 			onError: (msg: String) -> Unit,
-			onSuccess: () -> Unit
+			onSuccess: () -> Unit,
+			commentSentToResearcher: Boolean = false
 		) {
 			val web = Web()
 			nativeAsync {
-				val errorMsg = web.sendErrorReport(comment)
+				val errorMsg = web.sendErrorReport(comment, commentSentToResearcher)
 				kotlinRunOnUiThread {
 					if(errorMsg == null)
 						onSuccess()

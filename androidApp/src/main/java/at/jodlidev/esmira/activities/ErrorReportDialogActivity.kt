@@ -49,7 +49,7 @@ class ErrorReportDialogActivity : ComponentActivity() {
 		super.onCreate(savedInstanceState)
 		setContent {
 			if(openWhatIsSentDialog.value)
-				WhatIsSentDialog(DbLogic.getErrors(), ErrorBox.getReportHeader(comment.value).toString())
+				WhatIsSentDialog(DbLogic.getErrors(), ErrorBox.getReportHeader(comment.value, sendAsMessage.value).toString())
 			if(openToWhomDialog.value)
 				ToWhomDialog()
 			ESMiraSurface {
@@ -70,7 +70,8 @@ class ErrorReportDialogActivity : ComponentActivity() {
 						Toast.makeText(applicationContext, R.string.info_thank_you, Toast.LENGTH_SHORT).show()
 					}
 					finish()
-				}
+				},
+				sendAsMessage.value
 			)
 			if(sendAsMessage.value) {
 				val messageText = StringBuilder()
