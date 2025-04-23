@@ -35,8 +35,14 @@ class QrInterpreter {
 		val matchStudy = patternStudy.find(s)
 		return if(matchStudy != null) {
 			val (url, _, studyId, key, _, fallbackUrl) = matchStudy.destructured
+			var decodedFallbackUrl: String? = null
+			if(fallbackUrl.isNotEmpty()) {
+				try {
+					decodedFallbackUrl = Base64.decode(fallbackUrl).decodeToString()
+				} catch (_: Throwable) {}
+			}
 			ConnectData(url = url, accessKey = key, studyId = if(studyId.isNotEmpty()) studyId.toLong() else 0,
-				fallbackUrl = if(fallbackUrl.isNotEmpty()) Base64.decode(fallbackUrl).decodeToString() else null)
+				fallbackUrl = decodedFallbackUrl)
 		}
 		else {
 			val matchQuestionnaire = patternQuestionnaire.find(s)
