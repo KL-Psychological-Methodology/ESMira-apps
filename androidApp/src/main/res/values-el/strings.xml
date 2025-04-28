@@ -3,5 +3,13 @@
     <string name="app_name">ESMira</string>
     <string name="add">προσθήκη</string>
     <string name="add_a_study">Λάβετε μέρος σε μια νέα έρευνα</string>
-    <string name="additional_notification_settings_general_android"></string>
+    <string name="additional_notification_settings_general_android"/>
+    <string name="back">Πίσω</string>
+    <string name="backup">Αντίγραφο ασφαλείας</string>
+    <string name="cancel">Ακύρωση</string>
+    <string name="close">Κλείσιμο</string>
+    <string name="colon_accessCode">Κωδικός πρόσβασης:</string>
+    <string name="colon_enter_manually">Χειροκίνητη εισαγωγή:</string>
+    <string name="colon_next_expected_notification">Επόμενη αναμενόμενη ενημέρωση:</string>
+    <string name="colon_password">Κωδικός πρόσβασης:</string>
 </resources>
