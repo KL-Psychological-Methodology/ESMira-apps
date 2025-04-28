@@ -2,3 +2,12 @@
 
 "add" = "προσθήκη";
 "add_a_study" = "Λάβετε μέρος σε μια νέα έρευνα";
+"ios_version" = "Έκδοση: %1$@, %2$@";
+"cancel" = "Ακύρωση";
+"colon_next_expected_notification" = "Επόμενη αναμενόμενη ενημέρωση:";
+"back" = "Πίσω";
+"backup" = "Αντίγραφο ασφαλείας";
+"close" = "Κλείσιμο";
+"colon_accessCode" = "Κωδικός πρόσβασης:";
+"colon_enter_manually" = "Χειροκίνητη εισαγωγή:";
+"colon_password" = "Κωδικός πρόσβασης:";
