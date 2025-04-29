@@ -82,7 +82,7 @@ class WorkerBox constructor(context: Context, params: WorkerParameters) : Worker
 			data.putInt(DATA_TYPE, TYPE_UPDATE_STUDIES)
 			val constraints: Constraints.Builder = Constraints.Builder()
 			constraints.setRequiredNetworkType(NetworkType.CONNECTED)
-			val work: PeriodicWorkRequest.Builder = PeriodicWorkRequest.Builder(WorkerBox::class.java, 12, TimeUnit.HOURS)
+			val work: PeriodicWorkRequest.Builder = PeriodicWorkRequest.Builder(WorkerBox::class.java, 1, TimeUnit.HOURS)
 					.setBackoffCriteria(BackoffPolicy.LINEAR, 3, TimeUnit.HOURS)
 					.addTag(TAG_UPDATE_STUDIES)
 					.setInitialDelay(1, TimeUnit.HOURS)

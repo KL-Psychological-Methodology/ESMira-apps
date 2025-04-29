@@ -809,6 +809,25 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                 }
             },
 
+            // shuffle(arr)
+            "shuffle" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 1
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val arg = arguments[0]
+                    if (arg !is MerlinArray)
+                        return arg
+                    val arr = arg.array.toMutableList()
+                    arr.shuffle()
+                    return MerlinArray(arr)
+                }
+            },
+
             //
             // Random Functions
             //
