@@ -109,7 +109,8 @@ struct SendErrorReportView: View {
 									self.navigationState.closeScreenDialog()
 									self.appState.showTranslatedToast("info_thank_you")
 								}
-							}
+							},
+							commentSentToResearcher: self.sendAsMessage
 						)
 						if(sendAsMessage) {
 							let message = String(format: "%1$@\n%2$@", NSLocalizedString("error_report_message", comment: ""), self.comment)
