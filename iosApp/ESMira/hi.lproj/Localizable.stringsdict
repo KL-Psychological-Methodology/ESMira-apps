@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-    <dict>
-    </dict>
+<dict>
+	<key>info_reward_is_not_active_yet</key>
+	<dict>
+		<key>days</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>इस अध्ययन के लिए इनाम अभी सक्रिय नहीं हैं। वे जल्द ही उपलब्ध होंगे।</string>
+			<key>one</key>
+			<string>इस अध्ययन के लिए इनाम अभी सक्रिय नहीं हैं। वे एक दिन में उपलब्ध होंगे।</string>
+			<key>other</key>
+			<string>इस अध्ययन के लिए इनाम अभी सक्रिय नहीं हैं। वे %1$d दिनों में उपलब्ध होंगे।</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>इस अध्ययन के लिए इनाम अभी सक्रिय नहीं हैं। वे जल्द ही उपलब्ध होंगे।</string>
+	</dict>
+	<key>ios_info_missed_notifications</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@notifications@</string>
+		<key>notifications</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>कोई अधिसूचना नहीं छूटी।</string>
+			<key>one</key>
+			<string>1 अधिसूचना छूट गई।</string>
+			<key>other</key>
+			<string>%1$d अधिसूचनाएँ छूट गईं।</string>
+		</dict>
+	</dict>
+</dict>
 </plist>
