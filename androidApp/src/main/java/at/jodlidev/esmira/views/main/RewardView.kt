@@ -219,7 +219,8 @@ fun RewardErrorView(study: Study, error: String, fulfilledQuestionnaires: Map<Lo
 		Spacer(modifier = Modifier.size(10.dp))
 		
 		val availableStudies = study.questionnaires.filter {
-			questionnaire: Questionnaire -> questionnaire.limitToGroup == 0 || questionnaire.limitToGroup == study.group
+			// always display unfulfilled questionnaires, for user feedback in case of older servers not marking inaccessible questionnaires as fulfilled
+			questionnaire: Questionnaire -> questionnaire.limitToGroup == 0 || questionnaire.limitToGroup == study.group || fulfilledQuestionnaires[questionnaire.internalId] != true
 		}
 		
 		availableStudies.forEach { questionnaire ->
