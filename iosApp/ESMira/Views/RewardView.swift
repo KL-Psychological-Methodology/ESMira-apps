@@ -28,7 +28,10 @@ struct RewardView: View {
 			
 			if(!self.fulfilledQuestionnaires.isEmpty) {
 				Text("error_reward_questionnaires_not_finished").padding(.vertical)
-				ForEach(self.study.questionnaires, id: \.internalId) { (questionnaire: Questionnaire) in
+				let availableQuestionnaires = self.study.questionnaires.filter{(questionnaire: Questionnaire) in
+					questionnaire.limitToGroup == 0 || questionnaire.limitToGroup == study.group || self.fulfilledQuestionnaires[KotlinLong(value: questionnaire.internalId)] ?? true != true
+				}
+				ForEach(availableQuestionnaires, id: \.internalId) { (questionnaire: Questionnaire) in
 					HStack {
 						Text(questionnaire.title)
 						Spacer()
