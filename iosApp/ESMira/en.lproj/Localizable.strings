@@ -221,3 +221,4 @@
 "option_other" = "Other";
 "measure" = "Measure";
 "charging" = "charging";
+"hint_missing_fields" = "One or more questions were not filled out. Press \"continue/save\" again to proceed anyway.";
