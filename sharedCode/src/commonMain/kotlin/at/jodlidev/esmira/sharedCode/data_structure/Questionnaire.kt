@@ -357,8 +357,8 @@ class Questionnaire {
 	}
 	fun checkQuestionnaire(pageI: Int): Int {
 		val page = pages[pageI]
-		for((i, input) in page.inputs.withIndex()) {
 			if(input.needsValue())
+		for((i, input) in page.activeInputs.withIndex()) {
 				return i
 		}
 		return -1
