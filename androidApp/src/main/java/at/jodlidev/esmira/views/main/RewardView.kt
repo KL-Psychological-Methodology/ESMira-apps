@@ -218,12 +218,12 @@ fun RewardErrorView(study: Study, error: String, fulfilledQuestionnaires: Map<Lo
 		Text(stringResource(id = R.string.error_reward_questionnaires_not_finished))
 		Spacer(modifier = Modifier.size(10.dp))
 		
-		val availableStudies = study.questionnaires.filter {
+		val availableQuestionnaires = study.questionnaires.filter {
 			// always display unfulfilled questionnaires, for user feedback in case of older servers not marking inaccessible questionnaires as fulfilled
 			questionnaire: Questionnaire -> questionnaire.limitToGroup == 0 || questionnaire.limitToGroup == study.group || fulfilledQuestionnaires[questionnaire.internalId] != true
 		}
 		
-		availableStudies.forEach { questionnaire ->
+		availableQuestionnaires.forEach { questionnaire ->
 			Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
 				Text("${questionnaire.title}:", modifier = Modifier.weight(1F))
 				val modifier = Modifier.width(50.dp)
