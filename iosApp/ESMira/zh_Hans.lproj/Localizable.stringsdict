@@ -1,6 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-    <dict>
-    </dict>
+<dict>
+	<key>info_reward_is_not_active_yet</key>
+	<dict>
+		<key>days</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>该研究的奖励尚未启用，预计很快可用。</string>
+			<key>other</key>
+			<string>该研究的奖励尚未启用，将在 %1$d 天后开放。</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>该研究的奖励尚未启用，预计很快可用。</string>
+	</dict>
+	<key>ios_info_missed_notifications</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@notifications@</string>
+		<key>notifications</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>无未读通知。</string>
+			<key>other</key>
+			<string>%1$d 条未读通知。</string>
+		</dict>
+	</dict>
+</dict>
 </plist>
