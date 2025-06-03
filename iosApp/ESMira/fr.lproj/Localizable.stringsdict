@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-    <dict>
-    </dict>
+<dict>
+	<key>info_reward_is_not_active_yet</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Les récompenses pour cette étude ne sont pas encore actives. Elles devraient être disponibles bientôt.</string>
+		<key>days</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>Les récompenses pour cette étude ne sont pas encore actives. Elles devraient être disponibles bientôt.</string>
+			<key>one</key>
+			<string>Les récompenses pour cette étude ne sont pas encore actives. Elles seront disponibles dans un jour.</string>
+			<key>other</key>
+			<string>Les récompenses pour cette étude ne sont pas encore actives. Elles seront disponibles dans %1$d jours.</string>
+		</dict>
+	</dict>
+	<key>ios_info_missed_notifications</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@notifications@</string>
+		<key>notifications</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>Aucune notification manquée.</string>
+			<key>one</key>
+			<string>1 notification manquée.</string>
+			<key>other</key>
+			<string>%1$d notifications manquées.</string>
+		</dict>
+	</dict>
+</dict>
 </plist>
