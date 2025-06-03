@@ -6,6 +6,19 @@
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
 		<string>Ang gantimpala para sa study na ito ay hindi pa aktibo.</string>
+		<key>days</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>Ang mga gantimpala para sa pag-aaral na ito ay hindi pa aktibo. Dapat ay magagamit na ito sa lalong madaling panahon.</string>
+			<key>one</key>
+			<string>Ang mga gantimpala para sa pag-aaral na ito ay hindi pa aktibo. Magiging available ito sa loob ng isang araw.</string>
+			<key>other</key>
+			<string>Ang mga gantimpala para sa pag-aaral na ito ay hindi pa aktibo. Magiging available ito sa loob ng %1$d na araw.</string>
+		</dict>
 	</dict>
 	<key>ios_info_missed_notifications</key>
 	<dict>
@@ -23,7 +36,7 @@
 			<string>mga abisong napalampas</string>
 		</dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>Abis</string>
+		<string>%#@notifications@</string>
 	</dict>
 </dict>
 </plist>
