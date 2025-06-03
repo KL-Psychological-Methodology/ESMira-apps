@@ -1,1 +1,20 @@
 
+
+"messages" = "消息";
+"delete_study" = "删除研究";
+"add" = "添加";
+"settings" = "设置";
+"i_agree" = "我同意";
+"info_required" = "* 必填项";
+"informed_consent" = "知情同意";
+"please_select" = "请选择";
+"questionnaires" = "问卷";
+"reload" = "重新加载";
+"save" = "保存";
+"send" = "发送";
+"statistics" = "统计";
+"study_description" = "研究描述";
+"today" = "今天";
+"user_id" = "用户 ID";
+"yes" = "是";
+"no" = "否";
