@@ -1,2 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="add">添加</string>
+    <string name="settings">设置</string>
+    <string name="delete_study">删除研究</string>
+    <string name="i_agree">我同意</string>
+    <string name="info_required">* 必填项</string>
+    <string name="informed_consent">知情同意</string>
+    <string name="messages">消息</string>
+    <string name="please_select">请选择</string>
+    <string name="questionnaires">问卷</string>
+    <string name="reload">重新加载</string>
+    <string name="save">保存</string>
+    <string name="send">发送</string>
+    <string name="statistics">统计</string>
+    <string name="study_description">研究描述</string>
+    <string name="today">今天</string>
+    <string name="user_id">用户 ID</string>
+    <string name="yesterday">昨天</string>
+    <string name="yes">是</string>
+    <string name="no">否</string>
+</resources>
