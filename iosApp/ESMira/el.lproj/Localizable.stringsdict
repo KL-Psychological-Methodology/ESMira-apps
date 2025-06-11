@@ -5,7 +5,38 @@
 	<key>ios_info_missed_notifications</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@ειδοποιήσεις@</string>
+		<string>%#@notifications@</string>
+		<key>notifications</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>Καμία χαμένη ειδοποίηση.</string>
+			<key>one</key>
+			<string>1 χαμένη ειδοποίηση.</string>
+			<key>other</key>
+			<string>%1$d χαμένες ειδοποιήσεις.</string>
+		</dict>
+	</dict>
+	<key>info_reward_is_not_active_yet</key>
+	<dict>
+		<key>days</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>Οι ανταμοιβές για αυτή τη μελέτη δεν είναι ακόμη ενεργές. Θα είναι διαθέσιμες σύντομα.</string>
+			<key>one</key>
+			<string>Οι ανταμοιβές για αυτή τη μελέτη δεν είναι ακόμη ενεργές. Θα είναι διαθέσιμες σε μία ημέρα.</string>
+			<key>other</key>
+			<string>Οι ανταμοιβές για αυτή τη μελέτη δεν είναι ακόμη ενεργές. Θα είναι διαθέσιμες σε %1$d ημέρες.</string>
+		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Οι ανταμοιβές για αυτή τη μελέτη δεν είναι ακόμη ενεργές. Θα είναι διαθέσιμες σύντομα.</string>
 	</dict>
 </dict>
 </plist>
