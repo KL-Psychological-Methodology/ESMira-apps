@@ -34,7 +34,11 @@ class ChartInfo (
 		var yAxis: AxisData = AxisData(0, ""),
 		var xAxis: AxisData = AxisData(0, ""),
 		var label: String = "",
-		var color: String = "#00bbff"
+		var color: String = "#00bbff",
+		var useThresholdOnClient: Boolean = true,
+		var useThreshold: Boolean = false,
+		var threshold: Double = 0.0,
+		var thresholdColor: String = "#dc4e9d"
 	) {
 		
 		init {
