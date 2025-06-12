@@ -3,4 +3,21 @@
     <string name="app_name">ESMira</string>
     <string name="add_a_study">Pridružite se novom istraživanju</string>
     <string name="add">Dodati</string>
+    <string name="additional_notification_settings_esmi">Na narednom ekranu pronađite ESMira na listi aplikacija i osigurajte da ima dozvolu za Automatsko pokretanje (Autostart).</string>
+    <string name="additional_notification_settings_huaweiV2_1">Na sljedećem ekranu pronađite ESMira na listi aplikacija i provjerite da je postavljeno na\"Ručno upravljanje\" (Manually managed).</string>
+    <string name="additional_notification_settings_huaweiV2_2">Na narednom ekranu osigurajte da aplikacija ESMira ima dozvole za \"Automatsko pokretanje\" (Auto-Launch) i \"Rad u pozadini\" (Run in background).</string>
+    <string name="additional_notification_settings_samsung_1">Na narednom ekranu sačekajte da se proces „Provjere” (Checking) završi, a zatim skrolajte do dna stranice.</string>
+    <string name="additional_notification_settings_samsung_2">Na dnu stranice odaberite opciju „Nadgledane aplikacije“ (Unmonitored apps).</string>
+    <string name="additional_notification_settings_zte_blade_3_1">Na narednom ekranu odaberite „Optimizacija baterije“ (Battery optimization).</string>
+    <string name="additional_notification_settings_zte_blade_3_2">Zatim otvorite padajući meni i odaberite „Sve aplikacije“ (All apps).</string>
+    <string name="additional_notification_settings_zte_blade_3_3">Sada pronađite \"ESMira\" na listi, kliknite na nju, odaberite \"Ne optimiziraj\" i pritisnite \"Gotovo\".</string>
+    <string name="additional_notification_settings_zte_blade_l110_1">U nadolazećem ekranu odaberite \"Baterija\".</string>
+    <string name="additional_notification_settings_zte_blade_l110_2">Zatim odaberite \"Postavke sinkronizacije otkucaja srca\".</string>
+    <string name="additional_notification_settings_zte_blade_l110_3">Sada pronađite \"ESMira\" na listi i provjerite je li kvačica omogućena.</string>
+    <string name="additional_notification_settings_general_android">Na sljedećem ekranu, molimo Vas da osigurate da je aplikaciji ESMira dozvoljeno da radi u pozadini i da se automatski pokreće prilikom ponovnog pokretanja telefona. Nažalost, nazivi postavki (i koje postavke uopće postoje) se znatno razlikuju između različitih modela telefona, pa nemamo dostupne snimke ekrana za Vaš model kako bismo vas dodatno uputili. Zato vas molimo da pokušate sami pronaći odgovarajuće postavke.
+\n
+\nAko nam želite pomoći i poslati snimke ekrana, molimo vas da kontaktirate programera aplikacije putem e-maila: esmira@kl.ac.at.
+\n
+\nKada završite, pritisnite tipku za povratak na svom telefonu da biste se vratili na ovaj ekran.</string>
+    <string name="additional_notification_settings_samsung_3">Na sljedećem ekranu pritisnite dugme „Dodaj aplikacije“ (Add apps). Zatim pronađite i označite ESMira na listi i pritisnite „U redu“ (OK).</string>
 </resources>
