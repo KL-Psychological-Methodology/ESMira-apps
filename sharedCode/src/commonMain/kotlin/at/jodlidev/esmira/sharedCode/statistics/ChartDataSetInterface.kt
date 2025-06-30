@@ -15,7 +15,9 @@ interface ChartDataSetInterface {
 	fun setMode(mode: Mode)
 	
 	fun setColor(color: String)
+	fun setColors(colors: List<String>)
 	fun setCircleColor(color: String)
+	fun setCircleColors(colors: List<String>)
 	fun setFillColor(color: String)
 	
 	fun setCircleRadius(x: Float)

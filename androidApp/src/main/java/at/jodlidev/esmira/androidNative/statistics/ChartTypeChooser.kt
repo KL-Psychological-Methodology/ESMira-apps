@@ -1,6 +1,7 @@
 package at.jodlidev.esmira.androidNative.statistics
 
 import android.content.Context
+import android.service.autofill.Dataset
 import android.view.View
 import androidx.core.content.ContextCompat
 import at.jodlidev.esmira.*
@@ -39,6 +40,20 @@ class ChartTypeChooser(private val context: Context) : ChartChooserInterface {
 			
 			lineData.addDataSet(dataSet)
 			return DataSetWrapper(dataSet)
+		}
+
+		override fun applyThreshold() {
+			for ((i, dataset) in lineData.dataSets.withIndex()) {
+				if(!useThreshold(i)) {
+					continue
+				}
+				val values = (0..<dataset.entryCount).map { j ->
+					val entry = dataset.getEntryForIndex(j)
+					entry.y.toDouble()
+				}
+				val colors = getThresholdColors(values, i) ?:continue
+				DataSetWrapper(dataset as LineDataSet).setCircleColors(colors)
+			}
 		}
 		
 		override fun addValue(xValue: Float, yValue: Float, dataSetIndex: Int) {
@@ -91,6 +106,21 @@ class ChartTypeChooser(private val context: Context) : ChartChooserInterface {
 			barData.addDataSet(dataSet)
 			return DataSetWrapper(dataSet)
 		}
+
+		override fun applyThreshold() {
+			for ((i, dataset) in barData.dataSets.withIndex()) {
+
+				if(!useThreshold(i)) {
+					continue
+				}
+				val values = (0..<dataset.entryCount).map { j ->
+					val entry = dataset.getEntryForIndex(j)
+					entry.y.toDouble()
+				}
+				val colors = getThresholdColors(values, i) ?: continue
+				DataSetWrapper(dataset as BarDataSet).setColors(colors)
+			}
+		}
 		
 		override fun addValue(xValue: Float, yValue: Float, dataSetIndex: Int) {
 			barData.addEntry(BarEntry(xValue, yValue), dataSetIndex)
@@ -107,6 +137,11 @@ class ChartTypeChooser(private val context: Context) : ChartChooserInterface {
 			
 			chartViewRef = WeakReference(chartView)
 			chartView.data = barData
+
+			val legendEntries = chartInfo.axisContainer.map {
+				LegendEntry(it.label, Legend.LegendForm.DEFAULT, Float.NaN, Float.NaN, null, DataSetWrapper.getIntColor(it.color))
+			}
+			chartView.legend.setCustom(legendEntries)
 			
 			setupChart(ChartViewWrapper(chartView))
 			return chartView
@@ -141,6 +176,8 @@ class ChartTypeChooser(private val context: Context) : ChartChooserInterface {
 			return DataSetWrapper(dataSet)
 		}
 
+		override fun applyThreshold() {}
+
 		override fun packageLinearRegressionIntoBox(x1: Float, y1: Float, x2: Float, y2: Float): ChartDataSetInterface {
 			val regressionList = ArrayList<Entry>()
 			regressionList.add(Entry(x1, y1))
@@ -168,6 +205,7 @@ class ChartTypeChooser(private val context: Context) : ChartChooserInterface {
 
 			if(legendEntries.isNotEmpty())
 				chartView.legend.setCustom(legendEntries)
+
 			postUpdateChart(ChartViewWrapper(chartView))
 		}
 
@@ -215,6 +253,8 @@ class ChartTypeChooser(private val context: Context) : ChartChooserInterface {
 		override fun addEntry(value: Float, label: String) {
 			entries.add(PieEntry(value, label))
 		}
+
+		override fun applyThreshold() {}
 
 		override fun createChart(): View {
 			val pieDataSet = PieDataSet(entries, "")
