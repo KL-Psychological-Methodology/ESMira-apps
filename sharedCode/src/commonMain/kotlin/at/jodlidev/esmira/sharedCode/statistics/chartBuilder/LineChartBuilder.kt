@@ -4,6 +4,7 @@ import at.jodlidev.esmira.sharedCode.data_structure.statistics.ChartInfo
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.ChartInfoCollection
 import at.jodlidev.esmira.sharedCode.statistics.ChartBuilder
 import at.jodlidev.esmira.sharedCode.statistics.ChartDataSetInterface
+import at.jodlidev.esmira.sharedCode.statistics.ChartViewInterface
 
 /**
  * Created by JodliDev on 07.10.2020.
@@ -23,5 +24,15 @@ abstract class LineChartBuilder(
 			dataSet.setDrawFilled(true)
 			dataSet.setFillColor("#55${color.substring(1)}")
 		}
+	}
+
+	override fun fillData() {
+		super.fillData()
+		applyThreshold()
+	}
+
+	override fun postUpdateChart(chartView: ChartViewInterface) {
+		applyThreshold()
+		super.postUpdateChart(chartView)
 	}
 }

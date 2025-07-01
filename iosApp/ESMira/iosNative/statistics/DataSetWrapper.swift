@@ -82,6 +82,15 @@ class DataSetWrapper : ChartDataSetInterface {
         dataSet.setColor(DataSetWrapper.getNSUIColor(color))
 	}
 	
+	func setCircleColors(colors: [String]) {
+		
+		(dataSet as! LineChartDataSet).circleColors = colors.map{DataSetWrapper.getNSUIColor($0)}
+	}
+	
+	func setColors(colors: [String]) {
+		dataSet.setColors(colors.map{DataSetWrapper.getNSUIColor($0)}, alpha: 1)
+	}
+	
 	func setDrawCircleHole(x: Bool) {
         (dataSet as! LineChartDataSet).drawCircleHoleEnabled = x
 	}

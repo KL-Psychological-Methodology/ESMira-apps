@@ -355,10 +355,12 @@ class Questionnaire {
 			nextAlarm = DbLogic.getNextAlarm(this)
 		}
 	}
-	fun checkQuestionnaire(pageI: Int): Int {
+	fun checkQuestionnaire(pageI: Int, checkAll: Boolean = false): Int {
 		val page = pages[pageI]
-		for((i, input) in page.inputs.withIndex()) {
-			if(input.needsValue())
+		for((i, input) in page.activeInputs.withIndex()) {
+			val needsValue = input.needsValue()
+			val hasValue = input.getValue().isNotEmpty()
+			if(checkAll && !hasValue || needsValue)
 				return i
 		}
 		return -1

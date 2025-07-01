@@ -23,9 +23,17 @@ class DataSetWrapper(private val dataSet: DataSet<*>) : ChartDataSetInterface {
 	override fun setColor(color: String) {
 		dataSet.color = getIntColor(color)
 	}
+
+	override fun setColors(colors: List<String>) {
+		dataSet.colors = colors.map { getIntColor(it) }.toMutableList()
+	}
 	
 	override fun setCircleColor(color: String) {
 		(dataSet as LineDataSet).setCircleColor(getIntColor(color))
+	}
+
+	override fun setCircleColors(colors: List<String>) {
+		(dataSet as LineDataSet).circleColors = colors.map { getIntColor(it) }
 	}
 	
 	override fun setDrawCircleHole(x: Boolean) {

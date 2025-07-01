@@ -506,7 +506,19 @@ abstract class ChartBuilder(
 				unsortedValueIndex.add(value)
 		}
 	}
-	
+
+	protected fun useThreshold(index: Int): Boolean {
+		val axisContainer = chartInfo.axisContainer.getOrNull(index) ?: return false
+		return axisContainer.useThreshold && axisContainer.useThresholdOnClient
+	}
+
+	protected fun getThresholdColors(data: List<Double>, index: Int): List<String>? {
+		val axisContainer = chartInfo.axisContainer.getOrNull(index) ?: return null
+		return data.map { if (it >= axisContainer.threshold) axisContainer.thresholdColor else axisContainer.color }
+	}
+
+	protected abstract fun applyThreshold()
+
 	
 	open fun addPublicData(publicChartCollection: ChartInfoCollection) {
 		if(!chartInfo.displayPublicVariable || chartInfo.chartType == ChartInfo.CHART_TYPE_PIE) {

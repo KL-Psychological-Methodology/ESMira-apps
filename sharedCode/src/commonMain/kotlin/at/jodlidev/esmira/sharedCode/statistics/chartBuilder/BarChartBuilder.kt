@@ -21,10 +21,12 @@ abstract class BarChartBuilder(
 	override fun fillData() {
 		super.fillData()
 		groupBars()
+		applyThreshold()
 	}
 	
 	override fun postUpdateChart(chartView: ChartViewInterface) {
 		groupBars()
+		applyThreshold()
 		super.postUpdateChart(chartView)
 	}
 	

@@ -23,6 +23,7 @@ struct QuestionnaireView: View {
 	@State private var pageIsActive = true
 	
 	@State var skipPageTimer: DispatchSourceTimer? = nil
+	@State var didRemindOfEmptyResponses = false
 	
 	/**
 	 * Only called from ContentView
@@ -41,13 +42,27 @@ struct QuestionnaireView: View {
 	}
 	
 	private func noMissings() -> Bool {
-		let errorIndex = self.questionnaire.checkQuestionnaire(pageI: Int32(self.pageIndex))
+		let errorIndex = self.questionnaire.checkQuestionnaire(pageI: Int32(self.pageIndex), checkAll: false)
 		if(errorIndex == -1) {
 			return true
 		}
 
 		self.action = .toTag(tag: Int(errorIndex))
 		self.appState.showToast(NSLocalizedString("error_missing_fields", comment: ""))
+		return false
+	}
+	
+	private func hintMissings() -> Bool {
+		if(didRemindOfEmptyResponses) {
+			return true
+		}
+		let emptyRespnoseIndex = self.questionnaire.checkQuestionnaire(pageI: Int32(self.pageIndex), checkAll: true)
+		if(emptyRespnoseIndex == -1) {
+			return true
+		}
+		self.action = .toTag(tag: Int(emptyRespnoseIndex))
+		self.appState.showToast(NSLocalizedString("hint_missing_fields", comment: ""))
+		didRemindOfEmptyResponses = true
 		return false
 	}
 
@@ -99,7 +114,7 @@ struct QuestionnaireView: View {
 					HStack {
 						Spacer()
 						Button(action: {
-							if(self.noMissings()) {
+							if(self.noMissings() && self.hintMissings()) {
 								goNext()
 							}
 						}) {
@@ -113,7 +128,7 @@ struct QuestionnaireView: View {
 					HStack {
 						Spacer()
 						Button(action: {
-							if(self.noMissings()) {
+							if(self.noMissings() && self.hintMissings()) {
 								self.pageIsActive = false
 								goNext()
 							}
