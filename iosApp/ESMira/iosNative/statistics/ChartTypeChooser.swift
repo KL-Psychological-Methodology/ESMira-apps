@@ -24,6 +24,23 @@ class ChartTypeChooser : ChartChooserInterface {
 			return DataSetWrapper(dataSet)
 		}
 		
+		override func applyThreshold() {
+			for (i, dataset) in lineData.dataSets.enumerated() {
+				if(!useThreshold(index: Int32(i))) {
+					continue
+				}
+				
+				let values = (0..<dataset.entryCount).map {
+					KotlinDouble.init(double: dataset.entryForIndex($0)?.y ?? 0)
+				}
+				let colors = getThresholdColors(data: values, index: Int32(i)) ?? []
+				let lineDataSet = dataset as? LineChartDataSet
+				if(lineDataSet != nil) {
+					DataSetWrapper(lineDataSet!).setCircleColors(colors: colors)
+				}
+			}
+		}
+		
 		override func addValue(xValue: Float, yValue: Float, dataSetIndex: Int32) {
 			lineData.appendEntry(ChartDataEntry(x: Double(xValue), y: Double(yValue)), toDataSet: Int(dataSetIndex))
 		}
@@ -70,6 +87,24 @@ class ChartTypeChooser : ChartChooserInterface {
 			return DataSetWrapper(dataSet)
 		}
 		
+		override func applyThreshold() {
+			for (i, dataset) in barData.dataSets.enumerated() {
+				if(!useThreshold(index: Int32(i))) {
+					continue
+				}
+				
+				let values = (0..<dataset.entryCount).map {
+					KotlinDouble.init(double: dataset.entryForIndex($0)?.y ?? 0)
+				}
+				
+				let colors = getThresholdColors(data: values, index: Int32(i)) ?? []
+				let barDataset = dataset as? BarChartDataSet
+				if(barDataset != nil) {
+					DataSetWrapper(barDataset!).setColors(colors: colors)
+				}
+			}
+		}
+		
 		override func addValue(xValue: Float, yValue: Float, dataSetIndex: Int32) {
 			barData.appendEntry(BarChartDataEntry(x: Double(xValue), y: Double(yValue)), toDataSet: Int(dataSetIndex))
 		}
@@ -78,6 +113,14 @@ class ChartTypeChooser : ChartChooserInterface {
 			let chartView = BarChartView()
 			chartViewRef = chartView
 			chartView.data = barData
+			
+			let legendEntries = chartInfo.axisContainer.map {
+				let entry = LegendEntry(label: $0.label)
+				entry.formColor = DataSetWrapper.getNSUIColor($0.color)
+				return entry
+			}
+			chartView.legend.setCustom(entries: legendEntries)
+			
 			setupChart(chartView: ChartViewWrapper(chartView))
 			
 			return chartView
@@ -112,6 +155,8 @@ class ChartTypeChooser : ChartChooserInterface {
 			
 			return DataSetWrapper(dataSet)
 		}
+		
+		override func applyThreshold() {}
 		
 		override func packageLinearRegressionIntoBox(x1: Float, y1: Float, x2: Float, y2: Float) -> ChartDataSetInterface {
 			var regressionList: [ChartDataEntry] = []
@@ -192,6 +237,8 @@ class ChartTypeChooser : ChartChooserInterface {
 		override func addEntry(value: Float, label: String) {
 			entries.append(PieChartDataEntry(value: Double(value), label: label))
 		}
+		
+		override func applyThreshold() {}
 		
 		
 		override func createChart() -> Any {
