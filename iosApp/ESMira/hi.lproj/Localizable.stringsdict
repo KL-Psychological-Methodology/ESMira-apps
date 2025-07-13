@@ -23,7 +23,7 @@
 	<key>ios_info_missed_notifications</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@notifications@</string>
+		<string>%#@अधिसूचनाएं@</string>
 		<key>notifications</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
