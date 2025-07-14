@@ -82,6 +82,7 @@ kotlin {
 //				implementation(kotlin("test-junit"))
 //				implementation("junit:junit:4.13.2")
 //			}
+			dependsOn(commonTest)
 		}
 		val androidInstrumentedTest by getting {
 			//this is for instrumented testing (sqlite on android using an emulator)

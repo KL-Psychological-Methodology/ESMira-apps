@@ -296,12 +296,12 @@ class SchedulerTest : BaseCommonTest() {
 		val questionnaire1 = createJsonObj<Questionnaire>("""{"durationStart": ${timestamp + 10}}""")
 		questionnaire1.save(true)
 		signalTime.bindParent(questionnaire1.id, schedule)
-		assertNotEquals(-1, Scheduler.considerDayOptions(timestamp, signalTime))
+		assertNotEquals(-1, Scheduler.considerDayOptions(timestamp, schedule))
 		
 		val questionnaire2 = createJsonObj<Questionnaire>("""{"durationEnd": ${timestamp - 10}}""")
 		questionnaire2.save(true)
 		signalTime.bindParent(questionnaire2.id, schedule)
-		assertEquals(-1, Scheduler.considerDayOptions(timestamp, signalTime))
+		assertEquals(-1, Scheduler.considerDayOptions(timestamp, schedule))
 	}
 	
 	@Test
