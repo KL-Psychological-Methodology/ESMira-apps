@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="add_a_study">नए अध्ययन में भाग लें</string>
-    <string name="app_name">ESMira</string>
-    <string name="additional_notification_settings_general_android">अगली स्क्रीन में कृपया सुनिश्चित करें कि ESMira को पृष्ठभूमि में चलने और फोन रीबूट होने पर स्वतः शुरू होने की अनुमति है। दुर्भाग्यवश, सेटिंग्स के नाम (और कौन-सी सेटिंग्स वास्तव में मौजूद हैं) फोन मॉडलों के बीच काफी भिन्न होते हैं, और हमारे पास इस फोन मॉडल के लिए कोई स्क्रीनशॉट उपलब्ध नहीं हैं। इसलिए कृपया उपयुक्त सेटिंग्स का अनुमान लगाने की कोशिश करें। यदि आप हमारी सहायता करना चाहते हैं और हमें कुछ स्क्रीनशॉट भेज सकते हैं, तो कृपया ऐप डेवलपर से संपर्क करें (esmira@kl.ac.at)।
+    <string name="app_name">ईऐसमिरा</string>
+    <string name="additional_notification_settings_general_android">अगली स्क्रीन में कृपया सुनिश्चित करें कि ईऐसमिरा को बैकग्राउंड में चलने और फोन रीबूट होने पर स्वतः शुरू होने की अनुमति है। दुर्भाग्य से, सेटिंग्स के नाम (और कौन-सी सेटिंग्स उपलब्ध हैं) अलग-अलग फ़ोन मॉडलों में बहुत भिन्न होते हैं, और हमारे पास इस फ़ोन मॉडल के लिए कोई स्क्रीनशॉट नहीं है जिससे हम आपकी सहायता कर सकें। इसलिए कृपया अनुमान लगाकर उपयुक्त सेटिंग्स ढूंढने की कोशिश करें। यदि आप हमारी मदद करना चाहें और कुछ स्क्रीनशॉट भेज सकें, तो कृपया ऐप डिवेलपर (esmira@kl.ac.at) से संपर्क करें।
 \n
-\nजब आप कार्य पूरा कर लें, तो इस स्क्रीन पर लौटने के लिए अपने फ़ोन की बैक-कुंजी दबाएँ।</string>
-    <string name="additional_notification_settings_esmi">अगली स्क्रीन में ऐप्स की सूची में ESMira को खोजें और सुनिश्चित करें कि उसे ऑटोस्टार्ट की अनुमति है।</string>
-    <string name="additional_notification_settings_huaweiV2_1">अगली स्क्रीन में कृपया ऐप्स की सूची में ESMira को खोजें और सुनिश्चित करें कि यह मैन्युअल रूप से प्रबंधित है।</string>
-    <string name="additional_notification_settings_samsung_2">पृष्ठ के नीचे जाकर अननिगरानी ऐप्स पर टैप करें।</string>
-    <string name="dialogDesc_leave_study">क्या आप इस अध्ययन को छोड़ना चाहते हैं? ऐसा करने से आपकी सारी प्रगति नष्ट हो जाएगी।</string>
+\nकाम पूरा हो जाने के बाद, कृपया इस स्क्रीन पर लौटने के लिए अपने फ़ोन का \'बैक\' बटन दबाएं।</string>
+    <string name="additional_notification_settings_esmi">अगली स्क्रीन पर ऐप्स की सूची से ESMira को खोजें और सुनिश्चित करें कि उसे ऑटोस्टार्ट की अनुमति दी गई हो।</string>
+    <string name="additional_notification_settings_huaweiV2_1">अगली स्क्रीन पर कृपया ऐप्स की सूची में ईऐसमिरा को खोजें और सुनिश्चित करें कि वह \"Manually managed\" पर सेट हो।</string>
+    <string name="additional_notification_settings_samsung_2">पेज के नीचे \"Unmonitored apps\" (निरीक्षित ऐप्स) को चुनें।</string>
+    <string name="dialogDesc_leave_study">क्या आप इस अध्ययन को छोड़ना चाहते हैं? इससे आपकी सभी प्रगति खो जाएगी।</string>
     <string name="android_email_study_subject">आपके अध्ययन के संबंध में: %1$s</string>
     <string name="android_error_general">त्रुटि: %1$s</string>
     <string name="error_loading_failed">लोड करना विफल रहा…</string>
-    <string name="error_notifications_broken_android_desc">दुर्भाग्यवश, कुछ स्मार्टफोन मॉडलों में छिपी हुई सेटिंग्स होती हैं जो पृष्ठभूमि में अधिसूचनाओं की अनुमति देने के लिए आवश्यक होती हैं।</string>
+    <string name="error_notifications_broken_android_desc">दुर्भाग्यवश, कुछ फोन मॉडलों में छिपी हुई सेटिंग्स होती हैं जो बैकग्राउंड में अधिसूचनाओं की अनुमति देने के लिए आवश्यक होती हैं।</string>
     <string name="hint_server">example.com</string>
-    <string name="error_notifications_broken_android_footer">क्या आपको और सहायता चाहिए या आप चाहते हैं कि हम आपके डिवाइस मॉडल के लिए अधिक जानकारी (स्क्रीनशॉट, विवरण) ESMira में शामिल करें? हमें ईमेल लिखें: <a href="mailto:esmira@kl.ac.at">esmira@kl.ac.at</a></string>
-    <string name="error_notifications_broken_android_model_settings">आपके फ़ोन के लिए निम्न डिवाइस सेटिंग्स पाई गईं:</string>
+    <string name="error_notifications_broken_android_footer">क्या आपको और सहायता चाहिए या आप चाहते हैं कि हम आपके फ़ोन मॉडल के लिए अधिक जानकारी (स्क्रीनशॉट, विवरण) ईऐसमिरा में शामिल करें? हमें ईमेल लिखें: <a href="mailto:esmira@kl.ac.at">esmira@kl.ac.at</a></string>
+    <string name="error_notifications_broken_android_model_settings">आपके फ़ोन के लिए ये सेटिंग्स पाई गईं:</string>
     <string name="hint_message">संदेश</string>
     <string name="info_dev_inactive">डेवलपर मोड अक्षम किया गया</string>
     <plurals name="android_info_missed_notifications" comment="Needs to be short">
@@ -25,9 +25,11 @@
     <string name="info_no_messages">कोई संदेश नहीं हैं।</string>
     <string name="android_info_no_studies_withAccessKey">इस सर्वर पर %1$s एक्सेस कुंजी वाला कोई अध्ययन नहीं मिला।</string>
     <string name="info_notification_additional_settings">कृपया सुनिश्चित करें कि
-\n[1] आपका फ़ोन म्यूट नहीं है,</string>
+\n[1] आपका फ़ोन म्यूट नहीं है,
+\n[2] ईऐसमिरा के लिए अधिसूचना सक्षम हैं,
+\n[3] यदि उपलब्ध हो तो आपका फ़ोन \"डू नॉट डिस्टर्ब\" मोड में नहीं है।</string>
     <string name="info_thank_you">धन्यवाद!</string>
-    <string name="info_study_permissionSetup_ended">कॉन्फ़िगरेशन पूरा हो गया है। अब आप अध्ययन में शामिल होने के लिए \"भाग लें\" पर दबा सकते हैं।</string>
+    <string name="info_study_permissionSetup_ended">संरचना पूरा हो गया है। अब आप अध्ययन में शामिल होने के लिए \"भाग लें\" पर दबा सकते हैं।</string>
     <string name="android_info_study_updated">%1$s अपडेट किया गया!</string>
     <string name="new_message">नया संदेश</string>
     <string name="notificationChannel_generalNotifications_name">सामान्य अधिसूचनाएँ</string>
@@ -91,17 +93,17 @@
     <string name="user_id">यूसर आईडी</string>
     <string name="yesterday">कल</string>
     <string name="no">नहीं</string>
-    <string name="additional_notification_settings_huaweiV2_2">आगामी स्क्रीन में सुनिश्चित करें कि ESMira को ऑटो-लॉन्च और पृष्ठभूमि में चलने की अनुमति मिली हुई है।</string>
-    <string name="additional_notification_settings_samsung_1">आगामी स्क्रीन में तब तक प्रतीक्षा करें जब तक कि जाँच की जा रही है पूरी न हो जाए और फिर पृष्ठ के निचले भाग तक स्क्रॉल करें।</string>
-    <string name="additional_notification_settings_samsung_3">अगली स्क्रीन में ऐप्स जोड़ें बटन दबाएँ। फिर सूची में ESMira चुनें और ठीक है दबाएँ।</string>
+    <string name="additional_notification_settings_huaweiV2_2">अगली स्क्रीन में सुनिश्चित करें कि ESMira को \"Auto-Launch\" और \"Run in background\" की अनुमति दी गई हो।</string>
+    <string name="additional_notification_settings_samsung_1">अगली स्क्रीन पर जांच पूरी होने तक प्रतीक्षा करें, फिर पेज को नीचे तक स्क्रॉल करें।</string>
+    <string name="additional_notification_settings_samsung_3">अगली स्क्रीन में \"Add apps\" (ऐप्स जोड़ें) बटन दबाएँ। फिर सूची में ईऐसमिरा चुनें और \"OK\" (ठीक है) दबाएँ।</string>
     <string name="additional_notification_settings_zte_blade_3_1">अगली स्क्रीन में बैटरी ऑप्टिमाइज़ेशन चुनें।</string>
     <string name="additional_notification_settings_zte_blade_3_2">फिर ड्रॉपडाउन मेनू खोलें और सभी ऐप्स चुनें।</string>
     <string name="back">वापस</string>
     <string name="backup">बैकअप</string>
     <string name="cancel">रद्द करें</string>
-    <string name="change_schedules">अनुसूचियाँ बदलें</string>
+    <string name="change_schedules">समय-सारिणी बदलें</string>
     <string name="close">बंद करें</string>
-    <string name="colon_enter_manually">मैन्युअल रूप से दर्ज करें:</string>
+    <string name="colon_enter_manually">हाथ से दर्ज करें:</string>
     <string name="colon_next_expected_notification">अगली अपेक्षित अधिसूचना:</string>
     <string name="colon_password">पासवर्ड:</string>
     <string name="consent">सहमति</string>
@@ -111,17 +113,17 @@
     <string name="delete_">हटाएँ</string>
     <string name="delete_statistics">आँकड़े हटाएँ</string>
     <string name="desc_update_schedules">अपने अध्ययनों की अनुसूचियाँ बदलें</string>
-    <string name="desc_update_studies">अपने अध्ययनों की सेटिंग्स अपडेट करें</string>
+    <string name="desc_update_studies">अपने अध्ययनों की सेटिंग्स बदलें</string>
     <string name="dialogDesc_delete_statistics">क्या आप इस अध्ययन के सभी आँकड़े मिटाना चाहते हैं?</string>
     <string name="enable">सक्षम करें</string>
     <string name="enable_notifications">अधिसूचनाएँ सक्षम करें</string>
-    <string name="enter_manually">मैन्युअल रूप से दर्ज करें</string>
-    <string name="error_app_update_needed_title">ईऐसमिरा अपडेट ।</string>
+    <string name="enter_manually">हाथ से दर्ज करें</string>
+    <string name="error_app_update_needed_title">ईऐसमिरा अपडेट।</string>
     <string name="error_missing_fields">कृपया सभी आवश्यक फ़ील्ड भरें!</string>
     <string name="error_no_email_client">कोई ईमेल ऐप नहीं मिला…</string>
     <string name="hint_error_comment">आपको कौन सी समस्या आई?</string>
     <string name="https">https://</string>
-    <string name="ignore">अनदेखा करें</string>
+    <string name="ignore">नज़रअंदाज़ करें</string>
     <string name="in_x_days">%1$d दिनों में</string>
     <string name="info_error_report_header">एक गंभीर त्रुटि पाई गई!</string>
     <string name="info_loading">लोड हो रहा है…</string>
@@ -129,7 +131,7 @@
     <string name="info_no_statistics">प्रदर्शित करने के लिए कोई आँकड़े नहीं हैं।</string>
     <string name="info_no_studies_noAccessKey">इस सर्वर पर कोई सार्वजनिक अध्ययन नहीं मिला।</string>
     <string name="info_no_errors">कोई त्रुटियाँ रिपोर्ट करने के लिए नहीं हैं</string>
-    <string name="info_number_to_sync">आपके पास %1$d अनसिंक डेटा सेट हैं</string>
+    <string name="info_number_to_sync">आपके पास %1$d अनसिंक डेटासेट हैं</string>
     <string name="info_questionnaire_success">आपकी प्रविष्टियाँ सफलतापूर्वक सहेजी गईं!</string>
     <string name="info_required">* इनपुट आवश्यक है</string>
     <string name="info_sync_complete">सिंक सफलतापूर्वक पूर्ण हुआ।</string>
@@ -206,34 +208,34 @@
     <string name="toast_skipped_to_end">शेष सभी पृष्ठ छोड़े गए</string>
     <string name="text_script_error">!! ईऐसमिरा को यह पाठ प्रदर्शित करने में समस्या हुई !!</string>
     <string name="measure">माप</string>
-    <string name="additional_notification_settings_zte_blade_3_3">अब सूची में ESMira खोजें, उस पर टैप करें, ऑप्टिमाइज़ न करें चुनें और पूर्ण दबाएँ।</string>
+    <string name="additional_notification_settings_zte_blade_3_3">अब सूची में ईऐसमिरा खोजें, उस पर टैप करें, \"Don\'t optimize\" (ऑप्टिमाइज़ न करें) चुनें और \"Done\" (समाप्त) दबाएँ।</string>
     <string name="additional_notification_settings_zte_blade_l110_1">अगली स्क्रीन में बैटरी चुनें।</string>
-    <string name="additional_notification_settings_zte_blade_l110_2">फिर HeartBeat Sync Settings चुनें।</string>
-    <string name="additional_notification_settings_zte_blade_l110_3">अब सूची में ESMira खोजें और सुनिश्चित करें कि चेकबॉक्स सक्रिय है।</string>
+    <string name="additional_notification_settings_zte_blade_l110_2">फिर \"HeartBeat Sync Settings\" (हार्टबीट सिंक सेटिंग्स) चुनें।</string>
+    <string name="additional_notification_settings_zte_blade_l110_3">अब सूची में ईऐसमिरा खोजें और सुनिश्चित करें कि उसका चेकबॉक्स सक्षम हो।</string>
     <string name="additional_notification_settings_finish">जब आप कार्य पूरा कर लें, तो इस स्क्रीन पर लौटने के लिए अपने फ़ोन की बैक-कुंजी दबाएँ।</string>
     <string name="android_version">संस्करण: %1$s, %2$s</string>
-    <string name="ask_model_settings_correct">क्या आप निर्देशों के अनुसार सेटिंग्स समायोजित करने में सक्षम थे?</string>
-    <string name="ask_notification_posted">क्या आपको अधिसूचना प्राप्त हुई?</string>
+    <string name="ask_model_settings_correct">क्या आप दिए गए निर्देशों के अनुसार सेटिंग्स समायोजित कर पाए?</string>
+    <string name="ask_notification_posted">क्या आपको कोई अधिसूचना मिली?</string>
     <string name="complete">पूर्ण</string>
     <string name="android_contact_email">संपर्क करें: %1$s</string>
-    <string name="colon_accessCode">एक्सेस कोड:</string>
-    <string name="dialogTitle_delete_statistics">क्या आँकड़े मिटाने हैं?</string>
-    <string name="dialogTitle_leave_study">क्या अध्ययन छोड़ना है?</string>
+    <string name="colon_accessCode">पहुंच कोड:</string>
+    <string name="dialogTitle_delete_statistics">क्या आप आंकड़े हटाना चाहते हैं?</string>
+    <string name="dialogTitle_leave_study">क्या आप अध्ययन छोड़ना चाहते हैं?</string>
     <string name="error_app_update_needed_msg">एक आवश्यक अपडेट मिला है। कृपया ऐप स्टोर में जाकर ईऐसमिरा को अपडेट करें।</string>
-    <string name="error_input">त्रुटिपूर्ण इनपुट</string>
+    <string name="error_input">खराब इनपुट</string>
     <string name="error_no_images_to_upload">आपने अपलोड करने के लिए कोई फ़ोटो नहीं चुनी हैं।</string>
-    <string name="error_notifications_broken_android_header">ESMira अधिसूचनाएँ भेजने में सक्षम नहीं है!</string>
+    <string name="error_notifications_broken_android_header">ईऐसमिरा अधिसूचनाएँ भेजने में सक्षम नहीं है!</string>
     <string name="error_notifications_broken_android_dontkillmyapp">यदि यह संवाद आपके लिए सहायक नहीं है, तो आप <a href="https://dontkillmyapp.com/">dontkillmyapp.com</a> पर और जानकारी प्राप्त कर सकते हैं।</string>
-    <string name="error_schedule_time_window_too_small">कृपया एक बड़ा समय विंडो चुनें!</string>
+    <string name="error_schedule_time_window_too_small">कृपया बड़ा समय अंतराल चुनें!</string>
     <string name="error_settings_not_opened">सेटिंग्स खोली नहीं जा सकीं!</string>
     <string name="android_info_copied_x_to_clipboard">%1$s को क्लिपबोर्ड पर कॉपी किया गया</string>
     <string name="info_detected_x_errors">कुल %1$d त्रुटियाँ पाई गईं</string>
     <string name="info_dev_active">अब आप डेवलपर हैं!</string>
-    <string name="info_error_report_desc">कृपया हमारी सहायता करें और इस त्रुटि रिपोर्ट को हमें भेजें। धन्यवाद!</string>
-    <string name="info_leave_empty_if_unsure">(यदि अनिश्चित हों तो खाली छोड़ सकते हैं)</string>
-    <string name="info_model_settings">यह सुनिश्चित करने के लिए कि ईऐसमिरा पृष्ठभूमि से अधिसूचनाएँ भेज सके, आपके फ़ोन मॉडल के लिए कुछ विशेष सेटिंग्स आवश्यक हैं। नीचे दिए गए \"डिवाइस-विशिष्ट सेटअप खोलें\" पर दबाऐं।</string>
+    <string name="info_error_report_desc">कृपया अपनी समस्या का समाधान करने में हमारी मदद करें और यह त्रुटि रिपोर्ट हमें भेजें। धन्यवाद!</string>
+    <string name="info_leave_empty_if_unsure">(खाली छोड़ा जा सकता है)</string>
+    <string name="info_model_settings">यह सुनिश्चित करने के लिए कि ईऐसमिरा बैकग्राउंड से अधिसूचनाएँ भेज सके, आपके फ़ोन मॉडल के लिए कुछ विशेष सेटिंग्स आवश्यक हैं। नीचे दिए गए \"डिवाइस-विशिष्ट सेटअप खोलें\" पर दबाऐं।</string>
     <string name="info_no_schedules">कोई अनुसूचियाँ बदलने के लिए नहीं हैं।</string>
-    <string name="info_no_studies_joined">आपने कोई भी अध्ययन में भाग नहीं लिया है।</string>
+    <string name="info_no_studies_joined">आप अभी तक किसी अध्ययन में शामिल नहीं हुए हैं।</string>
     <string name="info_no_questionnaires">इस समय कोई प्रश्नावलियाँ उपलब्ध नहीं हैं…</string>
     <string name="info_nothing_to_sync">सिंक करने के लिए कुछ भी नहीं है</string>
     <string name="info_notification_setup_failed">इस बात की बहुत संभावना है कि आपका फ़ोन इस अध्ययन के लिए अधिसूचनाएँ प्राप्त नहीं कर पाएगा।आपके फ़ोन में कुछ विशेष सेटिंग्स हो सकती हैं जिनकी हमें जानकारी नहीं है। कृपया इस अध्ययन के शोधकर्ता या ऐप डेवलपर से संपर्क करें (और अपने फ़ोन मॉडल का उल्लेख करें) ताकि आपकी समस्या का समाधान किया जा सके।</string>
