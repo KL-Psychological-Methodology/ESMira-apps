@@ -5,9 +5,9 @@
     <string name="additional_notification_settings_general_android">अगली स्क्रीन में कृपया सुनिश्चित करें कि ईऐसमिरा को बैकग्राउंड में चलने और फोन रीबूट होने पर स्वतः शुरू होने की अनुमति है। दुर्भाग्य से, सेटिंग्स के नाम (और कौन-सी सेटिंग्स उपलब्ध हैं) अलग-अलग फ़ोन मॉडलों में बहुत भिन्न होते हैं, और हमारे पास इस फ़ोन मॉडल के लिए कोई स्क्रीनशॉट नहीं है जिससे हम आपकी सहायता कर सकें। इसलिए कृपया अनुमान लगाकर उपयुक्त सेटिंग्स ढूंढने की कोशिश करें। यदि आप हमारी मदद करना चाहें और कुछ स्क्रीनशॉट भेज सकें, तो कृपया ऐप डिवेलपर (esmira@kl.ac.at) से संपर्क करें।
 \n
 \nकाम पूरा हो जाने के बाद, कृपया इस स्क्रीन पर लौटने के लिए अपने फ़ोन का \'बैक\' बटन दबाएं।</string>
-    <string name="additional_notification_settings_esmi">अगली स्क्रीन पर ऐप्स की सूची से ESMira को खोजें और सुनिश्चित करें कि उसे ऑटोस्टार्ट की अनुमति दी गई हो।</string>
-    <string name="additional_notification_settings_huaweiV2_1">अगली स्क्रीन पर कृपया ऐप्स की सूची में ईऐसमिरा को खोजें और सुनिश्चित करें कि वह \"Manually managed\" पर सेट हो।</string>
-    <string name="additional_notification_settings_samsung_2">पेज के नीचे \"Unmonitored apps\" (निरीक्षित ऐप्स) को चुनें।</string>
+    <string name="additional_notification_settings_esmi">अगली स्क्रीन पर ऐप्स की सूची से ईऐसमिरा को खोजें और सुनिश्चित करें कि उसे ऑटोस्टार्ट की अनुमति दी गई हो।</string>
+    <string name="additional_notification_settings_huaweiV2_1">अगली स्क्रीन पर कृपया ऐप्स की सूची में ईऐसमिरा को खोजें और सुनिश्चित करें कि वह \"हाथ से प्रबंधित\" पर सेट हो।</string>
+    <string name="additional_notification_settings_samsung_2">पेज के नीचे \"निरीक्षित ऐप्स\" को चुनें।</string>
     <string name="dialogDesc_leave_study">क्या आप इस अध्ययन को छोड़ना चाहते हैं? इससे आपकी सभी प्रगति खो जाएगी।</string>
     <string name="android_email_study_subject">आपके अध्ययन के संबंध में: %1$s</string>
     <string name="android_error_general">त्रुटि: %1$s</string>
@@ -44,7 +44,7 @@
     <string name="questionMark">\?</string>
     <string name="scan_a_qrcode">क्यू-आर कोड स्कैन करें</string>
     <string name="schedules">अनुसूचियाँ</string>
-    <string name="search_manually">मैन्युअल रूप से खोजें</string>
+    <string name="search_manually">हाथ से खोजें</string>
     <string name="send_error_report">त्रुटि रिपोर्ट भेजें</string>
     <string name="problems_with_notifications">अधिसूचनाओं में समस्याएँ</string>
     <string name="send_message_to_researcher">शोधकर्ता को गुमनाम संदेश भेजें</string>
@@ -93,9 +93,9 @@
     <string name="user_id">यूज़र आईडी</string>
     <string name="yesterday">कल</string>
     <string name="no">नहीं</string>
-    <string name="additional_notification_settings_huaweiV2_2">अगली स्क्रीन में सुनिश्चित करें कि ESMira को \"Auto-Launch\" और \"Run in background\" की अनुमति दी गई हो।</string>
+    <string name="additional_notification_settings_huaweiV2_2">अगली स्क्रीन में सुनिश्चित करें कि ईऐसमिरा को \"स्वतः प्रारंभ\" और \"बैकग्राउंड में चलने\" की अनुमति दी गई हो।</string>
     <string name="additional_notification_settings_samsung_1">अगली स्क्रीन पर जांच पूरी होने तक प्रतीक्षा करें, फिर पेज को नीचे तक स्क्रॉल करें।</string>
-    <string name="additional_notification_settings_samsung_3">अगली स्क्रीन में \"Add apps\" (ऐप्स जोड़ें) बटन दबाएँ। फिर सूची में ईऐसमिरा चुनें और \"OK\" (ठीक है) दबाएँ।</string>
+    <string name="additional_notification_settings_samsung_3">अगली स्क्रीन में \"ऐप्स जोड़ें\" बटन दबाएँ। फिर सूची में ईऐसमिरा चुनें और \"ठीक है\" दबाएँ।</string>
     <string name="additional_notification_settings_zte_blade_3_1">अगली स्क्रीन में बैटरी ऑप्टिमाइज़ेशन चुनें।</string>
     <string name="additional_notification_settings_zte_blade_3_2">फिर ड्रॉपडाउन मेनू खोलें और सभी ऐप्स चुनें।</string>
     <string name="back">वापस</string>
@@ -208,9 +208,9 @@
     <string name="toast_skipped_to_end">शेष सभी पृष्ठ छोड़े गए</string>
     <string name="text_script_error">!! ईऐसमिरा को यह पाठ प्रदर्शित करने में समस्या हुई !!</string>
     <string name="measure">माप</string>
-    <string name="additional_notification_settings_zte_blade_3_3">अब सूची में ईऐसमिरा खोजें, उस पर टैप करें, \"Don\'t optimize\" (ऑप्टिमाइज़ न करें) चुनें और \"Done\" (समाप्त) दबाएँ।</string>
+    <string name="additional_notification_settings_zte_blade_3_3">अब सूची में ईऐसमिरा खोजें, उस पर टैप करें, \"ऑप्टिमाइज़ न करें\" चुनें और \"समाप्त\" दबाएँ।</string>
     <string name="additional_notification_settings_zte_blade_l110_1">अगली स्क्रीन में बैटरी चुनें।</string>
-    <string name="additional_notification_settings_zte_blade_l110_2">फिर \"HeartBeat Sync Settings\" (हार्टबीट सिंक सेटिंग्स) चुनें।</string>
+    <string name="additional_notification_settings_zte_blade_l110_2">फिर \"हार्टबीट सिंक सेटिंग्स\" चुनें।</string>
     <string name="additional_notification_settings_zte_blade_l110_3">अब सूची में ईऐसमिरा खोजें और सुनिश्चित करें कि उसका चेकबॉक्स सक्षम हो।</string>
     <string name="additional_notification_settings_finish">जब आप कार्य पूरा कर लें, तो इस स्क्रीन पर लौटने के लिए अपने फ़ोन की बैक-कुंजी दबाएँ।</string>
     <string name="android_version">संस्करण: %1$s, %2$s</string>
