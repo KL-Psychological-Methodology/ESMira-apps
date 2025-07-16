@@ -41,7 +41,7 @@ class DataSetTest : BaseCommonTest() {
 		questionnaire.pages[0].inputs[1].setValue("string")
 		questionnaire.pages[1].inputs[0].setValue("5")
 		questionnaire.pages[1].inputs[1].setValue("6")
-		questionnaire.saveQuestionnaire(NativeLink.getNowMillis())
+		questionnaire.saveQuestionnaire()
 		
 		val value = getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
 		assertNotEquals(-1, value.indexOf("boolean123"))
@@ -70,7 +70,7 @@ class DataSetTest : BaseCommonTest() {
 		dataSet.addResponseData("test3", test3)
 		dataSet.addResponseData("test4", test4)
 		
-		questionnaire.saveQuestionnaire(NativeLink.getNowMillis())
+		questionnaire.saveQuestionnaire()
 		
 		val value = getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
 		assertEquals(-1, value.indexOf("\"sumScore\":$sumScoreValue"))

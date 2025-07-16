@@ -13,6 +13,7 @@ import kotlin.math.floor
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.math.pow
+import kotlin.math.roundToInt
 import kotlin.math.sqrt
 import kotlin.math.truncate
 
@@ -744,6 +745,25 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                 ): MerlinType {
                     val arg = arguments[0]
                     return arg.asNumber()?.let { MerlinNumber(ceil(it.value)) } ?: arg
+                }
+            },
+
+            // round(num, digits)
+            "round" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 2
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val num = arguments[0]
+                    val digits = arguments[1].asNumber()?.value?.toInt()?.let { max(it, 0) } ?: 0
+                    val factor = 10.0.pow(digits)
+                    return num.asNumber()?.let {
+                        MerlinNumber((it.value * factor).roundToInt() * factor)
+                    } ?: num
                 }
             },
 

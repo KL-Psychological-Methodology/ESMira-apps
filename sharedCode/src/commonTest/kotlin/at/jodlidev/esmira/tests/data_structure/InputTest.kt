@@ -167,7 +167,7 @@ class InputTest : BaseCommonTest() {
 		
 		assertSqlWasUpdated(FileUpload.TABLE, FileUpload.KEY_IS_TEMPORARY, 0, 0)
 		
-		dataSet.saveQuestionnaire(questionnaire, NativeLink.getNowMillis(), listOf())
+		dataSet.saveQuestionnaire(questionnaire)
 		val value = getSqlSavedValue(DataSet.TABLE, DataSet.KEY_RESPONSES) as String
 		assertNotEquals(-1, value.indexOf(testValue1))
 		assertNotEquals(-1, value.indexOf(testValue2))
