@@ -5,7 +5,7 @@
 	<key>info_reward_is_not_active_yet</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@days@</string>
+		<string>Belohnungen sind für diese Studie noch nicht aktiv. Sie sollten bald verfügbar sein.</string>
 		<key>days</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
