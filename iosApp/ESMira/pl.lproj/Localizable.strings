@@ -1,1 +1,24 @@
 
+
+"add_a_study" = "Dołącz do nowego badania";
+"ios_version" = "Wersja: %1$@, %2$@";
+"back" = "Wstecz";
+"backup" = "Kopia zapasowa";
+"cancel" = "Anuluj";
+"close" = "Zamknij";
+"colon_accessCode" = "Kod dostępu:";
+"colon_enter_manually" = "Wprowadź ręcznie:";
+"colon_next_expected_notification" = "Następne oczekiwane powiadomienie:";
+"colon_password" = "Hasło:";
+"complete" = "Zakończone";
+"consent" = "Zgoda";
+"contact_researcher" = "Skontaktuj się z badaczem";
+"contentDesc_more_studies" = "Otwiera menu opcji dla tego badania.";
+"continue_" = "Kontynuuj";
+"delete_" = "Usuń";
+"delete_statistics" = "Usuń statystyki";
+"desc_update_studies" = "Zaktualizuj ustawienia swoich badań";
+"add" = "Dodaj";
+"ios_contact_email" = "Kontakt %1$@";
+"change_schedules" = "Zmień harmonogramy";
+"desc_update_schedules" = "Zmień harmonogramy swoich badań";
