@@ -147,7 +147,7 @@
 "about_ESMira" = "O ESMira";
 "colon_homepage" = "Strona główna:";
 "colon_github" = "GitHub:";
-"sent_to_whom" = "Wysłano do:";
+"sent_to_whom" = "Do kogo wysłano?";
 "start_scanning" = "Rozpocznij skanowanie";
 "north_abr" = "N";
 "east_abr" = "E";
@@ -222,3 +222,4 @@
 "ios_dialogDesc_backgroundRefresh_disabled" = "Włącz „Odnawianie aplikacji w tle” w poniższych ustawieniach. Następnie upewnij się, że jest ono także włączone globalnie, wracając do „Ustawienia”, a następnie do: „Globalne” > „Odnawianie aplikacji w tle” i aktywując „Odnawianie aplikacji w tle” u góry.";
 "error_app_update_needed_msg" = "Wykryto krytyczną aktualizację. Zaktualizuj ESMira w app store.";
 "info_notification_setup_failed" = "Jest bardzo prawdopodobne, że Twój telefon nie będzie mógł odbierać powiadomień dla tego badania. Twój telefon może mieć specjalne ustawienia, o których nie wiemy. Skontaktuj się z badaczem badania lub twórcą aplikacji (podając model telefonu), aby znaleźć rozwiązanie problemu.";
+"hint_server" = "example.com";
