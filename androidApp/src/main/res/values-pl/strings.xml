@@ -1,2 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="colon_accessCode">Kod dostępu:</string>
+    <string name="add_a_study">Dołącz do nowego badania</string>
+    <string name="cancel">Anuluj</string>
+    <string name="change_schedules">Zmień harmonogramy</string>
+    <string name="close">Zamknij</string>
+    <string name="complete">Zakończone</string>
+    <string name="consent">Zgoda</string>
+    <string name="continue_">Kontynuuj</string>
+    <string name="delete_statistics">Usuń statystyki</string>
+    <string name="add">Dodaj</string>
+    <string name="back">Wstecz</string>
+    <string name="colon_password">Hasło:</string>
+    <string name="contact_researcher">Skontaktuj się z badaczem</string>
+    <string name="contentDesc_more_studies">Otwiera menu opcji dla tego badania.</string>
+    <string name="delete_">Usuń</string>
+    <string name="backup">Kopia zapasowa</string>
+    <string name="colon_next_expected_notification">Następne oczekiwane powiadomienie:</string>
+    <string name="desc_update_studies">Zaktualizuj ustawienia swoich badań</string>
+    <string name="colon_enter_manually">Wprowadź ręcznie:</string>
+    <string name="desc_update_schedules">Zmień harmonogramy swoich badań</string>
+</resources>
