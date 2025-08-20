@@ -1,6 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-    <dict>
-    </dict>
+<dict>
+	<key>ios_info_missed_notifications</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@powiadomienia@</string>
+		<key>notifications</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>Brak pominiętych powiadomień.</string>
+			<key>one</key>
+			<string>Jedno pominięte powiadomienie.</string>
+			<key>few</key>
+			<string>Kilka pominiętych powiadomień.</string>
+			<key>many</key>
+			<string>%1$d pominiętych powiadomień.</string>
+		</dict>
+	</dict>
+	<key>info_reward_is_not_active_yet</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Nagrody za to badanie nie są jeszcze aktywne. Powinny być dostępne wkrótce.</string>
+		<key>days</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>Nagrody za to badanie nie są jeszcze aktywne. Powinny być dostępne wkrótce.</string>
+			<key>one</key>
+			<string>Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne za jeden dzień.</string>
+			<key>few</key>
+			<string>Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne za kilka dni.</string>
+			<key>many</key>
+			<string>Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne za %1$d dni.</string>
+		</dict>
+	</dict>
+</dict>
 </plist>
