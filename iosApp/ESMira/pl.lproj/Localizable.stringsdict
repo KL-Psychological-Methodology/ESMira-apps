@@ -33,13 +33,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>1$d</string>
 			<key>zero</key>
-			<string>Nagrody za to badanie nie są jeszcze aktywne. Powinny być dostępne wkrótce.</string>
+			<string>Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne w ciągu jednego dnia.</string>
 			<key>one</key>
-			<string>Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne za jeden dzień.</string>
-			<key>few</key>
-			<string>Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne za kilka dni.</string>
+			<string>Nagrody za to badanie nie są jeszcze aktywne. Powinny być dostępne wkrótce.</string>
 			<key>many</key>
-			<string>Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne za %1$d dni.</string>
+			<string>Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne w ciągu %1$d dni.</string>
 		</dict>
 	</dict>
 </dict>
