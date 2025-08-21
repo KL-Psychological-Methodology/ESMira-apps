@@ -282,10 +282,10 @@
     <string name="ask_model_settings_correct">Czy udało Ci się dostosować ustawienia zgodnie z instrukcjami?</string>
     <string name="ask_notification_posted">Czy otrzymałeś(-aś) powiadomienie?</string>
     <plurals name="android_info_missed_notifications" comment="Needs to be short">
-        <item quantity="one">Jedno nieodebrane powiadomienie.</item>
-        <item quantity="few">Kilka 1 nieodebranych powiadomień.</item>
-        <item quantity="many"></item>
-        <item quantity="other"></item>
+        <item quantity="one">1 nieodebrane powiadomienie.</item>
+        <item quantity="few"></item>
+        <item quantity="many">%1$d nieodebrane powiadomienia.</item>
+        <item quantity="other">%1$d nieodebrane powiadomienia.</item>
     </plurals>
     <string name="app_usage_desc">To badanie wymaga uprawnień do dostępu do użycia aplikacji. Upewnij się, że ESMira jest włączona na ekranie uprawnień, a następnie naciśnij przycisk wstecz w telefonie.</string>
     <string name="hint_missing_fields">Jedno lub więcej pytań nie zostało wypełnionych. Naciśnij ponownie przycisk „kontynuuj/zapisz”, aby mimo to przejść dalej.</string>
@@ -307,4 +307,10 @@
     <string name="error_notifications_broken_android_footer">Czy potrzebujesz dalszej pomocy lub chcesz nam pomóc, dostarczając więcej informacji (zrzuty ekranu, opisy) o Twoim modelu telefonu do ESMira? Napisz do nas e-mail na adres: <a href="mailto:esmira@kl.ac.at">esmira@kl.ac.at</a>.</string>
     <string name="app_usage_whatFor">Niektóre kwestionariusze tego badania śledzą czas korzystania z określonych aplikacji (lub smartfona ogólnie) w ciągu ostatniego dnia. Dane te NIE są zbierane w tle i są zapisywane TYLKO wtedy, gdy wyślesz odpowiedni kwestionariusz. Przed wysłaniem kwestionariusza zostaniesz poinformowany, czy i które dane są wysyłane.</string>
     <string name="notificationChannel_screen_tracking">Powiadomienie o usłudze czasu korzystania z ekranu.</string>
+    <plurals name="info_reward_is_not_active_yet">
+        <item quantity="one">Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne w ciągu jednego dnia.</item>
+        <item quantity="few"></item>
+        <item quantity="many">Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne w ciągu %1$d dni.</item>
+        <item quantity="other">Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne w ciągu %1$d dni.</item>
+    </plurals>
 </resources>
