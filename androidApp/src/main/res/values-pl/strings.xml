@@ -296,8 +296,8 @@
     <string name="sync_data">Synchronizuj dane</string>
     <string name="additional_notification_settings_general_android">Na kolejnym ekranie upewnij się, że ESMira ma pozwolenie na działanie w tle oraz uruchamianie się po ponownym włączeniu telefonu. Niestety, nazwy ustawień (a także to, które ustawienia są dostępne) różnią się znacznie w zależności od modelu telefonu i nie posiadamy zrzutów ekranu dla tego modelu, aby pomóc Ci bardziej szczegółowo. Spróbuj więc samodzielnie odnaleźć odpowiednie ustawienia. Jeśli chcesz nam pomóc i wysłać zrzuty ekranu, skontaktuj się z twórcą aplikacji (esmira@kl.ac.at).
 \n
-\nPo zakończeniu naciśnij przycisk „Wstecz” w telefonie, aby powrócić do tego ekranu</string>
-    <string name="additional_notification_settings_esmi">Na kolejnym ekranie znajdź ESMira na liście aplikacji i upewnij się, że ma uprawnienie do autostartu.</string>
+\nPo zakończeniu naciśnij przycisk „Wstecz” w telefonie, aby powrócić do tego ekranu.</string>
+    <string name="additional_notification_settings_esmi">Na następnym ekranie znajdź ESMira na liście aplikacji i upewnij się, że ma uprawnienia do automatycznego uruchamiania.</string>
     <string name="additional_notification_settings_zte_blade_3_2">Następnie otwórz menu rozwijane i wybierz „Wszystkie aplikacje”.</string>
     <string name="additional_notification_settings_finish">Po zakończeniu naciśnij przycisk „Wstecz” w telefonie, aby powrócić do tego ekranu.</string>
     <string name="additional_notification_settings_samsung_3">Na kolejnym ekranie naciśnij przycisk „Dodaj aplikacje”. Następnie wybierz ESMira z listy i naciśnij „OK”.</string>
