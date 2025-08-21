@@ -13,11 +13,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>1$d</string>
 			<key>zero</key>
-			<string>Brak pominiętych powiadomień.</string>
+			<string>Brak nieodebranych powiadomień.</string>
 			<key>one</key>
-			<string>Jedno pominięte powiadomienie.</string>
+			<string>Jedno nieodebrane powiadomienie.</string>
+			<key>few</key>
+			<string>Kilka nieodebranych powiadomień.</string>
 			<key>many</key>
-			<string>%1$d pominiętych powiadomień.</string>
+			<string>%1$d nieodebrnaych powiadomień.</string>
 		</dict>
 	</dict>
 	<key>info_reward_is_not_active_yet</key>
@@ -34,6 +36,8 @@
 			<string>Nagrody za to badanie nie są jeszcze aktywne. Powinny być dostępne wkrótce.</string>
 			<key>one</key>
 			<string>Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne w ciągu jednego dnia.</string>
+			<key>few</key>
+			<string>Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne w ciągu kilku dni.</string>
 			<key>many</key>
 			<string>Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne w ciągu %1$d dni.</string>
 		</dict>
