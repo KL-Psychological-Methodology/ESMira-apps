@@ -16,8 +16,6 @@
 			<string>Brak pominiętych powiadomień.</string>
 			<key>one</key>
 			<string>Jedno pominięte powiadomienie.</string>
-			<key>few</key>
-			<string>Kilka pominiętych powiadomień.</string>
 			<key>many</key>
 			<string>%1$d pominiętych powiadomień.</string>
 		</dict>
@@ -33,9 +31,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>1$d</string>
 			<key>zero</key>
-			<string>Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne w ciągu jednego dnia.</string>
-			<key>one</key>
 			<string>Nagrody za to badanie nie są jeszcze aktywne. Powinny być dostępne wkrótce.</string>
+			<key>one</key>
+			<string>Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne w ciągu jednego dnia.</string>
 			<key>many</key>
 			<string>Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne w ciągu %1$d dni.</string>
 		</dict>
