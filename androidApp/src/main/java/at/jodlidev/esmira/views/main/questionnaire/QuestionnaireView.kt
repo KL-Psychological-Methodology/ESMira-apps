@@ -78,7 +78,7 @@ fun QuestionnaireView(
 			}
 			val emptyResponseIndex = questionnaire.checkQuestionnaire(pageNumber, true)
 			if (!didRemindOfEmptyResponses.value && emptyResponseIndex != -1) {
-				Toast.makeText(context, R.string.hint_missing_fields, Toast.LENGTH_SHORT).show()
+				Toast.makeText(context, R.string.hint_missing_fields, Toast.LENGTH_LONG).show()
 				coroutineScope.launch {
 					listState.animateScrollToItem(emptyResponseIndex)
 				}

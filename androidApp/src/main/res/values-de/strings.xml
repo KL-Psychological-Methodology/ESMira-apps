@@ -308,5 +308,5 @@
     <string name="option_other">Anderes</string>
     <string name="measure">Messen</string>
     <string name="charging">lade</string>
-    <string name="hint_missing_fields">Eine oder mehrere Fragen wurden nicht ausgefüllt. Drücken Sie "Weiter/Speichern" um trotzdem weiter zu machen.</string>
+    <string name="hint_missing_fields">Sie haben womöglich eine Frage übersehen</string>
 </resources>

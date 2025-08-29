@@ -359,8 +359,8 @@ class Questionnaire {
 		val page = pages[pageI]
 		for((i, input) in page.activeInputs.withIndex()) {
 			val needsValue = input.needsValue()
-			val hasValue = input.type == Input.TYPES.text || input.getValue().isNotEmpty()
-			if(checkAll && !hasValue || needsValue)
+			val wantsValue = input.wantsValue()
+			if(checkAll && wantsValue || needsValue)
 				return i
 		}
 		return -1
