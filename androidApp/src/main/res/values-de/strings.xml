@@ -309,4 +309,6 @@
     <string name="measure">Messen</string>
     <string name="charging">lade</string>
     <string name="hint_missing_fields">Sie haben womöglich eine Frage übersehen</string>
+    <string name="frequently_asked_questions">Häufig gestellte Fragen</string>
+    <string name="faqs">FAQs</string>
 </resources>

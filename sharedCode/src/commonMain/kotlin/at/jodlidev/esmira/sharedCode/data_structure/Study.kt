@@ -59,6 +59,7 @@ class Study internal constructor(
 	var rewardVisibleAfterDays = 0
 	var rewardEmailContent = ""
 	var rewardInstructions = ""
+	var faq = ""
 	
 	@SerialName("eventUploadSettings")
 	@Serializable(with = JsonToStringSerializer::class)
@@ -227,6 +228,7 @@ class Study internal constructor(
 		rewardEmailContent = c.getString(25)
 		rewardInstructions = c.getString(26)
 		cachedRewardCode = c.getString(27)
+		faq = c.getString(28)
 	}
 	
 	private fun loadQuestionnairesDB(): List<Questionnaire> {
@@ -442,6 +444,7 @@ class Study internal constructor(
 			this.rewardVisibleAfterDays = newStudy.rewardVisibleAfterDays
 			this.rewardEmailContent = newStudy.rewardEmailContent
 			this.rewardInstructions = newStudy.rewardInstructions
+			this.faq = newStudy.faq
 			this._jsonQuestionnaires = newStudy.questionnaires
 			if(this.group > newStudy.randomGroups) {
 				this.randomGroups = newStudy.randomGroups
@@ -497,6 +500,7 @@ class Study internal constructor(
 		values.putString(KEY_REWARD_EMAIL_CONTENT, rewardEmailContent)
 		values.putString(KEY_REWARD_INSTRUCTIONS, rewardInstructions)
 		values.putString(KEY_CACHED_REWARD_CODE, cachedRewardCode)
+		values.putString(KEY_FAQ, faq)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -715,6 +719,7 @@ class Study internal constructor(
 		const val KEY_REWARD_INSTRUCTIONS = "rewardInstructions"
 		const val KEY_CACHED_REWARD_CODE = "cachedRewardCode"
 		const val KEY_FAULTY_ACCESS_KEY = "faultyAccessKey"
+		const val KEY_FAQ = "faq"
 		
 		const val REWARD_SUCCESS = 0
 		const val REWARD_ERROR_DOES_NOT_EXIST = 1
@@ -750,7 +755,8 @@ class Study internal constructor(
 			KEY_REWARD_VISIBLE_AFTER,
 			KEY_REWARD_EMAIL_CONTENT,
 			KEY_REWARD_INSTRUCTIONS,
-			KEY_CACHED_REWARD_CODE
+			KEY_CACHED_REWARD_CODE,
+			KEY_FAQ
 		)
 		
 		val defaultSettings = hashMapOf(

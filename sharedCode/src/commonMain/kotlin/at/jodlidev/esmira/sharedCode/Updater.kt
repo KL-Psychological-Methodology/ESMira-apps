@@ -12,7 +12,7 @@ import kotlinx.serialization.json.*
  */
 internal object Updater {
 	const val EXPECTED_SERVER_VERSION: Int = 13
-	const val DATABASE_VERSION = 49
+	const val DATABASE_VERSION = 50
 	const val LIBRARY_VERSION = 19 //this is mainly used for iOS so we can check that changes in the library have been used in the C library
 	const val MERLIN_VERSION = 1
 
@@ -536,6 +536,9 @@ internal object Updater {
 
 			db.execSQL("ALTER TABLE dataSets ADD COLUMN timezone_offset INTEGER DEFAULT 0;")
 			db.execSQL("ALTER TABLE dataSets ADD COLUMN local_datetime TEXT DEFAULT '';")
+		}
+		if(oldVersion <= 49) {
+			db.execSQL("ALTER TABLE studies ADD COLUMN faq TEXT DEFAULT '';")
 		}
 	}
 	

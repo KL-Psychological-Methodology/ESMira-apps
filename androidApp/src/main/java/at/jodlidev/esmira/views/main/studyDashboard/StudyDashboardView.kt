@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Help
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -58,6 +59,7 @@ fun StudyDashboardView(
 	gotoStatistics: () -> Unit,
 	gotoDataProtocol: () -> Unit,
 	gotoStudyInformation: () -> Unit,
+	gotoFaq: () -> Unit,
 	saveBackup: () -> Unit,
 	loadBackup: () -> Unit
 ) {
@@ -115,6 +117,7 @@ fun StudyDashboardView(
 			gotoStatistics = gotoStatistics,
 			gotoDataProtocol = gotoDataProtocol,
 			gotoStudyInformation = gotoStudyInformation,
+			gotoFaq = gotoFaq,
 			sendEmail = sendEmail,
 			modifier = Modifier.padding(innerPadding)
 		)
@@ -137,6 +140,7 @@ fun StudyDashboardGrid(
 	gotoStatistics: () -> Unit,
 	gotoDataProtocol: () -> Unit,
 	gotoStudyInformation: () -> Unit,
+	gotoFaq: () -> Unit,
 	sendEmail: () -> Unit,
 	modifier: Modifier = Modifier
 ) {
@@ -144,6 +148,7 @@ fun StudyDashboardGrid(
 	val hasStatistics = study.hasStatistics()
 	val hasMessages = study.hasMessages()
 	val hasRewards = study.hasRewards()
+	val hasFAQs = study.faq.isNotEmpty()
 	
 	val showLeaveStudyDialog = remember { mutableStateOf(false) }
 	
@@ -237,7 +242,16 @@ fun StudyDashboardGrid(
 		item {
 			StudyDashboardButtonView(stringResource(R.string.study_information), Icons.Default.Info, onClick = gotoStudyInformation)
 		}
-		
+
+		if(hasFAQs) {
+			item {
+				StudyDashboardButtonView(
+					stringResource(R.string.faqs),
+					Icons.AutoMirrored.Filled.Help,
+					onClick = gotoFaq
+					)
+			}
+		}
 		if(hasStatistics) {
 			item {
 				StudyDashboardButtonView(stringResource(R.string.statistics), Icons.Default.BarChart, onClick = gotoStatistics)
@@ -308,7 +322,7 @@ fun StudyDashboardGrid(
 fun PreviewStudyDashboardView() {
 	ESMiraSurface {
 		val study = DbLogic.createJsonObj<Study>(
-			"""{"id": 1, "enableRewardSystem": true, "publicStatistics": {"charts": [{}]}, "questionnaires": [{"actionTriggers": [{"actions": [{"type": 3}]}]}]}"""
+			"""{"id": 1, "faq": "A", "enableRewardSystem": true, "publicStatistics": {"charts": [{}]}, "questionnaires": [{"actionTriggers": [{"actions": [{"type": 3}]}]}]}"""
 		)
 		study.finishJSON("https://jodli.dev", "accessKey")
 		
@@ -337,6 +351,7 @@ fun PreviewStudyDashboardView() {
 			gotoStatistics = {},
 			gotoDataProtocol = {},
 			gotoStudyInformation = {},
+			gotoFaq = {},
 			openChangeSchedulesDialog = {}
 		)
 	}
@@ -349,7 +364,7 @@ fun PreviewStudyDashboardView() {
 fun PreviewStudyDashboardNoQuestionnairesView() {
 	ESMiraSurface {
 		val study = DbLogic.createJsonObj<Study>(
-			"""{"id": 1, "enableRewardSystem": true, "publicStatistics": {"charts": [{}]}, "questionnaires": [{"actionTriggers": [{"actions": [{"type": 3}]}]}]}"""
+			"""{"id": 1, "faq": "A", "enableRewardSystem": true, "publicStatistics": {"charts": [{}]}, "questionnaires": [{"actionTriggers": [{"actions": [{"type": 3}]}]}]}"""
 		)
 		study.finishJSON("https://jodli.dev", "accessKey")
 
@@ -368,6 +383,7 @@ fun PreviewStudyDashboardNoQuestionnairesView() {
 			gotoStatistics = {},
 			gotoDataProtocol = {},
 			gotoStudyInformation = {},
+			gotoFaq = {},
 			openChangeSchedulesDialog = {}
 		)
 	}
