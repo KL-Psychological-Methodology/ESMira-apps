@@ -7,16 +7,16 @@
     <string name="close">Zamknij</string>
     <string name="complete">Zakończone</string>
     <string name="consent">Zgoda</string>
-    <string name="continue_">Kontynuuj</string>
+    <string name="continue_">Przejdź dalej</string>
     <string name="delete_statistics">Usuń statystyki</string>
     <string name="add">Dodaj</string>
     <string name="back">Wstecz</string>
     <string name="colon_password">Hasło:</string>
     <string name="contact_researcher">Skontaktuj się z badaczem</string>
-    <string name="contentDesc_more_studies">Otwiera menu opcji dla tego badania.</string>
+    <string name="contentDesc_more_studies">Otwórz dostępne opcje dla badania.</string>
     <string name="delete_">Usuń</string>
     <string name="backup">Kopia zapasowa</string>
-    <string name="colon_next_expected_notification">Następne oczekiwane powiadomienie:</string>
+    <string name="colon_next_expected_notification">Następne zaplanowane powiadomienie:</string>
     <string name="desc_update_studies">Zaktualizuj ustawienia swoich badań</string>
     <string name="colon_enter_manually">Wprowadź ręcznie:</string>
     <string name="desc_update_schedules">Zmień harmonogramy swoich badań</string>
@@ -24,20 +24,20 @@
     <string name="error_app_update_needed_title">Aktualizacja ESMira.</string>
     <string name="error_input">Błędne dane wejściowe</string>
     <string name="error_missing_fields">Proszę wypełnić wszystkie wymagane pola!</string>
-    <string name="error_no_email_client">Nie znaleziono aplikacji e-mail…</string>
+    <string name="error_no_email_client">Nie można znaleźć aplikacji do obsługi poczty e-mail…</string>
     <string name="error_no_images_to_upload">Nie wybrałeś(-aś) żadnych obrazów do przesłania.</string>
     <string name="hint_error_comment">Jaki problem napotkałeś(-aś)?</string>
     <string name="i_agree">Zgadzam się</string>
-    <string name="info_dev_active">Jesteś teraz deweloperem!</string>
-    <string name="info_error_report_desc">Pomóż nam rozwiązać Twój problem i wyślij raport o błędach. Dziękujemy!</string>
+    <string name="info_dev_active">Teraz jesteś programistą!</string>
+    <string name="info_error_report_desc">Pomóż nam rozwiązać Twój problem i prześlij raport o błędzie. Dziękujemy!</string>
     <string name="info_leave_empty_if_unsure">(można pozostawić puste)</string>
     <string name="info_loading">Ładowanie…</string>
     <string name="info_new_message">Masz nową wiadomość!</string>
     <string name="info_no_statistics">Brak statystyk do wyświetlenia.</string>
     <string name="info_nothing_to_sync">Brak danych do synchronizacji</string>
-    <string name="info_questionnaire_success">Twoje wpisy zostały zapisane!</string>
+    <string name="info_questionnaire_success">Twoje dane zostały pomyślnie zapisane!</string>
     <string name="info_required">* wymagane dane</string>
-    <string name="info_schedule_changed_after_one_day">Twoje zmiany zaczną obowiązywać po jednym dniu.</string>
+    <string name="info_schedule_changed_after_one_day">Twoje zmiany będą widoczne po jednym dniu.</string>
     <string name="info_sync_complete">Synchronizacja zakończona pomyślnie.</string>
     <string name="info_sync_failed">Synchronizacja nie powiodła się!</string>
     <string name="info_thank_you">Dziękujemy!</string>
@@ -56,8 +56,8 @@
     <string name="please_select">Wybierz</string>
     <string name="problems_with_notifications">Problemy z powiadomieniami</string>
     <string name="questionMark">\?</string>
-    <string name="questionnaires">Kwestionariusze</string>
-    <string name="reload">Przeładuj</string>
+    <string name="questionnaires">Ankiety</string>
+    <string name="reload">Odśwież</string>
     <string name="save">Zapisz</string>
     <string name="scan_a_qrcode">Skanuj kod QR</string>
     <string name="schedules">Harmonogramy</string>
@@ -119,13 +119,13 @@
     <string name="measure">Pomiar</string>
     <string name="charging">ładowanie</string>
     <string name="toast_skipped_to_end">Pominięto pozostałe strony</string>
-    <string name="error_schedule_time_window_too_small">Wybierz większy przedział czasowy!</string>
+    <string name="error_schedule_time_window_too_small">Wybierz dłuższy przedział czasowy!</string>
     <string name="error_settings_not_opened">Nie można otworzyć ustawień!</string>
     <string name="ignore">Zignoruj</string>
     <string name="info_study_not_active_anymore">To badanie nie jest już aktywne.</string>
     <string name="info_wrong_access_key">Wygląda na to, że klucz dostępu do tego badania został zmieniony. Twoje dane nie zostaną przesłane, dopóki nie podasz poprawnego klucza dostępu.</string>
     <string name="welcome_qr_instructions">Umieść kod QR około 30 cm przed aparatem swojego smartfona tak, aby był widoczny na ekranie.
-\nESMira zeskanuje kod automatycznie, gdy tylko aparat się wyostrzy.</string>
+\nESMira zeskanuje kod automatycznie, gdy tylko aparat ustawi ostrość.</string>
     <string name="info_test_notifications">Naciśnij „Wyślij powiadomienie testowe”, aby sprawdzić, czy Twój telefon może odbierać powiadomienia.</string>
     <string name="enable">Włącz</string>
     <string name="info_detected_x_errors">Wykryto łącznie %1$d błędów</string>
@@ -135,11 +135,11 @@
     <string name="welcome_accessKey_question">Czy masz klucz dostępu?</string>
     <string name="welcome_exit_questionDesc">Aby korzystać z ESMira, musisz najpierw dołączyć do badania.</string>
     <string name="welcome_exit_questionTitle">Czy na pewno chcesz anulować?</string>
-    <string name="welcome_join_public_study">Nie, dołącz do badania publicznego</string>
+    <string name="welcome_join_public_study">Nie, wybieram badanie publiczne</string>
     <string name="welcome_server_question">Na którym serwerze znajduje się badanie?</string>
     <string name="dialogTitle_leave_study">Opuścić badanie?</string>
     <string name="enter_manually">Wprowadź ręcznie</string>
-    <string name="info_dev_inactive">Tryb deweloperski wyłączony</string>
+    <string name="info_dev_inactive">Tryb programisty wyłączony</string>
     <string name="leave_study">Opuść badanie</string>
     <string name="no_dateTime_data">Brak</string>
     <string name="notifications">Powiadomienia</string>
@@ -150,7 +150,7 @@
     <string name="update_studies">Zaktualizuj badania</string>
     <string name="upload_screenshots">Prześlij zrzuty ekranu</string>
     <string name="welcome_hello">Cześć!</string>
-    <string name="welcome_qr_question">Czy masz kod QR do badania?</string>
+    <string name="welcome_qr_question">Czy masz kod QR badania?</string>
     <string name="take_picture">Zrób zdjęcie</string>
     <string name="joined_at">Dołączono o</string>
     <string name="completed_questionnaires">Wypełnione kwestionariusze</string>
@@ -171,14 +171,14 @@
     <string name="dialogDesc_delete_statistics">Czy chcesz usunąć wszystkie statystyki dla tego badania?</string>
     <string name="info_error_report_header">Wykryto krytyczny błąd!</string>
     <string name="info_no_studies_joined">Nie dołączyłeś(-aś) do żadnego badania.</string>
-    <string name="info_no_studies_noAccessKey">Nie znaleziono badań publicznych na tym serwerze.</string>
+    <string name="info_no_studies_noAccessKey">Na tym serwerze nie ma badań dostępnych publicznie.</string>
     <string name="in_x_days">za %1$d dni</string>
     <string name="info_no_errors">Brak błędów do zgłoszenia</string>
-    <string name="info_no_model_settings">Nie znaleziono ustawień urządzenia.</string>
-    <string name="info_no_questionnaires">Obecnie brak dostępnych kwestionariuszy…</string>
+    <string name="info_no_model_settings">Nie znaleziono ustawień dla Twojego urządzenia.</string>
+    <string name="info_no_questionnaires">Obecnie brak dostępnych ankiet…</string>
     <string name="info_no_schedules">Brak harmonogramów do zmiany.</string>
     <string name="info_number_to_sync">Masz %1$d niesynchronizowanych zestawów danych</string>
-    <string name="info_update_complete">Aktualizacja zakończona (%1$d aktualizacji pobrano).</string>
+    <string name="info_update_complete">Aktualizacja zakończona (pobrano %1$d aktualizacji).</string>
     <string name="load_backup">Wczytaj kopię zapasową</string>
     <string name="search_manually">Wyszukaj ręcznie</string>
     <string name="send">Wyślij</string>
@@ -196,20 +196,20 @@
     <string name="error_report_message">Raport o błędach został wysłany. Komentarz:</string>
     <string name="about_ESMira_description">ESMira to platforma składająca się z serwera i aplikacji mobilnej (Android, iOS), opracowana do projektów badawczych z wykorzystaniem metody doświadczeń codziennych (ESM). ESMira oferuje bardzo prosty proces konfiguracji i łatwość użycia – a przy tym jest bezpłatna, zdecentralizowana i otwartoźródłowa.</string>
     <string name="notification_permission_check">Naciśnij „Włącz powiadomienia”, aby sprawdzić, czy ESMira ma uprawnienie do wysyłania powiadomień.</string>
-    <string name="info_notification_setup_failed">Jest bardzo prawdopodobne, że Twój telefon nie będzie mógł odbierać powiadomień dla tego badania. Twój telefon może mieć specjalne ustawienia, o których nie wiemy. Skontaktuj się z badaczem badania lub twórcą aplikacji (podając model telefonu), aby znaleźć rozwiązanie problemu.</string>
-    <string name="welcome_first_instructions">Witaj w ESMira, anonimowym Asystencie Kwestionariuszy.
+    <string name="info_notification_setup_failed">Jest bardzo prawdopodobne, że Twój telefon nie będzie mógł odbierać powiadomień dla tego badania. Twój telefon może mieć specjalne ustawienia. Skontaktuj się z badaczami lub twórcami aplikacji (podając model telefonu), aby znaleźć rozwiązanie problemu.</string>
+    <string name="welcome_first_instructions">Witaj w ESMira, anonimowym asystencie badania.
 \n
 \nAby rozpocząć, wybierz badanie i dołącz do niego.
-\nTen komunikat pomoże Ci w tym procesie</string>
+\nPostępuj zgodnie ze wskazówkami na ekranie.</string>
     <string name="state_loading_public_statistics">Ładowanie statystyk publicznych…</string>
-    <string name="notification_test_desc">To jest powiadomienie testowe, aby upewnić się, że ESMira może faktycznie wysyłać powiadomienia.</string>
-    <string name="notification_setup_desc">Powiadomienia służą do zapraszania Cię do wypełniania kwestionariuszy o ustalonych porach. Po zakończeniu badania nie będziesz już otrzymywać żadnych powiadomień.</string>
-    <string name="info_model_settings">Aby upewnić się, że ESMira może wysyłać powiadomienia w tle, dla Twojego modelu telefonu wymagane są specjalne ustawienia. Naciśnij „Otwórz ustawienia specyficzne dla urządzenia” poniżej, aby przejść do ustawień telefonu.</string>
-    <string name="error_app_update_needed_msg">Wykryto krytyczną aktualizację. Zaktualizuj ESMira w app store.</string>
+    <string name="notification_test_desc">To jest testowe powiadomienie ESMira, aby upewnić się, że odbierasz powiadomienia.</string>
+    <string name="notification_setup_desc">Powiadomienia przypominają o wypełnianiu ankiet o określonych porach. Po zakończeniu badania nie będziesz ich już otrzymywać.</string>
+    <string name="info_model_settings">Aby upewnić się, że ESMira może wysyłać powiadomienia w tle, dla Twojego modelu telefonu wymagane są specjalne ustawienia. Naciśnij „Otwórz ustawienia urządzenia” poniżej, aby przejść do ustawień telefonu.</string>
+    <string name="error_app_update_needed_msg">Dostępna jest kluczowa aktualizacja. Pobierz i zainstaluj najnowszą wersję ESMira z App Store.</string>
     <string name="app_name">ESMira</string>
-    <string name="additional_notification_settings_huaweiV2_2">Na kolejnym ekranie upewnij się, że ESMira ma uprawnienia do „Autostartu” oraz „Działania w tle”.</string>
-    <string name="additional_notification_settings_samsung_1">Na kolejnym ekranie poczekaj, aż \"Sprawdzanie\" zostanie zakończone, a następnie przewiń stronę do samego dołu.</string>
-    <string name="additional_notification_settings_samsung_2">Na dole strony wybierz „Aplikacje bez nadzoru”.</string>
+    <string name="additional_notification_settings_huaweiV2_2">Na kolejnym ekranie upewnij się, że ESMira ma uprawnienia do „Automatycznego uruchamiania” oraz „Działania w tle”.</string>
+    <string name="additional_notification_settings_samsung_1">Na kolejnym ekranie poczekaj, aż \"Sprawdzanie\" się zakończy, a następnie przewiń stronę na sam dół.</string>
+    <string name="additional_notification_settings_samsung_2">Na dole strony wybierz opcję „Aplikacje bez ograniczeń”.</string>
     <string name="additional_notification_settings_zte_blade_l110_1">Na kolejnym ekranie wybierz „Bateria”.</string>
     <string name="additional_notification_settings_zte_blade_l110_2">Następnie wybierz „Ustawienia synchronizacji HeartBeat”.</string>
     <string name="android_version">Wersja: %1$s, %2$s</string>
@@ -228,19 +228,19 @@
     <string name="new_message">Nowa wiadomość</string>
     <string name="notificationChannel_generalNotifications_name">Powiadomienia ogólne</string>
     <string name="notificationChannel_generalNotifications_desc">Powiadomienia ogólne do różnych celów.</string>
-    <string name="notificationChannel_questionnaire_name">Przypomnienie o kwestionariuszach</string>
-    <string name="notificationChannel_questionnaire_desc">Badania mogą wysyłać przypomnienia o wypełnieniu kwestionariuszy o określonych porach dnia. Najczęściej powiadomienia te są istotne dla prawidłowego działania badań. Prosimy nie wyłączać tego kanału powiadomień.</string>
-    <string name="notificationChannel_studyMessages_name">Wiadomości badania</string>
+    <string name="notificationChannel_questionnaire_name">Przypomnienie o ankietach</string>
+    <string name="notificationChannel_questionnaire_desc">Badania mogą wysyłać przypomnienia o wypełnieniu ankiet w określonych porach dnia. Zwykle są one ważne dla prawidłowego przeprowadzenia badania. Nie wyłączaj tego kanału powiadomień.</string>
+    <string name="notificationChannel_studyMessages_name">Wiadomości dotyczące badania</string>
     <string name="notificationChannel_studyMessages_desc">Wysyła powiadomienie, gdy badacz prześle Ci nową wiadomość dotyczącą trwającego badania.</string>
     <string name="notificationChannel_studyUpdates_name">Badanie zaktualizowane</string>
-    <string name="notificationChannel_studyUpdates_desc">Wysyła powiadomienie, gdy badanie zostało zaktualizowane, jeśli chcesz zmienić jego harmonogram powiadomień.</string>
+    <string name="notificationChannel_studyUpdates_desc">Wysyła powiadomienie, gdy badanie zostanie zaktualizowane, na wypadek gdybyś chciał/-a zmienić harmonogram powiadomień badania.</string>
     <string name="notifications_not_working">Powiadomienia nie działają?</string>
     <string name="open_device_specific_settings">Otwórz ustawienia specyficzne dla urządzenia</string>
     <string name="open_device_specific_settings_numbered">Otwórz ustawienia specyficzne dla urządzenia %1$d</string>
     <string name="open_doNotDisturb_settings">Otwórz ustawienia „Nie przeszkadzać”</string>
     <string name="open_notification_settings">Otwórz ustawienia powiadomień</string>
     <string name="send_message_to_researcher">Wyślij anonimową wiadomość do badacza</string>
-    <string name="app_usage">Użycie aplikacji</string>
+    <string name="app_usage">Korzystanie z aplikacji</string>
     <string name="failed">Błąd</string>
     <string name="feature_is_not_supported">Ta funkcja nie jest obsługiwana na Twoim telefonie</string>
     <string name="time_format_android">%1$s:%2$s:%3$s</string>
@@ -277,8 +277,8 @@
     <string name="error_app_usage_revoked_android_desc">Badanie, w którym uczestniczysz, wymaga uprawnień do dostępu do danych o użyciu aplikacji. Upewnij się, że ESMira jest włączona na ekranie uprawnień.</string>
     <string name="found_location">Znaleziono lokalizację: %1$s</string>
     <string name="error_notifications_broken_android_dontkillmyapp">Jeśli ten komunikat nie jest dla Ciebie pomocny, możesz również odwiedzić ⁣ <a href="https://dontkillmyapp.com/">dontkillmyapp.com</a>, aby uzyskać więcej informacji.</string>
-    <string name="additional_notification_settings_huaweiV2_1">Na kolejnym ekranie znajdź ESMira na liście aplikacji i upewnij się, że jest „Zarządzana ręcznie”.</string>
-    <string name="additional_notification_settings_zte_blade_3_3">Teraz znajdź na liście „ESMira”, kliknij ją, wybierz „Nie optymalizuj” i naciśnij „Gotowe”.</string>
+    <string name="additional_notification_settings_huaweiV2_1">Na kolejnym ekranie znajdź ESMira na liście aplikacji i upewnij się, że ma ustawioną opcję „Zarządzanie ręczne\".</string>
+    <string name="additional_notification_settings_zte_blade_3_3">Teraz wyszukaj na liście „ESMira”, kliknij ją, wybierz „Nie optymalizuj” i naciśnij „Gotowe”.</string>
     <string name="ask_model_settings_correct">Czy udało Ci się dostosować ustawienia zgodnie z instrukcjami?</string>
     <string name="ask_notification_posted">Czy otrzymałeś(-aś) powiadomienie?</string>
     <plurals name="android_info_missed_notifications" comment="Needs to be short">
@@ -289,22 +289,22 @@
     </plurals>
     <string name="app_usage_desc">To badanie wymaga uprawnień do dostępu do użycia aplikacji. Upewnij się, że ESMira jest włączona na ekranie uprawnień, a następnie naciśnij przycisk wstecz w telefonie.</string>
     <string name="hint_missing_fields">Jedno lub więcej pytań nie zostało wypełnionych. Naciśnij ponownie przycisk „kontynuuj/zapisz”, aby mimo to przejść dalej.</string>
-    <string name="additional_notification_settings_zte_blade_l110_3">Teraz znajdź na liście ”ESMira” i upewnij się, że pole wyboru jest zaznaczone.</string>
-    <string name="additional_notification_settings_zte_blade_3_1">Na kolejnym ekranie wybierz „Optymalizacja baterii”.</string>
+    <string name="additional_notification_settings_zte_blade_l110_3">Teraz wyszukaj na liście ”ESMira” i upewnij się, że pole wyboru jest zaznaczone.</string>
+    <string name="additional_notification_settings_zte_blade_3_1">Na kolejnym ekranie wybierz „Oszczędzanie baterii”.</string>
     <string name="info_no_messages">Brak wiadomości.</string>
     <string name="android_info_no_studies_withAccessKey">Nie znaleziono badań z kluczem dostępu „%1$s” na tym serwerze.</string>
     <string name="sync_data">Synchronizuj dane</string>
-    <string name="additional_notification_settings_general_android">Na kolejnym ekranie upewnij się, że ESMira ma pozwolenie na działanie w tle oraz uruchamianie się po ponownym włączeniu telefonu. Niestety, nazwy ustawień (a także to, które ustawienia są dostępne) różnią się znacznie w zależności od modelu telefonu i nie posiadamy zrzutów ekranu dla tego modelu, aby pomóc Ci bardziej szczegółowo. Spróbuj więc samodzielnie odnaleźć odpowiednie ustawienia. Jeśli chcesz nam pomóc i wysłać zrzuty ekranu, skontaktuj się z twórcą aplikacji (esmira@kl.ac.at).
+    <string name="additional_notification_settings_general_android">Na kolejnym ekranie upewnij się, że ESMira ma pozwolenie na działanie w tle oraz uruchamianie się po ponownym włączeniu telefonu. Niestety, nazwy ustawień (a także to, które ustawienia są dostępne) różnią się znacznie w zależności od modelu telefonu. Nie dysponujemy zrzutami ekranu dla tego modelu, które mogłyby pomóć Ci w dalszej konfiguracji. Spróbuj więc samodzielnie odnaleźć odpowiednie ustawienia. Jeśli chcesz nam pomóc i wysłać zrzuty ekranu, skontaktuj się z twórcą aplikacji (esmira@kl.ac.at).
 \n
 \nPo zakończeniu naciśnij przycisk „Wstecz” w telefonie, aby powrócić do tego ekranu.</string>
-    <string name="additional_notification_settings_esmi">Na następnym ekranie znajdź ESMira na liście aplikacji i upewnij się, że ma uprawnienia do automatycznego uruchamiania.</string>
-    <string name="additional_notification_settings_zte_blade_3_2">Następnie otwórz menu rozwijane i wybierz „Wszystkie aplikacje”.</string>
-    <string name="additional_notification_settings_finish">Po zakończeniu naciśnij przycisk „Wstecz” w telefonie, aby powrócić do tego ekranu.</string>
+    <string name="additional_notification_settings_esmi">Na następnym ekranie znajdź ESMira na liście aplikacji i upewnij się, że ma włączone automatyczne uruchamianie.</string>
+    <string name="additional_notification_settings_zte_blade_3_2">Następnie otwórz listę rozwijaną i wybierz „Aplikacje”.</string>
+    <string name="additional_notification_settings_finish">Po zakończeniu naciśnij „Cofnij” w telefonie, aby powrócić do tego ekranu.</string>
     <string name="additional_notification_settings_samsung_3">Na kolejnym ekranie naciśnij przycisk „Dodaj aplikacje”. Następnie wybierz ESMira z listy i naciśnij „OK”.</string>
     <string name="dialogDesc_leave_study">Czy chcesz opuścić to badanie? Utracisz cały swój postęp w badaniu.</string>
-    <string name="error_notifications_broken_android_desc">Niestety niektóre modele smartfonów mają również ukryte ustawienia, które są konieczne do zezwolenia na powiadomienia w tle.</string>
+    <string name="error_notifications_broken_android_desc">Niestety, niektóre modele smartfonów mają ukryte ustawienia, które trzeba włączyć, aby zezwolić na powiadomienia w tle.</string>
     <string name="error_notifications_broken_android_header">ESMira nie może wysyłać powiadomień!</string>
-    <string name="error_notifications_broken_android_footer">Czy potrzebujesz dalszej pomocy lub chcesz nam pomóc, dostarczając więcej informacji (zrzuty ekranu, opisy) o Twoim modelu telefonu do ESMira? Napisz do nas e-mail na adres: <a href="mailto:esmira@kl.ac.at">esmira@kl.ac.at</a>.</string>
+    <string name="error_notifications_broken_android_footer">Potrzebujesz dodatkowej pomocy lub chcesz pomóc nam wprowadzić więcej informacji (zrzuty ekranu, opisy) na temat Twojego modelu urządzenia do ESMira? Napisz do nas na adres: <a href="mailto:esmira@kl.ac.at">esmira@kl.ac.at</a>.</string>
     <string name="app_usage_whatFor">Niektóre kwestionariusze tego badania śledzą czas korzystania z określonych aplikacji (lub smartfona ogólnie) w ciągu ostatniego dnia. Dane te NIE są zbierane w tle i są zapisywane TYLKO wtedy, gdy wyślesz odpowiedni kwestionariusz. Przed wysłaniem kwestionariusza zostaniesz poinformowany, czy i które dane są wysyłane.</string>
     <string name="notificationChannel_screen_tracking">Powiadomienie o usłudze czasu korzystania z ekranu.</string>
     <plurals name="info_reward_is_not_active_yet">
