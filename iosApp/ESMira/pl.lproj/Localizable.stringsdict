@@ -13,13 +13,13 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>1$d</string>
 			<key>zero</key>
-			<string>Brak nieodebranych powiadomień.</string>
+			<string>Brak nowych powiadomień.</string>
 			<key>one</key>
-			<string>Jedno nieodebrane powiadomienie.</string>
+			<string>Jedno nowe powiadomienie.</string>
 			<key>few</key>
-			<string>Kilka nieodebranych powiadomień.</string>
+			<string>Kilka nowych powiadomień.</string>
 			<key>many</key>
-			<string>%1$d nieodebrnaych powiadomień.</string>
+			<string>%1$d nowych powiadomień.</string>
 		</dict>
 	</dict>
 	<key>info_reward_is_not_active_yet</key>
