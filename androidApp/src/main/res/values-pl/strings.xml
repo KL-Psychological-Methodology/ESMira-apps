@@ -75,7 +75,7 @@
     <string name="word_and">i</string>
     <string name="yes">Tak</string>
     <string name="rewards">Nagrody</string>
-    <string name="error_reward_conditions_not_met">Nie kwalifikujesz się jeszcze do nagrody.</string>
+    <string name="error_reward_conditions_not_met">Nie kwalifikujesz się jeszcze do otrzymania nagrody.</string>
     <string name="colon_reward_code_header">Twój kod nagrody to:</string>
     <string name="reward_code_send_email">Wyślij e-mailem</string>
     <string name="reward_code_share">Udostępnij przez aplikację</string>
@@ -83,7 +83,7 @@
 \nOto mój kod nagrody: [[CODE]].
 \nMoje dane:</string>
     <string name="error_already_generated">Kod nagrody został już wygenerowany na innym urządzeniu. Skontaktuj się w tej sprawie z badaczem.</string>
-    <string name="error_reward_questionnaires_not_finished">Niektóre kwestionariusze nie były wypełniane wystarczająco często:</string>
+    <string name="error_reward_questionnaires_not_finished">Niektóre ankiety nie były wypełniane wystarczająco często:</string>
     <string name="upload_protocol">Prześlij protokół</string>
     <string name="none">Brak</string>
     <string name="quit_at">Zakończono o</string>
@@ -99,7 +99,7 @@
     <string name="east_abr">E</string>
     <string name="south_abr">S</string>
     <string name="west_abr">W</string>
-    <string name="start_timer">Uruchom minutnik</string>
+    <string name="start_timer">Uruchom licznik czasu</string>
     <string name="start_audio_record">Rozpocznij nagrywanie</string>
     <string name="stop_audio_record">Zatrzymaj nagrywanie</string>
     <string name="start_playing_audio">Odtwórz</string>
@@ -107,7 +107,7 @@
     <string name="list_devices">Lista %1$d urządzeń</string>
     <string name="select_picture">Wybierz obraz</string>
     <string name="distance_rssi">Odległość (RSSI)</string>
-    <string name="no_active_questionnaires">Brak aktywnych kwestionariuszy</string>
+    <string name="no_active_questionnaires">Brak aktywnych ankiet</string>
     <string name="error_gps_disabled">GPS jest wyłączony!</string>
     <string name="scanning">Skanowanie</string>
     <string name="countdown_running">Odliczanie w toku</string>
@@ -153,7 +153,7 @@
     <string name="welcome_qr_question">Czy masz kod QR badania?</string>
     <string name="take_picture">Zrób zdjęcie</string>
     <string name="joined_at">Dołączono o</string>
-    <string name="completed_questionnaires">Wypełnione kwestionariusze</string>
+    <string name="completed_questionnaires">Wypełnione ankiety</string>
     <string name="study_description">Opis badania</string>
     <string name="confirm_delete_study">Czy chcesz usunąć to badanie i wszystkie jego dane lokalne? Dane, które zostały już przesłane na serwer, nie zostaną usunięte. Utracisz jednak swoje statystyki osobiste, wiadomości oraz kod nagrody.</string>
     <string name="enable_notifications">Włącz powiadomienia</string>
@@ -166,7 +166,7 @@
     <string name="study_information">Informacje o badaniu</string>
     <string name="about_ESMira">O ESMira</string>
     <string name="open_url">Otwórz adres URL</string>
-    <string name="could_not_determine_location">Nie udało się ustalić lokalizacji</string>
+    <string name="could_not_determine_location">Nie można określić lokalizacji</string>
     <string name="text_script_error">!! ESMira napotkała problem podczas próby wyświetlenia tego tekstu !!</string>
     <string name="dialogDesc_delete_statistics">Czy chcesz usunąć wszystkie statystyki dla tego badania?</string>
     <string name="info_error_report_header">Wykryto krytyczny błąd!</string>
@@ -184,17 +184,17 @@
     <string name="send">Wyślij</string>
     <string name="just_finished">Zakończono</string>
     <string name="extras">Dodatki</string>
-    <string name="show_inactive_questionnaires">Pokaż nieaktywne kwestionariusze</string>
+    <string name="show_inactive_questionnaires">Pokaż nieaktywne ankiety</string>
     <string name="sent_to_whom">Do kogo wysłano?</string>
     <string name="anonymised_device">Zanonimizowane urządzenie</string>
     <string name="notification_test_name">Powiadomienie testowe</string>
     <string name="open_sound_settings">Otwórz ustawienia dźwięku</string>
     <string name="tomorrow">Jutro</string>
     <string name="start_scanning">Rozpocznij skanowanie</string>
-    <string name="reward_code_description">Ważne jest dla nas, aby wszystkie dane przekazywane przez ESMira pozostały całkowicie anonimowe. Aby jednak otrzymać nagrodę, musisz podać pewne dane osobowe, które nie powinny być powiązane z Twoim identyfikatorem użytkownika. Z tego powodu stosujemy kod nagrody, który nie jest powiązany ani z Twoim identyfikatorem, ani z żadnymi danymi, które podałeś(-aś).</string>
+    <string name="reward_code_description">Wszystkie odpowiedzi zbierane za pośrednictwem ESMira są całkowicie anonimowe. Aby jednak otrzymać nagrodę, konieczne będzie podanie pewnych danych osobowych, które nie będą powiązane z Twoim identyfikatorem użytkownika. Z tego powodu stosujemy kod nagrody, który nie jest powiązany ani z Twoim identyfikatorem użytkownika, ani z żadnymi przekazanymi przez Ciebie odpowiedziami w ramach badania.</string>
     <string name="distance_rssi_content">~%1$.1fm (%2$d)</string>
     <string name="error_report_message">Raport o błędach został wysłany. Komentarz:</string>
-    <string name="about_ESMira_description">ESMira to platforma składająca się z serwera i aplikacji mobilnej (Android, iOS), opracowana do projektów badawczych z wykorzystaniem metody doświadczeń codziennych (ESM). ESMira oferuje bardzo prosty proces konfiguracji i łatwość użycia – a przy tym jest bezpłatna, zdecentralizowana i otwartoźródłowa.</string>
+    <string name="about_ESMira_description">ESMira to platforma składająca się z serwera i aplikacji mobilnej (na systemy Android i iOS), opracowana do projektów badawczych wykorzystujących metodę pobierania próbek doświadczenia (ESM). ESMira oferuje bardzo prosty proces konfiguracji i łatwość obsługi, pozostając przy tym bezpłatnym, zdecentralizowanym i otwartym oprogramowaniem.</string>
     <string name="notification_permission_check">Naciśnij „Włącz powiadomienia”, aby sprawdzić, czy ESMira ma uprawnienie do wysyłania powiadomień.</string>
     <string name="info_notification_setup_failed">Jest bardzo prawdopodobne, że Twój telefon nie będzie mógł odbierać powiadomień dla tego badania. Twój telefon może mieć specjalne ustawienia. Skontaktuj się z badaczami lub twórcami aplikacji (podając model telefonu), aby znaleźć rozwiązanie problemu.</string>
     <string name="welcome_first_instructions">Witaj w ESMira, anonimowym asystencie badania.
@@ -241,7 +241,7 @@
     <string name="open_notification_settings">Otwórz ustawienia powiadomień</string>
     <string name="send_message_to_researcher">Wyślij anonimową wiadomość do badacza</string>
     <string name="app_usage">Korzystanie z aplikacji</string>
-    <string name="failed">Błąd</string>
+    <string name="failed">Wystąpił błąd</string>
     <string name="feature_is_not_supported">Ta funkcja nie jest obsługiwana na Twoim telefonie</string>
     <string name="time_format_android">%1$s:%2$s:%3$s</string>
     <string name="not_installed">Nie zainstalowano</string>
@@ -251,9 +251,9 @@
     <string name="colon_usageTime">Czas użycia:</string>
     <string name="colon_usageCount">Liczba użyć:</string>
     <string name="error_no_cameraApp">Nie znaleziono aplikacji aparatu!</string>
-    <string name="info_screen_tracking_notification_content">Pomiar czasu korzystania z ekranu…</string>
-    <string name="notificationChannel_screen_tracking_desc">Niektóre badania mierzą czas korzystania z ekranu, co wymaga działania usługi w tle.</string>
-    <string name="data_will_be_sent_to_app_developer">Raport o błędzie zostanie wysłany do twórcy aplikacji (%1$s). Podkreślamy, że raport o błędzie nie zawiera żadnych danych osobowych ani danych z kwestionariuszy!</string>
+    <string name="info_screen_tracking_notification_content">Pomiar czasu spędzonego przed ekranem…</string>
+    <string name="notificationChannel_screen_tracking_desc">Niektóre badania mierzą czas spędzony przed ekranem, co wymaga działania aplikacji w tle.</string>
+    <string name="data_will_be_sent_to_app_developer">Raport o błędzie zostanie wysłany do twórcy aplikacji (%1$s). Podkreślamy, że raport o błędzie nie zawiera żadnych danych osobowych ani danych z ankiety!</string>
     <string name="colon_choose_study">Wybierz badanie:</string>
     <string name="from_X">Od %1$s</string>
     <string name="check_phone_model">Sprawdź model telefonu</string>
@@ -263,18 +263,18 @@
     <string name="repeating">Powtarzające się</string>
     <string name="one_time">Jednorazowe</string>
     <string name="colon_last_filled_out">Ostatnio wypełniono: %1$s</string>
-    <string name="disabled_questionnaires">Wyłączone kwestionariusze</string>
+    <string name="disabled_questionnaires">Nieaktywne ankiety</string>
     <string name="send_email">Wyślij e-mail</string>
     <string name="stop_scanning">zatrzymaj skanowanie</string>
     <string name="yesterday">Wczoraj</string>
     <string name="error_bluetooth_disabled">Bluetooth jest wyłączony!</string>
     <string name="server_url">Adres URL serwera</string>
-    <string name="schedule_permission_setup_desc">ESMira musi mieć możliwość planowania zdarzeń (takich jak przypomnienia o kwestionariuszach) o określonych porach.</string>
+    <string name="schedule_permission_setup_desc">ESMira musi mieć możliwość planowania zdarzeń (takich jak przypomnienia o ankietach) o określonych porach.</string>
     <string name="schedule_permission_check">Proszę nacisnąć „Włącz harmonogramy”, a następnie wybrać ESMira z listy i włączyć „Zezwól na ustawianie alarmów i przypomnień”.</string>
     <string name="enable_schedules">Włącz harmonogramy</string>
     <string name="info_schedule_setup_skipped">To badanie nie będzie działać prawidłowo!</string>
-    <string name="error_app_usage_revoked_android_header">ESMira nie ma dostępu do danych o użyciu aplikacji</string>
-    <string name="error_app_usage_revoked_android_desc">Badanie, w którym uczestniczysz, wymaga uprawnień do dostępu do danych o użyciu aplikacji. Upewnij się, że ESMira jest włączona na ekranie uprawnień.</string>
+    <string name="error_app_usage_revoked_android_header">ESMira nie może uzyskać dostępu do danych o użyciu aplikacji</string>
+    <string name="error_app_usage_revoked_android_desc">To badanie wymaga dostępu do danych o użyciu aplikacji. Sprawdź w ustawieniach, czy ESMira ma włączony dostęp do tych danych.</string>
     <string name="found_location">Znaleziono lokalizację: %1$s</string>
     <string name="error_notifications_broken_android_dontkillmyapp">Jeśli ten komunikat nie jest dla Ciebie pomocny, możesz również odwiedzić ⁣ <a href="https://dontkillmyapp.com/">dontkillmyapp.com</a>, aby uzyskać więcej informacji.</string>
     <string name="additional_notification_settings_huaweiV2_1">Na kolejnym ekranie znajdź ESMira na liście aplikacji i upewnij się, że ma ustawioną opcję „Zarządzanie ręczne\".</string>
@@ -282,13 +282,13 @@
     <string name="ask_model_settings_correct">Czy udało Ci się dostosować ustawienia zgodnie z instrukcjami?</string>
     <string name="ask_notification_posted">Czy otrzymałeś(-aś) powiadomienie?</string>
     <plurals name="android_info_missed_notifications" comment="Needs to be short">
-        <item quantity="one">1 nieodebrane powiadomienie.</item>
-        <item quantity="few"/>
+        <item quantity="one">1 nowe powiadomienie.</item>
+        <item quantity="few"></item>
         <item quantity="many">%1$d nieodebrane powiadomienia.</item>
         <item quantity="other">%1$d nieodebrane powiadomienia.</item>
     </plurals>
-    <string name="app_usage_desc">To badanie wymaga uprawnień do dostępu do użycia aplikacji. Upewnij się, że ESMira jest włączona na ekranie uprawnień, a następnie naciśnij przycisk wstecz w telefonie.</string>
-    <string name="hint_missing_fields">Jedno lub więcej pytań nie zostało wypełnionych. Naciśnij ponownie przycisk „kontynuuj/zapisz”, aby mimo to przejść dalej.</string>
+    <string name="app_usage_desc">To badanie wymaga uprawnień do dostępu do użycia aplikacji. Upewnij się, że ESMira jest włączona na ekranie uprawnień, a następnie naciśnij \"Wstecz\".</string>
+    <string name="hint_missing_fields">Jedno lub więcej pytań pozostało bez odpowiedzi. Naciśnij ponownie „kontynuuj/zapisz”, aby mimo to przejść dalej.</string>
     <string name="additional_notification_settings_zte_blade_l110_3">Teraz wyszukaj na liście ”ESMira” i upewnij się, że pole wyboru jest zaznaczone.</string>
     <string name="additional_notification_settings_zte_blade_3_1">Na kolejnym ekranie wybierz „Oszczędzanie baterii”.</string>
     <string name="info_no_messages">Brak wiadomości.</string>
@@ -305,8 +305,8 @@
     <string name="error_notifications_broken_android_desc">Niestety, niektóre modele smartfonów mają ukryte ustawienia, które trzeba włączyć, aby zezwolić na powiadomienia w tle.</string>
     <string name="error_notifications_broken_android_header">ESMira nie może wysyłać powiadomień!</string>
     <string name="error_notifications_broken_android_footer">Potrzebujesz dodatkowej pomocy lub chcesz pomóc nam wprowadzić więcej informacji (zrzuty ekranu, opisy) na temat Twojego modelu urządzenia do ESMira? Napisz do nas na adres: <a href="mailto:esmira@kl.ac.at">esmira@kl.ac.at</a>.</string>
-    <string name="app_usage_whatFor">Niektóre kwestionariusze tego badania śledzą czas korzystania z określonych aplikacji (lub smartfona ogólnie) w ciągu ostatniego dnia. Dane te NIE są zbierane w tle i są zapisywane TYLKO wtedy, gdy wyślesz odpowiedni kwestionariusz. Przed wysłaniem kwestionariusza zostaniesz poinformowany, czy i które dane są wysyłane.</string>
-    <string name="notificationChannel_screen_tracking">Powiadomienie o usłudze czasu korzystania z ekranu.</string>
+    <string name="app_usage_whatFor">Niektóre ankiety w tym badaniu śledzą czas użytkowania konkretnych aplikacji (lub smartfona ogólnie) z ostatniej doby. Dane te NIE są pobierane w tle i są zapisywane TYLKO wtedy, gdy wysyłasz daną ankietę. Przed wysłaniem ankiety otrzymasz informację, czy i jakie dane zostały wysłane.</string>
+    <string name="notificationChannel_screen_tracking">Powiadomienie o usłudze \"Czas przed ekranem\".</string>
     <plurals name="info_reward_is_not_active_yet">
         <item quantity="one">Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne w ciągu jednego dnia.</item>
         <item quantity="few"/>
