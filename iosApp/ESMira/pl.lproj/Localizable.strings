@@ -129,7 +129,7 @@
 "just_finished" = "Zakończono";
 "welcome_first_instructions" = "Witaj w ESMira, anonimowym asystencie badania.\n\nAby rozpocząć, wybierz badanie i dołącz do niego.\nPostępuj zgodnie ze wskazówkami na ekranie.";
 "state_loading_public_statistics" = "Ładowanie statystyk publicznych…";
-"error_reward_conditions_not_met" = "Nie kwalifikujesz się jeszcze do nagrody.";
+"error_reward_conditions_not_met" = "Nie kwalifikujesz się jeszcze do otrzymania nagrody.";
 "colon_reward_code_header" = "Twój kod nagrody to:";
 "reward_code_send_email" = "Wyślij e-mailem";
 "info_study_not_active_anymore" = "To badanie nie jest już aktywne.";
@@ -138,12 +138,12 @@
 "study_information" = "Informacje o badaniu";
 "joined_at" = "Dołączono o";
 "quit_at" = "Zakończono o";
-"completed_questionnaires" = "Wypełnione kwestionariusze";
+"completed_questionnaires" = "Wypełnione ankiety";
 "upload_protocol" = "Prześlij protokół";
 "are_you_sure" = "Czy jesteś pewien/pewna?";
 "rejoin_study" = "Dołącz ponownie";
 "delete_study" = "Usuń badanie";
-"show_inactive_questionnaires" = "Pokaż nieaktywne kwestionariusze";
+"show_inactive_questionnaires" = "Pokaż nieaktywne ankiety";
 "about_ESMira" = "O ESMira";
 "colon_homepage" = "Strona główna:";
 "colon_github" = "GitHub:";
@@ -153,7 +153,7 @@
 "east_abr" = "E";
 "south_abr" = "S";
 "west_abr" = "W";
-"start_timer" = "Uruchom minutnik";
+"start_timer" = "Uruchom licznik czasu";
 "open_url" = "Otwórz adres URL";
 "start_audio_record" = "Rozpocznij nagrywanie";
 "stop_audio_record" = "Zatrzymaj nagrywanie";
@@ -163,7 +163,7 @@
 "none" = "Brak";
 "reward_code_content" = "Cześć,\nOto mój kod nagrody: [[CODE]].\nMoje dane:";
 "error_already_generated" = "Kod nagrody został już wygenerowany na innym urządzeniu. Skontaktuj się w tej sprawie z badaczem.";
-"error_reward_questionnaires_not_finished" = "Niektóre kwestionariusze nie były wypełniane wystarczająco często:";
+"error_reward_questionnaires_not_finished" = "Niektóre ankiety nie były wypełniane wystarczająco często:";
 "stop_playing_audio" = "Stop";
 "list_devices" = "Lista %1$d urządzeń";
 "select_picture" = "Wybierz obraz";
@@ -173,11 +173,11 @@
 "colon_between" = "Pomiędzy:";
 "send_error_report_to_researcher" = "Wyślij to również jako anonimową wiadomość do badacza";
 "error_report_message" = "Raport o błędach został wysłany. Komentarz:";
-"no_active_questionnaires" = "Brak aktywnych kwestionariuszy";
+"no_active_questionnaires" = "Brak aktywnych ankiet";
 "error_gps_disabled" = "GPS jest wyłączony!";
 "scanning" = "Skanowanie";
 "found_location" = "Znaleziono lokalizację: %1$@";
-"could_not_determine_location" = "Nie udało się ustalić lokalizacji";
+"could_not_determine_location" = "Nie można określić lokalizacji";
 "stop_scanning" = "Zatrzymaj skanowanie";
 "countdown_running" = "Odliczanie w toku";
 "toast_skipped_one_page" = "Pominięto 1 stronę";
@@ -214,9 +214,9 @@
 "informed_consent_desc" = "Aby kontynuować, przeczytaj świadomą zgodę i zaakceptuj.";
 "colon_used_libraries" = "Wykorzystane biblioteki:";
 "data_will_be_sent_to_app_developer" = "Raport o błędach zostanie wysłany do twórcy aplikacji (%1$@). Podkreślamy, że raport nie zawiera żadnych danych osobowych ani odpowiedzi z kwestionariuszy!";
-"about_ESMira_description" = "ESMira to platforma składająca się z serwera i aplikacji mobilnej (Android, iOS), opracowana do projektów badawczych z wykorzystaniem metody doświadczeń codziennych (ESM). ESMira oferuje bardzo prosty proces konfiguracji i łatwość użycia – a przy tym jest bezpłatna, zdecentralizowana i otwartoźródłowa.";
+"about_ESMira_description" = "ESMira to platforma składająca się z serwera i aplikacji mobilnej (na systemy Android i iOS), opracowana do projektów badawczych wykorzystujących metodę pobierania próbek doświadczenia (ESM). ESMira oferuje bardzo prosty proces konfiguracji i łatwość obsługi, pozostając przy tym bezpłatnym, zdecentralizowanym i otwartym oprogramowaniem.";
 "notification_permission_check" = "Naciśnij „Włącz powiadomienia”, aby sprawdzić, czy ESMira ma uprawnienie do wysyłania powiadomień.";
-"reward_code_description" = "Ważne jest dla nas, aby wszystkie dane przekazywane przez ESMira pozostały całkowicie anonimowe. Aby jednak otrzymać nagrodę, musisz podać pewne dane osobowe, które nie powinny być powiązane z Twoim identyfikatorem użytkownika. Z tego powodu stosujemy kod nagrody, który nie jest powiązany ani z Twoim identyfikatorem, ani z żadnymi danymi, które podałeś(-aś).";
+"reward_code_description" = "Wszystkie odpowiedzi zbierane za pośrednictwem ESMira są całkowicie anonimowe. Aby jednak otrzymać nagrodę, konieczne będzie podanie pewnych danych osobowych, które nie będą powiązane z Twoim identyfikatorem użytkownika. Z tego powodu stosujemy kod nagrody, który nie jest powiązany ani z Twoim identyfikatorem użytkownika, ani z żadnymi przekazanymi przez Ciebie odpowiedziami w ramach badania.";
 "notification_test_desc" = "To jest testowe powiadomienie ESMira, aby upewnić się, że odbierasz powiadomienia.";
 "notification_setup_desc" = "Powiadomienia przypominają o wypełnianiu ankiet o określonych porach. Po zakończeniu badania nie będziesz ich już otrzymywać.";
 "ios_dialogDesc_backgroundRefresh_disabled" = "Włącz „Odnawianie aplikacji w tle” w poniższych ustawieniach. Następnie upewnij się, że jest ono także włączone globalnie, wracając do „Ustawienia”, a następnie do: „Globalne” > „Odnawianie aplikacji w tle” i aktywując „Odnawianie aplikacji w tle” u góry.";
