@@ -57,6 +57,7 @@ class Input internal constructor( ) {
 	var name: String = "input"
 	private var text: String = ""
 	var required: Boolean = false
+	var optional: Boolean = false
 	var url: String = ""
 	var random: Boolean = false
 	var relevance: String = ""
@@ -240,6 +241,13 @@ class Input internal constructor( ) {
 			getValue().isEmpty()
 		else
 			false
+	}
+
+	fun wantsValue(): Boolean {
+		return if(optional || type == TYPES.text)
+			return false
+		else
+			getValue().isEmpty()
 	}
 	
 	fun getFilledUrl(): String {

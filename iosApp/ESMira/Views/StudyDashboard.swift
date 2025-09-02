@@ -301,6 +301,14 @@ struct StudyDashboard: View {
 			destinationView: { StudyInformation(study: self.study) }
 		))
 		
+		if(!study.faq.isEmpty) {
+			list.append(NavigationBox(
+				header: "faqs",
+				icon: "questionmark.circle",
+				destinationView: { FaqView(study: self.study) }
+			))
+		}
+		
 		if(study.hasStatistics()) {
 			list.append(NavigationBox(
 				header: "statistics",

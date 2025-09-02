@@ -191,6 +191,10 @@ class MainActivity: ComponentActivity() {
 			composable("studyInformation") {
 				PageStudyInformation(studyId.value)
 			}
+
+			composable("faq") {
+				PageFaq(studyId.value)
+			}
 			
 			composable("about") {
 				PageAbout()
@@ -329,6 +333,7 @@ class MainActivity: ComponentActivity() {
 				gotoStatistics = { navController.navigate("statistics") },
 				gotoDataProtocol = { navController.navigate("uploadProtocol") },
 				gotoStudyInformation = { navController.navigate("studyInformation") },
+				gotoFaq = { navController.navigate("faq") },
 				saveBackup = { saveBackupLauncher.launch("backup.db") },
 				loadBackup = { loadBackupLauncher.launch("*/*") },
 			)
@@ -451,7 +456,15 @@ class MainActivity: ComponentActivity() {
 			goBack = { onBackPressedDispatcher.onBackPressed() }
 		)
 	}
-	
+
+	@Composable
+	fun PageFaq(studyId: Long) {
+		FaqView(
+			getStudy = { DbLogic.getStudy(studyId)!! },
+			goBack = { onBackPressedDispatcher.onBackPressed() }
+		)
+	}
+
 	@Composable
 	fun PageAbout() {
 		AboutView {

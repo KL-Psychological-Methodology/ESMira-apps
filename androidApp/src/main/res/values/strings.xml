@@ -308,5 +308,7 @@
     <string name="option_other">Other</string>
     <string name="measure">Measure</string>
     <string name="charging">charging</string>
-    <string name="hint_missing_fields">One or more questions were not filled out. Press "continue/save" again to proceed anyway.</string>
+    <string name="hint_missing_fields">You might have missed a question.</string>
+    <string name="frequently_asked_questions">Frequently Asked Questions</string>
+    <string name="faqs">FAQs</string>
 </resources>

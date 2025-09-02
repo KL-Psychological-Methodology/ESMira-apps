@@ -51,6 +51,7 @@
 		6BCCF47D29BF20FA006E88E1 /* StudyDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCCF47C29BF20FA006E88E1 /* StudyDashboard.swift */; };
 		6BCCF48129BF3D35006E88E1 /* FixedGridView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCCF48029BF3D35006E88E1 /* FixedGridView.swift */; };
 		6BCD31C828252A3700BD266B /* URLImage in Frameworks */ = {isa = PBXBuildFile; productRef = 6BCD31C728252A3700BD266B /* URLImage */; };
+		6BCE4E192E65B9C40080E4A7 /* FaqView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCE4E182E65B9BA0080E4A7 /* FaqView.swift */; };
 		6BCFED5D2825274A009167B0 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCFED5C2825274A009167B0 /* AppState.swift */; };
 		6BCFED6128252761009167B0 /* OrientationLockedController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCFED6028252761009167B0 /* OrientationLockedController.swift */; };
 		6BCFED6328252778009167B0 /* Workarounds.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCFED6228252778009167B0 /* Workarounds.swift */; };
@@ -175,6 +176,7 @@
 		6BB8E5962C47B2FB0039D306 /* DurationStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DurationStruct.swift; sourceTree = "<group>"; };
 		6BCCF47C29BF20FA006E88E1 /* StudyDashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudyDashboard.swift; sourceTree = "<group>"; };
 		6BCCF48029BF3D35006E88E1 /* FixedGridView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FixedGridView.swift; sourceTree = "<group>"; };
+		6BCE4E182E65B9BA0080E4A7 /* FaqView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaqView.swift; sourceTree = "<group>"; };
 		6BCFED5C2825274A009167B0 /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		6BCFED6028252761009167B0 /* OrientationLockedController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OrientationLockedController.swift; sourceTree = "<group>"; };
 		6BCFED6228252778009167B0 /* Workarounds.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Workarounds.swift; sourceTree = "<group>"; };
@@ -298,6 +300,7 @@
 		6BCFED642825283A009167B0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6BCE4E182E65B9BA0080E4A7 /* FaqView.swift */,
 				6BA4BF9A283E566D00D3E8C7 /* AddStudySubViews */,
 				6B92BF3229DC38F80011E8D9 /* questionnaire */,
 				6BCFED7B2825283A009167B0 /* AddStudyView.swift */,
@@ -607,6 +610,7 @@
 				6BCCF48129BF3D35006E88E1 /* FixedGridView.swift in Sources */,
 				6BCFED882825283A009167B0 /* PermissionLine.swift in Sources */,
 				6B3A92C429E816410081A554 /* AboutESMira.swift in Sources */,
+				6BCE4E192E65B9C40080E4A7 /* FaqView.swift in Sources */,
 				6BCFEDB32825284D009167B0 /* TextFieldAlert.swift in Sources */,
 				6BD037F729F7D29100CAF208 /* DefaultButtons.swift in Sources */,
 				6BA4BF9E283E575700D3E8C7 /* QrExistsView.swift in Sources */,
@@ -825,7 +829,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 79;
+				CURRENT_PROJECT_VERSION = 81;
 				DEVELOPMENT_ASSET_PATHS = "ESMira/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZXQ54B7QHL;
 				ENABLE_PREVIEWS = YES;
@@ -835,7 +839,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.14.6;
+				MARKETING_VERSION = 1.14.8;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -857,7 +861,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 79;
+				CURRENT_PROJECT_VERSION = 81;
 				DEVELOPMENT_ASSET_PATHS = "ESMira/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZXQ54B7QHL;
 				ENABLE_PREVIEWS = YES;
@@ -867,7 +871,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.14.6;
+				MARKETING_VERSION = 1.14.8;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",

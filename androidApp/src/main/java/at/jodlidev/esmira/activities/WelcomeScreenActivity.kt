@@ -69,100 +69,138 @@ class WelcomeScreenActivity: ComponentActivity() {
 		val skipEntrance = (extras != null && extras.getBoolean(KEY_SKIP_ENTRANCE)) || openStudyDirectly
 		
 		setContent {
-			ESMiraSurface {
-				val context = LocalContext.current
-				val navController = rememberNavController()
-				
-				val studyLoadingData = rememberSaveable {
-					if(isOpenedFromLink) {
-						val urlData = QrInterpreter().check(data.toString())
-						if(urlData == null) {
-							finish()
-							mutableStateOf<StudyLoadingData?>(null)
-						}
-						else
-							mutableStateOf<StudyLoadingData?>(StudyLoadingData(urlData.url, urlData.accessKey, urlData.fallbackUrl, urlData.studyId, urlData.qId))
-					}
-					else if(hasStudyData)
-						mutableStateOf<StudyLoadingData?>(StudyLoadingData(serverUrl, accessKey, null, studyWebId, 0))
-					else
-						mutableStateOf<StudyLoadingData?>(null)
-				}
-				
-				val showStudyLoader = remember { mutableStateOf(openStudyDirectly) }
-				
-				val getStudyList = {
-					val loadData = studyLoadingData.value
-					val studiesJson = getStudyJsonList(context)
-					if(loadData != null && studiesJson.isNotEmpty())
-						Study.getFilteredStudyList(studiesJson, loadData.serverUrl, loadData.accessKey, loadData.studyId, loadData.qId)
-					else
-						Study.StudyList()
-				}
-				val studyList = remember { mutableStateOf(getStudyList()) }
-				
-				val gotoStudies = {
-					if(studyList.value.filteredStudies.size == 1) {
-						if(openStudyDirectly)
-							navController.popBackStack()
-						navController.navigate("studyInfo/0")
-					} else if (studyList.value.joinedStudies.size == 1) {
-						val firstJoinedStudy = studyList.value.joinedStudies.first()
-						DbLogic.getStudy(firstJoinedStudy.serverUrl, firstJoinedStudy.webId)?.id?.let{ DbUser.setCurrentStudyId(it) }
-						finish()
-					}
-					else if(navController.currentDestination?.route != "studyList")
-						navController.navigate("studyList")
-				}
-				
-				DisposableEffect(studyLoadingData.value) {
-					if(!showStudyLoader.value) // block will be called again, when screen was rotated because studyLoadingData was set in loadStudies()
-						return@DisposableEffect onDispose {}
-					
-					val loadData = studyLoadingData.value ?: return@DisposableEffect onDispose {}
-					
-					val web = Web.loadStudies(loadData.serverUrl, loadData.accessKey, loadData.fallbackUrl, onError = { msg, e ->
-						runOnUiThread {
-							showStudyLoader.value = false
-							studyLoadingData.value = null
-							clearStudyJsonList(context)
-							Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
-						}
-						e?.printStackTrace()
-					}, onSuccess = { studyString, urlFormatted ->
-						loadData.serverUrl = urlFormatted
-						saveStudyJsonList(context, studyString)
-						studyList.value = getStudyList()
-						runOnUiThread {
-							showStudyLoader.value = false
+			Scaffold { innerPadding ->
+				Box(modifier = Modifier.padding(innerPadding)) {
+					ESMiraSurface {
+						val context = LocalContext.current
+						val navController = rememberNavController()
 
-							gotoStudies()
+						val studyLoadingData = rememberSaveable {
+							if (isOpenedFromLink) {
+								val urlData = QrInterpreter().check(data.toString())
+								if (urlData == null) {
+									finish()
+									mutableStateOf<StudyLoadingData?>(null)
+								} else
+									mutableStateOf<StudyLoadingData?>(
+										StudyLoadingData(
+											urlData.url,
+											urlData.accessKey,
+											urlData.fallbackUrl,
+											urlData.studyId,
+											urlData.qId
+										)
+									)
+							} else if (hasStudyData)
+								mutableStateOf<StudyLoadingData?>(
+									StudyLoadingData(
+										serverUrl,
+										accessKey,
+										null,
+										studyWebId,
+										0
+									)
+								)
+							else
+								mutableStateOf<StudyLoadingData?>(null)
 						}
-					})
-					onDispose {
-						web.cancel()
+
+						val showStudyLoader = remember { mutableStateOf(openStudyDirectly) }
+
+						val getStudyList = {
+							val loadData = studyLoadingData.value
+							val studiesJson = getStudyJsonList(context)
+							if (loadData != null && studiesJson.isNotEmpty())
+								Study.getFilteredStudyList(
+									studiesJson,
+									loadData.serverUrl,
+									loadData.accessKey,
+									loadData.studyId,
+									loadData.qId
+								)
+							else
+								Study.StudyList()
+						}
+						val studyList = remember { mutableStateOf(getStudyList()) }
+
+						val gotoStudies = {
+							if (studyList.value.filteredStudies.size == 1) {
+								if (openStudyDirectly)
+									navController.popBackStack()
+								navController.navigate("studyInfo/0")
+							} else if (studyList.value.joinedStudies.size == 1) {
+								val firstJoinedStudy = studyList.value.joinedStudies.first()
+								DbLogic.getStudy(
+									firstJoinedStudy.serverUrl,
+									firstJoinedStudy.webId
+								)?.id?.let { DbUser.setCurrentStudyId(it) }
+								finish()
+							} else if (navController.currentDestination?.route != "studyList")
+								navController.navigate("studyList")
+						}
+
+						DisposableEffect(studyLoadingData.value) {
+							if (!showStudyLoader.value) // block will be called again, when screen was rotated because studyLoadingData was set in loadStudies()
+								return@DisposableEffect onDispose {}
+
+							val loadData =
+								studyLoadingData.value ?: return@DisposableEffect onDispose {}
+
+							val web = Web.loadStudies(
+								loadData.serverUrl,
+								loadData.accessKey,
+								loadData.fallbackUrl,
+								onError = { msg, e ->
+									runOnUiThread {
+										showStudyLoader.value = false
+										studyLoadingData.value = null
+										clearStudyJsonList(context)
+										Toast.makeText(context, msg, Toast.LENGTH_LONG).show()
+									}
+									e?.printStackTrace()
+								},
+								onSuccess = { studyString, urlFormatted ->
+									loadData.serverUrl = urlFormatted
+									saveStudyJsonList(context, studyString)
+									studyList.value = getStudyList()
+									runOnUiThread {
+										showStudyLoader.value = false
+
+										gotoStudies()
+									}
+								})
+							onDispose {
+								web.cancel()
+							}
+						}
+
+						if (showStudyLoader.value) {
+							LoadingView {
+								showStudyLoader.value = false
+								studyLoadingData.value = null
+							}
+						}
+
+						MainView(
+							startDestination = if (openStudyDirectly) "studyList" else if (skipEntrance) "qrQuestion" else "entrance",
+							getServerList = {
+								Web.serverList
+							},
+							studyList = { studyList.value.filteredStudies },
+							loadStudies = { serverUrl: String, accessKey: String, studyId: Long, qId: Long, fallbackUrl: String? ->
+								showStudyLoader.value = true
+								studyLoadingData.value = StudyLoadingData(
+									serverUrl,
+									accessKey,
+									fallbackUrl,
+									studyId,
+									qId
+								)
+							},
+							navController = navController
+						)
 					}
 				}
-				
-				if(showStudyLoader.value) {
-					LoadingView {
-						showStudyLoader.value = false
-						studyLoadingData.value = null
-					}
-				}
-				
-				MainView(
-					startDestination = if(openStudyDirectly) "studyList" else if(skipEntrance) "qrQuestion" else "entrance",
-					getServerList = {
-						Web.serverList
-					},
-					studyList = { studyList.value.filteredStudies },
-					loadStudies = { serverUrl: String, accessKey: String, studyId: Long, qId: Long, fallbackUrl: String? ->
-						showStudyLoader.value = true
-						studyLoadingData.value = StudyLoadingData(serverUrl, accessKey, fallbackUrl, studyId, qId)
-					},
-					navController = navController
-				)
 			}
 		}
 	}

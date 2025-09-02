@@ -221,4 +221,6 @@
 "option_other" = "Anderes";
 "measure" = "Messen";
 "charging" = "lade";
-"hint_missing_fields" = "Eine oder mehrere Fragen wurden nicht ausgefüllt. Drücken Sie \"Weiter/Speichern\" um trotzdem weiter zu machen.";
+"hint_missing_fields" = "Sie haben womöglich eine Frage übersehen.";
+"frequently_asked_questions" = "Häufig gestellte Fragen";
+"faqs" = "FAQs";
