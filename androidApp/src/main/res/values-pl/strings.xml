@@ -283,7 +283,7 @@
     <string name="ask_notification_posted">Czy otrzymałeś(-aś) powiadomienie?</string>
     <plurals name="android_info_missed_notifications" comment="Needs to be short">
         <item quantity="one">1 nowe powiadomienie.</item>
-        <item quantity="few"></item>
+        <item quantity="few"/>
         <item quantity="many">%1$d nieodebrane powiadomienia.</item>
         <item quantity="other">%1$d nieodebrane powiadomienia.</item>
     </plurals>
