@@ -187,7 +187,7 @@
 "option_other" = "Inne";
 "measure" = "Pomiar";
 "charging" = "ładowanie";
-"hint_missing_fields" = "Jedno lub więcej pytań nie zostało wypełnionych. Naciśnij ponownie „kontynuuj/zapisz”, aby mimo to przejść dalej.";
+"hint_missing_fields" = "Jedno lub więcej pytań pozostało bez odpowiedzi. Naciśnij ponownie „kontynuuj/zapisz”, aby mimo to przejść dalej.";
 "toast_skipped_to_end" = "Pominięto pozostałe strony";
 "text_script_error" = "!! ESMira napotkała problem podczas próby wyświetlenia tego tekstu !!";
 "info_wrong_access_key" = "Wygląda na to, że klucz dostępu do tego badania został zmieniony. Twoje dane nie zostaną przesłane, dopóki nie podasz poprawnego klucza dostępu.";
@@ -207,7 +207,7 @@
 /* Needs to be short */
 "ios_info_missed_notifications" = "%1$d pominiętych powiadomień.";
 "info_no_studies_joined" = "Nie dołączyłeś(-aś) do żadnego badania.";
-"info_required" = "* wymagane dane";
+"info_required" = "* wymagane dane wejściowe";
 "ios_info_no_studies_withAccessKey" = "Nie znaleziono badań z kluczem dostępu \"%1$@\" na tym serwerze.";
 "problems_with_notifications" = "Problemy z powiadomieniami";
 "search_manually" = "Wyszukaj ręcznie";
@@ -224,3 +224,5 @@
 "info_notification_setup_failed" = "Jest bardzo prawdopodobne, że Twój telefon nie będzie mógł odbierać powiadomień dla tego badania. Twój telefon może mieć specjalne ustawienia. Skontaktuj się z badaczami lub twórcami aplikacji (podając model telefonu), aby znaleźć rozwiązanie problemu.";
 "hint_server" = "example.com";
 "ios_info_study_updated" = "%1$@ został zaktualizowany!";
+"faqs" = "Najczęściej zadawane pytania";
+"frequently_asked_questions" = "Często zadawane pytania";
