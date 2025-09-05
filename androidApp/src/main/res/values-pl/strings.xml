@@ -36,7 +36,7 @@
     <string name="info_no_statistics">Brak statystyk do wyświetlenia.</string>
     <string name="info_nothing_to_sync">Brak danych do synchronizacji</string>
     <string name="info_questionnaire_success">Twoje dane zostały pomyślnie zapisane!</string>
-    <string name="info_required">* wymagane dane</string>
+    <string name="info_required">* wymagane dane wejściowe</string>
     <string name="info_schedule_changed_after_one_day">Twoje zmiany będą widoczne po jednym dniu.</string>
     <string name="info_sync_complete">Synchronizacja zakończona pomyślnie.</string>
     <string name="info_sync_failed">Synchronizacja nie powiodła się!</string>
@@ -313,4 +313,6 @@
         <item quantity="many">Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne w ciągu %1$d dni.</item>
         <item quantity="other">Nagrody za to badanie nie są jeszcze aktywne. Będą dostępne w ciągu %1$d dni.</item>
     </plurals>
+    <string name="frequently_asked_questions">Często zadawane pytania</string>
+    <string name="faqs">Najczęściej zadawane pytania</string>
 </resources>
