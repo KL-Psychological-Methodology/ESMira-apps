@@ -17,9 +17,9 @@
     <string name="delete_">Usuń</string>
     <string name="backup">Kopia zapasowa</string>
     <string name="colon_next_expected_notification">Następne zaplanowane powiadomienie:</string>
-    <string name="desc_update_studies">Zaktualizuj ustawienia swoich badań</string>
+    <string name="desc_update_studies">Zaktualizuj ustawienia badań</string>
     <string name="colon_enter_manually">Wprowadź ręcznie:</string>
-    <string name="desc_update_schedules">Zmień harmonogramy swoich badań</string>
+    <string name="desc_update_schedules">Zmień harmonogram badań</string>
     <string name="dialogTitle_delete_statistics">Usunąć statystyki?</string>
     <string name="error_app_update_needed_title">Aktualizacja ESMira.</string>
     <string name="error_input">Błędne dane wejściowe</string>
@@ -113,7 +113,7 @@
     <string name="countdown_running">Odliczanie w toku</string>
     <string name="toast_skipped_one_page">Pominięto 1 stronę</string>
     <string name="toast_skipped_pages">Pominięto %1$d stron</string>
-    <string name="duration_hours_abbreviation">G:</string>
+    <string name="duration_hours_abbreviation">H:</string>
     <string name="duration_minutes_abbreviation">M:</string>
     <string name="option_other">Inne</string>
     <string name="measure">Pomiar</string>
@@ -177,7 +177,7 @@
     <string name="info_no_model_settings">Nie znaleziono ustawień dla Twojego urządzenia.</string>
     <string name="info_no_questionnaires">Obecnie brak dostępnych ankiet…</string>
     <string name="info_no_schedules">Brak harmonogramów do zmiany.</string>
-    <string name="info_number_to_sync">Masz %1$d niesynchronizowanych zestawów danych</string>
+    <string name="info_number_to_sync">Masz %1$d niezsynchronizowanych zestawów danych</string>
     <string name="info_update_complete">Aktualizacja zakończona (pobrano %1$d aktualizacji).</string>
     <string name="load_backup">Wczytaj kopię zapasową</string>
     <string name="search_manually">Wyszukaj ręcznie</string>
@@ -214,7 +214,7 @@
     <string name="additional_notification_settings_zte_blade_l110_2">Następnie wybierz „Ustawienia synchronizacji HeartBeat”.</string>
     <string name="android_version">Wersja: %1$s, %2$s</string>
     <string name="android_contact_email">Skontaktuj się z %1$s</string>
-    <string name="android_email_study_subject">Dotyczy badania: %1$s”</string>
+    <string name="android_email_study_subject">Dotyczy badania: %1$s</string>
     <string name="android_error_general">Błąd: %1$s</string>
     <string name="error_notifications_broken_android_model_settings">Na Twoim telefonie znaleziono następujące ustawienia:</string>
     <string name="hint_message">Wiadomość</string>
@@ -276,7 +276,7 @@
     <string name="error_app_usage_revoked_android_header">ESMira nie może uzyskać dostępu do danych o użyciu aplikacji</string>
     <string name="error_app_usage_revoked_android_desc">To badanie wymaga dostępu do danych o użyciu aplikacji. Sprawdź w ustawieniach, czy ESMira ma włączony dostęp do tych danych.</string>
     <string name="found_location">Znaleziono lokalizację: %1$s</string>
-    <string name="error_notifications_broken_android_dontkillmyapp">Jeśli ten komunikat nie jest dla Ciebie pomocny, możesz również odwiedzić ⁣ <a href="https://dontkillmyapp.com/">dontkillmyapp.com</a>, aby uzyskać więcej informacji.</string>
+    <string name="error_notifications_broken_android_dontkillmyapp">Jeśli ten komunikat nie jest dla Ciebie pomocny, możesz również odwiedzić⁣ <a href="https://dontkillmyapp.com/">dontkillmyapp.com</a>, aby uzyskać więcej informacji.</string>
     <string name="additional_notification_settings_huaweiV2_1">Na kolejnym ekranie znajdź ESMira na liście aplikacji i upewnij się, że ma ustawioną opcję „Zarządzanie ręczne\".</string>
     <string name="additional_notification_settings_zte_blade_3_3">Teraz wyszukaj na liście „ESMira”, kliknij ją, wybierz „Nie optymalizuj” i naciśnij „Gotowe”.</string>
     <string name="ask_model_settings_correct">Czy udało Ci się dostosować ustawienia zgodnie z instrukcjami?</string>
