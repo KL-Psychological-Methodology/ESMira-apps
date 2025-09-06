@@ -17,14 +17,14 @@
 "continue_" = "Przejdź dalej";
 "delete_" = "Usuń";
 "delete_statistics" = "Usuń statystyki";
-"desc_update_studies" = "Zaktualizuj ustawienia swoich badań";
+"desc_update_studies" = "Zaktualizuj ustawienia badań";
 "add" = "Dodaj";
 "ios_contact_email" = "Kontakt %1$@";
 "change_schedules" = "Zmień harmonogramy";
-"desc_update_schedules" = "Zmień harmonogramy swoich badań";
+"desc_update_schedules" = "Zmień harmonogram badań";
 "error_schedule_time_window_too_small" = "Wybierz dłuższy przedział czasowy!";
 "dialogDesc_delete_statistics" = "Czy chcesz usunąć wszystkie statystyki dla tego badania?";
-"dialogDesc_leave_study" = "Czy chcesz opuścić to badanie? Będziesz musiał(a) ponownie wprowadzić dane dostępowe, aby do niego dołączyć.";
+"dialogDesc_leave_study" = "Czy chcesz opuścić to badanie? Aby ponownie do niego dołączyć, będziesz musiał jeszcze raz wprowadzić dane dostępowe.";
 "dialogTitle_delete_statistics" = "Usunąć statystyki?";
 "dialogTitle_leave_study" = "Opuścić badanie?";
 "enable" = "Włącz";
@@ -54,7 +54,7 @@
 "info_no_statistics" = "Brak statystyk do wyświetlenia.";
 "info_no_studies_noAccessKey" = "Na tym serwerze nie ma badań dostępnych publicznie.";
 "info_nothing_to_sync" = "Brak danych do synchronizacji";
-"info_number_to_sync" = "Masz %1$d niesynchronizowanych zestawów danych";
+"info_number_to_sync" = "Masz %1$d niezsynchronizowanych zestawów danych";
 "info_questionnaire_success" = "Twoje dane zostały pomyślnie zapisane!";
 "info_model_settings" = "Aby upewnić się, że ESMira może wysyłać powiadomienia w tle, dla Twojego modelu telefonu wymagane są specjalne ustawienia. Naciśnij „Otwórz ustawienia urządzenia” poniżej, aby przejść do ustawień telefonu.";
 "hint_error_comment" = "Jaki problem napotkałeś(-aś)?";
@@ -182,7 +182,7 @@
 "countdown_running" = "Odliczanie w toku";
 "toast_skipped_one_page" = "Pominięto 1 stronę";
 "toast_skipped_pages" = "Pominięto %1$d stron";
-"duration_hours_abbreviation" = "G:";
+"duration_hours_abbreviation" = "H:";
 "duration_minutes_abbreviation" = "M:";
 "option_other" = "Inne";
 "measure" = "Pomiar";
