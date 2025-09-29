@@ -61,10 +61,13 @@ class EventTrigger {
 		val skipThisQuestionnaire = skipThisQuestionnaire && questionnaireId == questionnaire?.id
 		val specificQuestionnaire = specificQuestionnaireInternalId != -1L && questionnaire?.internalId == specificQuestionnaireInternalId && studyId == questionnaire.studyId
 
+
 		if(noCondition || skipThisQuestionnaire || specificQuestionnaire) {
-			if(delaySec == 0)
-				exec(NativeLink.getNowMillis())
-			else
+			if(delaySec == 0) {
+				if(questionnaire?.isActive() == true) {
+					exec(NativeLink.getNowMillis())
+				}
+			} else
 				Scheduler.scheduleEventTrigger(this)
 		}
 	}
