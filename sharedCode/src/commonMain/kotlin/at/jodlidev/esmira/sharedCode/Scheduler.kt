@@ -382,8 +382,12 @@ object Scheduler {
 		}
 		else
 			eventTrigger.delaySec.toLong()*1000
-		
-		Alarm.createFromEventTrigger(eventTrigger, now + add)
+
+		val timestamp = now + add
+		val questionnaire = DbLogic.getQuestionnaire(eventTrigger.questionnaireId)
+		if(questionnaire != null && questionnaire.isActive(timestamp)) {
+			Alarm.createFromEventTrigger(eventTrigger, timestamp)
+		}
 	}
 	
 	private fun getRandom(): Double {
