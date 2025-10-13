@@ -144,6 +144,18 @@
 		6B3A92C929F2AE2A0081A554 /* ShareStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareStruct.swift; sourceTree = "<group>"; };
 		6B3A92CB29F2B3CC0081A554 /* CompassStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CompassStruct.swift; sourceTree = "<group>"; };
 		6B3A92CD29F7B2720081A554 /* RecordAudioStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordAudioStruct.swift; sourceTree = "<group>"; };
+		6B3AB70E2E9D1497009675BD /* bs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bs; path = bs.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6B3AB70F2E9D1497009675BD /* bs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = bs; path = bs.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		6B3AB7102E9D14A6009675BD /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hr; path = hr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6B3AB7112E9D14A6009675BD /* hr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = hr; path = hr.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		6B3AB7122E9D14C1009675BD /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = it; path = it.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6B3AB7132E9D14C1009675BD /* it */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = it; path = it.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		6B3AB7142E9D14CE009675BD /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6B3AB7152E9D14CE009675BD /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sl; path = sl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		6B3AB7162E9D14E1009675BD /* sr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sr; path = sr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6B3AB7172E9D14E1009675BD /* sr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sr; path = sr.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		6B3AB7182E9D1503009675BD /* tl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tl; path = tl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6B3AB7192E9D1503009675BD /* tl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = tl; path = tl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		6B4996CC2825414100D8B6F1 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6B4996CE2825415300D8B6F1 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		6B4996D02825BD6300D8B6F1 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
@@ -521,6 +533,13 @@
 				Base,
 				de,
 				uk,
+				bs,
+				hr,
+				it,
+				sl,
+				sr,
+				tl,
+				fil,
 			);
 			mainGroup = 7555FF72242A565900829871;
 			packageReferences = (
@@ -691,6 +710,12 @@
 				6B4996DA2825BE3B00D8B6F1 /* de */,
 				6B4996DF2825BE5800D8B6F1 /* en */,
 				6BAC44DC2922369A007B7431 /* uk */,
+				6B3AB70E2E9D1497009675BD /* bs */,
+				6B3AB7102E9D14A6009675BD /* hr */,
+				6B3AB7122E9D14C1009675BD /* it */,
+				6B3AB7142E9D14CE009675BD /* sl */,
+				6B3AB7162E9D14E1009675BD /* sr */,
+				6B3AB7182E9D1503009675BD /* tl */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -701,6 +726,12 @@
 				6B4996DD2825BE4D00D8B6F1 /* de */,
 				6B4996E02825BE6300D8B6F1 /* en */,
 				6BAC44DD292236AB007B7431 /* uk */,
+				6B3AB70F2E9D1497009675BD /* bs */,
+				6B3AB7112E9D14A6009675BD /* hr */,
+				6B3AB7132E9D14C1009675BD /* it */,
+				6B3AB7152E9D14CE009675BD /* sl */,
+				6B3AB7172E9D14E1009675BD /* sr */,
+				6B3AB7192E9D1503009675BD /* tl */,
 			);
 			name = Localizable.stringsdict;
 			sourceTree = "<group>";
