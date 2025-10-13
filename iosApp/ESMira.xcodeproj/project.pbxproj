@@ -156,6 +156,22 @@
 		6B3AB7172E9D14E1009675BD /* sr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sr; path = sr.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		6B3AB7182E9D1503009675BD /* tl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tl; path = tl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6B3AB7192E9D1503009675BD /* tl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = tl; path = tl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		6B3AB71C2E9D16F8009675BD /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6B3AB71D2E9D16F8009675BD /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = cs; path = cs.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		6B3AB71E2E9D1704009675BD /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = el; path = el.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6B3AB71F2E9D1704009675BD /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = el; path = el.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		6B3AB7202E9D17C0009675BD /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6B3AB7212E9D17C0009675BD /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = es; path = es.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		6B3AB7222E9D1886009675BD /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6B3AB7232E9D1886009675BD /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = fr; path = fr.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		6B3AB7242E9D18CB009675BD /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = hi; path = hi.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6B3AB7252E9D18CB009675BD /* hi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = hi; path = hi.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		6B3AB7262E9D18E5009675BD /* nb_NO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nb_NO; path = nb_NO.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		6B3AB7272E9D18EE009675BD /* nb-NO */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "nb-NO"; path = "nb-NO.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		6B3AB7282E9D18F9009675BD /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pl; path = pl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6B3AB7292E9D18F9009675BD /* pl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = pl; path = pl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		6B3AB72A2E9D1904009675BD /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6B3AB72B2E9D1904009675BD /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = pt; path = pt.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		6B4996CC2825414100D8B6F1 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6B4996CE2825415300D8B6F1 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		6B4996D02825BD6300D8B6F1 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
@@ -540,6 +556,15 @@
 				sr,
 				tl,
 				fil,
+				cs,
+				el,
+				es,
+				fr,
+				hi,
+				nb_NO,
+				"nb-NO",
+				pl,
+				pt,
 			);
 			mainGroup = 7555FF72242A565900829871;
 			packageReferences = (
@@ -716,6 +741,14 @@
 				6B3AB7142E9D14CE009675BD /* sl */,
 				6B3AB7162E9D14E1009675BD /* sr */,
 				6B3AB7182E9D1503009675BD /* tl */,
+				6B3AB71C2E9D16F8009675BD /* cs */,
+				6B3AB71E2E9D1704009675BD /* el */,
+				6B3AB7202E9D17C0009675BD /* es */,
+				6B3AB7222E9D1886009675BD /* fr */,
+				6B3AB7242E9D18CB009675BD /* hi */,
+				6B3AB7272E9D18EE009675BD /* nb-NO */,
+				6B3AB7282E9D18F9009675BD /* pl */,
+				6B3AB72A2E9D1904009675BD /* pt */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -732,6 +765,14 @@
 				6B3AB7152E9D14CE009675BD /* sl */,
 				6B3AB7172E9D14E1009675BD /* sr */,
 				6B3AB7192E9D1503009675BD /* tl */,
+				6B3AB71D2E9D16F8009675BD /* cs */,
+				6B3AB71F2E9D1704009675BD /* el */,
+				6B3AB7212E9D17C0009675BD /* es */,
+				6B3AB7232E9D1886009675BD /* fr */,
+				6B3AB7252E9D18CB009675BD /* hi */,
+				6B3AB7262E9D18E5009675BD /* nb_NO */,
+				6B3AB7292E9D18F9009675BD /* pl */,
+				6B3AB72B2E9D1904009675BD /* pt */,
 			);
 			name = Localizable.stringsdict;
 			sourceTree = "<group>";
@@ -860,7 +901,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 81;
+				CURRENT_PROJECT_VERSION = 83;
 				DEVELOPMENT_ASSET_PATHS = "ESMira/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZXQ54B7QHL;
 				ENABLE_PREVIEWS = YES;
@@ -870,7 +911,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.14.8;
+				MARKETING_VERSION = 1.14.10;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -892,7 +933,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 81;
+				CURRENT_PROJECT_VERSION = 83;
 				DEVELOPMENT_ASSET_PATHS = "ESMira/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZXQ54B7QHL;
 				ENABLE_PREVIEWS = YES;
@@ -902,7 +943,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.14.8;
+				MARKETING_VERSION = 1.14.10;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
