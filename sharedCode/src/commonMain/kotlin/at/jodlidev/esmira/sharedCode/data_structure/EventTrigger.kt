@@ -58,7 +58,7 @@ class EventTrigger {
 	
 	fun triggerCheck(questionnaire: Questionnaire?) {
 		val noCondition = !skipThisQuestionnaire && specificQuestionnaireInternalId == -1L
-		val skipThisQuestionnaire = skipThisQuestionnaire && questionnaireId == questionnaire?.id
+		val skipThisQuestionnaire = skipThisQuestionnaire && questionnaireId != questionnaire?.id && specificQuestionnaireInternalId == -1L
 		val specificQuestionnaire = specificQuestionnaireInternalId != -1L && questionnaire?.internalId == specificQuestionnaireInternalId && studyId == questionnaire.studyId
 
 
