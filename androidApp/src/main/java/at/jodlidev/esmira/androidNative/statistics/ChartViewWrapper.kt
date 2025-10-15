@@ -99,7 +99,7 @@ class ChartViewWrapper(val chartView: Chart<*>): ChartViewInterface {
 	}
 	
 	override fun getDataSetCount(): Int {
-		return chartView.data.dataSetCount
+		return chartView.data?.dataSetCount ?: 0
 	}
 	
 	override fun getLegend(): ChartViewInterface.Legend {
@@ -157,7 +157,7 @@ class ChartViewWrapper(val chartView: Chart<*>): ChartViewInterface {
 	}
 	
 	override fun notifyCurrentDataChanged() {
-		chartView.data.notifyDataChanged()
+		chartView.data?.notifyDataChanged()
 	}
 	
 	override fun fitScreen() = (chartView as BarLineChartBase<*>).fitScreen()

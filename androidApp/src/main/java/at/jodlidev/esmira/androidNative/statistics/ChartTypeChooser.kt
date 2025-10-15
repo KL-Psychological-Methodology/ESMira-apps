@@ -274,7 +274,7 @@ class ChartTypeChooser(private val context: Context) : ChartChooserInterface {
 			setupChart(ChartViewWrapper(chartView))
 
 			if(colors.isNotEmpty())
-				pieDataSet.colors = colors
+				pieDataSet.setColors(colors)
 			setupDataSet(DataSetWrapper(pieDataSet))
 
 			chartView.data = PieData(pieDataSet)

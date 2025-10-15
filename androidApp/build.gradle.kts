@@ -88,7 +88,7 @@ dependencies {
     implementation("androidx.preference:preference:1.2.1") //PreferenceManager
 //    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0") //https://github.com/PhilJay/MPAndroidChart
     //Unfortunately the original MPAndroidChart is dead. Using an updated fork instead:
-    implementation("com.github.AppDevNext:AndroidChart:3.1.0.15")
+    implementation("com.github.AppDevNext:AndroidChart:3.1.0.31")
     
     //HtmlView:
     implementation("io.noties.markwon:core:$markwonVersion")
