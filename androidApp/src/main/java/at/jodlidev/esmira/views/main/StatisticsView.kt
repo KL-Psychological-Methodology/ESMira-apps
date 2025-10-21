@@ -146,7 +146,7 @@ fun StatisticsBottomBar(navController: NavController) {
 fun StatisticsContentView(charts: List<ChartInfo>, chartInfoCollection: ChartInfoCollection) {
 	Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
 		//we cant use LazyColumn because mpAndroidChart can only correctly calculate the position of bar charts when the chart is loaded
-		for(chartInfo in charts) {
+		for(chartInfo in charts.filter { !it.hideOnClient }) {
 			Spacer(modifier = Modifier.height(10.dp))
 			Text(chartInfo.title, fontSize = MaterialTheme.typography.titleLarge.fontSize)
 			HtmlHandler.HtmlText(html = chartInfo.chartDescription)

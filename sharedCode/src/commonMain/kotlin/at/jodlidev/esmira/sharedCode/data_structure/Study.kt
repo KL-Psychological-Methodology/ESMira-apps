@@ -40,6 +40,7 @@ class Study internal constructor(
 	@Transient var msgTimestamp = 0L
 	@Transient var publicStatisticsNeeded = false
 	@Transient private var cachedRewardCode: String = ""
+	@Transient var hasStatistics: Boolean = false
 	
 	var quitTimestamp = 0L
 	var publishedAndroid = true //not in db, only known when directly from server
@@ -229,6 +230,7 @@ class Study internal constructor(
 		rewardInstructions = c.getString(26)
 		cachedRewardCode = c.getString(27)
 		faq = c.getString(28)
+		hasStatistics = c.getBoolean(29)
 	}
 	
 	private fun loadQuestionnairesDB(): List<Questionnaire> {
@@ -248,6 +250,10 @@ class Study internal constructor(
 		c.close()
 		return questionnaires
 	}
+
+	fun countCharts(): Int{
+		return personalCharts.filter { !it.hideOnClient }.size + publicCharts.filter{ !it.hideOnClient }.size
+	}
 	
 	fun finishJSON(serverUrl: String, accessKey: String) { //public for previews
 		fromJsonOrUpdated = true
@@ -256,6 +262,8 @@ class Study internal constructor(
 		
 		publicChartsJsonString = publicStatistics.charts
 		personalChartsJsonString = personalStatistics.charts
+
+		hasStatistics = countCharts() >= 1
 		
 		var publicStatisticsNeeded = publicChartsJsonString.length >= 2
 		if(!publicStatisticsNeeded) {
@@ -381,7 +389,7 @@ class Study internal constructor(
 		return sendMessagesAllowed || msgTimestamp != 0L
 	}
 	fun hasStatistics(): Boolean {
-		return publicChartsJsonString.length > 2 || personalChartsJsonString.length > 2
+		return hasStatistics
 	}
 	fun hasRewards(): Boolean {
 		return enableRewardSystem
@@ -445,6 +453,7 @@ class Study internal constructor(
 			this.rewardEmailContent = newStudy.rewardEmailContent
 			this.rewardInstructions = newStudy.rewardInstructions
 			this.faq = newStudy.faq
+			this.hasStatistics = newStudy.hasStatistics
 			this._jsonQuestionnaires = newStudy.questionnaires
 			if(this.group > newStudy.randomGroups) {
 				this.randomGroups = newStudy.randomGroups
@@ -501,6 +510,7 @@ class Study internal constructor(
 		values.putString(KEY_REWARD_INSTRUCTIONS, rewardInstructions)
 		values.putString(KEY_CACHED_REWARD_CODE, cachedRewardCode)
 		values.putString(KEY_FAQ, faq)
+		values.putBoolean(KEY_HAS_STATISTICS, hasStatistics)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -720,6 +730,7 @@ class Study internal constructor(
 		const val KEY_CACHED_REWARD_CODE = "cachedRewardCode"
 		const val KEY_FAULTY_ACCESS_KEY = "faultyAccessKey"
 		const val KEY_FAQ = "faq"
+		const val KEY_HAS_STATISTICS = "hasStatistics"
 		
 		const val REWARD_SUCCESS = 0
 		const val REWARD_ERROR_DOES_NOT_EXIST = 1
@@ -756,7 +767,8 @@ class Study internal constructor(
 			KEY_REWARD_EMAIL_CONTENT,
 			KEY_REWARD_INSTRUCTIONS,
 			KEY_CACHED_REWARD_CODE,
-			KEY_FAQ
+			KEY_FAQ,
+			KEY_HAS_STATISTICS
 		)
 		
 		val defaultSettings = hashMapOf(

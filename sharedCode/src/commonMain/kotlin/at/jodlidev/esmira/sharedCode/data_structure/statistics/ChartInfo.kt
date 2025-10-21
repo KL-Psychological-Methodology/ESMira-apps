@@ -27,7 +27,8 @@ class ChartInfo (
 	var yAxisLabel: String = "",
 	var maxYValue: Int = 0,
 	var fitToShowLinearProgression: Int = 0,
-	var xAxisIsNumberRange: Boolean = false
+	var xAxisIsNumberRange: Boolean = false,
+	var hideOnClient: Boolean = false
 ) {
 	@Serializable
 	class AxisContainer (
