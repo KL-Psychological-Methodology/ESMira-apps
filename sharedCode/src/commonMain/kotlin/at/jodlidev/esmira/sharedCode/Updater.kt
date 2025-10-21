@@ -1,6 +1,7 @@
 package at.jodlidev.esmira.sharedCode
 
 import at.jodlidev.esmira.sharedCode.data_structure.*
+import at.jodlidev.esmira.sharedCode.data_structure.statistics.ChartInfo
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_perData
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_perValue
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_timed
@@ -12,7 +13,7 @@ import kotlinx.serialization.json.*
  */
 internal object Updater {
 	const val EXPECTED_SERVER_VERSION: Int = 13
-	const val DATABASE_VERSION = 50
+	const val DATABASE_VERSION = 51
 	const val LIBRARY_VERSION = 19 //this is mainly used for iOS so we can check that changes in the library have been used in the C library
 	const val MERLIN_VERSION = 1
 
@@ -539,6 +540,41 @@ internal object Updater {
 		}
 		if(oldVersion <= 49) {
 			db.execSQL("ALTER TABLE studies ADD COLUMN faq TEXT DEFAULT '';")
+		}
+
+		if(oldVersion <= 50 ) {
+			db.execSQL("ALTER TABLE studies ADD COLUMN hasStatistics INTEGER DEFAULT 0;")
+
+			val c = db.select(
+				"studies",
+				arrayOf("_id", "public_charts_json", "personal_charts_json"),
+				null,
+				null,
+				null,
+				null,
+				null,
+				null
+			)
+
+			while(c.moveToNext()) {
+				val id = c.getLong(0)
+				val publicChartsJson = c.getString(1)
+				val personalChartsJson = c.getString(2)
+
+				var numCharts = 0
+				try {
+					val publicCharts: List<ChartInfo> = DbLogic.getJsonConfig().decodeFromString(publicChartsJson)
+					numCharts += publicCharts.filter { !it.hideOnClient }.size
+				} catch (_: Exception) {}
+				try {
+					val personalCharts: List<ChartInfo> = DbLogic.getJsonConfig().decodeFromString(personalChartsJson)
+					numCharts += personalCharts.filter { !it.hideOnClient }.size
+				} catch (_: Exception) {}
+				val values = db.getValueBox()
+				values.putBoolean("hasStatistics", numCharts >= 1)
+
+				db.update("studies", values, "_id = ?", arrayOf(id.toString()))
+			}
 		}
 	}
 	
