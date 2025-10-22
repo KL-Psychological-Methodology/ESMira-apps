@@ -43,7 +43,7 @@ import kotlin.native.concurrent.freeze
 
 internal class MainDispatcher(private val dispatchQueue: dispatch_queue_t) : CoroutineDispatcher() {
 	override fun dispatch(context: CoroutineContext, block: Runnable) {
-		dispatch_async(dispatchQueue.freeze()) {
+		dispatch_async(dispatchQueue) {
 			block.run()
 		}
 //		dispatch_async(dispatch_get_main_queue()) {
