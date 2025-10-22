@@ -547,15 +547,13 @@ class Web {
 			onSuccess: (studyString: String, urlFormatted: String) -> Unit
 		): Web {
 			val web = Web()
-			var urlFormatted: String
-			if(serverUrl.isEmpty())
-				urlFormatted = DEV_SERVER
+			val urlFormatted: String = if(serverUrl.isEmpty())
+				DEV_SERVER
 			else if(!checkUrl(serverUrl)) {
 				onError("\"$serverUrl\" is not a valid server address.", null)
 				return web
-			}
-			else {
-				urlFormatted = formatUrl(serverUrl)
+			} else {
+				formatUrl(serverUrl)
 			}
 			
 			val correctedAccessKey = accessKey.trim().lowercase()
