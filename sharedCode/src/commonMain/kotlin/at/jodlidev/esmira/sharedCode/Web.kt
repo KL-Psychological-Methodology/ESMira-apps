@@ -18,7 +18,6 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.Serializable
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
-import kotlin.jvm.Synchronized
 
 /**
  * Created by JodliDev on 27.05.2020.
@@ -663,7 +662,6 @@ class Web {
 			}
 			return updateCount
 		}
-		@Synchronized
 		fun updateStudiesAsync(forceStudyUpdate: Boolean = false, continueWith: ((Int) -> Unit)? = null) {
 			nativeAsync {
 				val web = Web()
@@ -683,7 +681,6 @@ class Web {
 			}
 			return r
 		}
-		@Synchronized
 		fun syncDataSetsAsync(continueWith: (Boolean) -> Unit): Web {
 			val web = Web()
 			nativeAsync {
@@ -694,8 +691,7 @@ class Web {
 			}
 			return web
 		}
-		
-		@Synchronized
+
 		fun sendErrorReportAsync(
 			comment: String?,
 			onError: (msg: String) -> Unit,
@@ -713,8 +709,7 @@ class Web {
 				}
 			}
 		}
-		
-		@Synchronized
+
 		fun sendMessageAsync(
 			content: String,
 			study: Study,
@@ -732,8 +727,7 @@ class Web {
 				}
 			}
 		}
-		
-		@Synchronized
+
 		fun loadStatistics(
 			study: Study,
 			onError: (msg: String) -> Unit,
@@ -758,9 +752,7 @@ class Web {
 			
 			return web
 		}
-		
-		
-		@Synchronized
+
 		fun loadRewardCode(
 			study: Study,
 			onError: (msg: String) -> Unit,
@@ -785,8 +777,7 @@ class Web {
 				}
 			}
 		}
-		
-		@Synchronized
+
 		fun getDonKillMyAppInfo(
 			onError: (msg: String) -> Unit,
 			onSuccess: (DontKillMyAppInfo) -> Unit
