@@ -311,4 +311,6 @@
     <string name="measure">Měřit</string>
     <string name="charging">nabíjení</string>
     <string name="hint_missing_fields">Nebyla vyplněna jedna nebo více otázek.</string>
+    <string name="frequently_asked_questions">Často kladené otázky</string>
+    <string name="faqs">Nejčastější dotazy</string>
 </resources>
