@@ -311,4 +311,6 @@
     <string name="hint_missing_fields">You might have missed a question.</string>
     <string name="frequently_asked_questions">Frequently Asked Questions</string>
     <string name="faqs">FAQs</string>
+    <string name="available_languages">This study is available in the following languages:</string>
+    <string name="select_language_instruction">Please select the one that works best for you.</string>
 </resources>

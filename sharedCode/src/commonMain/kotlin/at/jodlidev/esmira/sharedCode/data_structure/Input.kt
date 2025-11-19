@@ -244,7 +244,7 @@ class Input internal constructor( ) {
 	}
 
 	fun wantsValue(): Boolean {
-		return if(optional || type == TYPES.text)
+		return if(optional || type == TYPES.text || type == TYPES.countdown || type == TYPES.image || type == TYPES.video)
 			return false
 		else
 			getValue().isEmpty()

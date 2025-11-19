@@ -51,6 +51,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 		val fallbackUrl: String?,
 		val studyId: Long,
 		val qId: Long,
+		val lang: String = NativeLink.smartphoneData.lang,
 		val loadedTimestamp: Long = NativeLink.getNowMillis() // just exists to force reloads of the same data
 	) : Parcelable
 	
@@ -106,6 +107,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 						}
 
 						val showStudyLoader = remember { mutableStateOf(openStudyDirectly) }
+						val loaderStayOnPage = remember { mutableStateOf(false) }
 
 						val getStudyList = {
 							val loadData = studyLoadingData.value
@@ -127,7 +129,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 							if (studyList.value.filteredStudies.size == 1) {
 								if (openStudyDirectly)
 									navController.popBackStack()
-								navController.navigate("studyInfo/0")
+								navController.navigate("langSelection/0")
 							} else if (studyList.value.joinedStudies.size == 1) {
 								val firstJoinedStudy = studyList.value.joinedStudies.first()
 								DbLogic.getStudy(
@@ -149,6 +151,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 							val web = Web.loadStudies(
 								loadData.serverUrl,
 								loadData.accessKey,
+								loadData.lang,
 								loadData.fallbackUrl,
 								onError = { msg, e ->
 									runOnUiThread {
@@ -166,7 +169,9 @@ class WelcomeScreenActivity: ComponentActivity() {
 									runOnUiThread {
 										showStudyLoader.value = false
 
-										gotoStudies()
+										if(!loaderStayOnPage.value) {
+											gotoStudies()
+										}
 									}
 								})
 							onDispose {
@@ -187,14 +192,16 @@ class WelcomeScreenActivity: ComponentActivity() {
 								Web.serverList
 							},
 							studyList = { studyList.value.filteredStudies },
-							loadStudies = { serverUrl: String, accessKey: String, studyId: Long, qId: Long, fallbackUrl: String? ->
+							loadStudies = { serverUrl: String, accessKey: String, studyId: Long, qId: Long, fallbackUrl: String?, lang: String?, autoproceed: Boolean ->
 								showStudyLoader.value = true
+								loaderStayOnPage.value = !autoproceed
 								studyLoadingData.value = StudyLoadingData(
 									serverUrl,
 									accessKey,
 									fallbackUrl,
 									studyId,
-									qId
+									qId,
+									lang ?: NativeLink.smartphoneData.lang
 								)
 							},
 							navController = navController
@@ -239,12 +246,16 @@ class WelcomeScreenActivity: ComponentActivity() {
 			accessKey: String,
 			studyId: Long,
 			qId: Long,
-			fallbackUrl: String?
+			fallbackUrl: String?,
+			lang: String?,
+			autoproceed: Boolean,
 		) -> Unit,
 		navController: NavHostController = rememberNavController()
 	) {
 		val serverUrl = rememberSaveable { mutableStateOf("") }
 		val accessKey = rememberSaveable { mutableStateOf("") }
+		val fallbackUrl = rememberSaveable { mutableStateOf<String?>("") }
+		val lang = rememberSaveable { mutableStateOf(NativeLink.smartphoneData.lang) }
 		
 		
 		NavHost(
@@ -286,10 +297,11 @@ class WelcomeScreenActivity: ComponentActivity() {
 					gotoPrevious = {
 						onBackPressedDispatcher.onBackPressed()
 					},
-					gotoNext = { _serverUrl: String, _accessKey: String, studyId: Long, qId: Long, fallbackUrl: String? ->
+					gotoNext = { _serverUrl: String, _accessKey: String, studyId: Long, qId: Long, _fallbackUrl: String? ->
 						serverUrl.value = _serverUrl
 						accessKey.value = _accessKey
-						loadStudies(serverUrl.value, _accessKey, studyId, qId, fallbackUrl)
+						fallbackUrl.value = _fallbackUrl
+						loadStudies(serverUrl.value, _accessKey, studyId, qId, _fallbackUrl, null, true)
 					}
 				)
 			}
@@ -314,7 +326,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 					},
 					gotoNext = { _accessKey: String ->
 						accessKey.value = _accessKey
-						loadStudies(serverUrl.value, _accessKey, 0, 0, null)
+						loadStudies(serverUrl.value, _accessKey, 0, 0, fallbackUrl.value, null, true)
 					},
 				)
 			}
@@ -331,10 +343,44 @@ class WelcomeScreenActivity: ComponentActivity() {
 							onBackPressedDispatcher.onBackPressed()
 						},
 						gotoNext = { index ->
-							navController.navigate("studyInfo/$index")
+							navController.navigate("langSelection/$index")
 						}
 					)
 				}
+			}
+			composable("langSelection/{studyIndex}",
+				arguments = listOf(
+					navArgument("studyIndex") {
+						type = NavType.IntType
+					}
+				)
+			) { backStackEntry ->
+				val studyIndex = backStackEntry.arguments?.getInt("studyIndex") ?: 0
+				val study = studyList()[studyIndex]
+
+				LangQuestionView(
+					study,
+					updateStudies = {
+						lang ->
+						if(lang != study.lang) {
+							loadStudies(
+								serverUrl.value,
+								accessKey.value,
+								study.id,
+								0,
+								fallbackUrl.value,
+								lang,
+								false
+							)
+						}
+					},
+					gotoPrevious = {
+						onBackPressedDispatcher.onBackPressed()
+					},
+					gotoNext = {
+						navController.navigate("studyInfo/$studyIndex")
+					}
+				)
 			}
 			composable("studyInfo/{studyIndex}",
 				arguments = listOf(
@@ -398,7 +444,6 @@ class WelcomeScreenActivity: ComponentActivity() {
 			}
 		}
 	}
-	
 	
 	@Composable
 	fun LoadingView(onCancel: () -> Unit) {
