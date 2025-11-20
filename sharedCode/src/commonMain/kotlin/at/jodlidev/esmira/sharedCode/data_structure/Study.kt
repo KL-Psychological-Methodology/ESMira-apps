@@ -326,6 +326,10 @@ class Study internal constructor(
 		}
 		return false
 	}
+
+	fun hasMultipleLanguages(): Boolean {
+		return getAvailableLangs().size > 1
+	}
 	
 	fun hasNotifications(): Boolean {
 		for(q in questionnaires) {

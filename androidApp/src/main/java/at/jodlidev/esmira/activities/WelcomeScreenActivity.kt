@@ -129,7 +129,11 @@ class WelcomeScreenActivity: ComponentActivity() {
 							if (studyList.value.filteredStudies.size == 1) {
 								if (openStudyDirectly)
 									navController.popBackStack()
-								navController.navigate("langSelection/0")
+								if(studyList.value.filteredStudies.get(0).hasMultipleLanguages()) {
+									navController.navigate("langSelection/0")
+								} else {
+									navController.navigate("studyInfo/0")
+								}
 							} else if (studyList.value.joinedStudies.size == 1) {
 								val firstJoinedStudy = studyList.value.joinedStudies.first()
 								DbLogic.getStudy(
@@ -343,7 +347,11 @@ class WelcomeScreenActivity: ComponentActivity() {
 							onBackPressedDispatcher.onBackPressed()
 						},
 						gotoNext = { index ->
-							navController.navigate("langSelection/$index")
+							if(studyList().get(index).hasMultipleLanguages()) {
+								navController.navigate("langSelection/$index")
+							} else {
+								navController.navigate("studyInfo/$index")
+							}
 						}
 					)
 				}
