@@ -109,9 +109,12 @@ class Web {
 	private fun close() = client.close()
 	
 	//internal for testing:
-	internal fun getStudyInfoMapForUpdates(forceStudyUpdate: Boolean): Map<String, Map<String, StudyInfo>> {
+	internal fun getStudyInfoMapForUpdates(forceStudyUpdate: Boolean, studyFilter: Array<Long> = arrayOf()): Map<String, Map<String, StudyInfo>> {
 		ErrorBox.log("Web", "Searching for updated studies...")
-		val studies = DbLogic.getJoinedStudies()
+		var studies = DbLogic.getJoinedStudies()
+		if(!studyFilter.isEmpty()){
+			studies = studies.filter { study -> study.id in studyFilter }
+		}
 		val container: MutableMap<String, MutableMap<String, StudyInfo>> = HashMap()
 		
 		if(studies.isEmpty()) {
@@ -225,13 +228,13 @@ class Web {
 		}
 	}
 	
-	private suspend fun updateStudies(forceStudyUpdate: Boolean): Int {
+	private suspend fun updateStudies(forceStudyUpdate: Boolean, studyFilter: Array<Long> = arrayOf()): Int {
 		if(NativeLink.isUpdating)
 			return 0
 		NativeLink.isUpdating = true
 		var updatedCount = 0
 		try {
-			val map = getStudyInfoMapForUpdates(forceStudyUpdate)
+			val map = getStudyInfoMapForUpdates(forceStudyUpdate, studyFilter)
 			
 			//do updates:
 			for((url, studyInfo) in map) {
@@ -656,18 +659,18 @@ class Web {
 			}
 		}
 		
-		fun updateStudiesBlocking(forceStudyUpdate: Boolean = false): Int {
+		fun updateStudiesBlocking(forceStudyUpdate: Boolean = false, filterStudies: Array<Long> = arrayOf()): Int {
 			var updateCount = -1
 			nativeBlocking {
 				val web = Web()
-				updateCount = web.updateStudies(forceStudyUpdate)
+				updateCount = web.updateStudies(forceStudyUpdate, filterStudies)
 			}
 			return updateCount
 		}
-		fun updateStudiesAsync(forceStudyUpdate: Boolean = false, continueWith: ((Int) -> Unit)? = null) {
+		fun updateStudiesAsync(forceStudyUpdate: Boolean = false, filterStudies: Array<Long> = arrayOf(), continueWith: ((Int) -> Unit)? = null) {
 			nativeAsync {
 				val web = Web()
-				val r = web.updateStudies(forceStudyUpdate)
+				val r = web.updateStudies(forceStudyUpdate, filterStudies)
 				if(continueWith != null) {
 					kotlinRunOnUiThread {
 						continueWith(r)
