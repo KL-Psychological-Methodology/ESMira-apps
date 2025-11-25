@@ -187,9 +187,18 @@ class DataSet: UploadData {
 			addResponseData(score.name, sum)
 		}
 
+		val metadata: Map<String, JsonElement> = mapOf(
+			"studyVersion" to JsonPrimitive(studyVersion),
+			"studyLang" to JsonPrimitive(studyLang),
+			"group" to JsonPrimitive(group),
+			"timezone" to JsonPrimitive(timezone),
+			"responseTime" to JsonPrimitive(responseTime),
+			"appType" to JsonPrimitive(NativeLink.smartphoneData.appType)
+		)
+
 		for((key, _) in responseTemp) {
 			for(observedVariable in DbLogic.getObservedVariables(studyId, key)) {
-				observedVariable.createStatistic(responseTemp)
+				observedVariable.createStatistic(responseTemp, metadata)
 			}
 		}
 		
