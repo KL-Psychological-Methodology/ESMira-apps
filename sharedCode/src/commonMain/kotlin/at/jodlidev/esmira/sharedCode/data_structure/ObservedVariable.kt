@@ -90,11 +90,13 @@ class ObservedVariable internal constructor() {
 	}
 	
 	//internal for testing
-	internal fun checkCondition(responses: Map<String, JsonElement>): Boolean {
+	internal fun checkCondition(responses: Map<String, JsonElement>, metadata: Map<String, JsonElement>): Boolean {
 		//the logic of this function is pretty slow and the same condition-JSON is interpreted every time - but it should not matter
 		if(conditionType == Condition.TYPE_ALL)
 			return true
-		
+
+
+
 		val conditions = DbLogic.getJsonConfig().decodeFromString<List<Condition>>(conditionsJson)
 		val conditionTypeIsOr = conditionType == Condition.TYPE_OR
 		val conditionTypeIsAnd = conditionType == Condition.TYPE_AND
@@ -102,7 +104,11 @@ class ObservedVariable internal constructor() {
 		
 		
 		for(condition in conditions) {
-			val rawResponse = responses[condition.key]!!
+			val rawResponse = if(condition.key in metadata) {
+				metadata[condition.key]!!
+			} else {
+				responses[condition.key]!!
+			}
 			//Note: JsonPrimitive.toString() adds quotes around value. So we get the value directly
 			val response = if(rawResponse.jsonPrimitive.doubleOrNull != null) rawResponse.jsonPrimitive.double.toString() else rawResponse.jsonPrimitive.content
 			val conditionValue = if(condition.value.toDoubleOrNull() != null) condition.value.toDouble().toString() else condition.value
@@ -127,8 +133,8 @@ class ObservedVariable internal constructor() {
 		return conditionIsMet
 	}
 	
-	fun createStatistic(responses: Map<String, JsonElement>) {
-		if(checkCondition(responses)) {
+	fun createStatistic(responses: Map<String, JsonElement>, metadata: Map<String, JsonElement>) {
+		if(checkCondition(responses, metadata)) {
 			when(storageType) {
 				STORAGE_TYPE_TIMED -> {
 					val num = responses[variableName]?.jsonPrimitive?.content?.toDoubleOrNull() ?: 0.0
