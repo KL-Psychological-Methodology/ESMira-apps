@@ -146,6 +146,8 @@ class Questionnaire {
 		endScriptBlock = c.getString(25)
 		virtualInputsString = c.getString(26)
 		showInDisabledList = c.getBoolean(27)
+		showPagination = c.getBoolean(28)
+		showSkipToast = c.getBoolean(29)
 
 		exists = true
 		fromJsonOrUpdated = false
@@ -267,6 +269,8 @@ class Questionnaire {
 		values.putString(KEY_SCRIPT_END_BLOCK, endScriptBlock)
 		values.putString(KEY_VIRTUAL_INPUTS, virtualInputsString)
 		values.putBoolean(KEY_SHOW_IN_DISABLED_LIST, showInDisabledList)
+		values.putBoolean(KEY_SHOW_PAGINATION, showPagination)
+		values.putBoolean(KEY_SHOW_SKIP_TOAST, showSkipToast)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -622,6 +626,8 @@ class Questionnaire {
 		const val KEY_SCRIPT_END_BLOCK = "scriptEndBlock"
 		const val KEY_VIRTUAL_INPUTS = "virtualInputs"
 		const val KEY_SHOW_IN_DISABLED_LIST = "showInDisabledList"
+		const val KEY_SHOW_PAGINATION = "showPagination"
+		const val KEY_SHOW_SKIP_TOAST = "showSkipToast"
 		
 		val COLUMNS = arrayOf(
 			KEY_ID,
@@ -651,7 +657,9 @@ class Questionnaire {
 			KEY_IS_BACK_ENABLED,
 			KEY_SCRIPT_END_BLOCK,
 			KEY_VIRTUAL_INPUTS,
-			KEY_SHOW_IN_DISABLED_LIST
+			KEY_SHOW_IN_DISABLED_LIST,
+			KEY_SHOW_PAGINATION,
+			KEY_SHOW_SKIP_TOAST,
 		)
 	}
 }
