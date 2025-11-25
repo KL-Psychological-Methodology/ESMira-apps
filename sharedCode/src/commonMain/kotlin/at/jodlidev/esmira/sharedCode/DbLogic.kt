@@ -78,8 +78,7 @@ object DbLogic {
 			${Study.KEY_FAULTY_ACCESS_KEY} INTEGER DEFAULT 0,
 			${Study.KEY_INSTRUCTIONS} TEXT,
 			${Study.KEY_FAQ} TEXT DEFAULT '',
-			${Study.KEY_HAS_STATISTICS} INTEGER DEFAULT 0,
-			${Study.KEY_LANG_CODES} TEXT DEFAULT '[]')""")
+			${Study.KEY_HAS_STATISTICS} INTEGER DEFAULT 0)""")
 			
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${Message.TABLE} (
 			${Message.KEY_ID} INTEGER PRIMARY KEY,
@@ -162,8 +161,6 @@ object DbLogic {
 			${Questionnaire.KEY_SCRIPT_END_BLOCK} TEXT,
 			${Questionnaire.KEY_VIRTUAL_INPUTS} TEXT,
 			${Questionnaire.KEY_SHOW_IN_DISABLED_LIST} INTEGER DEFAULT 1,
-			${Questionnaire.KEY_SHOW_PAGINATION} INTEGER DEFAULT 1,
-			${Questionnaire.KEY_SHOW_SKIP_TOAST} INTEGER DEFAULT 1,
 			FOREIGN KEY(${Questionnaire.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}) ON DELETE CASCADE)""")
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${QuestionnaireCache.TABLE} (
 			${QuestionnaireCache.KEY_ID} INTEGER PRIMARY KEY,
