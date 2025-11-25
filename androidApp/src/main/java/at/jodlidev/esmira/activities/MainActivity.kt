@@ -381,7 +381,7 @@ class MainActivity: ComponentActivity() {
 						}
 					}
 				}
-				if(nextRelevantPageIndex == -1) {
+				if(nextRelevantPageIndex == -1 && questionnaire.showSkipToast) {
 					if(!questionnaire.isLastPage(pageNumber)) {
 						Toast.makeText(
 							context,
