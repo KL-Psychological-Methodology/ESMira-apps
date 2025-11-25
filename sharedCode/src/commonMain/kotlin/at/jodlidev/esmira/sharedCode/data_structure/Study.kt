@@ -61,11 +61,7 @@ class Study internal constructor(
 	var rewardEmailContent = ""
 	var rewardInstructions = ""
 	var faq = ""
-
-	@SerialName("langCodes")
-	@Serializable(with = JsonToStringSerializer::class)
-	private var langCodesString = "[]"
-
+	
 	@SerialName("eventUploadSettings")
 	@Serializable(with = JsonToStringSerializer::class)
 	private var eventUploadSettingsString = "{}"
@@ -235,7 +231,6 @@ class Study internal constructor(
 		cachedRewardCode = c.getString(27)
 		faq = c.getString(28)
 		hasStatistics = c.getBoolean(29)
-		langCodesString = c.getString(30)
 	}
 	
 	private fun loadQuestionnairesDB(): List<Questionnaire> {
@@ -403,17 +398,7 @@ class Study internal constructor(
 	fun hasRewards(): Boolean {
 		return enableRewardSystem
 	}
-
-	fun getAvailableLangs(): List<String> {
-		return try {
-			DbLogic.getJsonConfig().decodeFromString(langCodesString)
-		}catch (e: Exception) {
-			ErrorBox.error("Study", "Could not load available language codes from study \"$title\"", e)
-			ErrorBox.log("Study", langCodesString)
-			ArrayList()
-		}
-	}
-
+	
 	fun needsPermissionScreen(): Boolean {
 		return hasInformedConsent() || usesPostponedActions() || hasNotifications() || hasScreenOrAppTracking()
 	}
@@ -473,7 +458,6 @@ class Study internal constructor(
 			this.rewardInstructions = newStudy.rewardInstructions
 			this.faq = newStudy.faq
 			this.hasStatistics = newStudy.hasStatistics
-			this.langCodesString = newStudy.langCodesString
 			this._jsonQuestionnaires = newStudy.questionnaires
 			if(this.group > newStudy.randomGroups) {
 				this.randomGroups = newStudy.randomGroups
@@ -531,7 +515,6 @@ class Study internal constructor(
 		values.putString(KEY_CACHED_REWARD_CODE, cachedRewardCode)
 		values.putString(KEY_FAQ, faq)
 		values.putBoolean(KEY_HAS_STATISTICS, hasStatistics)
-		values.putString(KEY_LANG_CODES, langCodesString)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -752,7 +735,6 @@ class Study internal constructor(
 		const val KEY_FAULTY_ACCESS_KEY = "faultyAccessKey"
 		const val KEY_FAQ = "faq"
 		const val KEY_HAS_STATISTICS = "hasStatistics"
-		const val KEY_LANG_CODES = "langCodes"
 		
 		const val REWARD_SUCCESS = 0
 		const val REWARD_ERROR_DOES_NOT_EXIST = 1
@@ -790,8 +772,7 @@ class Study internal constructor(
 			KEY_REWARD_INSTRUCTIONS,
 			KEY_CACHED_REWARD_CODE,
 			KEY_FAQ,
-			KEY_HAS_STATISTICS,
-			KEY_LANG_CODES,
+			KEY_HAS_STATISTICS
 		)
 		
 		val defaultSettings = hashMapOf(
