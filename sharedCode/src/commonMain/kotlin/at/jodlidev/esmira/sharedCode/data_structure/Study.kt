@@ -617,6 +617,16 @@ class Study internal constructor(
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
 		}
 	}
+
+	fun saveLanguage(newLang: String) {
+		lang = newLang
+		if(exists) {
+			val db = NativeLink.sql
+			val values = db.getValueBox()
+			values.putString(KEY_LANG, newLang)
+			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
+		}
+	}
 	
 	fun saveFaultyAccessKeyState(faulty: Boolean, newAccessKey: String? = null) {
 		if(exists) {

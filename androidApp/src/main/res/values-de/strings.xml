@@ -313,4 +313,5 @@
     <string name="faqs">FAQs</string>
     <string name="available_languages">Diese Studie ist in den folgenden Sprachen verfügbar:</string>
     <string name="select_language_instruction">Bitte wählen Sie die Sprache, die am besten für Sie passt.</string>
+    <string name="change_language">Sprache Ändern</string>
 </resources>
