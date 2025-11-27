@@ -320,6 +320,7 @@ class MainActivity: ComponentActivity() {
 				openNotificationsDialog = { NotificationsBrokenDialogActivity.start(context, true) },
 				openAbout = { navController.navigate("about") },
 				openChangeSchedulesDialog = { ChangeSchedulesDialogActivity.start(context, studyId) },
+				openChangeLanguageDialog = { ChangeStudyLanguageDialogActivity.start(context, studyId) },
 				openNextNotifications = {
 					showNextNotifications.value = true
 				},
