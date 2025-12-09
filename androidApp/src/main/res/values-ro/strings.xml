@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="add">Adaugă</string>
+    <string name="change_schedules">Modifică orarele</string>
+    <string name="close">Închide</string>
+    <string name="add_a_study">Participă la un nou studiu</string>
+    <string name="colon_next_expected_notification">Următoarea notificare programată:</string>
 </resources>
