@@ -2,3 +2,7 @@
 
 "ios_version" = "Versiunea: %1$@, %2$@";
 "add" = "Adaugă";
+"change_schedules" = "Modifică orarele";
+"close" = "Închide";
+"colon_next_expected_notification" = "Următoarea notificare programată:";
+"add_a_study" = "Participă la un nou studiu";
