@@ -37,6 +37,7 @@ import at.jodlidev.esmira.views.main.questionnaire.QuestionnaireView
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import at.jodlidev.esmira.views.welcome.LanguageSelectView
 import kotlinx.coroutines.delay
 import java.io.*
 
@@ -192,6 +193,10 @@ class MainActivity: ComponentActivity() {
 				PageStudyInformation(studyId.value)
 			}
 
+			composable("languageSelect") {
+				PageLanguageSelect(studyId.value)
+			}
+
 			composable("faq") {
 				PageFaq(studyId.value)
 			}
@@ -293,9 +298,14 @@ class MainActivity: ComponentActivity() {
 				},
 				updateStudies = {
 					Web.updateStudiesAsync {updatedCount ->
-						if(updatedCount != -1)
-							Toast.makeText(context, context.getString(R.string.info_update_complete, updatedCount), Toast.LENGTH_SHORT).show()
-						else
+						if(updatedCount != -1) {
+							Toast.makeText(
+								context,
+								context.getString(R.string.info_update_complete, updatedCount),
+								Toast.LENGTH_SHORT
+							).show()
+							reloadPage()
+						}else
 							Toast.makeText(context, context.getString(R.string.info_update_failed), Toast.LENGTH_SHORT).show()
 						
 						val faultyStudy = DbLogic.getFirstStudyWithFaultyAccessKey()
@@ -320,7 +330,6 @@ class MainActivity: ComponentActivity() {
 				openNotificationsDialog = { NotificationsBrokenDialogActivity.start(context, true) },
 				openAbout = { navController.navigate("about") },
 				openChangeSchedulesDialog = { ChangeSchedulesDialogActivity.start(context, studyId) },
-				openChangeLanguageDialog = { ChangeStudyLanguageDialogActivity.start(context, studyId) },
 				openNextNotifications = {
 					showNextNotifications.value = true
 				},
@@ -332,6 +341,7 @@ class MainActivity: ComponentActivity() {
 				gotoMessages = { navController.navigate("messages") },
 				gotoReward = { navController.navigate("reward") },
 				gotoStatistics = { navController.navigate("statistics") },
+				gotoLanguageSelect = { navController.navigate("languageSelect") },
 				gotoDataProtocol = { navController.navigate("uploadProtocol") },
 				gotoStudyInformation = { navController.navigate("studyInformation") },
 				gotoFaq = { navController.navigate("faq") },
@@ -455,6 +465,15 @@ class MainActivity: ComponentActivity() {
 			hasNotifications = { study -> study.hasNotifications() },
 			getNextAlarm = { DbLogic.getNextAlarmWithNotifications(studyId) },
 			goBack = { onBackPressedDispatcher.onBackPressed() }
+		)
+	}
+
+	@Composable
+	fun PageLanguageSelect(studyId: Long) {
+		LanguageSelectView(
+			getStudy = { DbLogic.getStudy(studyId)!! },
+			goBack = { onBackPressedDispatcher.onBackPressed() },
+			afterUpdate = { reloadPage() }
 		)
 	}
 

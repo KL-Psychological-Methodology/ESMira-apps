@@ -51,13 +51,13 @@ fun StudyDashboardView(
 	openNotificationsDialog: () -> Unit,
 	openAbout: () -> Unit,
 	openChangeSchedulesDialog: () -> Unit,
-	openChangeLanguageDialog: () -> Unit,
 	openNextNotifications: () -> Unit,
 	gotoQuestionnaire: (Questionnaire) -> Unit,
 	gotoDisabledQuestionnaires: (() -> Unit)?,
 	gotoMessages: () -> Unit,
 	gotoReward: () -> Unit,
 	gotoStatistics: () -> Unit,
+	gotoLanguageSelect: () -> Unit,
 	gotoDataProtocol: () -> Unit,
 	gotoStudyInformation: () -> Unit,
 	gotoFaq: () -> Unit,
@@ -111,7 +111,7 @@ fun StudyDashboardView(
 			hasUnSyncedDataSets = hasUnSyncedDataSets,
 			countUnreadMessages = countUnreadMessages,
 			openChangeSchedulesDialog = openChangeSchedulesDialog,
-			openChangeLanguageDialog = openChangeLanguageDialog,
+			gotoLanguageSelect = gotoLanguageSelect,
 			gotoQuestionnaire = gotoQuestionnaire,
 			gotoDisabledQuestionnaires = gotoDisabledQuestionnaires,
 			gotoMessages = gotoMessages,
@@ -135,7 +135,7 @@ fun StudyDashboardGrid(
 	hasUnSyncedDataSets: () -> Boolean,
 	countUnreadMessages: () -> Int,
 	openChangeSchedulesDialog: () -> Unit,
-	openChangeLanguageDialog: () -> Unit,
+	gotoLanguageSelect: () -> Unit,
 	gotoQuestionnaire: (Questionnaire) -> Unit,
 	gotoDisabledQuestionnaires: (() -> Unit)?,
 	gotoMessages: () -> Unit,
@@ -288,7 +288,7 @@ fun StudyDashboardGrid(
 		}
 		if(hasMultipleLanguages) {
 			item {
-				StudyDashboardButtonView(stringResource(R.string.change_schedules), Icons.Default.Language, onClick = openChangeLanguageDialog)
+				StudyDashboardButtonView(stringResource(R.string.change_language), Icons.Default.Language, onClick = gotoLanguageSelect)
 			}
 		}
 		item {
@@ -362,7 +362,7 @@ fun PreviewStudyDashboardView() {
 			gotoStudyInformation = {},
 			gotoFaq = {},
 			openChangeSchedulesDialog = {},
-			openChangeLanguageDialog = {},
+			gotoLanguageSelect = {},
 		)
 	}
 }
@@ -395,7 +395,7 @@ fun PreviewStudyDashboardNoQuestionnairesView() {
 			gotoStudyInformation = {},
 			gotoFaq = {},
 			openChangeSchedulesDialog = {},
-			openChangeLanguageDialog = {},
+			gotoLanguageSelect = {},
 		)
 	}
 }
