@@ -82,7 +82,7 @@ struct SettingsView: View {
 			
 			SettingsButton(
 				action: {
-					Web.Companion().updateStudiesAsync(forceStudyUpdate: false) {updatedCount in
+					Web.Companion().updateStudiesAsync(forceStudyUpdate: false, filterStudies: KotlinArray<KotlinLong>(size:0, init:{_ in KotlinLong(0)})) {updatedCount in
 						DispatchQueue.main.async {
 							if(updatedCount != -1) {
 								self.appState.showToast(String(format: NSLocalizedString("info_update_complete", comment: ""), Int(truncating: updatedCount)))

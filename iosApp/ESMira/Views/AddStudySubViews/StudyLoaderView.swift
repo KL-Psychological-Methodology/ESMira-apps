@@ -28,6 +28,7 @@ struct StudyLoaderView: View {
 		self.web = Web.Companion().loadStudies(
 			serverUrl: self.addStudyState.serverUrl,
 			accessKey: self.addStudyState.accessKey,
+			lang: self.addStudyState.lang,
 			fallbackUrl: self.addStudyState.fallbackUrl,
 			onError: { msg, e in
 				self.loadingMessage = msg
@@ -65,11 +66,13 @@ struct StudyLoaderView: View {
 					}
 				}
 				else if(self.studiesList.filteredStudies.count == 1) {
-					StudyDetailView(study: self.studiesList.filteredStudies[0])
+					let study = self.studiesList.filteredStudies[0]
+					study.hasMultipleLanguages() ? AnyView(LangQuestionView(study: study)) : AnyView(StudyDetailView(study: study))
+					
 				}
 				else {
 					List(self.studiesList.filteredStudies, id: \.webId) { study in
-						NavigationLink(destination: StudyDetailView(study: study)) {
+						NavigationLink(destination: study.hasMultipleLanguages() ? AnyView(LangQuestionView(study: study)): AnyView(StudyDetailView(study: study))) {
 							VStack(alignment: .leading) {
 								Text(study.title).bold()
 								Text(study.contactEmail).offset(x: 10)

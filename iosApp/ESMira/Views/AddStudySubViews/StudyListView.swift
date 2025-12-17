@@ -29,7 +29,7 @@ struct StudyListView: View {
 			}
 			else {
 				List(self.studiesList, id: \.webId) { study in
-					NavigationLink(destination: StudyDetailView(study: study)) {
+					NavigationLink(destination: study.hasMultipleLanguages() ? AnyView(LangQuestionView(study: study)) : AnyView(StudyDetailView(study: study))) {
 						VStack(alignment: .leading) {
 							Text(study.title).bold()
 							Text(study.contactEmail).offset(x: 10)

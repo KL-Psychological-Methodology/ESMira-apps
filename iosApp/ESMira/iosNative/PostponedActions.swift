@@ -67,7 +67,7 @@ class PostponedActions: PostponedActionsInterface {
 			
 		}
 		
-		Web.Companion().updateStudiesBlocking(forceStudyUpdate: false)
+		Web.Companion().updateStudiesBlocking(forceStudyUpdate: false, filterStudies: KotlinArray<KotlinLong>(size: 0, init: {_ in KotlinLong(0)}))
 		task.setTaskCompleted(success: web.error)
 	}
 	

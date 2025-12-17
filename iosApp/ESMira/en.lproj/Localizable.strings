@@ -224,3 +224,6 @@
 "hint_missing_fields" = "You might have missed a question.";
 "frequently_asked_questions" = "Frequently Asked Questions";
 "faqs" = "FAQs";
+"available_languages" = "This study is available in the following languages:";
+"select_language_instruction" = "Select the language the study should be displayed in. Note that this only affects the text in the study itself. The application interface is dependent on your system language and will not change.";
+"change_language" = "Change Language";
