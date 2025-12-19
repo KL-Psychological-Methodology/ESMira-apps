@@ -21,6 +21,7 @@
 		6B3A92CC29F2B3CC0081A554 /* CompassStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3A92CB29F2B3CC0081A554 /* CompassStruct.swift */; };
 		6B3A92CE29F7B2720081A554 /* RecordAudioStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3A92CD29F7B2720081A554 /* RecordAudioStruct.swift */; };
 		6B3AB7312EE9A2FF009675BD /* LangQuestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3AB7302EE9A2F8009675BD /* LangQuestionView.swift */; };
+		6B3AB7332EF2DBA5009675BD /* LanguageSelectView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3AB7322EF2DB73009675BD /* LanguageSelectView.swift */; };
 		6B4996CD2825414100D8B6F1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4996CC2825414100D8B6F1 /* AppDelegate.swift */; };
 		6B4996CF2825415300D8B6F1 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B4996CE2825415300D8B6F1 /* SceneDelegate.swift */; };
 		6B4996D12825BD6300D8B6F1 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6B4996D02825BD6300D8B6F1 /* Colors.xcassets */; };
@@ -174,6 +175,7 @@
 		6B3AB72A2E9D1904009675BD /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6B3AB72B2E9D1904009675BD /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = pt; path = pt.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		6B3AB7302EE9A2F8009675BD /* LangQuestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LangQuestionView.swift; sourceTree = "<group>"; };
+		6B3AB7322EF2DB73009675BD /* LanguageSelectView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageSelectView.swift; sourceTree = "<group>"; };
 		6B4996CC2825414100D8B6F1 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		6B4996CE2825415300D8B6F1 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		6B4996D02825BD6300D8B6F1 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
@@ -331,21 +333,22 @@
 		6BCFED642825283A009167B0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				6BCE4E182E65B9BA0080E4A7 /* FaqView.swift */,
-				6BA4BF9A283E566D00D3E8C7 /* AddStudySubViews */,
-				6B92BF3229DC38F80011E8D9 /* questionnaire */,
-				6BCFED7B2825283A009167B0 /* AddStudyView.swift */,
+				6B3AB7322EF2DB73009675BD /* LanguageSelectView.swift */,
 				6B3A92C329E816410081A554 /* AboutESMira.swift */,
+				6BCFED7B2825283A009167B0 /* AddStudyView.swift */,
+				6BCE4E182E65B9BA0080E4A7 /* FaqView.swift */,
+				6B6BD2B12B2871CC005648C0 /* FaultyAccessKeyView.swift */,
 				6BCFED7C2825283A009167B0 /* MessagesView.swift */,
 				6BCFED7A2825283A009167B0 /* NewMessageView.swift */,
 				6BB47F7628F6FFB900C0F561 /* RewardView.swift */,
 				6BCFED7F2825283A009167B0 /* SendErrorReportView.swift */,
-				6B6BD2B12B2871CC005648C0 /* FaultyAccessKeyView.swift */,
 				6BCFED652825283A009167B0 /* SettingsView.swift */,
 				6BCFED682825283A009167B0 /* StatisticsView.swift */,
 				6BCCF47C29BF20FA006E88E1 /* StudyDashboard.swift */,
 				6B6B607329DDCC2200E7929D /* StudyInformation.swift */,
 				6B3A92BF29E5C8250081A554 /* UploadProtocol.swift */,
+				6BA4BF9A283E566D00D3E8C7 /* AddStudySubViews */,
+				6B92BF3229DC38F80011E8D9 /* questionnaire */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -664,6 +667,7 @@
 				6BA4BF9E283E575700D3E8C7 /* QrExistsView.swift in Sources */,
 				6BCFEDBD2825284D009167B0 /* ChatBubble.swift in Sources */,
 				6BCFED832825283A009167B0 /* StatisticsView.swift in Sources */,
+				6B3AB7332EF2DBA5009675BD /* LanguageSelectView.swift in Sources */,
 				6BCFEDEE28252854009167B0 /* BinaryStruct.swift in Sources */,
 				6BCFEDE228252854009167B0 /* ListSingleStruct.swift in Sources */,
 				6BCFEDEF28252854009167B0 /* DateStruct.swift in Sources */,

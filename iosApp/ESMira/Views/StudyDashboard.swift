@@ -338,12 +338,20 @@ struct StudyDashboard: View {
 		
 		
 		list.append(HeaderLine(content: NSLocalizedString("settings", comment: "study settings")))
-		
+				
 		if(study.hasEditableSchedules()) {
 			list.append(ActionBox(
 				header: "change_schedules",
 				icon: "clock",
 				action: { navigationState.openChangeSchedules(study.id)}
+			))
+		}
+		
+		if(study.hasMultipleLanguages()) {
+			list.append(NavigationBox(
+				header: "change_language",
+				icon: "globe",
+				destinationView: { LanguageSelect(study: self.study) }
 			))
 		}
 		
