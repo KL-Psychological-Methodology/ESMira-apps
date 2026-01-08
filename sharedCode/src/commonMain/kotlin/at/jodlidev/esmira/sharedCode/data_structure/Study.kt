@@ -821,6 +821,7 @@ class Study internal constructor(
 			DataSet.EventTypes.statistic_viewed.toString() to false,
 			DataSet.EventTypes.study_message.toString() to false,
 			DataSet.EventTypes.study_updated.toString() to false,
+			DataSet.EventTypes.requested_reward_code.toString() to false,
 		)
 		
 		fun newInstance(serverUrl: String, accessKey: String, json: String, checkUpdate: Boolean = true): Study {
