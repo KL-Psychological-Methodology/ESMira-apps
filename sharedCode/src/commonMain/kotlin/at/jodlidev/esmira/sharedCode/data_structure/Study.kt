@@ -625,6 +625,8 @@ class Study internal constructor(
 			val values = db.getValueBox()
 			values.putString(KEY_LANG, newLang)
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
+			ErrorBox.log("Study", "Switching study language from $lang to $newLang.")
+			DataSet.createShortDataSet(DataSet.EventTypes.language_changed, this)
 		}
 	}
 	
@@ -822,6 +824,7 @@ class Study internal constructor(
 			DataSet.EventTypes.study_message.toString() to false,
 			DataSet.EventTypes.study_updated.toString() to false,
 			DataSet.EventTypes.requested_reward_code.toString() to false,
+			DataSet.EventTypes.language_changed.toString() to false,
 		)
 		
 		fun newInstance(serverUrl: String, accessKey: String, json: String, checkUpdate: Boolean = true): Study {
