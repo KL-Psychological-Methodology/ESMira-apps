@@ -12,7 +12,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -27,7 +26,6 @@ import at.jodlidev.esmira.sharedCode.*
 import at.jodlidev.esmira.sharedCode.data_structure.QuestionnaireCache
 import at.jodlidev.esmira.sharedCode.data_structure.DbUser
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
-import at.jodlidev.esmira.sharedCode.merlinInterpreter.MerlinRunner
 import at.jodlidev.esmira.views.ESMiraDialog
 import at.jodlidev.esmira.views.NextNotificationsView
 import at.jodlidev.esmira.views.main.*
@@ -37,7 +35,7 @@ import at.jodlidev.esmira.views.main.questionnaire.QuestionnaireView
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import at.jodlidev.esmira.views.welcome.LanguageSelectView
+import at.jodlidev.esmira.views.main.LanguageSelectView
 import kotlinx.coroutines.delay
 import java.io.*
 
