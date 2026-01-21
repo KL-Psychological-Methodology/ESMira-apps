@@ -77,6 +77,8 @@ class Input internal constructor( ) {
 	var textScript: String = ""
 	var size: Int = 100 //for image compression
 	var other: Boolean = false // for lists
+    var useCustomStart: Boolean = false
+    var customStart: Int = 0
 	
 	var forceInt: Boolean = false
 	
