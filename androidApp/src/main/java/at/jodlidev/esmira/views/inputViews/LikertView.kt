@@ -51,7 +51,9 @@ private fun LikertViewHorizontal(input: Input, get: () -> String, save: (String)
 		Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
 			val configuration = LocalConfiguration.current
 			val width = configuration.screenWidthDp.dp / input.likertSteps
-			for(i in 1..input.likertSteps) {
+            val start = if(input.useCustomStart) input.customStart else 1
+            val end = start + input.likertSteps - 1
+            for(i in start..end) {
 				RadioButton(selected = get() == i.toString(),
 					onClick = {
 						save(i.toString())
@@ -76,7 +78,9 @@ private fun LikertViewVertical(input: Input, get: () -> String, save: (String) -
 				modifier = Modifier.weight(1F)
 			)
 		}
-		for(i in 1..input.likertSteps) {
+        val start = if(input.useCustomStart) input.customStart else 1
+        val end = start + input.likertSteps - 1
+        for(i in start..end) {
 			Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
 				RadioButton(selected = get() == i.toString(),
 					onClick = {

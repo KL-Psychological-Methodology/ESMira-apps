@@ -61,10 +61,11 @@ fun ListSingleView(input: Input, get: () -> String, save: (String, Map<String, S
 fun ListSingleAsListView(input: Input, get: () -> String, save: (String, Map<String, String>) -> Unit) {
 	val otherText = remember{ mutableStateOf(input.getAdditional("other") ?: "") }
 	val otherSelected = remember{ mutableStateOf( get() == if(input.forceInt) (input.listChoices.size + 1).toString() else "other") }
+    val startValue = if(input.useCustomStart) input.customStart else 1
 
 	Column {
 		for((i, value) in input.listChoices.withIndex()) {
-			val actualValue = if(input.forceInt) (i+1).toString() else value
+			val actualValue = if(input.forceInt) (startValue + i).toString() else value
 			
 			RadioButtonLine(
 				text = value,
@@ -76,7 +77,7 @@ fun ListSingleAsListView(input: Input, get: () -> String, save: (String, Map<Str
 			)
 		}
 		if(input.other) {
-			val actualValue = if(input.forceInt) (input.listChoices.size + 1).toString() else "other"
+			val actualValue = if(input.forceInt) (startValue + input.listChoices.size).toString() else "other"
 			RadioButtonLine(
 				text = stringResource(id = R.string.option_other),
 				isSelected = { actualValue == get() },
@@ -101,13 +102,14 @@ fun ListSingleAsListView(input: Input, get: () -> String, save: (String, Map<Str
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ListSingleAsDropdownView(input: Input, get: () -> String, save: (String, Map<String, String>) -> Unit) {
+    val startValue = if(input.useCustomStart) input.customStart else 1
 	val expanded = remember { mutableStateOf(false) }
 	val otherText = remember { mutableStateOf(input.getAdditional("other") ?: "")}
 	val otherSelected = remember { mutableStateOf(false) }
 	Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 		Box {
 			val shownValue =  if(input.forceInt)
-				get().toIntOrNull()?.let { if(it <= input.listChoices.size) input.listChoices[it-1] else ""} ?: ""
+				get().toIntOrNull()?.let { if((it - startValue) >= 0 && (it - startValue) < input.listChoices.size) input.listChoices[it - startValue] else ""} ?: ""
 			else
 				get()
 			
@@ -133,7 +135,7 @@ fun ListSingleAsDropdownView(input: Input, get: () -> String, save: (String, Map
 					.defaultMinSize(200.dp)
 			) {
 				for((i, value) in input.listChoices.withIndex()) {
-					val actualValue = if(input.forceInt) (i+1).toString() else value
+					val actualValue = if(input.forceInt) (startValue + i).toString() else value
 					DropdownMenuItem(
 						text = {
 							Text(value)
@@ -147,7 +149,7 @@ fun ListSingleAsDropdownView(input: Input, get: () -> String, save: (String, Map
 					)
 				}
 				if(input.other) {
-					val actualValue = if(input.forceInt) input.listChoices.size.toString() else "other"
+					val actualValue = if(input.forceInt) (startValue + input.listChoices.size).toString() else "other"
 					DropdownMenuItem(
 						text = { Text(stringResource(id = R.string.option_other)) },
 						onClick = {
@@ -166,7 +168,7 @@ fun ListSingleAsDropdownView(input: Input, get: () -> String, save: (String, Map
 				onValueChange = {
 					otherText.value = it
 					save(
-						if(input.forceInt) input.listChoices.size.toString() else "other",
+						if(input.forceInt) (startValue + input.listChoices.size).toString() else "other",
 						mapOf("other" to otherText.value)
 					)
 				},
