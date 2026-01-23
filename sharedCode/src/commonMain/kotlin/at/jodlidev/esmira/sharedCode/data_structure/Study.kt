@@ -617,6 +617,18 @@ class Study internal constructor(
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
 		}
 	}
+
+	fun saveLanguage(newLang: String) {
+		lang = newLang
+		if(exists) {
+			val db = NativeLink.sql
+			val values = db.getValueBox()
+			values.putString(KEY_LANG, newLang)
+			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
+			ErrorBox.log("Study", "Switching study language from $lang to $newLang.")
+			DataSet.createShortDataSet(DataSet.EventTypes.language_changed, this)
+		}
+	}
 	
 	fun saveFaultyAccessKeyState(faulty: Boolean, newAccessKey: String? = null) {
 		if(exists) {
@@ -811,6 +823,8 @@ class Study internal constructor(
 			DataSet.EventTypes.statistic_viewed.toString() to false,
 			DataSet.EventTypes.study_message.toString() to false,
 			DataSet.EventTypes.study_updated.toString() to false,
+			DataSet.EventTypes.requested_reward_code.toString() to false,
+			DataSet.EventTypes.language_changed.toString() to false,
 		)
 		
 		fun newInstance(serverUrl: String, accessKey: String, json: String, checkUpdate: Boolean = true): Study {

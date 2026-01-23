@@ -338,12 +338,20 @@ struct StudyDashboard: View {
 		
 		
 		list.append(HeaderLine(content: NSLocalizedString("settings", comment: "study settings")))
-		
+				
 		if(study.hasEditableSchedules()) {
 			list.append(ActionBox(
 				header: "change_schedules",
 				icon: "clock",
 				action: { navigationState.openChangeSchedules(study.id)}
+			))
+		}
+		
+		if(study.hasMultipleLanguages()) {
+			list.append(NavigationBox(
+				header: "change_language",
+				icon: "globe",
+				destinationView: { LanguageSelect(study: self.study) }
 			))
 		}
 		
@@ -420,7 +428,7 @@ struct StudyDashboard: View {
 			self.navigationState.openErrorReport()
 		})
 		r.append(ActionSheet.Button.default(Text("update_studies")) {
-			Web.Companion().updateStudiesAsync(forceStudyUpdate: false) {updatedCount in
+			Web.Companion().updateStudiesAsync(forceStudyUpdate: false, filterStudies: KotlinArray<KotlinLong>(size: 0, init: {_ in KotlinLong(0)})) {updatedCount in
 				DispatchQueue.main.async {
 					if(updatedCount != -1) {
 						self.appState.showToast(String(format: NSLocalizedString("info_update_complete", comment: ""), Int(truncating: updatedCount)))

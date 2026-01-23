@@ -312,5 +312,6 @@
     <string name="frequently_asked_questions">Häufig gestellte Fragen</string>
     <string name="faqs">FAQs</string>
     <string name="available_languages">Diese Studie ist in den folgenden Sprachen verfügbar:</string>
-    <string name="select_language_instruction">Bitte wählen Sie die Sprache, die am besten für Sie passt.</string>
+    <string name="select_language_instruction">Wählen Sie die Sprache, in der die Studie dargestellt werden soll. Beachten Sie, dass dies nur Texte in der Studie selbst betrifft. Die Sprache der Interfacelemente der Anwendung is abhängig von Ihrer Systemsprache.</string>
+    <string name="change_language">Sprache Ändern</string>
 </resources>
