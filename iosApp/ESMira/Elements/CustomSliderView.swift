@@ -8,13 +8,15 @@ import SwiftUI
 
 //Thanks to: https://stackoverflow.com/questions/58286350/how-to-create-custom-slider-by-using-swiftui
 struct CustomSliderView: View {
+	let minValue: Float
 	let maxValue: Float
 	
 	@Binding var value: String
 	@State var percentage: Float
 	@State var color: Color
 	
-	init(value: Binding<String>, maxValue: Int = 100) {
+	init(value: Binding<String>, maxValue: Int = 100, minValue: Int = 0) {
+		self.minValue = Float(minValue)
 		self.maxValue = Float(maxValue)
 		self._value = value
 		self._percentage = State(initialValue: (Float(value.wrappedValue) ?? Float(maxValue) / 2) / Float(maxValue))
@@ -37,8 +39,8 @@ struct CustomSliderView: View {
 			}.frame(height: 20)
 			.gesture(DragGesture(minimumDistance: 0)
 				.onChanged({ value in
-					self.percentage = min(max(Float(1) / self.maxValue, Float(value.location.x / geometry.size.width)), 1)
-					self.value = String(Int(round(maxValue * self.percentage)))
+					self.percentage = min(max(0, Float(value.location.x / geometry.size.width)), 1)
+					self.value = String(Int(round(minValue + (maxValue - minValue) * self.percentage)))
 					self.color = .accentColor
 				}))
 		}.frame(height: 20)
