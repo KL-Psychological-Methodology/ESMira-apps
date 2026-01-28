@@ -54,7 +54,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 			case "invitation":
 				let questionnaire = DbLogic().getQuestionnaire(id: Int64(id[1]) ?? -1)
 				if(questionnaire != nil) {
-					navigationState.openQuestionnaire(questionnaire!)
+					if(questionnaire!.canBeFilledOut(now: NativeLink().getNowMillis())){
+						navigationState.openQuestionnaire(questionnaire!)
+					}
 				}
 				else {
 					ErrorBox.Companion().error(title: "Alarm", msg: "Questionnaire (id=\(id[1])) is null")
@@ -66,8 +68,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 					alarm?.exec(fireNotifications: false)
 					if(alarm!.actionTrigger.hasInvitation(nothingElse: false)) {
 						let questionnaire = DbLogic().getQuestionnaire(id: alarm?.questionnaireId ?? 0)
-						if(questionnaire != nil) {
-							navigationState.openQuestionnaire(questionnaire!)
+						if(questionnaire != nil){
+							if(questionnaire!.canBeFilledOut(now: NativeLink().getNowMillis())) {
+								navigationState.openQuestionnaire(questionnaire!)
+							}
 						}
 						else {
 							ErrorBox.Companion().error(title: "Alarm", msg: "Questionnaire (id=\(alarm?.questionnaireId ?? -1) for Alarm (id=\(alarm?.id ?? -1)) is null")
