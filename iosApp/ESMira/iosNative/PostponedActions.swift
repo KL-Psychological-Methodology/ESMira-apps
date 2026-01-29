@@ -12,6 +12,7 @@ class PostponedActions: PostponedActionsInterface {
 	static let IDENTIFIER_SYNC = "at.jodlidev.esmira.sync"
 	static let IDENTIFIER_UPDATE = "at.jodlidev.esmira.update"
 	static let IDENTIFIER_NOTIFICATIONS = "at.jodlidev.esmira.notifications"
+	static let ONE_HOUR = TimeInterval(60*60*1)
 	static let THREE_HOURS = TimeInterval(60*60*3)
 	static let TWELVE_HOURS = TimeInterval(60*60*12)
 	
@@ -91,7 +92,7 @@ class PostponedActions: PostponedActionsInterface {
 	static func scheduleStudyUpdate() {
 		let request = BGProcessingTaskRequest(identifier: PostponedActions.IDENTIFIER_UPDATE)
 		request.requiresNetworkConnectivity = true
-		request.earliestBeginDate = Date(timeIntervalSinceNow: PostponedActions.TWELVE_HOURS)
+		request.earliestBeginDate = Date(timeIntervalSinceNow: PostponedActions.ONE_HOUR)
 //		request.earliestBeginDate = Date(timeIntervalSinceNow: TimeInterval(60*3))
 		logScheduleDate("Study Update", request.earliestBeginDate)
 		
@@ -104,7 +105,7 @@ class PostponedActions: PostponedActionsInterface {
 	}
 	static func scheduleNotificationUpdater() {
 		let refreshTask = BGAppRefreshTaskRequest(identifier: PostponedActions.IDENTIFIER_NOTIFICATIONS)
-		refreshTask.earliestBeginDate = Date(timeIntervalSinceNow: PostponedActions.TWELVE_HOURS)
+		refreshTask.earliestBeginDate = Date(timeIntervalSinceNow: PostponedActions.ONE_HOUR)
 		logScheduleDate("Notification Update", refreshTask.earliestBeginDate)
 		
 		do {
