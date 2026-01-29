@@ -62,7 +62,7 @@ struct FaultyAccessKey: View {
 					.padding()
 				DefaultButton("ok_", action: {
 					self.study.saveFaultyAccessKeyState(faulty: false, newAccessKey: self.newAccessKey)
-					Web.Companion().updateStudiesAsync(forceStudyUpdate: false) { updatedCount in
+					Web.Companion().updateStudiesAsync(forceStudyUpdate: false, filterStudies: KotlinArray<KotlinLong>(size: 0, init: {_ in KotlinLong(0)})) { updatedCount in
 						let faultyStudy = DbLogic().getFirstStudyWithFaultyAccessKey()
 						if(faultyStudy != nil) {
 							self.navigationState.openFaultyAccessKeyDialog(studyId: self.study.id)

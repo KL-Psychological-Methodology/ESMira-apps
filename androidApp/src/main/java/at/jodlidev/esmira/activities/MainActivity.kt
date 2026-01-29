@@ -12,7 +12,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
@@ -27,7 +26,6 @@ import at.jodlidev.esmira.sharedCode.*
 import at.jodlidev.esmira.sharedCode.data_structure.QuestionnaireCache
 import at.jodlidev.esmira.sharedCode.data_structure.DbUser
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
-import at.jodlidev.esmira.sharedCode.merlinInterpreter.MerlinRunner
 import at.jodlidev.esmira.views.ESMiraDialog
 import at.jodlidev.esmira.views.NextNotificationsView
 import at.jodlidev.esmira.views.main.*
@@ -37,6 +35,7 @@ import at.jodlidev.esmira.views.main.questionnaire.QuestionnaireView
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import at.jodlidev.esmira.views.main.LanguageSelectView
 import kotlinx.coroutines.delay
 import java.io.*
 
@@ -192,6 +191,10 @@ class MainActivity: ComponentActivity() {
 				PageStudyInformation(studyId.value)
 			}
 
+			composable("languageSelect") {
+				PageLanguageSelect(studyId.value)
+			}
+
 			composable("faq") {
 				PageFaq(studyId.value)
 			}
@@ -293,9 +296,14 @@ class MainActivity: ComponentActivity() {
 				},
 				updateStudies = {
 					Web.updateStudiesAsync {updatedCount ->
-						if(updatedCount != -1)
-							Toast.makeText(context, context.getString(R.string.info_update_complete, updatedCount), Toast.LENGTH_SHORT).show()
-						else
+						if(updatedCount != -1) {
+							Toast.makeText(
+								context,
+								context.getString(R.string.info_update_complete, updatedCount),
+								Toast.LENGTH_SHORT
+							).show()
+							reloadPage()
+						}else
 							Toast.makeText(context, context.getString(R.string.info_update_failed), Toast.LENGTH_SHORT).show()
 						
 						val faultyStudy = DbLogic.getFirstStudyWithFaultyAccessKey()
@@ -331,6 +339,7 @@ class MainActivity: ComponentActivity() {
 				gotoMessages = { navController.navigate("messages") },
 				gotoReward = { navController.navigate("reward") },
 				gotoStatistics = { navController.navigate("statistics") },
+				gotoLanguageSelect = { navController.navigate("languageSelect") },
 				gotoDataProtocol = { navController.navigate("uploadProtocol") },
 				gotoStudyInformation = { navController.navigate("studyInformation") },
 				gotoFaq = { navController.navigate("faq") },
@@ -381,8 +390,8 @@ class MainActivity: ComponentActivity() {
 						}
 					}
 				}
-				if(nextRelevantPageIndex == -1) {
-					if(!questionnaire.isLastPage(pageNumber) && questionnaire.showSkipToast) {
+				if(nextRelevantPageIndex == -1 && questionnaire.showSkipToast) {
+					if(!questionnaire.isLastPage(pageNumber)) {
 						Toast.makeText(
 							context,
 							getString(R.string.toast_skipped_to_end),
@@ -454,6 +463,15 @@ class MainActivity: ComponentActivity() {
 			hasNotifications = { study -> study.hasNotifications() },
 			getNextAlarm = { DbLogic.getNextAlarmWithNotifications(studyId) },
 			goBack = { onBackPressedDispatcher.onBackPressed() }
+		)
+	}
+
+	@Composable
+	fun PageLanguageSelect(studyId: Long) {
+		LanguageSelectView(
+			getStudy = { DbLogic.getStudy(studyId)!! },
+			goBack = { onBackPressedDispatcher.onBackPressed() },
+			afterUpdate = { reloadPage() }
 		)
 	}
 

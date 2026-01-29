@@ -29,7 +29,11 @@ struct VaScaleStruct: View {
 				}
 			}
 			
-			CustomSliderView(value: self.$viewModel.value, maxValue: (self.viewModel.input.maxValue > 1 ? Int(self.viewModel.input.maxValue) : 100))
+			CustomSliderView(
+				value: self.$viewModel.value,
+				maxValue: (self.viewModel.input.maxValue > 1 ? Int(self.viewModel.input.maxValue) : 100),
+				minValue: (self.viewModel.input.useCustomStart ? Int(self.viewModel.input.customStart) : 0)
+			)
 		}
 	}
 }

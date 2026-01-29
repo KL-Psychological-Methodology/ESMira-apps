@@ -11,6 +11,7 @@ struct LikertStruct: View {
 	@State var value: String = ""
 
 	private func drawLikertHorizontal() -> some View {
+		let startValue = self.viewModel.input.useCustomStart ? self.viewModel.input.customStart : 1;
 		return VStack {
 			HStack(alignment: .top) {
 				Text(self.viewModel.input.leftSideLabel)
@@ -24,7 +25,7 @@ struct LikertStruct: View {
 					.multilineTextAlignment(.trailing)
 			}
 			HStack {
-				ForEach(1...self.viewModel.input.likertSteps, id: \.self) { index in
+				ForEach(startValue...(startValue + self.viewModel.input.likertSteps - 1), id: \.self) { index in
 					RadioButtonView(state: self.$value, label: "", value: String(index)) { value in
 						self.viewModel.value = value
 					}
@@ -37,12 +38,13 @@ struct LikertStruct: View {
 	}
 
 	private func drawLikertVertical() -> some View {
+		let startValue = self.viewModel.input.useCustomStart ? self.viewModel.input.customStart : 1;
 		return VStack {
 			Text(self.viewModel.input.leftSideLabel)
 				.font(.system(size: 14))
 				.multilineTextAlignment(.center)
 			VStack(alignment: .center, spacing: 15) {
-				ForEach(1...self.viewModel.input.likertSteps, id: \.self) { index in
+				ForEach(startValue...(startValue + self.viewModel.input.likertSteps - 1), id: \.self) { index in
 					HStack(alignment: .center) {
 						RadioButtonView(state: self.$value, label: "", value: String(index)) { value in
 							self.viewModel.value = value}

@@ -347,28 +347,12 @@ object DbLogic {
 			Scheduler.scheduleAhead()
 			cleanupFiles()
 			NativeLink.postponedActions.syncDataSets()
-			
-			val newLang = NativeLink.smartphoneData.lang
-			val oldLang = DbUser.getLang()
-			
+
+
 			if(!hasNoJoinedStudies()) {
 				checkLeaveStudies()
-				
-				if(newLang != oldLang) {
-					ErrorBox.log("startupApp", "Detected change in language to \"$newLang\"")
-					Web.updateStudiesAsync(true) { updatedCount ->
-						if(updatedCount != -1)
-							DbUser.setLang(newLang)
-					}
-				}
-				else
-					Web.updateStudiesAsync()
-				
+				Web.updateStudiesAsync()
 				NativeLink.postponedActions.updateStudiesRegularly()
-			}
-			else if(newLang != oldLang) {
-				ErrorBox.log("startupApp", "Detected change in language from \"$oldLang\" to \"$newLang\"")
-				DbUser.setLang(newLang)
 			}
 			
 			val alarms = getAlarms()

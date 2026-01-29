@@ -57,6 +57,7 @@ fun StudyDashboardView(
 	gotoMessages: () -> Unit,
 	gotoReward: () -> Unit,
 	gotoStatistics: () -> Unit,
+	gotoLanguageSelect: () -> Unit,
 	gotoDataProtocol: () -> Unit,
 	gotoStudyInformation: () -> Unit,
 	gotoFaq: () -> Unit,
@@ -110,6 +111,7 @@ fun StudyDashboardView(
 			hasUnSyncedDataSets = hasUnSyncedDataSets,
 			countUnreadMessages = countUnreadMessages,
 			openChangeSchedulesDialog = openChangeSchedulesDialog,
+			gotoLanguageSelect = gotoLanguageSelect,
 			gotoQuestionnaire = gotoQuestionnaire,
 			gotoDisabledQuestionnaires = gotoDisabledQuestionnaires,
 			gotoMessages = gotoMessages,
@@ -133,6 +135,7 @@ fun StudyDashboardGrid(
 	hasUnSyncedDataSets: () -> Boolean,
 	countUnreadMessages: () -> Int,
 	openChangeSchedulesDialog: () -> Unit,
+	gotoLanguageSelect: () -> Unit,
 	gotoQuestionnaire: (Questionnaire) -> Unit,
 	gotoDisabledQuestionnaires: (() -> Unit)?,
 	gotoMessages: () -> Unit,
@@ -148,6 +151,7 @@ fun StudyDashboardGrid(
 	val hasStatistics = study.hasStatistics()
 	val hasMessages = study.hasMessages()
 	val hasRewards = study.hasRewards()
+	val hasMultipleLanguages = study.hasMultipleLanguages()
 	val hasFAQs = study.faq.isNotEmpty()
 	
 	val showLeaveStudyDialog = remember { mutableStateOf(false) }
@@ -282,6 +286,11 @@ fun StudyDashboardGrid(
 				StudyDashboardButtonView(stringResource(R.string.change_schedules), Icons.Default.AccessTime, onClick = openChangeSchedulesDialog)
 			}
 		}
+		if(hasMultipleLanguages) {
+			item {
+				StudyDashboardButtonView(stringResource(R.string.change_language), Icons.Default.Language, onClick = gotoLanguageSelect)
+			}
+		}
 		item {
 			StudyDashboardButtonView(stringResource(R.string.upload_protocol), Icons.Default.MenuBook, onClick = gotoDataProtocol)
 		}
@@ -352,7 +361,8 @@ fun PreviewStudyDashboardView() {
 			gotoDataProtocol = {},
 			gotoStudyInformation = {},
 			gotoFaq = {},
-			openChangeSchedulesDialog = {}
+			openChangeSchedulesDialog = {},
+			gotoLanguageSelect = {},
 		)
 	}
 }
@@ -384,7 +394,8 @@ fun PreviewStudyDashboardNoQuestionnairesView() {
 			gotoDataProtocol = {},
 			gotoStudyInformation = {},
 			gotoFaq = {},
-			openChangeSchedulesDialog = {}
+			openChangeSchedulesDialog = {},
+			gotoLanguageSelect = {},
 		)
 	}
 }

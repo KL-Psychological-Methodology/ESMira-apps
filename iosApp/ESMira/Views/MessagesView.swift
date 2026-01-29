@@ -80,7 +80,7 @@ struct MessagesView: View {
 		.modifier(FlipEffect())
 		.onAppear {
 			let oldUnreadMessagesCount = DbLogic().countUnreadMessages(id: self.study.id)
-			Web.Companion().updateStudiesAsync(forceStudyUpdate: false) {updatedCount in
+			Web.Companion().updateStudiesAsync(forceStudyUpdate: false, filterStudies: KotlinArray<KotlinLong>(size: 0, init: {_ in KotlinLong(0)})) {updatedCount in
 				DispatchQueue.main.async {
 					if(DbLogic().countUnreadMessages(id: self.study.id) != oldUnreadMessagesCount) {
 						self.navigationState.reloadStudy()

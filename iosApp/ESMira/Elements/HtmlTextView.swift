@@ -196,7 +196,7 @@ struct ScrollableHtmlTextView: View {
 //		AttributedText(htmlText: html, isScrollable: true)
 		ScrollView {
 			AttributedText(htmlText: html)
-		}
+		}.padding()
 	}
 }
 

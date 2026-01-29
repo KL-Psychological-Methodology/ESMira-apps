@@ -75,6 +75,12 @@
             android:excludeFromRecents="true">
         </activity>
         <activity
+            android:name="at.jodlidev.esmira.activities.ChangeStudyLanguageDialogActivity"
+            android:theme="@style/AppTheme.ActivityDialog"
+            android:label="@string/change_language"
+            android:excludeFromRecents="true">
+        </activity>
+        <activity
             android:name="at.jodlidev.esmira.activities.NotificationsBrokenDialogActivity"
             android:theme="@style/AppTheme.ActivityDialog"
             android:label="@string/problems_with_notifications"

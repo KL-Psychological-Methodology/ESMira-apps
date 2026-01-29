@@ -77,6 +77,8 @@ class Input internal constructor( ) {
 	var textScript: String = ""
 	var size: Int = 100 //for image compression
 	var other: Boolean = false // for lists
+    var useCustomStart: Boolean = false
+    var customStart: Int = 0
 	
 	var forceInt: Boolean = false
 	
@@ -244,7 +246,7 @@ class Input internal constructor( ) {
 	}
 
 	fun wantsValue(): Boolean {
-		return if(optional || type == TYPES.text)
+		return if(optional || type == TYPES.text || type == TYPES.countdown || type == TYPES.image || type == TYPES.video)
 			return false
 		else
 			getValue().isEmpty()

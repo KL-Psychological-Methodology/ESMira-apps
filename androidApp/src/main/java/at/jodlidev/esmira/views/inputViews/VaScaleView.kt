@@ -28,11 +28,12 @@ import kotlin.math.roundToInt
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VaScaleView(input: Input, get: () -> String, save: (String) -> Unit) {
+    val startValue = if(input.useCustomStart) input.customStart.toFloat() else 0F
 	val showThumb = remember { mutableStateOf(get().isNotEmpty()) }
-	val sliderValue = remember { mutableFloatStateOf(try {get().toFloat()} catch (_:Throwable) {0F}) }
+	val sliderValue = remember { mutableFloatStateOf(try {get().toFloat()} catch (_:Throwable) {startValue}) }
 	val sliderState = remember {
 		SliderState(
-			valueRange = 1F..(if(input.maxValue > 1) input.maxValue else 100F),
+			valueRange = startValue..(if(input.maxValue > 1) input.maxValue else 100F),
 			value = sliderValue.floatValue
 		)
 	}

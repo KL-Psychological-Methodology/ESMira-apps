@@ -29,7 +29,8 @@ class DataSet: UploadData {
 		statistic_viewed,
 		study_message,
 		study_updated,
-		requested_reward_code
+		requested_reward_code,
+		language_changed,
 	}
 	@SerialName("dataSetId") override var id: Long = 0
 	@SerialName("studyId") override val studyWebId: Long

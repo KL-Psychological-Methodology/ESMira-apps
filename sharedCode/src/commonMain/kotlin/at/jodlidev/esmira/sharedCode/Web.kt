@@ -18,6 +18,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.Serializable
 import kotlin.io.encoding.Base64
 import kotlin.io.encoding.ExperimentalEncodingApi
+import kotlin.jvm.Synchronized
 
 /**
  * Created by JodliDev on 27.05.2020.
@@ -109,9 +110,12 @@ class Web {
 	private fun close() = client.close()
 	
 	//internal for testing:
-	internal fun getStudyInfoMapForUpdates(forceStudyUpdate: Boolean): Map<String, Map<String, StudyInfo>> {
+	internal fun getStudyInfoMapForUpdates(forceStudyUpdate: Boolean, studyFilter: Array<Long> = arrayOf()): Map<String, Map<String, StudyInfo>> {
 		ErrorBox.log("Web", "Searching for updated studies...")
-		val studies = DbLogic.getJoinedStudies()
+		var studies = DbLogic.getJoinedStudies()
+		if(!studyFilter.isEmpty()){
+			studies = studies.filter { study -> study.id in studyFilter }
+		}
 		val container: MutableMap<String, MutableMap<String, StudyInfo>> = HashMap()
 		
 		if(studies.isEmpty()) {
@@ -137,6 +141,7 @@ class Web {
 				version = study.version,
 				msgTimestamp = study.msgTimestamp,
 				accessKey = study.accessKey,
+				lang = study.lang,
 				forceStudyUpdate = forceStudyUpdate
 			)
 		}
@@ -224,13 +229,13 @@ class Web {
 		}
 	}
 	
-	private suspend fun updateStudies(forceStudyUpdate: Boolean): Int {
+	private suspend fun updateStudies(forceStudyUpdate: Boolean, studyFilter: Array<Long> = arrayOf()): Int {
 		if(NativeLink.isUpdating)
 			return 0
 		NativeLink.isUpdating = true
 		var updatedCount = 0
 		try {
-			val map = getStudyInfoMapForUpdates(forceStudyUpdate)
+			val map = getStudyInfoMapForUpdates(forceStudyUpdate, studyFilter)
 			
 			//do updates:
 			for((url, studyInfo) in map) {
@@ -428,7 +433,8 @@ class Web {
 			val version: Int,
 			val msgTimestamp: Long,
 			val accessKey: String,
-			val forceStudyUpdate: Boolean = false
+			val lang: String,
+			val forceStudyUpdate: Boolean = false,
 		)
 		
 		@Serializable
@@ -542,6 +548,7 @@ class Web {
 		fun loadStudies(
 			serverUrl: String,
 			accessKey: String,
+			lang: String,
 			fallbackUrl: String?,
 			onError: (msg: String, e: Throwable?) -> Unit,
 			onSuccess: (studyString: String, urlFormatted: String) -> Unit
@@ -562,9 +569,9 @@ class Web {
 				try {
 					val path = urlFormatted + (
 						if ((correctedAccessKey.isNotEmpty()))
-							URL_LIST_STUDIES_PASSWORD.replace("%s1", correctedAccessKey).replace("%s2", NativeLink.smartphoneData.lang)
+							URL_LIST_STUDIES_PASSWORD.replace("%s1", correctedAccessKey).replace("%s2", lang)
 						else
-							URL_LIST_STUDIES.replace("%s", NativeLink.smartphoneData.lang)
+							URL_LIST_STUDIES.replace("%s", lang)
 						)
 					val response = web.get(path)
 					kotlinRunOnUiThread {
@@ -588,7 +595,7 @@ class Web {
 
 					// Try Fallback
 					if(fallbackUrl != null) {
-						loadStudiesFallback(urlFormatted, fallbackUrl, correctedAccessKey, onError, onSuccess)
+						loadStudiesFallback(urlFormatted, fallbackUrl, lang, correctedAccessKey, onError, onSuccess)
 					} else {
 						kotlinRunOnUiThread {
 							onError(e.message ?: "Unknown error", e)
@@ -604,6 +611,7 @@ class Web {
 		fun loadStudiesFallback(
 			serverUrl: String,
 			fallbackUrl: String,
+			lang: String,
 			accessKey: String,
 			onError: (msg: String, e: Throwable?) -> Unit,
 			onSuccess: (studyString: String, urlFormatted: String) -> Unit
@@ -623,12 +631,12 @@ class Web {
 					val path = urlFormatted + (
 							if (accessKey.isNotEmpty())
 								URL_LIST_STUDIES_PASSWORD_FALLBACK
-									.replace("%s1", NativeLink.smartphoneData.lang)
+									.replace("%s1", lang)
 									.replace("%s2", accessKey)
 									.replace("%s3", encodedOrigin)
 							else
 								URL_LIST_STUDIES_FALLBACK
-									.replace("%s1", NativeLink.smartphoneData.lang)
+									.replace("%s1", lang)
 									.replace("%s2", encodedOrigin)
 							)
 					val response = web.get(path)
@@ -652,18 +660,18 @@ class Web {
 			}
 		}
 		
-		fun updateStudiesBlocking(forceStudyUpdate: Boolean = false): Int {
+		fun updateStudiesBlocking(forceStudyUpdate: Boolean = false, filterStudies: Array<Long> = arrayOf()): Int {
 			var updateCount = -1
 			nativeBlocking {
 				val web = Web()
-				updateCount = web.updateStudies(forceStudyUpdate)
+				updateCount = web.updateStudies(forceStudyUpdate, filterStudies)
 			}
 			return updateCount
 		}
-		fun updateStudiesAsync(forceStudyUpdate: Boolean = false, continueWith: ((Int) -> Unit)? = null) {
+		fun updateStudiesAsync(forceStudyUpdate: Boolean = false, filterStudies: Array<Long> = arrayOf(), continueWith: ((Int) -> Unit)? = null) {
 			nativeAsync {
 				val web = Web()
-				val r = web.updateStudies(forceStudyUpdate)
+				val r = web.updateStudies(forceStudyUpdate, filterStudies)
 				if(continueWith != null) {
 					kotlinRunOnUiThread {
 						continueWith(r)
