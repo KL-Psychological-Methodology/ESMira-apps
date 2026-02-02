@@ -294,8 +294,8 @@
     <string name="error_app_usage_revoked_android_desc">Eine Studie an der Sie teilnehmen benötigt Berechtigungen um auf Nutzungsdaten von Anwendungen zuzugreifen. Bitte stellen Sie sicher, dass der Zugriff für ESMira in den Einstellungen zugelassen ist.</string>
     <string name="error_report_message">Ein Fehlerbericht wurde gesendet. Kommentar:</string>
     <string name="no_active_questionnaires">Keine aktiven Fragebögen</string>
-    <string name="error_gps_disabled">GPS is disabled!</string>
-    <string name="scanning">Scanne </string>
+    <string name="error_gps_disabled">GPS ist deaktiviert!</string>
+    <string name="scanning">Scanne</string>
     <string name="found_location">Gefundener Standort: %1$s</string>
     <string name="could_not_determine_location">Standort konnte nicht bestimmt werden</string>
     <string name="countdown_running">Countdown läuft</string>
@@ -312,6 +312,6 @@
     <string name="frequently_asked_questions">Häufig gestellte Fragen</string>
     <string name="faqs">FAQs</string>
     <string name="available_languages">Diese Studie ist in den folgenden Sprachen verfügbar:</string>
-    <string name="select_language_instruction">Wählen Sie die Sprache, in der die Studie dargestellt werden soll. Beachten Sie, dass dies nur Texte in der Studie selbst betrifft. Die Sprache der Interfacelemente der Anwendung is abhängig von Ihrer Systemsprache.</string>
-    <string name="change_language">Sprache Ändern</string>
+    <string name="select_language_instruction">Wählen Sie die Sprache, in der die Studie dargestellt werden soll. Beachten Sie, dass dies nur Texte der Studie selbst betrifft. Die Sprache der Anwendung ist abhängig von Ihrer Systemsprache.</string>
+    <string name="change_language">Sprache ändern</string>
 </resources>
