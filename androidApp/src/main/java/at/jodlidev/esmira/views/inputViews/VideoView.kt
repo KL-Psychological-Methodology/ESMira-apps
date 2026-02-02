@@ -1,7 +1,6 @@
 package at.jodlidev.esmira.views.inputViews
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.view.ViewGroup
 import android.webkit.*
 import androidx.compose.foundation.layout.*
@@ -72,7 +71,9 @@ fun VideoView(input: Input, get: () -> String, save: (String) -> Unit) {
 					}
 				},
 				update = { webView ->
-					webView.loadUrl(input.url)
+					val headers = HashMap<String?, String?>()
+					headers.put("Referer", "https://github.com/KL-Psychological-Methodology/ESMira")
+					webView.loadUrl(input.url, headers)
 				},
 				modifier = Modifier.height(250.dp).clip(RectangleShape)
 			)
