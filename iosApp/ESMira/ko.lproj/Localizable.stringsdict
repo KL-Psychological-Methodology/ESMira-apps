@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-    <dict>
-    </dict>
+<dict>
+	<key>ios_info_missed_notifications</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@notifications@</string>
+	</dict>
+	<key>info_reward_is_not_active_yet</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>이 연구의 보상은 아직 활성화되지 않았습니다. 곧 제공될 예정입니다.</string>
+		<key>days</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>이 연구의 보상은 아직 활성화되지 않았습니다. 곧 제공될 예정입니다.</string>
+			<key>other</key>
+			<string>이 연구의 보상은 아직 활성화되지 않았습니다. %1$d일 후에 제공됩니다.</string>
+		</dict>
+	</dict>
+</dict>
 </plist>
