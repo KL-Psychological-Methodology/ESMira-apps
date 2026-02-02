@@ -1,6 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
-    <dict>
-    </dict>
+<dict>
+	<key>info_reward_is_not_active_yet</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Tämän tutkimuksen palkinnot eivät ole vielä käytössä. Ne tulevat pian saataville.</string>
+		<key>days</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>Tämän tutkimuksen palkinnot eivät ole vielä käytössä. Ne tulevat pian saataville.</string>
+			<key>one</key>
+			<string>Tämän tutkimuksen palkinnot eivät ole vielä käytössä. Ne ovat saatavilla yhden päivän kuluttua.</string>
+			<key>other</key>
+			<string>Tämän tutkimuksen palkinnot eivät ole vielä käytössä. Ne ovat saatavilla %1$d päivän kuluttua.</string>
+		</dict>
+	</dict>
+	<key>ios_info_missed_notifications</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@notifications@</string>
+		<key>notifications</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>Ei väliin jääneitä ilmoituksia.</string>
+			<key>one</key>
+			<string>1 väliin jäänyt ilmoitus.</string>
+			<key>other</key>
+			<string>%1$d väliin jäänyttä ilmoitusta.</string>
+		</dict>
+	</dict>
+</dict>
 </plist>
