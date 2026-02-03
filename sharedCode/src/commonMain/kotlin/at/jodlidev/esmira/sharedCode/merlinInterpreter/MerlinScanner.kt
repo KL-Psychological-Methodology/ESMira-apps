@@ -34,10 +34,10 @@ class MerlinScanner (private val source: String) {
             ',' -> addToken(MerlinTokenType.COMMA)
             ':' -> addToken(MerlinTokenType.COLON)
             ';' -> addToken(MerlinTokenType.SEMICOLON)
-            '-' -> addToken(MerlinTokenType.MINUS)
-            '+' -> addToken(MerlinTokenType.PLUS)
-            '*' -> addToken(MerlinTokenType.STAR)
-            '%' -> addToken(MerlinTokenType.MODULO)
+            '-' -> addToken(if (match('=')) MerlinTokenType.MINUS_EQUAL else MerlinTokenType.MINUS)
+            '+' -> addToken(if (match('=')) MerlinTokenType.PLUS_EQUAL else MerlinTokenType.PLUS)
+            '*' -> addToken(if (match('=')) MerlinTokenType.STAR_EQUAL else MerlinTokenType.STAR)
+            '%' -> addToken(if (match('=')) MerlinTokenType.MODULO_EQUAL else MerlinTokenType.MODULO)
             '.' -> addToken(if (match('.')) MerlinTokenType.DOT_DOT else MerlinTokenType.DOT)
             '!' -> addToken(if (match('=')) MerlinTokenType.EXCLAMATION_EQUAL else MerlinTokenType.EXCLAMATION)
             '=' -> addToken(if (match('=')) MerlinTokenType.EQUAL_EQUAL else MerlinTokenType.EQUAL)
@@ -53,7 +53,7 @@ class MerlinScanner (private val source: String) {
             '/' -> if (match('/')) {
                 while (peek() != '\n' && !isAtEnd()) advance()
             } else {
-                addToken(MerlinTokenType.SLASH)
+                addToken(if (match('=')) MerlinTokenType.SLASH_EQUAL else MerlinTokenType.SLASH)
             }
             ' ', '\r', '\t' -> {}
             '\n' -> line++

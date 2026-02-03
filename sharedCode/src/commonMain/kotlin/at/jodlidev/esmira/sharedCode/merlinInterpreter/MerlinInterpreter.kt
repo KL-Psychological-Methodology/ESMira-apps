@@ -123,6 +123,7 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                 MerlinTokenType.MINUS,
                 MerlinTokenType.STAR,
                 MerlinTokenType.SLASH,
+                MerlinTokenType.MODULO,
                 MerlinTokenType.DOT_DOT,
                 MerlinTokenType.GREATER,
                 MerlinTokenType.GREATER_EQUAL,
