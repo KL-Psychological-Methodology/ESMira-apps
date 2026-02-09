@@ -46,16 +46,18 @@ class SimpleDialogActivity: ComponentActivity() {
 		const val EXTRAS_MSG = "msg"
 		const val EXTRAS_NOTIFICATION_ID = "notification_id"
 		
-		fun start(context: Context, title: String, msg: String) {
+		fun start(context: Context, title: String, msg: String, triggerNotification: Boolean = true) {
 			val intent = Intent(context, SimpleDialogActivity::class.java)
 			if(context !is Activity)
 				intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
 			intent.putExtra(EXTRAS_TITLE, title)
 			intent.putExtra(EXTRAS_MSG, msg)
-			
-			val notificationId = (Math.random() * 1000).toInt()
-			NativeLink.notifications.fire(title, msg, notificationId)
-			intent.putExtra(EXTRAS_NOTIFICATION_ID, notificationId)
+
+            if(triggerNotification) {
+                val notificationId = (Math.random() * 1000).toInt()
+                NativeLink.notifications.fire(title, msg, notificationId)
+                intent.putExtra(EXTRAS_NOTIFICATION_ID, notificationId)
+            }
 			context.startActivity(intent)
 		}
 		

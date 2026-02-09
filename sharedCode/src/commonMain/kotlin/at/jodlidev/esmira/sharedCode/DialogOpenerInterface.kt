@@ -11,5 +11,5 @@ interface DialogOpenerInterface {
 	fun notificationsBroken()
 	fun faultyAccessKey(study: Study)
 	fun appTrackingRevoked()
-	fun dialog(title: String, msg: String)
+	fun dialog(title: String, msg: String, triggerNotification: Boolean = true)
 }

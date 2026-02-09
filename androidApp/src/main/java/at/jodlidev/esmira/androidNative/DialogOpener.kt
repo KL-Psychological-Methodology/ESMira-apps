@@ -47,9 +47,9 @@ object DialogOpener : DialogOpenerInterface {
 	}
 
 	
-	override fun dialog(title: String, msg: String) {
+	override fun dialog(title: String, msg: String, triggerNotification: Boolean) {
 		context.get()?.let {
-			SimpleDialogActivity.start(it, title, msg)
+			SimpleDialogActivity.start(it, title, msg, triggerNotification)
 		}
 	}
 }
