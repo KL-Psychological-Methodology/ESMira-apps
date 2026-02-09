@@ -390,8 +390,8 @@ class MainActivity: ComponentActivity() {
 						}
 					}
 				}
-				if(nextRelevantPageIndex == -1 && questionnaire.showSkipToast) {
-					if(!questionnaire.isLastPage(pageNumber)) {
+				if(nextRelevantPageIndex == -1) {
+					if(!questionnaire.isLastPage(pageNumber) && questionnaire.showSkipToast) {
 						Toast.makeText(
 							context,
 							getString(R.string.toast_skipped_to_end),
