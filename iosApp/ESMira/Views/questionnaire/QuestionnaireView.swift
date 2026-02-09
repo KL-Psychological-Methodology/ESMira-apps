@@ -226,7 +226,7 @@ struct QuestionnaireView: View {
 			}
 		}
 		else {
-			if(!self.questionnaire.isLastPage(pageNumber: Int32(self.pageIndex))) {
+			if(!self.questionnaire.isLastPage(pageNumber: Int32(self.pageIndex)) && self.questionnaire.showSkipToast) {
 				self.appState.showTranslatedToast(NSLocalizedString("toast_skipped_to_end", comment: ""))
 			}
 			self.questionnaire.saveQuestionnaire()
