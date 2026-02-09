@@ -409,7 +409,7 @@ class MainActivity: ComponentActivity() {
 					if(!questionnaire.isBackEnabled) {
 						navController.popBackStack("entrance", false)
 					}
-					QuestionnaireCache.savePage(questionnaire.id, nextRelevantPageIndex)
+					QuestionnaireCache.savePage(questionnaire.id, pageNumber + 1)
 					navController.navigate("questionnaire/${questionnaire.id}/${nextRelevantPageIndex}")
 				}
 			}
