@@ -19,10 +19,12 @@ class DialogOpenerForBackground: DialogOpenerInterface {
 		UserDefaults.standard.set(msg, forKey: DialogOpener.KEY_DIALOG_MSG)
 	}
 	
-	func dialog(title: String, msg: String) {
+	func dialog(title: String, msg: String, triggerNotification: Bool) {
 		self.saveDialogForLater(title, msg)
 		
-		NativeLink().notifications.fire(title: title, msg: msg, id: Int32(Date().timeIntervalSince1970))
+		if(triggerNotification) {
+			NativeLink().notifications.fire(title: title, msg: msg, id: Int32(Date().timeIntervalSince1970))
+		}
 	}
 	
 	func errorReport() {
@@ -30,7 +32,7 @@ class DialogOpenerForBackground: DialogOpenerInterface {
 	}
 	
 	func updateNeeded() {
-		self.dialog(title: NSLocalizedString("error_app_update_needed_title", comment: ""), msg: NSLocalizedString("error_app_update_needed_msg", comment: ""))
+		self.dialog(title: NSLocalizedString("error_app_update_needed_title", comment: ""), msg: NSLocalizedString("error_app_update_needed_msg", comment: ""), triggerNotification: true)
 	}
 	
 	func faultyAccessKey(study: Study) {

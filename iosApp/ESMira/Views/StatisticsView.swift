@@ -95,7 +95,7 @@ struct StatisticsView: View {
 				Text("info_no_statistics")
 			}
 			else {
-				ForEach(charts.filter { !$0.hideUntilCompletion }, id: \.self) { chartInfo in
+				ForEach(charts.filter { $0.isAvailable(study: self.study) }, id: \.self) { chartInfo in
 					ChartView(chartInfo: chartInfo, studyStateIsJoined: self.studyStateIsJoined, width: width)
 				}
 			}

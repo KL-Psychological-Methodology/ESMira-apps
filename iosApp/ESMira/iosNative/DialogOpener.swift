@@ -28,10 +28,12 @@ class DialogOpener: DialogOpenerInterface {
 		UserDefaults.standard.set(msg, forKey: DialogOpener.KEY_DIALOG_MSG)
 	}
 	
-	func dialog(title: String, msg: String) {
+	func dialog(title: String, msg: String, triggerNotification: Bool) {
 		self.openGuiDialog(title, msg)
 		
-		NativeLink().notifications.fire(title: title, msg: msg, id: Int32(Date().timeIntervalSince1970))
+		if(triggerNotification) {
+			NativeLink().notifications.fire(title: title, msg: msg, id: Int32(Date().timeIntervalSince1970))
+		}
 	}
 	func openGuiDialog(_ title: String, _ msg: String) {
 		DispatchQueue.main.async { //in case function was started from the background while app was in foreground
@@ -46,7 +48,7 @@ class DialogOpener: DialogOpenerInterface {
 	}
 	
 	func updateNeeded() {
-		self.dialog(title: NSLocalizedString("error_app_update_needed_title", comment: ""), msg: NSLocalizedString("error_app_update_needed_msg", comment: ""))
+		self.dialog(title: NSLocalizedString("error_app_update_needed_title", comment: ""), msg: NSLocalizedString("error_app_update_needed_msg", comment: ""), triggerNotification: true)
 	}
 	
 	func openChangeSchedule(_ studyId: Int64 = -1) {

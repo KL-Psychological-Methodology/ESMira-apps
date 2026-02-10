@@ -56,6 +56,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 				if(questionnaire != nil) {
 					if(questionnaire!.canBeFilledOut(now: NativeLink().getNowMillis())){
 						navigationState.openQuestionnaire(questionnaire!)
+					} else {
+						navigationState.openNotificationExpiredDialog(studyId: questionnaire!.studyId)
 					}
 				}
 				else {
@@ -71,6 +73,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 						if(questionnaire != nil){
 							if(questionnaire!.canBeFilledOut(now: NativeLink().getNowMillis())) {
 								navigationState.openQuestionnaire(questionnaire!)
+							} else {
+								navigationState.openNotificationExpiredDialog(studyId: questionnaire!.studyId)
 							}
 						}
 						else {
