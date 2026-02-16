@@ -89,7 +89,7 @@ fun StatisticsView(
 				.fillMaxWidth()
 			) {
 				composable("personal") {
-					StatisticsContentView(personalCharts, personalChartInfoCollection)
+					StatisticsContentView(personalCharts, personalChartInfoCollection, study)
 				}
 				composable("public") {
 					if(publicStatistics.value == null) {
@@ -98,14 +98,14 @@ fun StatisticsView(
 						}
 					}
 					else {
-						StatisticsContentView(publicCharts, publicStatistics.value!!)
+						StatisticsContentView(publicCharts, publicStatistics.value!!, study)
 					}
 				}
 			}
 		}
 	}
 	else {
-		StatisticsContentView(personalCharts, personalChartInfoCollection)
+		StatisticsContentView(personalCharts, personalChartInfoCollection, study)
 	}
 }
 
@@ -143,10 +143,10 @@ fun StatisticsBottomBar(navController: NavController) {
 }
 
 @Composable
-fun StatisticsContentView(charts: List<ChartInfo>, chartInfoCollection: ChartInfoCollection) {
+fun StatisticsContentView(charts: List<ChartInfo>, chartInfoCollection: ChartInfoCollection, study: Study) {
 	Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
 		//we cant use LazyColumn because mpAndroidChart can only correctly calculate the position of bar charts when the chart is loaded
-		for(chartInfo in charts.filter { !it.hideOnClient }) {
+		for(chartInfo in charts.filter { it.isAvailable(study)}) {
 			Spacer(modifier = Modifier.height(10.dp))
 			Text(chartInfo.title, fontSize = MaterialTheme.typography.titleLarge.fontSize)
 			HtmlHandler.HtmlText(html = chartInfo.chartDescription)

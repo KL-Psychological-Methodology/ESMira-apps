@@ -43,6 +43,12 @@ enum class MerlinTokenType {
     LESS_EQUAL,
     GREATER_GREATER,
 
+    PLUS_EQUAL,
+    MINUS_EQUAL,
+    SLASH_EQUAL,
+    STAR_EQUAL,
+    MODULO_EQUAL,
+
     // Literals
     IDENTIFIER,
     STRING,

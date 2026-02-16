@@ -176,7 +176,7 @@ object Scheduler {
 		for(alarm in alarms) {
 			additionalAlarms += alarm.actionTrigger.countPostponedReminder()
 		}
-		val reschedulesPerAlarm = IOS_MAX_TIMES_TO_SCHEDULE_AHEAD.coerceAtMost(IOS_MAX_ALARM_COUNT / (alarms.size + additionalAlarms))
+		val reschedulesPerAlarm = IOS_MAX_TIMES_TO_SCHEDULE_AHEAD.coerceAtMost((IOS_MAX_ALARM_COUNT - DbLogic.countAlarms()) / (alarms.size + additionalAlarms))
 		
 		ErrorBox.log("Scheduler", "Found ${alarms.size} different alarms with $additionalAlarms reminder that can be rescheduled. Trying to reschedule $reschedulesPerAlarm times")
 		//this loop has a lot of empty runs, but it makes sure that all alarms are scheduled equally even if we hit the max notification limit on iOS

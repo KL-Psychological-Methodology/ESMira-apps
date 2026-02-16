@@ -34,6 +34,7 @@ import at.jodlidev.esmira.views.main.questionnaire.QuestionnaireView
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import at.jodlidev.esmira.androidNative.DialogOpener
 import at.jodlidev.esmira.views.main.LanguageSelectView
 import at.jodlidev.esmira.views.main.studyDashboard.StudyDashboardView
 import kotlinx.coroutines.delay
@@ -77,7 +78,9 @@ class MainActivity: ComponentActivity() {
 					if(questionnaire.canBeFilledOut()) {
 						QuestionnaireCache.saveFormStarted(questionnaire.id)
 						startDestination = "questionnaire/${questionnaire.id}/${questionnaire.getFirstPageIndex()}"
-					}
+					} else {
+                        DialogOpener.dialog(resources.getString(R.string.notification_expired_title), resources.getString(R.string.notification_expired_info), false)
+                    }
 				}
 			}
 		}

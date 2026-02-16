@@ -18,7 +18,9 @@ struct VideoPlayerView: UIViewRepresentable {
 		view.navigationDelegate = context.coordinator
 		let url = URL(string: self.url)
 		if(url != nil) {
-			view.load(URLRequest(url: url!))
+			var urlRequest = URLRequest(url: url!)
+			urlRequest.addValue("https://github.com/KL-Psychological-Methodology/ESMira", forHTTPHeaderField: "Referer")
+			view.load(urlRequest)
 		}
 		return view
 	}

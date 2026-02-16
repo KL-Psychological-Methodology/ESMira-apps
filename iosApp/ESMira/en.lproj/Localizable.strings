@@ -227,3 +227,5 @@
 "available_languages" = "This study is available in the following languages:";
 "select_language_instruction" = "Select the language the study should be displayed in. Note that this only affects the text in the study itself. The application interface is dependent on your system language and will not change.";
 "change_language" = "Change Language";
+"notification_expired_title" = "Notification expired";
+"notification_expired_info" = "The selected notification has expired and the associated questionnaire is currently not available.";

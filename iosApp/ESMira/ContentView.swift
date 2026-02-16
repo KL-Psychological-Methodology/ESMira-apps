@@ -55,6 +55,13 @@ struct ContentView: View {
 			else {
 				return AnyView(Text("error"))
 			}
+		case .expiredNotification:
+			return AnyView(
+				ExpiredNotificationView()
+					.environmentObject(appState)
+					.environmentObject(navigationState)
+					.accentColor(Color("onSurface"))
+			)
 				
 			default:
 				return AnyView(Text("error"))

@@ -1,6 +1,7 @@
 package at.jodlidev.esmira.sharedCode.data_structure.statistics
 
 import at.jodlidev.esmira.sharedCode.data_structure.ObservedVariable
+import at.jodlidev.esmira.sharedCode.data_structure.Study
 import at.jodlidev.esmira.sharedCode.statistics.ChartBuilder
 import at.jodlidev.esmira.sharedCode.statistics.ChartChooserInterface
 import kotlinx.serialization.Transient
@@ -28,7 +29,9 @@ class ChartInfo (
 	var maxYValue: Int = 0,
 	var fitToShowLinearProgression: Int = 0,
 	var xAxisIsNumberRange: Boolean = false,
-	var hideOnClient: Boolean = false
+	var hideOnClient: Boolean = false,
+    var showOnlyGroup: Int = 0,
+    var showOnlyLang: String = "",
 ) {
 	@Serializable
 	class AxisContainer (
@@ -70,6 +73,14 @@ class ChartInfo (
 		
 		builder.fillData()
 	}
+
+    fun isAvailable(study: Study): Boolean {
+        val hiddenGeneral = hideOnClient
+        val hiddenFromGroup = showOnlyGroup != 0 && study.group != showOnlyGroup
+        val hiddenFromLang = showOnlyLang != "" && showOnlyLang != study.lang && study.getAvailableLangs().size > 1
+
+        return !(hiddenGeneral || hiddenFromGroup || hiddenFromLang)
+    }
 	
 	
 	companion object {

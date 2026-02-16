@@ -227,3 +227,5 @@
 "available_languages" = "Diese Studie ist in den folgenden Sprachen verfügbar:";
 "select_language_instruction" = "Wählen Sie die Sprache, in der die Studie dargestellt werden soll. Beachten Sie, dass dies nur Texte der Studie selbst betrifft. Die Sprache der Anwendung ist abhängig von Ihrer Systemsprache.";
 "change_language" = "Sprache ändern";
+"notification_expired_title" = "Benachrichtigung abgelaufen";
+"notification_expired_info" = "Die gewählte Benachrichtigung ist abgelaufen, und der dazugehörige Fragebogen ist aktuell nicht verfügbar.";

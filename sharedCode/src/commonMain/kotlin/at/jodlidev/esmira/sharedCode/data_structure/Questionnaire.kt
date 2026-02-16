@@ -41,6 +41,7 @@ class Questionnaire {
 	var minDataSetsForReward = 0
 	var isBackEnabled = true
 	var endScriptBlock = ""
+    var scriptFilter = ""
 	var showInDisabledList = true
 	var showPagination = true
 	var showSkipToast = true
@@ -148,8 +149,9 @@ class Questionnaire {
 		showInDisabledList = c.getBoolean(27)
 		showPagination = c.getBoolean(28)
 		showSkipToast = c.getBoolean(29)
+        scriptFilter = c.getString(30)
 
-		exists = true
+        exists = true
 		fromJsonOrUpdated = false
 	}
 	
@@ -271,6 +273,7 @@ class Questionnaire {
 		values.putBoolean(KEY_SHOW_IN_DISABLED_LIST, showInDisabledList)
 		values.putBoolean(KEY_SHOW_PAGINATION, showPagination)
 		values.putBoolean(KEY_SHOW_SKIP_TOAST, showSkipToast)
+        values.putString(KEY_SCRIPT_FILTER, scriptFilter)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -569,7 +572,10 @@ class Questionnaire {
 					true
 		val completionFrequency = (!limitCompletionFrequency || (now >= metadata.lastCompleted + completionFrequencyMinutes * 60 * 1000))
 
+        val scriptFilterEvaluation = if(scriptFilter != "") MerlinRunner.runForBool(scriptFilter, this, "evaluate if questionnaire is active", true) else true
+
 		return hasQuestionnaire() && isActive() &&
+                scriptFilterEvaluation &&
 				oncePerNotification &&
 				completionFrequency &&
 				specificTime &&
@@ -604,6 +610,7 @@ class Questionnaire {
 		const val KEY_TIME_CONSTRAINT_START = "timeConstraint_start"
 		const val KEY_TIME_CONSTRAINT_END = "timeConstraint_end"
 		const val KEY_TIME_CONSTRAINT_PERIOD = "timeConstraint_period"
+        const val KEY_SCRIPT_FILTER = "script_filter"
 
 		const val KEY_COMPLETABLE_ONCE = "completableOnce"
 		const val KEY_COMPLETABLE_ONCE_PER_NOTIFICATION = "completableOncePerNotification"
@@ -660,6 +667,7 @@ class Questionnaire {
 			KEY_SHOW_IN_DISABLED_LIST,
 			KEY_SHOW_PAGINATION,
 			KEY_SHOW_SKIP_TOAST,
+            KEY_SCRIPT_FILTER,
 		)
 	}
 }

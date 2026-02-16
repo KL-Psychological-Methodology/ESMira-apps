@@ -7,7 +7,7 @@ import sharedCode
 
 class NavigationState: ObservableObject {
 	enum DialogsScreens: Identifiable {
-		case errorReport, changeSchedule, faultyAccessKey
+		case errorReport, changeSchedule, faultyAccessKey, expiredNotification
 		
 		var id: Int {
 			self.hashValue
@@ -67,5 +67,9 @@ class NavigationState: ObservableObject {
 	}
 	func closeScreenDialog() {
 		self.dialogOpened = nil
+	}
+	func openNotificationExpiredDialog(studyId: Int64) {
+		switchStudy(studyId)
+		self.dialogOpened = .expiredNotification
 	}
 }

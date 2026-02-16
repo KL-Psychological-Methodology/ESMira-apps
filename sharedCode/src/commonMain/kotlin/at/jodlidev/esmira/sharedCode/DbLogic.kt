@@ -164,6 +164,7 @@ object DbLogic {
 			${Questionnaire.KEY_SHOW_IN_DISABLED_LIST} INTEGER DEFAULT 1,
 			${Questionnaire.KEY_SHOW_PAGINATION} INTEGER DEFAULT 1,
 			${Questionnaire.KEY_SHOW_SKIP_TOAST} INTEGER DEFAULT 1,
+            ${Questionnaire.KEY_SCRIPT_FILTER} TEXT DEFAULT '',
 			FOREIGN KEY(${Questionnaire.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}) ON DELETE CASCADE)""")
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${QuestionnaireCache.TABLE} (
 			${QuestionnaireCache.KEY_ID} INTEGER PRIMARY KEY,

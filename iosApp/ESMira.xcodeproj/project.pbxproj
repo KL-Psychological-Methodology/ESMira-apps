@@ -13,6 +13,7 @@
 		6B13CF5A28F808580035BA01 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B13CF5928F808580035BA01 /* ShareSheet.swift */; };
 		6B1BB1172B2F28D0009B09C3 /* ZMarkupParser in Frameworks */ = {isa = PBXBuildFile; productRef = 6B1BB1162B2F28D0009B09C3 /* ZMarkupParser */; };
 		6B268B282BA844E700ED2F6C /* LocationStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B268B272BA844E700ED2F6C /* LocationStruct.swift */; };
+		6B39B7A52F3B700600C81D68 /* ExpiredNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B39B7A42F3B6FFD00C81D68 /* ExpiredNotificationView.swift */; };
 		6B3A92C029E5C8250081A554 /* UploadProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3A92BF29E5C8250081A554 /* UploadProtocol.swift */; };
 		6B3A92C229E6E2900081A554 /* AddStudyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3A92C129E6E2900081A554 /* AddStudyState.swift */; };
 		6B3A92C429E816410081A554 /* AboutESMira.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3A92C329E816410081A554 /* AboutESMira.swift */; };
@@ -139,6 +140,7 @@
 		6B012BF12DB9241B00F7A3B8 /* BatteryLevelStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryLevelStruct.swift; sourceTree = "<group>"; };
 		6B13CF5928F808580035BA01 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		6B268B272BA844E700ED2F6C /* LocationStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationStruct.swift; path = ESMira/iosNative/inputViews/LocationStruct.swift; sourceTree = SOURCE_ROOT; };
+		6B39B7A42F3B6FFD00C81D68 /* ExpiredNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpiredNotificationView.swift; sourceTree = "<group>"; };
 		6B3A92BF29E5C8250081A554 /* UploadProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadProtocol.swift; sourceTree = "<group>"; };
 		6B3A92C129E6E2900081A554 /* AddStudyState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddStudyState.swift; sourceTree = "<group>"; };
 		6B3A92C329E816410081A554 /* AboutESMira.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutESMira.swift; sourceTree = "<group>"; };
@@ -333,6 +335,7 @@
 		6BCFED642825283A009167B0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				6B39B7A42F3B6FFD00C81D68 /* ExpiredNotificationView.swift */,
 				6B3AB7322EF2DB73009675BD /* LanguageSelectView.swift */,
 				6B3A92C329E816410081A554 /* AboutESMira.swift */,
 				6BCFED7B2825283A009167B0 /* AddStudyView.swift */,
@@ -730,6 +733,7 @@
 				6BCFEDAD2825284D009167B0 /* MultilineTextField.swift in Sources */,
 				6BB8E5972C47B2FB0039D306 /* DurationStruct.swift in Sources */,
 				6B012BF22DB9241B00F7A3B8 /* BatteryLevelStruct.swift in Sources */,
+				6B39B7A52F3B700600C81D68 /* ExpiredNotificationView.swift in Sources */,
 				6B6BD2B22B2871CC005648C0 /* FaultyAccessKeyView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

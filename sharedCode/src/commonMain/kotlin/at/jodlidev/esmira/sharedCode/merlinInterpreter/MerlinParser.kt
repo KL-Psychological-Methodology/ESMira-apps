@@ -108,9 +108,29 @@ class MerlinParser (private val tokens: List<MerlinToken>) {
     private fun assignmentStatement(): MerlinStmt {
         val expr = expression()
 
-        if (match(MerlinTokenType.EQUAL)) {
-            val equals = previous()
-            val value = expression()
+        if (match(
+                MerlinTokenType.EQUAL,
+                MerlinTokenType.PLUS_EQUAL,
+                MerlinTokenType.MINUS_EQUAL,
+                MerlinTokenType.STAR_EQUAL,
+                MerlinTokenType.SLASH_EQUAL,
+                MerlinTokenType.MODULO_EQUAL
+            )) {
+            val assignmentOperator = previous()
+            var value = expression()
+
+            if (assignmentOperator.type != MerlinTokenType.EQUAL) {
+               val arithmeticType = when(assignmentOperator.type) {
+                   MerlinTokenType.PLUS_EQUAL -> MerlinTokenType.PLUS
+                   MerlinTokenType.MINUS_EQUAL -> MerlinTokenType.MINUS
+                   MerlinTokenType.STAR_EQUAL -> MerlinTokenType.STAR
+                   MerlinTokenType.SLASH_EQUAL -> MerlinTokenType.SLASH
+                   MerlinTokenType.MODULO_EQUAL -> MerlinTokenType.MODULO
+                   else -> throw MerlinParseError(assignmentOperator, "Error: Used, compound assignment operator not implemented (this should be unreachable)")
+               }
+               val arithmeticOperator = MerlinToken(arithmeticType, assignmentOperator.lexeme, assignmentOperator.literal, assignmentOperator.line)
+               value = MerlinExpr.Binary(expr, arithmeticOperator, value)
+            }
 
             return when (expr) {
                 is MerlinExpr.Variable -> {
@@ -126,7 +146,7 @@ class MerlinParser (private val tokens: List<MerlinToken>) {
                     consume(MerlinTokenType.SEMICOLON, "Expect ';' after assign statement.")
                     MerlinStmt.ArraySet(expr.bracket, expr.arr, expr.index, value)
                 }
-                else -> throw MerlinParseError(equals, "Invalid assignment target.")
+                else -> throw MerlinParseError(assignmentOperator, "Invalid assignment target.")
             }
         }
 
