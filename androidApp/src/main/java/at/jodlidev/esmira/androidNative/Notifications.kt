@@ -13,7 +13,6 @@ import android.graphics.Color
 import android.media.AudioAttributes
 import android.net.Uri
 import android.os.Build
-import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
@@ -23,6 +22,7 @@ import at.jodlidev.esmira.activities.MainActivity
 import at.jodlidev.esmira.sharedCode.NotificationsInterface
 import at.jodlidev.esmira.sharedCode.data_structure.*
 import java.lang.ref.WeakReference
+import androidx.core.net.toUri
 
 /**
  * Created by JodliDev on 18.05.2020.
@@ -47,7 +47,7 @@ object Notifications: NotificationsInterface {
 		this.context = WeakReference(context.applicationContext)
 		
 		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-			val sound: Uri = Uri.parse("${ContentResolver.SCHEME_ANDROID_RESOURCE}://${context.packageName}/${R.raw.notifcation}")
+			val sound: Uri = "${ContentResolver.SCHEME_ANDROID_RESOURCE}://${context.packageName}/${R.raw.notifcation}".toUri()
 			val attr: AudioAttributes = AudioAttributes.Builder()
 				.setUsage(AudioAttributes.USAGE_NOTIFICATION)
 				.build()
@@ -144,34 +144,13 @@ object Notifications: NotificationsInterface {
 			.setStyle(NotificationCompat.BigTextStyle().bigText(msg))
 			.setContentIntent(pendingIntent)
 			.setAutoCancel(true)
-			.setSound(Uri.parse("${ContentResolver.SCHEME_ANDROID_RESOURCE}://${context.packageName}/${R.raw.notifcation}"))
+			.setSound("${ContentResolver.SCHEME_ANDROID_RESOURCE}://${context.packageName}/${R.raw.notifcation}".toUri())
 //				.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
 			.setLights(Color.BLUE, 1000, 1000)
 			.setPriority(NotificationCompat.PRIORITY_HIGH)
 	}
 	private fun createId(value: Long, range: Int): Int {
 		return (value%ID_RANGE_SIZE + range).toInt()
-	}
-	
-	private fun notificationWasPosted(notification_id: Int): Boolean {
-		val context = context.get() ?: return false
-		when {
-			Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> {
-				val notificationManager: NotificationManager = context.getSystemService(
-					NotificationManager::class.java)
-				val notifications: Array<StatusBarNotification> = notificationManager.activeNotifications
-				for(n: StatusBarNotification in notifications) {
-					if(n.id == notification_id) {
-						return true
-					}
-				}
-				return false
-			}
-			Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT ->
-				return NotificationManagerCompat.from(context).areNotificationsEnabled()
-			else ->
-				return true
-		}
 	}
 	
 	override fun fire(title: String, msg: String, id: Int) {
