@@ -308,7 +308,9 @@
     <string name="error_input">Ongeldige invoer</string>
     <string name="error_no_email_client">Geen e-mailapp gevonden…</string>
     <string name="error_settings_not_opened">Instellingen konden niet worden geopend!</string>
-    <string name="hint_server">voorbeeld.com</string>
+    <string name="hint_server">example.com</string>
     <string name="info_error_report_desc">Help ons alstublieft je probleem op te lossen en stuur dit foutenrapport naar ons. Bedankt!</string>
     <string name="info_leave_empty_if_unsure">(mag leeg blijven)</string>
+    <string name="notification_expired_title">Melding verlopen</string>
+    <string name="notification_expired_info">De geselecteerde melding is verlopen en de bijbehorende enquete is nu niet beschikbaar.</string>
 </resources>
