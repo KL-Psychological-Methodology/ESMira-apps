@@ -1,5 +1,6 @@
 package at.jodlidev.esmira.androidNative
 
+import android.Manifest
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -7,6 +8,7 @@ import android.app.PendingIntent
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.media.AudioAttributes
 import android.net.Uri
@@ -14,6 +16,7 @@ import android.os.Build
 import android.service.notification.StatusBarNotification
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import at.jodlidev.esmira.*
 import at.jodlidev.esmira.activities.ChangeSchedulesDialogActivity
 import at.jodlidev.esmira.activities.MainActivity
@@ -124,7 +127,12 @@ object Notifications: NotificationsInterface {
 		}
 		val pendingIntent: PendingIntent = PendingIntent.getActivity(context, id, realIntent, getPendingIntentFlag())
 		val builder: NotificationCompat.Builder = createNotification(context, title, msg, pendingIntent, channel)
-		NotificationManagerCompat.from(context).notify(id, builder.build())
+		if(ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+			NotificationManagerCompat.from(context).notify(id, builder.build())
+		}
+		else {
+			ErrorBox.warn("Notifications", "User has revoked permissions for notifications")
+		}
 	}
 	
 	private fun createNotification(context: Context, title: String, msg: String, pendingIntent: PendingIntent, channel: String): NotificationCompat.Builder {
@@ -190,7 +198,12 @@ object Notifications: NotificationsInterface {
 				builder.setTimeoutAfter(timeoutMin * 1000 * 60.toLong()) //we don't really need this because WorkerBox (below) will remove the notification anyway
 			WorkerBox.timeoutNotification(context, notificationId, questionnaire.id, timeoutMin)
 		}
-		NotificationManagerCompat.from(context).notify(notificationId, builder.build())
+		if(ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+			NotificationManagerCompat.from(context).notify(notificationId, builder.build())
+		}
+		else {
+			ErrorBox.warn("Notifications", "User has revoked permissions for notifications")
+		}
 		
 		//TODO: it is possible that this check happens too soon and will not always catch the freshly posted notification
 		DataSet.createActionSentDataSet(type, questionnaire, scheduledToTimestamp)
@@ -212,7 +225,12 @@ object Notifications: NotificationsInterface {
 		
 		val pendingIntent: PendingIntent = PendingIntent.getActivity(context, notificationId, intent, getPendingIntentFlag())
 		val builder: NotificationCompat.Builder = createNotification(context, study.title, context.getString(R.string.info_new_message), pendingIntent, CHANNEL_ID_STUDY_MESSAGES)
-		NotificationManagerCompat.from(context).notify(notificationId, builder.build())
+		if(ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+			NotificationManagerCompat.from(context).notify(notificationId, builder.build())
+		}
+		else {
+			ErrorBox.warn("Notifications", "User has revoked permissions for notifications")
+		}
 	}
 	
 	override fun removeQuestionnaireBing(questionnaire: Questionnaire) {
