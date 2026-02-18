@@ -44,6 +44,7 @@ class Input internal constructor( ) {
 		list_single,
 		list_multiple,
 		location,
+		noise_level,
 		number,
 		photo,
 		record_audio,
