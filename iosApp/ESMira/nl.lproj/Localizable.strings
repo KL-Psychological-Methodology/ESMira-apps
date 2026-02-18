@@ -39,7 +39,7 @@
 "error_schedule_time_window_too_small" = "Kies een groter tijdvenster!";
 "error_settings_not_opened" = "Instellingen konden niet worden geopend!";
 "hint_error_comment" = "Welk probleem ben je tegengekomen?";
-"hint_server" = "voorbeeld.com";
+"hint_server" = "example.com";
 "https" = "https://";
 "i_agree" = "Ik ga akkoord";
 "ignore" = "Negeren";
@@ -52,3 +52,8 @@
 "info_error_report_header" = "Er is een kritieke fout gedetecteerd!";
 "info_leave_empty_if_unsure" = "(mag leeg blijven)";
 "info_loading" = "Laden…";
+"notification_expired_title" = "Melding verlopen";
+"select_language_instruction" = "Selecteer de taal waarin de studie moet worden weergegeven. Dit heeft alleen invloed op de tekst in het onderzoek zelf. De interface van de toepassing is afhankelijk van de systeemtaal en verandert niet.";
+"notification_expired_info" = "De geselecteerde melding is verlopen en de bijbehorende enquete is nu niet beschikbaar.";
+"change_language" = "Verander van taal";
+"available_languages" = "Deze studie is beschikbaar in de volgende talen:";
