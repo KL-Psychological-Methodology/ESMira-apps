@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>info_reward_is_not_active_yet</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Belöningar för den här studien är inte aktiva än. De bör vara tillgängliga snart.</string>
+		<key>days</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>Belöningar för den här studien är inte aktiva än. De bör vara tillgängliga snart.</string>
+			<key>one</key>
+			<string>Belöningar för den här studien är inte aktiva än. De kommer att vara tillgängliga om en dag.</string>
+			<key>other</key>
+			<string>Belöningar för den här studien är inte aktiva än. De kommer att vara tillgängliga om %1$d dagar.</string>
+		</dict>
+	</dict>
+	<key>ios_info_missed_notifications</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@notifications@</string>
+		<key>notifications</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>Inga missade aviseringar.</string>
+			<key>one</key>
+			<string>1 missad avisering.</string>
+			<key>other</key>
+			<string>%1$d missade aviseringar.</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

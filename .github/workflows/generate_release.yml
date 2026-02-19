@@ -1,0 +1,101 @@
+name: Generated APK AAB (Upload - Create Artifact To Github Action)
+
+env:
+  # The name of the main module repository
+  main_project_module: androidApp
+on:
+
+  push:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get Android version
+        id: androidApp
+        uses: ltDino/android-get-version-action@v1.0
+        with:
+          gradlePath: androidApp/build.gradle.kts 
+      
+      - name: Check if release exists
+        id: check-release-exists
+        shell: bash
+        run: |
+          priorRelease=$(gh release list --limit 1 --json tagName --jq .[0].tagName)
+          echo "Prior release: $priorRelease"
+          if [[ "$priorRelease" == "v${{steps.androidApp.outputs.versionName}}" ]]; then
+            echo "Release 'v${{steps.androidApp.outputs.versionName}}' already exists."
+            echo "ReleaseExists=true" >> $GITHUB_OUTPUT
+          else
+            echo "Release 'v${{steps.androidApp.outputs.versionName}}' not found."
+            echo "ReleaseExists=false" >> $GITHUB_OUTPUT
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set Up JDK
+        if: ${{steps.check-release-exists.outputs.ReleaseExists == 'false'}}
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu' # See 'Supported distributions' for available options
+          java-version: '17'
+          cache: 'gradle'
+      
+      - name: Change wrapper permissions
+        if: ${{steps.check-release-exists.outputs.ReleaseExists == 'false'}}
+        run: chmod +x ./gradlew
+
+      - name: Decode Keystore
+        if: ${{steps.check-release-exists.outputs.ReleaseExists == 'false'}}
+        shell: bash
+        run: echo "${{ secrets.KEYSTORE }}" | base64 -d > "$GITHUB_WORKSPACE/signing-key.jks"
+        
+      - name: Build gradle project
+        if: ${{steps.check-release-exists.outputs.ReleaseExists == 'false'}}
+        run: ./gradlew ${{ env.main_project_module }}:build -x lint 
+      
+      - name: Build apk
+        if: ${{steps.check-release-exists.outputs.ReleaseExists == 'false'}}
+        shell: bash
+        run: |
+          ./gradlew assembleRelease \
+            -Pandroid.injected.signing.store.file="$GITHUB_WORKSPACE/signing-key.jks" \
+            -Pandroid.injected.signing.store.password='${{ secrets.SIGNING_STORE_PASSWORD }}' \
+            -Pandroid.injected.signing.key.alias='${{ secrets.SIGNING_KEY_ALIAS }}' \
+            -Pandroid.injected.signing.key.password='${{ secrets.SIGNING_KEY_PASSWORD }}'
+
+      - name: Build app bundle (AAB)
+        if: ${{steps.check-release-exists.outputs.ReleaseExists == 'false'}}
+        run: |
+          ./gradlew ${{ env.main_project_module }}:bundleRelease \
+            -Pandroid.injected.signing.store.file="$GITHUB_WORKSPACE/signing-key.jks" \
+            -Pandroid.injected.signing.store.password='${{ secrets.SIGNING_STORE_PASSWORD }}' \
+            -Pandroid.injected.signing.key.alias='${{ secrets.SIGNING_KEY_ALIAS }}' \
+            -Pandroid.injected.signing.key.password='${{ secrets.SIGNING_KEY_PASSWORD }}'
+  
+      - name: Delete signing key file
+        if: ${{steps.check-release-exists.outputs.ReleaseExists == 'false'}}
+        shell: bash
+        run: rm "$GITHUB_WORKSPACE/signing-key.jks"
+
+      - name: Create named release
+        if: ${{steps.check-release-exists.outputs.ReleaseExists == 'false'}}
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: Release version ${{steps.androidApp.outputs.versionName}}
+          tag_name: v${{steps.androidApp.outputs.versionName}}
+          generate_release_notes: true
+          append_body: true
+          files: |
+            ${{ env.main_project_module }}/build/outputs/apk/release/androidApp-release.apk
+            ${{ env.main_project_module }}/build/outputs/bundle/release/androidApp-release.aab

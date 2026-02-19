@@ -1,6 +1,5 @@
 package at.jodlidev.esmira.activities
 
-import at.jodlidev.esmira.views.main.studyDashboard.StudyDashboardView
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -37,6 +36,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import at.jodlidev.esmira.androidNative.DialogOpener
 import at.jodlidev.esmira.views.main.LanguageSelectView
+import at.jodlidev.esmira.views.main.studyDashboard.StudyDashboardView
 import kotlinx.coroutines.delay
 import java.io.*
 
