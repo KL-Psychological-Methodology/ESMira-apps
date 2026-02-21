@@ -1,2 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+    <string name="add">ekle</string>
+    <string name="colon_accessCode">Erişim kodu</string>
+    <string name="add_a_study">bir çalışmaya katılın</string>
+    <string name="close">kapat</string>
+    <string name="colon_next_expected_notification">Bir sonraki beklenen bildirim</string>
+    <string name="colon_password">Şifre:</string>
+    <string name="complete">Tamamlayın</string>
+    <string name="consent">İzin veriyorum</string>
+    <string name="contact_researcher">araştırmacı ile iletişime geçin</string>
+    <string name="continue_">Devam et</string>
+    <string name="delete_">Sil</string>
+</resources>
