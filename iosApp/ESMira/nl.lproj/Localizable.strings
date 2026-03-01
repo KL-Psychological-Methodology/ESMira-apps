@@ -108,3 +108,4 @@
 "reload" = "Opnieuw laden";
 "save" = "Opslaan";
 "open_settings" = "Instellingen openen";
+"info_no_studies_noAccessKey" = "Kon geen openbare studies op deze server vinden.";
