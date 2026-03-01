@@ -159,7 +159,7 @@
     <string name="send_message_to_researcher">Anoniem bericht naar onderzoeker verzenden</string>
     <string name="send_test_notification">Testmelding verzenden</string>
     <string name="settings">Instellingen</string>
-    <string name="show_informed_consent">Informed consent tonen</string>
+    <string name="show_informed_consent">Toestemmingsverklaring tonen</string>
     <string name="show_welcome_screen">Welkomstscherm tonen</string>
     <string name="soon">Binnenkort</string>
     <string name="start">Start</string>
