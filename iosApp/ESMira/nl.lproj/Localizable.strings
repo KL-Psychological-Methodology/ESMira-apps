@@ -180,3 +180,7 @@
 "colon_used_libraries" = "Gebruikte bibliotheken:";
 "sent_to_whom" = "Naar wie verzonden?";
 "start_scanning" = "Scannen starten";
+"write_message_to_researcher" = "Schrijf bericht naar onderzoeker";
+"error_no_camera" = "Kon camera niet vinden";
+"error_qr_faulty" = "QR-code is defect.";
+"colon_last_filled_out" = "Laatst ingevuld: %1$@";
