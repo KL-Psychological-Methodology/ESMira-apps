@@ -184,3 +184,6 @@
 "error_no_camera" = "Kon camera niet vinden";
 "error_qr_faulty" = "QR-code is defect.";
 "colon_last_filled_out" = "Laatst ingevuld: %1$@";
+"south_abr" = "Z";
+"west_abr" = "W";
+"show_informed_consent" = "Toestemmingsverklaring tonen";
