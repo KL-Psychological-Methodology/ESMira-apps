@@ -115,3 +115,8 @@
 "ios_backgroundRefresh_desc" = "ESMira controleert periodiek op de achtergrond of er studie-updates zijn en zorgt ervoor dat alle vereiste meldingen worden ingepland. Om dat te kunnen doen is de toestemming \"Ververs op achtergrond\" nodig.";
 "ios_dialogDesc_backgroundRefresh_disabled" = "Schakel \"Vernieuwen van app op achtergrond\" in bij de volgende instellingen. Zorg er vervolgens voor dat het ook algmeen is ingeschakeld door terug te gaan naar \"Instellingen\" en dan naar: \"Algemeen\" > \"Ververs op achergrond\" en schakel \"Ververs op de achtergrond\" bovenaan in.";
 "notifications_not_working" = "Werken meldingen niet?";
+"scan_a_qrcode" = "Scan een QR-code";
+"schedules" = "Schema’s";
+"search_manually" = "Handmatig zoeken";
+"statistics_public" = "Openbaar";
+"today" = "Vandaag";
