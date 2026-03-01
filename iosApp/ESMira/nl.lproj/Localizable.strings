@@ -121,3 +121,7 @@
 "statistics_public" = "Openbaar";
 "today" = "Vandaag";
 "sync_now" = "Nu synchroniseren";
+"word_and" = "en";
+"data_will_be_sent_to_app_developer" = "Het foutrapport wordt naar de app-ontwikkelaar (%1$s) gestuurd. We willen benadrukken dat het foutrapport geen persoonlijke of vragenlijstgegevens bevat!";
+"north_abr" = "N";
+"east_abr" = "O";
