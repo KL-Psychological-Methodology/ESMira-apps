@@ -112,3 +112,5 @@
 "ios_info_study_updated" = "%1$@ is bijgewerkt!";
 "ios_backgroundRefresh" = "App verversen op de achtergrond";
 "ios_dialogDesc_notifications_disabled" = "Deze studie werkt niet naar behoren. Overweeg om meldingen toe te staan voordat je verdergaat. Je kunt dat doen door \"Meldingen toestaan\" in te schakelen in de instellingen. Schakel daarna terug naar ESMira.";
+"ios_backgroundRefresh_desc" = "ESMira controleert periodiek op de achtergrond of er studie-updates zijn en zorgt ervoor dat alle vereiste meldingen worden ingepland. Om dat te kunnen doen is de toestemming \"Ververs op achtergrond\" nodig.";
+"ios_dialogDesc_backgroundRefresh_disabled" = "Schakel \"Vernieuwen van app op achtergrond\" in bij de volgende instellingen. Zorg er vervolgens voor dat het ook algmeen is ingeschakeld door terug te gaan naar \"Instellingen\" en dan naar: \"Algemeen\" > \"Ververs op achergrond\" en schakel \"Ververs op de achtergrond\" bovenaan in.";
