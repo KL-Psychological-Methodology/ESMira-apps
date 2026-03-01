@@ -110,3 +110,5 @@
 "open_settings" = "Instellingen openen";
 "info_no_studies_noAccessKey" = "Kon geen openbare studies op deze server vinden.";
 "ios_info_study_updated" = "%1$@ is bijgewerkt!";
+"ios_backgroundRefresh" = "App verversen op de achtergrond";
+"ios_dialogDesc_notifications_disabled" = "Deze studie werkt niet naar behoren. Overweeg om meldingen toe te staan voordat je verdergaat. Je kunt dat doen door \"Meldingen toestaan\" in te schakelen in de instellingen. Schakel daarna terug naar ESMira.";
