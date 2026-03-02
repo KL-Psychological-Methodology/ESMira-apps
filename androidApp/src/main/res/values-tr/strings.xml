@@ -81,4 +81,7 @@
     <string name="informed_consent_desc">Devam etmek için lütfen bilgilendirilmiş onamı okuyun ve kabul edin.</string>
     <string name="leave">Ayrılın</string>
     <string name="leave_study">Çalışmadan ayrılın</string>
+    <string name="info_new_message">Yeni bir mesajınız var!</string>
+    <string name="info_no_messages">Mesaj yok.</string>
+    <string name="android_info_no_studies_withAccessKey">Bu sunucuda \"%1$s\" erişim anahtarına sahip çalışmalar bulunamadı.</string>
 </resources>
