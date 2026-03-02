@@ -23,4 +23,12 @@
     <string name="colon_enter_manually">Manuel olarak girin:</string>
     <string name="additional_notification_settings_zte_blade_3_2">Sonra açılır menüden ‘Tüm uygulamalar’ı seçin.</string>
     <string name="additional_notification_settings_zte_blade_l110_2">Ardından ‘HeartBeat Senkronizasyon Ayarları’ seçeneğini seçin</string>
+    <string name="additional_notification_settings_esmi">Gelen ekranda uygulamalar listesinde ESMira\'yı bulun ve Otomatik Başlatma iznine sahip olduğundan emin olun.</string>
+    <string name="additional_notification_settings_huaweiV2_2">Gelecek ekranda ESMira\'nın \"Otomatik Başlat\" ve \"Arka planda çalıştır\" izinlerine sahip olduğundan emin olun.</string>
+    <string name="additional_notification_settings_samsung_2">Sayfanın alt kısmında \"İzlenmeyen uygulamalar \"ı seçin.</string>
+    <string name="additional_notification_settings_samsung_3">Aşağıdaki ekranda \"Uygulama ekle\" düğmesine basın. Ardından listeden ESMira\'yı seçin ve \"Tamam \"a basın.</string>
+    <string name="additional_notification_settings_zte_blade_3_1">Gelen ekranda \"Pil optimizasyonu \"nu seçin.</string>
+    <string name="additional_notification_settings_zte_blade_3_3">Şimdi listede \"ESMira \"yı arayın, üzerine tıklayın, \"Optimize Etme \"yi seçin ve \"Bitti \"ye basın.</string>
+    <string name="additional_notification_settings_zte_blade_l110_1">Gelen ekranda \"Pil\" seçeneğini seçin.</string>
+    <string name="additional_notification_settings_zte_blade_l110_3">Şimdi listede \"ESMira\" için arama yapın ve onay kutusunun etkin olduğundan emin olun.</string>
 </resources>
