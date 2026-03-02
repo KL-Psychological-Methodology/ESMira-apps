@@ -63,3 +63,5 @@
 "ios_dialogDesc_backgroundRefresh_disabled" = "Lütfen aşağıdaki ayarlarda \"Arka Plan Uygulama Yenileme\" özelliğini etkinleştirin. Ardından, \"Ayarlar \"a geri dönerek ve ardından: \"Genel\" > \"Arka Plan Uygulama Yenileme \"ye giderek ve en üstte \"Arka Plan Uygulama Yenileme \"yi etkinleştirerek genel olarak da etkinleştirildiğinden emin olun.";
 "ios_dialogDesc_notifications_disabled" = "Bu çalışma düzgün çalışmayacaktır. Lütfen devam etmeden önce bildirimlere izin vermeyi düşünün. Bunu ayarlardan \"Bildirimlere İzin Ver\" seçeneğini etkinleştirerek yapabilirsiniz. Ardından ESMira'ya geri dönün.";
 "leave" = "Ayrılın";
+"load_backup" = "Yedeği yükle";
+"info_nothing_to_sync" = "Senkronize edilecek bir şey yok";
