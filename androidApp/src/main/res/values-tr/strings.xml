@@ -83,5 +83,11 @@
     <string name="leave_study">Çalışmadan ayrılın</string>
     <string name="info_new_message">Yeni bir mesajınız var!</string>
     <string name="info_no_messages">Mesaj yok.</string>
-    <string name="android_info_no_studies_withAccessKey">Bu sunucuda \"%1$s\" erişim anahtarına sahip çalışmalar bulunamadı.</string>
+    <string name="android_info_no_studies_withAccessKey">Bu sunucuda \"%1$s\" erişim koduna sahip çalışma bulunamadı.</string>
+    <string name="load_backup">Yedeği yükle</string>
+    <string name="next_notification">Sonraki bildirim</string>
+    <string name="next_notifications">Sonraki bildirimler</string>
+    <string name="no">Hayır</string>
+    <string name="no_data">Veri yok</string>
+    <string name="no_dateTime_data">Hiçbiri</string>
 </resources>
