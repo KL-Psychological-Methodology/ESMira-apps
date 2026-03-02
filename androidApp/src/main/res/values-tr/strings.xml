@@ -90,4 +90,9 @@
     <string name="no">Hayır</string>
     <string name="no_data">Veri yok</string>
     <string name="no_dateTime_data">Hiçbiri</string>
+    <string name="info_nothing_to_sync">Senkronize edilecek bir şey yok</string>
+    <string name="info_notification_additional_settings">Lütfen şunlardan emin olun
+\n[1] telefonunuzun sesi kapalı değil,
+\nESMira için [2] bildirimleri etkinleştirilir ve
+\n[3] \"Rahatsız etmeyin\" modu (telefonunuzda mevcutsa) devre dışı bırakılır:</string>
 </resources>
