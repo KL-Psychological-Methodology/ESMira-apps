@@ -11,4 +11,8 @@
     <string name="contact_researcher">araştırmacı ile iletişime geçin</string>
     <string name="continue_">Devam et</string>
     <string name="delete_">Sil</string>
+    <string name="additional_notification_settings_general_android">Aşağıdaki ekranda lütfen ESMira’nın arka planda çalışmasına izin verildiğinden ve telefon yeniden başlatıldığında otomatik olarak açılabildiğinden emin olun.
+\nNe yazık ki ayarların isimleri (ve hangi ayarların mevcut olduğu) telefon modellerine göre büyük ölçüde değişmektedir ve bu telefon modeli için size yardımcı olabilecek ekran görüntülerine sahip değiliz. Bu nedenle uygun ayarları tahmin ederek bulmaya çalışın. Bize yardımcı olmak ve bazı ekran görüntüleri göndermek isterseniz, lütfen uygulama geliştiricisiyle (esmira@kl.ac.at) iletişime geçin.
+\n
+\nİşlemi tamamladıktan sonra, bu ekrana geri dönmek için telefonunuzdaki geri tuşuna basın.</string>
 </resources>
