@@ -44,4 +44,14 @@
     <string name="info_no_errors">Rapor edilecek hata yok</string>
     <string name="info_no_model_settings">Hiçbir cihaz ayarı bulunamadı.</string>
     <string name="info_no_questionnaires">Şu anda herhangi bir anket mevcut değil…</string>
+    <string name="error_notifications_broken_android_dontkillmyapp">Bu iletişim kutusunun size yardımcı olmaması durumunda, daha fazla bilgi için <a href="https://dontkillmyapp.com/">dontkillmyapp.com</a> adresini de ziyaret edebilirsiniz.</string>
+    <string name="additional_notification_settings_finish">İşiniz bittikten sonra, bu ekrana dönmek için telefonunuzdaki geri tuşuna basın.</string>
+    <string name="android_version">Versiyon: %1$s, %2$s</string>
+    <string name="ask_model_settings_correct">Ayarları belirtildiği gibi yapabildiniz mi?</string>
+    <string name="ask_notification_posted">Bir bildirim aldınız mı?</string>
+    <string name="android_contact_email">İletişim %1$s</string>
+    <string name="error_no_email_client">Bir e-posta uygulaması bulamadım …</string>
+    <string name="error_no_images_to_upload">Yüklemek için herhangi bir resim seçmediniz.</string>
+    <string name="error_notifications_broken_android_desc">Ne yazık ki bazı akıllı telefon modellerinde arka plan bildirimlerine izin vermek için gerekli olan gizli ayarlar da vardır.</string>
+    <string name="error_notifications_broken_android_header">ESMira bildirim gönderemiyor!</string>
 </resources>
