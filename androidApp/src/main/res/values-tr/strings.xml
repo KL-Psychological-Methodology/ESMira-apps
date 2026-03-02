@@ -91,8 +91,17 @@
     <string name="no_data">Veri yok</string>
     <string name="no_dateTime_data">Hiçbiri</string>
     <string name="info_nothing_to_sync">Senkronize edilecek bir şey yok</string>
-    <string name="info_notification_additional_settings">Lütfen şunlardan emin olun
-\n[1] telefonunuzun sesi kapalı değil,
-\nESMira için [2] bildirimleri etkinleştirilir ve
-\n[3] \"Rahatsız etmeyin\" modu (telefonunuzda mevcutsa) devre dışı bırakılır:</string>
+    <string name="info_notification_additional_settings">Lütfen şunlardan emin olun:
+\n[1] Telefonunuz sessizde değil,
+\n[2] ESMira için bildirimler etkin,
+\n[3] Telefonunuzda varsa “Rahatsız Etme” modu devre dışı.</string>
+    <string name="settings">Ayarlar</string>
+    <string name="notification_setup_desc">Bildirimler sizi belirli zamanlarda anketleri doldurmaya davet etmek için kullanılır. Çalışma sona erdiğinde artık herhangi bir bildirim almayacaksınız.</string>
+    <string name="notification_test_desc">Bu, ESMira’nın bildirim gönderebildiğinden emin olmak için gönderilen deneme bildirimidir.</string>
+    <string name="info_number_to_sync">%1$d eşleşmemiş veri setiniz var</string>
+    <string name="notification_test_name">Deneme bildirimi</string>
+    <string name="info_questionnaire_success">Yanıtınız başarıyla kaydedildi!</string>
+    <string name="info_required">Bu alanın doldurulması zorunludur</string>
+    <string name="info_schedule_changed_after_one_day">Yapılan değişiklikler bir gün sonra uygulanacaktır.</string>
+    <string name="notifications">Bildirimler</string>
 </resources>
