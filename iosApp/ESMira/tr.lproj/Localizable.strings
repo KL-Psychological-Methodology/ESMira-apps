@@ -1,6 +1,6 @@
 
 
-"contact_researcher" = "araştırmacı ile iletişime geçin";
+"contact_researcher" = "Araştırmacıyla iletişime geçin";
 "add" = "ekle";
 "add_a_study" = "bir çalışmaya katılın";
 "close" = "kapat";
@@ -18,3 +18,9 @@
 "cancel" = "İptal";
 "change_schedules" = "Programları değiştirin";
 "colon_enter_manually" = "Manuel olarak girin:";
+
+/* Needs to be short */
+"ios_info_missed_notifications" = "%1$d bildirim kaçırıldı.";
+"dialogTitle_leave_study" = "Çalışmadan ayrılmak istiyor musunuz?";
+"error_no_email_client" = "Bir e-posta uygulaması bulamadım …";
+"error_no_images_to_upload" = "Yüklemek için herhangi bir resim seçmediniz.";
