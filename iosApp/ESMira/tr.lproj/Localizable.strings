@@ -24,3 +24,16 @@
 "dialogTitle_leave_study" = "Çalışmadan ayrılmak istiyor musunuz?";
 "error_no_email_client" = "Bir e-posta uygulaması bulamadım …";
 "error_no_images_to_upload" = "Yüklemek için herhangi bir resim seçmediniz.";
+"info_model_settings" = "ESMira'nın arka plandan bildirimler yayınlayabilmesini sağlamak için telefon modelinize özel bazı ayarların yapılması gerekir. Telefon ayarlarınızı açmak için aşağıdaki \"Cihaza özel kurulumu aç\" seçeneğine dokunun.";
+"contentDesc_more_studies" = "Bu çalışma için bir seçenek menüsü açar.";
+"delete_statistics" = "İstatistikleri sil";
+"desc_update_schedules" = "Çalışmalarınızın programlarını değiştirin";
+"desc_update_studies" = "Çalışmalarınızın ayarlarını güncelleyin";
+"dialogDesc_delete_statistics" = "Bu çalışmaya ait tüm istatistikleri silmek istiyor musunuz?";
+"dialogDesc_leave_study" = "Bu çalışmadan ayrılmak mı istiyorsunuz? Tekrar katılmak için kimlik bilgilerini yeniden girmeniz gerekecektir.";
+"dialogTitle_delete_statistics" = "İstatistikleri silelim mi?";
+"enable" = "Etkinleştir";
+"enable_notifications" = "Bildirimleri etkinleştirin";
+"info_no_errors" = "Rapor edilecek hata yok";
+"info_no_model_settings" = "Hiçbir cihaz ayarı bulunamadı.";
+"info_no_questionnaires" = "Şu anda herhangi bir anket mevcut değil…";
