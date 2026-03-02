@@ -57,7 +57,7 @@
     <string name="info_no_schedules">Değiştirilecek program yok.</string>
     <plurals name="android_info_missed_notifications" comment="Needs to be short">
         <item quantity="one">1 cevapsız bildirim.</item>
-        <item quantity="other">%1$d cevapsız bildirimler.</item>
+        <item quantity="other">%1$d cevapsız bildirim.</item>
     </plurals>
     <string name="error_notifications_broken_android_footer">Daha fazla yardıma mı ihtiyacınız var veya cihaz modeliniz hakkında ESMira\'ya daha fazla bilgi (Ekran görüntüleri, açıklamalar) eklememize yardımcı olmak mı istiyorsunuz? Bize bir e-posta yazın: <a href="mailto:esmira@kl.ac.at">esmira@kl.ac.at</a>.</string>
     <string name="error_notifications_broken_android_model_settings">Telefonunuz için aşağıdaki cihaz ayarları bulundu:</string>
@@ -78,4 +78,7 @@
     <string name="info_thank_you">Teşekkürler!</string>
     <string name="info_update_failed">Çalışmalarınızı güncellerken bir hata oluştu</string>
     <string name="informed_consent">Bilgilendirilmiş Onam</string>
+    <string name="informed_consent_desc">Devam etmek için lütfen bilgilendirilmiş onamı okuyun ve kabul edin.</string>
+    <string name="leave">Ayrılın</string>
+    <string name="leave_study">Çalışmadan ayrılın</string>
 </resources>
