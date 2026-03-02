@@ -14,3 +14,7 @@
 "delete_" = "Sil";
 "ios_version" = "Versiyon: %1$@, %2$@";
 "back" = "Geri";
+"backup" = "Yedekleme";
+"cancel" = "İptal";
+"change_schedules" = "Programları değiştirin";
+"colon_enter_manually" = "Manuel olarak girin:";
