@@ -50,3 +50,8 @@
 "info_leave_empty_if_unsure" = "(boş bırakılabilir)";
 "info_loading" = "Yükleniyor…";
 "informed_consent" = "Bilgilendirilmiş Onam";
+"info_no_statistics" = "Görüntülenecek istatistik yok.";
+"info_no_studies_joined" = "Herhangi bir çalışmaya katılmadınız.";
+"info_sync_failed" = "Senkronizasyon başarısız!";
+"info_test_notifications" = "Telefonunuzun bildirim mesajlarını alıp alamadığını test etmek için \"Test bildirimi gönder\" düğmesine basın.";
+"info_update_failed" = "Çalışmalarınızı güncellerken bir hata oluştu";
