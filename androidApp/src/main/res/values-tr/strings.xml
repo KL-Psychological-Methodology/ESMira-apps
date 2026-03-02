@@ -55,4 +55,18 @@
     <string name="error_notifications_broken_android_desc">Ne yazık ki bazı akıllı telefon modellerinde arka plan bildirimlerine izin vermek için gerekli olan gizli ayarlar da vardır.</string>
     <string name="error_notifications_broken_android_header">ESMira bildirim gönderemiyor!</string>
     <string name="info_no_schedules">Değişecek program yok.</string>
+    <plurals name="android_info_missed_notifications" comment="Needs to be short">
+        <item quantity="one">1 cevapsız bildirim.</item>
+        <item quantity="other">%1$d cevapsız bildirimler.</item>
+    </plurals>
+    <string name="error_notifications_broken_android_footer">Daha fazla yardıma mı ihtiyacınız var veya cihaz modeliniz hakkında ESMira\'ya daha fazla bilgi (Ekran görüntüleri, açıklamalar) eklememize yardımcı olmak mı istiyorsunuz? Bize bir e-posta yazın: <a href="mailto:esmira@kl.ac.at">esmira@kl.ac.at</a>.</string>
+    <string name="error_notifications_broken_android_model_settings">Telefonunuz için aşağıdaki cihaz ayarları bulundu:</string>
+    <string name="error_schedule_time_window_too_small">Lütfen daha büyük bir zaman aralığı seçin!</string>
+    <string name="error_settings_not_opened">Ayarlar açılamadı!</string>
+    <string name="info_dev_inactive">Geliştirici modu devre dışı</string>
+    <string name="info_error_report_desc">Lütfen sorununuzu çözmemize yardımcı olun ve bu hata raporunu bize gönderin. Teşekkür ederiz!</string>
+    <string name="info_error_report_header">Kritik bir hata tespit edildi!</string>
+    <string name="info_leave_empty_if_unsure">(boş bırakılabilir)</string>
+    <string name="info_loading">Yükleniyor…</string>
+    <string name="info_message_sent">Mesaj gönderildi</string>
 </resources>
