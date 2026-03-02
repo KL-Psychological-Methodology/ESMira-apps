@@ -37,3 +37,4 @@
 "info_no_errors" = "Rapor edilecek hata yok";
 "info_no_model_settings" = "Hiçbir cihaz ayarı bulunamadı.";
 "info_no_questionnaires" = "Şu anda herhangi bir anket mevcut değil…";
+"info_no_schedules" = "Değişecek program yok.";
