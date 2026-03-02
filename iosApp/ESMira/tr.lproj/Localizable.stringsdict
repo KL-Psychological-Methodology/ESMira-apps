@@ -18,5 +18,21 @@
 			<string>Bu çalışmaya ait kazanımlar henüz erişilebilir değil. %1$d gün içinde erişilebilir olacaktır.</string>
 		</dict>
 	</dict>
+	<key>ios_info_missed_notifications</key>
+	<dict>
+		<key>notifications</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>1$d</string>
+			<key>zero</key>
+			<string>Herhangi bir bildirim yok.</string>
+			<key>one</key>
+			<string>1 bildirim bekliyor.</string>
+			<key>other</key>
+			<string>%1$d bildirim bekliyor.</string>
+		</dict>
+	</dict>
 </dict>
 </plist>
