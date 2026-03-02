@@ -65,3 +65,8 @@
 "leave" = "Ayrılın";
 "load_backup" = "Yedeği yükle";
 "info_nothing_to_sync" = "Senkronize edilecek bir şey yok";
+"next_notification" = "Sonraki bildirim";
+"next_notifications" = "Sonraki bildirimler";
+"no" = "Hayır";
+"no_data" = "Veri yok";
+"no_dateTime_data" = "Hiçbiri";
