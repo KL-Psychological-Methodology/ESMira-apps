@@ -8,7 +8,7 @@
     <string name="colon_password">Şifre:</string>
     <string name="complete">Tamamlayın</string>
     <string name="consent">İzin veriyorum</string>
-    <string name="contact_researcher">araştırmacı ile iletişime geçin</string>
+    <string name="contact_researcher">Araştırmacıyla iletişime geçin</string>
     <string name="continue_">Devam et</string>
     <string name="delete_">Sil</string>
     <string name="additional_notification_settings_general_android">Aşağıdaki ekranda lütfen ESMira’nın arka planda çalışmasına izin verildiğinden ve telefon yeniden başlatıldığında otomatik olarak açılabildiğinden emin olun. Ne yazık ki ayarların isimleri (ve hangi ayarların mevcut olduğu) telefon modellerine göre büyük ölçüde değişmektedir ve bu telefon modeli için size yardımcı olabilecek ekran görüntülerine sahip değiliz. Bu nedenle uygun ayarları tahmin ederek bulmaya çalışın. Bize yardımcı olmak ve bazı ekran görüntüleri göndermek isterseniz, lütfen uygulama geliştiricisiyle (esmira@kl.ac.at) iletişime geçin.
@@ -31,4 +31,17 @@
     <string name="additional_notification_settings_zte_blade_3_3">Şimdi listede \"ESMira \"yı arayın, üzerine tıklayın, \"Optimize Etme \"yi seçin ve \"Bitti \"ye basın.</string>
     <string name="additional_notification_settings_zte_blade_l110_1">Gelen ekranda \"Pil\" seçeneğini seçin.</string>
     <string name="additional_notification_settings_zte_blade_l110_3">Şimdi listede \"ESMira\" için arama yapın ve onay kutusunun etkin olduğundan emin olun.</string>
+    <string name="enable_notifications">Bildirimleri etkinleştirin</string>
+    <string name="info_model_settings">ESMira\'nın arka plandan bildirimler yayınlayabilmesini sağlamak için telefon modelinize özel bazı ayarların yapılması gerekir. Telefon ayarlarınızı açmak için aşağıdaki \"Cihaza özel kurulumu aç\" seçeneğine dokunun.</string>
+    <string name="contentDesc_more_studies">Bu çalışma için bir seçenek menüsü açar.</string>
+    <string name="delete_statistics">İstatistikleri sil</string>
+    <string name="desc_update_schedules">Çalışmalarınızın programlarını değiştirin</string>
+    <string name="desc_update_studies">Çalışmalarınızın ayarlarını güncelleyin</string>
+    <string name="dialogDesc_delete_statistics">Bu çalışmaya ait tüm istatistikleri silmek istiyor musunuz?</string>
+    <string name="dialogTitle_delete_statistics">İstatistikleri silelim mi?</string>
+    <string name="dialogTitle_leave_study">Çalışmadan ayrılmak istiyor musunuz?</string>
+    <string name="enable">Etkinleştir</string>
+    <string name="info_no_errors">Rapor edilecek hata yok</string>
+    <string name="info_no_model_settings">Hiçbir cihaz ayarı bulunamadı.</string>
+    <string name="info_no_questionnaires">Şu anda herhangi bir anket mevcut değil…</string>
 </resources>
