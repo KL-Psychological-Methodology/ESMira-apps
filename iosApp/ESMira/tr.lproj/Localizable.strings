@@ -78,3 +78,6 @@
 "info_schedule_changed_after_one_day" = "Yapılan değişiklikler bir gün sonra uygulanacaktır.";
 "settings" = "Ayarlar";
 "notification_test_name" = "Deneme bildirimi";
+"notification_setup_desc" = "Bildirimler sizi belirli zamanlarda anketleri doldurmaya davet etmek için kullanılır. Çalışma sona erdiğinde artık herhangi bir bildirim almayacaksınız.";
+"notifications" = "Bildirimler";
+"notifications_not_working" = "Bildirimler çalışmıyor";
