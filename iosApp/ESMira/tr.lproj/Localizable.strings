@@ -37,4 +37,16 @@
 "info_no_errors" = "Rapor edilecek hata yok";
 "info_no_model_settings" = "Hiçbir cihaz ayarı bulunamadı.";
 "info_no_questionnaires" = "Şu anda herhangi bir anket mevcut değil…";
-"info_no_schedules" = "Değişecek program yok.";
+"info_no_schedules" = "Değiştirilecek program yok.";
+"info_update_complete" = "Güncelleme tamamlandı (%1$d güncelleme indirildi).";
+"info_message_sent" = "Mesaj gönderildi";
+"error_schedule_time_window_too_small" = "Lütfen daha büyük bir zaman aralığı seçin!";
+"error_settings_not_opened" = "Ayarlar açılamadı!";
+"info_dev_inactive" = "Geliştirici modu devre dışı";
+"info_no_studies_noAccessKey" = "Bu sunucuda herkese açık çalışma bulunamadı.";
+"info_error_report_desc" = "Lütfen sorununuzu çözmemize yardımcı olun ve bu hata raporunu bize gönderin. Teşekkür ederiz!";
+"info_error_report_header" = "Kritik bir hata tespit edildi!";
+"info_thank_you" = "Teşekkürler!";
+"info_leave_empty_if_unsure" = "(boş bırakılabilir)";
+"info_loading" = "Yükleniyor…";
+"informed_consent" = "Bilgilendirilmiş Onam";
