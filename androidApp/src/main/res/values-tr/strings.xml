@@ -54,7 +54,7 @@
     <string name="error_no_images_to_upload">Yüklemek için herhangi bir resim seçmediniz.</string>
     <string name="error_notifications_broken_android_desc">Ne yazık ki bazı akıllı telefon modellerinde arka plan bildirimlerine izin vermek için gerekli olan gizli ayarlar da vardır.</string>
     <string name="error_notifications_broken_android_header">ESMira bildirim gönderemiyor!</string>
-    <string name="info_no_schedules">Değişecek program yok.</string>
+    <string name="info_no_schedules">Değiştirilecek program yok.</string>
     <plurals name="android_info_missed_notifications" comment="Needs to be short">
         <item quantity="one">1 cevapsız bildirim.</item>
         <item quantity="other">%1$d cevapsız bildirimler.</item>
@@ -69,4 +69,13 @@
     <string name="info_leave_empty_if_unsure">(boş bırakılabilir)</string>
     <string name="info_loading">Yükleniyor…</string>
     <string name="info_message_sent">Mesaj gönderildi</string>
+    <string name="info_update_complete">Güncelleme tamamlandı (%1$d güncelleme indirildi).</string>
+    <string name="info_no_studies_noAccessKey">Bu sunucuda herkese açık çalışma bulunamadı.</string>
+    <string name="info_no_statistics">Görüntülenecek istatistik yok.</string>
+    <string name="info_no_studies_joined">Herhangi bir çalışmaya katılmadınız.</string>
+    <string name="info_sync_failed">Senkronizasyon başarısız!</string>
+    <string name="info_test_notifications">Telefonunuzun bildirim mesajlarını alıp alamadığını test etmek için \"Test bildirimi gönder\" düğmesine basın.</string>
+    <string name="info_thank_you">Teşekkürler!</string>
+    <string name="info_update_failed">Çalışmalarınızı güncellerken bir hata oluştu</string>
+    <string name="informed_consent">Bilgilendirilmiş Onam</string>
 </resources>
