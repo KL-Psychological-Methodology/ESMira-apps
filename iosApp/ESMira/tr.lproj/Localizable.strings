@@ -70,3 +70,11 @@
 "no" = "Hayır";
 "no_data" = "Veri yok";
 "no_dateTime_data" = "Hiçbiri";
+"notification_test_desc" = "Bu, ESMira’nın bildirim gönderebildiğinden emin olmak için gönderilen deneme bildirimidir.";
+"info_notification_setup_failed" = "Büyük olasılıkla telefonunuz bu çalışma için bildirim alamayacaktır. Telefonunuzda bizim bilmediğimiz özel ayarlar olabilir. Sorununuza bir çözüm bulmak için lütfen çalışmanın araştırmacısı veya uygulama geliştiricisi ile iletişime geçin (ve kullandığınız telefon modelini belirtin).";
+"info_number_to_sync" = "%1$d eşleşmemiş veri setiniz var";
+"info_questionnaire_success" = "Yanıtınız başarıyla kaydedildi!";
+"info_required" = "Bu alanın doldurulması zorunludur";
+"info_schedule_changed_after_one_day" = "Yapılan değişiklikler bir gün sonra uygulanacaktır.";
+"settings" = "Ayarlar";
+"notification_test_name" = "Deneme bildirimi";
