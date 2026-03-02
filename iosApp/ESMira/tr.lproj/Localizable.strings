@@ -55,3 +55,6 @@
 "info_sync_failed" = "Senkronizasyon başarısız!";
 "info_test_notifications" = "Telefonunuzun bildirim mesajlarını alıp alamadığını test etmek için \"Test bildirimi gönder\" düğmesine basın.";
 "info_update_failed" = "Çalışmalarınızı güncellerken bir hata oluştu";
+"info_new_message" = "Yeni bir mesajınız var!";
+"ios_backgroundRefresh" = "Uygulamaların Arka Planda Yenilenmesi";
+"leave_study" = "Çalışmadan ayrılın";
