@@ -11,7 +11,16 @@
     <string name="contact_researcher">araştırmacı ile iletişime geçin</string>
     <string name="continue_">Devam et</string>
     <string name="delete_">Sil</string>
-    <string name="additional_notification_settings_general_android">Aşağıdaki ekranda, lütfen ESMira\'nın arka planda çalışmasına izin verildiğinden ve telefon yeniden başlatıldığında başlayabildiğinden emin olun. Ne yazık ki ayarların adları (ve hangi ayarların gerçekten var olduğu) telefon modelleri arasında büyük farklılıklar göstermektedir ve size daha fazla yardımcı olmak için bu telefon modeli için herhangi bir ekran görüntüsüne sahip değiliz. Bu yüzden lütfen uygun ayarları tahmin etmeye çalışın. Bize yardımcı olmak ve bazı ekran görüntüleri göndermek isterseniz, lütfen Uygulama geliştiricisi ile iletişime geçin (esmira@kl.ac.at).
+    <string name="additional_notification_settings_general_android">Aşağıdaki ekranda lütfen ESMira’nın arka planda çalışmasına izin verildiğinden ve telefon yeniden başlatıldığında otomatik olarak açılabildiğinden emin olun. Ne yazık ki ayarların isimleri (ve hangi ayarların mevcut olduğu) telefon modellerine göre büyük ölçüde değişmektedir ve bu telefon modeli için size yardımcı olabilecek ekran görüntülerine sahip değiliz. Bu nedenle uygun ayarları tahmin ederek bulmaya çalışın. Bize yardımcı olmak ve bazı ekran görüntüleri göndermek isterseniz, lütfen uygulama geliştiricisiyle (esmira@kl.ac.at) iletişime geçin.
 \n
-\nİşiniz bittikten sonra, bu ekrana dönmek için telefonunuzdaki geri tuşuna basın.</string>
+\nİşlemi tamamladıktan sonra, bu ekrana geri dönmek için telefonunuzdaki geri tuşuna basın.</string>
+    <string name="back">Geri</string>
+    <string name="backup">Yedekleme</string>
+    <string name="additional_notification_settings_huaweiV2_1">Aşağıdaki ekranda uygulamalar listesinden ESMira’yı bulun ve ‘Manuel yönetim’ modunda olduğundan emin olun.</string>
+    <string name="cancel">İptal</string>
+    <string name="change_schedules">Programları değiştirin</string>
+    <string name="additional_notification_settings_samsung_1">Bir sonraki ekranda ‘Kontrol ediliyor’ işlemi tamamlanana kadar bekleyin ve sayfayı aşağı kaydırın.</string>
+    <string name="colon_enter_manually">Manuel olarak girin:</string>
+    <string name="additional_notification_settings_zte_blade_3_2">Sonra açılır menüden ‘Tüm uygulamalar’ı seçin.</string>
+    <string name="additional_notification_settings_zte_blade_l110_2">Ardından ‘HeartBeat Senkronizasyon Ayarları’ seçeneğini seçin</string>
 </resources>
