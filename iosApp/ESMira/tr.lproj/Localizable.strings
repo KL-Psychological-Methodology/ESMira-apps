@@ -138,4 +138,6 @@
 "welcome_accessKey_question" = "Bir giriş kodunuz var mı?";
 "welcome_exit_questionTitle" = "Gerçekten iptal etmek istiyor musun?";
 "welcome_exit_questionDesc" = "ESMira'yı kullanmak için önce bir çalışmaya katılmanız gerekir.";
-"welcome_first_instructions" = "Anonim Anket Asistanı ESMira'ya hoş geldiniz.\n\nBaşlamak için lütfen bir çalışma seçin ve katılın.\nBu iletişim kutusu size yardımcı olacaktır.";
+"welcome_first_instructions" = "Anonim Anket Asistanı ESMira'ya hoş geldiniz.\n\nBaşlamak için lütfen bir çalışma seçin ve katılın.\nBu pencere size yol gösterecektir.";
+"welcome_hello" = "Merhaba!";
+"welcome_join_public_study" = "Hayır, bir kamu çalışmasına katılın";
