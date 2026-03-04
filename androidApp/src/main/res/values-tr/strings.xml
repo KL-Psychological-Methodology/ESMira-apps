@@ -215,4 +215,8 @@
     <string name="take_picture">Fotoğraf çek</string>
     <string name="notificationChannel_screen_tracking">Ekran süresi bildirimi.</string>
     <string name="just_finished">Tamamlandı</string>
+    <string name="notificationChannel_screen_tracking_desc">Bazı çalışmalar, bir arka plan hizmeti gerektiren ekran süresini ölçmektedir.</string>
+    <string name="sent_to_whom">Kime gönderildi?</string>
+    <string name="data_will_be_sent_to_app_developer">Hata raporu uygulama geliştiricisine (%1$s) gönderilecektir. Hata raporunun herhangi bir kişisel veya anket verisi içermediğini vurgulamak isteriz!</string>
+    <string name="rewards">Ödüller</string>
 </resources>
