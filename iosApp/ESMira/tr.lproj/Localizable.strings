@@ -140,4 +140,12 @@
 "welcome_exit_questionDesc" = "ESMira'yı kullanmak için önce bir çalışmaya katılmanız gerekir.";
 "welcome_first_instructions" = "Anonim Anket Asistanı ESMira'ya hoş geldiniz.\n\nBaşlamak için lütfen bir çalışma seçin ve katılın.\nBu pencere size yol gösterecektir.";
 "welcome_hello" = "Merhaba!";
-"welcome_join_public_study" = "Hayır, bir kamu çalışmasına katılın";
+"welcome_join_public_study" = "Hayır, genel bir çalışmaya katılın";
+"welcome_qr_instructions" = "Lütfen QR kodunu ekranda görünecek şekilde akıllı telefon kameranızın önüne yaklaşık 30 cm uzağa yerleştirin.\nESMira, kamera odaklandığı anda kodu otomatik olarak tarayacaktır.";
+"welcome_qr_question" = "Bir çalışma için QR kodunuz var mı?";
+"welcome_server_question" = "Çalışma hangi sunucuda yer alıyor?";
+"what_for" = "Ne için?";
+"what_is_sent" = "Ne gönderildi?";
+"word_and" = "ve";
+"yes" = "Evet";
+"take_picture" = "Fotoğraf çek";
