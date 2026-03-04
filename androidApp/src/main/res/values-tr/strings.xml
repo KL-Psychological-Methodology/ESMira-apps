@@ -283,4 +283,11 @@
     <string name="schedule_permission_check">Lütfen \"Programları etkinleştir\" düğmesine basın, ardından listeden ESMira\'yı seçin ve \"Alarm ve hatırlatıcı ayarlamaya izin ver\" seçeneğini etkinleştirin.</string>
     <string name="info_schedule_setup_skipped">Bu çalışma düzgün çalışmayacaktır!</string>
     <string name="info_wrong_access_key">Bu çalışma için erişim anahtarı değişmiş görünüyor. Doğru erişim anahtarını sağlamadığınız sürece verileriniz yüklenmeyecektir.</string>
+    <string name="quit_at">Çıkış zamanı</string>
+    <string name="colon_used_libraries">Kullanılan kütüphaneler:</string>
+    <string name="disabled_questionnaires">Devre dışı bırakılmış anketler</string>
+    <string name="show_inactive_questionnaires">Aktif olmayan anketleri göster</string>
+    <string name="start_playing_audio">Başlat</string>
+    <string name="open_url">Url aç</string>
+    <string name="enable_schedules">Zamanlamaları etkinleştirin</string>
 </resources>
