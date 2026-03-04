@@ -132,4 +132,27 @@
     <string name="messages">Mesajlar</string>
     <string name="new_message">Yeni Mesaj</string>
     <string name="notification_permission_check">ESMira\'nın bildirim gönderme iznine sahip olup olmadığını kontrol etmek için lütfen \"Bildirimleri etkinleştir\" düğmesine basın.</string>
+    <string name="notificationChannel_questionnaire_desc">Çalışmalar, günün belirli saatlerinde anketlerin doldurulması için hatırlatma gönderebilir. Çoğu zaman bu bildirimler çalışmaların düzgün bir şekilde işlemesi için önemlidir. Lütfen bu bildirim kanalını devre dışı bırakmayın.</string>
+    <string name="send_error_report">Hata raporu gönder</string>
+    <string name="send_message_to_researcher">Araştırmacıya anonim mesaj gönderin</string>
+    <string name="open_notification_settings">Bildirim ayarlarını açın</string>
+    <string name="notificationChannel_questionnaire_name">Anketler için hatırlatma</string>
+    <string name="notificationChannel_studyUpdates_name">Çalışma güncellendi</string>
+    <string name="notifications_not_working">Bildirimler çalışmıyor mu?</string>
+    <string name="open_device_specific_settings">Cihaza özel ayarları açın</string>
+    <string name="open_device_specific_settings_numbered">Cihaza özel ayarları açın %1$d</string>
+    <string name="open_doNotDisturb_settings">\"Rahatsız Etmeyin\" ayarlarını açın</string>
+    <string name="open_sound_settings">Ses ayarlarını açın</string>
+    <string name="please_select">Lütfen seçiniz</string>
+    <string name="problems_with_notifications">Bildirimlerle ilgili sorunlar</string>
+    <string name="questionnaires">Anketler</string>
+    <string name="questionMark">\?</string>
+    <string name="reload">Yeniden Yükle</string>
+    <string name="save">Kaydet</string>
+    <string name="scan_a_qrcode">Bir QR kodu tarayın</string>
+    <string name="send">Gönder</string>
+    <string name="send_error_report_to_researcher">Ayrıca bunu araştırmacıya anonim bir mesaj olarak gönderin</string>
+    <string name="show_welcome_screen">Karşılama ekranını göster</string>
+    <string name="soon">Yakında</string>
+    <string name="start">Başlangıç</string>
 </resources>
