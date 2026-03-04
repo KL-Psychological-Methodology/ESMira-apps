@@ -184,4 +184,8 @@
     <string name="visible_when_study_finished">Yalnızca çalışma sona erdiğinde görünür.</string>
     <string name="welcome_exit_questionTitle">Gerçekten iptal etmek istiyor musun?</string>
     <string name="welcome_exit_questionDesc">ESMira\'yı kullanmak için önce bir çalışmaya katılmanız gerekir.</string>
+    <string name="statistics_public">Genel</string>
+    <string name="understood">Anladım</string>
+    <string name="update_studies">Çalışmaları güncelle</string>
+    <string name="welcome_accessKey_question">Bir giriş kodunuz var mı?</string>
 </resources>
