@@ -95,3 +95,8 @@
 "in_x_days" = "%1$d gün içinde";
 "info_detected_x_errors" = "Toplam %1$d hata tespit edildi";
 "info_dev_active" = "Artık bir geliştiricisiniz!";
+"notification_permission_check" = "ESMira'nın bildirim gönderme iznine sahip olup olmadığını kontrol etmek için lütfen \"Bildirimleri etkinleştir\" düğmesine basın.";
+"info_study_permissionSetup_ended" = "Yapılandırma işlemi tamamlanmıştır. Şimdi çalışmaya katılmak için \"Katıl\" butonuna tıklayabilirsiniz.";
+"info_study_updated_desc" = "Çalışmada yapılan bir güncelleme nedeniyle programlarınız sıfırlanmıştır.";
+"info_sync_complete" = "Senkronizasyon başarıyla tamamlandı.";
+"messages" = "Mesajlar";
