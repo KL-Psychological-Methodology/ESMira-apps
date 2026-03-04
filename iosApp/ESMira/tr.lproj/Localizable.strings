@@ -219,3 +219,14 @@
 "available_languages" = "Bu çalışma aşağıdaki dillerde mevcuttur:";
 "select_language_instruction" = "Çalışmanın görüntülenmesi gereken dili seçin. Bunun yalnızca çalışmanın içindeki metni etkilediğini unutmayın. Uygulama arayüzü sistem dilinize bağlıdır ve değişmeyecektir.";
 "change_language" = "Dil Değiştir";
+"ios_info_copied_x_to_clipboard" = "Panoya \"%1$@\" kopyalandı";
+"ios_info_no_studies_withAccessKey" = "Bu sunucuda \"%1$@\" erişim anahtarına sahip çalışmalar bulunamadı.";
+"ios_info_study_updated" = "%1$@ güncellendi!";
+"sync_now" = "Şimdi senkronize et";
+"write_message_to_researcher" = "Araştırmacıya mesaj yazın";
+"error_no_camera" = "Kamera bulunamadı";
+"error_qr_faulty" = "QR kodu hatalı.";
+"colon_last_filled_out" = "Son doldurulan: %1$@";
+"data_will_be_sent_to_app_developer" = "Hata raporu uygulama geliştiricisine (%1$@) gönderilecektir. Hata raporunun herhangi bir kişisel veya anket verisi içermediğini vurgulamak isteriz!";
+"found_location" = "Bulunan konum: %1$@";
+"stop_scanning" = "Taramayı durdur";
