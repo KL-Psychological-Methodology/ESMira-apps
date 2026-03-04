@@ -282,7 +282,7 @@
     <string name="schedule_permission_setup_desc">ESMira\'nın belirli zamanlarda etkinlikler (anketler için hatırlatıcılar gibi) planlamasına izin verilmesi gerekir.</string>
     <string name="schedule_permission_check">Lütfen \"Programları etkinleştir\" düğmesine basın, ardından listeden ESMira\'yı seçin ve \"Alarm ve hatırlatıcı ayarlamaya izin ver\" seçeneğini etkinleştirin.</string>
     <string name="info_schedule_setup_skipped">Bu çalışma düzgün çalışmayacaktır!</string>
-    <string name="info_wrong_access_key">Bu çalışma için erişim anahtarı değişmiş görünüyor. Doğru erişim anahtarını sağlamadığınız sürece verileriniz yüklenmeyecektir.</string>
+    <string name="info_wrong_access_key">Bu çalışma için giriş kodu değişmiş görünüyor. Doğru giriş kodunu sağlamadığınız sürece verileriniz yüklenmeyecektir.</string>
     <string name="quit_at">Çıkış zamanı</string>
     <string name="colon_used_libraries">Kullanılan kütüphaneler:</string>
     <string name="disabled_questionnaires">Devre dışı bırakılmış anketler</string>
