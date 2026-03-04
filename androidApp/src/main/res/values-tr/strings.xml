@@ -188,4 +188,6 @@
     <string name="understood">Anladım</string>
     <string name="update_studies">Çalışmaları güncelle</string>
     <string name="welcome_accessKey_question">Bir giriş kodunuz var mı?</string>
+    <string name="welcome_hello">Merhaba!</string>
+    <string name="welcome_join_public_study">Hayır, bir kamu çalışmasına katılın</string>
 </resources>
