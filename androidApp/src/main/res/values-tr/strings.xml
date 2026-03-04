@@ -290,4 +290,13 @@
     <string name="start_playing_audio">Başlat</string>
     <string name="open_url">Url aç</string>
     <string name="enable_schedules">Zamanlamaları etkinleştirin</string>
+    <string name="error_app_usage_revoked_android_header">ESMira uygulama kullanımına erişemiyor</string>
+    <string name="error_app_usage_revoked_android_desc">Katıldığınız bir çalışma, uygulama kullanım verilerine erişim izni gerektiriyor. Lütfen izin ekranında ESMira\'nın etkinleştirildiğinden emin olun.</string>
+    <string name="no_active_questionnaires">Aktif anket yok</string>
+    <string name="error_gps_disabled">GPS devre dışı!</string>
+    <string name="scanning">Tarama</string>
+    <string name="found_location">Bulunduğu yer: %1$s</string>
+    <string name="could_not_determine_location">Konum belirlenemedi</string>
+    <string name="countdown_running">Geri sayım çalışıyor</string>
+    <string name="toast_skipped_pages">Atlanan %1$d sayfaları</string>
 </resources>
