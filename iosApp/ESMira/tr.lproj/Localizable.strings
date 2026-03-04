@@ -20,7 +20,7 @@
 "colon_enter_manually" = "Manuel olarak girin:";
 
 /* Needs to be short */
-"ios_info_missed_notifications" = "%1$d bildirim kaçırıldı.";
+"ios_info_missed_notifications" = "%1$d cevapsız bildirim";
 "dialogTitle_leave_study" = "Çalışmadan ayrılmak istiyor musunuz?";
 "error_no_email_client" = "Bir e-posta uygulaması bulamadım …";
 "error_no_images_to_upload" = "Yüklemek için herhangi bir resim seçmediniz.";
@@ -203,4 +203,19 @@
 "scanning" = "Tarama";
 "could_not_determine_location" = "Konum belirlenemedi";
 "countdown_running" = "Geri sayım çalışıyor";
-"toast_skipped_pages" = "Atlanan %1$d sayfaları";
+"toast_skipped_pages" = "%1$d sayfa atlandı";
+"notification_expired_info" = "Seçilen bildirim süresi dolmuş ve ilgili anket şu anda kullanılamıyor.";
+"notification_expired_title" = "bildirim süresi sona erdi";
+"toast_skipped_one_page" = "1 sayfa atlandı";
+"toast_skipped_to_end" = "Kalan sayfalar atlandı";
+"text_script_error" = "!! ESMira bu metni görüntülemeye çalışırken bir sorunla karşılaştı!";
+"duration_hours_abbreviation" = "H:";
+"duration_minutes_abbreviation" = "M:";
+"option_other" = "Diğer";
+"measure" = "Ölçüm (Measure)";
+"hint_missing_fields" = "Bir soruyu kaçırmış olabilirsin.";
+"frequently_asked_questions" = "Sıkça Sorulan Sorular";
+"faqs" = "SSS";
+"available_languages" = "Bu çalışma aşağıdaki dillerde mevcuttur:";
+"select_language_instruction" = "Çalışmanın görüntülenmesi gereken dili seçin. Bunun yalnızca çalışmanın içindeki metni etkilediğini unutmayın. Uygulama arayüzü sistem dilinize bağlıdır ve değişmeyecektir.";
+"change_language" = "Dil Değiştir";
