@@ -213,5 +213,6 @@
     <string name="colon_usageTime">Kullanım süresi:</string>
     <string name="colon_usageCount">Kullanım sayısı:</string>
     <string name="take_picture">Fotoğraf çek</string>
-    <string name="notificationChannel_screen_tracking">Ekran süresi hizmet bildirimi.</string>
+    <string name="notificationChannel_screen_tracking">Ekran süresi bildirimi.</string>
+    <string name="just_finished">Tamamlandı</string>
 </resources>
