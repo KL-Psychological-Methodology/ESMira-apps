@@ -168,4 +168,5 @@
     <string name="send_test_notification">Deneme bildirimi gönder</string>
     <string name="show_informed_consent">Bilgilendirilmiş onamı gösterin</string>
     <string name="state_loading_public_statistics">Genel istatistikler yükleniyor…</string>
+    <string name="statistics">İstatistikler</string>
 </resources>
