@@ -169,4 +169,19 @@
     <string name="show_informed_consent">Bilgilendirilmiş onamı gösterin</string>
     <string name="state_loading_public_statistics">Genel istatistikler yükleniyor…</string>
     <string name="statistics">İstatistikler</string>
+    <string name="welcome_first_instructions">Anonim Anket Asistanı ESMira\'ya hoş geldiniz.
+\n
+\nBaşlamak için lütfen bir çalışma seçin ve katılın.
+\nBu iletişim kutusu size yardımcı olacaktır.</string>
+    <string name="statistics_personal">Kişisel</string>
+    <string name="sync_data">Veri senkronizasyonu</string>
+    <string name="today">Bugün</string>
+    <string name="tomorrow">Yarın</string>
+    <string name="try_again">Tekrar deneyin</string>
+    <string name="upload">Yükle</string>
+    <string name="upload_screenshots">Ekran görüntülerini yükle</string>
+    <string name="user_id">Kullanıcı kimliği</string>
+    <string name="visible_when_study_finished">Yalnızca çalışma sona erdiğinde görünür.</string>
+    <string name="welcome_exit_questionTitle">Gerçekten iptal etmek istiyor musun?</string>
+    <string name="welcome_exit_questionDesc">ESMira\'yı kullanmak için önce bir çalışmaya katılmanız gerekir.</string>
 </resources>
