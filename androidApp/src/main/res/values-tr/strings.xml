@@ -105,4 +105,7 @@
     <string name="info_schedule_changed_after_one_day">Yapılan değişiklikler bir gün sonra uygulanacaktır.</string>
     <string name="notifications">Bildirimler</string>
     <string name="info_notification_setup_failed">Büyük olasılıkla telefonunuz bu çalışma için bildirim alamayacaktır. Telefonunuzda bizim bilmediğimiz özel ayarlar olabilir. Sorununuza bir çözüm bulmak için lütfen çalışmanın araştırmacısı veya uygulama geliştiricisi ile iletişime geçin (ve kullandığınız telefon modelini belirtin).</string>
+    <string name="app_name">ESMira</string>
+    <string name="error_input">Hatalı giriş</string>
+    <string name="info_detected_x_errors">Toplam %1$d hata tespit edildi</string>
 </resources>
