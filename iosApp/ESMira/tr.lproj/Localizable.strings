@@ -119,6 +119,8 @@
 "show_informed_consent" = "Bilgilendirilmiş onamı gösterin";
 "show_welcome_screen" = "Karşılama ekranını göster";
 "soon" = "Yakında";
-"start" = "Başlangıç";
+"start" = "Başla";
 "open_settings" = "Ayarları açın";
 "error_report_message" = "Bir hata raporu gönderildi. Yorum:";
+"state_loading_public_statistics" = "Genel istatistikler yükleniyor…";
+"statistics" = "İstatistikler";
