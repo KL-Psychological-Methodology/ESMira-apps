@@ -126,4 +126,10 @@
     <string name="android_info_copied_x_to_clipboard">Panoya \"%1$s\" kopyalandı</string>
     <string name="info_dev_active">Artık bir geliştiricisiniz!</string>
     <string name="info_study_permissionSetup_ended">Yapılandırma işlemi tamamlanmıştır. Şimdi çalışmaya katılmak için \"Katıl\" butonuna tıklayabilirsiniz.</string>
+    <string name="android_info_study_updated">%1$s güncellendi!</string>
+    <string name="info_study_updated_desc">Çalışmada yapılan bir güncelleme nedeniyle programlarınız sıfırlanmıştır.</string>
+    <string name="info_sync_complete">Senkronizasyon başarıyla tamamlandı.</string>
+    <string name="messages">Mesajlar</string>
+    <string name="new_message">Yeni Mesaj</string>
+    <string name="notification_permission_check">ESMira\'nın bildirim gönderme iznine sahip olup olmadığını kontrol etmek için lütfen \"Bildirimleri etkinleştir\" düğmesine basın.</string>
 </resources>
