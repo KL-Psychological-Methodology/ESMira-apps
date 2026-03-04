@@ -154,7 +154,7 @@
     <string name="send_error_report_to_researcher">Ayrıca bunu araştırmacıya anonim bir mesaj olarak gönderin</string>
     <string name="show_welcome_screen">Karşılama ekranını göster</string>
     <string name="soon">Yakında</string>
-    <string name="start">Başlangıç</string>
+    <string name="start">Başla</string>
     <string name="notificationChannel_generalNotifications_desc">Genel amaçlı bildirimler</string>
     <string name="notificationChannel_studyMessages_name">çalışmaya ait mesajlar</string>
     <string name="notificationChannel_studyMessages_desc">Araştırmacı, devam eden bir çalışmayla ilgili size yeni bir mesaj gönderdiğinde bildirim gönderilir.</string>
@@ -167,4 +167,5 @@
     <string name="error_report_message">Bir hata raporu gönderildi. Yorum:</string>
     <string name="send_test_notification">Deneme bildirimi gönder</string>
     <string name="show_informed_consent">Bilgilendirilmiş onamı gösterin</string>
+    <string name="state_loading_public_statistics">Genel istatistikler yükleniyor…</string>
 </resources>
