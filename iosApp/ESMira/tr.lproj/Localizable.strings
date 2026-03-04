@@ -152,7 +152,7 @@
 "just_finished" = "Tamamlandı";
 "rewards" = "Ödüller";
 "sent_to_whom" = "Kime gönderildi?";
-"info_wrong_access_key" = "Bu çalışma için erişim anahtarı değişmiş görünüyor. Doğru erişim anahtarını sağlamadığınız sürece verileriniz yüklenmeyecektir.";
+"info_wrong_access_key" = "Bu çalışma için giriş kodu değişmiş görünüyor. Doğru giriş kodunu sağlamadığınız sürece verileriniz yüklenmeyecektir.";
 "reward_code_description" = "ESMira aracılığıyla sağlanan tüm verilerin tamamen anonim kalması bizim için önemlidir. Ancak ödülünüzü alabilmek için kullanıcı kimliğinizle ilişkilendirilmemesi gereken bazı kişisel bilgiler vermeniz gerekecektir. Bu nedenle, kullanıcı kimliğinizle veya sağladığınız herhangi bir veriyle bağlantılı olmayan bir ödül kodumuz var.";
 "list_devices" = "%1$d cihazlarını listeleyin";
 "error_reward_conditions_not_met" = "Henüz bir ödül için uygun değilsiniz.";
@@ -198,3 +198,9 @@
 "anonymised_device" = "Anonimleştirilmiş cihaz";
 "distance_rssi" = "Mesafe (RSSI)";
 "distance_rssi_content" = "~%1$.1fm (%2$d)";
+"no_active_questionnaires" = "Aktif anket yok";
+"error_gps_disabled" = "GPS devre dışı!";
+"scanning" = "Tarama";
+"could_not_determine_location" = "Konum belirlenemedi";
+"countdown_running" = "Geri sayım çalışıyor";
+"toast_skipped_pages" = "Atlanan %1$d sayfaları";
