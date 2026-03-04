@@ -189,5 +189,10 @@
     <string name="update_studies">Çalışmaları güncelle</string>
     <string name="welcome_accessKey_question">Bir giriş kodunuz var mı?</string>
     <string name="welcome_hello">Merhaba!</string>
-    <string name="welcome_join_public_study">Hayır, bir kamu çalışmasına katılın</string>
+    <string name="welcome_join_public_study">Hayır, genel bir çalışmaya katılın</string>
+    <string name="app_usage_desc">Bu çalışmaya erişim izni gerekiyor. ESMira’nın izinler ekranında açık olduğundan emin olun ve ardından telefonunuzdaki geri tuşuna basın.</string>
+    <string name="failed">Hata oluştu</string>
+    <string name="not_installed">Yüklenmedi</string>
+    <string name="error_no_cameraApp">Kamera uygulaması bulunamadı!</string>
+    <string name="info_screen_tracking_notification_content">Ekran süresi ölçülüyor…</string>
 </resources>
