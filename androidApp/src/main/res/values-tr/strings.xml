@@ -302,4 +302,16 @@
     <string name="notification_expired_title">bildirim süresi sona erdi</string>
     <string name="notification_expired_info">Seçilen bildirim süresi dolmuş ve ilgili anket şu anda kullanılamıyor.</string>
     <string name="measure">Ölçüm (Measure)</string>
+    <string name="toast_skipped_one_page">1 sayfa atlandı</string>
+    <string name="toast_skipped_to_end">Kalan sayfalar atlandı</string>
+    <string name="text_script_error">!! ESMira bu metni görüntülemeye çalışırken bir sorunla karşılaştı!</string>
+    <string name="duration_hours_abbreviation">H:</string>
+    <string name="duration_minutes_abbreviation">M:</string>
+    <string name="option_other">Diğer</string>
+    <string name="hint_missing_fields">Bir soruyu kaçırmış olabilirsin.</string>
+    <string name="frequently_asked_questions">Sıkça Sorulan Sorular</string>
+    <string name="faqs">SSS</string>
+    <string name="available_languages">Bu çalışma aşağıdaki dillerde mevcuttur:</string>
+    <string name="select_language_instruction">Çalışmanın görüntülenmesi gereken dili seçin. Bunun yalnızca çalışmanın içindeki metni etkilediğini unutmayın. Uygulama arayüzü sistem dilinize bağlıdır ve değişmeyecektir.</string>
+    <string name="change_language">Dil Değiştir</string>
 </resources>
