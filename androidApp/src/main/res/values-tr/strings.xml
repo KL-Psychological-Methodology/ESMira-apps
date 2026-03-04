@@ -298,5 +298,8 @@
     <string name="found_location">Bulunduğu yer: %1$s</string>
     <string name="could_not_determine_location">Konum belirlenemedi</string>
     <string name="countdown_running">Geri sayım çalışıyor</string>
-    <string name="toast_skipped_pages">Atlanan %1$d sayfaları</string>
+    <string name="toast_skipped_pages">%1$d sayfa atlandı</string>
+    <string name="notification_expired_title">bildirim süresi sona erdi</string>
+    <string name="notification_expired_info">Seçilen bildirim süresi dolmuş ve ilgili anket şu anda kullanılamıyor.</string>
+    <string name="measure">Ölçüm (Measure)</string>
 </resources>
