@@ -195,4 +195,23 @@
     <string name="not_installed">Yüklenmedi</string>
     <string name="error_no_cameraApp">Kamera uygulaması bulunamadı!</string>
     <string name="info_screen_tracking_notification_content">Ekran süresi ölçülüyor…</string>
+    <string name="app_usage_whatFor">Bu çalışmanın bazı anketleri, son gün boyunca belirli uygulamaların (veya genel olarak akıllı telefonun) kullanım sürelerini takip etmektedir. Bu verilere arka planda erişilmeyecek ve SADECE ilgili anketi gönderdiğinizde kaydedilecektir. Anketi göndermeden önce hangi verilerin gönderileceği konusunda bilgilendirileceksiniz.</string>
+    <string name="welcome_qr_question">Bir çalışma için QR kodunuz var mı?</string>
+    <string name="welcome_qr_instructions">Lütfen QR kodunu ekranda görünecek şekilde akıllı telefon kameranızın önüne yaklaşık 30 cm uzağa yerleştirin.
+\nESMira, kamera odaklandığı anda kodu otomatik olarak tarayacaktır.</string>
+    <string name="welcome_server_question">Çalışma hangi sunucuda yer alıyor?</string>
+    <string name="what_for">Ne için?</string>
+    <string name="what_is_sent">Ne gönderildi?</string>
+    <string name="word_and">ve</string>
+    <string name="yes">Evet</string>
+    <string name="app_usage">Uygulama kullanımı</string>
+    <string name="feature_is_not_supported">Bu özellik telefonunuzda desteklenmiyor</string>
+    <string name="time_format_android">%1$s:%2$s:%3$s</string>
+    <string name="colon_total_screenTime">Toplam ekran süresi:</string>
+    <string name="colon_app_usage">Uygulama kullanımı:</string>
+    <string name="qrCodeInvalid">QR kodu geçerli değil</string>
+    <string name="colon_usageTime">Kullanım süresi:</string>
+    <string name="colon_usageCount">Kullanım sayısı:</string>
+    <string name="take_picture">Fotoğraf çek</string>
+    <string name="notificationChannel_screen_tracking">Ekran süresi hizmet bildirimi.</string>
 </resources>
