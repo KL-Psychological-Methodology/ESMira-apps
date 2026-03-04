@@ -81,3 +81,17 @@
 "notification_setup_desc" = "Bildirimler sizi belirli zamanlarda anketleri doldurmaya davet etmek için kullanılır. Çalışma sona erdiğinde artık herhangi bir bildirim almayacaksınız.";
 "notifications" = "Bildirimler";
 "notifications_not_working" = "Bildirimler çalışmıyor";
+"enter_manually" = "Manuel olarak girin";
+"error_app_update_needed_title" = "ESMira güncellemesi.";
+"error_app_update_needed_msg" = "Kritik bir güncelleme bulundu. Lütfen ESMira'yı uygulama mağazasında güncelleyin.";
+"error_input" = "Hatalı giriş";
+"error_loading_failed" = "Yükleme başarısız oldu…";
+"error_missing_fields" = "Lütfen gerekli tüm alanları doldurun!";
+"hint_error_comment" = "Hangi sorunla karşılaştınız?";
+"hint_server" = "example.com";
+"https" = "https://";
+"i_agree" = "Katılıyorum.";
+"ignore" = "Görmezden gel";
+"in_x_days" = "%1$d gün içinde";
+"info_detected_x_errors" = "Toplam %1$d hata tespit edildi";
+"info_dev_active" = "Artık bir geliştiricisiniz!";
