@@ -11,11 +11,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>1$d</string>
 			<key>zero</key>
-			<string>Bu çalışmaya ait kazanımlar henüz erişilebilir değil. Çok yakında erişilebilir olacaktır.</string>
+			<string>Bu çalışmaya ait ödüller henüz erişilebilir değil. Çok yakında erişilebilir olacaktır.</string>
 			<key>one</key>
-			<string>Bu çalışmaya ait kazanımlar henüz erişilebilir değil. Bir gün içinde erişilebilir olacaktır.</string>
+			<string>Bu çalışmaya ait ödüller henüz erişilebilir değil. Bir gün içinde erişilebilir olacaktır.</string>
 			<key>other</key>
-			<string>Bu çalışmaya ait kazanımlar henüz erişilebilir değil. %1$d gün içinde erişilebilir olacaktır.</string>
+			<string>Bu çalışmaya ait ödüller henüz erişilebilir değil. %1$d gün içinde erişilebilir olacaktır.</string>
 		</dict>
 	</dict>
 	<key>ios_info_missed_notifications</key>
