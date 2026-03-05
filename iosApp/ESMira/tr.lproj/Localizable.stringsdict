@@ -17,6 +17,8 @@
 			<key>other</key>
 			<string>Bu çalışmaya ait ödüller henüz erişilebilir değil. %1$d gün içinde erişilebilir olacaktır.</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>Bu çalışma için ödüller henüz aktif değildir. Yakında kullanıma açılacaktır.</string>
 	</dict>
 	<key>ios_info_missed_notifications</key>
 	<dict>
@@ -33,6 +35,8 @@
 			<key>other</key>
 			<string>%1$d bildirim bekliyor.</string>
 		</dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@notifications@</string>
 	</dict>
 </dict>
 </plist>
