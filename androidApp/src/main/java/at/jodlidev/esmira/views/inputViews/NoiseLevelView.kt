@@ -99,6 +99,7 @@ fun NoiseLevelView(input: Input, get: () -> String, save: (String, Map<String, S
                 val buffer = ShortArray(samplesToRead)
 
                 audioRecord.startRecording()
+
                 try {
                     var readTotal = 0
                     progress.value = 0f
@@ -126,45 +127,40 @@ fun NoiseLevelView(input: Input, get: () -> String, save: (String, Map<String, S
                     // Calculate AC RMS
 
                     var sumTotal = 0.0
-                    val means: MutableList<Double> = mutableListOf()
+                    var sumSquaresTotal = 0.0
+                    var minRMS = Double.MAX_VALUE
+                    var maxRMS = Double.MIN_VALUE
+
                     for(i in 0..<duration) {
                         var sum = 0.0
+                        var sumSquares = 0.0
                         for(j in 0..<SAMPLE_RATE) {
                             val sample = buffer[i+j].toDouble()
                             sum += sample
+                            sumTotal += sample
+                            sumSquares += sample * sample
+
                         }
                         val mean = sum / SAMPLE_RATE
-                        means.add(mean)
+                        val meanOfSquares = sumSquares / SAMPLE_RATE
+
+                        val rmsWindow = sqrt(meanOfSquares - mean * mean)
+                        minRMS = min(minRMS, rmsWindow)
+                        maxRMS = max(maxRMS, rmsWindow)
+
                         sumTotal += sum
+                        sumSquaresTotal += sumSquares
                     }
 
                     val meanTotal = sumTotal / readTotal
+                    val meanOfSquaresTotal = sumSquaresTotal / readTotal
+                    val rms = sqrt(meanOfSquaresTotal - meanTotal * meanTotal)
 
-                    var minSum = Double.MAX_VALUE
-                    var maxSum = Double.MIN_VALUE
+                    val dBFStotal = 20.0 * log10(rms / REFERENCE)
 
-                    sumTotal = 0.0
-                    for(i in 0..<duration) {
-                        var sum = 0.0
-                        for(j in 0..<SAMPLE_RATE) {
-                            val sample = buffer[i+j].toDouble()
-                            val dFrame = sample - means[i]
-                            sum += dFrame * dFrame
-                            val dTotal = sample - meanTotal
-                            sumTotal += dTotal * dTotal
-                        }
-                        minSum = min(minSum, sum)
-                        maxSum = max(maxSum, sum)
-                    }
+                    val dBFSfminFrame = 20.0 * log10(minRMS / REFERENCE)
 
-                    val rmsTotal = sqrt(sumTotal / readTotal)
-                    val dBFStotal = 20.0 * log10(rmsTotal / REFERENCE)
-
-                    val rmsMinFrame = sqrt(minSum / SAMPLE_RATE)
-                    val dBFSfminFrame = 20.0 * log10(rmsMinFrame / REFERENCE)
-
-                    val rmsMaxFrame = sqrt(maxSum / SAMPLE_RATE)
-                    val dBFSmaxFrame = 20.0 * log10(rmsMaxFrame / REFERENCE)
+                    val dBFSmaxFrame = 20.0 * log10(maxRMS / REFERENCE)
 
                     save(
                         (round(dBFStotal * 100.0) / 100.0).toString(),
