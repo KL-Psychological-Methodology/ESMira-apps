@@ -316,4 +316,5 @@
     <string name="change_language">Change Language</string>
     <string name="notification_expired_title">Notification expired</string>
     <string name="notification_expired_info">The selected notification has expired and the associated questionnaire is currently not available.</string>
+    <string name="measured_noise_level">Measured noise level: %1$s dBFS</string>
 </resources>
