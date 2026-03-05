@@ -167,7 +167,7 @@ fun BluetoothDevicesView(input: Input, get: () -> String, save: (String, Map<Str
 				Text("${(progress.value * 100).toInt()}%")
 				Spacer(modifier = Modifier.width(10.dp))
 				LinearProgressIndicator(
-					progress = progress.value,
+					progress = { progress.value },
 					modifier = Modifier.padding(all = 10.dp)
 				)
 				
