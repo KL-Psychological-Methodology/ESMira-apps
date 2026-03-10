@@ -192,7 +192,7 @@
     <string name="welcome_join_public_study">Hayır, genel bir çalışmaya katılın</string>
     <string name="app_usage_desc">Bu çalışmaya erişim izni gerekiyor. ESMira’nın izinler ekranında açık olduğundan emin olun ve ardından telefonunuzdaki geri tuşuna basın.</string>
     <string name="failed">Hata oluştu</string>
-    <string name="not_installed">Yüklenmedi</string>
+    <string name="not_installed">Yüklü değil</string>
     <string name="error_no_cameraApp">Kamera uygulaması bulunamadı!</string>
     <string name="info_screen_tracking_notification_content">Ekran süresi ölçülüyor…</string>
     <string name="app_usage_whatFor">Bu çalışmanın bazı anketleri, son gün boyunca belirli uygulamaların (veya genel olarak akıllı telefonun) kullanım sürelerini takip etmektedir. Bu verilere arka planda erişilmeyecek ve SADECE ilgili anketi gönderdiğinizde kaydedilecektir. Anketi göndermeden önce hangi verilerin gönderileceği konusunda bilgilendirileceksiniz.</string>
@@ -314,4 +314,5 @@
     <string name="available_languages">Bu çalışma aşağıdaki dillerde mevcuttur:</string>
     <string name="select_language_instruction">Çalışmanın görüntülenmesi gereken dili seçin. Bunun yalnızca çalışmanın içindeki metni etkilediğini unutmayın. Uygulama arayüzü sistem dilinize bağlıdır ve değişmeyecektir.</string>
     <string name="change_language">Dil Değiştir</string>
+    <string name="notificationChannel_generalNotifications_name">Genel bildirimler</string>
 </resources>
