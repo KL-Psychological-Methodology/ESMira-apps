@@ -315,4 +315,5 @@
     <string name="select_language_instruction">Çalışmanın görüntülenmesi gereken dili seçin. Bunun yalnızca çalışmanın içindeki metni etkilediğini unutmayın. Uygulama arayüzü sistem dilinize bağlıdır ve değişmeyecektir.</string>
     <string name="change_language">Dil Değiştir</string>
     <string name="notificationChannel_generalNotifications_name">Genel bildirimler</string>
+    <string name="charging">Şarj oluyor</string>
 </resources>
