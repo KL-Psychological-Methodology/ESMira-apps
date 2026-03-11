@@ -229,3 +229,4 @@
 "change_language" = "Sprache Ändern";
 "notification_expired_title" = "Benachrichtigung abgelaufen";
 "notification_expired_info" = "Die gewählte Benachrichtigung ist abgelaufen, und der dazugehörige Fragebogen ist aktuell nicht verfügbar.";
+"measured_noise_level" = "Gemessene Geräuschlautstärke: %1$@ dBFS";
