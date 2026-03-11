@@ -229,3 +229,4 @@
 "change_language" = "Change Language";
 "notification_expired_title" = "Notification expired";
 "notification_expired_info" = "The selected notification has expired and the associated questionnaire is currently not available.";
+"measured_noise_level" = "Measured noise level: %1$@ dBFS";

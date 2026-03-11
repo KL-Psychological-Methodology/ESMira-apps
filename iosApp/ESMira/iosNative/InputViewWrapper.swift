@@ -92,6 +92,8 @@ struct InputView: View {
 				return AnyView(ListMultipleStruct(viewModel: self.viewModel))
 			case Input.TYPES.location:
 				return AnyView(LocationStruct(viewModel: self.viewModel))
+			case Input.TYPES.noiseLevel:
+				return AnyView(NoiseLevelStruct(viewModel: self.viewModel))
 			case Input.TYPES.number:
 				return AnyView(NumberStruct(viewModel: self.viewModel))
 			case Input.TYPES.photo:
