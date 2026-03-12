@@ -109,11 +109,11 @@
     <string name="info_thank_you">Dank je!</string>
     <string name="info_update_complete">Update voltooid (%1$d updates gedownload).</string>
     <string name="info_update_failed">Er is een fout opgetreden tijdens het bijwerken van je studies</string>
-    <string name="informed_consent">Informed consent</string>
-    <string name="informed_consent_desc">Om door te gaan, lees de informed consent en ga akkoord.</string>
+    <string name="informed_consent">Toestemmingsverklaring</string>
+    <string name="informed_consent_desc">Om door te gaan, lees de toestemmingsverklaring en ga akkoord.</string>
     <string name="messages">Berichten</string>
     <string name="leave">Verlaten</string>
-    <string name="leave_study">Studie verlaten</string>
+    <string name="leave_study">Verlaat de studie</string>
     <string name="load_backup">Back-up laden</string>
     <string name="new_message">Nieuw bericht</string>
     <string name="next_notifications">Volgende meldingen</string>
@@ -159,7 +159,7 @@
     <string name="send_message_to_researcher">Anoniem bericht naar onderzoeker verzenden</string>
     <string name="send_test_notification">Testmelding verzenden</string>
     <string name="settings">Instellingen</string>
-    <string name="show_informed_consent">Informed consent tonen</string>
+    <string name="show_informed_consent">Toestemmingsverklaring tonen</string>
     <string name="show_welcome_screen">Welkomstscherm tonen</string>
     <string name="soon">Binnenkort</string>
     <string name="start">Start</string>
@@ -308,7 +308,12 @@
     <string name="error_input">Ongeldige invoer</string>
     <string name="error_no_email_client">Geen e-mailapp gevonden…</string>
     <string name="error_settings_not_opened">Instellingen konden niet worden geopend!</string>
-    <string name="hint_server">voorbeeld.com</string>
+    <string name="hint_server">example.com</string>
     <string name="info_error_report_desc">Help ons alstublieft je probleem op te lossen en stuur dit foutenrapport naar ons. Bedankt!</string>
     <string name="info_leave_empty_if_unsure">(mag leeg blijven)</string>
+    <string name="notification_expired_title">Melding verlopen</string>
+    <string name="notification_expired_info">De geselecteerde melding is verlopen en de bijbehorende enquete is nu niet beschikbaar.</string>
+    <string name="change_language">Verander van taal</string>
+    <string name="available_languages">Deze studie is beschikbaar in de volgende talen:</string>
+    <string name="select_language_instruction">Selecteer de taal waarin de studie moet worden weergegeven. Dit heeft alleen invloed op de tekst in het onderzoek zelf. De interface van de toepassing is afhankelijk van de systeemtaal en verandert niet.</string>
 </resources>
