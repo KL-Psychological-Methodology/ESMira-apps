@@ -325,7 +325,20 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                     arguments: List<MerlinType>
                 ): MerlinType {
                     val questionnaire = interpreter.getQuestionnaire() ?: return MerlinNone
-                    val getSingleValue = { inputName: String ->
+                    val getSystemValue = fun(inputName: String): MerlinType {
+                        return when (inputName) {
+                            "_randomGroup" -> {
+                                val study = DbLogic.getStudy(questionnaire.studyId) ?: return MerlinNone
+                                MerlinNumber(study.group.toDouble())
+                            }
+                            else -> MerlinNone
+                        }
+                    }
+                    val getSingleValue = fun(inputName: String): MerlinType {
+                        val systemValue = getSystemValue(inputName)
+                        if (systemValue !is MerlinNone)
+                            return systemValue
+
                         var out: MerlinType = MerlinNone
                         for (page in questionnaire.pages) {
                             for (input in page.inputs) {
@@ -336,7 +349,7 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                                 }
                             }
                         }
-                        out
+                        return out
                     }
                     val arg = arguments[0]
                     return if (arg is MerlinArray) {
