@@ -13,7 +13,6 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.utils.io.core.toByteArray
 import kotlinx.coroutines.*
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.Serializable
 import kotlin.io.encoding.Base64
@@ -427,6 +426,7 @@ class Web {
 			Pair("Test Server", "https://esmira.jodli.dev")
 		)
 		
+		@Suppress("unused")
 		@Serializable
 		class StudyInfo(
 			val version: Int,
@@ -481,6 +481,7 @@ class Web {
 			@Serializable(with = JsonToStringSerializer::class) val dataset: String = ""
 		)
 		
+		@Suppress("unused")
 		@Serializable
 		sealed class PostStructure {
 			val userId: String = DbUser.getUid()
@@ -518,7 +519,7 @@ class Web {
 		}
 		
 		@Serializable
-		public class DontKillMyAppInfo(
+		class DontKillMyAppInfo(
 			val name: String,
 			val url: String,
 			val explanation: String,
@@ -528,7 +529,7 @@ class Web {
 		)
 		
 		private fun formatUrl(url: String): String {
-			var urlFormatted = url;
+			var urlFormatted = url
 			if(urlFormatted.endsWith("/"))
 				urlFormatted = urlFormatted.substring(0, urlFormatted.length - 1)
 			if(urlFormatted.startsWith("http://")) {
@@ -586,7 +587,7 @@ class Web {
 					}
 
 				}
-				catch(e: ClientEngineClosedException) {
+				catch(_: ClientEngineClosedException) {
 					println("ClientEngineClosedException: Cancelled by user")
 				}
 				catch(e: Throwable) {
@@ -647,7 +648,7 @@ class Web {
 					kotlinRunOnUiThread {
 						onError(e.message ?: "Unknown error", e)
 					}
-				} catch(e: ClientEngineClosedException) {
+				} catch(_: ClientEngineClosedException) {
 					println("ClientEngineClosedException: Cancelled by user")
 				} catch(e: Throwable) {
 					ErrorBox.warn("Loading Studies", "Failed to load studies", e)

@@ -223,3 +223,6 @@
 "found_location" = "Nalezena lokace: %1$@";
 "measure" = "Měřit";
 "charging" = "nabíjení";
+"hint_missing_fields" = "Nebyla vyplněna jedna nebo více otázek.";
+"frequently_asked_questions" = "Často kladené otázky";
+"faqs" = "Nejčastější dotazy";

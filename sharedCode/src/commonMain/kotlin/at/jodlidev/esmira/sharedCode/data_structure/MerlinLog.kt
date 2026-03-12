@@ -127,7 +127,10 @@ class MerlinLog: UploadData {
 
 
         //message:
-        output.append(msg)
+        val msgArr = msg.split("\\n")
+        for(line in msgArr){
+            output.appendLine(line)
+        }
 
         return output.toString()
     }
