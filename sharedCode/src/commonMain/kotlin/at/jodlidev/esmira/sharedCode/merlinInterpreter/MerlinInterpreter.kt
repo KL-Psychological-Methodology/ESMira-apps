@@ -39,15 +39,12 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
         this.questionnaire = questionnaire
         isInitializing = false
         globals = MerlinEnvironment()
-        for(func in nativeFunctions) {
-            globals.defineFunction(func.key, func.value)
-        }
         globals.define("globals", globalsObject)
         environment = globals
     }
 
     fun getGlobalsObject(): MerlinObject? {
-        return globals.get("globals").let { if (it is MerlinObject) it else null }
+        return globals.get("globals").let { it as? MerlinObject }
     }
 
     fun getEnvironmentString(): String {
@@ -136,7 +133,7 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
     }
 
     override fun visitCallExpr(expr: MerlinExpr.Call): MerlinType {
-        val callee = environment.getFunction(expr.callee) ?: throw MerlinRuntimeError(expr.callee, "Could not find called function.")
+        val callee = nativeFunctions[expr.callee.lexeme] ?: environment.getFunction(expr.callee) ?: throw MerlinRuntimeError(expr.callee, "Could not find called function.")
 
         val arguments = expr.arguments.map { evaluate(it) }
         if (arguments.size != callee.arity()) throw MerlinRuntimeError(expr.paren, "Wrong number of arguments for function call.")
