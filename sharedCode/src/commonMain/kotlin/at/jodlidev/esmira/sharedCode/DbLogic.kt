@@ -79,6 +79,7 @@ object DbLogic {
 			${Study.KEY_INSTRUCTIONS} TEXT,
 			${Study.KEY_FAQ} TEXT DEFAULT '',
 			${Study.KEY_HAS_STATISTICS} INTEGER DEFAULT 0,
+            ${Study.KEY_ADDITIONAL_DAYS_ACTIVE} INTEGER DEFAULT 0,
 			${Study.KEY_LANG_CODES} TEXT DEFAULT '[]')""")
 			
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${Message.TABLE} (

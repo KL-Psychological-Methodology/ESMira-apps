@@ -61,6 +61,7 @@ class Study internal constructor(
 	var rewardEmailContent = ""
 	var rewardInstructions = ""
 	var faq = ""
+    var additionalDaysActive = 0
 
 	@SerialName("langCodes")
 	@Serializable(with = JsonToStringSerializer::class)
@@ -236,6 +237,7 @@ class Study internal constructor(
 		faq = c.getString(28)
 		hasStatistics = c.getBoolean(29)
 		langCodesString = c.getString(30)
+        additionalDaysActive = c.getInt(31)
 	}
 	
 	private fun loadQuestionnairesDB(): List<Questionnaire> {
@@ -472,6 +474,7 @@ class Study internal constructor(
 			this.rewardEmailContent = newStudy.rewardEmailContent
 			this.rewardInstructions = newStudy.rewardInstructions
 			this.faq = newStudy.faq
+            this.additionalDaysActive = newStudy.additionalDaysActive
 			this.hasStatistics = newStudy.hasStatistics
 			this.langCodesString = newStudy.langCodesString
 			this._jsonQuestionnaires = newStudy.questionnaires
@@ -532,6 +535,7 @@ class Study internal constructor(
 		values.putString(KEY_FAQ, faq)
 		values.putBoolean(KEY_HAS_STATISTICS, hasStatistics)
 		values.putString(KEY_LANG_CODES, langCodesString)
+        values.putInt(KEY_ADDITIONAL_DAYS_ACTIVE, additionalDaysActive)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -693,7 +697,8 @@ class Study internal constructor(
 	}
 
 	internal fun leaveAfterCheck() {
-		if(state != STATES.Quit && !isActive() && !hasNotYetActiveQuestionnaires()) {
+		if(state != STATES.Quit && !isActive() && !hasNotYetActiveQuestionnaires() && !questionnaires.any { NativeLink.getDatesDiff(
+                NativeLink.getNowMillis(), it.metadata.lastCompleted) <= additionalDaysActive }) {
 			ErrorBox.log("Study", "Leaving study \"$title\" because it is not active anymore")
 			leave()
 		}
@@ -765,6 +770,7 @@ class Study internal constructor(
 		const val KEY_FAQ = "faq"
 		const val KEY_HAS_STATISTICS = "hasStatistics"
 		const val KEY_LANG_CODES = "langCodes"
+        const val KEY_ADDITIONAL_DAYS_ACTIVE = "additionalDaysActive"
 		
 		const val REWARD_SUCCESS = 0
 		const val REWARD_ERROR_DOES_NOT_EXIST = 1
@@ -804,6 +810,7 @@ class Study internal constructor(
 			KEY_FAQ,
 			KEY_HAS_STATISTICS,
 			KEY_LANG_CODES,
+            KEY_ADDITIONAL_DAYS_ACTIVE,
 		)
 		
 		val defaultSettings = hashMapOf(
