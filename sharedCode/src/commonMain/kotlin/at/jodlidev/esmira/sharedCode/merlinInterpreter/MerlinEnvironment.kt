@@ -26,7 +26,7 @@ class MerlinEnvironment (private val enclosing: MerlinEnvironment? = null) {
         envString.append(
             values.entries.joinToString(separator = "\n", prefix = "-- ") { "${it.key}: ${it.value.getDebugString()}" }
         )
-        envString.append("***********************\n")
+        envString.append("\n***********************\n")
 
         return envString.toString()
     }

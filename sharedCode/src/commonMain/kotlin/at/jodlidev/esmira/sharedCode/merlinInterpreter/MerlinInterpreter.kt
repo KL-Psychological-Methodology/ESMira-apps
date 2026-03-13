@@ -501,7 +501,7 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                     if (!questionnaire.canBeFilledOut(now)) {
                         ErrorBox.log(
                             "Notification",
-                            "Questionnaire (${questionnaire.title}) is not active at ${NativeLink.formatDateTime(now)}. Skippin notification."
+                            "Questionnaire (${questionnaire.title}) is not active at ${NativeLink.formatDateTime(now)}. Skipping notification."
                         )
                         return MerlinType.createBool(false)
                     }
