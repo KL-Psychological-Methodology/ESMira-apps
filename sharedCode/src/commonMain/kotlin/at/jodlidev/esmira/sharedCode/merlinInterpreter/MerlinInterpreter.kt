@@ -327,7 +327,7 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                     val questionnaire = interpreter.getQuestionnaire() ?: return MerlinNone
                     val getSystemValue = fun(inputName: String): MerlinType {
                         return when (inputName) {
-                            "_randomGroup" -> {
+                            "*randomGroup" -> {
                                 val study = DbLogic.getStudy(questionnaire.studyId) ?: return MerlinNone
                                 MerlinNumber(study.group.toDouble())
                             }
