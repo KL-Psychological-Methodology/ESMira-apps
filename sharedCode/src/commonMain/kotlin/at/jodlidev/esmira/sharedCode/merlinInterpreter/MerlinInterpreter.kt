@@ -327,10 +327,27 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                     val questionnaire = interpreter.getQuestionnaire() ?: return MerlinNone
                     val getSystemValue = fun(inputName: String): MerlinType {
                         return when (inputName) {
-                            "*randomGroup" -> {
+                            "group" -> {
                                 val study = DbLogic.getStudy(questionnaire.studyId) ?: return MerlinNone
                                 MerlinNumber(study.group.toDouble())
                             }
+                            "studyId" -> {
+                                val study = DbLogic.getStudy(questionnaire.studyId) ?: return MerlinNone
+                                MerlinNumber(study.webId.toDouble())
+                            }
+                            "studyVersion" -> {
+                                val study = DbLogic.getStudy(questionnaire.studyId) ?: return MerlinNone
+                                MerlinNumber(study.version.toDouble())
+                            }
+                            "studyLang" -> {
+                                val study = DbLogic.getStudy(questionnaire.studyId) ?: return MerlinNone
+                                MerlinString(study.lang)
+                            }
+                            "questionnaireName" -> MerlinString(questionnaire.title)
+                            "appType" -> MerlinString(NativeLink.smartphoneData.appType)
+                            "appVersion" -> MerlinString(NativeLink.smartphoneData.appVersion)
+                            "timezone" -> MerlinString(NativeLink.getTimezone())
+                            "timezoneOffset" -> MerlinNumber(NativeLink.getTimezoneOffsetMillis().toDouble())
                             else -> MerlinNone
                         }
                     }
