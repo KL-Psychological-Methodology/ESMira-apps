@@ -325,37 +325,7 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                     arguments: List<MerlinType>
                 ): MerlinType {
                     val questionnaire = interpreter.getQuestionnaire() ?: return MerlinNone
-                    val getSystemValue = fun(inputName: String): MerlinType {
-                        return when (inputName) {
-                            "group" -> {
-                                val study = DbLogic.getStudy(questionnaire.studyId) ?: return MerlinNone
-                                MerlinNumber(study.group.toDouble())
-                            }
-                            "studyId" -> {
-                                val study = DbLogic.getStudy(questionnaire.studyId) ?: return MerlinNone
-                                MerlinNumber(study.webId.toDouble())
-                            }
-                            "studyVersion" -> {
-                                val study = DbLogic.getStudy(questionnaire.studyId) ?: return MerlinNone
-                                MerlinNumber(study.version.toDouble())
-                            }
-                            "studyLang" -> {
-                                val study = DbLogic.getStudy(questionnaire.studyId) ?: return MerlinNone
-                                MerlinString(study.lang)
-                            }
-                            "questionnaireName" -> MerlinString(questionnaire.title)
-                            "appType" -> MerlinString(NativeLink.smartphoneData.appType)
-                            "appVersion" -> MerlinString(NativeLink.smartphoneData.appVersion)
-                            "timezone" -> MerlinString(NativeLink.getTimezone())
-                            "timezoneOffset" -> MerlinNumber(NativeLink.getTimezoneOffsetMillis().toDouble())
-                            else -> MerlinNone
-                        }
-                    }
-                    val getSingleValue = fun(inputName: String): MerlinType {
-                        val systemValue = getSystemValue(inputName)
-                        if (systemValue !is MerlinNone)
-                            return systemValue
-
+                    val getSingleValue = { inputName: String ->
                         var out: MerlinType = MerlinNone
                         for (page in questionnaire.pages) {
                             for (input in page.inputs) {
@@ -366,7 +336,7 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
                                 }
                             }
                         }
-                        return out
+                        out
                     }
                     val arg = arguments[0]
                     return if (arg is MerlinArray) {
