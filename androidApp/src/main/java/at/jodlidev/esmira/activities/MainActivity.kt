@@ -82,6 +82,7 @@ class MainActivity: ComponentActivity() {
                         DialogOpener.dialog(resources.getString(R.string.notification_expired_title), resources.getString(R.string.notification_expired_info), false)
                     }
 				}
+                intent.removeExtra(EXTRA_OPEN_QUESTIONNAIRE)
 			}
 		}
 		
