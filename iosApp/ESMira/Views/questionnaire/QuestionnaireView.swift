@@ -23,7 +23,6 @@ struct QuestionnaireView: View {
 	@State private var pageIsActive = true
 	
 	@State var skipPageTimer: DispatchSourceTimer? = nil
-	@State var didRemindOfEmptyResponses = false
 	
 	/**
 	 * Only called from ContentView
@@ -51,20 +50,7 @@ struct QuestionnaireView: View {
 		self.appState.showToast(NSLocalizedString("error_missing_fields", comment: ""))
 		return false
 	}
-	
-	private func hintMissings() -> Bool {
-		if(didRemindOfEmptyResponses) {
-			return true
-		}
-		let emptyRespnoseIndex = self.questionnaire.checkQuestionnaire(pageI: Int32(self.pageIndex), checkAll: true)
-		if(emptyRespnoseIndex == -1) {
-			return true
-		}
-		self.action = .toTag(tag: Int(emptyRespnoseIndex))
-		self.appState.showToast(NSLocalizedString("hint_missing_fields", comment: ""))
-		didRemindOfEmptyResponses = true
-		return false
-	}
+
 
 	private func getBackgroundColor(_ i: Int) -> Color {
 		return (i % 2 != 0) ? Color("ListColor1") : Color("ListColor2")
@@ -114,7 +100,7 @@ struct QuestionnaireView: View {
 					HStack {
 						Spacer()
 						Button(action: {
-							if(self.noMissings() && self.hintMissings()) {
+							if(self.noMissings()) {
 								goNext()
 							}
 						}) {
@@ -128,7 +114,7 @@ struct QuestionnaireView: View {
 					HStack {
 						Spacer()
 						Button(action: {
-							if(self.noMissings() && self.hintMissings()) {
+							if(self.noMissings()) {
 								self.pageIsActive = false
 								goNext()
 							}
