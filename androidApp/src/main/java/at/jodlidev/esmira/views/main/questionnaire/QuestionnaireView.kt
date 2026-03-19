@@ -49,7 +49,6 @@ fun QuestionnaireView(
 	val coroutineScope = rememberCoroutineScope()
 	val page = questionnaire.getPage(pageNumber)
 	val pageIsActive = remember { mutableStateOf(true) }
-	val didRemindOfEmptyResponses = remember { mutableStateOf(false) }
 	if(page.skipAfterSecs != 0) {
 		val currentGoNext = rememberUpdatedState(newValue = goNext)
 		LaunchedEffect(Unit) {
@@ -74,15 +73,6 @@ fun QuestionnaireView(
 					listState.animateScrollToItem(errorIndex)
 				}
 				
-				return@MainView
-			}
-			val emptyResponseIndex = questionnaire.checkQuestionnaire(pageNumber, true)
-			if (!didRemindOfEmptyResponses.value && emptyResponseIndex != -1) {
-				Toast.makeText(context, R.string.hint_missing_fields, Toast.LENGTH_LONG).show()
-				coroutineScope.launch {
-					listState.animateScrollToItem(emptyResponseIndex)
-				}
-				didRemindOfEmptyResponses.value = true
 				return@MainView
 			}
 			pageIsActive.value = false
