@@ -149,7 +149,11 @@ class MerlinNumber (val value: Double): MerlinType() {
                 MerlinTokenType.PLUS -> Result.success(MerlinNumber(value + other.value))
                 MerlinTokenType.MINUS -> Result.success(MerlinNumber(value - other.value))
                 MerlinTokenType.STAR -> Result.success(MerlinNumber(value * other.value))
-                MerlinTokenType.SLASH -> Result.success(MerlinNumber(value / other.value))
+                MerlinTokenType.SLASH -> if(other.value != 0.0) {
+                    Result.success(MerlinNumber(value / other.value))
+                } else {
+                    Result.failure(MerlinRuntimeError(operator, "Division by zero."))
+                }
                 MerlinTokenType.MODULO -> Result.success(MerlinNumber(value % other.value))
                 MerlinTokenType.EQUAL_EQUAL -> Result.success(createBool(value == other.value))
                 MerlinTokenType.EXCLAMATION_EQUAL -> Result.success(createBool(value != other.value))
