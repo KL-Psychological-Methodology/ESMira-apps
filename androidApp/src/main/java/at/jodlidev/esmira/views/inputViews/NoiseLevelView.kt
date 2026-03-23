@@ -135,9 +135,8 @@ fun NoiseLevelView(input: Input, get: () -> String, save: (String, Map<String, S
                         var sum = 0.0
                         var sumSquares = 0.0
                         for(j in 0..<SAMPLE_RATE) {
-                            val sample = buffer[i+j].toDouble()
+                            val sample = buffer[i*SAMPLE_RATE+j].toDouble()
                             sum += sample
-                            sumTotal += sample
                             sumSquares += sample * sample
 
                         }
