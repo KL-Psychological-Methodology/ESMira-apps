@@ -59,8 +59,8 @@ class IosCode: IosCodeInterface {
 		formatter.timeStyle = .none
 		let date1 = formatter.date(from: formatter.string(from: Date(timeIntervalSince1970: Double(ms1)/1000))) ?? Date(timeIntervalSince1970: 0)
 		let date2 = formatter.date(from: formatter.string(from: Date(timeIntervalSince1970: Double(ms2)/1000))) ?? Date(timeIntervalSince1970: 0)
-		let diff = Calendar.current.dateComponents([.day], from: date1, to: date2)
-		return Int64(diff.day!)
+		let diff = Calendar.current.dateComponents([.day], from: date1, to: date2).day
+		return Int64(abs(diff!))
 	}
 	
 	/**
