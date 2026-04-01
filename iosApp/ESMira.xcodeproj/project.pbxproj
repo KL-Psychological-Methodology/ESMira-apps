@@ -13,6 +13,78 @@
 		6B13CF5A28F808580035BA01 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B13CF5928F808580035BA01 /* ShareSheet.swift */; };
 		6B1BB1172B2F28D0009B09C3 /* ZMarkupParser in Frameworks */ = {isa = PBXBuildFile; productRef = 6B1BB1162B2F28D0009B09C3 /* ZMarkupParser */; };
 		6B268B282BA844E700ED2F6C /* LocationStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B268B272BA844E700ED2F6C /* LocationStruct.swift */; };
+		6B2E56C22F7CF43C00052C84 /* Web.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56BB2F7CF43C00052C84 /* Web.kt */; };
+		6B2E56C32F7CF43C00052C84 /* Updater.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56BA2F7CF43C00052C84 /* Updater.kt */; };
+		6B2E56C42F7CF43C00052C84 /* EventTrigger.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E567E2F7CF43C00052C84 /* EventTrigger.kt */; };
+		6B2E56C52F7CF43C00052C84 /* LineChartBuilder.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E569D2F7CF43C00052C84 /* LineChartBuilder.kt */; };
+		6B2E56C62F7CF43C00052C84 /* SignalTime.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56892F7CF43C00052C84 /* SignalTime.kt */; };
+		6B2E56C72F7CF43C00052C84 /* FileUpload.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E567F2F7CF43C00052C84 /* FileUpload.kt */; };
+		6B2E56C82F7CF43C00052C84 /* ObservedVariable.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56832F7CF43C00052C84 /* ObservedVariable.kt */; };
+		6B2E56C92F7CF43C00052C84 /* DataSet.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E567A2F7CF43C00052C84 /* DataSet.kt */; };
+		6B2E56CA2F7CF43C00052C84 /* SmartphoneDataInterface.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56B62F7CF43C00052C84 /* SmartphoneDataInterface.kt */; };
+		6B2E56CB2F7CF43C00052C84 /* ChartFormatterInterface.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56A42F7CF43C00052C84 /* ChartFormatterInterface.kt */; };
+		6B2E56CC2F7CF43C00052C84 /* ServerList.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56B52F7CF43C00052C84 /* ServerList.kt */; };
+		6B2E56CD2F7CF43C00052C84 /* Input.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56802F7CF43C00052C84 /* Input.kt */; };
+		6B2E56CE2F7CF43C00052C84 /* PostponedActionsInterface.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56B22F7CF43C00052C84 /* PostponedActionsInterface.kt */; };
+		6B2E56CF2F7CF43C00052C84 /* StatisticData.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56732F7CF43C00052C84 /* StatisticData.kt */; };
+		6B2E56D02F7CF43C00052C84 /* ErrorBox.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E567D2F7CF43C00052C84 /* ErrorBox.kt */; };
+		6B2E56D12F7CF43C00052C84 /* ChartChooserInterface.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56A22F7CF43C00052C84 /* ChartChooserInterface.kt */; };
+		6B2E56D22F7CF43C00052C84 /* MerlinLog.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56812F7CF43C00052C84 /* MerlinLog.kt */; };
+		6B2E56D32F7CF43C00052C84 /* Schedule.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56882F7CF43C00052C84 /* Schedule.kt */; };
+		6B2E56D42F7CF43C00052C84 /* MerlinStmt.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56982F7CF43C00052C84 /* MerlinStmt.kt */; };
+		6B2E56D52F7CF43C00052C84 /* NativeLink.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56AF2F7CF43C00052C84 /* NativeLink.kt */; };
+		6B2E56D62F7CF43C00052C84 /* SQLiteCursor.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56B72F7CF43C00052C84 /* SQLiteCursor.kt */; };
+		6B2E56D72F7CF43C00052C84 /* PhoneType.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56B12F7CF43C00052C84 /* PhoneType.kt */; };
+		6B2E56D82F7CF43C00052C84 /* Questionnaire.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56852F7CF43C00052C84 /* Questionnaire.kt */; };
+		6B2E56D92F7CF43C00052C84 /* BarChartBuilder.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E569C2F7CF43C00052C84 /* BarChartBuilder.kt */; };
+		6B2E56DA2F7CF43C00052C84 /* MerlinExceptions.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56912F7CF43C00052C84 /* MerlinExceptions.kt */; };
+		6B2E56DB2F7CF43C00052C84 /* Page.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56842F7CF43C00052C84 /* Page.kt */; };
+		6B2E56DC2F7CF43C00052C84 /* SQLiteInterface.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56B82F7CF43C00052C84 /* SQLiteInterface.kt */; };
+		6B2E56DD2F7CF43C00052C84 /* QuestionnaireMetadata.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56872F7CF43C00052C84 /* QuestionnaireMetadata.kt */; };
+		6B2E56DE2F7CF43C00052C84 /* MerlinParser.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56952F7CF43C00052C84 /* MerlinParser.kt */; };
+		6B2E56DF2F7CF43C00052C84 /* MerlinFunction.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56932F7CF43C00052C84 /* MerlinFunction.kt */; };
+		6B2E56E02F7CF43C00052C84 /* ChartInfoCollection.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56702F7CF43C00052C84 /* ChartInfoCollection.kt */; };
+		6B2E56E12F7CF43C00052C84 /* Alarm.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56792F7CF43C00052C84 /* Alarm.kt */; };
+		6B2E56E22F7CF43C00052C84 /* DialogOpenerInterface.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56A92F7CF43C00052C84 /* DialogOpenerInterface.kt */; };
+		6B2E56E32F7CF43C00052C84 /* ChartDataSetInterface.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56A32F7CF43C00052C84 /* ChartDataSetInterface.kt */; };
+		6B2E56E42F7CF43C00052C84 /* UploadData.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E568D2F7CF43C00052C84 /* UploadData.kt */; };
+		6B2E56E52F7CF43C00052C84 /* DbLogic.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56A82F7CF43C00052C84 /* DbLogic.kt */; };
+		6B2E56E62F7CF43C00052C84 /* Condition.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56712F7CF43C00052C84 /* Condition.kt */; };
+		6B2E56E72F7CF43C00052C84 /* MerlinInterpreter.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56942F7CF43C00052C84 /* MerlinInterpreter.kt */; };
+		6B2E56E82F7CF43C00052C84 /* MerlinRunner.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56962F7CF43C00052C84 /* MerlinRunner.kt */; };
+		6B2E56E92F7CF43C00052C84 /* DueDateFormatter.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56AA2F7CF43C00052C84 /* DueDateFormatter.kt */; };
+		6B2E56EA2F7CF43C00052C84 /* QrInterpreter.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56B32F7CF43C00052C84 /* QrInterpreter.kt */; };
+		6B2E56EB2F7CF43C00052C84 /* MerlinToken.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56992F7CF43C00052C84 /* MerlinToken.kt */; };
+		6B2E56EC2F7CF43C00052C84 /* StatisticBox.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56722F7CF43C00052C84 /* StatisticBox.kt */; };
+		6B2E56ED2F7CF43C00052C84 /* JsonToStringSerializer.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56AE2F7CF43C00052C84 /* JsonToStringSerializer.kt */; };
+		6B2E56EE2F7CF43C00052C84 /* ChartInfo.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E566F2F7CF43C00052C84 /* ChartInfo.kt */; };
+		6B2E56EF2F7CF43C00052C84 /* SQLiteValues.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56B92F7CF43C00052C84 /* SQLiteValues.kt */; };
+		6B2E56F02F7CF43C00052C84 /* Study.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E568A2F7CF43C00052C84 /* Study.kt */; };
+		6B2E56F12F7CF43C00052C84 /* NotificationsInterface.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56B02F7CF43C00052C84 /* NotificationsInterface.kt */; };
+		6B2E56F22F7CF43C00052C84 /* ChartViewInterface.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56A52F7CF43C00052C84 /* ChartViewInterface.kt */; };
+		6B2E56F32F7CF43C00052C84 /* StatisticData_perData.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56742F7CF43C00052C84 /* StatisticData_perData.kt */; };
+		6B2E56F42F7CF43C00052C84 /* InputViewInterface.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56AD2F7CF43C00052C84 /* InputViewInterface.kt */; };
+		6B2E56F52F7CF43C00052C84 /* MerlinTypes.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E569A2F7CF43C00052C84 /* MerlinTypes.kt */; };
+		6B2E56F62F7CF43C00052C84 /* MerlinEnvironment.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56902F7CF43C00052C84 /* MerlinEnvironment.kt */; };
+		6B2E56F72F7CF43C00052C84 /* ChartBuilder.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56A12F7CF43C00052C84 /* ChartBuilder.kt */; };
+		6B2E56F82F7CF43C00052C84 /* DbUser.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E567B2F7CF43C00052C84 /* DbUser.kt */; };
+		6B2E56F92F7CF43C00052C84 /* MerlinExpr.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56922F7CF43C00052C84 /* MerlinExpr.kt */; };
+		6B2E56FA2F7CF43C00052C84 /* Message.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56822F7CF43C00052C84 /* Message.kt */; };
+		6B2E56FB2F7CF43C00052C84 /* H3.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56AC2F7CF43C00052C84 /* H3.kt */; };
+		6B2E56FC2F7CF43C00052C84 /* StatisticData_perValue.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56752F7CF43C00052C84 /* StatisticData_perValue.kt */; };
+		6B2E56FD2F7CF43C00052C84 /* StatisticData_timed.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56762F7CF43C00052C84 /* StatisticData_timed.kt */; };
+		6B2E56FE2F7CF43C00052C84 /* VirtualInput.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E568E2F7CF43C00052C84 /* VirtualInput.kt */; };
+		6B2E56FF2F7CF43C00052C84 /* DynamicInputData.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E567C2F7CF43C00052C84 /* DynamicInputData.kt */; };
+		6B2E57002F7CF43C00052C84 /* common.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56A72F7CF43C00052C84 /* common.kt */; };
+		6B2E57012F7CF43C00052C84 /* SumScore.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E568C2F7CF43C00052C84 /* SumScore.kt */; };
+		6B2E57022F7CF43C00052C84 /* ActionTrigger.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56782F7CF43C00052C84 /* ActionTrigger.kt */; };
+		6B2E57032F7CF43C00052C84 /* QuestionnaireCache.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56862F7CF43C00052C84 /* QuestionnaireCache.kt */; };
+		6B2E57042F7CF43C00052C84 /* MerlinScanner.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56972F7CF43C00052C84 /* MerlinScanner.kt */; };
+		6B2E57052F7CF43C00052C84 /* FileOpener.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56AB2F7CF43C00052C84 /* FileOpener.kt */; };
+		6B2E57062F7CF43C00052C84 /* StudyToken.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E568B2F7CF43C00052C84 /* StudyToken.kt */; };
+		6B2E57072F7CF43C00052C84 /* ScatterChartBuilder.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E569F2F7CF43C00052C84 /* ScatterChartBuilder.kt */; };
+		6B2E57082F7CF43C00052C84 /* Scheduler.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56B42F7CF43C00052C84 /* Scheduler.kt */; };
+		6B2E57092F7CF43C00052C84 /* PieChartBuilder.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E569E2F7CF43C00052C84 /* PieChartBuilder.kt */; };
 		6B39B7A52F3B700600C81D68 /* ExpiredNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B39B7A42F3B6FFD00C81D68 /* ExpiredNotificationView.swift */; };
 		6B39B7A72F59BFFB00C81D68 /* NoiseLevelStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B39B7A62F59BFF100C81D68 /* NoiseLevelStruct.swift */; };
 		6B3A92C029E5C8250081A554 /* UploadProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3A92BF29E5C8250081A554 /* UploadProtocol.swift */; };
@@ -141,8 +213,84 @@
 		6B012BF12DB9241B00F7A3B8 /* BatteryLevelStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BatteryLevelStruct.swift; sourceTree = "<group>"; };
 		6B13CF5928F808580035BA01 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
 		6B268B272BA844E700ED2F6C /* LocationStruct.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LocationStruct.swift; path = ESMira/iosNative/inputViews/LocationStruct.swift; sourceTree = SOURCE_ROOT; };
+		6B2E566F2F7CF43C00052C84 /* ChartInfo.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChartInfo.kt; sourceTree = "<group>"; };
+		6B2E56702F7CF43C00052C84 /* ChartInfoCollection.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChartInfoCollection.kt; sourceTree = "<group>"; };
+		6B2E56712F7CF43C00052C84 /* Condition.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Condition.kt; sourceTree = "<group>"; };
+		6B2E56722F7CF43C00052C84 /* StatisticBox.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = StatisticBox.kt; sourceTree = "<group>"; };
+		6B2E56732F7CF43C00052C84 /* StatisticData.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = StatisticData.kt; sourceTree = "<group>"; };
+		6B2E56742F7CF43C00052C84 /* StatisticData_perData.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = StatisticData_perData.kt; sourceTree = "<group>"; };
+		6B2E56752F7CF43C00052C84 /* StatisticData_perValue.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = StatisticData_perValue.kt; sourceTree = "<group>"; };
+		6B2E56762F7CF43C00052C84 /* StatisticData_timed.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = StatisticData_timed.kt; sourceTree = "<group>"; };
+		6B2E56782F7CF43C00052C84 /* ActionTrigger.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ActionTrigger.kt; sourceTree = "<group>"; };
+		6B2E56792F7CF43C00052C84 /* Alarm.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Alarm.kt; sourceTree = "<group>"; };
+		6B2E567A2F7CF43C00052C84 /* DataSet.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = DataSet.kt; sourceTree = "<group>"; };
+		6B2E567B2F7CF43C00052C84 /* DbUser.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = DbUser.kt; sourceTree = "<group>"; };
+		6B2E567C2F7CF43C00052C84 /* DynamicInputData.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = DynamicInputData.kt; sourceTree = "<group>"; };
+		6B2E567D2F7CF43C00052C84 /* ErrorBox.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ErrorBox.kt; sourceTree = "<group>"; };
+		6B2E567E2F7CF43C00052C84 /* EventTrigger.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = EventTrigger.kt; sourceTree = "<group>"; };
+		6B2E567F2F7CF43C00052C84 /* FileUpload.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = FileUpload.kt; sourceTree = "<group>"; };
+		6B2E56802F7CF43C00052C84 /* Input.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Input.kt; sourceTree = "<group>"; };
+		6B2E56812F7CF43C00052C84 /* MerlinLog.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MerlinLog.kt; sourceTree = "<group>"; };
+		6B2E56822F7CF43C00052C84 /* Message.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Message.kt; sourceTree = "<group>"; };
+		6B2E56832F7CF43C00052C84 /* ObservedVariable.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ObservedVariable.kt; sourceTree = "<group>"; };
+		6B2E56842F7CF43C00052C84 /* Page.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Page.kt; sourceTree = "<group>"; };
+		6B2E56852F7CF43C00052C84 /* Questionnaire.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Questionnaire.kt; sourceTree = "<group>"; };
+		6B2E56862F7CF43C00052C84 /* QuestionnaireCache.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = QuestionnaireCache.kt; sourceTree = "<group>"; };
+		6B2E56872F7CF43C00052C84 /* QuestionnaireMetadata.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = QuestionnaireMetadata.kt; sourceTree = "<group>"; };
+		6B2E56882F7CF43C00052C84 /* Schedule.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Schedule.kt; sourceTree = "<group>"; };
+		6B2E56892F7CF43C00052C84 /* SignalTime.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = SignalTime.kt; sourceTree = "<group>"; };
+		6B2E568A2F7CF43C00052C84 /* Study.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Study.kt; sourceTree = "<group>"; };
+		6B2E568B2F7CF43C00052C84 /* StudyToken.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = StudyToken.kt; sourceTree = "<group>"; };
+		6B2E568C2F7CF43C00052C84 /* SumScore.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = SumScore.kt; sourceTree = "<group>"; };
+		6B2E568D2F7CF43C00052C84 /* UploadData.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = UploadData.kt; sourceTree = "<group>"; };
+		6B2E568E2F7CF43C00052C84 /* VirtualInput.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = VirtualInput.kt; sourceTree = "<group>"; };
+		6B2E56902F7CF43C00052C84 /* MerlinEnvironment.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MerlinEnvironment.kt; sourceTree = "<group>"; };
+		6B2E56912F7CF43C00052C84 /* MerlinExceptions.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MerlinExceptions.kt; sourceTree = "<group>"; };
+		6B2E56922F7CF43C00052C84 /* MerlinExpr.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MerlinExpr.kt; sourceTree = "<group>"; };
+		6B2E56932F7CF43C00052C84 /* MerlinFunction.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MerlinFunction.kt; sourceTree = "<group>"; };
+		6B2E56942F7CF43C00052C84 /* MerlinInterpreter.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MerlinInterpreter.kt; sourceTree = "<group>"; };
+		6B2E56952F7CF43C00052C84 /* MerlinParser.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MerlinParser.kt; sourceTree = "<group>"; };
+		6B2E56962F7CF43C00052C84 /* MerlinRunner.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MerlinRunner.kt; sourceTree = "<group>"; };
+		6B2E56972F7CF43C00052C84 /* MerlinScanner.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MerlinScanner.kt; sourceTree = "<group>"; };
+		6B2E56982F7CF43C00052C84 /* MerlinStmt.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MerlinStmt.kt; sourceTree = "<group>"; };
+		6B2E56992F7CF43C00052C84 /* MerlinToken.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MerlinToken.kt; sourceTree = "<group>"; };
+		6B2E569A2F7CF43C00052C84 /* MerlinTypes.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = MerlinTypes.kt; sourceTree = "<group>"; };
+		6B2E569C2F7CF43C00052C84 /* BarChartBuilder.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = BarChartBuilder.kt; sourceTree = "<group>"; };
+		6B2E569D2F7CF43C00052C84 /* LineChartBuilder.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = LineChartBuilder.kt; sourceTree = "<group>"; };
+		6B2E569E2F7CF43C00052C84 /* PieChartBuilder.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = PieChartBuilder.kt; sourceTree = "<group>"; };
+		6B2E569F2F7CF43C00052C84 /* ScatterChartBuilder.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ScatterChartBuilder.kt; sourceTree = "<group>"; };
+		6B2E56A12F7CF43C00052C84 /* ChartBuilder.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChartBuilder.kt; sourceTree = "<group>"; };
+		6B2E56A22F7CF43C00052C84 /* ChartChooserInterface.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChartChooserInterface.kt; sourceTree = "<group>"; };
+		6B2E56A32F7CF43C00052C84 /* ChartDataSetInterface.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChartDataSetInterface.kt; sourceTree = "<group>"; };
+		6B2E56A42F7CF43C00052C84 /* ChartFormatterInterface.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChartFormatterInterface.kt; sourceTree = "<group>"; };
+		6B2E56A52F7CF43C00052C84 /* ChartViewInterface.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ChartViewInterface.kt; sourceTree = "<group>"; };
+		6B2E56A72F7CF43C00052C84 /* common.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = common.kt; sourceTree = "<group>"; };
+		6B2E56A82F7CF43C00052C84 /* DbLogic.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = DbLogic.kt; sourceTree = "<group>"; };
+		6B2E56A92F7CF43C00052C84 /* DialogOpenerInterface.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = DialogOpenerInterface.kt; sourceTree = "<group>"; };
+		6B2E56AA2F7CF43C00052C84 /* DueDateFormatter.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = DueDateFormatter.kt; sourceTree = "<group>"; };
+		6B2E56AB2F7CF43C00052C84 /* FileOpener.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = FileOpener.kt; sourceTree = "<group>"; };
+		6B2E56AC2F7CF43C00052C84 /* H3.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = H3.kt; sourceTree = "<group>"; };
+		6B2E56AD2F7CF43C00052C84 /* InputViewInterface.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = InputViewInterface.kt; sourceTree = "<group>"; };
+		6B2E56AE2F7CF43C00052C84 /* JsonToStringSerializer.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = JsonToStringSerializer.kt; sourceTree = "<group>"; };
+		6B2E56AF2F7CF43C00052C84 /* NativeLink.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = NativeLink.kt; sourceTree = "<group>"; };
+		6B2E56B02F7CF43C00052C84 /* NotificationsInterface.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = NotificationsInterface.kt; sourceTree = "<group>"; };
+		6B2E56B12F7CF43C00052C84 /* PhoneType.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = PhoneType.kt; sourceTree = "<group>"; };
+		6B2E56B22F7CF43C00052C84 /* PostponedActionsInterface.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = PostponedActionsInterface.kt; sourceTree = "<group>"; };
+		6B2E56B32F7CF43C00052C84 /* QrInterpreter.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = QrInterpreter.kt; sourceTree = "<group>"; };
+		6B2E56B42F7CF43C00052C84 /* Scheduler.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Scheduler.kt; sourceTree = "<group>"; };
+		6B2E56B52F7CF43C00052C84 /* ServerList.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = ServerList.kt; sourceTree = "<group>"; };
+		6B2E56B62F7CF43C00052C84 /* SmartphoneDataInterface.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = SmartphoneDataInterface.kt; sourceTree = "<group>"; };
+		6B2E56B72F7CF43C00052C84 /* SQLiteCursor.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = SQLiteCursor.kt; sourceTree = "<group>"; };
+		6B2E56B82F7CF43C00052C84 /* SQLiteInterface.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = SQLiteInterface.kt; sourceTree = "<group>"; };
+		6B2E56B92F7CF43C00052C84 /* SQLiteValues.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = SQLiteValues.kt; sourceTree = "<group>"; };
+		6B2E56BA2F7CF43C00052C84 /* Updater.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Updater.kt; sourceTree = "<group>"; };
+		6B2E56BB2F7CF43C00052C84 /* Web.kt */ = {isa = PBXFileReference; lastKnownFileType = text; path = Web.kt; sourceTree = "<group>"; };
 		6B39B7A42F3B6FFD00C81D68 /* ExpiredNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpiredNotificationView.swift; sourceTree = "<group>"; };
 		6B39B7A62F59BFF100C81D68 /* NoiseLevelStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseLevelStruct.swift; sourceTree = "<group>"; };
+		6B39B7AC2F7A96ED00C81D68 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6B39B7AD2F7A96ED00C81D68 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nl; path = nl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		6B39B7AE2F7A971000C81D68 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = tr; path = tr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		6B39B7AF2F7A971000C81D68 /* tr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = tr; path = tr.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		6B3A92BF29E5C8250081A554 /* UploadProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadProtocol.swift; sourceTree = "<group>"; };
 		6B3A92C129E6E2900081A554 /* AddStudyState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddStudyState.swift; sourceTree = "<group>"; };
 		6B3A92C329E816410081A554 /* AboutESMira.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutESMira.swift; sourceTree = "<group>"; };
@@ -304,6 +452,174 @@
 			path = "Preview Content";
 			sourceTree = "<group>";
 		};
+		6B2E566E2F7CF41F00052C84 /* Kotlin Debug */ = {
+			isa = PBXGroup;
+			children = (
+				6B2E56C12F7CF43C00052C84 /* commonMain */,
+			);
+			path = "Kotlin Debug";
+			sourceTree = "<group>";
+		};
+		6B2E56772F7CF43C00052C84 /* statistics */ = {
+			isa = PBXGroup;
+			children = (
+				6B2E566F2F7CF43C00052C84 /* ChartInfo.kt */,
+				6B2E56702F7CF43C00052C84 /* ChartInfoCollection.kt */,
+				6B2E56712F7CF43C00052C84 /* Condition.kt */,
+				6B2E56722F7CF43C00052C84 /* StatisticBox.kt */,
+				6B2E56732F7CF43C00052C84 /* StatisticData.kt */,
+				6B2E56742F7CF43C00052C84 /* StatisticData_perData.kt */,
+				6B2E56752F7CF43C00052C84 /* StatisticData_perValue.kt */,
+				6B2E56762F7CF43C00052C84 /* StatisticData_timed.kt */,
+			);
+			path = statistics;
+			sourceTree = "<group>";
+		};
+		6B2E568F2F7CF43C00052C84 /* data_structure */ = {
+			isa = PBXGroup;
+			children = (
+				6B2E56772F7CF43C00052C84 /* statistics */,
+				6B2E56782F7CF43C00052C84 /* ActionTrigger.kt */,
+				6B2E56792F7CF43C00052C84 /* Alarm.kt */,
+				6B2E567A2F7CF43C00052C84 /* DataSet.kt */,
+				6B2E567B2F7CF43C00052C84 /* DbUser.kt */,
+				6B2E567C2F7CF43C00052C84 /* DynamicInputData.kt */,
+				6B2E567D2F7CF43C00052C84 /* ErrorBox.kt */,
+				6B2E567E2F7CF43C00052C84 /* EventTrigger.kt */,
+				6B2E567F2F7CF43C00052C84 /* FileUpload.kt */,
+				6B2E56802F7CF43C00052C84 /* Input.kt */,
+				6B2E56812F7CF43C00052C84 /* MerlinLog.kt */,
+				6B2E56822F7CF43C00052C84 /* Message.kt */,
+				6B2E56832F7CF43C00052C84 /* ObservedVariable.kt */,
+				6B2E56842F7CF43C00052C84 /* Page.kt */,
+				6B2E56852F7CF43C00052C84 /* Questionnaire.kt */,
+				6B2E56862F7CF43C00052C84 /* QuestionnaireCache.kt */,
+				6B2E56872F7CF43C00052C84 /* QuestionnaireMetadata.kt */,
+				6B2E56882F7CF43C00052C84 /* Schedule.kt */,
+				6B2E56892F7CF43C00052C84 /* SignalTime.kt */,
+				6B2E568A2F7CF43C00052C84 /* Study.kt */,
+				6B2E568B2F7CF43C00052C84 /* StudyToken.kt */,
+				6B2E568C2F7CF43C00052C84 /* SumScore.kt */,
+				6B2E568D2F7CF43C00052C84 /* UploadData.kt */,
+				6B2E568E2F7CF43C00052C84 /* VirtualInput.kt */,
+			);
+			path = data_structure;
+			sourceTree = "<group>";
+		};
+		6B2E569B2F7CF43C00052C84 /* merlinInterpreter */ = {
+			isa = PBXGroup;
+			children = (
+				6B2E56902F7CF43C00052C84 /* MerlinEnvironment.kt */,
+				6B2E56912F7CF43C00052C84 /* MerlinExceptions.kt */,
+				6B2E56922F7CF43C00052C84 /* MerlinExpr.kt */,
+				6B2E56932F7CF43C00052C84 /* MerlinFunction.kt */,
+				6B2E56942F7CF43C00052C84 /* MerlinInterpreter.kt */,
+				6B2E56952F7CF43C00052C84 /* MerlinParser.kt */,
+				6B2E56962F7CF43C00052C84 /* MerlinRunner.kt */,
+				6B2E56972F7CF43C00052C84 /* MerlinScanner.kt */,
+				6B2E56982F7CF43C00052C84 /* MerlinStmt.kt */,
+				6B2E56992F7CF43C00052C84 /* MerlinToken.kt */,
+				6B2E569A2F7CF43C00052C84 /* MerlinTypes.kt */,
+			);
+			path = merlinInterpreter;
+			sourceTree = "<group>";
+		};
+		6B2E56A02F7CF43C00052C84 /* chartBuilder */ = {
+			isa = PBXGroup;
+			children = (
+				6B2E569C2F7CF43C00052C84 /* BarChartBuilder.kt */,
+				6B2E569D2F7CF43C00052C84 /* LineChartBuilder.kt */,
+				6B2E569E2F7CF43C00052C84 /* PieChartBuilder.kt */,
+				6B2E569F2F7CF43C00052C84 /* ScatterChartBuilder.kt */,
+			);
+			path = chartBuilder;
+			sourceTree = "<group>";
+		};
+		6B2E56A62F7CF43C00052C84 /* statistics */ = {
+			isa = PBXGroup;
+			children = (
+				6B2E56A02F7CF43C00052C84 /* chartBuilder */,
+				6B2E56A12F7CF43C00052C84 /* ChartBuilder.kt */,
+				6B2E56A22F7CF43C00052C84 /* ChartChooserInterface.kt */,
+				6B2E56A32F7CF43C00052C84 /* ChartDataSetInterface.kt */,
+				6B2E56A42F7CF43C00052C84 /* ChartFormatterInterface.kt */,
+				6B2E56A52F7CF43C00052C84 /* ChartViewInterface.kt */,
+			);
+			path = statistics;
+			sourceTree = "<group>";
+		};
+		6B2E56BC2F7CF43C00052C84 /* sharedCode */ = {
+			isa = PBXGroup;
+			children = (
+				6B2E568F2F7CF43C00052C84 /* data_structure */,
+				6B2E569B2F7CF43C00052C84 /* merlinInterpreter */,
+				6B2E56A62F7CF43C00052C84 /* statistics */,
+				6B2E56A72F7CF43C00052C84 /* common.kt */,
+				6B2E56A82F7CF43C00052C84 /* DbLogic.kt */,
+				6B2E56A92F7CF43C00052C84 /* DialogOpenerInterface.kt */,
+				6B2E56AA2F7CF43C00052C84 /* DueDateFormatter.kt */,
+				6B2E56AB2F7CF43C00052C84 /* FileOpener.kt */,
+				6B2E56AC2F7CF43C00052C84 /* H3.kt */,
+				6B2E56AD2F7CF43C00052C84 /* InputViewInterface.kt */,
+				6B2E56AE2F7CF43C00052C84 /* JsonToStringSerializer.kt */,
+				6B2E56AF2F7CF43C00052C84 /* NativeLink.kt */,
+				6B2E56B02F7CF43C00052C84 /* NotificationsInterface.kt */,
+				6B2E56B12F7CF43C00052C84 /* PhoneType.kt */,
+				6B2E56B22F7CF43C00052C84 /* PostponedActionsInterface.kt */,
+				6B2E56B32F7CF43C00052C84 /* QrInterpreter.kt */,
+				6B2E56B42F7CF43C00052C84 /* Scheduler.kt */,
+				6B2E56B52F7CF43C00052C84 /* ServerList.kt */,
+				6B2E56B62F7CF43C00052C84 /* SmartphoneDataInterface.kt */,
+				6B2E56B72F7CF43C00052C84 /* SQLiteCursor.kt */,
+				6B2E56B82F7CF43C00052C84 /* SQLiteInterface.kt */,
+				6B2E56B92F7CF43C00052C84 /* SQLiteValues.kt */,
+				6B2E56BA2F7CF43C00052C84 /* Updater.kt */,
+				6B2E56BB2F7CF43C00052C84 /* Web.kt */,
+			);
+			path = sharedCode;
+			sourceTree = "<group>";
+		};
+		6B2E56BD2F7CF43C00052C84 /* esmira */ = {
+			isa = PBXGroup;
+			children = (
+				6B2E56BC2F7CF43C00052C84 /* sharedCode */,
+			);
+			path = esmira;
+			sourceTree = "<group>";
+		};
+		6B2E56BE2F7CF43C00052C84 /* jodlidev */ = {
+			isa = PBXGroup;
+			children = (
+				6B2E56BD2F7CF43C00052C84 /* esmira */,
+			);
+			path = jodlidev;
+			sourceTree = "<group>";
+		};
+		6B2E56BF2F7CF43C00052C84 /* at */ = {
+			isa = PBXGroup;
+			children = (
+				6B2E56BE2F7CF43C00052C84 /* jodlidev */,
+			);
+			path = at;
+			sourceTree = "<group>";
+		};
+		6B2E56C02F7CF43C00052C84 /* kotlin */ = {
+			isa = PBXGroup;
+			children = (
+				6B2E56BF2F7CF43C00052C84 /* at */,
+			);
+			path = kotlin;
+			sourceTree = "<group>";
+		};
+		6B2E56C12F7CF43C00052C84 /* commonMain */ = {
+			isa = PBXGroup;
+			children = (
+				6B2E56C02F7CF43C00052C84 /* kotlin */,
+			);
+			name = commonMain;
+			path = ../sharedCode/src/commonMain;
+			sourceTree = SOURCE_ROOT;
+		};
 		6B92BF3229DC38F80011E8D9 /* questionnaire */ = {
 			isa = PBXGroup;
 			children = (
@@ -464,6 +780,7 @@
 		7555FF72242A565900829871 = {
 			isa = PBXGroup;
 			children = (
+				6B2E566E2F7CF41F00052C84 /* Kotlin Debug */,
 				7555FF7D242A565900829871 /* ESMira */,
 				7555FF7C242A565900829871 /* Products */,
 				7555FFB0242A642200829871 /* Frameworks */,
@@ -577,6 +894,8 @@
 				"nb-NO",
 				pl,
 				pt,
+				nl,
+				tr,
 			);
 			mainGroup = 7555FF72242A565900829871;
 			packageReferences = (
@@ -602,6 +921,78 @@
 				6B4996D12825BD6300D8B6F1 /* Colors.xcassets in Resources */,
 				6B4996DB2825BE3B00D8B6F1 /* Localizable.strings in Resources */,
 				058557D9273AAEEB004C7B11 /* Preview Assets.xcassets in Resources */,
+				6B2E56C22F7CF43C00052C84 /* Web.kt in Resources */,
+				6B2E56C32F7CF43C00052C84 /* Updater.kt in Resources */,
+				6B2E56C42F7CF43C00052C84 /* EventTrigger.kt in Resources */,
+				6B2E56C52F7CF43C00052C84 /* LineChartBuilder.kt in Resources */,
+				6B2E56C62F7CF43C00052C84 /* SignalTime.kt in Resources */,
+				6B2E56C72F7CF43C00052C84 /* FileUpload.kt in Resources */,
+				6B2E56C82F7CF43C00052C84 /* ObservedVariable.kt in Resources */,
+				6B2E56C92F7CF43C00052C84 /* DataSet.kt in Resources */,
+				6B2E56CA2F7CF43C00052C84 /* SmartphoneDataInterface.kt in Resources */,
+				6B2E56CB2F7CF43C00052C84 /* ChartFormatterInterface.kt in Resources */,
+				6B2E56CC2F7CF43C00052C84 /* ServerList.kt in Resources */,
+				6B2E56CD2F7CF43C00052C84 /* Input.kt in Resources */,
+				6B2E56CE2F7CF43C00052C84 /* PostponedActionsInterface.kt in Resources */,
+				6B2E56CF2F7CF43C00052C84 /* StatisticData.kt in Resources */,
+				6B2E56D02F7CF43C00052C84 /* ErrorBox.kt in Resources */,
+				6B2E56D12F7CF43C00052C84 /* ChartChooserInterface.kt in Resources */,
+				6B2E56D22F7CF43C00052C84 /* MerlinLog.kt in Resources */,
+				6B2E56D32F7CF43C00052C84 /* Schedule.kt in Resources */,
+				6B2E56D42F7CF43C00052C84 /* MerlinStmt.kt in Resources */,
+				6B2E56D52F7CF43C00052C84 /* NativeLink.kt in Resources */,
+				6B2E56D62F7CF43C00052C84 /* SQLiteCursor.kt in Resources */,
+				6B2E56D72F7CF43C00052C84 /* PhoneType.kt in Resources */,
+				6B2E56D82F7CF43C00052C84 /* Questionnaire.kt in Resources */,
+				6B2E56D92F7CF43C00052C84 /* BarChartBuilder.kt in Resources */,
+				6B2E56DA2F7CF43C00052C84 /* MerlinExceptions.kt in Resources */,
+				6B2E56DB2F7CF43C00052C84 /* Page.kt in Resources */,
+				6B2E56DC2F7CF43C00052C84 /* SQLiteInterface.kt in Resources */,
+				6B2E56DD2F7CF43C00052C84 /* QuestionnaireMetadata.kt in Resources */,
+				6B2E56DE2F7CF43C00052C84 /* MerlinParser.kt in Resources */,
+				6B2E56DF2F7CF43C00052C84 /* MerlinFunction.kt in Resources */,
+				6B2E56E02F7CF43C00052C84 /* ChartInfoCollection.kt in Resources */,
+				6B2E56E12F7CF43C00052C84 /* Alarm.kt in Resources */,
+				6B2E56E22F7CF43C00052C84 /* DialogOpenerInterface.kt in Resources */,
+				6B2E56E32F7CF43C00052C84 /* ChartDataSetInterface.kt in Resources */,
+				6B2E56E42F7CF43C00052C84 /* UploadData.kt in Resources */,
+				6B2E56E52F7CF43C00052C84 /* DbLogic.kt in Resources */,
+				6B2E56E62F7CF43C00052C84 /* Condition.kt in Resources */,
+				6B2E56E72F7CF43C00052C84 /* MerlinInterpreter.kt in Resources */,
+				6B2E56E82F7CF43C00052C84 /* MerlinRunner.kt in Resources */,
+				6B2E56E92F7CF43C00052C84 /* DueDateFormatter.kt in Resources */,
+				6B2E56EA2F7CF43C00052C84 /* QrInterpreter.kt in Resources */,
+				6B2E56EB2F7CF43C00052C84 /* MerlinToken.kt in Resources */,
+				6B2E56EC2F7CF43C00052C84 /* StatisticBox.kt in Resources */,
+				6B2E56ED2F7CF43C00052C84 /* JsonToStringSerializer.kt in Resources */,
+				6B2E56EE2F7CF43C00052C84 /* ChartInfo.kt in Resources */,
+				6B2E56EF2F7CF43C00052C84 /* SQLiteValues.kt in Resources */,
+				6B2E56F02F7CF43C00052C84 /* Study.kt in Resources */,
+				6B2E56F12F7CF43C00052C84 /* NotificationsInterface.kt in Resources */,
+				6B2E56F22F7CF43C00052C84 /* ChartViewInterface.kt in Resources */,
+				6B2E56F32F7CF43C00052C84 /* StatisticData_perData.kt in Resources */,
+				6B2E56F42F7CF43C00052C84 /* InputViewInterface.kt in Resources */,
+				6B2E56F52F7CF43C00052C84 /* MerlinTypes.kt in Resources */,
+				6B2E56F62F7CF43C00052C84 /* MerlinEnvironment.kt in Resources */,
+				6B2E56F72F7CF43C00052C84 /* ChartBuilder.kt in Resources */,
+				6B2E56F82F7CF43C00052C84 /* DbUser.kt in Resources */,
+				6B2E56F92F7CF43C00052C84 /* MerlinExpr.kt in Resources */,
+				6B2E56FA2F7CF43C00052C84 /* Message.kt in Resources */,
+				6B2E56FB2F7CF43C00052C84 /* H3.kt in Resources */,
+				6B2E56FC2F7CF43C00052C84 /* StatisticData_perValue.kt in Resources */,
+				6B2E56FD2F7CF43C00052C84 /* StatisticData_timed.kt in Resources */,
+				6B2E56FE2F7CF43C00052C84 /* VirtualInput.kt in Resources */,
+				6B2E56FF2F7CF43C00052C84 /* DynamicInputData.kt in Resources */,
+				6B2E57002F7CF43C00052C84 /* common.kt in Resources */,
+				6B2E57012F7CF43C00052C84 /* SumScore.kt in Resources */,
+				6B2E57022F7CF43C00052C84 /* ActionTrigger.kt in Resources */,
+				6B2E57032F7CF43C00052C84 /* QuestionnaireCache.kt in Resources */,
+				6B2E57042F7CF43C00052C84 /* MerlinScanner.kt in Resources */,
+				6B2E57052F7CF43C00052C84 /* FileOpener.kt in Resources */,
+				6B2E57062F7CF43C00052C84 /* StudyToken.kt in Resources */,
+				6B2E57072F7CF43C00052C84 /* ScatterChartBuilder.kt in Resources */,
+				6B2E57082F7CF43C00052C84 /* Scheduler.kt in Resources */,
+				6B2E57092F7CF43C00052C84 /* PieChartBuilder.kt in Resources */,
 				6B4996DE2825BE4D00D8B6F1 /* Localizable.stringsdict in Resources */,
 				058557BB273AAA24004C7B11 /* Assets.xcassets in Resources */,
 			);
@@ -765,6 +1156,8 @@
 				6B3AB7272E9D18EE009675BD /* nb-NO */,
 				6B3AB7282E9D18F9009675BD /* pl */,
 				6B3AB72A2E9D1904009675BD /* pt */,
+				6B39B7AC2F7A96ED00C81D68 /* nl */,
+				6B39B7AE2F7A971000C81D68 /* tr */,
 			);
 			name = Localizable.strings;
 			sourceTree = "<group>";
@@ -789,6 +1182,8 @@
 				6B3AB7262E9D18E5009675BD /* nb_NO */,
 				6B3AB7292E9D18F9009675BD /* pl */,
 				6B3AB72B2E9D1904009675BD /* pt */,
+				6B39B7AD2F7A96ED00C81D68 /* nl */,
+				6B39B7AF2F7A971000C81D68 /* tr */,
 			);
 			name = Localizable.stringsdict;
 			sourceTree = "<group>";
@@ -917,7 +1312,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 93;
+				CURRENT_PROJECT_VERSION = 94;
 				DEVELOPMENT_ASSET_PATHS = "ESMira/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZXQ54B7QHL;
 				ENABLE_PREVIEWS = YES;
@@ -927,7 +1322,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.17.2;
+				MARKETING_VERSION = 1.17.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
@@ -949,7 +1344,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 93;
+				CURRENT_PROJECT_VERSION = 94;
 				DEVELOPMENT_ASSET_PATHS = "ESMira/Preview\\ Content";
 				DEVELOPMENT_TEAM = ZXQ54B7QHL;
 				ENABLE_PREVIEWS = YES;
@@ -959,7 +1354,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.17.2;
+				MARKETING_VERSION = 1.17.3;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-framework",
