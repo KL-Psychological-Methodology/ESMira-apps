@@ -159,7 +159,30 @@ struct AttributedText: UIViewRepresentable {
 		override var intrinsicContentSize: CGSize {
 			print("bounds:\(bounds.width), size:\(sizeThatFits(CGSize(width: bounds.width, height: CGFloat.greatestFiniteMagnitude)))")
 //			return CGSize(width: 360, height: 1530)
-			return sizeThatFits(CGSize(width: bounds.width > 0 ? bounds.width : UIScreen.main.bounds.width, height: CGFloat.greatestFiniteMagnitude))
+			
+			guard let attributedText = attributedText else { return .zero }
+			
+			let width = bounds.width > 0 ? bounds.width: UIScreen.main.bounds.width
+			let targetSize = CGSize(width: width, height: .greatestFiniteMagnitude)
+			
+			let size = sizeThatFits(targetSize)
+			
+			let storage = NSTextStorage(attributedString: attributedText)
+			let container = NSTextContainer(size: targetSize)
+			let manager = NSLayoutManager()
+			
+			manager.addTextContainer(container)
+			storage.addLayoutManager(manager)
+			
+			container.lineFragmentPadding = 0
+			
+			manager.glyphRange(for: container)
+			
+			let manualHeight = manager.usedRect(for: container).height
+			
+			return CGSize(width: width, height: max(size.height, manualHeight).rounded(.up) + 2)
+			
+			//return sizeThatFits(CGSize(width: bounds.width > 0 ? bounds.width : UIScreen.main.bounds.width, height: CGFloat.greatestFiniteMagnitude))
 			
 //			let rect = self.attributedText.boundingRect(with: CGSize.init(width: super.intrinsicContentSize.width, height: CGFloat.greatestFiniteMagnitude),
 //														options: [.usesLineFragmentOrigin, .usesFontLeading],
