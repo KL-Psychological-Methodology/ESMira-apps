@@ -6,6 +6,8 @@ import io.ktor.util.date.Month
 import io.ktor.util.date.plus
 import kotlin.math.ceil
 import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.sign
 import kotlin.random.Random
 
 /**
@@ -253,34 +255,51 @@ object Scheduler {
 	}
 	
 	private fun calculateRandomPeriod(questionnaire: Questionnaire, signalTime: SignalTime): Int {
-		if(questionnaire.completableAtSpecificTime) {
-			if(questionnaire.completableAtSpecificTimeStart != -1 && questionnaire.completableAtSpecificTimeEnd != -1) {
-				if(questionnaire.completableAtSpecificTimeStart > questionnaire.completableAtSpecificTimeEnd) { //start and end include midnight
-					var period = 0
-					if(questionnaire.completableAtSpecificTimeStart < signalTime.endTimeOfDay)
-						period += signalTime.endTimeOfDay - questionnaire.completableAtSpecificTimeStart
-					if(questionnaire.completableAtSpecificTimeEnd > signalTime.startTimeOfDay)
-						period += questionnaire.completableAtSpecificTimeEnd - signalTime.startTimeOfDay
-					return period
-				}
-				else {
-					var period = 0
-					if(questionnaire.completableAtSpecificTimeEnd < signalTime.endTimeOfDay)
-						period += signalTime.endTimeOfDay - questionnaire.completableAtSpecificTimeEnd
-					if(questionnaire.completableAtSpecificTimeStart > signalTime.startTimeOfDay)
-						period += questionnaire.completableAtSpecificTimeStart - signalTime.startTimeOfDay
-					return period
-				}
-			}
-			else if(questionnaire.completableAtSpecificTimeStart != -1)
-				return questionnaire.completableAtSpecificTimeStart - signalTime.startTimeOfDay
-			else if(questionnaire.completableAtSpecificTimeEnd != -1)
-				return signalTime.endTimeOfDay - questionnaire.completableAtSpecificTimeEnd
-			else
-				return signalTime.endTimeOfDay - signalTime.startTimeOfDay
-		}
-		else
-			return signalTime.endTimeOfDay - signalTime.startTimeOfDay
+
+        return if(questionnaire.completableAtSpecificTime) {
+            var includeMidnigt = 0
+            val signalIntervals = if (signalTime.startTimeOfDay > signalTime.endTimeOfDay) {
+                includeMidnigt += 1
+                arrayOf(Pair(0, signalTime.endTimeOfDay), Pair(signalTime.startTimeOfDay, ONE_DAY_MS.toInt()))
+            } else {
+                arrayOf(Pair(signalTime.startTimeOfDay, signalTime.endTimeOfDay))
+            }
+
+            val filterTimes = Pair(
+                if (questionnaire.completableAtSpecificTimeStart != -1) { questionnaire.completableAtSpecificTimeStart } else { 0 },
+                if (questionnaire.completableAtSpecificTimeEnd != -1) { questionnaire.completableAtSpecificTimeEnd } else { ONE_DAY_MS.toInt() }
+            )
+
+            val filterIntervals = if (filterTimes.first > filterTimes.second) {
+                includeMidnigt += 1
+                arrayOf(Pair(0, filterTimes.second), Pair(filterTimes.first, ONE_DAY_MS.toInt()))
+            } else {
+                arrayOf(Pair(filterTimes.first, filterTimes.second))
+            }
+
+            var overlaps = if (includeMidnigt == 2) {-1} else {0}
+            var period = 0
+
+            for (signalInterval in signalIntervals) {
+                for (filterInterval in filterIntervals) {
+                    val overlap = max(0, min(signalInterval.second, filterInterval.second) - max(signalInterval.first, filterInterval.first))
+                    if (overlap > 0) {
+                        period += overlap
+                        overlaps += 1
+                    }
+                }
+            }
+
+            ErrorBox.error("Scheduler", "SignalTime ${signalTime.id}: Configuration of completableAtSpecificTime filter (${questionnaire.completableAtSpecificTimeStart}, ${questionnaire.completableAtSpecificTimeEnd}) and signalTime (${signalTime.startTimeOfDay}, ${signalTime.endTimeOfDay}) results in more than one interval overlaps.")
+
+            period
+        } else {
+            if(signalTime.endTimeOfDay > signalTime.startTimeOfDay) {
+                signalTime.endTimeOfDay - signalTime.startTimeOfDay
+            } else {
+                signalTime.startTimeOfDay + ONE_DAY_MS.toInt() - signalTime.endTimeOfDay
+            }
+        }
 	}
 	
 	// * We can use this function for single time schedules as well. We can just set frequency=1 and it will fire at startTime_minutes
