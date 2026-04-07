@@ -290,7 +290,12 @@ object Scheduler {
                 }
             }
 
-            ErrorBox.error("Scheduler", "SignalTime ${signalTime.id}: Configuration of completableAtSpecificTime filter (${questionnaire.completableAtSpecificTimeStart}, ${questionnaire.completableAtSpecificTimeEnd}) and signalTime (${signalTime.startTimeOfDay}, ${signalTime.endTimeOfDay}) results in more than one interval overlaps.")
+            if(overlaps >= 2) {
+                ErrorBox.error(
+                    "Scheduler",
+                    "SignalTime ${signalTime.id}: Configuration of completableAtSpecificTime filter (${questionnaire.completableAtSpecificTimeStart}, ${questionnaire.completableAtSpecificTimeEnd}) and signalTime (${signalTime.startTimeOfDay}, ${signalTime.endTimeOfDay}) results in more than one interval overlaps."
+                )
+            }
 
             period
         } else {
