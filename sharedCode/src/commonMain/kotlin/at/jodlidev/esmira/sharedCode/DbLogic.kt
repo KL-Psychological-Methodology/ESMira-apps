@@ -80,7 +80,8 @@ object DbLogic {
 			${Study.KEY_FAQ} TEXT DEFAULT '',
 			${Study.KEY_HAS_STATISTICS} INTEGER DEFAULT 0,
             ${Study.KEY_ADDITIONAL_DAYS_ACTIVE} INTEGER DEFAULT 0,
-			${Study.KEY_LANG_CODES} TEXT DEFAULT '[]')""")
+			${Study.KEY_LANG_CODES} TEXT DEFAULT '[]',
+            ${Study.KEY_LEGACY_SCHEDULING} INTEGER DEFAULT 0)""")
 			
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${Message.TABLE} (
 			${Message.KEY_ID} INTEGER PRIMARY KEY,
