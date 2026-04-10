@@ -47,7 +47,43 @@ object Scheduler {
 		64, //Saturday
 		1  //Sunday
 	)
-	
+
+    private class Interval(val start: Int, val end: Int) {
+        val includesMidnight: Boolean = start > end
+        val period: Int = if(includesMidnight) {start - end + ONE_DAY_MS.toInt()} else {end - start}
+
+        fun getOverlaps(other: Interval): Array<Interval> {
+            val first = this.splitIfIncludesMidnight()
+            val second = other.splitIfIncludesMidnight()
+
+            val overlaps = mutableListOf<Interval>()
+            for(i in first) {
+                for (j in second) {
+                    val overlap = i.getOverlap(j)
+                    if (overlap != null) {
+                        overlaps.add(overlap)
+                    }
+                }
+            }
+            return overlaps.toTypedArray()
+        }
+
+        fun getOverlap(other: Interval): Interval? {
+            return if(this.includesMidnight || other.includesMidnight || this.start > other.end || other.start > this.end) {
+                null
+            } else {
+                Interval(max(this.start, other.start), min(this.end, other.end))
+            }
+        }
+
+        private fun splitIfIncludesMidnight(): Array<Interval> {
+            return if(this.includesMidnight) {
+                arrayOf(Interval(0, this.end), Interval(this.start, ONE_DAY_MS.toInt()))
+            } else {
+                arrayOf(this)
+            }
+        }
+    }
 	
 	fun checkMissedAlarms(missedAlarmsAsBroken: Boolean = false) {
 		//on IOS we can assume that all notifications have been issued or noticed by reactToBootOrTimeChange()
@@ -253,59 +289,35 @@ object Scheduler {
 		else
 			scheduleSignalTime(signalTime, actionTriggerId, max(timestampAnchor, NativeLink.getNowMillis()))
 	}
-	
-	private fun calculateRandomPeriod(questionnaire: Questionnaire, signalTime: SignalTime): Int {
 
+    private fun calculateRandomInterval(questionnaire: Questionnaire, signalTime: SignalTime): Interval? {
         return if(questionnaire.completableAtSpecificTime) {
-            var includeMidnigt = 0
-            val signalIntervals = if (signalTime.startTimeOfDay > signalTime.endTimeOfDay) {
-                includeMidnigt += 1
-                arrayOf(Pair(0, signalTime.endTimeOfDay), Pair(signalTime.startTimeOfDay, ONE_DAY_MS.toInt()))
+            val signalInterval = Interval(signalTime.startTimeOfDay, signalTime.endTimeOfDay)
+            val filterStart = if(questionnaire.completableAtSpecificTimeStart != -1){questionnaire.completableAtSpecificTimeStart}else{0}
+            val filterEnd = if(questionnaire.completableAtSpecificTimeEnd != -1){questionnaire.completableAtSpecificTimeEnd}else{ONE_DAY_MS.toInt()}
+            val filterInterval = Interval(filterStart, filterEnd)
+
+            val overlaps = signalInterval.getOverlaps(filterInterval)
+            val bothIncludeMidnight = signalInterval.includesMidnight && filterInterval.includesMidnight
+            if(overlaps.size == 1) {
+                overlaps[0]
+            } else if (overlaps.size == 2 && bothIncludeMidnight) {
+                // merge the two intervals that border on midnight by taking the inner points and creating an interval that goes from the upper inner point to the lower inner point (thereby including midnight)
+                val times = arrayOf(overlaps[0].start, overlaps[0].end, overlaps[1].start, overlaps[1].end)
+                times.sort()
+                Interval(times[2], times[1])
             } else {
-                arrayOf(Pair(signalTime.startTimeOfDay, signalTime.endTimeOfDay))
-            }
-
-            val filterTimes = Pair(
-                if (questionnaire.completableAtSpecificTimeStart != -1) { questionnaire.completableAtSpecificTimeStart } else { 0 },
-                if (questionnaire.completableAtSpecificTimeEnd != -1) { questionnaire.completableAtSpecificTimeEnd } else { ONE_DAY_MS.toInt() }
-            )
-
-            val filterIntervals = if (filterTimes.first > filterTimes.second) {
-                includeMidnigt += 1
-                arrayOf(Pair(0, filterTimes.second), Pair(filterTimes.first, ONE_DAY_MS.toInt()))
-            } else {
-                arrayOf(Pair(filterTimes.first, filterTimes.second))
-            }
-
-            var overlaps = if (includeMidnigt == 2) {-1} else {0}
-            var period = 0
-
-            for (signalInterval in signalIntervals) {
-                for (filterInterval in filterIntervals) {
-                    val overlap = max(0, min(signalInterval.second, filterInterval.second) - max(signalInterval.first, filterInterval.first))
-                    if (overlap > 0) {
-                        period += overlap
-                        overlaps += 1
-                    }
-                }
-            }
-
-            if(overlaps >= 2) {
                 ErrorBox.error(
                     "Scheduler",
                     "SignalTime ${signalTime.id}: Configuration of completableAtSpecificTime filter (${questionnaire.completableAtSpecificTimeStart}, ${questionnaire.completableAtSpecificTimeEnd}) and signalTime (${signalTime.startTimeOfDay}, ${signalTime.endTimeOfDay}) results in more than one interval overlaps."
                 )
+                return null
             }
 
-            period
         } else {
-            if(signalTime.endTimeOfDay > signalTime.startTimeOfDay) {
-                signalTime.endTimeOfDay - signalTime.startTimeOfDay
-            } else {
-                signalTime.startTimeOfDay + ONE_DAY_MS.toInt() - signalTime.endTimeOfDay
-            }
+            Interval(signalTime.startTimeOfDay, signalTime.endTimeOfDay)
         }
-	}
+    }
 	
 	// * We can use this function for single time schedules as well. We can just set frequency=1 and it will fire at startTime_minutes
 	// * This function can also deal with random == false and frequency > 1 - but will we ever use it this way..?
@@ -316,10 +328,14 @@ object Scheduler {
 		val questionnaire = DbLogic.getQuestionnaire(signalTime.questionnaireId) ?: return
 		val frequency = signalTime.frequency
 		val msBetween = signalTime.minutesBetween * 60000
-		val period = if(signalTime.random) calculateRandomPeriod(questionnaire, signalTime) else 0
-		val block = period / frequency
+		val interval = if(signalTime.random) calculateRandomInterval(questionnaire, signalTime) else Interval(signalTime.startTimeOfDay, signalTime.startTimeOfDay)
+        if(interval == null) {
+            ErrorBox.log("Scheduler", "Available interval is null. Canceling")
+            return
+        }
+		val block = interval.period / frequency
 		if(signalTime.random && frequency > 1 && block < msBetween) {
-			ErrorBox.error("Scheduler", "SignalTime ${signalTime.id}: $frequency blocks with $msBetween ms do not fit into $period ms")
+			ErrorBox.error("Scheduler", "SignalTime ${signalTime.id}: $frequency blocks with $msBetween ms do not fit into ${interval.period} ms")
 			return
 		}
 		
@@ -365,8 +381,8 @@ object Scheduler {
 			if(signalTime.random) {
 				val randomBlock = (nextBlock * getRandom()).toInt()
 				
-				workTimestamp = considerHourOptions(baseTimestamp + randomBlock, questionnaire) //set the actual timing of the notification
-				baseTimestamp = considerHourOptions(baseTimestamp + nextBlock, questionnaire) //prepare timestamp for the next loop
+				workTimestamp = considerHourOptions(baseTimestamp + randomBlock, interval) //set the actual timing of the notification
+				baseTimestamp = considerHourOptions(baseTimestamp + nextBlock, interval) //prepare timestamp for the next loop
 				
 				if(baseTimestamp - workTimestamp < msBetween) { //if random is very late in this block, make sure that the next time gets shortened to account for minutesBetween
 					val shorten = msBetween - (baseTimestamp - workTimestamp).toInt()
@@ -418,35 +434,25 @@ object Scheduler {
 		return Random.nextDouble(1.0)
 	}
 	
-	private fun considerHourOptions(timestamp: Long, questionnaire: Questionnaire): Long {
+	private fun considerHourOptions(timestamp: Long, relevantInterval: Interval): Long {
 		val midnight = NativeLink.getMidnightMillis(timestamp)
 		val fromMidnight = timestamp - midnight
-		
-		
-		if(!questionnaire.completableAtSpecificTime)
-			return timestamp
-		else if(questionnaire.completableAtSpecificTimeStart != -1 && questionnaire.completableAtSpecificTimeEnd != -1) {
-			if(questionnaire.completableAtSpecificTimeStart > questionnaire.completableAtSpecificTimeEnd) { //start and end include midnight
-				if(fromMidnight < questionnaire.completableAtSpecificTimeStart)
-					return midnight + questionnaire.completableAtSpecificTimeStart
-				else if(fromMidnight > questionnaire.completableAtSpecificTimeEnd) //this should never happen
-					return fromMidnight + questionnaire.completableAtSpecificTimeEnd
-			}
-			else {
-				if(fromMidnight > questionnaire.completableAtSpecificTimeStart && fromMidnight < questionnaire.completableAtSpecificTimeEnd)
-					return midnight + questionnaire.completableAtSpecificTimeEnd
-			}
-		}
-		else if(questionnaire.completableAtSpecificTimeStart != -1) {
-			if(fromMidnight < questionnaire.completableAtSpecificTimeStart)
-				return midnight + questionnaire.completableAtSpecificTimeStart
-		}
-		else if(questionnaire.completableAtSpecificTimeEnd != -1) {
-			if(fromMidnight > questionnaire.completableAtSpecificTimeEnd) //this should never happen
-				return midnight + questionnaire.completableAtSpecificTimeEnd
-		}
-		
-		return timestamp
+		val intervalStart = relevantInterval.start.toLong()
+		val intervalEnd = relevantInterval.end.toLong()
+
+		if(relevantInterval.includesMidnight) {
+		    if(fromMidnight in (intervalEnd + 1)..<intervalStart) {
+                return midnight + if (fromMidnight - intervalEnd < intervalStart - fromMidnight) {intervalEnd} else {intervalStart}
+            }
+        } else {
+            if(fromMidnight < intervalStart) {
+                return midnight + intervalStart
+            } else if (fromMidnight > intervalEnd) {
+                return midnight + intervalEnd
+            }
+        }
+
+        return timestamp
 	}
 	
 	internal fun considerDayOptions(timestamp: Long, questionnaire: Questionnaire, schedule: Schedule): Long {
