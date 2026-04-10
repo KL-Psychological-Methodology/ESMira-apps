@@ -50,7 +50,7 @@ object Scheduler {
 
     private class Interval(val start: Int, val end: Int) {
         val includesMidnight: Boolean = start > end
-        val period: Int = if(includesMidnight) {start - end + ONE_DAY_MS.toInt()} else {end - start}
+        val period: Int = (end - start) + if(includesMidnight) {ONE_DAY_MS.toInt()} else {0}
 
         fun getOverlaps(other: Interval): Array<Interval> {
             val first = this.splitIfIncludesMidnight()
@@ -328,7 +328,7 @@ object Scheduler {
 		val questionnaire = DbLogic.getQuestionnaire(signalTime.questionnaireId) ?: return
 		val frequency = signalTime.frequency
 		val msBetween = signalTime.minutesBetween * 60000
-		val interval = if(signalTime.random) calculateRandomInterval(questionnaire, signalTime) else Interval(signalTime.startTimeOfDay, signalTime.startTimeOfDay)
+		val interval = if(signalTime.random) {calculateRandomInterval(questionnaire, signalTime)} else {Interval(signalTime.startTimeOfDay, signalTime.startTimeOfDay)}
         if(interval == null) {
             ErrorBox.log("Scheduler", "Available interval is null. Canceling")
             return
@@ -438,7 +438,7 @@ object Scheduler {
 		val midnight = NativeLink.getMidnightMillis(timestamp)
 		val fromMidnight = timestamp - midnight
 		val intervalStart = relevantInterval.start.toLong()
-		val intervalEnd = relevantInterval.end.toLong()
+		val intervalEnd = relevantInterval.end.toLong() + if(relevantInterval.includesMidnight){ONE_DAY_MS}else{0L}
 
 		if(relevantInterval.includesMidnight) {
 		    if(fromMidnight in (intervalEnd + 1)..<intervalStart) {
