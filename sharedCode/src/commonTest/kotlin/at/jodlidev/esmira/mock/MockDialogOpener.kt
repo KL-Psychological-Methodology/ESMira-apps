@@ -34,9 +34,13 @@ class MockDialogOpener: DialogOpenerInterface {
 		++appTrackingRevokedCount
 	}
 
-	override fun dialog(title: String, msg: String) {
-		++dialogCount
-	}
+    override fun dialog(
+        title: String,
+        msg: String,
+        triggerNotification: Boolean
+    ) {
+        ++dialogCount
+    }
 	
 	fun reset() {
 		errorReportCount = 0

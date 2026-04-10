@@ -138,10 +138,14 @@ class SchedulerTest : BaseCommonTest() {
 			arrayOf(1114313512000, 3L, 31L, 52L)
 		)
 		val nowDate = GMTDate(NativeLink.getNowMillis())
-		
+
+        val study = createStudy("""{"id":1234}""")
+        study.save()
+
 		val questionnaire = createJsonObj<Questionnaire>()
+        questionnaire.studyId = study.id
 		questionnaire.save(true)
-		
+
 		var idCount = 1L
 		for(dailyRepeatRate in 1 until 7) {
 			for((timestamp, hours, minutes, seconds) in timestamps) {
@@ -179,9 +183,13 @@ class SchedulerTest : BaseCommonTest() {
 		val timestampMidnight = NativeLink.getMidnightMillis(1114313512000) //2005-04-24 03:31:52
 		val randomBlockSize = 1000*60*60
 		val minutesBetween = 60
-		
+
+        val study = createStudy("""{"id":1234}""")
+        study.save()
+
 		var scheduleId = 1L
 		val questionnaire = createJsonObj<Questionnaire>()
+        questionnaire.studyId = study.id
 		questionnaire.save(true)
 		
 		for(manualDelayDays in -1 until 10) {
@@ -262,14 +270,28 @@ class SchedulerTest : BaseCommonTest() {
 	@Test
 	fun scheduleEventTrigger() {
 		val now = 626637180000
-		Scheduler.scheduleEventTrigger(createJsonObj<EventTrigger>("""{
+
+        val study = createStudy("""{"id":1234}""")
+        study.save()
+
+        val questionnaire = createJsonObj<Questionnaire>()
+        questionnaire.studyId = study.id
+        questionnaire.save(true)
+
+        val eventTrigger1 = createJsonObj<EventTrigger>("""{
 				"delaySec": 5
-			}"""), now)
-		Scheduler.scheduleEventTrigger(createJsonObj<EventTrigger>("""{
+			}""")
+        eventTrigger1.questionnaireId = questionnaire.id
+
+        val eventTrigger2 = createJsonObj<EventTrigger>("""{
 				"randomDelay": true
 				"delayMinimumSec": 10
 				"delaySec": 15
-			}"""), now)
+			}""")
+        eventTrigger2.questionnaireId = questionnaire.id
+
+		Scheduler.scheduleEventTrigger(eventTrigger1, now)
+		Scheduler.scheduleEventTrigger(eventTrigger2, now)
 		
 		
 		val alarms = DbLogic.getAlarms()
