@@ -391,25 +391,27 @@ class SchedulerTest : BaseCommonTest() {
 	}
 	
 	@Test
-	fun considerScheduleOptions_signalTime() {
+	fun considerDayOptions_signalTime() {
 		val timestamp = 626637180000
 		val schedule = createJsonObj<Schedule>()
 		val signalTime = createJsonObj<SignalTime>()
 		signalTime.bindParent(-1, createJsonObj())
 		
+		//Check questionnaire that will be active in the future
 		val questionnaire1 = createJsonObj<Questionnaire>("""{"durationStart": ${timestamp + 10}}""")
 		questionnaire1.save(true)
 		signalTime.bindParent(questionnaire1.id, schedule)
-		assertNotEquals(-1, Scheduler.considerDayOptions(timestamp, schedule))
+		assertNotEquals(-1, Scheduler.considerDayOptions(timestamp, questionnaire1, schedule))
 		
+		//Check questionnaire that will never be active and should result in -1
 		val questionnaire2 = createJsonObj<Questionnaire>("""{"durationEnd": ${timestamp - 10}}""")
 		questionnaire2.save(true)
 		signalTime.bindParent(questionnaire2.id, schedule)
-		assertEquals(-1, Scheduler.considerDayOptions(timestamp, schedule))
+		assertEquals(-1, Scheduler.considerDayOptions(timestamp, questionnaire2, schedule))
 	}
 	
 	@Test
-	fun considerScheduleOptions_schedule() {
+	fun considerDayOptions_schedule() {
 		val timestamp1 = 626637180000 // Thu Nov 09 1989 18:53:00 GMT+0100
 		val timestampEndOfYear = 629229180000 // Sat Dec 09 1989 18:53:00 GMT+0100
 		
