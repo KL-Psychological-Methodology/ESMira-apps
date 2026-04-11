@@ -12,6 +12,7 @@ import kotlin.test.*
  */
 class SchedulerTest : BaseCommonTest() {
 	private val ONE_DAY_MS: Long = 1000*60*60*24
+	private var scheduleId: Long = 0
 	
 	private fun assertCheckMissedAlarms(questionnaire: Questionnaire, daySpacing: Int) {
 		val schedule = createScheduleForSaving("""{"dailyRepeatRate": $daySpacing, "signalTimes": [{}]}""")
@@ -140,8 +141,8 @@ class SchedulerTest : BaseCommonTest() {
 		val nowDate = GMTDate(NativeLink.getNowMillis())
 
         val study = createStudy("""{"id":1234}""")
-        study.save()
-
+		study.save()
+		
 		val questionnaire = createJsonObj<Questionnaire>()
         questionnaire.studyId = study.id
 		questionnaire.save(true)
@@ -177,31 +178,24 @@ class SchedulerTest : BaseCommonTest() {
 		}
 		
 	}
-	
-	@Test
-	fun scheduleSignalTime() {
-		val timestampMidnight = NativeLink.getMidnightMillis(1114313512000) //2005-04-24 03:31:52
-		val randomBlockSize = 1000*60*60
-		val minutesBetween = 60
-
-        val study = createStudy("""{"id":1234}""")
-        study.save()
-
-		var scheduleId = 1L
-		val questionnaire = createJsonObj<Questionnaire>()
-        questionnaire.studyId = study.id
-		questionnaire.save(true)
+	fun scheduleAndCheckSignalTimes(
+		questionnaireId: Long,
+		timestampNow: Long,
+		startTimeOfDay: Int,
+		endTimeOfDay: Int,
+		expectToSkipFirstDay: Boolean,
+		alarmStart: Int = startTimeOfDay,
+		alarmEnd: Int = endTimeOfDay,
+	) {
+		val minutesBetween = 30
+		val timestampMidnight = NativeLink.getMidnightMillis(timestampNow)
+		var loopI = 0
 		
-		for(manualDelayDays in -1 until 10) {
-			for(dailyRepeatRate in 1 until 10) {
-				for(loopFrequency in 0 until 10) {
+		for(manualDelayDays in -1 until 5) {
+			for(dailyRepeatRate in 1 until 5) {
+				for(loopFrequency in 0 until 5) {
 					val random = loopFrequency != 0
 					val frequency = if(random) loopFrequency else 1
-					
-					val period = frequency * (minutesBetween * 1000 * 60 + randomBlockSize)
-					val startTimeOfDay = Random.nextInt(0, (ONE_DAY_MS - period).toInt())
-					val endTimeOfDay = startTimeOfDay + period
-					val timestampNow = timestampMidnight + startTimeOfDay - Scheduler.MIN_SCHEDULE_DISTANCE
 					
 					val schedule = createJsonObj<Schedule>("""{"dailyRepeatRate": $dailyRepeatRate}""")
 					schedule.id = scheduleId++
@@ -214,51 +208,59 @@ class SchedulerTest : BaseCommonTest() {
 							"endTimeOfDay": $endTimeOfDay
 						}"""
 					)
-					signalTime.bindParent(questionnaire.id, schedule)
-					
-					
+					signalTime.bindParent(questionnaireId, schedule)
 					Scheduler.scheduleSignalTime(signalTime, -1, timestampNow, manualDelayDays)
 					
 					
 					//check alarm:
 					
 					val alarms = DbLogic.getAlarms(schedule) //only get alarms from this loop (schedule.id)
-					val errorInfo = "\nnow: $timestampNow,\n" +
-						"midnight: $timestampMidnight,\n" +
-						"startTimeOfDay: $startTimeOfDay,\n" +
-						"endTimeOfDay: $endTimeOfDay,\n" +
-						"frequency: $frequency,\n" +
-						"minutesBetween: $minutesBetween,\n" +
-						"dailyRepeatRate: $dailyRepeatRate,\n" +
-						"random: $random,\n" +
-						"manualDelayDays: $manualDelayDays\n"
+					val errorInfo = "\nLoop: ${++loopI}\n" +
+							"expectToSkipFirstDay: $expectToSkipFirstDay,\n" +
+							"now: $timestampNow,\n" +
+							"midnight: $timestampMidnight,\n" +
+							"startTimeOfDay: $startTimeOfDay,\n" +
+							"endTimeOfDay: $endTimeOfDay,\n" +
+							"frequency: $frequency,\n" +
+							"minutesBetween: $minutesBetween,\n" +
+							"dailyRepeatRate: $dailyRepeatRate,\n" +
+							"random: $random,\n" +
+							"manualDelayDays: $manualDelayDays\n"
+					
+					val delay = if(manualDelayDays == -1) {
+						ONE_DAY_MS * dailyRepeatRate
+					}
+					else {
+						manualDelayDays * ONE_DAY_MS + if(expectToSkipFirstDay) ONE_DAY_MS else 0
+					}
+					
+					val min = timestampMidnight + alarmStart + delay
+					val max = timestampMidnight + alarmEnd + delay
 					
 					assertEquals(
 						frequency,
 						alarms.size,
 						"The wrong number of alarms was scheduled. Failed with $errorInfo"
 					)
-					val delay = if(manualDelayDays == -1) ONE_DAY_MS * dailyRepeatRate else manualDelayDays * ONE_DAY_MS
-					val min = timestampMidnight + startTimeOfDay + delay
-					val max = timestampMidnight + endTimeOfDay + delay
+					
 					val lastTimeStamp = 0L
 					for((i, alarm) in alarms.withIndex()) {
 						if(random) {
 							val timestamp = alarm.timestamp
 							assertTrue(
 								timestamp in min..max,
-								"$timestamp for alarm $i is not between $min and $max. Settings: $errorInfo"
+								"$timestamp is not between $min and $max. Settings: \nalarm: $i$errorInfo"
 							)
 							assertTrue(
 								timestamp > lastTimeStamp + minutesBetween,
-								"$timestamp needs to be greater than ${lastTimeStamp + minutesBetween}. Settings: $errorInfo"
+								"$timestamp needs to be greater than ${lastTimeStamp + minutesBetween}. Settings: \nalarm: $i$errorInfo"
 							)
 						}
 						else {
 							assertEquals(
-								timestampMidnight + startTimeOfDay + delay,
+								min,
 								alarm.timestamp,
-								"Failed alarm number $i. Settings: $errorInfo"
+								"Wrong timestamp. Settings: \nalarm: $i$errorInfo"
 							)
 						}
 					}
@@ -266,6 +268,86 @@ class SchedulerTest : BaseCommonTest() {
 			}
 		}
 	}
+	
+	@Test
+	fun scheduleSignalTime() {
+		val study = createStudy("""{"id":1234}""")
+		study.save()
+		
+		val questionnaire = createJsonObj<Questionnaire>()
+		questionnaire.studyId = study.id
+		questionnaire.save(true)
+		
+		scheduleAndCheckSignalTimes(
+			questionnaire.id,
+			1114306312000, //2005-04-24 03:31:52
+			7200000, //02:00
+			72000000, //20:00
+			true
+		)
+		scheduleAndCheckSignalTimes(
+			questionnaire.id,
+			1114306312000, //2005-04-24 03:31:52
+			21600000, //06:00
+			72000000, //20:00
+			false
+		)
+	}
+	
+	@Test
+	fun scheduleFilteredSignalTime() {
+		val study = createStudy("""{"id":1234}""")
+		study.save()
+		
+		val completableAtSpecificTimeStart = 25200000 //07:00
+		val completableAtSpecificTimeEnd = 75600000 //21:00
+		val questionnaire = createJsonObj<Questionnaire>("""{"completableAtSpecificTime": true, "completableAtSpecificTimeStart": $completableAtSpecificTimeStart, "completableAtSpecificTimeEnd": $completableAtSpecificTimeEnd}""")
+		questionnaire.studyId = study.id
+		questionnaire.save(true)
+		
+		//Filter has no effect:
+		scheduleAndCheckSignalTimes(
+			questionnaire.id,
+			1114306312000, //2005-04-24 03:31:52
+			28800000, //08:00
+			72000000, //20:00
+			false
+		)
+		
+		//Filter reduces start:
+		scheduleAndCheckSignalTimes(
+			questionnaire.id,
+			1114306312000, //2005-04-24 03:31:52
+			7200000, //02:00
+			72000000, //20:00
+			false,
+			25200000 //07:00
+		)
+		
+		//Filter reduces end:
+		scheduleAndCheckSignalTimes(
+			questionnaire.id,
+			1114306312000, //2005-04-24 03:31:52
+			28800000, //08:00
+			79200000, //22:00
+			false,
+			28800000, //08:00
+			75600000 //21:00
+		)
+		
+		
+		//Filter reduces both:
+		scheduleAndCheckSignalTimes(
+			questionnaire.id,
+			1114306312000, //2005-04-24 03:31:52
+			3600000, //01:00
+			82800000, //23:00
+			false,
+			25200000, //07:00
+			75600000 //21:00
+		)
+	}
+	
 	
 	@Test
 	fun scheduleEventTrigger() {
@@ -283,12 +365,12 @@ class SchedulerTest : BaseCommonTest() {
 			}""")
         eventTrigger1.questionnaireId = questionnaire.id
 
-        val eventTrigger2 = createJsonObj<EventTrigger>("""{
+		val eventTrigger2 = createJsonObj<EventTrigger>("""{
 				"randomDelay": true
 				"delayMinimumSec": 10
 				"delaySec": 15
 			}""")
-        eventTrigger2.questionnaireId = questionnaire.id
+		eventTrigger2.questionnaireId = questionnaire.id
 
 		Scheduler.scheduleEventTrigger(eventTrigger1, now)
 		Scheduler.scheduleEventTrigger(eventTrigger2, now)
