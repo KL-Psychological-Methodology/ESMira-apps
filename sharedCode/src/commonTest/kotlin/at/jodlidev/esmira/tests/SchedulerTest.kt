@@ -140,7 +140,7 @@ class SchedulerTest : BaseCommonTest() {
 		)
 		val nowDate = GMTDate(NativeLink.getNowMillis())
 
-        val study = createStudy("""{"id":1234}""")
+		val study = createStudy("""{"id":1234}""")
 		study.save()
 		
 		val questionnaire = createJsonObj<Questionnaire>()
@@ -178,6 +178,36 @@ class SchedulerTest : BaseCommonTest() {
 		}
 		
 	}
+	
+	fun scheduleSignalTime(
+		questionnaireId: Long,
+		timestampNow: Long,
+		startTimeOfDay: Int,
+		endTimeOfDay: Int,
+		minutesBetween: Int,
+		manualDelayDays: Int,
+		dailyRepeatRate: Int,
+		random: Boolean,
+		frequency: Int
+	): Schedule {
+		val schedule = createJsonObj<Schedule>("""{"dailyRepeatRate": $dailyRepeatRate}""")
+		schedule.id = scheduleId++
+		val signalTime = createJsonObj<SignalTime>(
+			"""{
+				"frequency": $frequency
+				"minutesBetween": $minutesBetween
+				"random": $random
+				"startTimeOfDay": $startTimeOfDay
+				"endTimeOfDay": $endTimeOfDay
+			}"""
+		)
+		signalTime.bindParent(questionnaireId, schedule)
+		Scheduler.scheduleSignalTime(signalTime, -1, timestampNow, manualDelayDays)
+		
+		return schedule
+	}
+	
+	
 	fun scheduleAndCheckSignalTimes(
 		questionnaireId: Long,
 		timestampNow: Long,
@@ -187,7 +217,7 @@ class SchedulerTest : BaseCommonTest() {
 		alarmStart: Int = startTimeOfDay,
 		alarmEnd: Int = endTimeOfDay,
 	) {
-		val minutesBetween = 30
+		val minutesBetween = 10
 		val timestampMidnight = NativeLink.getMidnightMillis(timestampNow)
 		var loopI = 0
 		
@@ -197,20 +227,17 @@ class SchedulerTest : BaseCommonTest() {
 					val random = loopFrequency != 0
 					val frequency = if(random) loopFrequency else 1
 					
-					val schedule = createJsonObj<Schedule>("""{"dailyRepeatRate": $dailyRepeatRate}""")
-					schedule.id = scheduleId++
-					val signalTime = createJsonObj<SignalTime>(
-						"""{
-							"frequency": $frequency
-							"minutesBetween": $minutesBetween
-							"random": $random
-							"startTimeOfDay": $startTimeOfDay
-							"endTimeOfDay": $endTimeOfDay
-						}"""
+					val schedule = scheduleSignalTime(
+						questionnaireId,
+						timestampNow,
+						startTimeOfDay,
+						endTimeOfDay,
+						minutesBetween,
+						manualDelayDays,
+						dailyRepeatRate,
+						random,
+						frequency
 					)
-					signalTime.bindParent(questionnaireId, schedule)
-					Scheduler.scheduleSignalTime(signalTime, -1, timestampNow, manualDelayDays)
-					
 					
 					//check alarm:
 					
@@ -299,9 +326,10 @@ class SchedulerTest : BaseCommonTest() {
 		val study = createStudy("""{"id":1234}""")
 		study.save()
 		
-		val completableAtSpecificTimeStart = 25200000 //07:00
-		val completableAtSpecificTimeEnd = 75600000 //21:00
-		val questionnaire = createJsonObj<Questionnaire>("""{"completableAtSpecificTime": true, "completableAtSpecificTimeStart": $completableAtSpecificTimeStart, "completableAtSpecificTimeEnd": $completableAtSpecificTimeEnd}""")
+		//07:00 - 21:00
+		val questionnaire = createJsonObj<Questionnaire>(
+			"""{"completableAtSpecificTime": true, "completableAtSpecificTimeStart": 25200000, "completableAtSpecificTimeEnd": 75600000}"""
+		)
 		questionnaire.studyId = study.id
 		questionnaire.save(true)
 		
@@ -345,6 +373,53 @@ class SchedulerTest : BaseCommonTest() {
 			false,
 			25200000, //07:00
 			75600000 //21:00
+		)
+		
+		
+		//18:00 - 09:00
+		val questionnaire2 = createJsonObj<Questionnaire>(
+			"""{"completableAtSpecificTime": true, "completableAtSpecificTimeStart": 64800000, "completableAtSpecificTimeEnd": 32400000}"""
+		)
+		questionnaire2.studyId = study.id
+		questionnaire2.save(true)
+		scheduleAndCheckSignalTimes(
+			questionnaire2.id,
+			1114306312000, //2005-04-24 03:31:52
+			28800000, //08:00
+			32400000, //09:00
+			false,
+			28800000, //08:00
+			32400000 //09:00
+		)
+		
+		
+		//Filter creates two overlaps and leads to cancellation:
+		//12:00 - 08:00
+		val questionnaire3 = createJsonObj<Questionnaire>(
+			"""{
+				"completableAtSpecificTime": true,
+				"completableAtSpecificTimeStart": 43200000,
+				"completableAtSpecificTimeEnd": 28800000
+			}""".trimMargin())
+		questionnaire2.studyId = study.id
+		questionnaire2.save(true)
+		
+		val schedule = scheduleSignalTime(
+			questionnaire3.id,
+			1114306312000, //2005-04-24 03:31:52
+			14400000, //04:00
+			57600000, //16:00
+			10,
+			-1,
+			1,
+			false,
+			1
+		)
+		val alarms = DbLogic.getAlarms(schedule)
+		assertEquals(
+			0,
+			alarms.size,
+			"Scheduling was not canceled when signalTime and filter created two overlaps"
 		)
 	}
 	
