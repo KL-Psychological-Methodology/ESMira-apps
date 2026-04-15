@@ -348,17 +348,23 @@ object Scheduler {
 		var baseTimestamp = midnight + signalTime.startTimeOfDay
 		val minDate: Long
 		if(manualDelayDays != -1) { //is only set when schedules are freshly created
-			baseTimestamp += ONE_DAY_MS * manualDelayDays
-			minDate = anchorTimestamp + (ONE_DAY_MS * manualDelayDays).coerceAtLeast(MIN_SCHEDULE_DISTANCE)
-			
-			// Assuming that anchorTimestamp = 23:58, startTimeOfDay = 00:00 and dailyRepeatRate = 5 (anything greater than 1).
-			// When we used getMidnightMillis(), we calculated backwards a whole day, so baseTimestamp is one day short.
-			// That means, when we just added ONE_DAY_MS * dailyRepeatRate, we effectively only added 4 days instead of 5.
-			// This would not be true if startTimeOfDay = 23:59, so we cant just blindly add a day.
-			// This loop fixes it:
-			while(baseTimestamp < minDate) {
-				baseTimestamp += ONE_DAY_MS
-			}
+            minDate = anchorTimestamp + (ONE_DAY_MS * manualDelayDays).coerceAtLeast(MIN_SCHEDULE_DISTANCE)
+            val useLegacyScheduling = DbLogic.getStudy(questionnaire.studyId)?.legacyScheduling ?: false
+            if(useLegacyScheduling) {
+
+                // Assuming that anchorTimestamp = 23:58, startTimeOfDay = 00:00 and dailyRepeatRate = 5 (anything greater than 1).
+                // When we used getMidnightMillis(), we calculated backwards a whole day, so baseTimestamp is one day short.
+                // That means, when we just added ONE_DAY_MS * dailyRepeatRate, we effectively only added 4 days instead of 5.
+                // This would not be true if startTimeOfDay = 23:59, so we cant just blindly add a day.
+                // This loop fixes it:
+                while (baseTimestamp < minDate) {
+                    baseTimestamp += ONE_DAY_MS
+                }
+            } else {
+                while (NativeLink.getDatesDiff(baseTimestamp, minDate) < manualDelayDays) {
+                    baseTimestamp += ONE_DAY_MS
+                }
+            }
 		}
 		else
 			baseTimestamp += ONE_DAY_MS * signalTime.schedule.dailyRepeatRate

@@ -37,6 +37,7 @@ class Schedule {
 	var dayOfMonth: Int = 0
 	var userEditable: Boolean = true
 	var skipFirstInLoop: Boolean = false
+    var startDayOne: Boolean = true
 	
 	@Transient var exists = false
 	@Transient var fromJson = true
@@ -79,6 +80,7 @@ class Schedule {
 		skipFirstInLoop = c.getBoolean(4)
 		weekdays = c.getInt(5)
 		dayOfMonth = c.getInt(6)
+        startDayOne = c.getBoolean(7)
 	}
 	fun bindParent(actionTrigger: ActionTrigger) {
 		this.actionTrigger = actionTrigger
@@ -90,9 +92,10 @@ class Schedule {
 			dailyRepeatRate != other.dailyRepeatRate ||
 			weekdays != other.weekdays ||
 			dayOfMonth != other.dayOfMonth ||
-			skipFirstInLoop != other.skipFirstInLoop
+			skipFirstInLoop != other.skipFirstInLoop ||
+            startDayOne != other.startDayOne
 		) {
-			println("Schedule content is different: $userEditable==${other.userEditable}, $dailyRepeatRate==${other.dailyRepeatRate}, $weekdays==${other.weekdays}, $dayOfMonth==${other.dayOfMonth}, $skipFirstInLoop==${other.skipFirstInLoop}")
+			println("Schedule content is different: $userEditable==${other.userEditable}, $dailyRepeatRate==${other.dailyRepeatRate}, $weekdays==${other.weekdays}, $dayOfMonth==${other.dayOfMonth}, $skipFirstInLoop==${other.skipFirstInLoop}, $startDayOne==${other.startDayOne}")
 			return true
 		}
 		else {
@@ -126,6 +129,7 @@ class Schedule {
 		values.putBoolean(KEY_SKIP_FIRST_IN_LOOP, skipFirstInLoop)
 		values.putInt(KEY_WEEKDAYS, weekdays)
 		values.putInt(KEY_DAY_OF_MONTH, dayOfMonth)
+        values.putBoolean(KEY_START_DAY_ONE, startDayOne)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -175,7 +179,7 @@ class Schedule {
 	}
 	
 	internal fun getInitialDelayDays():Int { //in days
-		return if(skipFirstInLoop) dailyRepeatRate else 0
+		return (if(skipFirstInLoop) dailyRepeatRate else 0) + (if(startDayOne) 1 else 0)
 	}
 	
 	internal fun getQuestionnaire(): Questionnaire {
@@ -212,6 +216,7 @@ class Schedule {
 		const val KEY_SKIP_FIRST_IN_LOOP = "skip_first_in_loop"
 		const val KEY_WEEKDAYS = "weekdays"
 		const val KEY_DAY_OF_MONTH = "dayOfMonth"
+        const val KEY_START_DAY_ONE = "startDayOne"
 
 		val COLUMNS = arrayOf(
 			KEY_ID,
@@ -221,7 +226,8 @@ class Schedule {
 			KEY_SKIP_FIRST_IN_LOOP,
 			KEY_WEEKDAYS,
 			KEY_DAY_OF_MONTH,
-			KEY_ACTION_TRIGGER //is usually ignored
+			KEY_ACTION_TRIGGER, //is usually ignored
+            KEY_START_DAY_ONE
 		)
 		
 		fun updateLastScheduled(id: Long, timestamp: Long) {

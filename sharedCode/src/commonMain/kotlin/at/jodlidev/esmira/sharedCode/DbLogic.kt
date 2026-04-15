@@ -210,6 +210,7 @@ object DbLogic {
 			${Schedule.KEY_SKIP_FIRST_IN_LOOP} INTEGER,
 			${Schedule.KEY_WEEKDAYS} INTEGER,
 			${Schedule.KEY_DAY_OF_MONTH} INTEGER,
+            ${Schedule.KEY_START_DAY_ONE} INTEGER,
 			FOREIGN KEY(${Schedule.KEY_ACTION_TRIGGER}) REFERENCES ${ActionTrigger.TABLE}(${ActionTrigger.KEY_ID}) ON DELETE CASCADE,
 			FOREIGN KEY(${Schedule.KEY_QUESTIONNAIRE_ID}) REFERENCES ${Questionnaire.TABLE}(${Questionnaire.KEY_ID}) ON DELETE CASCADE)""")
 		
