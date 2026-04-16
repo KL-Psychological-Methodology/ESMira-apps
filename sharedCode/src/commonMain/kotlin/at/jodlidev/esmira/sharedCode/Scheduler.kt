@@ -7,6 +7,7 @@ import io.ktor.util.date.plus
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min
+import kotlin.math.sign
 import kotlin.random.Random
 
 /**
@@ -290,8 +291,8 @@ object Scheduler {
 	}
 	
 	private fun calculateRandomInterval(questionnaire: Questionnaire, signalTime: SignalTime): Interval? {
+        val signalInterval = Interval(signalTime.startTimeOfDay, if(signalTime.random) {signalTime.endTimeOfDay} else {signalTime.startTimeOfDay})
 		return if(questionnaire.completableAtSpecificTime) {
-			val signalInterval = Interval(signalTime.startTimeOfDay, signalTime.endTimeOfDay)
 			val filterStart = if(questionnaire.completableAtSpecificTimeStart != -1) {questionnaire.completableAtSpecificTimeStart} else {0}
 			val filterEnd = if(questionnaire.completableAtSpecificTimeEnd != -1) {questionnaire.completableAtSpecificTimeEnd} else {ONE_DAY_MS.toInt()}
 			val filterInterval = Interval(filterStart, filterEnd)
@@ -317,7 +318,7 @@ object Scheduler {
 			
 		}
 		else {
-			Interval(signalTime.startTimeOfDay, signalTime.endTimeOfDay)
+			signalInterval
 		}
 	}
 	
