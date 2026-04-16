@@ -398,8 +398,10 @@ object Scheduler {
 				baseTimestamp += block.toLong() //this has no effect. I will leave it in, in case we ever want to use frequency on non-random schedules
 				workTimestamp = baseTimestamp
 			}
-			
-			Alarm.createFromSignalTime(signalTime, actionTriggerId, workTimestamp, i)
+
+            if(questionnaire.isActive(workTimestamp)) { // with legacy scheduling questionnaires can become invalid during a single signal time window, so we check just in case
+                Alarm.createFromSignalTime(signalTime, actionTriggerId, workTimestamp, i)
+            }
 		}
 	}
 	
