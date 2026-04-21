@@ -506,10 +506,13 @@ class Questionnaire {
 	fun isActive(now: Long = NativeLink.getNowMillis()): Boolean { //if study is active in general
 		val study: Study? = DbLogic.getStudy(studyId) //study can be null when we test for a study that we have not joined yet
 
-		val durationCheck = study == null || (
-			(durationPeriodDays == 0 || now <= study.joinedTimestamp + durationPeriodDays.toLong() * ONE_DAY_MS)
-				&& (durationStartingAfterDays == 0 || now >= study.joinedTimestamp + durationStartingAfterDays.toLong() * ONE_DAY_MS)
-			)
+		val durationCheck = study == null || if(study.legacyScheduling) {
+            (durationPeriodDays == 0 || now <= study.joinedTimestamp + durationPeriodDays.toLong() * ONE_DAY_MS)
+                    && (durationStartingAfterDays == 0 || now >= study.joinedTimestamp + durationStartingAfterDays.toLong() * ONE_DAY_MS)
+        } else {
+            (durationPeriodDays == 0 || NativeLink.getDatesDiff(now, study.joinedTimestamp) <= durationPeriodDays)
+                    && (durationStartingAfterDays == 0 || NativeLink.getDatesDiff(now, study.joinedTimestamp) >= durationStartingAfterDays)
+        }
 		
 		return durationCheck
 			&& (limitToGroup == 0 || study == null || limitToGroup == study.group)
