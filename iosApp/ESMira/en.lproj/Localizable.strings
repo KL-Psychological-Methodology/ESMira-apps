@@ -230,3 +230,5 @@
 "notification_expired_title" = "Notification expired";
 "notification_expired_info" = "The selected notification has expired and the associated questionnaire is currently not available.";
 "measured_noise_level" = "Measured noise level: %1$@ dBFS";
+"switch_to_dark_mode" = "Switch to dark mode";
+"switch_to_light_mode" = "Switch to light mode";

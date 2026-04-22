@@ -39,6 +39,7 @@ struct StudyListView: View {
 			}
 		}
 			.navigationBarTitle(Text("studies"), displayMode: .inline)
+			.esBackgroundNavBar()
 		
 	}
 }

@@ -44,5 +44,6 @@ struct StudyDetailView: View {
 		}
 		.padding()
 		.navigationBarTitle(Text("add_a_study"), displayMode: .inline)
+		.esBackgroundNavBar()
 	}
 }

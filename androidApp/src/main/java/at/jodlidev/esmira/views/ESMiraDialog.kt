@@ -58,7 +58,7 @@ fun ESMiraDialogContent(
 	contentPadding: PaddingValues = PaddingValues(horizontal = 20.dp),
 	content: @Composable ColumnScope.() -> Unit,
 ) {
-	val darkTheme = isSystemInDarkTheme()
+	val darkTheme = at.jodlidev.esmira.ThemeState.isDark.value ?: isSystemInDarkTheme()
 	ESMiraTheme(darkTheme) {
 		Surface(
 			color = if(darkTheme) MaterialTheme.colorScheme.surfaceVariant else MaterialTheme.colorScheme.background,

@@ -243,6 +243,8 @@
     <string name="repeating">Repeating</string>
     <string name="one_time">One-time</string>
     <string name="about_ESMira">About ESMira</string>
+    <string name="switch_to_dark_mode">Switch to dark mode</string>
+    <string name="switch_to_light_mode">Switch to light mode</string>
     <string name="joined_at">Joined at</string>
     <string name="completed_questionnaires">Completed questionnaires</string>
     <string name="upload_protocol">Upload protocol</string>

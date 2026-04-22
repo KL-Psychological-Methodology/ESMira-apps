@@ -4,20 +4,71 @@ import sharedCode
 struct ContentView: View {
 	@EnvironmentObject var appState: AppState
 	@EnvironmentObject var navigationState: NavigationState
+
+	/// 0 = follow system, 1 = force light, 2 = force dark
+	@AppStorage("themeOverride") private var themeOverride: Int = 0
+
+	private var preferredScheme: ColorScheme? {
+		switch themeOverride {
+		case 1: return .light
+		case 2: return .dark
+		default: return nil
+		}
+	}
 	
 //	let updateTimer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
 	
 	init() {
-		let appearance = UINavigationBarAppearance()
-		appearance.configureWithOpaqueBackground()
-		appearance.backgroundColor = UIColor(named: "Surface")
-		appearance.titleTextAttributes = [.foregroundColor: UIColor(named: "onSurface") ?? UIColor.white]
-		appearance.largeTitleTextAttributes = [.foregroundColor: UIColor(named: "onSurface") ?? UIColor.white]
-			
-		UINavigationBar.appearance().standardAppearance = appearance
-		UINavigationBar.appearance().scrollEdgeAppearance = appearance
-		UINavigationBar.appearance().compactAppearance = appearance
-		UINavigationBar.appearance().tintColor = UIColor(named: "onSurface") ?? UIColor.white
+		func makeGradientImage(colors: [CGColor], locations: [NSNumber]? = nil) -> UIImage {
+			let layer = CAGradientLayer()
+			layer.colors = colors
+			layer.locations = locations
+			layer.startPoint = CGPoint(x: 0, y: 0.5)
+			layer.endPoint   = CGPoint(x: 1, y: 0.5)
+			layer.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 100)
+			return UIGraphicsImageRenderer(size: layer.frame.size).image { ctx in
+				layer.render(in: ctx.cgContext)
+			}.resizableImage(withCapInsets: .zero, resizingMode: .stretch)
+		}
+
+		// Light mode: same pink as dark mode (#DC4E9D) → blue
+		let lightImage = makeGradientImage(colors: [
+			UIColor(red: 0.863, green: 0.306, blue: 0.616, alpha: 1).cgColor, // #DC4E9D pink
+			UIColor(red: 0.169, green: 0.596, blue: 0.792, alpha: 1).cgColor  // #2B98CA blue
+		])
+		let lightAppearance = UINavigationBarAppearance()
+		lightAppearance.configureWithOpaqueBackground()
+		lightAppearance.backgroundImage = lightImage
+		lightAppearance.titleTextAttributes      = [.foregroundColor: UIColor.white]
+		lightAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+		// Dark mode: darker pink (#DC4E9D, matches AccentLight dark) → blue
+		let darkImage = makeGradientImage(colors: [
+			UIColor(red: 0.863, green: 0.306, blue: 0.616, alpha: 1).cgColor, // #DC4E9D dark pink
+			UIColor(red: 0.169, green: 0.596, blue: 0.792, alpha: 1).cgColor  // #2B98CA blue
+		])
+		let darkAppearance = UINavigationBarAppearance()
+		darkAppearance.configureWithOpaqueBackground()
+		darkAppearance.backgroundImage = darkImage
+		darkAppearance.titleTextAttributes      = [.foregroundColor: UIColor.white]
+		darkAppearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+		let lightTraits = UITraitCollection(userInterfaceStyle: .light)
+		let darkTraits  = UITraitCollection(userInterfaceStyle: .dark)
+
+		UINavigationBar.appearance(for: lightTraits).standardAppearance   = lightAppearance
+		UINavigationBar.appearance(for: lightTraits).scrollEdgeAppearance = lightAppearance
+		UINavigationBar.appearance(for: lightTraits).compactAppearance    = lightAppearance
+		UINavigationBar.appearance(for: lightTraits).tintColor            = .white
+
+		UINavigationBar.appearance(for: darkTraits).standardAppearance   = darkAppearance
+		UINavigationBar.appearance(for: darkTraits).scrollEdgeAppearance = darkAppearance
+		UINavigationBar.appearance(for: darkTraits).compactAppearance    = darkAppearance
+		UINavigationBar.appearance(for: darkTraits).tintColor            = .white
+
+		// Apply background tint globally to scroll/list views.
+		// Background.colorset: light = white, dark = #0A1F3A (dark navy).
+		UIScrollView.appearance().backgroundColor = UIColor(named: "Background")
 	}
 	
 	func getScreenDialogView() -> some View {
@@ -128,5 +179,6 @@ struct ContentView: View {
 			
 			.accentColor(Color("onSurface"))
 			.navigationViewStyle(.stack)
+			.preferredColorScheme(preferredScheme)
 	}
 }

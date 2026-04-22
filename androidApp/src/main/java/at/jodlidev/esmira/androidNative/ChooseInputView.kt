@@ -61,6 +61,8 @@ fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifi
 			Input.TYPES.file_upload -> FileUploadView(input, get, setFilePath)
 			Input.TYPES.record_audio -> RecordAudioView(input)
 			Input.TYPES.share -> ShareView(input, get, setValue)
+		Input.TYPES.creativity -> CreativityView(input, get, setAdditionalValue)
+		Input.TYPES.stroop -> StroopView(input, get, setAdditionalValue)
 			Input.TYPES.text -> Unit
 			Input.TYPES.text_input -> TextInputView(input, get, setValue)
 			Input.TYPES.time -> TimeView(input, get, setValue)

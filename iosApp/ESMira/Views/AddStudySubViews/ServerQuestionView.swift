@@ -57,5 +57,7 @@ struct ServerQuestionView: View {
 		.textFieldAlert(isPresented: self.$askManualUrl, text: self.$manualUrl, title: "colon_enter_manually") {
 			self.addStudyState.serverUrl = self.manualUrl
 		}
+		.navigationBarTitle(Text(""), displayMode: .inline)
+		.esBackgroundNavBar()
 	}
 }
