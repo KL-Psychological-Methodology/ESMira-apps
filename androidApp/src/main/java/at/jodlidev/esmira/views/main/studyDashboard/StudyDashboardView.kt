@@ -10,6 +10,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -59,7 +60,8 @@ fun StudyDashboardView(
 	gotoStudyInformation: () -> Unit,
 	gotoFaq: () -> Unit,
 	saveBackup: () -> Unit,
-	loadBackup: () -> Unit
+	loadBackup: () -> Unit,
+	toggleTheme: (Boolean) -> Unit = {}
 ) {
 	val context = LocalContext.current
 	val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -82,7 +84,8 @@ fun StudyDashboardView(
 				openAbout = openAbout,
 				openNextNotifications = openNextNotifications,
 				saveBackup = saveBackup,
-				loadBackup = loadBackup
+				loadBackup = loadBackup,
+				toggleTheme = toggleTheme
 			)
 		},
 		modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -188,6 +191,7 @@ fun StudyDashboardGrid(
 	
 	LazyVerticalGrid(
 		columns = GridCells.Fixed(2),
+		contentPadding = PaddingValues(start = 5.dp, end = 5.dp, bottom = 10.dp),
 		modifier = modifier.fillMaxWidth()
 	) {
 		if(study.state == Study.STATES.Quit) {
@@ -201,6 +205,7 @@ fun StudyDashboardGrid(
 		item(span = { GridItemSpan(maxLineSpan) }) {
 			StudyDashboardHeaderView(
 				stringResource(R.string.questionnaires),
+				topSpacing = false,
 				if(gotoDisabledQuestionnaires != null) {
 					{
 						MenuItem(

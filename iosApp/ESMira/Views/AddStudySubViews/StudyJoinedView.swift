@@ -40,5 +40,6 @@ struct StudyJoinedView: View {
 		.padding()
 		.navigationBarBackButtonHidden(true)
 		.navigationBarTitle(Text("complete"), displayMode: .inline)
+		.esBackgroundNavBar()
 	}
 }

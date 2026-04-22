@@ -92,6 +92,7 @@ struct StudyPermissionsView: View, PermissionListProtocol {
 		.alert(isPresented: self.$showAlert, content: self.alertView)
 		.padding()
 		.navigationBarTitle(Text("add_a_study"), displayMode: .inline)
+		.esBackgroundNavBar()
 	}
 	
 	private func createLine(index: Int, line: LineData) -> some View {

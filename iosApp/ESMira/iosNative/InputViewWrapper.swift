@@ -102,6 +102,10 @@ struct InputView: View {
 			   return AnyView(RecordAudioStruct(viewModel: self.viewModel))
 			case Input.TYPES.share:
 			   return AnyView(ShareStruct(viewModel: self.viewModel))
+			case Input.TYPES.creativity:
+				return AnyView(CreativityStruct(viewModel: self.viewModel))
+			case Input.TYPES.stroop:
+				return AnyView(StroopStruct(viewModel: self.viewModel))
 			case Input.TYPES.textInput:
 				return AnyView(TextInputStruct(viewModel: self.viewModel))
 			case Input.TYPES.time:

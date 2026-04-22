@@ -32,5 +32,6 @@ struct WelcomeView: View {
 		}
 		.padding()
 		.navigationBarTitle(Text(""), displayMode: .inline)
+		.esBackgroundNavBar()
 	}
 }
