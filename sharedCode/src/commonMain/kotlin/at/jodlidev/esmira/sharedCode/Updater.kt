@@ -593,9 +593,9 @@ internal object Updater {
 
         if(oldVersion <= 56) {
             db.execSQL("ALTER TABLE studies ADD COLUMN legacyScheduling INTEGER DEFAULT 0;")
-            db.execSQL("UPDATE TABLE studies SET legacyScheduling=1;")
+            db.execSQL("UPDATE studies SET legacyScheduling=1;")
             db.execSQL("ALTER TABLE schedules ADD COLUMN startDayOne INTEGER DEFAULT 1;")
-            db.execSQL("UPDATE TABLE schedules SET startDayOne=0;")
+            db.execSQL("UPDATE schedules SET startDayOne=0;")
         }
 	}
 	
