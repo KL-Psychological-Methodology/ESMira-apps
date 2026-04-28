@@ -71,6 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 					if(alarm!.actionTrigger.hasInvitation(nothingElse: false)) {
 						let questionnaire = DbLogic().getQuestionnaire(id: alarm?.questionnaireId ?? 0)
 						if(questionnaire != nil){
+							questionnaire?.updateLastNotification(timestamp: max(questionnaire!.metadata.lastNotification, alarm!.timestamp))
 							if(questionnaire!.canBeFilledOut(now: NativeLink().getNowMillis())) {
 								navigationState.openQuestionnaire(questionnaire!)
 							} else {
