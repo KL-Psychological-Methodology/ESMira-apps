@@ -44,9 +44,6 @@ android {
         compose = true
         buildConfig = true
     }
-    composeOptions {
-        kotlinCompilerExtensionVersion = composeVersion
-    }
     namespace = "at.jodlidev.esmira"
 }
 
@@ -75,8 +72,6 @@ dependencies {
     //implementation("com.google.accompanist:accompanist-navigation-animation:$accompanistVersion")
     implementation("androidx.navigation:navigation-compose:2.8.4")
 //    implementation("androidx.navigation:navigation-compose:2.5.2") // Navigation
-    
-    implementation("androidx.multidex:multidex:2.0.1") //project became too big. Needed for SdK<21 See: https://stackoverflow.com/a/59308589)
     
     //debug db and sharedPreferences with browser (http://localhost:8080)
     //to access from outside, command for windows: C:\Users\[USERNAME]\AppData\Local\Android\sdk\platform-tools\adb forward tcp:8080 tcp:8080

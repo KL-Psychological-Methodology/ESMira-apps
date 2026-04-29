@@ -17,7 +17,7 @@ val coroutinesVersion = "1.6.4" //for multiple threads (used for web-requests)
 plugins {
 	kotlin("multiplatform")
 	id("com.android.library")
-	kotlin("plugin.serialization") version "2.1.0"
+	kotlin("plugin.serialization") version "2.2.10"
 }
 
 allprojects {
@@ -139,7 +139,11 @@ kotlin {
 
 android {
 	compileSdk = 34
-	sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+	sourceSets {
+		getByName("main") {
+			manifest.srcFile("src/androidMain/AndroidManifest.xml")
+		}
+	}
 	defaultConfig {
 		minSdk = 16
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

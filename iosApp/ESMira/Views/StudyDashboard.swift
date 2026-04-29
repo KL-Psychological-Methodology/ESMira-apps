@@ -169,9 +169,7 @@ struct StudyDashboard: View {
 	var study: Study
 
 	@Environment(\.colorScheme) private var colorScheme
-	/// 0 = follow system, 1 = force light, 2 = force dark
-	@AppStorage("themeOverride") private var themeOverride: Int = 0
-	
+
 	@State var showQuestionnaireMoreMenu = false
 	@State var showStudySelector = false
 	@State var showSettingsMenu = false
@@ -449,7 +447,7 @@ struct StudyDashboard: View {
 			? NSLocalizedString("switch_to_light_mode", comment: "")
 			: NSLocalizedString("switch_to_dark_mode", comment: "")
 		r.append(ActionSheet.Button.default(Text(themeLabel)) {
-			self.themeOverride = isDark ? 1 : 2
+			ThemeManager.shared.themeOverride = isDark ? 1 : 2
 		})
 
 		r.append(ActionSheet.Button.default(Text("send_error_report")) {
