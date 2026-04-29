@@ -55,7 +55,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 		val loadedTimestamp: Long = NativeLink.getNowMillis() // just exists to force reloads of the same data
 	) : Parcelable
 	
-	@OptIn(ExperimentalAnimationApi::class)
+	@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		
@@ -70,9 +70,22 @@ class WelcomeScreenActivity: ComponentActivity() {
 		val skipEntrance = (extras != null && extras.getBoolean(KEY_SKIP_ENTRANCE)) || openStudyDirectly
 		
 		setContent {
-			Scaffold { innerPadding ->
+			ESMiraSurface {
+				val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
+				Scaffold(
+					topBar = {
+						TopAppBar(
+							title = {},
+							scrollBehavior = scrollBehavior,
+							colors = TopAppBarDefaults.topAppBarColors(
+								containerColor = MaterialTheme.colorScheme.background,
+								scrolledContainerColor = MaterialTheme.colorScheme.background
+							)
+						)
+					}
+				) { innerPadding ->
 				Box(modifier = Modifier.padding(innerPadding)) {
-					ESMiraSurface {
+					run {
 						val context = LocalContext.current
 						val navController = rememberNavController()
 
@@ -211,6 +224,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 							navController = navController
 						)
 					}
+				}
 				}
 			}
 		}

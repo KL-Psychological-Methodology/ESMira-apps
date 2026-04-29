@@ -18,6 +18,7 @@ struct ImportantBox: FixedGridItem {
 			Text(content)
 				.fontWeight(.bold)
 				.foregroundColor(Color("Accent"))
+				.esTextShadow()
 				.padding(10)
 				.frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
 				.border(Color("Accent"))
@@ -30,35 +31,44 @@ struct HeaderLine: FixedGridItem {
 	let content: String
 	func fillsLine() -> Bool { return true }
 	var action: (() -> Void)? = nil
-	
-	var view: some View {
-		VStack {
-			VStack {
-				Divider()
-					.background(Color("Outline"))
-				HStack {
-					Text(content)
-					Spacer()
-					if(action != nil) {
-						Button(action: self.action!) {
-							HStack {
-								Image(systemName: "ellipsis")
-							}.frame(minWidth: 40, minHeight: 40)
-						}
-					}
+	var topSpacing: Bool = true
+
+	var view: some View { HeaderLineView(content: content, action: action, topSpacing: topSpacing) }
+}
+
+private struct HeaderLineView: View {
+	let content: String
+	var action: (() -> Void)?
+	var topSpacing: Bool = true
+
+	var body: some View {
+		HStack(alignment: .center, spacing: 8) {
+			// Accent bar
+			RoundedRectangle(cornerRadius: 2)
+				.fill(Color("Accent"))
+				.frame(width: 4, height: 18)
+
+			Text(content)
+				.font(.subheadline)
+				.fontWeight(.semibold)
+				.foregroundColor(Color("onSurface").opacity(0.7))
+				.esTextShadow()
+
+			Spacer()
+
+			if let action = action {
+				Button(action: action) {
+					Image(systemName: "ellipsis")
+						.frame(minWidth: 40, minHeight: 40)
 				}
-				.padding([.horizontal], 20)
-				
-				Divider()
-					.background(Color("Outline"))
+				.foregroundColor(Color("onSurface").opacity(0.7))
 			}
-			.padding(0)
-			.foregroundColor(Color("onSurface"))
-			.background(Color("Surface"))
-			.shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.05), radius: 5, y: 5)
 		}
-			.padding([.vertical], 5)
-			.frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
+		.padding(.leading, 16)
+		.padding(.trailing, 4)
+		.padding(.top, topSpacing ? 28 : 6)
+		.padding(.bottom, 6)
+		.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
 	}
 }
 
@@ -67,15 +77,21 @@ struct ClickableContent: View {
 	let icon: String
 	var important: Bool = false
 	var badge: Int = 0
-	
+	@Environment(\.colorScheme) private var colorScheme
+
 	var body: some View {
+		let dropShadowColor = colorScheme == .dark
+			? Color(.sRGBLinear, white: 1, opacity: 0.35)
+			: Color(.sRGBLinear, white: 0, opacity: 0.05)
 		ZStack(alignment:.topTrailing) {
 			VStack(alignment: .center) {
 				Spacer()
 				Image(systemName: self.icon)
+					.esTextShadow()
 				Text(NSLocalizedString(header, comment: ""))
 					.font(.caption)
 					.fontWeight(.bold)
+					.esTextShadow()
 					.padding([.top], 2)
 				Spacer()
 			}
@@ -94,6 +110,7 @@ struct ClickableContent: View {
 			.frame(minWidth: 0, maxWidth: .infinity, minHeight: 80, alignment: .center)
 			.background(Color(self.important ? "AccentLight" : "Surface"))
 			.foregroundColor(self.important ? .white : Color("onSurface"))
+			.shadow(color: dropShadowColor, radius: 5, y: 5)
 	}
 }
 struct NavigationBox<Content: View>: FixedGridItem {
@@ -150,7 +167,9 @@ struct StudyDashboard: View {
 	@EnvironmentObject var appState: AppState
 	@EnvironmentObject var navigationState: NavigationState
 	var study: Study
-	
+
+	@Environment(\.colorScheme) private var colorScheme
+
 	@State var showQuestionnaireMoreMenu = false
 	@State var showStudySelector = false
 	@State var showSettingsMenu = false
@@ -281,7 +300,7 @@ struct StudyDashboard: View {
 		
 		list.append(HeaderLine(content: NSLocalizedString("questionnaires", comment: "questionnaires"), action: {
 			self.showQuestionnaireMoreMenu = true
-		}))
+		}, topSpacing: false))
 		if(!questionnaireList.isEmpty) {
 			list.append(ContentLine(viewContent: VStack {
 				ForEach(questionnaireList, id: \.id) { questionnaire in
@@ -422,8 +441,15 @@ struct StudyDashboard: View {
 	
 	func generateSettingsMenu() -> [ActionSheet.Button] {
 		var r = [ActionSheet.Button]()
-		
-		
+
+		let isDark = colorScheme == .dark
+		let themeLabel = isDark
+			? NSLocalizedString("switch_to_light_mode", comment: "")
+			: NSLocalizedString("switch_to_dark_mode", comment: "")
+		r.append(ActionSheet.Button.default(Text(themeLabel)) {
+			ThemeManager.shared.themeOverride = isDark ? 1 : 2
+		})
+
 		r.append(ActionSheet.Button.default(Text("send_error_report")) {
 			self.navigationState.openErrorReport()
 		})

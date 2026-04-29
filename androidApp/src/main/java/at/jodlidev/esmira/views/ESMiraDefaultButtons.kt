@@ -20,10 +20,10 @@ import at.jodlidev.esmira.ESMiraSurface
  */
 
 val defaultButtonPadding = PaddingValues(
-	start = 4.dp,
-	top = 1.dp,
-	end = 4.dp,
-	bottom = 1.dp
+	start = 16.dp,
+	top = 8.dp,
+	end = 16.dp,
+	bottom = 8.dp
 )
 
 @Composable
@@ -33,7 +33,7 @@ fun DefaultButton(
 	modifier: Modifier = Modifier
 ) {
 	Button(
-		shape = RoundedCornerShape(1.dp),
+		shape = RoundedCornerShape(16.dp),
 		colors = ButtonDefaults.buttonColors(
 			containerColor = MaterialTheme.colorScheme.surface,
 			contentColor = MaterialTheme.colorScheme.onSurface,
@@ -52,7 +52,7 @@ fun DefaultButton(
 	content: @Composable RowScope.() -> Unit
 ) {
 	Button(
-		shape = RoundedCornerShape(1.dp),
+		shape = RoundedCornerShape(16.dp),
 		colors = ButtonDefaults.buttonColors(
 			containerColor = MaterialTheme.colorScheme.surface,
 			contentColor = MaterialTheme.colorScheme.onSurface,
@@ -73,7 +73,7 @@ fun DefaultButtonIconLeft(
 	enabled: Boolean = true
 ) {
 	Button(
-		shape = RoundedCornerShape(1.dp),
+		shape = RoundedCornerShape(16.dp),
 		colors = ButtonDefaults.buttonColors(
 			containerColor = MaterialTheme.colorScheme.surface,
 			contentColor = MaterialTheme.colorScheme.onSurface,
@@ -101,7 +101,7 @@ fun DefaultButtonIconRight(
 	textModifier: Modifier = Modifier
 ) {
 	Button(
-		shape = RoundedCornerShape(5.dp),
+		shape = RoundedCornerShape(16.dp),
 		colors = ButtonDefaults.buttonColors(
 			containerColor = MaterialTheme.colorScheme.surface,
 			contentColor = MaterialTheme.colorScheme.onSurface,
@@ -127,7 +127,7 @@ fun DefaultButtonIconAbove(
 	modifier: Modifier = Modifier
 ) {
 	Button(
-		shape = RoundedCornerShape(5.dp),
+		shape = RoundedCornerShape(16.dp),
 		colors = ButtonDefaults.buttonColors(
 			containerColor = MaterialTheme.colorScheme.surface,
 			contentColor = MaterialTheme.colorScheme.onSurface,

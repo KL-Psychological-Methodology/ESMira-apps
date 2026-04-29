@@ -4,20 +4,22 @@ import sharedCode
 struct ContentView: View {
 	@EnvironmentObject var appState: AppState
 	@EnvironmentObject var navigationState: NavigationState
-	
+
 //	let updateTimer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
 	
 	init() {
 		let appearance = UINavigationBarAppearance()
 		appearance.configureWithOpaqueBackground()
-		appearance.backgroundColor = UIColor(named: "Surface")
-		appearance.titleTextAttributes = [.foregroundColor: UIColor(named: "onSurface") ?? UIColor.white]
-		appearance.largeTitleTextAttributes = [.foregroundColor: UIColor(named: "onSurface") ?? UIColor.white]
-			
-		UINavigationBar.appearance().standardAppearance = appearance
+		appearance.backgroundColor = UIColor(named: "PrimaryDark")
+		appearance.titleTextAttributes      = [.foregroundColor: UIColor.white]
+		appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+
+		UINavigationBar.appearance().standardAppearance   = appearance
 		UINavigationBar.appearance().scrollEdgeAppearance = appearance
-		UINavigationBar.appearance().compactAppearance = appearance
-		UINavigationBar.appearance().tintColor = UIColor(named: "onSurface") ?? UIColor.white
+		UINavigationBar.appearance().compactAppearance    = appearance
+		UINavigationBar.appearance().tintColor            = .white
+
+		UIScrollView.appearance().backgroundColor = UIColor(named: "Background")
 	}
 	
 	func getScreenDialogView() -> some View {
@@ -102,6 +104,7 @@ struct ContentView: View {
 			}
 		}
 			.onAppear {
+				ThemeManager.shared.applyToWindow()
 				let missedNotifications = DbLogic().getMissedInvitations()
 				if(missedNotifications != 0) {
 					self.appState.showToast(String(format: NSLocalizedString("ios_info_missed_notifications", comment: ""), missedNotifications))

@@ -38,5 +38,7 @@ struct AccessKeyQuesionView: View {
 			.textFieldAlert(isPresented: self.$askAccessKey, text: self.$addStudyState.accessKey, title: "colon_accessCode") {
 				self.gotoStudyLoader = true
 			}
+		.navigationBarTitle(Text(""), displayMode: .inline)
+		.esBackgroundNavBar()
 	}
 }

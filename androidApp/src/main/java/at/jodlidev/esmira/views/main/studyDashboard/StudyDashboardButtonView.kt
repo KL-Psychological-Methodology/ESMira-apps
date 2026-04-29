@@ -9,10 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import at.jodlidev.esmira.EsIcon
+import at.jodlidev.esmira.esShadowColor
 
 @Composable
 fun StudyDashboardButtonView(
@@ -22,12 +25,13 @@ fun StudyDashboardButtonView(
 	badge: String? = null,
 	important: Boolean = false
 ) {
+	val shadowColor = esShadowColor()
 	Box(
 		contentAlignment = Alignment.Center,
 	) {
 		Button(
 			onClick = onClick,
-			shape = RoundedCornerShape(1.dp),
+			shape = RoundedCornerShape(16.dp),
 			colors = if(important) ButtonDefaults.buttonColors(
 				containerColor = MaterialTheme.colorScheme.tertiaryContainer,
 				contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
@@ -38,11 +42,12 @@ fun StudyDashboardButtonView(
 			),
 			modifier = Modifier
 				.padding(all = 5.dp)
+				.shadow(elevation = 5.dp, shape = RoundedCornerShape(16.dp), ambientColor = shadowColor, spotColor = shadowColor)
 				.heightIn(min = 80.dp)
 				.fillMaxSize()
 		) {
 			Column(horizontalAlignment = Alignment.CenterHorizontally) {
-				Icon(icon, "")
+				EsIcon(icon, "")
 				Text(text, textAlign = TextAlign.Center, fontSize = MaterialTheme.typography.bodySmall.fontSize, fontWeight = FontWeight.Bold)
 			}
 		}

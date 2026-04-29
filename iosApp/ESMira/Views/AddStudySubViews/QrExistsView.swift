@@ -26,5 +26,7 @@ struct QrExistsView: View {
 			Spacer()
 		}
 		.padding()
+		.navigationBarTitle(Text(""), displayMode: .inline)
+		.esBackgroundNavBar()
 	}
 }

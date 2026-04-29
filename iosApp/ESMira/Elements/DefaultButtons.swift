@@ -9,12 +9,16 @@
 import Foundation
 import SwiftUI
 
+private let esButtonCornerRadius: CGFloat = 16
+
 struct NavigationLinkModifier: ViewModifier {
 	func body(content: Content) -> some View {
 		content
-			.foregroundColor(Color("onSurface"))
-			.padding()
-			.background(Color("Surface"))
+			.foregroundColor(Color.esOnSurface)
+			.padding(.horizontal, 16)
+			.padding(.vertical, 10)
+			.background(Color.esSurface)
+			.clipShape(RoundedRectangle(cornerRadius: esButtonCornerRadius))
 	}
 }
 
@@ -41,12 +45,14 @@ struct DefaultButton: View {
 			Text(NSLocalizedString(self.label, comment: ""))
 				.bold()
 				.frame(maxWidth: self.maxWidth)
-				.foregroundColor(Color("onSurface"))
+				.foregroundColor(Color.esOnSurface)
 		}
 			.opacity(self.disabled ? 0.3 : 1)
 			.disabled(self.disabled)
-			.padding()
-			.background(Color("Surface"))
+			.padding(.horizontal, 16)
+			.padding(.vertical, 10)
+			.background(Color.esSurface)
+			.clipShape(RoundedRectangle(cornerRadius: esButtonCornerRadius))
 	}
 }
 
@@ -72,12 +78,14 @@ struct DefaultIconButton: View {
 				Text(NSLocalizedString(self.label, comment: "")).bold()
 			}
 			.frame(maxWidth: self.maxWidth)
-			.foregroundColor(Color("onSurface"))
+			.foregroundColor(Color.esOnSurface)
 		}
 			.opacity(self.disabled ? 0.3 : 1)
 			.disabled(self.disabled)
-			.padding()
-			.background(Color("Surface"))
+			.padding(.horizontal, 16)
+			.padding(.vertical, 10)
+			.background(Color.esSurface)
+			.clipShape(RoundedRectangle(cornerRadius: esButtonCornerRadius))
 	}
 }
 
@@ -100,9 +108,11 @@ struct DefaultIconRightButton: View {
 				Image(systemName: self.icon)
 			}
 			.frame(maxWidth: self.maxWidth)
-			.foregroundColor(Color("onSurface"))
+			.foregroundColor(Color.esOnSurface)
 		}
-			.padding()
-			.background(Color("Surface"))
+			.padding(.horizontal, 16)
+			.padding(.vertical, 10)
+			.background(Color.esSurface)
+			.clipShape(RoundedRectangle(cornerRadius: esButtonCornerRadius))
 	}
 }
