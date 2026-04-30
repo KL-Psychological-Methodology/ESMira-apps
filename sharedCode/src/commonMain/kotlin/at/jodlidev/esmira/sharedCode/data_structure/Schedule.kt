@@ -226,8 +226,8 @@ class Schedule {
 			KEY_SKIP_FIRST_IN_LOOP,
 			KEY_WEEKDAYS,
 			KEY_DAY_OF_MONTH,
-			KEY_ACTION_TRIGGER, //is usually ignored
-            KEY_START_DAY_ONE
+            KEY_START_DAY_ONE,
+			KEY_ACTION_TRIGGER //is usually ignored
 		)
 		
 		fun updateLastScheduled(id: Long, timestamp: Long) {
