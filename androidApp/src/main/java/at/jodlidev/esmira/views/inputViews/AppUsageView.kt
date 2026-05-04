@@ -39,8 +39,13 @@ class AppUsageCalculator(context: Context) {
 	
 	class UsageStatsInfo(
 		val count: Int,
-		val totalTime: Long
-	)
+		val totalTime: Long,
+        val events: List<Pair<Long, Long>>
+	) {
+        fun getEventsString(): String {
+            return "[" + events.joinToString(",") { (start, end) -> "[$start,$end]" } + "]"
+        }
+    }
 	private class AppUsageCounter(
 		val from: Long,
 		val to: Long,
@@ -50,6 +55,7 @@ class AppUsageCalculator(context: Context) {
 	) {
 		private var count = 0
 		private var totalTime = 0L
+        private var events = mutableListOf<Pair<Long, Long>>()
 		
 		private var enableTimestamp = 0L
 		private var hasEvent = false
@@ -64,16 +70,20 @@ class AppUsageCalculator(context: Context) {
 				endEventCode -> {
 					if(enableTimestamp != 0L) {
 						totalTime += event.timeStamp - enableTimestamp
+                        events.add(Pair(enableTimestamp, event.timeStamp))
 						enableTimestamp = 0L
 						hasEvent = true
 					}
-					else if(!hasEvent)//measures the time from filling out the last questionnaire to turning of the screen
-						totalTime += event.timeStamp - from
+					else if(!hasEvent) {//measures the time from filling out the last questionnaire to turning of the screen
+                        totalTime += event.timeStamp - from
+                        events.add(Pair(from, event.timeStamp))
+                    }
 					
 				}
 				UsageEvents.Event.DEVICE_SHUTDOWN, unexpectedEndEventCode -> {
 					if(enableTimestamp != 0L) {
 						totalTime += event.timeStamp - enableTimestamp
+                        events.add(Pair(enableTimestamp, event.timeStamp))
 						enableTimestamp = 0L
 						hasEvent = true
 					}
@@ -82,10 +92,12 @@ class AppUsageCalculator(context: Context) {
 		}
 		
 		fun getResults(): UsageStatsInfo{
-			if(enableTimestamp != 0L)
-				totalTime += to - enableTimestamp
+			if(enableTimestamp != 0L) {
+                totalTime += to - enableTimestamp
+                events.add(Pair(enableTimestamp, to))
+            }
 			
-			return UsageStatsInfo(count, totalTime)
+			return UsageStatsInfo(count, totalTime, events.toList())
 		}
 	}
 	
@@ -114,7 +126,7 @@ class AppUsageCalculator(context: Context) {
 			counter.getResults()
 		}
 		else
-			context.get()?.let { ScreenTrackingReceiver.getData(it) } ?: UsageStatsInfo(-1, -1)
+			context.get()?.let { ScreenTrackingReceiver.getData(it) } ?: UsageStatsInfo(-1, -1, listOf())
 	}
 	
 	
@@ -135,8 +147,8 @@ class AppUsageCalculator(context: Context) {
 				counterList[event.packageName] = AppUsageCounter(
 					from,
 					to,
-					UsageEvents.Event.MOVE_TO_FOREGROUND,
-					UsageEvents.Event.MOVE_TO_BACKGROUND,
+					if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) UsageEvents.Event.ACTIVITY_RESUMED else UsageEvents.Event.MOVE_TO_FOREGROUND,
+					if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) UsageEvents.Event.ACTIVITY_PAUSED else UsageEvents.Event.MOVE_TO_BACKGROUND,
 					if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) UsageEvents.Event.ACTIVITY_STOPPED else 23
 				)
 			}
@@ -163,33 +175,41 @@ fun AppUsageView(input: Input, get: () -> String, save: (String, Map<String, Str
 	
 	val yesterdayUsageTime: Long
 	val yesterdayUsageCount: Int
+    val yesterdayUsageProtocol: String
 	val todayUsageTime: Long
 	val todayUsageCount: Int
+    val todayUsageProtocol: String
 	
 	if(displayAppUsage) {
 		val packageUsagesYesterday = appUsageCalculator.getAllPackageUsages(from, to)
 		yesterdayUsageCount = packageUsagesYesterday[input.packageId]?.count ?: -1
 		yesterdayUsageTime = packageUsagesYesterday[input.packageId]?.totalTime ?: -1L
+        yesterdayUsageProtocol = packageUsagesYesterday[input.packageId]?.getEventsString() ?: ""
 		
 		val packageUsagesToday = appUsageCalculator.getAllPackageUsages(to, now)
 		todayUsageCount = packageUsagesToday[input.packageId]?.count ?: -1
 		todayUsageTime = packageUsagesToday[input.packageId]?.totalTime ?: -1L
+        todayUsageProtocol = packageUsagesToday[input.packageId]?.getEventsString() ?: ""
 	}
 	else { //general screen time:
 		val yesterdayPair = appUsageCalculator.countTotalEvents(from, to)
 		yesterdayUsageCount = yesterdayPair.count
 		yesterdayUsageTime = yesterdayPair.totalTime
+        yesterdayUsageProtocol = yesterdayPair.getEventsString()
 		
 		val todayPair = appUsageCalculator.countTotalEvents(to, now)
 		todayUsageCount = todayPair.count
 		todayUsageTime = todayPair.totalTime
+        todayUsageProtocol = todayPair.getEventsString()
 	}
 	
 	save(if(yesterdayUsageCount > 0 && todayUsageCount > 0) "1" else "0", mapOf(
 		Pair("usageCountYesterday", yesterdayUsageCount.toString()),
 		Pair("usageCountToday", todayUsageCount.toString()),
 		Pair("usageTimeYesterday", yesterdayUsageTime.toString()),
-		Pair("usageTimeToday", todayUsageTime.toString())
+		Pair("usageTimeToday", todayUsageTime.toString()),
+        Pair("usageProtocolYesterday", yesterdayUsageProtocol),
+        Pair("usageProtocolToday", todayUsageProtocol)
 	))
 	
 	AppUsageTableView(yesterdayUsageCount, yesterdayUsageTime, todayUsageCount, todayUsageTime, displayAppUsage, input.packageId)
