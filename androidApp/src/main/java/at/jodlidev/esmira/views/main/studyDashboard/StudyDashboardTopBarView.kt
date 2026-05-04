@@ -1,7 +1,6 @@
 package at.jodlidev.esmira.views.main.studyDashboard
 
 import android.content.res.Configuration
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -11,7 +10,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import at.jodlidev.esmira.ThemeState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -46,8 +44,7 @@ fun StudyEntranceTopBarView(
 	openAbout: () -> Unit,
 	openNextNotifications: () -> Unit,
 	saveBackup: () -> Unit,
-	loadBackup: () -> Unit,
-	toggleTheme: (Boolean) -> Unit = {}
+	loadBackup: () -> Unit
 ) {
 	val study = getStudy()
 	val studyList = getStudyList()
@@ -105,10 +102,6 @@ fun StudyEntranceTopBarView(
 					{
 						loadBackup()
 						settingsExpanded.value = false
-					},
-					{ currentDark ->
-						settingsExpanded.value = false
-						toggleTheme(currentDark)
 					}
 				)
 			}
@@ -159,20 +152,12 @@ fun SettingsDropdownView(
 	openAbout: () -> Unit,
 	openNextNotifications: () -> Unit,
 	saveBackup: () -> Unit,
-	loadBackup: () -> Unit,
-	onToggleTheme: (Boolean) -> Unit = {}
+	loadBackup: () -> Unit
 ) {
-	val isDark = ThemeState.isDark.value ?: isSystemInDarkTheme()
 	MenuItem(stringResource(R.string.send_error_report), Icons.Default.BugReport, openErrorReport)
 	MenuItem(stringResource(R.string.notifications_not_working), Icons.Default.NotificationsOff, openNotificationsDialog)
 	MenuItem(stringResource(R.string.update_studies), Icons.Default.Refresh, updateStudies)
 	MenuItem(stringResource(R.string.about_ESMira), painterResource(id = R.drawable.ic_notification), openAbout)
-	Divider(modifier = Modifier.padding(all = 10.dp), color = MaterialTheme.colorScheme.secondary)
-	MenuItem(
-		text = stringResource(if(isDark) R.string.switch_to_light_mode else R.string.switch_to_dark_mode),
-		icon = if(isDark) Icons.Default.LightMode else Icons.Default.DarkMode,
-		onClick = { onToggleTheme(isDark) }
-	)
 
 	if(isDev()) {
 		Divider(modifier = Modifier.padding(all = 10.dp),

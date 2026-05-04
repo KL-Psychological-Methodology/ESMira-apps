@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.*
 import at.jodlidev.esmira.*
-import at.jodlidev.esmira.ThemeState
 import at.jodlidev.esmira.BuildConfig
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.*
@@ -47,7 +46,6 @@ import java.io.*
  */
 class MainActivity: ComponentActivity() {
 	private val reloadState = mutableStateOf(false)
-	private val themePrefs by lazy { getSharedPreferences("esmira_theme", Context.MODE_PRIVATE) }
 	
 	private fun reloadPage() {
 		reloadState.value = reloadState.value.not()
@@ -60,11 +58,6 @@ class MainActivity: ComponentActivity() {
 		DbLogic.startupApp()
 		ScreenTrackingService.startService(applicationContext)
 
-		// Restore persisted theme override (if any)
-		if(themePrefs.contains("dark_mode")) {
-			ThemeState.isDark.value = themePrefs.getBoolean("dark_mode", false)
-		}
-		
 		if(BuildConfig.DEBUG)
 			DbUser.setDev(true, DbLogic.ADMIN_PASSWORD)
 		
@@ -98,11 +91,7 @@ class MainActivity: ComponentActivity() {
 				val navController = rememberNavController()
 				MainView(
 					startDestination = startDestination,
-					navController = navController,
-					toggleTheme = { currentDark ->
-						val newDark = ThemeState.toggle(currentDark)
-						themePrefs.edit().putBoolean("dark_mode", newDark).apply()
-					}
+					navController = navController
 				)
 			}
 		}
@@ -118,8 +107,7 @@ class MainActivity: ComponentActivity() {
 	@Composable
 	fun MainView(
 		startDestination: String,
-		navController: NavHostController = rememberNavController(),
-		toggleTheme: (Boolean) -> Unit = {}
+		navController: NavHostController = rememberNavController()
 	) {
 		val studyId = remember(reloadState.value) { mutableStateOf(DbUser.getCurrentStudyId()) }
 		if(studyId.value == 0L) {
@@ -157,8 +145,7 @@ class MainActivity: ComponentActivity() {
 					switchStudy = { newStudyId ->
 						studyId.value = newStudyId
 					},
-					navController = navController,
-					toggleTheme = toggleTheme
+					navController = navController
 				)
 			}
 			composable("hiddenQuestionnairesList") {
@@ -227,8 +214,7 @@ class MainActivity: ComponentActivity() {
 		studyId: Long,
 		reloadStudy: () -> Unit,
 		switchStudy: (Long) -> Unit,
-		navController: NavHostController,
-		toggleTheme: (Boolean) -> Unit = {}
+		navController: NavHostController
 	) {
 		val context = LocalContext.current
 		Crossfade(studyId) { currentStudyId ->
@@ -301,7 +287,6 @@ class MainActivity: ComponentActivity() {
 			StudyDashboardView(
 				getStudy = { study },
 				getStudyList = { studyList.value },
-				toggleTheme = toggleTheme,
 				getQuestionnaireList = { DbLogic.getEnabledQuestionnaires(currentStudyId) },
 				hasEditableSchedules = { study.hasEditableSchedules() },
 				hasUnSyncedDataSets = { DbLogic.hasUnSyncedDataSets(currentStudyId) },

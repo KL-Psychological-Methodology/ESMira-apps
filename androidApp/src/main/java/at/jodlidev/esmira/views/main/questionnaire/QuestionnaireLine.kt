@@ -19,9 +19,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import at.jodlidev.esmira.ESMiraSurface
-import at.jodlidev.esmira.EsIcon
+import at.jodlidev.esmira.ESMiraIcon
 import at.jodlidev.esmira.R
-import at.jodlidev.esmira.esShadowColor
+import at.jodlidev.esmira.ESMiraShadowColor
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
@@ -36,7 +36,7 @@ fun QuestionnaireLine(
 	questionnaire: Questionnaire,
 	gotoQuestionnaire: (Questionnaire) -> Unit
 ) {
-	val shadowColor = esShadowColor()
+	val shadowColor = ESMiraShadowColor()
 	DefaultButton(
 		onClick = { gotoQuestionnaire(questionnaire) },
 		modifier = Modifier
@@ -49,7 +49,7 @@ fun QuestionnaireLine(
 			modifier = Modifier.fillMaxWidth()
 		) {
 			Row(modifier = Modifier.padding(all = 5.dp)) {
-				EsIcon(Icons.Default.Article, "", tint = MaterialTheme.colorScheme.onSurface)
+				ESMiraIcon(Icons.Default.Article, "", tint = MaterialTheme.colorScheme.onSurface)
 				Spacer(Modifier.size(ButtonDefaults.IconSpacing))
 				Text(
 					questionnaire.title,

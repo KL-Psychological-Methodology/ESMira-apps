@@ -58,6 +58,6 @@ struct ServerQuestionView: View {
 			self.addStudyState.serverUrl = self.manualUrl
 		}
 		.navigationBarTitle(Text(""), displayMode: .inline)
-		.esBackgroundNavBar()
+		.ESMiraBackgroundNavBar()
 	}
 }

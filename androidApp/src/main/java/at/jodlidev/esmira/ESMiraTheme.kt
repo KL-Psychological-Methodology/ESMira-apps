@@ -13,8 +13,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,23 +23,6 @@ import at.jodlidev.esmira.views.DialogButton
  * Created by JodliDev on 05.10.2022.
  */
 
-
-/**
- * Holds the app-level dark mode override.
- * null  = follow system setting (default)
- * true  = force dark
- * false = force light
- */
-object ThemeState {
-	val isDark: MutableState<Boolean?> = mutableStateOf(null)
-
-	/** Toggle to the opposite of [currentDark], then persist via the caller. */
-	fun toggle(currentDark: Boolean): Boolean {
-		val newValue = !currentDark
-		isDark.value = newValue
-		return newValue
-	}
-}
 
 val colorGreen = Color(0xFF009600)
 val colorRed = Color(0xFFC80000)
@@ -54,28 +35,23 @@ val colorWarn = Color(0xFFFFBB00)
 val colorError = Color(0xFFFF0000)
 
 
-private const val esTextShadowAlpha = 0.18f
+private const val ESMiraTextShadowAlpha = 0.18f
 
-/** Returns the appropriate shadow color for elevated surfaces based on the current theme. */
 @Composable
-fun esShadowColor(): Color {
-	val isDark = ThemeState.isDark.value ?: isSystemInDarkTheme()
+fun ESMiraShadowColor(): Color {
+	val isDark = isSystemInDarkTheme()
 	return if(isDark) Color.White.copy(alpha = 0.35f) else Color.Black
 }
 
-/**
- * An [Icon] with a subtle drop shadow.
- * Achieved by rendering the icon twice: once offset in the shadow color, then normally on top.
- */
 @Composable
-fun EsIcon(
+fun ESMiraIcon(
 	imageVector: ImageVector,
 	contentDescription: String,
 	modifier: Modifier = Modifier,
 	tint: Color = LocalContentColor.current
 ) {
-	val isDark = ThemeState.isDark.value ?: isSystemInDarkTheme()
-	val shadowColor = if(isDark) Color.White.copy(alpha = esTextShadowAlpha) else Color.Black.copy(alpha = esTextShadowAlpha)
+	val isDark = isSystemInDarkTheme()
+	val shadowColor = if(isDark) Color.White.copy(alpha = ESMiraTextShadowAlpha) else Color.Black.copy(alpha = ESMiraTextShadowAlpha)
 	Box(modifier = modifier) {
 		Icon(imageVector, contentDescription = null, tint = shadowColor, modifier = Modifier.offset(x = 1.dp, y = 1.dp))
 		Icon(imageVector, contentDescription = contentDescription, tint = tint)
@@ -162,7 +138,7 @@ private val DarkColorPalette = darkColorScheme(
 )
 @Composable
 fun ESMiraTheme (
-	darkTheme: Boolean = ThemeState.isDark.value ?: isSystemInDarkTheme(),
+	darkTheme: Boolean = isSystemInDarkTheme(),
 	content: @Composable () -> Unit
 ) {
 	MaterialTheme(
@@ -174,7 +150,7 @@ fun ESMiraTheme (
 }
 
 @Composable fun ESMiraSurface (
-	darkTheme: Boolean = ThemeState.isDark.value ?: isSystemInDarkTheme(),
+	darkTheme: Boolean = isSystemInDarkTheme(),
 	content: @Composable () -> Unit
 ) {
 	ESMiraTheme(darkTheme) {

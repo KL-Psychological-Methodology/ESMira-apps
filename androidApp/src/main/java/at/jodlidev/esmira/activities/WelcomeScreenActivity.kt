@@ -55,6 +55,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 		val loadedTimestamp: Long = NativeLink.getNowMillis() // just exists to force reloads of the same data
 	) : Parcelable
 	
+	// ExperimentalMaterial3Api is required for TopAppBar and its scroll behavior
 	@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -84,8 +85,9 @@ class WelcomeScreenActivity: ComponentActivity() {
 						)
 					}
 				) { innerPadding ->
-				Box(modifier = Modifier.padding(innerPadding)) {
-					run {
+					Box(modifier = Modifier.padding(innerPadding)) {
+						// run{} creates a local scope for remember/state declarations within the Box lambda
+						run {
 						val context = LocalContext.current
 						val navController = rememberNavController()
 
@@ -223,8 +225,8 @@ class WelcomeScreenActivity: ComponentActivity() {
 							},
 							navController = navController
 						)
+						}
 					}
-				}
 				}
 			}
 		}

@@ -28,9 +28,9 @@ struct QuestionnaireLineView: View {
 			VStack(alignment: .leading) {
 				HStack {
 					Image(systemName: "doc.text.fill")
-						.esTextShadow()
+						.ESMiraTextShadow()
 					Text(questionnaire.title)
-						.esTextShadow()
+						.ESMiraTextShadow()
 					Spacer()
 					if(questionnaire.showJustFinishedBadge()) {
 						ZStack {
@@ -54,7 +54,7 @@ struct QuestionnaireLineView: View {
 						Spacer()
 						Text(String(format: NSLocalizedString("colon_last_filled_out", comment: ""), NativeLink().formatDateTime(ms: questionnaire.metadata.lastCompleted)))
 							.font(.caption)
-							.esTextShadow()
+							.ESMiraTextShadow()
 					}
 					.padding(.horizontal, 5)
 					.padding(.vertical, 2)

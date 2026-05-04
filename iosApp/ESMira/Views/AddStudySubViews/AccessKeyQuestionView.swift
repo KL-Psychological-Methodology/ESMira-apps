@@ -39,6 +39,6 @@ struct AccessKeyQuesionView: View {
 				self.gotoStudyLoader = true
 			}
 		.navigationBarTitle(Text(""), displayMode: .inline)
-		.esBackgroundNavBar()
+		.ESMiraBackgroundNavBar()
 	}
 }

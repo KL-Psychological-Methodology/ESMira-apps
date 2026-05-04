@@ -8,7 +8,7 @@
 
 import SwiftUI
 
-private struct ESTextShadowModifier: ViewModifier {
+private struct ESMiraTextShadowModifier: ViewModifier {
     @Environment(\.colorScheme) private var colorScheme
     func body(content: Content) -> some View {
         let shadowColor = colorScheme == .dark
@@ -35,11 +35,11 @@ private struct NavBarBackgroundHelper: UIViewControllerRepresentable {
             a.configureWithOpaqueBackground()
             a.backgroundColor = UIColor(named: "Background")
             let fg = UIColor(named: "onSurface") ?? .label
-            a.titleTextAttributes      = [.foregroundColor: fg]
+            a.titleTextAttributes = [.foregroundColor: fg]
             a.largeTitleTextAttributes = [.foregroundColor: fg]
-            bar.standardAppearance   = a
+            bar.standardAppearance = a
             bar.scrollEdgeAppearance = a
-            bar.compactAppearance    = a
+            bar.compactAppearance = a
             bar.tintColor = fg
         }
 
@@ -49,23 +49,23 @@ private struct NavBarBackgroundHelper: UIViewControllerRepresentable {
             let a = UINavigationBarAppearance()
             a.configureWithOpaqueBackground()
             a.backgroundColor = UIColor(named: "PrimaryDark")
-            a.titleTextAttributes      = [.foregroundColor: UIColor.white]
+            a.titleTextAttributes = [.foregroundColor: UIColor.white]
             a.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-            bar.standardAppearance   = a
+            bar.standardAppearance = a
             bar.scrollEdgeAppearance = a
-            bar.compactAppearance    = a
+            bar.compactAppearance = a
             bar.tintColor = .white
         }
     }
 }
 
 extension View {
-    func esTextShadow() -> some View {
-        self.modifier(ESTextShadowModifier())
+    func ESMiraTextShadow() -> some View {
+        self.modifier(ESMiraTextShadowModifier())
     }
 
     @ViewBuilder
-    func esBackgroundNavBar() -> some View {
+    func ESMiraBackgroundNavBar() -> some View {
         if #available(iOS 16.0, *) {
             self
                 .toolbarBackground(Color("Background"), for: .navigationBar)
@@ -77,14 +77,14 @@ extension View {
 }
 
 extension Color {
-    static let esPrimaryDark   = Color("PrimaryDark")
-    static let esPrimaryLight  = Color("PrimaryLight")
-    static let esAccent        = Color("Accent")
-    static let esAccentLight   = Color("AccentLight")
-    static let esSurface       = Color("Surface")
-    static let esOnSurface     = Color("onSurface")
-    static let esOutline       = Color("Outline")
-    static let esListColor1    = Color("ListColor1")
-    static let esListColor2    = Color("ListColor2")
-    static let esBackground    = Color("Background")
+    static let ESMiraPrimaryDark  = Color("PrimaryDark")
+    static let ESMiraPrimaryLight = Color("PrimaryLight")
+    static let ESMiraAccent       = Color("Accent")
+    static let ESMiraAccentLight  = Color("AccentLight")
+    static let ESMiraSurface      = Color("Surface")
+    static let ESMiraOnSurface    = Color("onSurface")
+    static let ESMiraOutline      = Color("Outline")
+    static let ESMiraListColor1   = Color("ListColor1")
+    static let ESMiraListColor2   = Color("ListColor2")
+    static let ESMiraBackground   = Color("Background")
 }

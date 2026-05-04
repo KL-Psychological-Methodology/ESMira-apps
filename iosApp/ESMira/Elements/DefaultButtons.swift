@@ -9,16 +9,16 @@
 import Foundation
 import SwiftUI
 
-private let esButtonCornerRadius: CGFloat = 16
+private let ESMiraButtonCornerRadius: CGFloat = 16
 
 struct NavigationLinkModifier: ViewModifier {
 	func body(content: Content) -> some View {
 		content
-			.foregroundColor(Color.esOnSurface)
+			.foregroundColor(Color.ESMiraOnSurface)
 			.padding(.horizontal, 16)
 			.padding(.vertical, 10)
-			.background(Color.esSurface)
-			.clipShape(RoundedRectangle(cornerRadius: esButtonCornerRadius))
+			.background(Color.ESMiraSurface)
+			.clipShape(RoundedRectangle(cornerRadius: ESMiraButtonCornerRadius))
 	}
 }
 
@@ -45,14 +45,14 @@ struct DefaultButton: View {
 			Text(NSLocalizedString(self.label, comment: ""))
 				.bold()
 				.frame(maxWidth: self.maxWidth)
-				.foregroundColor(Color.esOnSurface)
+				.foregroundColor(Color.ESMiraOnSurface)
 		}
 			.opacity(self.disabled ? 0.3 : 1)
 			.disabled(self.disabled)
 			.padding(.horizontal, 16)
 			.padding(.vertical, 10)
-			.background(Color.esSurface)
-			.clipShape(RoundedRectangle(cornerRadius: esButtonCornerRadius))
+			.background(Color.ESMiraSurface)
+			.clipShape(RoundedRectangle(cornerRadius: ESMiraButtonCornerRadius))
 	}
 }
 
@@ -78,14 +78,14 @@ struct DefaultIconButton: View {
 				Text(NSLocalizedString(self.label, comment: "")).bold()
 			}
 			.frame(maxWidth: self.maxWidth)
-			.foregroundColor(Color.esOnSurface)
+			.foregroundColor(Color.ESMiraOnSurface)
 		}
 			.opacity(self.disabled ? 0.3 : 1)
 			.disabled(self.disabled)
 			.padding(.horizontal, 16)
 			.padding(.vertical, 10)
-			.background(Color.esSurface)
-			.clipShape(RoundedRectangle(cornerRadius: esButtonCornerRadius))
+			.background(Color.ESMiraSurface)
+			.clipShape(RoundedRectangle(cornerRadius: ESMiraButtonCornerRadius))
 	}
 }
 
@@ -108,11 +108,11 @@ struct DefaultIconRightButton: View {
 				Image(systemName: self.icon)
 			}
 			.frame(maxWidth: self.maxWidth)
-			.foregroundColor(Color.esOnSurface)
+			.foregroundColor(Color.ESMiraOnSurface)
 		}
 			.padding(.horizontal, 16)
 			.padding(.vertical, 10)
-			.background(Color.esSurface)
-			.clipShape(RoundedRectangle(cornerRadius: esButtonCornerRadius))
+			.background(Color.ESMiraSurface)
+			.clipShape(RoundedRectangle(cornerRadius: ESMiraButtonCornerRadius))
 	}
 }

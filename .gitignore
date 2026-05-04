@@ -15,11 +15,5 @@ androidApp/release
 xcuserdata/*
 /iosApp/ESMira.xcodeproj/xcuserdata/*
 *.xcuserstate
-
-# AI Tools
+*.xcuserstate
 .claude/
-.gemini/
-
-# Local configuration backups
-*.properties.txt
-local.properties

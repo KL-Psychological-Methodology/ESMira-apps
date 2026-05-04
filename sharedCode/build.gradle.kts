@@ -17,7 +17,7 @@ val coroutinesVersion = "1.6.4" //for multiple threads (used for web-requests)
 plugins {
 	kotlin("multiplatform")
 	id("com.android.library")
-	kotlin("plugin.serialization") version "2.2.10"
+	kotlin("plugin.serialization") version "2.1.0"
 }
 
 allprojects {

@@ -14,8 +14,8 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import at.jodlidev.esmira.EsIcon
-import at.jodlidev.esmira.esShadowColor
+import at.jodlidev.esmira.ESMiraIcon
+import at.jodlidev.esmira.ESMiraShadowColor
 
 @Composable
 fun StudyDashboardButtonView(
@@ -25,7 +25,7 @@ fun StudyDashboardButtonView(
 	badge: String? = null,
 	important: Boolean = false
 ) {
-	val shadowColor = esShadowColor()
+	val shadowColor = ESMiraShadowColor()
 	Box(
 		contentAlignment = Alignment.Center,
 	) {
@@ -47,7 +47,7 @@ fun StudyDashboardButtonView(
 				.fillMaxSize()
 		) {
 			Column(horizontalAlignment = Alignment.CenterHorizontally) {
-				EsIcon(icon, "")
+				ESMiraIcon(icon, "")
 				Text(text, textAlign = TextAlign.Center, fontSize = MaterialTheme.typography.bodySmall.fontSize, fontWeight = FontWeight.Bold)
 			}
 		}

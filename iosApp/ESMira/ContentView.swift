@@ -11,13 +11,13 @@ struct ContentView: View {
 		let appearance = UINavigationBarAppearance()
 		appearance.configureWithOpaqueBackground()
 		appearance.backgroundColor = UIColor(named: "PrimaryDark")
-		appearance.titleTextAttributes      = [.foregroundColor: UIColor.white]
+		appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
 		appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
 
-		UINavigationBar.appearance().standardAppearance   = appearance
+		UINavigationBar.appearance().standardAppearance = appearance
 		UINavigationBar.appearance().scrollEdgeAppearance = appearance
-		UINavigationBar.appearance().compactAppearance    = appearance
-		UINavigationBar.appearance().tintColor            = .white
+		UINavigationBar.appearance().compactAppearance = appearance
+		UINavigationBar.appearance().tintColor = .white
 
 		UIScrollView.appearance().backgroundColor = UIColor(named: "Background")
 	}

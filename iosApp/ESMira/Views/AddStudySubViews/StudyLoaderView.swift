@@ -82,7 +82,7 @@ struct StudyLoaderView: View {
 				}
 			}
 				.navigationBarTitle(Text("studies"), displayMode: .inline)
-				.esBackgroundNavBar()
+				.ESMiraBackgroundNavBar()
 		}
 		else {
 			VStack {

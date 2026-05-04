@@ -60,8 +60,7 @@ fun StudyDashboardView(
 	gotoStudyInformation: () -> Unit,
 	gotoFaq: () -> Unit,
 	saveBackup: () -> Unit,
-	loadBackup: () -> Unit,
-	toggleTheme: (Boolean) -> Unit = {}
+	loadBackup: () -> Unit
 ) {
 	val context = LocalContext.current
 	val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -84,8 +83,7 @@ fun StudyDashboardView(
 				openAbout = openAbout,
 				openNextNotifications = openNextNotifications,
 				saveBackup = saveBackup,
-				loadBackup = loadBackup,
-				toggleTheme = toggleTheme
+				loadBackup = loadBackup
 			)
 		},
 		modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)

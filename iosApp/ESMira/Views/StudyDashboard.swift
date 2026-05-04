@@ -18,7 +18,7 @@ struct ImportantBox: FixedGridItem {
 			Text(content)
 				.fontWeight(.bold)
 				.foregroundColor(Color("Accent"))
-				.esTextShadow()
+				.ESMiraTextShadow()
 				.padding(10)
 				.frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
 				.border(Color("Accent"))
@@ -52,7 +52,7 @@ private struct HeaderLineView: View {
 				.font(.subheadline)
 				.fontWeight(.semibold)
 				.foregroundColor(Color("onSurface").opacity(0.7))
-				.esTextShadow()
+				.ESMiraTextShadow()
 
 			Spacer()
 
@@ -87,11 +87,11 @@ struct ClickableContent: View {
 			VStack(alignment: .center) {
 				Spacer()
 				Image(systemName: self.icon)
-					.esTextShadow()
+					.ESMiraTextShadow()
 				Text(NSLocalizedString(header, comment: ""))
 					.font(.caption)
 					.fontWeight(.bold)
-					.esTextShadow()
+					.ESMiraTextShadow()
 					.padding([.top], 2)
 				Spacer()
 			}
