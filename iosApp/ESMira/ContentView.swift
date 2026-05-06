@@ -104,7 +104,6 @@ struct ContentView: View {
 			}
 		}
 			.onAppear {
-				ThemeManager.shared.applyToWindow()
 				let missedNotifications = DbLogic().getMissedInvitations()
 				if(missedNotifications != 0) {
 					self.appState.showToast(String(format: NSLocalizedString("ios_info_missed_notifications", comment: ""), missedNotifications))

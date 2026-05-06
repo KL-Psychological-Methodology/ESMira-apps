@@ -168,8 +168,6 @@ struct StudyDashboard: View {
 	@EnvironmentObject var navigationState: NavigationState
 	var study: Study
 
-	@Environment(\.colorScheme) private var colorScheme
-
 	@State var showQuestionnaireMoreMenu = false
 	@State var showStudySelector = false
 	@State var showSettingsMenu = false
@@ -441,14 +439,6 @@ struct StudyDashboard: View {
 	
 	func generateSettingsMenu() -> [ActionSheet.Button] {
 		var r = [ActionSheet.Button]()
-
-		let isDark = colorScheme == .dark
-		let themeLabel = isDark
-			? NSLocalizedString("switch_to_light_mode", comment: "")
-			: NSLocalizedString("switch_to_dark_mode", comment: "")
-		r.append(ActionSheet.Button.default(Text(themeLabel)) {
-			ThemeManager.shared.themeOverride = isDark ? 1 : 2
-		})
 
 		r.append(ActionSheet.Button.default(Text("send_error_report")) {
 			self.navigationState.openErrorReport()

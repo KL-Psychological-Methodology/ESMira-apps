@@ -151,6 +151,7 @@
 		6BCFEDB12825284D009167B0 /* SwiftUIChart.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCFED9E2825284D009167B0 /* SwiftUIChart.swift */; };
 		6BCFEDB22825284D009167B0 /* ChangeSchedulesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCFED9F2825284D009167B0 /* ChangeSchedulesView.swift */; };
 		6BCFEDB32825284D009167B0 /* TextFieldAlert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCFEDA02825284D009167B0 /* TextFieldAlert.swift */; };
+		A4087EA548A64D33B622DD4C /* Color+ESMira.swift in Sources */ = {isa = PBXBuildFile; fileRef = F81EDAB16D3E4E76A808FFA5 /* Color+ESMira.swift */; };
 		6BCFEDB42825284D009167B0 /* CheckBoxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCFEDA12825284D009167B0 /* CheckBoxView.swift */; };
 		6BCFEDB52825284D009167B0 /* HtmlTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCFEDA22825284D009167B0 /* HtmlTextView.swift */; };
 		6BCFEDB62825284D009167B0 /* RadioButtonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BCFEDA32825284D009167B0 /* RadioButtonView.swift */; };
@@ -384,6 +385,7 @@
 		6BCFED9E2825284D009167B0 /* SwiftUIChart.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftUIChart.swift; sourceTree = "<group>"; };
 		6BCFED9F2825284D009167B0 /* ChangeSchedulesView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChangeSchedulesView.swift; sourceTree = "<group>"; };
 		6BCFEDA02825284D009167B0 /* TextFieldAlert.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextFieldAlert.swift; sourceTree = "<group>"; };
+		F81EDAB16D3E4E76A808FFA5 /* Color+ESMira.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Color+ESMira.swift"; sourceTree = "<group>"; };
 		6BCFEDA12825284D009167B0 /* CheckBoxView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CheckBoxView.swift; sourceTree = "<group>"; };
 		6BCFEDA22825284D009167B0 /* HtmlTextView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HtmlTextView.swift; sourceTree = "<group>"; };
 		6BCFEDA32825284D009167B0 /* RadioButtonView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RadioButtonView.swift; sourceTree = "<group>"; };
@@ -711,6 +713,7 @@
 				6B13CF5928F808580035BA01 /* ShareSheet.swift */,
 				6BCFED9E2825284D009167B0 /* SwiftUIChart.swift */,
 				6BCFEDA02825284D009167B0 /* TextFieldAlert.swift */,
+				F81EDAB16D3E4E76A808FFA5 /* Color+ESMira.swift */,
 				6BCFEDAC2825284D009167B0 /* Toast.swift */,
 				6BCFED9C2825284D009167B0 /* VideoPlayerView.swift */,
 			);
@@ -1017,7 +1020,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cd \"$SRCROOT/..\"\nchmod +x ./gradlew\n./gradlew :sharedCode:embedAndSignAppleFrameworkForXcode\n";
+			shellScript = "if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n  exit 0\nfi\ncd \"$SRCROOT/..\"\nchmod +x ./gradlew\n./gradlew :sharedCode:embedAndSignAppleFrameworkForXcode";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1060,6 +1063,7 @@
 				6B3A92C429E816410081A554 /* AboutESMira.swift in Sources */,
 				6BCE4E192E65B9C40080E4A7 /* FaqView.swift in Sources */,
 				6BCFEDB32825284D009167B0 /* TextFieldAlert.swift in Sources */,
+				A4087EA548A64D33B622DD4C /* Color+ESMira.swift in Sources */,
 				6BD037F729F7D29100CAF208 /* DefaultButtons.swift in Sources */,
 				6BA4BF9E283E575700D3E8C7 /* QrExistsView.swift in Sources */,
 				6BCFEDBD2825284D009167B0 /* ChatBubble.swift in Sources */,
