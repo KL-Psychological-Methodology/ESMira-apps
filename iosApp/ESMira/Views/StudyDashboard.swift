@@ -18,7 +18,6 @@ struct ImportantBox: FixedGridItem {
 			Text(content)
 				.fontWeight(.bold)
 				.foregroundColor(Color("Accent"))
-				.ESMiraTextShadow()
 				.padding(10)
 				.frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
 				.border(Color("Accent"))
@@ -45,14 +44,13 @@ private struct HeaderLineView: View {
 		HStack(alignment: .center, spacing: 8) {
 			// Accent bar
 			RoundedRectangle(cornerRadius: 2)
-				.fill(Color("Accent"))
+				.fill(Color("PrimaryDark"))
 				.frame(width: 4, height: 18)
 
 			Text(content)
 				.font(.subheadline)
 				.fontWeight(.semibold)
 				.foregroundColor(Color("onSurface").opacity(0.7))
-				.ESMiraTextShadow()
 
 			Spacer()
 
@@ -82,7 +80,7 @@ struct ClickableContent: View {
 	var body: some View {
 		let dropShadowColor = colorScheme == .dark
 			? Color(.sRGBLinear, white: 1, opacity: 0.35)
-			: Color(.sRGBLinear, white: 0, opacity: 0.05)
+			: Color(.sRGBLinear, white: 0, opacity: 0.25)
 		ZStack(alignment:.topTrailing) {
 			VStack(alignment: .center) {
 				Spacer()
@@ -91,7 +89,6 @@ struct ClickableContent: View {
 				Text(NSLocalizedString(header, comment: ""))
 					.font(.caption)
 					.fontWeight(.bold)
-					.ESMiraTextShadow()
 					.padding([.top], 2)
 				Spacer()
 			}
@@ -110,6 +107,7 @@ struct ClickableContent: View {
 			.frame(minWidth: 0, maxWidth: .infinity, minHeight: 80, alignment: .center)
 			.background(Color(self.important ? "AccentLight" : "Surface"))
 			.foregroundColor(self.important ? .white : Color("onSurface"))
+			.clipShape(RoundedRectangle(cornerRadius: 16))
 			.shadow(color: dropShadowColor, radius: 5, y: 5)
 	}
 }

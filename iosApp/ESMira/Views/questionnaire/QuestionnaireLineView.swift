@@ -21,7 +21,7 @@ struct QuestionnaireLineView: View {
 	var body: some View {
 		let dropShadowColor = colorScheme == .dark
 			? Color(.sRGBLinear, white: 1, opacity: 0.35)
-			: Color(.sRGBLinear, white: 0, opacity: 0.05)
+			: Color(.sRGBLinear, white: 0, opacity: 0.25)
 		Button(action: {
 			navigationState.openQuestionnaire(questionnaire)
 		}) {
@@ -30,7 +30,6 @@ struct QuestionnaireLineView: View {
 					Image(systemName: "doc.text.fill")
 						.ESMiraTextShadow()
 					Text(questionnaire.title)
-						.ESMiraTextShadow()
 					Spacer()
 					if(questionnaire.showJustFinishedBadge()) {
 						ZStack {
@@ -54,7 +53,6 @@ struct QuestionnaireLineView: View {
 						Spacer()
 						Text(String(format: NSLocalizedString("colon_last_filled_out", comment: ""), NativeLink().formatDateTime(ms: questionnaire.metadata.lastCompleted)))
 							.font(.caption)
-							.ESMiraTextShadow()
 					}
 					.padding(.horizontal, 5)
 					.padding(.vertical, 2)
