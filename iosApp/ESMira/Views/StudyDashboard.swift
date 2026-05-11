@@ -510,9 +510,7 @@ struct StudyDashboard: View {
 								ActionSheet(title: Text("please_select"), buttons: self.generateStudyDropdown(studyList))
 							}
 						}
-						
 						Spacer(minLength: 20)
-
 						Button(action: {
 							self.showSettingsMenu = true
 						}) {
@@ -522,7 +520,7 @@ struct StudyDashboard: View {
 							ActionSheet(title: Text("please_select"), buttons: self.generateSettingsMenu())
 						}
 					}
-						.accentColor(Color("onSurface"))
+						.accentColor(.white)
 				)
 				.alert(isPresented: self.$showAlert) {
 					self.alertContent
