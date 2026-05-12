@@ -33,7 +33,6 @@ struct QrStartView: View {
 			Spacer()
 		}
 		.padding()
-		.navigationBarTitle(Text(""), displayMode: .inline)
 		.ESMiraBackgroundNavBar()
 		.sheet(isPresented: self.$openQrScanner) {
 			CodeScannerView(codeTypes: [.qr]) { result in
