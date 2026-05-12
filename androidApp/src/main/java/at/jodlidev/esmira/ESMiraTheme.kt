@@ -6,15 +6,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.material.icons.filled.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.offset
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import at.jodlidev.esmira.views.DialogButton
@@ -35,28 +31,12 @@ val colorWarn = Color(0xFFFFBB00)
 val colorError = Color(0xFFFF0000)
 
 
-private const val ESMiraTextShadowAlpha = 0.18f
-
 @Composable
 fun ESMiraShadowColor(): Color {
 	val isDark = isSystemInDarkTheme()
 	return if(isDark) Color.White.copy(alpha = 0.35f) else Color.Black
 }
 
-@Composable
-fun ESMiraIcon(
-	imageVector: ImageVector,
-	contentDescription: String,
-	modifier: Modifier = Modifier,
-	tint: Color = LocalContentColor.current
-) {
-	val isDark = isSystemInDarkTheme()
-	val shadowColor = if(isDark) Color.White.copy(alpha = ESMiraTextShadowAlpha) else Color.Black.copy(alpha = ESMiraTextShadowAlpha)
-	Box(modifier = modifier) {
-		Icon(imageVector, contentDescription = null, tint = shadowColor, modifier = Modifier.offset(x = 1.dp, y = 1.dp))
-		Icon(imageVector, contentDescription = contentDescription, tint = tint)
-	}
-}
 
 val ESMiraShapes = Shapes(
 	small = RoundedCornerShape(4.dp),

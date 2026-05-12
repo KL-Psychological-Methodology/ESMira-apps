@@ -19,9 +19,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import at.jodlidev.esmira.ESMiraSurface
-import at.jodlidev.esmira.ESMiraIcon
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.ESMiraShadowColor
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.ui.graphics.Color
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
@@ -49,7 +50,10 @@ fun QuestionnaireLine(
 			modifier = Modifier.fillMaxWidth()
 		) {
 			Row(modifier = Modifier.padding(all = 5.dp)) {
-				ESMiraIcon(Icons.Default.Article, "", tint = MaterialTheme.colorScheme.onSurface)
+				Box {
+					Icon(Icons.Default.Article, contentDescription = null, tint = if(isSystemInDarkTheme()) Color.White.copy(alpha = 0.18f) else Color.Black.copy(alpha = 0.18f), modifier = Modifier.offset(x = 1.dp, y = 1.dp))
+					Icon(Icons.Default.Article, "", tint = MaterialTheme.colorScheme.onSurface)
+				}
 				Spacer(Modifier.size(ButtonDefaults.IconSpacing))
 				Text(
 					questionnaire.title,
