@@ -14,10 +14,10 @@ private let ESMiraButtonCornerRadius: CGFloat = 16
 struct NavigationLinkModifier: ViewModifier {
 	func body(content: Content) -> some View {
 		content
-			.foregroundColor(Color.ESMiraOnSurface)
+			.foregroundColor(Color("onSurface"))
 			.padding(.horizontal, 16)
 			.padding(.vertical, 10)
-			.background(Color.ESMiraSurface)
+			.background(Color("Surface"))
 			.clipShape(RoundedRectangle(cornerRadius: ESMiraButtonCornerRadius))
 	}
 }
@@ -45,13 +45,13 @@ struct DefaultButton: View {
 			Text(NSLocalizedString(self.label, comment: ""))
 				.bold()
 				.frame(maxWidth: self.maxWidth)
-				.foregroundColor(Color.ESMiraOnSurface)
+				.foregroundColor(Color("onSurface"))
 		}
 			.opacity(self.disabled ? 0.3 : 1)
 			.disabled(self.disabled)
 			.padding(.horizontal, 16)
 			.padding(.vertical, 10)
-			.background(Color.ESMiraSurface)
+			.background(Color("Surface"))
 			.clipShape(RoundedRectangle(cornerRadius: ESMiraButtonCornerRadius))
 	}
 }
@@ -78,13 +78,13 @@ struct DefaultIconButton: View {
 				Text(NSLocalizedString(self.label, comment: "")).bold()
 			}
 			.frame(maxWidth: self.maxWidth)
-			.foregroundColor(Color.ESMiraOnSurface)
+			.foregroundColor(Color("onSurface"))
 		}
 			.opacity(self.disabled ? 0.3 : 1)
 			.disabled(self.disabled)
 			.padding(.horizontal, 16)
 			.padding(.vertical, 10)
-			.background(Color.ESMiraSurface)
+			.background(Color("Surface"))
 			.clipShape(RoundedRectangle(cornerRadius: ESMiraButtonCornerRadius))
 	}
 }
@@ -108,11 +108,11 @@ struct DefaultIconRightButton: View {
 				Image(systemName: self.icon)
 			}
 			.frame(maxWidth: self.maxWidth)
-			.foregroundColor(Color.ESMiraOnSurface)
+			.foregroundColor(Color("onSurface"))
 		}
 			.padding(.horizontal, 16)
 			.padding(.vertical, 10)
-			.background(Color.ESMiraSurface)
+			.background(Color("Surface"))
 			.clipShape(RoundedRectangle(cornerRadius: ESMiraButtonCornerRadius))
 	}
 }

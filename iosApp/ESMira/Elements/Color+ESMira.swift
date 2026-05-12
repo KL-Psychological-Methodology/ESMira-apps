@@ -75,16 +75,3 @@ extension View {
         }
     }
 }
-
-extension Color {
-    static let ESMiraPrimaryDark  = Color("PrimaryDark")
-    static let ESMiraPrimaryLight = Color("PrimaryLight")
-    static let ESMiraAccent       = Color("Accent")
-    static let ESMiraAccentLight  = Color("AccentLight")
-    static let ESMiraSurface      = Color("Surface")
-    static let ESMiraOnSurface    = Color("onSurface")
-    static let ESMiraOutline      = Color("Outline")
-    static let ESMiraListColor1   = Color("ListColor1")
-    static let ESMiraListColor2   = Color("ListColor2")
-    static let ESMiraBackground   = Color("Background")
-}
