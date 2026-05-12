@@ -21,7 +21,7 @@ class Application : Application() {
 		
 		super.onCreate()
 	}
-
+	
 	// Fix for Multidex combined with WorkerManager in Android API < 21
 	// See: https://stackoverflow.com/questions/58595909/androidx-work-impl-workmanagerinitializer-java-lang-classnotfoundexception-an
 	override fun attachBaseContext(base: Context?) {

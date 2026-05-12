@@ -158,7 +158,7 @@ fun SettingsDropdownView(
 	MenuItem(stringResource(R.string.notifications_not_working), Icons.Default.NotificationsOff, openNotificationsDialog)
 	MenuItem(stringResource(R.string.update_studies), Icons.Default.Refresh, updateStudies)
 	MenuItem(stringResource(R.string.about_ESMira), painterResource(id = R.drawable.ic_notification), openAbout)
-
+	
 	if(isDev()) {
 		Divider(modifier = Modifier.padding(all = 10.dp),
 			color = MaterialTheme.colorScheme.secondary)

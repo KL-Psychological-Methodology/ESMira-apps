@@ -4,7 +4,7 @@ import sharedCode
 struct ContentView: View {
 	@EnvironmentObject var appState: AppState
 	@EnvironmentObject var navigationState: NavigationState
-
+	
 //	let updateTimer = Timer.publish(every: 10, on: .main, in: .common).autoconnect()
 	
 	init() {
@@ -13,7 +13,7 @@ struct ContentView: View {
 		appearance.backgroundColor = UIColor(named: "PrimaryDark")
 		appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
 		appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-
+			
 		UINavigationBar.appearance().standardAppearance = appearance
 		UINavigationBar.appearance().scrollEdgeAppearance = appearance
 		UINavigationBar.appearance().compactAppearance = appearance

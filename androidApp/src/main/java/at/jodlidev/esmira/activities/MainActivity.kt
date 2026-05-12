@@ -57,7 +57,7 @@ class MainActivity: ComponentActivity() {
 		
 		DbLogic.startupApp()
 		ScreenTrackingService.startService(applicationContext)
-
+		
 		if(BuildConfig.DEBUG)
 			DbUser.setDev(true, DbLogic.ADMIN_PASSWORD)
 		
@@ -91,7 +91,7 @@ class MainActivity: ComponentActivity() {
 				val navController = rememberNavController()
 				MainView(
 					startDestination = startDestination,
-					navController = navController
+					navController = navController,
 				)
 			}
 		}
