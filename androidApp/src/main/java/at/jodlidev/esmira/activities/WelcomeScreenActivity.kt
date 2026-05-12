@@ -55,8 +55,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 		val loadedTimestamp: Long = NativeLink.getNowMillis() // just exists to force reloads of the same data
 	) : Parcelable
 	
-	// ExperimentalMaterial3Api is required for TopAppBar and its scroll behavior
-	@OptIn(ExperimentalAnimationApi::class, ExperimentalMaterial3Api::class)
+	@OptIn(ExperimentalAnimationApi::class)
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		
@@ -71,23 +70,9 @@ class WelcomeScreenActivity: ComponentActivity() {
 		val skipEntrance = (extras != null && extras.getBoolean(KEY_SKIP_ENTRANCE)) || openStudyDirectly
 		
 		setContent {
-			ESMiraSurface {
-				val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-				Scaffold(
-					topBar = {
-						TopAppBar(
-							title = {},
-							scrollBehavior = scrollBehavior,
-							colors = TopAppBarDefaults.topAppBarColors(
-								containerColor = MaterialTheme.colorScheme.background,
-								scrolledContainerColor = MaterialTheme.colorScheme.background
-							)
-						)
-					}
-				) { innerPadding ->
-					Box(modifier = Modifier.padding(innerPadding)) {
-						// run{} creates a local scope for remember/state declarations within the Box lambda
-						run {
+			Scaffold { innerPadding ->
+				Box(modifier = Modifier.padding(innerPadding)) {
+					ESMiraSurface {
 						val context = LocalContext.current
 						val navController = rememberNavController()
 
@@ -225,7 +210,6 @@ class WelcomeScreenActivity: ComponentActivity() {
 							},
 							navController = navController
 						)
-						}
 					}
 				}
 			}
