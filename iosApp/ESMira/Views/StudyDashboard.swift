@@ -165,7 +165,7 @@ struct StudyDashboard: View {
 	@EnvironmentObject var appState: AppState
 	@EnvironmentObject var navigationState: NavigationState
 	var study: Study
-
+	
 	@State var showQuestionnaireMoreMenu = false
 	@State var showStudySelector = false
 	@State var showSettingsMenu = false
@@ -437,7 +437,8 @@ struct StudyDashboard: View {
 	
 	func generateSettingsMenu() -> [ActionSheet.Button] {
 		var r = [ActionSheet.Button]()
-
+		
+		
 		r.append(ActionSheet.Button.default(Text("send_error_report")) {
 			self.navigationState.openErrorReport()
 		})

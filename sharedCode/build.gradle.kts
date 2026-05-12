@@ -139,11 +139,7 @@ kotlin {
 
 android {
 	compileSdk = 34
-	sourceSets {
-		getByName("main") {
-			manifest.srcFile("src/androidMain/AndroidManifest.xml")
-		}
-	}
+	sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
 	defaultConfig {
 		minSdk = 16
 		testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"

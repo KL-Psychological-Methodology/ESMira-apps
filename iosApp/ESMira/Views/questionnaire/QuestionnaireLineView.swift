@@ -12,12 +12,12 @@ import Foundation
 struct QuestionnaireLineView: View {
 	@EnvironmentObject var appState: AppState
 	@EnvironmentObject var navigationState: NavigationState
-
+	
 	let questionnaire: Questionnaire
-
+	
 	@State private var questionnaireIsOpened = false
 	@Environment(\.colorScheme) private var colorScheme
-
+	
 	var body: some View {
 		let dropShadowColor = colorScheme == .dark
 			? Color(.sRGBLinear, white: 1, opacity: 0.35)
