@@ -26,6 +26,7 @@ struct QrExistsView: View {
 			Spacer()
 		}
 		.padding()
-		.ESMiraBackgroundNavBar()
+		.frame(maxWidth: .infinity, maxHeight: .infinity)
+		.background(Color("Background").edgesIgnoringSafeArea(.all))
 	}
 }

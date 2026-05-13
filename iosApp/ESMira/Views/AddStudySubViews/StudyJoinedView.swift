@@ -29,17 +29,20 @@ struct StudyJoinedView: View {
 				}) {
 					Text("schedules")
 				}
+				.foregroundColor(Color.primary)
 				Spacer()
 				Button(action: {
 					self.navigationState.switchStudy(self.study.id)
 				}) {
 					Text("complete")
 				}
+				.foregroundColor(Color.primary)
 			}
 		}
 		.padding()
+		.frame(maxWidth: .infinity, maxHeight: .infinity)
+		.background(Color("Background").edgesIgnoringSafeArea(.all))
 		.navigationBarBackButtonHidden(true)
 		.navigationBarTitle(Text("complete"), displayMode: .inline)
-		.ESMiraBackgroundNavBar()
 	}
 }

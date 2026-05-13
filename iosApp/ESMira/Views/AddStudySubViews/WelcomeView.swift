@@ -28,10 +28,12 @@ struct WelcomeView: View {
 					Text("continue_")
 					Image(systemName: "chevron.compact.right")
 				}
+				.foregroundColor(Color.primary)
 			}
 		}
 		.padding()
+		.frame(maxWidth: .infinity, maxHeight: .infinity)
+		.background(Color("Background").edgesIgnoringSafeArea(.all))
 		.navigationBarTitle(Text(""), displayMode: .inline)
-		.ESMiraBackgroundNavBar()
 	}
 }

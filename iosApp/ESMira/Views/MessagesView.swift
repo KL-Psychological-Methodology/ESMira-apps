@@ -49,6 +49,7 @@ struct MessagesView: View {
 						Button(action: { draftNewMessage = false }) {
 							Text("cancel")
 						}
+						.foregroundColor(Color.primary)
 						.padding(.horizontal)
 						
 						Spacer()
@@ -58,6 +59,7 @@ struct MessagesView: View {
 						}) {
 							Text("send")
 						}
+						.foregroundColor(Color.primary)
 						.padding(.horizontal)
 					}
 					
@@ -78,6 +80,8 @@ struct MessagesView: View {
 			.padding()
 		}
 		.modifier(FlipEffect())
+		.frame(maxWidth: .infinity, maxHeight: .infinity)
+		.background(Color("Background").edgesIgnoringSafeArea(.all))
 		.onAppear {
 			let oldUnreadMessagesCount = DbLogic().countUnreadMessages(id: self.study.id)
 			Web.Companion().updateStudiesAsync(forceStudyUpdate: false, filterStudies: KotlinArray<KotlinLong>(size: 0, init: {_ in KotlinLong(0)})) {updatedCount in

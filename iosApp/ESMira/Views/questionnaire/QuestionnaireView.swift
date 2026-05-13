@@ -107,6 +107,7 @@ struct QuestionnaireView: View {
 							Text("continue_").bold()
 							Image(systemName: "chevron.right")
 						}
+						.foregroundColor(Color.primary)
 						Spacer()
 					}
 				}
@@ -122,6 +123,7 @@ struct QuestionnaireView: View {
 							Image(systemName: "tray.and.arrow.down")
 							Text("save").bold()
 						}
+						.foregroundColor(Color.primary)
 						Spacer()
 					}
 				}

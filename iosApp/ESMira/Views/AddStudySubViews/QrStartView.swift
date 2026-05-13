@@ -33,7 +33,8 @@ struct QrStartView: View {
 			Spacer()
 		}
 		.padding()
-		.ESMiraBackgroundNavBar()
+		.frame(maxWidth: .infinity, maxHeight: .infinity)
+		.background(Color("Background").edgesIgnoringSafeArea(.all))
 		.sheet(isPresented: self.$openQrScanner) {
 			CodeScannerView(codeTypes: [.qr]) { result in
 				switch result {

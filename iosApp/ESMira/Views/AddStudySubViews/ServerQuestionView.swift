@@ -51,12 +51,14 @@ struct ServerQuestionView: View {
 					Text("continue_")
 					Image(systemName: "chevron.compact.right")
 				}
+				.foregroundColor(Color.primary)
 			}
 		}
 		.padding()
+		.frame(maxWidth: .infinity, maxHeight: .infinity)
+		.background(Color("Background").edgesIgnoringSafeArea(.all))
 		.textFieldAlert(isPresented: self.$askManualUrl, text: self.$manualUrl, title: "colon_enter_manually") {
 			self.addStudyState.serverUrl = self.manualUrl
 		}
-		.ESMiraBackgroundNavBar()
 	}
 }

@@ -56,10 +56,14 @@ struct LangQuestionView: View {
 						Text("continue_")
 						Image(systemName: "chevron.compact.right")
 					}
+					.foregroundColor(Color.primary)
 				}
 				
 				
-			}.padding()
+			}
+			.padding()
+			.frame(maxWidth: .infinity, maxHeight: .infinity)
+			.background(Color("Background").edgesIgnoringSafeArea(.all))
 		}
 	}
 }
