@@ -11,6 +11,22 @@ import SwiftUI
 
 private let ESMiraButtonCornerRadius: CGFloat = 16
 
+private struct ESMiraTextShadowModifier: ViewModifier {
+	@Environment(\.colorScheme) private var colorScheme
+	func body(content: Content) -> some View {
+		let shadowColor = colorScheme == .dark
+			? Color.white.opacity(0.18)
+			: Color.black.opacity(0.18)
+		return content.shadow(color: shadowColor, radius: 1, x: 1, y: 1)
+	}
+}
+
+extension View {
+	func ESMiraTextShadow() -> some View {
+		self.modifier(ESMiraTextShadowModifier())
+	}
+}
+
 struct NavigationLinkModifier: ViewModifier {
 	func body(content: Content) -> some View {
 		content
