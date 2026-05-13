@@ -9,7 +9,15 @@
 import Foundation
 import SwiftUI
 
-private let ESMiraButtonCornerRadius: CGFloat = 16
+let ESMiraButtonCornerRadius: CGFloat = 16
+
+extension ColorScheme {
+	var cardShadowColor: Color {
+		self == .dark
+			? Color(.sRGBLinear, white: 1, opacity: 0.35)
+			: Color(.sRGBLinear, white: 0, opacity: 0.25)
+	}
+}
 
 private struct ESMiraTextShadowModifier: ViewModifier {
 	@Environment(\.colorScheme) private var colorScheme

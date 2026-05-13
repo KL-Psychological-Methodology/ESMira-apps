@@ -78,9 +78,6 @@ struct ClickableContent: View {
 	@Environment(\.colorScheme) private var colorScheme
 
 	var body: some View {
-		let dropShadowColor = colorScheme == .dark
-			? Color(.sRGBLinear, white: 1, opacity: 0.35)
-			: Color(.sRGBLinear, white: 0, opacity: 0.25)
 		ZStack(alignment:.topTrailing) {
 			VStack(alignment: .center) {
 				Spacer()
@@ -107,8 +104,8 @@ struct ClickableContent: View {
 			.frame(minWidth: 0, maxWidth: .infinity, minHeight: 80, alignment: .center)
 			.background(Color(self.important ? "AccentLight" : "Surface"))
 			.foregroundColor(self.important ? .white : Color("onSurface"))
-			.clipShape(RoundedRectangle(cornerRadius: 16))
-			.shadow(color: dropShadowColor, radius: 5, y: 5)
+			.clipShape(RoundedRectangle(cornerRadius: ESMiraButtonCornerRadius))
+			.shadow(color: colorScheme.cardShadowColor, radius: 5, y: 5)
 	}
 }
 struct NavigationBox<Content: View>: FixedGridItem {

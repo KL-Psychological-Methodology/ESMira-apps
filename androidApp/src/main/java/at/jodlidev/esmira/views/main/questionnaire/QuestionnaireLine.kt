@@ -4,7 +4,6 @@ import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -21,6 +20,7 @@ import androidx.compose.ui.unit.sp
 import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.graphics.Color
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.NativeLink
@@ -41,7 +41,7 @@ fun QuestionnaireLine(
 		onClick = { gotoQuestionnaire(questionnaire) },
 		modifier = Modifier
 			.padding(all = 5.dp)
-			.shadow(elevation = 5.dp, shape = RoundedCornerShape(16.dp), ambientColor = shadowColor, spotColor = shadowColor)
+			.shadow(elevation = 5.dp, shape = MaterialTheme.shapes.medium, ambientColor = shadowColor, spotColor = shadowColor)
 			.fillMaxWidth()
 	) {
 		Column(

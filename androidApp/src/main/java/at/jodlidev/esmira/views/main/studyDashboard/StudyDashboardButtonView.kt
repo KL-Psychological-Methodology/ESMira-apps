@@ -3,7 +3,6 @@ package at.jodlidev.esmira.views.main.studyDashboard
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,7 +30,7 @@ fun StudyDashboardButtonView(
 	) {
 		Button(
 			onClick = onClick,
-			shape = RoundedCornerShape(16.dp),
+			shape = MaterialTheme.shapes.medium,
 			colors = if(important) ButtonDefaults.buttonColors(
 				containerColor = MaterialTheme.colorScheme.tertiaryContainer,
 				contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
@@ -42,7 +41,7 @@ fun StudyDashboardButtonView(
 			),
 			modifier = Modifier
 				.padding(all = 5.dp)
-				.shadow(elevation = 5.dp, shape = RoundedCornerShape(16.dp), ambientColor = shadowColor, spotColor = shadowColor)
+				.shadow(elevation = 5.dp, shape = MaterialTheme.shapes.medium, ambientColor = shadowColor, spotColor = shadowColor)
 				.heightIn(min = 80.dp)
 				.fillMaxSize()
 		) {

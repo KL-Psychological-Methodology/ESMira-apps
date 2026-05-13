@@ -4,6 +4,7 @@ import android.content.res.Configuration
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material.icons.filled.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.ui.unit.dp
@@ -33,9 +34,7 @@ val colorError = Color(0xFFFF0000)
 
 val ESMiraShapes = Shapes(
 	small = RoundedCornerShape(4.dp),
-	medium = RoundedCornerShape(16.dp),
-	large = RoundedCornerShape(16.dp),
-	extraLarge = RoundedCornerShape(16.dp)
+	medium = RoundedCornerShape(16.dp)
 )
 
 private val blue1 = Color(0XFFe6f9ff)
@@ -116,7 +115,7 @@ fun ESMiraTheme (
 ) {
 	MaterialTheme(
 		colorScheme = if(darkTheme) DarkColorPalette else LightColorPalette,
-		typography = Typography(),
+		typography = typography,
 		shapes = ESMiraShapes,
 		content = content
 	)

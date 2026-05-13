@@ -19,9 +19,6 @@ struct QuestionnaireLineView: View {
 	@Environment(\.colorScheme) private var colorScheme
 	
 	var body: some View {
-		let dropShadowColor = colorScheme == .dark
-			? Color(.sRGBLinear, white: 1, opacity: 0.35)
-			: Color(.sRGBLinear, white: 0, opacity: 0.25)
 		Button(action: {
 			navigationState.openQuestionnaire(questionnaire)
 		}) {
@@ -61,7 +58,7 @@ struct QuestionnaireLineView: View {
 		}
 		.foregroundColor(Color("onSurface"))
 		.background(Color("Surface"))
-		.clipShape(RoundedRectangle(cornerRadius: 16))
-		.shadow(color: dropShadowColor, radius: 5, y: 5)
+		.clipShape(RoundedRectangle(cornerRadius: ESMiraButtonCornerRadius))
+		.shadow(color: colorScheme.cardShadowColor, radius: 5, y: 5)
 	}
 }
