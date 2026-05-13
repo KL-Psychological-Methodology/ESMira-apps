@@ -31,13 +31,6 @@ val colorWarn = Color(0xFFFFBB00)
 val colorError = Color(0xFFFF0000)
 
 
-@Composable
-fun ESMiraShadowColor(): Color {
-	val isDark = isSystemInDarkTheme()
-	return if(isDark) Color.White.copy(alpha = 0.35f) else Color.Black
-}
-
-
 val ESMiraShapes = Shapes(
 	small = RoundedCornerShape(4.dp),
 	medium = RoundedCornerShape(16.dp),

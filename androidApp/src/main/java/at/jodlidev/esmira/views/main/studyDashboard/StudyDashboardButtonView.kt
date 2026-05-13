@@ -14,7 +14,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import at.jodlidev.esmira.ESMiraShadowColor
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.graphics.Color
 
@@ -26,7 +25,7 @@ fun StudyDashboardButtonView(
 	badge: String? = null,
 	important: Boolean = false
 ) {
-	val shadowColor = ESMiraShadowColor()
+	val shadowColor = if (isSystemInDarkTheme()) Color.White.copy(alpha = 0.35f) else Color.Black
 	Box(
 		contentAlignment = Alignment.Center,
 	) {

@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
-import at.jodlidev.esmira.ESMiraShadowColor
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.ui.graphics.Color
 import at.jodlidev.esmira.sharedCode.DbLogic
@@ -37,7 +36,7 @@ fun QuestionnaireLine(
 	questionnaire: Questionnaire,
 	gotoQuestionnaire: (Questionnaire) -> Unit
 ) {
-	val shadowColor = ESMiraShadowColor()
+	val shadowColor = if (isSystemInDarkTheme()) Color.White.copy(alpha = 0.35f) else Color.Black
 	DefaultButton(
 		onClick = { gotoQuestionnaire(questionnaire) },
 		modifier = Modifier
