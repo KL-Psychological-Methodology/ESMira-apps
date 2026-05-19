@@ -45,8 +45,7 @@ struct StudyDetailView: View {
 			}
 		}
 		.padding()
-		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.background(Color("Background").edgesIgnoringSafeArea(.all))
+		.esmiraScreenBackground()
 		.navigationBarTitle(Text("add_a_study"), displayMode: .inline)
 	}
 }

@@ -80,8 +80,7 @@ struct MessagesView: View {
 			.padding()
 		}
 		.modifier(FlipEffect())
-		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.background(Color("Background").edgesIgnoringSafeArea(.all))
+		.esmiraScreenBackground()
 		.onAppear {
 			let oldUnreadMessagesCount = DbLogic().countUnreadMessages(id: self.study.id)
 			Web.Companion().updateStudiesAsync(forceStudyUpdate: false, filterStudies: KotlinArray<KotlinLong>(size: 0, init: {_ in KotlinLong(0)})) {updatedCount in

@@ -139,8 +139,7 @@ struct RewardView: View {
 			}
 		}
 		.padding()
-		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.background(Color("Background").edgesIgnoringSafeArea(.all))
+		.esmiraScreenBackground()
 		.onAppear {
 			error = ""
 			self.study.getRewardCode(

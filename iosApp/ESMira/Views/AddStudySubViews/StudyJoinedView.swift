@@ -40,8 +40,7 @@ struct StudyJoinedView: View {
 			}
 		}
 		.padding()
-		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.background(Color("Background").edgesIgnoringSafeArea(.all))
+		.esmiraScreenBackground()
 		.navigationBarBackButtonHidden(true)
 		.navigationBarTitle(Text("complete"), displayMode: .inline)
 	}

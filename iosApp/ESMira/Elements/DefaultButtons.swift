@@ -35,6 +35,20 @@ extension View {
 	}
 }
 
+private struct ESMiraScreenBackgroundModifier: ViewModifier {
+	func body(content: Content) -> some View {
+		content
+			.frame(maxWidth: .infinity, maxHeight: .infinity)
+			.background(Color("Background").edgesIgnoringSafeArea(.all))
+	}
+}
+
+extension View {
+	func esmiraScreenBackground() -> some View {
+		self.modifier(ESMiraScreenBackgroundModifier())
+	}
+}
+
 struct NavigationLinkModifier: ViewModifier {
 	func body(content: Content) -> some View {
 		content

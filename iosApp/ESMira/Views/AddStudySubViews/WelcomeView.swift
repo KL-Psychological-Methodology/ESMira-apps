@@ -32,8 +32,7 @@ struct WelcomeView: View {
 			}
 		}
 		.padding()
-		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.background(Color("Background").edgesIgnoringSafeArea(.all))
+		.esmiraScreenBackground()
 		.navigationBarTitle(Text(""), displayMode: .inline)
 	}
 }

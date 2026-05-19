@@ -159,8 +159,7 @@ struct StatisticsView: View {
 					.background(Color("Surface"))
 			}
 		}
-			.frame(maxWidth: .infinity, maxHeight: .infinity)
-			.background(Color("Background").edgesIgnoringSafeArea(.all))
+			.esmiraScreenBackground()
 			.customLoader(isShowing: self.$loadingState,
 				blocking: false,
 				onShowing: {

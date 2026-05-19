@@ -55,8 +55,7 @@ struct ServerQuestionView: View {
 			}
 		}
 		.padding()
-		.frame(maxWidth: .infinity, maxHeight: .infinity)
-		.background(Color("Background").edgesIgnoringSafeArea(.all))
+		.esmiraScreenBackground()
 		.textFieldAlert(isPresented: self.$askManualUrl, text: self.$manualUrl, title: "colon_enter_manually") {
 			self.addStudyState.serverUrl = self.manualUrl
 		}
