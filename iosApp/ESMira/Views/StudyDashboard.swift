@@ -490,7 +490,7 @@ struct StudyDashboard: View {
 			}
 				.navigationBarTitle(Text(self.study.title), displayMode: .inline)
 				.navigationBarItems(
-					trailing: HStack {
+					trailing: HStack(spacing: 20) {
 						let studyList = DbLogic().getAllStudies()
 						if(studyList.count <= 1) {
 							Button(
@@ -509,8 +509,6 @@ struct StudyDashboard: View {
 							}
 						}
 						
-						Spacer(minLength: 20)
-
 						Button(action: {
 							self.showSettingsMenu = true
 						}) {
