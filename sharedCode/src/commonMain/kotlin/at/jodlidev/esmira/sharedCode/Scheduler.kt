@@ -364,7 +364,7 @@ object Scheduler {
                     baseTimestamp += ONE_DAY_MS
                 }
             } else {
-                while (NativeLink.getDatesDiff(baseTimestamp, minDate) < manualDelayDays) {
+                while (baseTimestamp < minDate && NativeLink.getDatesDiff(baseTimestamp, minDate) > 0) {
                     baseTimestamp += ONE_DAY_MS
                 }
             }
