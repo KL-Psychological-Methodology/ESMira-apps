@@ -533,7 +533,15 @@ class Questionnaire {
 			return 0
 		
 		val durationValue = durationStart - now
-		val startingAfterDaysValue = joined + durationStartingAfterDays.toLong() * (1000*60*60*24) - now
+		val startingAfterDaysValue = if(study?.legacyScheduling ?: false) {
+            joined + durationStartingAfterDays.toLong() * ONE_DAY_MS - now
+        } else {
+            if(durationStartingAfterDays == 0 || NativeLink.getDatesDiff(now, joined) >= durationStartingAfterDays) {
+                0L
+            } else {
+                NativeLink.getMidnightMillis(joined) + durationStartingAfterDays * ONE_DAY_MS - now
+            }
+        }
 		
 		return when {
 			durationValue <= 0 ->
