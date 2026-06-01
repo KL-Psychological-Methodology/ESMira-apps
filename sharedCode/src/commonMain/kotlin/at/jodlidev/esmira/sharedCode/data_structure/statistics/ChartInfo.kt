@@ -26,6 +26,7 @@ class ChartInfo (
 	var chartDescription: String = "",
 	var xAxisLabel: String = "",
 	var yAxisLabel: String = "",
+    var minYValue: Int = 0,
 	var maxYValue: Int = 0,
 	var fitToShowLinearProgression: Int = 0,
 	var xAxisIsNumberRange: Boolean = false,
