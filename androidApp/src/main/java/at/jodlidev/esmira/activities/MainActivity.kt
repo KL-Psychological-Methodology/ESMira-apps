@@ -75,7 +75,7 @@ class MainActivity: ComponentActivity() {
 				if(questionnaire != null) {
 					DbUser.setCurrentStudyId(questionnaire.studyId)
 					
-					if(questionnaire.canBeFilledOut()) {
+					if(questionnaire.canBeFilledOut().isAvailable()) {
 						QuestionnaireCache.saveFormStarted(questionnaire.id)
 						startDestination = "questionnaire/${questionnaire.id}/${questionnaire.getFirstPageIndex()}"
 					} else {

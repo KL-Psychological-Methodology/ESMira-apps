@@ -525,7 +525,7 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
 
                     val now = NativeLink.getNowMillis()
                     questionnaire.updateLastNotification(now)
-                    if (!questionnaire.canBeFilledOut(now)) {
+                    if (!questionnaire.canBeFilledOut(now).isAvailable()) {
                         ErrorBox.log(
                             "Notification",
                             "Questionnaire (${questionnaire.title}) is not active at ${NativeLink.formatDateTime(now)}. Skipping notification."

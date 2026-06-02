@@ -315,12 +315,12 @@ class QuestionnaireTest : BaseCommonTest() {
 		var questionnaire = createJsonObj<Questionnaire>(
 			"{\"completableOncePerNotification\": true, \"pages\":[{\"items\":[{}]}]}"
 		)
-		assertFalse(questionnaire.canBeFilledOut(now)) //no notification
+		assertFalse(questionnaire.canBeFilledOut(now).isAvailable()) //no notification
 		questionnaire.metadata.lastNotification = now
 		questionnaire.metadata.lastCompleted = now-1 //completed before notification
-		assertTrue(questionnaire.canBeFilledOut(now))
+		assertTrue(questionnaire.canBeFilledOut(now).isAvailable())
 		questionnaire.metadata.lastCompleted = now+1
-		assertFalse(questionnaire.canBeFilledOut(now)) // was completed after notification
+		assertFalse(questionnaire.canBeFilledOut(now).isAvailable()) // was completed after notification
 		
 		//
 		//test completableOncePerNotification and completableMinutesAfterNotification:
@@ -329,12 +329,12 @@ class QuestionnaireTest : BaseCommonTest() {
 		questionnaire = createJsonObj<Questionnaire>(
 			"{\"completableOncePerNotification\": true, \"completableMinutesAfterNotification\": 2, \"pages\":[{\"items\":[{}]}]}"
 		)
-		assertFalse(questionnaire.canBeFilledOut(now)) //no notification
+		assertFalse(questionnaire.canBeFilledOut(now).isAvailable()) //no notification
 		questionnaire.metadata.lastNotification = now
 		questionnaire.metadata.lastCompleted = now - 1000*60*2 - 2 //completed before notification
-		assertTrue(questionnaire.canBeFilledOut(now))
+		assertTrue(questionnaire.canBeFilledOut(now).isAvailable())
 		questionnaire.metadata.lastNotification = now - 1000*60*2 - 1
-		assertFalse(questionnaire.canBeFilledOut(now)) //notification was longer than completableMinutesAfterNotification
+		assertFalse(questionnaire.canBeFilledOut(now).isAvailable()) //notification was longer than completableMinutesAfterNotification
 		
 		//
 		//test completableAtSpecificTime and completableAtSpecificTimeStart and completableAtSpecificTimeEnd:
@@ -344,29 +344,29 @@ class QuestionnaireTest : BaseCommonTest() {
 		questionnaire = createJsonObj<Questionnaire>(
 			"{\"completableAtSpecificTime\": true, \"completableAtSpecificTimeStart\": ${oneHour*18}, \"completableAtSpecificTimeEnd\": ${oneHour*3}, \"pages\":[{\"items\":[{}]}]}"
 		)
-		assertTrue(questionnaire.canBeFilledOut(targetDate2)) // 1989-11-9 18:53:00
-		assertFalse(questionnaire.canBeFilledOut(targetDate1)) // 2005-04-24 03:31:52
+		assertTrue(questionnaire.canBeFilledOut(targetDate2).isAvailable()) // 1989-11-9 18:53:00
+		assertFalse(questionnaire.canBeFilledOut(targetDate1).isAvailable()) // 2005-04-24 03:31:52
 		
 		//timeframe from 03:00 - 17:00
 		questionnaire = createJsonObj<Questionnaire>(
 			"{\"completableAtSpecificTime\": true, \"completableAtSpecificTimeStart\": ${oneHour*3}, \"completableAtSpecificTimeEnd\": ${oneHour*17}, \"pages\":[{\"items\":[{}]}]}"
 		)
-		assertFalse(questionnaire.canBeFilledOut(targetDate2)) // 1989-11-9 18:53:00
-		assertTrue(questionnaire.canBeFilledOut(targetDate1)) // 2005-04-24 03:31:52
+		assertFalse(questionnaire.canBeFilledOut(targetDate2).isAvailable()) // 1989-11-9 18:53:00
+		assertTrue(questionnaire.canBeFilledOut(targetDate1).isAvailable()) // 2005-04-24 03:31:52
 		
 		//timeframe after 04:00
 		questionnaire = createJsonObj<Questionnaire>(
 			"{\"completableAtSpecificTime\": true, \"completableAtSpecificTimeStart\": ${oneHour*4}, \"pages\":[{\"items\":[{}]}]}"
 		)
-		assertTrue(questionnaire.canBeFilledOut(targetDate2)) // 1989-11-9 18:53:00
-		assertFalse(questionnaire.canBeFilledOut(targetDate1)) // 2005-04-24 03:31:52
+		assertTrue(questionnaire.canBeFilledOut(targetDate2).isAvailable()) // 1989-11-9 18:53:00
+		assertFalse(questionnaire.canBeFilledOut(targetDate1).isAvailable()) // 2005-04-24 03:31:52
 		
 		//timeframe before 18:00
 		questionnaire = createJsonObj<Questionnaire>(
 			"{\"completableAtSpecificTime\": true, \"completableAtSpecificTimeEnd\": ${oneHour*18}, \"pages\":[{\"items\":[{}]}]}"
 		)
-		assertFalse(questionnaire.canBeFilledOut(targetDate2)) // 1989-11-9 18:53:00
-		assertTrue(questionnaire.canBeFilledOut(targetDate1)) // 2005-04-24 03:31:52
+		assertFalse(questionnaire.canBeFilledOut(targetDate2).isAvailable()) // 1989-11-9 18:53:00
+		assertTrue(questionnaire.canBeFilledOut(targetDate1).isAvailable()) // 2005-04-24 03:31:52
 		
 		//
 		//test limitCompletionFrequency
@@ -375,11 +375,11 @@ class QuestionnaireTest : BaseCommonTest() {
 		questionnaire = createJsonObj<Questionnaire>(
 			"{\"limitCompletionFrequency\": true, \"completionFrequencyMinutes\": 60, \"pages\":[{\"items\":[{}]}]}"
 		)
-		assertTrue(questionnaire.canBeFilledOut(now))
+		assertTrue(questionnaire.canBeFilledOut(now).isAvailable())
 		questionnaire.metadata.lastCompleted = now - (oneHour-1) //completed less than an hour ago
-		assertFalse(questionnaire.canBeFilledOut(now))
+		assertFalse(questionnaire.canBeFilledOut(now).isAvailable())
 		questionnaire.metadata.lastCompleted = now - (oneHour+1) //completed more than an hour ago
-		assertTrue(questionnaire.canBeFilledOut(now))
+		assertTrue(questionnaire.canBeFilledOut(now).isAvailable())
 		
 		//
 		//test publishedAndroid or publishedIOS
@@ -390,15 +390,15 @@ class QuestionnaireTest : BaseCommonTest() {
 		)
 		if(NativeLink.smartphoneData.phoneType == PhoneType.Android) {
 			questionnaire.publishedIOS = false
-			assertTrue(questionnaire.canBeFilledOut(now))
+			assertTrue(questionnaire.canBeFilledOut(now).isAvailable())
 			questionnaire.publishedAndroid = false
 		}
 		else if(NativeLink.smartphoneData.phoneType == PhoneType.IOS) {
 			questionnaire.publishedAndroid = false
-			assertTrue(questionnaire.canBeFilledOut(now))
+			assertTrue(questionnaire.canBeFilledOut(now).isAvailable())
 			questionnaire.publishedIOS = false
 		}
-		assertFalse(questionnaire.canBeFilledOut(now))
+		assertFalse(questionnaire.canBeFilledOut(now).isAvailable())
 	}
 	
 	@Test
