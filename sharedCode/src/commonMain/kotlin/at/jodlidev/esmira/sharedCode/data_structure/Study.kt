@@ -687,6 +687,7 @@ class Study internal constructor(
 		db.delete(Message.TABLE, "${Message.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StatisticData_timed.TABLE, "${StatisticData_timed.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StatisticData_perValue.TABLE, "${StatisticData_perValue.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
+        db.delete(StatisticData_perData.TABLE, "${StatisticData_perData.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(DataSet.TABLE, "${DataSet.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StudyToken.TABLE, "${StudyToken.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(QuestionnaireMetadata.TABLE, "${QuestionnaireMetadata.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
