@@ -582,7 +582,7 @@ class Questionnaire {
 
 	fun canBeFilledOut(now: Long = NativeLink.getNowMillis()): AvailabilityStatus { //if there are any questionnaires at the current time
 		val fromMidnight = now - NativeLink.getMidnightMillis(now)
-		val lastNotification = (DbLogic.getLastAlarmBefore(now, id)?.timestamp ?: 0).coerceAtLeast(metadata.lastNotification)
+        val lastNotification = (DbLogic.getLastAlarmBefore(now, id)?.timestamp ?: 0).coerceAtLeast(metadata.lastNotification)
 
         if(!hasQuestionnaire()) {
             return AvailabilityStatus(AvailabilityStatusType.EMPTY_QUESTIONNAIRE) // Should hopefully not appear to users
@@ -633,7 +633,7 @@ class Questionnaire {
                 return AvailabilityStatus(
                     AvailabilityStatusType.SPECIFIC_TIME,
                     if(completableAtSpecificTimeStart != 1) {completableAtSpecificTimeStart.toLong()} else {0L},
-                    if(completableAtSpecificTimeEnd != 1) {completableAtSpecificTimeEnd.toLong()} else {ONE_DAY_MS}
+                    if(completableAtSpecificTimeEnd != -1) {completableAtSpecificTimeEnd.toLong()} else {ONE_DAY_MS}
                 )
             }
         }
@@ -646,7 +646,7 @@ class Questionnaire {
             }
         }
 
-        if(scriptFilter != "") {
+        if(scriptFilter.isNotEmpty()) {
             val scriptFilterEvaluation = MerlinRunner.runForBool(scriptFilter, this, "evaluate if questionnaire is active", true)
             if(!scriptFilterEvaluation) {
                 return AvailabilityStatus(AvailabilityStatusType.SCRIPT_FILTER)
