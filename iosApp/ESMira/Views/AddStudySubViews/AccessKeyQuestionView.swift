@@ -35,6 +35,7 @@ struct AccessKeyQuesionView: View {
 			Spacer()
 		}
 			.padding()
+			.esmiraScreenBackground()
 			.textFieldAlert(isPresented: self.$askAccessKey, text: self.$addStudyState.accessKey, title: "colon_accessCode") {
 				self.gotoStudyLoader = true
 			}

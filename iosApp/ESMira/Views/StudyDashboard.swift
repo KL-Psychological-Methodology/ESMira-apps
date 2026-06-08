@@ -30,35 +30,43 @@ struct HeaderLine: FixedGridItem {
 	let content: String
 	func fillsLine() -> Bool { return true }
 	var action: (() -> Void)? = nil
-	
-	var view: some View {
-		VStack {
-			VStack {
-				Divider()
-					.background(Color("Outline"))
-				HStack {
-					Text(content)
-					Spacer()
-					if(action != nil) {
-						Button(action: self.action!) {
-							HStack {
-								Image(systemName: "ellipsis")
-							}.frame(minWidth: 40, minHeight: 40)
-						}
-					}
+	var topSpacing: Bool = true
+
+	var view: some View { HeaderLineView(content: content, action: action, topSpacing: topSpacing) }
+}
+
+private struct HeaderLineView: View {
+	let content: String
+	var action: (() -> Void)?
+	var topSpacing: Bool = true
+
+	var body: some View {
+		HStack(alignment: .center, spacing: 8) {
+			// Accent bar
+			RoundedRectangle(cornerRadius: 2)
+				.fill(Color("PrimaryDark"))
+				.frame(width: 4, height: 18)
+
+			Text(content)
+				.font(.subheadline)
+				.fontWeight(.semibold)
+				.foregroundColor(Color("onSurface").opacity(0.7))
+
+			Spacer()
+
+			if let action = action {
+				Button(action: action) {
+					Image(systemName: "ellipsis")
+						.frame(minWidth: 40, minHeight: 40)
 				}
-				.padding([.horizontal], 20)
-				
-				Divider()
-					.background(Color("Outline"))
+				.foregroundColor(Color("onSurface").opacity(0.7))
 			}
-			.padding(0)
-			.foregroundColor(Color("onSurface"))
-			.background(Color("Surface"))
-			.shadow(color: Color(.sRGBLinear, white: 0, opacity: 0.05), radius: 5, y: 5)
 		}
-			.padding([.vertical], 5)
-			.frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
+		.padding(.leading, 16)
+		.padding(.trailing, 4)
+		.padding(.top, topSpacing ? 28 : 6)
+		.padding(.bottom, 6)
+		.frame(minWidth: 0, maxWidth: .infinity, alignment: .leading)
 	}
 }
 
@@ -67,12 +75,14 @@ struct ClickableContent: View {
 	let icon: String
 	var important: Bool = false
 	var badge: Int = 0
-	
+	@Environment(\.colorScheme) private var colorScheme
+
 	var body: some View {
 		ZStack(alignment:.topTrailing) {
 			VStack(alignment: .center) {
 				Spacer()
 				Image(systemName: self.icon)
+					.ESMiraTextShadow()
 				Text(NSLocalizedString(header, comment: ""))
 					.font(.caption)
 					.fontWeight(.bold)
@@ -94,6 +104,8 @@ struct ClickableContent: View {
 			.frame(minWidth: 0, maxWidth: .infinity, minHeight: 80, alignment: .center)
 			.background(Color(self.important ? "AccentLight" : "Surface"))
 			.foregroundColor(self.important ? .white : Color("onSurface"))
+			.clipShape(RoundedRectangle(cornerRadius: ESMiraButtonCornerRadius))
+			.shadow(color: colorScheme.cardShadowColor, radius: 5, y: 5)
 	}
 }
 struct NavigationBox<Content: View>: FixedGridItem {
@@ -281,7 +293,7 @@ struct StudyDashboard: View {
 		
 		list.append(HeaderLine(content: NSLocalizedString("questionnaires", comment: "questionnaires"), action: {
 			self.showQuestionnaireMoreMenu = true
-		}))
+		}, topSpacing: false))
 		if(!questionnaireList.isEmpty) {
 			list.append(ContentLine(viewContent: VStack {
 				ForEach(questionnaireList, id: \.id) { questionnaire in
@@ -478,7 +490,7 @@ struct StudyDashboard: View {
 			}
 				.navigationBarTitle(Text(self.study.title), displayMode: .inline)
 				.navigationBarItems(
-					trailing: HStack {
+					trailing: HStack(spacing: 20) {
 						let studyList = DbLogic().getAllStudies()
 						if(studyList.count <= 1) {
 							Button(
@@ -497,8 +509,6 @@ struct StudyDashboard: View {
 							}
 						}
 						
-						Spacer(minLength: 20)
-
 						Button(action: {
 							self.showSettingsMenu = true
 						}) {
@@ -508,7 +518,7 @@ struct StudyDashboard: View {
 							ActionSheet(title: Text("please_select"), buttons: self.generateSettingsMenu())
 						}
 					}
-						.accentColor(Color("onSurface"))
+						.accentColor(.white)
 				)
 				.alert(isPresented: self.$showAlert) {
 					self.alertContent

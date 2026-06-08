@@ -8,6 +8,7 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.style.TextOverflow
 
@@ -33,7 +34,14 @@ fun DefaultTopBar(
 				}
 			}
 		},
-		scrollBehavior = scrollBehavior
+		scrollBehavior = scrollBehavior,
+		colors = TopAppBarDefaults.topAppBarColors(
+			containerColor = MaterialTheme.colorScheme.primary,
+			scrolledContainerColor = MaterialTheme.colorScheme.primary,
+			titleContentColor = Color.White,
+			actionIconContentColor = Color.White,
+			navigationIconContentColor = Color.White
+		)
 	)
 }
 

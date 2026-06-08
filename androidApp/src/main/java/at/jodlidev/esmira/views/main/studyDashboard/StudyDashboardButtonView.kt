@@ -3,16 +3,18 @@ package at.jodlidev.esmira.views.main.studyDashboard
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.ui.graphics.Color
 
 @Composable
 fun StudyDashboardButtonView(
@@ -22,12 +24,13 @@ fun StudyDashboardButtonView(
 	badge: String? = null,
 	important: Boolean = false
 ) {
+	val shadowColor = if (isSystemInDarkTheme()) Color.White.copy(alpha = 0.35f) else Color.Black
 	Box(
 		contentAlignment = Alignment.Center,
 	) {
 		Button(
 			onClick = onClick,
-			shape = RoundedCornerShape(1.dp),
+			shape = MaterialTheme.shapes.medium,
 			colors = if(important) ButtonDefaults.buttonColors(
 				containerColor = MaterialTheme.colorScheme.tertiaryContainer,
 				contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
@@ -38,11 +41,15 @@ fun StudyDashboardButtonView(
 			),
 			modifier = Modifier
 				.padding(all = 5.dp)
+				.shadow(elevation = 5.dp, shape = MaterialTheme.shapes.medium, ambientColor = shadowColor, spotColor = shadowColor)
 				.heightIn(min = 80.dp)
 				.fillMaxSize()
 		) {
 			Column(horizontalAlignment = Alignment.CenterHorizontally) {
-				Icon(icon, "")
+				Box {
+					Icon(icon, contentDescription = null, tint = if(isSystemInDarkTheme()) Color.White.copy(alpha = 0.18f) else Color.Black.copy(alpha = 0.18f), modifier = Modifier.offset(x = 1.dp, y = 1.dp))
+					Icon(icon, "")
+				}
 				Text(text, textAlign = TextAlign.Center, fontSize = MaterialTheme.typography.bodySmall.fontSize, fontWeight = FontWeight.Bold)
 			}
 		}

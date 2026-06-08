@@ -80,6 +80,7 @@ private struct RowContentItem: FixedGridItem {
 						.foregroundColor(Color.primary)
 					if(icon != nil) {
 						Image(systemName: icon!)
+							.foregroundColor(Color(UIColor.link))
 					}
 				}
 			}

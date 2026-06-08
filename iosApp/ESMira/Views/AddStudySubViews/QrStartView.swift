@@ -33,6 +33,7 @@ struct QrStartView: View {
 			Spacer()
 		}
 		.padding()
+		.esmiraScreenBackground()
 		.sheet(isPresented: self.$openQrScanner) {
 			CodeScannerView(codeTypes: [.qr]) { result in
 				switch result {

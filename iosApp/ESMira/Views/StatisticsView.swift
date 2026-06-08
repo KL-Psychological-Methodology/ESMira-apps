@@ -159,6 +159,7 @@ struct StatisticsView: View {
 					.background(Color("Surface"))
 			}
 		}
+			.esmiraScreenBackground()
 			.customLoader(isShowing: self.$loadingState,
 				blocking: false,
 				onShowing: {
