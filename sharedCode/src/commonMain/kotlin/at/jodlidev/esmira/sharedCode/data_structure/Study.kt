@@ -4,6 +4,7 @@ import at.jodlidev.esmira.sharedCode.*
 import at.jodlidev.esmira.sharedCode.Updater
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.ChartInfo
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticBox
+import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_perData
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_timed
 import at.jodlidev.esmira.sharedCode.data_structure.statistics.StatisticData_perValue
 import at.jodlidev.esmira.sharedCode.merlinInterpreter.MerlinRunner
@@ -62,6 +63,7 @@ class Study internal constructor(
 	var rewardInstructions = ""
 	var faq = ""
     var additionalDaysActive = 0
+    var legacyScheduling = false
 
 	@SerialName("langCodes")
 	@Serializable(with = JsonToStringSerializer::class)
@@ -238,6 +240,7 @@ class Study internal constructor(
 		hasStatistics = c.getBoolean(29)
 		langCodesString = c.getString(30)
         additionalDaysActive = c.getInt(31)
+        legacyScheduling = c.getBoolean(32)
 	}
 	
 	private fun loadQuestionnairesDB(): List<Questionnaire> {
@@ -475,6 +478,7 @@ class Study internal constructor(
 			this.rewardInstructions = newStudy.rewardInstructions
 			this.faq = newStudy.faq
             this.additionalDaysActive = newStudy.additionalDaysActive
+            this.legacyScheduling = newStudy.legacyScheduling
 			this.hasStatistics = newStudy.hasStatistics
 			this.langCodesString = newStudy.langCodesString
 			this._jsonQuestionnaires = newStudy.questionnaires
@@ -536,6 +540,7 @@ class Study internal constructor(
 		values.putBoolean(KEY_HAS_STATISTICS, hasStatistics)
 		values.putString(KEY_LANG_CODES, langCodesString)
         values.putInt(KEY_ADDITIONAL_DAYS_ACTIVE, additionalDaysActive)
+        values.putBoolean(KEY_LEGACY_SCHEDULING, legacyScheduling)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -683,6 +688,7 @@ class Study internal constructor(
 		db.delete(Message.TABLE, "${Message.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StatisticData_timed.TABLE, "${StatisticData_timed.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StatisticData_perValue.TABLE, "${StatisticData_perValue.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
+        db.delete(StatisticData_perData.TABLE, "${StatisticData_perData.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(DataSet.TABLE, "${DataSet.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StudyToken.TABLE, "${StudyToken.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(QuestionnaireMetadata.TABLE, "${QuestionnaireMetadata.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
@@ -771,6 +777,7 @@ class Study internal constructor(
 		const val KEY_HAS_STATISTICS = "hasStatistics"
 		const val KEY_LANG_CODES = "langCodes"
         const val KEY_ADDITIONAL_DAYS_ACTIVE = "additionalDaysActive"
+        const val KEY_LEGACY_SCHEDULING = "legacyScheduling"
 		
 		const val REWARD_SUCCESS = 0
 		const val REWARD_ERROR_DOES_NOT_EXIST = 1
@@ -811,6 +818,7 @@ class Study internal constructor(
 			KEY_HAS_STATISTICS,
 			KEY_LANG_CODES,
             KEY_ADDITIONAL_DAYS_ACTIVE,
+            KEY_LEGACY_SCHEDULING
 		)
 		
 		val defaultSettings = hashMapOf(

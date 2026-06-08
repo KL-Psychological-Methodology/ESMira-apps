@@ -93,7 +93,7 @@ abstract class ChartBuilder(
 		val axisLeft = chartView.getLeftAxis()
 		axisLeft.setDrawAxisLine(true)
 		axisLeft.setDrawGridLines(true)
-		axisLeft.setAxisMinimum(0f)
+        axisLeft.setAxisMinimum(chartInfo.minYValue.toFloat())
 		if(chartInfo.maxYValue != 0)
 			axisLeft.setAxisMaximum(chartInfo.maxYValue.toFloat())
 		

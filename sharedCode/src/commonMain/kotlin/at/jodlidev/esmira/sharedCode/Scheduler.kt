@@ -6,6 +6,8 @@ import io.ktor.util.date.Month
 import io.ktor.util.date.plus
 import kotlin.math.ceil
 import kotlin.math.max
+import kotlin.math.min
+import kotlin.math.sign
 import kotlin.random.Random
 
 /**
@@ -46,6 +48,42 @@ object Scheduler {
 		1  //Sunday
 	)
 	
+	private class Interval(val start: Int, val end: Int) {
+		val includesMidnight: Boolean = start > end
+		val period: Int = (end - start) + if(includesMidnight) {ONE_DAY_MS.toInt()} else {0}
+		
+		fun getOverlaps(other: Interval): Array<Interval> {
+			val first = this.splitIfIncludesMidnight()
+			val second = other.splitIfIncludesMidnight()
+			
+			val overlaps = mutableListOf<Interval>()
+			for(i in first) {
+				for (j in second) {
+					val overlap = i.getOverlap(j)
+					if (overlap != null) {
+						overlaps.add(overlap)
+					}
+				}
+			}
+			return overlaps.toTypedArray()
+		}
+		
+		fun getOverlap(other: Interval): Interval? {
+			return if(this.includesMidnight || other.includesMidnight || this.start > other.end || other.start > this.end) {
+				null
+			} else {
+				Interval(max(this.start, other.start), min(this.end, other.end))
+			}
+		}
+		
+		private fun splitIfIncludesMidnight(): Array<Interval> {
+			return if(this.includesMidnight) {
+				arrayOf(Interval(0, this.end), Interval(this.start, ONE_DAY_MS.toInt()))
+			} else {
+				arrayOf(this)
+			}
+		}
+	}
 	
 	fun checkMissedAlarms(missedAlarmsAsBroken: Boolean = false) {
 		//on IOS we can assume that all notifications have been issued or noticed by reactToBootOrTimeChange()
@@ -252,35 +290,36 @@ object Scheduler {
 			scheduleSignalTime(signalTime, actionTriggerId, max(timestampAnchor, NativeLink.getNowMillis()))
 	}
 	
-	private fun calculateRandomPeriod(questionnaire: Questionnaire, signalTime: SignalTime): Int {
-		if(questionnaire.completableAtSpecificTime) {
-			if(questionnaire.completableAtSpecificTimeStart != -1 && questionnaire.completableAtSpecificTimeEnd != -1) {
-				if(questionnaire.completableAtSpecificTimeStart > questionnaire.completableAtSpecificTimeEnd) { //start and end include midnight
-					var period = 0
-					if(questionnaire.completableAtSpecificTimeStart < signalTime.endTimeOfDay)
-						period += signalTime.endTimeOfDay - questionnaire.completableAtSpecificTimeStart
-					if(questionnaire.completableAtSpecificTimeEnd > signalTime.startTimeOfDay)
-						period += questionnaire.completableAtSpecificTimeEnd - signalTime.startTimeOfDay
-					return period
-				}
-				else {
-					var period = 0
-					if(questionnaire.completableAtSpecificTimeEnd < signalTime.endTimeOfDay)
-						period += signalTime.endTimeOfDay - questionnaire.completableAtSpecificTimeEnd
-					if(questionnaire.completableAtSpecificTimeStart > signalTime.startTimeOfDay)
-						period += questionnaire.completableAtSpecificTimeStart - signalTime.startTimeOfDay
-					return period
-				}
+	private fun calculateRandomInterval(questionnaire: Questionnaire, signalTime: SignalTime): Interval? {
+        val signalInterval = Interval(signalTime.startTimeOfDay, if(signalTime.random) {signalTime.endTimeOfDay} else {signalTime.startTimeOfDay})
+		return if(questionnaire.completableAtSpecificTime) {
+			val filterStart = if(questionnaire.completableAtSpecificTimeStart != -1) {questionnaire.completableAtSpecificTimeStart} else {0}
+			val filterEnd = if(questionnaire.completableAtSpecificTimeEnd != -1) {questionnaire.completableAtSpecificTimeEnd} else {ONE_DAY_MS.toInt()}
+			val filterInterval = Interval(filterStart, filterEnd)
+			
+			val overlaps = signalInterval.getOverlaps(filterInterval)
+			val bothIncludeMidnight = signalInterval.includesMidnight && filterInterval.includesMidnight
+			if(overlaps.size == 1) {
+				overlaps[0]
 			}
-			else if(questionnaire.completableAtSpecificTimeStart != -1)
-				return questionnaire.completableAtSpecificTimeStart - signalTime.startTimeOfDay
-			else if(questionnaire.completableAtSpecificTimeEnd != -1)
-				return signalTime.endTimeOfDay - questionnaire.completableAtSpecificTimeEnd
-			else
-				return signalTime.endTimeOfDay - signalTime.startTimeOfDay
+			else if (overlaps.size == 2 && bothIncludeMidnight) {
+				// merge the two intervals that border on midnight by taking the inner points and creating an interval that goes from the upper inner point to the lower inner point (thereby including midnight)
+				val times = arrayOf(overlaps[0].start, overlaps[0].end, overlaps[1].start, overlaps[1].end)
+				times.sort()
+				Interval(times[2], times[1])
+			}
+			else {
+				ErrorBox.error(
+					"Scheduler",
+					"SignalTime ${signalTime.id}: Configuration of completableAtSpecificTime filter (${questionnaire.completableAtSpecificTimeStart}, ${questionnaire.completableAtSpecificTimeEnd}) and signalTime (${signalTime.startTimeOfDay}, ${signalTime.endTimeOfDay}) results in more than one interval overlaps."
+				)
+				return null
+			}
+			
 		}
-		else
-			return signalTime.endTimeOfDay - signalTime.startTimeOfDay
+		else {
+			signalInterval
+		}
 	}
 	
 	// * We can use this function for single time schedules as well. We can just set frequency=1 and it will fire at startTime_minutes
@@ -292,10 +331,14 @@ object Scheduler {
 		val questionnaire = DbLogic.getQuestionnaire(signalTime.questionnaireId) ?: return
 		val frequency = signalTime.frequency
 		val msBetween = signalTime.minutesBetween * 60000
-		val period = if(signalTime.random) calculateRandomPeriod(questionnaire, signalTime) else 0
-		val block = period / frequency
+		val interval = calculateRandomInterval(questionnaire, signalTime)
+		if(interval == null) {
+			ErrorBox.log("Scheduler", "Available interval is null. Canceling")
+			return
+		}
+		val block = if(signalTime.random) {interval.period / frequency} else {0}
 		if(signalTime.random && frequency > 1 && block < msBetween) {
-			ErrorBox.error("Scheduler", "SignalTime ${signalTime.id}: $frequency blocks with $msBetween ms do not fit into $period ms")
+			ErrorBox.error("Scheduler", "SignalTime ${signalTime.id}: $frequency blocks with $msBetween ms do not fit into ${interval.period} ms")
 			return
 		}
 		
@@ -305,20 +348,26 @@ object Scheduler {
 		val midnight = NativeLink.getMidnightMillis(anchorTimestamp)
 
 		//set beginning time:
-		var baseTimestamp = midnight + signalTime.startTimeOfDay
+		var baseTimestamp = midnight + interval.start
 		val minDate: Long
 		if(manualDelayDays != -1) { //is only set when schedules are freshly created
-			baseTimestamp += ONE_DAY_MS * manualDelayDays
-			minDate = anchorTimestamp + (ONE_DAY_MS * manualDelayDays).coerceAtLeast(MIN_SCHEDULE_DISTANCE)
-			
-			// Assuming that anchorTimestamp = 23:58, startTimeOfDay = 00:00 and dailyRepeatRate = 5 (anything greater than 1).
-			// When we used getMidnightMillis(), we calculated backwards a whole day, so baseTimestamp is one day short.
-			// That means, when we just added ONE_DAY_MS * dailyRepeatRate, we effectively only added 4 days instead of 5.
-			// This would not be true if startTimeOfDay = 23:59, so we cant just blindly add a day.
-			// This loop fixes it:
-			while(baseTimestamp < minDate) {
-				baseTimestamp += ONE_DAY_MS
-			}
+            minDate = anchorTimestamp + (ONE_DAY_MS * manualDelayDays).coerceAtLeast(MIN_SCHEDULE_DISTANCE)
+            val useLegacyScheduling = DbLogic.getStudy(questionnaire.studyId)?.legacyScheduling ?: false
+            if(useLegacyScheduling) {
+
+                // Assuming that anchorTimestamp = 23:58, startTimeOfDay = 00:00 and dailyRepeatRate = 5 (anything greater than 1).
+                // When we used getMidnightMillis(), we calculated backwards a whole day, so baseTimestamp is one day short.
+                // That means, when we just added ONE_DAY_MS * dailyRepeatRate, we effectively only added 4 days instead of 5.
+                // This would not be true if startTimeOfDay = 23:59, so we cant just blindly add a day.
+                // This loop fixes it:
+                while (baseTimestamp < minDate) {
+                    baseTimestamp += ONE_DAY_MS
+                }
+            } else {
+                while (baseTimestamp < minDate && NativeLink.getDatesDiff(baseTimestamp, minDate) > 0) {
+                    baseTimestamp += ONE_DAY_MS
+                }
+            }
 		}
 		else
 			baseTimestamp += ONE_DAY_MS * signalTime.schedule.dailyRepeatRate
@@ -341,8 +390,8 @@ object Scheduler {
 			if(signalTime.random) {
 				val randomBlock = (nextBlock * getRandom()).toInt()
 				
-				workTimestamp = considerHourOptions(baseTimestamp + randomBlock, questionnaire) //set the actual timing of the notification
-				baseTimestamp = considerHourOptions(baseTimestamp + nextBlock, questionnaire) //prepare timestamp for the next loop
+				workTimestamp = baseTimestamp + randomBlock //set the actual timing of the notification
+				baseTimestamp = baseTimestamp + nextBlock //prepare timestamp for the next loop
 				
 				if(baseTimestamp - workTimestamp < msBetween) { //if random is very late in this block, make sure that the next time gets shortened to account for minutesBetween
 					val shorten = msBetween - (baseTimestamp - workTimestamp).toInt()
@@ -355,8 +404,10 @@ object Scheduler {
 				baseTimestamp += block.toLong() //this has no effect. I will leave it in, in case we ever want to use frequency on non-random schedules
 				workTimestamp = baseTimestamp
 			}
-			
-			Alarm.createFromSignalTime(signalTime, actionTriggerId, workTimestamp, i)
+
+            if(questionnaire.isActive(workTimestamp)) { // with legacy scheduling questionnaires can become invalid during a single signal time window, so we check just in case
+                Alarm.createFromSignalTime(signalTime, actionTriggerId, workTimestamp, i)
+            }
 		}
 	}
 	
@@ -392,37 +443,6 @@ object Scheduler {
 	
 	private fun getRandom(): Double {
 		return Random.nextDouble(1.0)
-	}
-	
-	private fun considerHourOptions(timestamp: Long, questionnaire: Questionnaire): Long {
-		val midnight = NativeLink.getMidnightMillis(timestamp)
-		val fromMidnight = timestamp - midnight
-		
-		
-		if(!questionnaire.completableAtSpecificTime)
-			return timestamp
-		else if(questionnaire.completableAtSpecificTimeStart != -1 && questionnaire.completableAtSpecificTimeEnd != -1) {
-			if(questionnaire.completableAtSpecificTimeStart > questionnaire.completableAtSpecificTimeEnd) { //start and end include midnight
-				if(fromMidnight < questionnaire.completableAtSpecificTimeStart)
-					return midnight + questionnaire.completableAtSpecificTimeStart
-				else if(fromMidnight > questionnaire.completableAtSpecificTimeEnd) //this should never happen
-					return fromMidnight + questionnaire.completableAtSpecificTimeEnd
-			}
-			else {
-				if(fromMidnight > questionnaire.completableAtSpecificTimeStart && fromMidnight < questionnaire.completableAtSpecificTimeEnd)
-					return midnight + questionnaire.completableAtSpecificTimeEnd
-			}
-		}
-		else if(questionnaire.completableAtSpecificTimeStart != -1) {
-			if(fromMidnight < questionnaire.completableAtSpecificTimeStart)
-				return midnight + questionnaire.completableAtSpecificTimeStart
-		}
-		else if(questionnaire.completableAtSpecificTimeEnd != -1) {
-			if(fromMidnight > questionnaire.completableAtSpecificTimeEnd) //this should never happen
-				return midnight + questionnaire.completableAtSpecificTimeEnd
-		}
-		
-		return timestamp
 	}
 	
 	internal fun considerDayOptions(timestamp: Long, questionnaire: Questionnaire, schedule: Schedule): Long {

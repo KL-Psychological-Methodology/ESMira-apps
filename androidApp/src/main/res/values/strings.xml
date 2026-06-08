@@ -317,4 +317,8 @@
     <string name="notification_expired_title">Notification expired</string>
     <string name="notification_expired_info">The selected notification has expired and the associated questionnaire is currently not available.</string>
     <string name="measured_noise_level">Measured noise level: %1$s dBFS</string>
+    <string name="app_usage_sessions_yesterday">Sessions yesterday</string>
+    <string name="app_usage_sessions_today">Sessions today</string>
+    <string name="app_usage_sessions_no_data_yesterday">No data for yesterday</string>
+    <string name="app_usage_sessions_no_data_today">No data for today</string>
 </resources>

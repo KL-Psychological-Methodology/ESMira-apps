@@ -202,7 +202,7 @@ class ScreenTrackingReceiver : BroadcastReceiver() {
 			
 			if(checkDay(data))
 				data.save()
-			return AppUsageCalculator.UsageStatsInfo(data.yesterdayCount, data.yesterdayTime)
+			return AppUsageCalculator.UsageStatsInfo(data.yesterdayCount, data.yesterdayTime, listOf())
 		}
 	}
 }

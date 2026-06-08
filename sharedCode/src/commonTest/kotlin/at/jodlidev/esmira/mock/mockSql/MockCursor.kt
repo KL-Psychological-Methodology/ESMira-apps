@@ -15,7 +15,7 @@ class MockCursor(
 	private fun getEntry(index: Int): Any? {
 		val split = keys[index].split('.')
 		return if(split.size == 1) {
-			if(split[0].toUpperCase() == "COUNT(*)") {
+			if(split[0].uppercase() == "COUNT(*)") {
 				return list.size
 			}
 			list[pos].getValue(split[0])

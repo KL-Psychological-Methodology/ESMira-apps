@@ -321,7 +321,7 @@ class MockDatabase: SQLiteInterface {
 			var sortTable: String? = null
 			var sortColumn: String? = null
 			for(value in values) {
-				val uppercase = value.toUpperCase()
+				val uppercase = value.uppercase()
 				isMax = if(uppercase.startsWith("MAX("))
 					true
 				else if(uppercase.startsWith("MIN("))

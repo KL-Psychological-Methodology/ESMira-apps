@@ -90,7 +90,7 @@ class ObservedVariable internal constructor() {
 	}
 	
 	//internal for testing
-	internal fun checkCondition(responses: Map<String, JsonElement>, metadata: Map<String, JsonElement>): Boolean {
+	internal fun checkCondition(responses: Map<String, JsonElement>, metadata: Map<String, JsonElement> = mapOf()): Boolean {
 		//the logic of this function is pretty slow and the same condition-JSON is interpreted every time - but it should not matter
 		if(conditionType == Condition.TYPE_ALL)
 			return true
@@ -133,7 +133,7 @@ class ObservedVariable internal constructor() {
 		return conditionIsMet
 	}
 	
-	fun createStatistic(responses: Map<String, JsonElement>, metadata: Map<String, JsonElement>) {
+	fun createStatistic(responses: Map<String, JsonElement>, metadata: Map<String, JsonElement> = mapOf()) {
 		if(checkCondition(responses, metadata)) {
 			when(storageType) {
 				STORAGE_TYPE_TIMED -> {
