@@ -122,6 +122,9 @@ private class NoiseLevelMeasurement: NSObject, ObservableObject {
 		let mean = self.sumTotal / (sampleRate * Double(self.duration))
 		let meanOfSquares = self.sumSquaresTotal / (sampleRate * Double(self.duration))
 		let rms = sqrt(meanOfSquares - mean * mean)
+		rms = rms > 0 ? rms : 1e-9
+		self.rmsMin > 0 ? self.rmsMin : 1e-9
+		self.rmsMax > 0 ? self.rmsMax : 1e-9
 		let dbfsTotal = round(20.0 * log10(rms) * 100.0) / 100.0
 		let dbfsMin = round(20.0 * log10(self.rmsMin) * 100.0) / 100.0
 		let dbfsMax = round(20.0 * log10(self.rmsMax) * 100.0) / 100.0
