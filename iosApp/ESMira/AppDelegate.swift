@@ -54,10 +54,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 			case "invitation":
 				let questionnaire = DbLogic().getQuestionnaire(id: Int64(id[1]) ?? -1)
 				if(questionnaire != nil) {
-					if(questionnaire!.canBeFilledOut(now: NativeLink().getNowMillis())){
+					let availabilityStatus = questionnaire!.canBeFilledOut(now: NativeLink().getNowMillis())
+					if(availabilityStatus.type == Questionnaire.AvailabilityStatusType.available){
 						navigationState.openQuestionnaire(questionnaire!)
 					} else {
-						navigationState.openNotificationExpiredDialog(studyId: questionnaire!.studyId)
+						navigationState.openNotificationExpiredDialog(studyId: questionnaire!.studyId, availabilityStatus: availabilityStatus)
 					}
 				}
 				else {
@@ -72,10 +73,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 						let questionnaire = DbLogic().getQuestionnaire(id: alarm?.questionnaireId ?? 0)
 						if(questionnaire != nil){
 							questionnaire?.updateLastNotification(timestamp: max(questionnaire!.metadata.lastNotification, alarm!.timestamp))
-							if(questionnaire!.canBeFilledOut(now: NativeLink().getNowMillis())) {
+							
+							let availabilityStatus = questionnaire!.canBeFilledOut(now: NativeLink().getNowMillis())
+							
+							if(availabilityStatus.type == Questionnaire.AvailabilityStatusType.available) {
 								navigationState.openQuestionnaire(questionnaire!)
 							} else {
-								navigationState.openNotificationExpiredDialog(studyId: questionnaire!.studyId)
+								
+								navigationState.openNotificationExpiredDialog(studyId: questionnaire!.studyId, availabilityStatus: availabilityStatus)
 							}
 						}
 						else {
@@ -94,6 +99,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 		}
 		completionHandler()
 	}
+
+	
 	func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
 		completionHandler([.alert, .sound])
 		Scheduler().checkMissedAlarms(missedAlarmsAsBroken: false)
