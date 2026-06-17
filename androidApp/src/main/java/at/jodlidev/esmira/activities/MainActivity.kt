@@ -48,7 +48,7 @@ import kotlin.math.floor
  */
 class MainActivity: ComponentActivity() {
 	private val reloadState = mutableStateOf(false)
-	
+
 	private fun reloadPage() {
 		reloadState.value = reloadState.value.not()
 	}
@@ -99,8 +99,8 @@ class MainActivity: ComponentActivity() {
                                 )
                             }
                             Questionnaire.AvailabilityStatusType.NOTIFICATION_TIMEOUT -> {
-                                val maxTimeout = (availabilityStatus.data_should_be.toDouble() / (1000.0 * 60.0)).toInt()
-                                val reactionTime = ceil(availabilityStatus.data_is.toDouble()/(1000.0 * 60.0)).toInt()
+                                val maxTimeout = (availabilityStatus.dataShouldBe.toDouble() / (1000.0 * 60.0)).toInt()
+                                val reactionTime = ceil(availabilityStatus.dataIs.toDouble()/(1000.0 * 60.0)).toInt()
                                 DialogOpener.dialog(
                                     getString(R.string.notification_unavailable_title),
                                     getString(R.string.notification_unavailable_info_notification_timeout, maxTimeout, reactionTime),
@@ -108,8 +108,8 @@ class MainActivity: ComponentActivity() {
                                 )
                             }
                             Questionnaire.AvailabilityStatusType.SPECIFIC_TIME -> {
-                                val startTime = NativeLink.formatTime(availabilityStatus.data_is)
-                                val endTime = NativeLink.formatTime(availabilityStatus.data_should_be)
+                                val startTime = NativeLink.formatTime(availabilityStatus.dataIs)
+                                val endTime = NativeLink.formatTime(availabilityStatus.dataShouldBe)
                                 DialogOpener.dialog(
                                     getString(R.string.notification_unavailable_title),
                                     getString(R.string.notification_unavailable_info_specific_time, startTime, endTime),
@@ -117,8 +117,8 @@ class MainActivity: ComponentActivity() {
                                 )
                             }
                             Questionnaire.AvailabilityStatusType.COMPLETION_FREQUENCY -> {
-                                val lastCompleted = floor(availabilityStatus.data_is.toDouble() / (60.0 * 1000.0)).toInt()
-                                val minInterval = ceil(availabilityStatus.data_should_be.toDouble() / (60.0 * 1000.0)).toInt()
+                                val lastCompleted = floor(availabilityStatus.dataIs.toDouble() / (60.0 * 1000.0)).toInt()
+                                val minInterval = ceil(availabilityStatus.dataShouldBe.toDouble() / (60.0 * 1000.0)).toInt()
                                 DialogOpener.dialog(
                                     getString(R.string.notification_unavailable_title),
                                     getString(R.string.notification_unavailable_info_completion_frequency, minInterval, lastCompleted),

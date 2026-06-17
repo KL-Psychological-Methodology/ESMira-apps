@@ -4,7 +4,6 @@ import at.jodlidev.esmira.sharedCode.*
 import at.jodlidev.esmira.sharedCode.merlinInterpreter.MerlinRunner
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Transient
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.Serializable
 
 /**
@@ -572,8 +571,8 @@ class Questionnaire {
 
     data class AvailabilityStatus(
         val type: AvailabilityStatusType,
-        val data_is: Long = 0L,
-        val data_should_be: Long = 0L
+        val dataIs: Long = 0L,
+        val dataShouldBe: Long = 0L
     ) {
         fun isAvailable(): Boolean {
             return type == AvailabilityStatusType.AVAILABLE
