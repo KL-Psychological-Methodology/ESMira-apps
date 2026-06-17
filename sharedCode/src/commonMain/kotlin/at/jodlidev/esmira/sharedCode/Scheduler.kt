@@ -301,17 +301,15 @@ object Scheduler {
 			val bothIncludeMidnight = signalInterval.includesMidnight && filterInterval.includesMidnight
 			if(overlaps.size == 1) {
 				overlaps[0]
-			}
-			else if (overlaps.size == 2 && bothIncludeMidnight) {
+			} else if (overlaps.size == 2 && bothIncludeMidnight) {
 				// merge the two intervals that border on midnight by taking the inner points and creating an interval that goes from the upper inner point to the lower inner point (thereby including midnight)
 				val times = arrayOf(overlaps[0].start, overlaps[0].end, overlaps[1].start, overlaps[1].end)
 				times.sort()
 				Interval(times[2], times[1])
-			}
-			else {
+            } else {
 				ErrorBox.error(
 					"Scheduler",
-					"SignalTime ${signalTime.id}: Configuration of completableAtSpecificTime filter (${questionnaire.completableAtSpecificTimeStart}, ${questionnaire.completableAtSpecificTimeEnd}) and signalTime (${signalTime.startTimeOfDay}, ${signalTime.endTimeOfDay}) results in more than one interval overlaps."
+					"SignalTime ${signalTime.id}: Configuration of completableAtSpecificTime filter (${questionnaire.completableAtSpecificTimeStart}, ${questionnaire.completableAtSpecificTimeEnd}) and signalTime (${signalTime.startTimeOfDay}, ${signalTime.endTimeOfDay}) results in ${if(overlaps.isEmpty()){"no"}else{"more than one"}} interval overlaps."
 				)
 				return null
 			}
