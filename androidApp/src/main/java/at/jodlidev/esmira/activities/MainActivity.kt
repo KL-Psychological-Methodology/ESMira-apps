@@ -39,6 +39,8 @@ import at.jodlidev.esmira.views.main.LanguageSelectView
 import at.jodlidev.esmira.views.main.studyDashboard.StudyDashboardView
 import kotlinx.coroutines.delay
 import java.io.*
+import kotlin.math.ceil
+import kotlin.math.floor
 
 
 /**
@@ -74,12 +76,84 @@ class MainActivity: ComponentActivity() {
 				val questionnaire = DbLogic.getQuestionnaire(extras.getLong(EXTRA_OPEN_QUESTIONNAIRE, -1))
 				if(questionnaire != null) {
 					DbUser.setCurrentStudyId(questionnaire.studyId)
-					
-					if(questionnaire.canBeFilledOut().isAvailable()) {
+
+                    val availabilityStatus = questionnaire.canBeFilledOut()
+
+                    if(availabilityStatus.isAvailable()) {
 						QuestionnaireCache.saveFormStarted(questionnaire.id)
 						startDestination = "questionnaire/${questionnaire.id}/${questionnaire.getFirstPageIndex()}"
 					} else {
-                        DialogOpener.dialog(resources.getString(R.string.notification_expired_title), resources.getString(R.string.notification_expired_info), false)
+                        when(availabilityStatus.type) {
+                            Questionnaire.AvailabilityStatusType.AVAILABLE -> {} // Already handled
+                            Questionnaire.AvailabilityStatusType.NO_NOTIFICATION -> {
+                                DialogOpener.dialog(
+                                    getString(R.string.notification_unavailable_title),
+                                    getString(R.string.notification_unavailable_info),
+                                    false)
+                            }
+                            Questionnaire.AvailabilityStatusType.ALREADY_FILLED_OUT -> {
+                                DialogOpener.dialog(
+                                    getString(R.string.notification_unavailable_title_filled_out),
+                                    getString(R.string.notification_unavailable_info_already_filled_out),
+                                    false
+                                )
+                            }
+                            Questionnaire.AvailabilityStatusType.NOTIFICATION_TIMEOUT -> {
+                                val maxTimeout = (availabilityStatus.data_should_be.toDouble() / (1000.0 * 60.0)).toInt()
+                                val reactionTime = ceil(availabilityStatus.data_is.toDouble()/(1000.0 * 60.0)).toInt()
+                                DialogOpener.dialog(
+                                    getString(R.string.notification_unavailable_title),
+                                    getString(R.string.notification_unavailable_info_notification_timeout, maxTimeout, reactionTime),
+                                    false
+                                )
+                            }
+                            Questionnaire.AvailabilityStatusType.SPECIFIC_TIME -> {
+                                val startTime = NativeLink.formatTime(availabilityStatus.data_is)
+                                val endTime = NativeLink.formatTime(availabilityStatus.data_should_be)
+                                DialogOpener.dialog(
+                                    getString(R.string.notification_unavailable_title),
+                                    getString(R.string.notification_unavailable_info_specific_time, startTime, endTime),
+                                    false
+                                )
+                            }
+                            Questionnaire.AvailabilityStatusType.COMPLETION_FREQUENCY -> {
+                                val lastCompleted = floor(availabilityStatus.data_is.toDouble() / (60.0 * 1000.0)).toInt()
+                                val minInterval = ceil(availabilityStatus.data_should_be.toDouble() / (60.0 * 1000.0)).toInt()
+                                DialogOpener.dialog(
+                                    getString(R.string.notification_unavailable_title),
+                                    getString(R.string.notification_unavailable_info_completion_frequency, minInterval, lastCompleted),
+                                    false
+                                )
+                            }
+                            Questionnaire.AvailabilityStatusType.SCRIPT_FILTER -> {
+                                DialogOpener.dialog(
+                                    getString(R.string.notification_unavailable_title),
+                                    getString(R.string.notification_unavailable_info_script_filter),
+                                    false
+                                )
+                            }
+                            Questionnaire.AvailabilityStatusType.PHONE_TYPE -> {
+                                DialogOpener.dialog(
+                                    getString(R.string.notification_unavailable_title_os),
+                                    getString(R.string.notification_unavailable_info_phone_type),
+                                    false
+                                )
+                            }
+                            Questionnaire.AvailabilityStatusType.EMPTY_QUESTIONNAIRE -> {
+                                DialogOpener.dialog(
+                                    getString(R.string.notification_unavailable_title_empty),
+                                    getString(R.string.notification_unavailable_info_empty_questionnaire),
+                                    false
+                                )
+                            }
+                            Questionnaire.AvailabilityStatusType.INACTIVE -> {
+                                DialogOpener.dialog(
+                                    getString(R.string.notification_unavailable_title_expired),
+                                    getString(R.string.notification_unavailable_info_inactive),
+                                    false
+                                )
+                            }
+                        }
                     }
 				}
                 intent.removeExtra(EXTRA_OPEN_QUESTIONNAIRE)

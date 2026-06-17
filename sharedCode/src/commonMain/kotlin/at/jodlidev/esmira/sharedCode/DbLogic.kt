@@ -814,7 +814,7 @@ object DbLogic {
 		val list = ArrayList<Questionnaire>()
 		while(c.moveToNext()) {
 			val questionnaire = Questionnaire(c)
-			if(!questionnaire.canBeFilledOut())
+			if(!questionnaire.canBeFilledOut().isAvailable())
 				list.add(questionnaire)
 		}
 		c.close()
@@ -835,7 +835,7 @@ object DbLogic {
 		val list = ArrayList<Questionnaire>()
 		while(c.moveToNext()) {
 			val questionnaire = Questionnaire(c)
-			if(questionnaire.canBeFilledOut())
+			if(questionnaire.canBeFilledOut().isAvailable())
 				list.add(questionnaire)
 		}
 		c.close()
