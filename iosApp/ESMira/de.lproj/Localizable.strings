@@ -230,3 +230,5 @@
 "notification_expired_title" = "Benachrichtigung abgelaufen";
 "notification_expired_info" = "Die gewählte Benachrichtigung ist abgelaufen, und der dazugehörige Fragebogen ist aktuell nicht verfügbar.";
 "measured_noise_level" = "Gemessene Geräuschlautstärke: %1$@ dBFS";
+"warning_study_entry" = "Dies ist die Liste offener Studien der Karl Landsteiner Universität. Wenn Sie bei einer Studie einer andern Institution teilnehmen wollten, oder über einen Zugangsschlüssel informiert worden sind, gehen Sie bitte zurück und wiederholen Sie den Einstiegsprozess.";
+"studies" = "Studien";

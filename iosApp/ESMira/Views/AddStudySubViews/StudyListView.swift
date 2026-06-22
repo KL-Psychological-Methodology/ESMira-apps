@@ -28,6 +28,18 @@ struct StudyListView: View {
 				StudyDetailView(study: self.studiesList[0])
 			}
 			else {
+				if(self.accessKey.isEmpty && self.serverUrl == "https://esmira.kl.ac.at") {
+					HStack {
+						Text("warning_study_entry")
+							.fontWeight(.bold)
+							.foregroundColor(Color("Accent"))
+							.padding(10)
+							.frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
+							.border(Color("Accent"))
+					}
+					.padding(5)
+					.frame(minWidth: 0, maxWidth: .infinity, alignment: .center)
+				}
 				List(self.studiesList, id: \.webId) { study in
 					NavigationLink(destination: study.hasMultipleLanguages() ? AnyView(LangQuestionView(study: study)) : AnyView(StudyDetailView(study: study))) {
 						VStack(alignment: .leading) {
@@ -38,7 +50,7 @@ struct StudyListView: View {
 				}
 			}
 		}
-			.navigationBarTitle(Text("studies"), displayMode: .inline)
+			.navigationBarTitle(Text("studsies"), displayMode: .inline)
 		
 	}
 }

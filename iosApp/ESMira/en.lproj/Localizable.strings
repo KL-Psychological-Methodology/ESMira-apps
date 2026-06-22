@@ -230,3 +230,5 @@
 "notification_expired_title" = "Notification expired";
 "notification_expired_info" = "The selected notification has expired and the associated questionnaire is currently not available.";
 "measured_noise_level" = "Measured noise level: %1$@ dBFS";
+"warning_study_ently" = "This is the list of open studies at Karl Landsteiner University. If you want to participate in a study at another institution or were informed to use an Access Key, please go back and retry the entry process.";
+"studies" = "Studies";
