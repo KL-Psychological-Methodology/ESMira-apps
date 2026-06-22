@@ -321,4 +321,5 @@
     <string name="app_usage_sessions_today">Sessions today</string>
     <string name="app_usage_sessions_no_data_yesterday">No data for yesterday</string>
     <string name="app_usage_sessions_no_data_today">No data for today</string>
+    <string name="warning_study_entry">This is the list of open studies at Karl Landsteiner University. If you want to participate in a study at another institution or were informed to use an Access Key, please go back and retry the entry process.</string>
 </resources>
