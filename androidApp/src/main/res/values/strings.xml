@@ -314,12 +314,24 @@
     <string name="available_languages">This study is available in the following languages:</string>
     <string name="select_language_instruction">Select the language the study should be displayed in. Note that this only affects the text in the study itself. The application interface is dependent on your system language and will not change.</string>
     <string name="change_language">Change Language</string>
-    <string name="notification_expired_title">Notification expired</string>
-    <string name="notification_expired_info">The selected notification has expired and the associated questionnaire is currently not available.</string>
     <string name="measured_noise_level">Measured noise level: %1$s dBFS</string>
     <string name="app_usage_sessions_yesterday">Sessions yesterday</string>
     <string name="app_usage_sessions_today">Sessions today</string>
     <string name="app_usage_sessions_no_data_yesterday">No data for yesterday</string>
     <string name="app_usage_sessions_no_data_today">No data for today</string>
     <string name="warning_study_entry">This is the list of open studies at Karl Landsteiner University. If you want to participate in a study at another institution or were informed to use an Access Key, please go back and retry the entry process.</string>
+    <string name="notification_unavailable_title">Questionnaire currently unavailable</string>
+    <string name="notification_unavailable_title_expired">Notification expired</string>
+    <string name="notification_unavailable_title_filled_out">Questionnaire filled out already</string>
+    <string name="notification_unavailable_title_os">Questionnaire not available on your phone</string>
+    <string name="notification_unavailable_title_empty">Questionnaire empty</string>
+    <string name="notification_unavailable_info">This questionnaire is currently not available. There is no need to take further action.</string>
+    <string name="notification_unavailable_info_already_filled_out">This questionnaire can only be filled out once per notification. You have already filled out this questionnaire, but ESMira was unable to remove the notification. There is no need to take further action.</string>
+    <string name="notification_unavailable_info_notification_timeout">This questionnaire can only be filled out for %1$d minutes after a notification was sent. ESMira was unable to remove the notification, and you clicked on it after %2$d minutes. There is no need to take further action.</string>
+    <string name="notification_unavailable_info_specific_time">This questionnaire can only be filled out from %1$s to %2$s. You clicked on the notification outside of that time. There is no need to take further action.</string>
+    <string name="notification_unavailable_info_completion_frequency">This questionnaire requires at least %1$d minutes to pass between each time you fill it out. You have last completed it %2$d minutes ago, and can therefore not access it at this time. There is no need to take further action.</string>
+    <string name="notification_unavailable_info_script_filter">This questionnaire is currently unavailable due to a dynamic condition the researchers have set. This condition might have changed since the notification was sent, and ESMira was unable to remove it. There is no need to take further action.</string>
+    <string name="notification_unavailable_info_phone_type">This questionnaire is not available on your operating system.</string>
+    <string name="notification_unavailable_info_empty_questionnaire">This questionnaire is empty. The researchers have not yet filled it with content, and it is thus unavailable. There is no need to take further action.</string>
+    <string name="notification_unavailable_info_inactive">This questionnaire has become unavailable since the notification was sent, and ESMira was unable to remove it. There is no need to take further action.</string>
 </resources>

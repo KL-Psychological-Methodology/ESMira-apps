@@ -55,9 +55,9 @@ struct ContentView: View {
 			else {
 				return AnyView(Text("error"))
 			}
-		case .expiredNotification:
+		case .unavailableQuestionnaire(let availabilityStatus):
 			return AnyView(
-				ExpiredNotificationView()
+				UnavailableQuestionnaireView(availabilityStatus: availabilityStatus)
 					.environmentObject(appState)
 					.environmentObject(navigationState)
 					.accentColor(Color("onSurface"))

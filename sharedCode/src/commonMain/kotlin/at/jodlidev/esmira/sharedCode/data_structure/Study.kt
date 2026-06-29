@@ -89,7 +89,7 @@ class Study internal constructor(
 	val availableQuestionnaires: List<Questionnaire> get() {
 		val r = ArrayList<Questionnaire>()
 		for(q in questionnaires) {
-			if(q.canBeFilledOut())
+			if(q.canBeFilledOut().isAvailable())
 				r.add(q)
 		}
 		return r

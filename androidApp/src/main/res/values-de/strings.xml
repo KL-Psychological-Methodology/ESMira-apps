@@ -314,8 +314,20 @@
     <string name="available_languages">Diese Studie ist in den folgenden Sprachen verfügbar:</string>
     <string name="select_language_instruction">Wählen Sie die Sprache, in der die Studie dargestellt werden soll. Beachten Sie, dass dies nur Texte der Studie selbst betrifft. Die Sprache der Anwendung ist abhängig von Ihrer Systemsprache.</string>
     <string name="change_language">Sprache ändern</string>
-    <string name="notification_expired_title">Benachrichtigung abgelaufen</string>
-    <string name="notification_expired_info">Die gewählte Benachrichtigung ist abgelaufen, und der dazugehörige Fragebogen ist aktuell nicht verfügbar.</string>
     <string name="measured_noise_level">Gemessene Geräuschlautstärke: %1$s dBFS</string>
     <string name="warning_study_entry">Dies ist die Liste offener Studien der Karl Landsteiner Universität. Wenn Sie bei einer Studie einer andern Institution teilnehmen wollten, oder über einen Zugangsschlüssel informiert worden sind, gehen Sie bitte zurück und wiederholen Sie den Einstiegsprozess.</string>
+    <string name="notification_unavailable_title">Fragebogen aktuell nicht verfügbar</string>
+    <string name="notification_unavailable_title_expired">Benachrichtigung abgelaufen</string>
+    <string name="notification_unavailable_title_filled_out">Fragebogen bereits ausgefüllt</string>
+    <string name="notification_unavailable_title_os">Fragebogen auf dem Gerät nicht verfügbar</string>
+    <string name="notification_unavailable_title_empty">Leerer Fragebogen</string>
+    <string name="notification_unavailable_info">Dieser Fragebogen ist aktuell nicht verfügbar. Es sind keine weiteren Schritte erforderlich.</string>
+    <string name="notification_unavailable_info_already_filled_out">Dieser Fragebogen kann nur einmal pro Benachrichtigung ausgefüllt werden. Sie haben den Fragebogen bereits ausgefüllt, aber ESMira konnte die Benachrichtigung nicht löschen. Es sind keine weiteren Schritte erforderlich.</string>
+    <string name="notification_unavailable_info_notification_timeout">Dieser Fragebogen kann nur innerhalb von %1$d Minuten nach einer Benachrichtigung ausgefüllt werden. Esmira konnte die Benachrichtigung nicht entfernen, und Sie haben %2$d Minuten nach der Benachrichtigung darauf geklickt. Es sind keine weiteren Schritte erforderlich.</string>
+    <string name="notification_unavailable_info_specific_time">Dieser Fragebogen kann nur von %1$s bis %2$s ausgefüllt werden. Sie haben außerhalb dieser Zeit auf die Benachrichtigung reagiert. Es sind keine weiteren Schritte erforderlich.</string>
+    <string name="notification_unavailable_info_completion_frequency">Dieser Fragebogen erfordert mindestens %1$d Minuten zwischen jedem ausfüllen. Sie haben ihn zuletzt vor %2$d Minuten ausgefüllt. Es sind keine weiteren Schritte erforderlich.</string>
+    <string name="notification_unavailable_info_script_filter">Dieser Fragebogen ist aktuell aufgrund einer dynamischen Bedingung, welche von der Studienleitung eingestellt wurde, nicht verfügbar. Diese Bedingung kann sich seit dem senden der Benachrichtigung geändert haben, und ESMira konnte die Benachrichtigung nicht entfernen. Es sind keine weiteren Schritte erforderlich.</string>
+    <string name="notification_unavailable_info_phone_type">Dieser Fragebogen is auf ihrem Betriebssystem nicht verfügbar.</string>
+    <string name="notification_unavailable_info_empty_questionnaire">Dieser Fragebogen ist leer. Die Studienleitung hat ihn noch nicht mit Inhalt befüllt, und er ist daher nicht verfügbar. Es sind keine weiteren Schritte erforderlich.</string>
+    <string name="notification_unavailable_info_inactive">Dieser Fragebogen ist inzwischen nicht mehr verfügbar, seit die Benachrichtigung gesendet wurde, und ESMira konnte diese nicht entfernen. Es sind keine weiteren Schritte erforderlich.</string>
 </resources>

@@ -4,7 +4,6 @@ import at.jodlidev.esmira.sharedCode.*
 import at.jodlidev.esmira.sharedCode.merlinInterpreter.MerlinRunner
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Transient
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.Serializable
 
 /**
@@ -556,42 +555,104 @@ class Questionnaire {
 	fun isNotActiveForGood(): Boolean {
 		return !isActive() && willBeActiveIn() == 0L
 	}
-	
-	fun canBeFilledOut(now: Long = NativeLink.getNowMillis()): Boolean { //if there are any questionnaires at the current time
+
+    enum class AvailabilityStatusType {
+        AVAILABLE,
+        NO_NOTIFICATION,
+        ALREADY_FILLED_OUT,
+        NOTIFICATION_TIMEOUT,
+        SPECIFIC_TIME,
+        COMPLETION_FREQUENCY,
+        SCRIPT_FILTER,
+        PHONE_TYPE,
+        EMPTY_QUESTIONNAIRE,
+        INACTIVE
+    }
+
+    data class AvailabilityStatus(
+        val type: AvailabilityStatusType,
+        val dataIs: Long = 0L,
+        val dataShouldBe: Long = 0L
+    ) {
+        fun isAvailable(): Boolean {
+            return type == AvailabilityStatusType.AVAILABLE
+        }
+    }
+
+	fun canBeFilledOut(now: Long = NativeLink.getNowMillis()): AvailabilityStatus { //if there are any questionnaires at the current time
 		val fromMidnight = now - NativeLink.getMidnightMillis(now)
-		
-		val lastNotification = (DbLogic.getLastAlarmBefore(now, id)?.timestamp ?: 0).coerceAtLeast(metadata.lastNotification)
-		val oncePerNotification = (!completableOncePerNotification ||
-				(lastNotification != 0L && lastNotification >= metadata.lastCompleted &&
-						(completableMinutesAfterNotification == 0 || now - lastNotification <= completableMinutesAfterNotification * 60 * 1000)
-						)
-				)
-		
-		val specificTime = !completableAtSpecificTime ||
-			if(completableAtSpecificTimeStart != -1 && completableAtSpecificTimeEnd != -1) {
-				if(completableAtSpecificTimeStart > completableAtSpecificTimeEnd)
-					fromMidnight >= completableAtSpecificTimeStart || fromMidnight <= completableAtSpecificTimeEnd
-				else
-					fromMidnight in completableAtSpecificTimeStart .. completableAtSpecificTimeEnd
-			}
-			else
-				if(completableAtSpecificTimeStart != -1)
-					fromMidnight >= completableAtSpecificTimeStart
-				else if(completableAtSpecificTimeEnd != -1)
-					fromMidnight <= completableAtSpecificTimeEnd
-				else
-					true
-		val completionFrequency = (!limitCompletionFrequency || (now >= metadata.lastCompleted + completionFrequencyMinutes * 60 * 1000))
+        val lastNotification = (DbLogic.getLastAlarmBefore(now, id)?.timestamp ?: 0).coerceAtLeast(metadata.lastNotification)
 
-        val scriptFilterEvaluation = if(scriptFilter != "") MerlinRunner.runForBool(scriptFilter, this, "evaluate if questionnaire is active", true) else true
+        if(!hasQuestionnaire()) {
+            return AvailabilityStatus(AvailabilityStatusType.EMPTY_QUESTIONNAIRE) // Should hopefully not appear to users
+        }
 
-		return hasQuestionnaire() && isActive() &&
-                scriptFilterEvaluation &&
-				oncePerNotification &&
-				completionFrequency &&
-				specificTime &&
-				(NativeLink.smartphoneData.phoneType != PhoneType.IOS || publishedIOS) &&
-				(NativeLink.smartphoneData.phoneType != PhoneType.Android || publishedAndroid)
+        if(!isActive()) {
+            return AvailabilityStatus(AvailabilityStatusType.INACTIVE)
+        }
+
+        if((NativeLink.smartphoneData.phoneType == PhoneType.IOS && !publishedIOS) || (NativeLink.smartphoneData.phoneType == PhoneType.Android && !publishedAndroid)) {
+            return AvailabilityStatus(AvailabilityStatusType.PHONE_TYPE)
+        }
+
+        if(completableOncePerNotification) {
+            if(lastNotification == 0L) { // This should hopefully never happen when a user clicks a notification
+                return AvailabilityStatus(AvailabilityStatusType.NO_NOTIFICATION)
+            }
+            if(lastNotification < metadata.lastCompleted) {
+                return AvailabilityStatus(AvailabilityStatusType.ALREADY_FILLED_OUT)
+            }
+            if(completableMinutesAfterNotification != 0) {
+                val elapsedTime = now - lastNotification
+                val availableTime = (completableMinutesAfterNotification * 60 * 1000).toLong()
+                if(elapsedTime > availableTime) {
+                    return AvailabilityStatus(AvailabilityStatusType.NOTIFICATION_TIMEOUT, elapsedTime, availableTime)
+                }
+            }
+        }
+
+        if(completableAtSpecificTime) {
+            val inInterval = if(completableAtSpecificTimeStart != 1 && completableAtSpecificTimeEnd != 1) {
+                if(completableAtSpecificTimeStart > completableAtSpecificTimeEnd){
+                    fromMidnight >= completableAtSpecificTimeStart || fromMidnight <= completableAtSpecificTimeEnd
+                } else {
+                    fromMidnight in completableAtSpecificTimeStart .. completableAtSpecificTimeEnd
+                }
+            } else {
+                if(completableAtSpecificTimeStart != 1) {
+                    fromMidnight >= completableAtSpecificTimeStart
+                } else if (completableAtSpecificTimeEnd != 1) {
+
+                    fromMidnight <= completableAtSpecificTimeEnd
+                } else {
+                    true
+                }
+            }
+            if(!inInterval) {
+                return AvailabilityStatus(
+                    AvailabilityStatusType.SPECIFIC_TIME,
+                    if(completableAtSpecificTimeStart != 1) {completableAtSpecificTimeStart.toLong()} else {0L},
+                    if(completableAtSpecificTimeEnd != -1) {completableAtSpecificTimeEnd.toLong()} else {ONE_DAY_MS}
+                )
+            }
+        }
+
+        if(limitCompletionFrequency) {
+            val elapsedTime = now - metadata.lastCompleted
+            val requiredMinimumTime = (completionFrequencyMinutes * 60 * 1000).toLong()
+            if (elapsedTime < requiredMinimumTime) {
+                return AvailabilityStatus(AvailabilityStatusType.COMPLETION_FREQUENCY, elapsedTime, requiredMinimumTime)
+            }
+        }
+
+        if(scriptFilter.isNotEmpty()) {
+            val scriptFilterEvaluation = MerlinRunner.runForBool(scriptFilter, this, "evaluate if questionnaire is active", true)
+            if(!scriptFilterEvaluation) {
+                return AvailabilityStatus(AvailabilityStatusType.SCRIPT_FILTER)
+            }
+        }
+
+        return AvailabilityStatus(AvailabilityStatusType.AVAILABLE)
 	}
 	fun questionnairePageHasRequired(index: Int): Boolean {
 		if (index >= pages.size)
