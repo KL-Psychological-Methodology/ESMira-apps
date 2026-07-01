@@ -16,6 +16,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -71,12 +72,12 @@ class WelcomeScreenActivity: ComponentActivity() {
 		val skipEntrance = (extras != null && extras.getBoolean(KEY_SKIP_ENTRANCE)) || openStudyDirectly
 		
 		setContent {
-			Scaffold { innerPadding ->
-				Box(modifier = Modifier.padding(innerPadding)) {
-					ESMiraSurface {
+			ESMiraSurface {
+				Scaffold(containerColor = Color.Transparent) { innerPadding ->
+					Box(modifier = Modifier.padding(innerPadding)) {
 						val context = LocalContext.current
 						val navController = rememberNavController()
-						//match the system bars to the screen background so the coloring is borderless (no seam above the content), like the main menu
+						//fallback for older Android (opaque system bars): paint them to match the background. On newer Android the system bars are transparent and the ESMiraSurface above draws the background behind them.
 						val backgroundColor = MaterialTheme.colorScheme.background
 						SideEffect {
 							window.statusBarColor = backgroundColor.toArgb()
