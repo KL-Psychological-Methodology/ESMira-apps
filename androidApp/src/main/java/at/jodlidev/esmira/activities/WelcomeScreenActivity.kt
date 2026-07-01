@@ -16,6 +16,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -75,6 +76,12 @@ class WelcomeScreenActivity: ComponentActivity() {
 					ESMiraSurface {
 						val context = LocalContext.current
 						val navController = rememberNavController()
+						//match the system bars to the screen background so the coloring is borderless (no seam above the content), like the main menu
+						val backgroundColor = MaterialTheme.colorScheme.background
+						SideEffect {
+							window.statusBarColor = backgroundColor.toArgb()
+							window.navigationBarColor = backgroundColor.toArgb()
+						}
 
 						val studyLoadingData = rememberSaveable {
 							if (isOpenedFromLink) {
