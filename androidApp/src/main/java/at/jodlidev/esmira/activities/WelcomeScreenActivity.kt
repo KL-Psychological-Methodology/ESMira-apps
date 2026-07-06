@@ -352,7 +352,8 @@ class WelcomeScreenActivity: ComponentActivity() {
 							} else {
 								navController.navigate("studyInfo/$index")
 							}
-						}
+						},
+                        showWarning = serverUrl.value == "https://esmira.kl.ac.at" && accessKey.value == ""
 					)
 				}
 			}

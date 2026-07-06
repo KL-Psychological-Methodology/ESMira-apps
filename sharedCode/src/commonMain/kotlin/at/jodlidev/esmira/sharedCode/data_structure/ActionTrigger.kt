@@ -446,7 +446,7 @@ class ActionTrigger {
 		questionnaire.updateLastNotification(actionScheduledTimestamp)
 		
 		//there is no point in issuing notifications when the questionnaire should not be reachable:
-		if(!questionnaire.canBeFilledOut(now)) {
+		if(!questionnaire.canBeFilledOut(now).isAvailable()) {
 			ErrorBox.log(
 				"Notification",
 				"Questionnaire (${questionnaire.title}) is not active at ${NativeLink.formatDateTime(now)}. Skipping notification"

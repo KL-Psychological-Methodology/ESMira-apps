@@ -7,10 +7,15 @@ import sharedCode
 
 class NavigationState: ObservableObject {
 	enum DialogsScreens: Identifiable {
-		case errorReport, changeSchedule, faultyAccessKey, expiredNotification
+		case errorReport, changeSchedule, faultyAccessKey, unavailableQuestionnaire(Questionnaire.AvailabilityStatus)
 		
 		var id: Int {
-			self.hashValue
+			switch self {
+			case .errorReport: return 0
+			case .changeSchedule: return 1
+			case .faultyAccessKey: return 2
+			case .unavailableQuestionnaire: return 3
+			}
 		}
 	}
 	@Published var study: Study? = nil
@@ -68,8 +73,8 @@ class NavigationState: ObservableObject {
 	func closeScreenDialog() {
 		self.dialogOpened = nil
 	}
-	func openNotificationExpiredDialog(studyId: Int64) {
+	func openNotificationExpiredDialog(studyId: Int64, availabilityStatus: Questionnaire.AvailabilityStatus) {
 		switchStudy(studyId)
-		self.dialogOpened = .expiredNotification
+		self.dialogOpened = .unavailableQuestionnaire(availabilityStatus)
 	}
 }

@@ -153,7 +153,10 @@ fun NoiseLevelView(input: Input, get: () -> String, save: (String, Map<String, S
 
                     val meanTotal = sumTotal / readTotal
                     val meanOfSquaresTotal = sumSquaresTotal / readTotal
-                    val rms = sqrt(meanOfSquaresTotal - meanTotal * meanTotal)
+                    var rms = sqrt(meanOfSquaresTotal - meanTotal * meanTotal)
+                    rms = if(rms > 0) {rms} else {1e-9}
+                    minRMS = if(minRMS > 0) {minRMS} else {1e-9}
+                    maxRMS = if(maxRMS > 0) {maxRMS} else {1e-9}
 
                     val dBFStotal = 20.0 * log10(rms / REFERENCE)
 

@@ -56,11 +56,11 @@ abstract class ScatterChartBuilder(
 	}
 	override fun setupDataSet(dataSet: ChartDataSetInterface, color: String, isPublic: Boolean) {
 		dataSet.setColor(color)
-		dataSet.setDrawValues(false)
+        dataSet.setDrawValues(false)
 		if(!isPublic) {
 			dataSet.setScatterShape(ChartDataSetInterface.Shape.Circle)
 			dataSet.setForm(ChartDataSetInterface.Shape.Circle)
-			dataSet.setScatterShapeSize(12f)
+			dataSet.setScatterShapeSize(3f)
 		}
 	}
 	

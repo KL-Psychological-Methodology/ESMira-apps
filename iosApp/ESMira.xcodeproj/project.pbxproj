@@ -85,7 +85,7 @@
 		6B2E57072F7CF43C00052C84 /* ScatterChartBuilder.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E569F2F7CF43C00052C84 /* ScatterChartBuilder.kt */; };
 		6B2E57082F7CF43C00052C84 /* Scheduler.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E56B42F7CF43C00052C84 /* Scheduler.kt */; };
 		6B2E57092F7CF43C00052C84 /* PieChartBuilder.kt in Resources */ = {isa = PBXBuildFile; fileRef = 6B2E569E2F7CF43C00052C84 /* PieChartBuilder.kt */; };
-		6B39B7A52F3B700600C81D68 /* ExpiredNotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B39B7A42F3B6FFD00C81D68 /* ExpiredNotificationView.swift */; };
+		6B39B7A52F3B700600C81D68 /* UnavailableQuestionnaireView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B39B7A42F3B6FFD00C81D68 /* UnavailableQuestionnaireView.swift */; };
 		6B39B7A72F59BFFB00C81D68 /* NoiseLevelStruct.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B39B7A62F59BFF100C81D68 /* NoiseLevelStruct.swift */; };
 		6B3A92C029E5C8250081A554 /* UploadProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3A92BF29E5C8250081A554 /* UploadProtocol.swift */; };
 		6B3A92C229E6E2900081A554 /* AddStudyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6B3A92C129E6E2900081A554 /* AddStudyState.swift */; };
@@ -301,7 +301,7 @@
 		6B2E57232F9F3AF300052C84 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sv; path = sv.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		6B2E57242F9F3B0500052C84 /* zh_Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = zh_Hans; path = zh_Hans.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		6B2E57252F9F3B0E00052C84 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
-		6B39B7A42F3B6FFD00C81D68 /* ExpiredNotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpiredNotificationView.swift; sourceTree = "<group>"; };
+		6B39B7A42F3B6FFD00C81D68 /* UnavailableQuestionnaireView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnavailableQuestionnaireView.swift; sourceTree = "<group>"; };
 		6B39B7A62F59BFF100C81D68 /* NoiseLevelStruct.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoiseLevelStruct.swift; sourceTree = "<group>"; };
 		6B39B7AC2F7A96ED00C81D68 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nl; path = nl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		6B39B7AD2F7A96ED00C81D68 /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nl; path = nl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -669,7 +669,7 @@
 		6BCFED642825283A009167B0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				6B39B7A42F3B6FFD00C81D68 /* ExpiredNotificationView.swift */,
+				6B39B7A42F3B6FFD00C81D68 /* UnavailableQuestionnaireView.swift */,
 				6B3AB7322EF2DB73009675BD /* LanguageSelectView.swift */,
 				6B3A92C329E816410081A554 /* AboutESMira.swift */,
 				6BCFED7B2825283A009167B0 /* AddStudyView.swift */,
@@ -1153,7 +1153,7 @@
 				6BB8E5972C47B2FB0039D306 /* DurationStruct.swift in Sources */,
 				6B39B7A72F59BFFB00C81D68 /* NoiseLevelStruct.swift in Sources */,
 				6B012BF22DB9241B00F7A3B8 /* BatteryLevelStruct.swift in Sources */,
-				6B39B7A52F3B700600C81D68 /* ExpiredNotificationView.swift in Sources */,
+				6B39B7A52F3B700600C81D68 /* UnavailableQuestionnaireView.swift in Sources */,
 				6B6BD2B22B2871CC005648C0 /* FaultyAccessKeyView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
