@@ -311,8 +311,6 @@
     <string name="hint_server">example.com</string>
     <string name="info_error_report_desc">Help ons alstublieft je probleem op te lossen en stuur dit foutenrapport naar ons. Bedankt!</string>
     <string name="info_leave_empty_if_unsure">(mag leeg blijven)</string>
-    <string name="notification_expired_title">Melding verlopen</string>
-    <string name="notification_expired_info">De geselecteerde melding is verlopen en de bijbehorende enquete is nu niet beschikbaar.</string>
     <string name="change_language">Verander van taal</string>
     <string name="available_languages">Deze studie is beschikbaar in de volgende talen:</string>
     <string name="select_language_instruction">Selecteer de taal waarin de studie moet worden weergegeven. Dit heeft alleen invloed op de tekst in het onderzoek zelf. De interface van de toepassing is afhankelijk van de systeemtaal en verandert niet.</string>
