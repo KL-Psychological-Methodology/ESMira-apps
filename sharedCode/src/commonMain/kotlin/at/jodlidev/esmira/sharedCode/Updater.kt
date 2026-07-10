@@ -605,6 +605,10 @@ internal object Updater {
             db.execSQL("ALTER TABLE questionnaires ADD COLUMN rewardRate INTEGER DEFAULT 0;")
             db.execSQL("ALTER TABLE questionnaires ADD COLUMN rewardMax INTEGER DEFAULT 0;")
 
+            db.execSQL("""CREATE TABLE IF NOT EXISTS screen_tracking_sessions (
+            _id INTEGER PRIMARY KEY,
+            session_start INTEGER,
+            session_end INTEGER)""")
         }
 	}
 	

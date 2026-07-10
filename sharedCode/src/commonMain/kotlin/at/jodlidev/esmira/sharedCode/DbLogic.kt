@@ -338,6 +338,11 @@ object DbLogic {
 			${QuestionnaireMetadata.KEY_LAST_COMPLETED} INTEGER,
 			${QuestionnaireMetadata.KEY_LAST_NOTIFICATION} INTEGER,
 			FOREIGN KEY(${QuestionnaireMetadata.KEY_STUDY_ID}) REFERENCES ${Study.TABLE}(${Study.KEY_ID}) ON DELETE CASCADE)""")
+
+        db.execSQL("""CREATE TABLE IF NOT EXISTS ${ScreenTrackingSession.TABLE} (
+            ${ScreenTrackingSession.KEY_ID} INTEGER PRIMARY KEY,
+            ${ScreenTrackingSession.KEY_SESSION_START} INTEGER,
+            ${ScreenTrackingSession.KEY_SESSION_END} INTEGER)""")
 	}
 	
 	fun updateFrom(db: SQLiteInterface, oldVersion: Int) {
