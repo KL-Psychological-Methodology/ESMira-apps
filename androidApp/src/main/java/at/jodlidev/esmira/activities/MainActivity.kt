@@ -66,7 +66,7 @@ class MainActivity: ComponentActivity() {
 		var startDestination = ""
 		val extras = intent.extras
 		
-		if(extras != null) {
+		if(savedInstanceState == null && (intent.flags and Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY) == 0 && extras != null) {
 			if(extras.containsKey(EXTRA_OPEN_MESSAGES)) {
 				val studyId = extras.getLong(EXTRA_OPEN_MESSAGES, -1)
 				DbUser.setCurrentStudyId(studyId)
