@@ -58,6 +58,9 @@ class Study internal constructor(
 	var randomGroups = 0 // will not be saved in deb, but Instead used to select group
 	var sendMessagesAllowed = true
 	var enableRewardSystem = false
+    var enableRewardCalculation = false
+    var rewardCalculationBase = 0.0
+    var rewardCalculationMax = 0.0
 	var rewardVisibleAfterDays = 0
 	var rewardEmailContent = ""
 	var rewardInstructions = ""
@@ -241,6 +244,9 @@ class Study internal constructor(
 		langCodesString = c.getString(30)
         additionalDaysActive = c.getInt(31)
         legacyScheduling = c.getBoolean(32)
+        enableRewardCalculation = c.getBoolean(33)
+        rewardCalculationBase = c.getDouble(34)
+        rewardCalculationMax = c.getDouble(35)
 	}
 	
 	private fun loadQuestionnairesDB(): List<Questionnaire> {
@@ -479,6 +485,9 @@ class Study internal constructor(
 			this.faq = newStudy.faq
             this.additionalDaysActive = newStudy.additionalDaysActive
             this.legacyScheduling = newStudy.legacyScheduling
+            this.enableRewardCalculation = newStudy.enableRewardCalculation
+            this.rewardCalculationBase = newStudy.rewardCalculationBase
+            this.rewardCalculationMax = newStudy.rewardCalculationMax
 			this.hasStatistics = newStudy.hasStatistics
 			this.langCodesString = newStudy.langCodesString
 			this._jsonQuestionnaires = newStudy.questionnaires
@@ -541,6 +550,9 @@ class Study internal constructor(
 		values.putString(KEY_LANG_CODES, langCodesString)
         values.putInt(KEY_ADDITIONAL_DAYS_ACTIVE, additionalDaysActive)
         values.putBoolean(KEY_LEGACY_SCHEDULING, legacyScheduling)
+        values.putBoolean(KEY_ENABLE_REWARD_CALCULATION, enableRewardCalculation)
+        values.putDouble(KEY_REWARD_CALCULATION_BASE, rewardCalculationBase)
+        values.putDouble(KEY_REWARD_CALCULATION_MAX, rewardCalculationMax)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -778,6 +790,9 @@ class Study internal constructor(
 		const val KEY_LANG_CODES = "langCodes"
         const val KEY_ADDITIONAL_DAYS_ACTIVE = "additionalDaysActive"
         const val KEY_LEGACY_SCHEDULING = "legacyScheduling"
+        const val KEY_ENABLE_REWARD_CALCULATION = "enableRewardCalculation"
+        const val KEY_REWARD_CALCULATION_BASE = "rewardCalculationBase"
+        const val KEY_REWARD_CALCULATION_MAX = "rewardCalculationMax"
 		
 		const val REWARD_SUCCESS = 0
 		const val REWARD_ERROR_DOES_NOT_EXIST = 1
@@ -818,7 +833,10 @@ class Study internal constructor(
 			KEY_HAS_STATISTICS,
 			KEY_LANG_CODES,
             KEY_ADDITIONAL_DAYS_ACTIVE,
-            KEY_LEGACY_SCHEDULING
+            KEY_LEGACY_SCHEDULING,
+            KEY_ENABLE_REWARD_CALCULATION,
+            KEY_REWARD_CALCULATION_BASE,
+            KEY_REWARD_CALCULATION_MAX
 		)
 		
 		val defaultSettings = hashMapOf(
