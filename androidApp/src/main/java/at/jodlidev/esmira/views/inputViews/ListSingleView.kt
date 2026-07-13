@@ -2,15 +2,21 @@ package at.jodlidev.esmira.views.inputViews
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.material3.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.tooling.preview.Preview
@@ -104,8 +110,14 @@ fun ListSingleAsListView(input: Input, get: () -> String, save: (String, Map<Str
 fun ListSingleAsDropdownView(input: Input, get: () -> String, save: (String, Map<String, String>) -> Unit) {
     val startValue = if(input.useCustomStart) input.customStart else 1
 	val expanded = remember { mutableStateOf(false) }
+	val scrollState = rememberScrollState()
+	val chevronColor = MaterialTheme.colorScheme.onSurface
 	val otherText = remember { mutableStateOf(input.getAdditional("other") ?: "")}
 	val otherSelected = remember { mutableStateOf(false) }
+	LaunchedEffect(expanded.value) {
+		if(expanded.value)
+			scrollState.scrollTo(0)
+	}
 	Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 		Box {
 			val shownValue =  if(input.forceInt)
@@ -131,8 +143,36 @@ fun ListSingleAsDropdownView(input: Input, get: () -> String, save: (String, Map
 					expanded.value = false
 				},
 				offset = DpOffset(20.dp, 0.dp),
+				scrollState = scrollState,
 				modifier = Modifier
 					.defaultMinSize(200.dp)
+					.heightIn(max = (LocalConfiguration.current.screenHeightDp * 0.6f).dp)
+					//chevron cue at the bottom edge while there are more items below to scroll to
+					.drawWithContent {
+						drawContent()
+						if(scrollState.canScrollForward) {
+							val chevronWidth = 22.dp.toPx()
+							val chevronHeight = 8.dp.toPx()
+							val centerX = size.width / 2f
+							val bottomY = size.height - 12.dp.toPx()
+							val topY = bottomY - chevronHeight
+							val strokeWidth = 2.5.dp.toPx()
+							drawLine(
+								color = chevronColor,
+								start = Offset(centerX - chevronWidth / 2f, topY),
+								end = Offset(centerX, bottomY),
+								strokeWidth = strokeWidth,
+								cap = StrokeCap.Round
+							)
+							drawLine(
+								color = chevronColor,
+								start = Offset(centerX, bottomY),
+								end = Offset(centerX + chevronWidth / 2f, topY),
+								strokeWidth = strokeWidth,
+								cap = StrokeCap.Round
+							)
+						}
+					}
 			) {
 				for((i, value) in input.listChoices.withIndex()) {
 					val actualValue = if(input.forceInt) (startValue + i).toString() else value

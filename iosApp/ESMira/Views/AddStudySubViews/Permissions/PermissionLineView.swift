@@ -25,6 +25,7 @@ struct PermissionLineView: View {
 							Alert(title: Text("what_for"), message: Text(NSLocalizedString(self.lineData.whatFor!, comment: "")), dismissButton: .default(Text("ok_")))
 						)
 					}
+					.foregroundColor(Color.primary)
 				}
 				Spacer()
 				if(self.lineData.isFailed) {

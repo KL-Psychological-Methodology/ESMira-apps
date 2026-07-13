@@ -56,10 +56,13 @@ struct LangQuestionView: View {
 						Text("continue_")
 						Image(systemName: "chevron.compact.right")
 					}
+					.foregroundColor(Color.primary)
 				}
 				
 				
-			}.padding()
+			}
+			.padding()
+			.esmiraScreenBackground()
 		}
 	}
 }

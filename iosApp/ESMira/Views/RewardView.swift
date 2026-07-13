@@ -139,6 +139,7 @@ struct RewardView: View {
 			}
 		}
 		.padding()
+		.esmiraScreenBackground()
 		.onAppear {
 			error = ""
 			self.study.getRewardCode(
