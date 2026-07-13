@@ -37,6 +37,7 @@ class ScreenTrackingSession {
         const val KEY_ID = "_id"
         const val KEY_SESSION_START = "session_start"
         const val KEY_SESSION_END = "session_end"
+        private const val ONE_DAY = 1000 * 60 * 60 * 24
 
         val COLUMNS = arrayOf(
             KEY_ID,
@@ -50,6 +51,34 @@ class ScreenTrackingSession {
 
         fun removeBefore(timestamp: Long, db: SQLiteInterface = NativeLink.sql) {
             db.delete(TABLE, "$KEY_SESSION_END < ?", arrayOf(timestamp.toString()))
+        }
+
+        private fun getSessions(from: Long, to: Long, db: SQLiteInterface = NativeLink.sql): List<Pair<Long, Long>> {
+            val c = db.select(
+                TABLE,
+                arrayOf(KEY_SESSION_START, KEY_SESSION_END),
+                "$KEY_SESSION_START <= ? AND $KEY_SESSION_END >= ?",
+                arrayOf(to.toString(), from.toString()),
+                null,
+                null,
+                null,
+                null
+            )
+            val sessions = ArrayList<Pair<Long, Long>>()
+            while(c.moveToNext()) {
+                sessions.add(Pair(c.getLong(0), c.getLong(1)))
+            }
+            return sessions
+        }
+
+        fun getToday(): List<Pair<Long, Long>> {
+            val midnightMillis = NativeLink.getMidnightMillis()
+            return getSessions(midnightMillis, NativeLink.getNowMillis())
+        }
+
+        fun getYesterday(): List<Pair<Long, Long>> {
+            val midnightMillis = NativeLink.getMidnightMillis()
+            return getSessions(midnightMillis - ONE_DAY, midnightMillis)
         }
     }
 }

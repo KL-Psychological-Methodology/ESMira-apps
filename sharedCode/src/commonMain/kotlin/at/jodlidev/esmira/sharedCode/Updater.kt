@@ -601,7 +601,8 @@ internal object Updater {
         if(oldVersion <= 57) {
             db.execSQL("ALTER TABLE studies ADD COLUMN enableRewardCalculation INTEGER DEFAULT 0;")
             db.execSQL("ALTER TABLE studies ADD COLUMN rewardCalculationBase REAL DEFAULT 0.0;")
-            db.execSQL("ALTER TABLE studies ADD COLUMN enableRewardCalculation REAL DEFAULT 0.0;")
+            db.execSQL("ALTER TABLE studies ADD COLUMN rewardCalculationMax REAL DEFAULT 0.0;")
+            db.execSQL("ALTER TABLE studies ADD COLUMN rewardCalculationInfo TEXT DEFAULT '';")
             db.execSQL("ALTER TABLE questionnaires ADD COLUMN rewardRate INTEGER DEFAULT 0;")
             db.execSQL("ALTER TABLE questionnaires ADD COLUMN rewardMax INTEGER DEFAULT 0;")
 

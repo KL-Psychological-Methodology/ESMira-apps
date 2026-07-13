@@ -61,6 +61,7 @@ class Study internal constructor(
     var enableRewardCalculation = false
     var rewardCalculationBase = 0.0
     var rewardCalculationMax = 0.0
+    var rewardCalculationInfo = ""
 	var rewardVisibleAfterDays = 0
 	var rewardEmailContent = ""
 	var rewardInstructions = ""
@@ -247,6 +248,7 @@ class Study internal constructor(
         enableRewardCalculation = c.getBoolean(33)
         rewardCalculationBase = c.getDouble(34)
         rewardCalculationMax = c.getDouble(35)
+        rewardCalculationInfo = c.getString(36)
 	}
 	
 	private fun loadQuestionnairesDB(): List<Questionnaire> {
@@ -488,6 +490,7 @@ class Study internal constructor(
             this.enableRewardCalculation = newStudy.enableRewardCalculation
             this.rewardCalculationBase = newStudy.rewardCalculationBase
             this.rewardCalculationMax = newStudy.rewardCalculationMax
+            this.rewardCalculationInfo = newStudy.rewardCalculationInfo
 			this.hasStatistics = newStudy.hasStatistics
 			this.langCodesString = newStudy.langCodesString
 			this._jsonQuestionnaires = newStudy.questionnaires
@@ -553,6 +556,7 @@ class Study internal constructor(
         values.putBoolean(KEY_ENABLE_REWARD_CALCULATION, enableRewardCalculation)
         values.putDouble(KEY_REWARD_CALCULATION_BASE, rewardCalculationBase)
         values.putDouble(KEY_REWARD_CALCULATION_MAX, rewardCalculationMax)
+        values.putString(KEY_REWARD_CALCULATION_INFO, rewardCalculationInfo)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -793,6 +797,7 @@ class Study internal constructor(
         const val KEY_ENABLE_REWARD_CALCULATION = "enableRewardCalculation"
         const val KEY_REWARD_CALCULATION_BASE = "rewardCalculationBase"
         const val KEY_REWARD_CALCULATION_MAX = "rewardCalculationMax"
+        const val KEY_REWARD_CALCULATION_INFO = "rewardCalculationInfo"
 		
 		const val REWARD_SUCCESS = 0
 		const val REWARD_ERROR_DOES_NOT_EXIST = 1
@@ -836,7 +841,8 @@ class Study internal constructor(
             KEY_LEGACY_SCHEDULING,
             KEY_ENABLE_REWARD_CALCULATION,
             KEY_REWARD_CALCULATION_BASE,
-            KEY_REWARD_CALCULATION_MAX
+            KEY_REWARD_CALCULATION_MAX,
+            KEY_REWARD_CALCULATION_INFO
 		)
 		
 		val defaultSettings = hashMapOf(

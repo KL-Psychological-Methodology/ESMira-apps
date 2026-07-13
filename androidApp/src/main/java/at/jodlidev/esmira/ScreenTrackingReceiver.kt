@@ -4,6 +4,7 @@ import android.content.*
 import androidx.preference.PreferenceManager
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.ErrorBox
+import at.jodlidev.esmira.sharedCode.data_structure.ScreenTrackingSession
 import at.jodlidev.esmira.views.inputViews.AppUsageCalculator
 
 /**
@@ -110,6 +111,7 @@ class ScreenTrackingReceiver : BroadcastReceiver() {
 					data.yesterdayCount = data.todayCount
 					data.todayTime = 0
 					data.todayCount = 0
+                    ScreenTrackingSession.removeBefore(yesterdayStart)
 					return true
 				}
 				in 0 until yesterdayStart -> { //current data is too old to keep
@@ -119,6 +121,7 @@ class ScreenTrackingReceiver : BroadcastReceiver() {
 					data.yesterdayCount = 0
 					data.todayTime = 0
 					data.todayCount = 0
+                    ScreenTrackingSession.removeBefore(yesterdayStart)
 					return true
 				}
 			}
@@ -139,16 +142,22 @@ class ScreenTrackingReceiver : BroadcastReceiver() {
 						0
 					else {
 						ErrorBox.warn("ScreenTrackingReceiver", "Screen was turned on before midnight. Splitting time between yesterday and today")
-						if(data.yesterdayTime != ScreenTrackData.MISSING_LONG)
-							data.yesterdayTime += NativeLink.getMidnightMillis() - data.lastScreenOnTime
+                        val midnightMillis = NativeLink.getMidnightMillis()
+                        if(data.yesterdayTime != ScreenTrackData.MISSING_LONG)
+							data.yesterdayTime += midnightMillis - data.lastScreenOnTime
 						if(data.yesterdayCount != ScreenTrackData.MISSING_INT)
 							++data.yesterdayCount
-						
+
+
+                        ScreenTrackingSession.store(data.lastScreenOnTime, midnightMillis)
+                        ScreenTrackingSession.store(midnightMillis, data.now)
 						data.now - NativeLink.getMidnightMillis()
 					}
 				}
-				else
-					data.now - data.lastScreenOnTime
+				else {
+                    ScreenTrackingSession.store(data.lastScreenOnTime, data.now)
+                    data.now - data.lastScreenOnTime
+                }
 				
 				if(data.todayTime != ScreenTrackData.MISSING_LONG)
 					data.todayTime += addTime
@@ -202,7 +211,8 @@ class ScreenTrackingReceiver : BroadcastReceiver() {
 			
 			if(checkDay(data))
 				data.save()
-			return AppUsageCalculator.UsageStatsInfo(data.yesterdayCount, data.yesterdayTime, listOf())
+			return AppUsageCalculator.UsageStatsInfo(data.yesterdayCount, data.yesterdayTime,
+                ScreenTrackingSession.getYesterday())
 		}
 	}
 }
