@@ -12,6 +12,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.Serializable
 import kotlin.math.ceil
+import kotlin.math.min
 import kotlin.random.Random
 
 /**
@@ -41,6 +42,7 @@ class Study internal constructor(
 	@Transient var msgTimestamp = 0L
 	@Transient var publicStatisticsNeeded = false
 	@Transient private var cachedRewardCode: String = ""
+    @Transient var cachedRewardAmount: String = ""
 	@Transient var hasStatistics: Boolean = false
 	
 	var quitTimestamp = 0L
@@ -249,6 +251,7 @@ class Study internal constructor(
         rewardCalculationBase = c.getDouble(34)
         rewardCalculationMax = c.getDouble(35)
         rewardCalculationInfo = c.getString(36)
+        cachedRewardAmount = c.getString(37)
 	}
 	
 	private fun loadQuestionnairesDB(): List<Questionnaire> {
@@ -422,6 +425,38 @@ class Study internal constructor(
 		return enableRewardSystem
 	}
 
+    fun hasCachedRewardCode(): Boolean {
+        return cachedRewardCode.isNotEmpty()
+    }
+
+    fun getRewardFulfillmentLocal(): MutableMap<Long, Boolean> {
+        val fulfilledQuestionnaires = mutableMapOf<Long, Boolean>()
+
+        for(questionnaire in questionnaires) {
+            val questionnaireFulfilled = questionnaire.metadata.timesCompleted >= questionnaire.minDataSetsForReward
+            fulfilledQuestionnaires[questionnaire.internalId] = questionnaireFulfilled
+        }
+
+        return fulfilledQuestionnaires
+    }
+
+    fun getRewardAmount(): Double {
+        if(!enableRewardCalculation) {
+            return Double.NaN
+        }
+        var amount = rewardCalculationBase
+        for(questionnaire in questionnaires) {
+            val questionnaireContribution = questionnaire.metadata.timesCompleted * questionnaire.rewardRate
+            amount += min(questionnaireContribution, questionnaire.rewardMax)
+        }
+
+        return if(rewardCalculationMax > 0.0) {
+            min(amount, rewardCalculationMax)
+        } else {
+            amount
+        }
+    }
+
 	fun getAvailableLangs(): List<String> {
 		return try {
 			DbLogic.getJsonConfig().decodeFromString(langCodesString)
@@ -562,6 +597,7 @@ class Study internal constructor(
         values.putDouble(KEY_REWARD_CALCULATION_BASE, rewardCalculationBase)
         values.putDouble(KEY_REWARD_CALCULATION_MAX, rewardCalculationMax)
         values.putString(KEY_REWARD_CALCULATION_INFO, rewardCalculationInfo)
+        values.putString(KEY_CACHED_REWARD_AMOUNT, cachedRewardAmount)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -679,15 +715,15 @@ class Study internal constructor(
 	}
 	
 	fun saveRewardCode(code: String) {
-		cachedRewardCode = code
-		if(exists) {
-			val db = NativeLink.sql
-			val values = db.getValueBox()
-			values.putString(KEY_CACHED_REWARD_CODE, cachedRewardCode)
-			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
-		}
-		
-	}
+        cachedRewardCode = code
+        if (exists) {
+            val db = NativeLink.sql
+            val values = db.getValueBox()
+            values.putString(KEY_CACHED_REWARD_CODE, cachedRewardCode)
+            db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
+        }
+
+    }
 	
 	fun getRewardCode(
 		onError: (msg: String) -> Unit,
@@ -700,7 +736,17 @@ class Study internal constructor(
 		DataSet.createShortDataSet(DataSet.EventTypes.requested_reward_code, this)
 		Web.loadRewardCode(this, onError, onSuccess)
 	}
-	
+
+    fun saveRewardAmount(amount: Double) {
+        cachedRewardAmount = amount.toString()
+        if(exists) {
+            val db = NativeLink.sql
+            val values = db.getValueBox()
+            values.putString(KEY_CACHED_REWARD_AMOUNT, cachedRewardAmount)
+            db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
+        }
+    }
+
 	fun delete() {
 		val db = NativeLink.sql
 		for(q in loadQuestionnairesDB()) {
@@ -710,7 +756,7 @@ class Study internal constructor(
 		db.delete(StatisticData_timed.TABLE, "${StatisticData_timed.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StatisticData_perValue.TABLE, "${StatisticData_perValue.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
         db.delete(StatisticData_perData.TABLE, "${StatisticData_perData.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
-		db.delete(DataSet.TABLE, "${DataSet.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
+        db.delete(DataSet.TABLE, "${DataSet.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StudyToken.TABLE, "${StudyToken.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(QuestionnaireMetadata.TABLE, "${QuestionnaireMetadata.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(TABLE, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -803,6 +849,7 @@ class Study internal constructor(
         const val KEY_REWARD_CALCULATION_BASE = "rewardCalculationBase"
         const val KEY_REWARD_CALCULATION_MAX = "rewardCalculationMax"
         const val KEY_REWARD_CALCULATION_INFO = "rewardCalculationInfo"
+        const val KEY_CACHED_REWARD_AMOUNT = "cachedRewardAmount"
 		
 		const val REWARD_SUCCESS = 0
 		const val REWARD_ERROR_DOES_NOT_EXIST = 1
@@ -847,7 +894,8 @@ class Study internal constructor(
             KEY_ENABLE_REWARD_CALCULATION,
             KEY_REWARD_CALCULATION_BASE,
             KEY_REWARD_CALCULATION_MAX,
-            KEY_REWARD_CALCULATION_INFO
+            KEY_REWARD_CALCULATION_INFO,
+            KEY_CACHED_REWARD_AMOUNT,
 		)
 		
 		val defaultSettings = hashMapOf(

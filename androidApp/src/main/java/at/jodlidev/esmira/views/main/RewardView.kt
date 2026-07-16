@@ -6,8 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -22,7 +20,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import at.jodlidev.esmira.*
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.NativeLink
@@ -32,6 +29,7 @@ import at.jodlidev.esmira.sharedCode.data_structure.Study
 import at.jodlidev.esmira.views.DefaultButtonIconAbove
 import at.jodlidev.esmira.views.DialogButton
 import at.jodlidev.esmira.views.ESMiraDialog
+import at.jodlidev.esmira.views.inputViews.TextElView
 
 /**
  * Created by JodliDev on 28.02.2023.
@@ -43,28 +41,43 @@ fun RewardView(
 ) {
 	val context = LocalContext.current
 	val study = getStudy()
+    val getCode = remember { mutableStateOf(study.hasCachedRewardCode())}
+    val requestRewardCode = {getCode.value = true}
 	val error = remember { mutableStateOf("") }
 	val fulfilledQuestionnaires = remember {
 		mutableMapOf<Long, Boolean>()
 	}
-	val rewardCode = produceState(initialValue = "") {
-		study.getRewardCode(
-			onError = { error.value = it },
-			onSuccess = { rewardInfo ->
-				ErrorBox.log("Reward", "Received reward response (errorMessage: ${rewardInfo.errorMessage}, errorCode: ${rewardInfo.errorCode}, fulfilledQuestionnaires: ${rewardInfo.fulfilledQuestionnaires})")
-				when(rewardInfo.errorCode) {
-					Study.REWARD_SUCCESS ->
-						value = rewardInfo.code
-					Study.REWARD_ERROR_UNFULFILLED_REWARD_CONDITIONS -> {
-						error.value = context.getString(R.string.error_reward_conditions_not_met)
-						fulfilledQuestionnaires.putAll(rewardInfo.fulfilledQuestionnaires)
-					}
-					Study.REWARD_ERROR_ALREADY_GENERATED ->
-						error.value = context.getString(R.string.error_already_generated)
-					else -> error.value = rewardInfo.errorMessage
-				}
-			}
-		)
+
+	val rewardCode = produceState(initialValue = "", getCode.value) {
+        if(getCode.value) {
+            study.getRewardCode(
+                onError = { error.value = it },
+                onSuccess = { rewardInfo ->
+                    ErrorBox.log(
+                        "Reward",
+                        "Received reward response (errorMessage: ${rewardInfo.errorMessage}, errorCode: ${rewardInfo.errorCode}, fulfilledQuestionnaires: ${rewardInfo.fulfilledQuestionnaires})"
+                    )
+                    when (rewardInfo.errorCode) {
+                        Study.REWARD_SUCCESS ->
+                            value = rewardInfo.code
+
+                        Study.REWARD_ERROR_UNFULFILLED_REWARD_CONDITIONS -> {
+                            error.value =
+                                context.getString(R.string.error_reward_conditions_not_met)
+                            fulfilledQuestionnaires.putAll(rewardInfo.fulfilledQuestionnaires)
+                        }
+
+                        Study.REWARD_ERROR_ALREADY_GENERATED ->
+                            error.value = context.getString(R.string.error_already_generated)
+
+                        else -> error.value = rewardInfo.errorMessage
+                    }
+                }
+            )
+        } else {
+            fulfilledQuestionnaires.putAll(study.getRewardFulfillmentLocal())
+            value = ""
+        }
 	}
 	DefaultScaffoldView(title = stringResource(R.string.rewards), goBack = goBack) {
 		Column(
@@ -75,15 +88,25 @@ fun RewardView(
 			val untilActive = study.daysUntilRewardsAreActive()
 			if(!study.enableRewardSystem || untilActive != 0) {
 				val resources = LocalContext.current.resources
-				RewardErrorView(
+				RewardDefaultView(
 					study,
 					resources.getQuantityString(R.plurals.info_reward_is_not_active_yet, untilActive, untilActive),
 					HashMap()
-				)
-			}
+                ) {}
+            } else if (study.enableRewardCalculation) {
+                if(error.value.isNotEmpty()) {
+                    RewardDefaultView(study, error.value, fulfilledQuestionnaires, requestRewardCode)
+                } else if(rewardCode.value.isNotEmpty()) {
+                    RewardCodeView(study, rewardCode.value)
+                } else if(getCode.value) {
+                    RewardLoadingView()
+                } else {
+                    RewardDefaultView(study, "", fulfilledQuestionnaires, requestRewardCode)
+                }
+            }
 			else {
 				if(error.value.isNotEmpty())
-					RewardErrorView(study, error.value, fulfilledQuestionnaires)
+					RewardDefaultView(study, error.value, fulfilledQuestionnaires, requestRewardCode)
 				else if(rewardCode.value.isEmpty())
 					RewardLoadingView()
 				else
@@ -205,8 +228,11 @@ fun RewardLoadingView() {
 }
 
 @Composable
-fun RewardErrorView(study: Study, error: String, fulfilledQuestionnaires: Map<Long, Boolean>) {
-	Column(
+fun RewardDefaultView(study: Study, error: String, fulfilledQuestionnaires: Map<Long, Boolean>, requestRewardCode: () -> Unit) {
+    val rewardAvailable = study.daysUntilRewardsAreActive() <= 0
+    val showDialog = remember { mutableStateOf(false) }
+
+    Column(
 		modifier = Modifier.fillMaxWidth(),
 		horizontalAlignment = Alignment.CenterHorizontally
 	) {
@@ -253,6 +279,30 @@ fun RewardErrorView(study: Study, error: String, fulfilledQuestionnaires: Map<Lo
 //			}
 //		}
 	}
+
+    if(study.enableRewardCalculation) {
+        HtmlHandler.HtmlText(study.rewardCalculationInfo)
+        val rewardAmount = study.getRewardAmount()
+        Text("%.2f".format(study.getRewardAmount()))
+    }
+
+    Button(enabled = rewardAvailable, onClick = {
+        showDialog.value = true
+    }) {
+        Text("Request Code")
+    }
+
+    if(showDialog.value){
+        ESMiraDialog(confirmButtonLabel = "Request Code",
+            onConfirmRequest = { requestRewardCode() },
+            title = "Request Reward Code",
+            dismissButtonLabel = "Cancel",
+            onDismissRequest = { showDialog.value = false}
+            ) {
+            Text("Really Request Code?")
+        }
+    }
+
 }
 
 @Preview
@@ -261,7 +311,7 @@ fun PreviewNotActiveYet() {
 	ESMiraSurface {
 		val study = Study.newInstance("", "", """{"id":1, "enableRewardSystem": true, "rewardVisibleAfterDays": 1}""")
 		study.joinedTimestamp = NativeLink.getNowMillis()
-		RewardErrorView(study, "Preview error message", HashMap())
+		RewardDefaultView(study, "Preview error message", HashMap()) {}
 	}
 }
 
@@ -275,7 +325,7 @@ fun ErrorWithFulfilledQuestionnairesPreview() {
 			"""{"id":1, "enableRewardSystem": true, "questionnaires": [{"title": "This is a very long title for a questionnaire that hopefully has a break", "internalId": 1}, {"title": "questionnaire 2", "internalId": 2}]}"""
 		)
 		Column(modifier = Modifier.width(400.dp)) {
-			RewardErrorView(study, "Preview error message", mapOf(Pair(1L, true), Pair(2L, false)))
+			RewardDefaultView(study, "Preview error message", mapOf(Pair(1L, true), Pair(2L, false))) {}
 		}
 	}
 }
