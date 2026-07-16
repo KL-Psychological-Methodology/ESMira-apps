@@ -369,10 +369,15 @@ class Study internal constructor(
 	}
 	
 	fun daysUntilRewardsAreActive(): Int {
-		val oneDay = 86400000L
-		return ceil((((joinedTimestamp + rewardVisibleAfterDays.toLong() * oneDay) - NativeLink.getNowMillis()).toFloat() / oneDay))
-			.toInt()
-			.coerceAtLeast(0)
+        return if(legacyScheduling) {
+            val oneDay = 86400000L
+            ceil((((joinedTimestamp + rewardVisibleAfterDays.toLong() * oneDay) - NativeLink.getNowMillis()).toFloat() / oneDay))
+                .toInt()
+                .coerceAtLeast(0)
+        } else {
+            val studyDay = NativeLink.getDatesDiff(joinedTimestamp, NativeLink.getNowMillis()).toInt()
+            (rewardVisibleAfterDays - studyDay).coerceAtLeast(0)
+        }
 	}
 	
 	fun usesPostponedActions(): Boolean {
