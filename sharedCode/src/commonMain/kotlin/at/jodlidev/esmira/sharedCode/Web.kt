@@ -772,6 +772,7 @@ class Web {
 					ErrorBox.log("Web", "Loaded rewardCode. Response: $response")
 					if(obj.errorCode == Study.REWARD_SUCCESS)
 						study.saveRewardCode(obj.code)
+                        study.saveRewardAmount(study.getRewardAmount())
 					kotlinRunOnUiThread {
 						onSuccess(obj)
 					}

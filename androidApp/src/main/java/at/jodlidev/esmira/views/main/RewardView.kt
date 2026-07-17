@@ -213,6 +213,18 @@ fun RewardCodeView(study: Study, rewardCode: String) {
 			HtmlHandler.HtmlText(study.rewardInstructions, modifier = Modifier.fillMaxWidth())
 		}
 	}
+    if(study.enableRewardCalculation) {
+        Spacer(modifier = Modifier.size(20.dp))
+        Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+            if(study.rewardCalculationInfo.isNotEmpty()) {
+                HtmlHandler.HtmlText(
+                    study.rewardCalculationInfo,
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+            Text(stringResource(R.string.reward_final_amount, study.cachedRewardAmount))
+        }
+    }
 }
 
 
@@ -229,8 +241,10 @@ fun RewardLoadingView() {
 
 @Composable
 fun RewardDefaultView(study: Study, error: String, fulfilledQuestionnaires: Map<Long, Boolean>, requestRewardCode: () -> Unit) {
-    val rewardAvailable = study.daysUntilRewardsAreActive() <= 0
+    val untilActive = study.daysUntilRewardsAreActive()
+    val rewardAvailable = untilActive <= 0
     val showDialog = remember { mutableStateOf(false) }
+    val canRequest = rewardAvailable && fulfilledQuestionnaires.all{(_, fulfilled) -> fulfilled}
 
     Column(
 		modifier = Modifier.fillMaxWidth(),
@@ -283,23 +297,55 @@ fun RewardDefaultView(study: Study, error: String, fulfilledQuestionnaires: Map<
     if(study.enableRewardCalculation) {
         HtmlHandler.HtmlText(study.rewardCalculationInfo)
         val rewardAmount = study.getRewardAmount()
-        Text("%.2f".format(study.getRewardAmount()))
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            if(study.rewardCalculationInfo.isNotEmpty()) {
+                HtmlHandler.HtmlText(study.rewardCalculationInfo, modifier = Modifier.fillMaxWidth())
+            }
+            Text(
+                stringResource(
+                    R.string.reward_current_amount,
+                    "%.2f".format(study.getRewardAmount())
+                )
+            )
+        }
     }
 
-    Button(enabled = rewardAvailable, onClick = {
-        showDialog.value = true
-    }) {
-        Text("Request Code")
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        if(!rewardAvailable) {
+            val resources = LocalContext.current.resources
+            Text(
+                resources.getQuantityString(
+                    R.plurals.info_reward_is_not_active_yet,
+                    untilActive,
+                    untilActive
+                )
+            )
+        }
+            Button(enabled = canRequest, onClick = {
+            showDialog.value = true
+        }) {
+            Text(stringResource(R.string.reward_code_request))
+        }
     }
 
     if(showDialog.value){
-        ESMiraDialog(confirmButtonLabel = "Request Code",
+        ESMiraDialog(confirmButtonLabel = stringResource(R.string.reward_code_request_action),
             onConfirmRequest = { requestRewardCode() },
-            title = "Request Reward Code",
-            dismissButtonLabel = "Cancel",
+            title = stringResource(R.string.reward_code_request),
+            dismissButtonLabel = stringResource(R.string.cancel),
             onDismissRequest = { showDialog.value = false}
             ) {
-            Text("Really Request Code?")
+            if(study.enableRewardCalculation) {
+                Text(stringResource(R.string.reward_code_request_info_calculation))
+            } else {
+                Text(stringResource(R.string.reward_code_request_info))
+            }
         }
     }
 

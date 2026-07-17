@@ -722,7 +722,6 @@ class Study internal constructor(
             values.putString(KEY_CACHED_REWARD_CODE, cachedRewardCode)
             db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
         }
-
     }
 	
 	fun getRewardCode(
