@@ -42,7 +42,7 @@ class Study internal constructor(
 	@Transient var msgTimestamp = 0L
 	@Transient var publicStatisticsNeeded = false
 	@Transient private var cachedRewardCode: String = ""
-    @Transient var cachedRewardAmount: String = ""
+    @Transient var cachedRewardAmount: Double = -1.0
 	@Transient var hasStatistics: Boolean = false
 	
 	var quitTimestamp = 0L
@@ -251,7 +251,7 @@ class Study internal constructor(
         rewardCalculationBase = c.getDouble(34)
         rewardCalculationMax = c.getDouble(35)
         rewardCalculationInfo = c.getString(36)
-        cachedRewardAmount = c.getString(37)
+        cachedRewardAmount = c.getDouble(37)
 	}
 	
 	private fun loadQuestionnairesDB(): List<Questionnaire> {
@@ -444,6 +444,9 @@ class Study internal constructor(
         if(!enableRewardCalculation) {
             return Double.NaN
         }
+        if(cachedRewardAmount != -1.0) {
+            return cachedRewardAmount
+        }
         var amount = rewardCalculationBase
         for(questionnaire in questionnaires) {
             val questionnaireContribution = questionnaire.metadata.timesCompleted * questionnaire.rewardRate
@@ -597,7 +600,7 @@ class Study internal constructor(
         values.putDouble(KEY_REWARD_CALCULATION_BASE, rewardCalculationBase)
         values.putDouble(KEY_REWARD_CALCULATION_MAX, rewardCalculationMax)
         values.putString(KEY_REWARD_CALCULATION_INFO, rewardCalculationInfo)
-        values.putString(KEY_CACHED_REWARD_AMOUNT, cachedRewardAmount)
+        values.putDouble(KEY_CACHED_REWARD_AMOUNT, cachedRewardAmount)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -737,11 +740,11 @@ class Study internal constructor(
 	}
 
     fun saveRewardAmount(amount: Double) {
-        cachedRewardAmount = amount.toString()
+        cachedRewardAmount = amount
         if(exists) {
             val db = NativeLink.sql
             val values = db.getValueBox()
-            values.putString(KEY_CACHED_REWARD_AMOUNT, cachedRewardAmount)
+            values.putDouble(KEY_CACHED_REWARD_AMOUNT, cachedRewardAmount)
             db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
         }
     }

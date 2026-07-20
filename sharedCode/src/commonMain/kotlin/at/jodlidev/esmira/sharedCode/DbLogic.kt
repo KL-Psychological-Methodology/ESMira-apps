@@ -86,7 +86,7 @@ object DbLogic {
             ${Study.KEY_REWARD_CALCULATION_BASE} REAL DEFAULT 0.0,
             ${Study.KEY_REWARD_CALCULATION_MAX} REAL DEFAULT 0.0,
             ${Study.KEY_REWARD_CALCULATION_INFO} TEXT DEFAULT '',
-            ${Study.KEY_CACHED_REWARD_AMOUNT} TEXT DEFAULT '')""")
+            ${Study.KEY_CACHED_REWARD_AMOUNT} REAL DEFAULT -1.0)""")
 			
 		db.execSQL("""CREATE TABLE IF NOT EXISTS ${Message.TABLE} (
 			${Message.KEY_ID} INTEGER PRIMARY KEY,

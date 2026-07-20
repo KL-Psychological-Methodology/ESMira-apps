@@ -603,7 +603,7 @@ internal object Updater {
             db.execSQL("ALTER TABLE studies ADD COLUMN rewardCalculationBase REAL DEFAULT 0.0;")
             db.execSQL("ALTER TABLE studies ADD COLUMN rewardCalculationMax REAL DEFAULT 0.0;")
             db.execSQL("ALTER TABLE studies ADD COLUMN rewardCalculationInfo TEXT DEFAULT '';")
-            db.execSQL("ALTER TABLE studies ADD COLUMN cachedRewardAmount TEXT DEFAULT '';")
+            db.execSQL("ALTER TABLE studies ADD COLUMN cachedRewardAmount REAL DEFAULT -1.0;")
             db.execSQL("ALTER TABLE questionnaires ADD COLUMN rewardRate INTEGER DEFAULT 0;")
             db.execSQL("ALTER TABLE questionnaires ADD COLUMN rewardMax INTEGER DEFAULT 0;")
 

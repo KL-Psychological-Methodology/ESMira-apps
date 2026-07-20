@@ -45,7 +45,7 @@ fun RewardView(
     val requestRewardCode = {getCode.value = true}
 	val error = remember { mutableStateOf("") }
 	val fulfilledQuestionnaires = remember {
-		mutableMapOf<Long, Boolean>()
+		mutableStateMapOf<Long, Boolean>()
 	}
 
 	val rewardCode = produceState(initialValue = "", getCode.value) {
@@ -64,6 +64,7 @@ fun RewardView(
                         Study.REWARD_ERROR_UNFULFILLED_REWARD_CONDITIONS -> {
                             error.value =
                                 context.getString(R.string.error_reward_conditions_not_met)
+                            fulfilledQuestionnaires.clear()
                             fulfilledQuestionnaires.putAll(rewardInfo.fulfilledQuestionnaires)
                         }
 
@@ -75,6 +76,7 @@ fun RewardView(
                 }
             )
         } else {
+            fulfilledQuestionnaires.clear()
             fulfilledQuestionnaires.putAll(study.getRewardFulfillmentLocal())
             value = ""
         }
@@ -214,15 +216,16 @@ fun RewardCodeView(study: Study, rewardCode: String) {
 		}
 	}
     if(study.enableRewardCalculation) {
-        Spacer(modifier = Modifier.size(20.dp))
+        Spacer(modifier = Modifier.size(30.dp))
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             if(study.rewardCalculationInfo.isNotEmpty()) {
                 HtmlHandler.HtmlText(
                     study.rewardCalculationInfo,
                     modifier = Modifier.fillMaxWidth()
                 )
+                Spacer(modifier = Modifier.size(10.dp))
             }
-            Text(stringResource(R.string.reward_final_amount, study.cachedRewardAmount))
+            Text(stringResource(R.string.reward_final_amount, "%.2f".format(study.cachedRewardAmount)))
         }
     }
 }
@@ -295,14 +298,14 @@ fun RewardDefaultView(study: Study, error: String, fulfilledQuestionnaires: Map<
 	}
 
     if(study.enableRewardCalculation) {
-        HtmlHandler.HtmlText(study.rewardCalculationInfo)
-        val rewardAmount = study.getRewardAmount()
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Spacer(modifier = Modifier.size(30.dp))
             if(study.rewardCalculationInfo.isNotEmpty()) {
                 HtmlHandler.HtmlText(study.rewardCalculationInfo, modifier = Modifier.fillMaxWidth())
+                Spacer(modifier = Modifier.size(10.dp))
             }
             Text(
                 stringResource(
@@ -317,6 +320,7 @@ fun RewardDefaultView(study: Study, error: String, fulfilledQuestionnaires: Map<
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.size(10.dp))
         if(!rewardAvailable) {
             val resources = LocalContext.current.resources
             Text(
