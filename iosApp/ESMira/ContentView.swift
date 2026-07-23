@@ -80,7 +80,7 @@ struct ContentView: View {
 				if(self.navigationState.questionnaire != nil) {
 					NavigationLink(
 						destination:
-							QuestionnaireView(questionnaire: self.navigationState.questionnaire!),
+							QuestionnaireView(questionnaire: self.navigationState.questionnaire!).id(self.navigationState.questionnaire!.id),
 						isActive: self.$navigationState.questionnaireOpened,
 						label: { EmptyView() }
 					)

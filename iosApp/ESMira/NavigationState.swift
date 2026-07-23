@@ -55,6 +55,7 @@ class NavigationState: ObservableObject {
 	func openQuestionnaire(_ questionnaire: Questionnaire) {
 		QuestionnaireCache().saveFormStarted(questionnaireId: questionnaire.id)
 		switchStudy(questionnaire.studyId)
+		self.questionnaireOpened = false
 		self.questionnaire = DbLogic().getQuestionnaire(id: questionnaire.id) //we reload questionnaire to make sure all inputs get reset properly
 		self.questionnaireOpened = true
 	}
