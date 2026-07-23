@@ -246,3 +246,10 @@
 "notification_unavailable_info_phone_type" = "This questionnaire is not available on your operating system.";
 "notification_unavailable_info_empty_questionnaire" = "This questionnaire is empty. The researchers have not yet filled it with content, and it is thus unavailable. There is no need to take further action.";
 "notification_unavailable_info_inactive" = "This questionnaire has become unavailable since the notification was sent, and ESMira was unable to remove it. There is no need to take further action.";
+"reward_current_amount" = "Current reward amount: %.02f";
+"reward_final_amount" = "Earned reward amount: %.02f";
+"reward_generate_code" = "Generate Reward Code";
+"reward_code_request" = "Request Reward Code";
+"reward_code_request_action" = "Request";
+"reward_code_request_info_calculation" = "You can only generate a Raward Code ONCE! If you generate it now, your reward amount will not increase. Any additional questionnaires you fill out will not count towards your reward.";
+"reward_code_request_info" = "You can only generate a Raward Code ONCE! If you generate it now, any additional questionnaires you fill out will not count towards your reward.";
