@@ -250,35 +250,35 @@ class MainActivity: ComponentActivity() {
 			}
 			
 			composable("messages") {
-				PageMessages(studyId.value)
+				PageMessages(studyId.value, navController)
 			}
 			
 			composable("reward") {
-				PageRewards(studyId.value)
+				PageRewards(studyId.value, navController)
 			}
 			
 			composable("statistics") {
-				PageStatistics(studyId.value)
+				PageStatistics(studyId.value, navController)
 			}
 			
 			composable("uploadProtocol") {
-				PageUploadProtocol(studyId.value)
+				PageUploadProtocol(studyId.value, navController)
 			}
 			
 			composable("studyInformation") {
-				PageStudyInformation(studyId.value)
+				PageStudyInformation(studyId.value, navController)
 			}
 
 			composable("languageSelect") {
-				PageLanguageSelect(studyId.value)
+				PageLanguageSelect(studyId.value, navController)
 			}
 
 			composable("faq") {
-				PageFaq(studyId.value)
+				PageFaq(studyId.value, navController)
 			}
 			
 			composable("about") {
-				PageAbout()
+				PageAbout(navController)
 			}
 		}
 	}
@@ -433,7 +433,7 @@ class MainActivity: ComponentActivity() {
 		
 		HiddenQuestionnairesListView(
 			questionnaires = questionnaires,
-			goBack = { onBackPressedDispatcher.onBackPressed() },
+			goBack = { navController.popBackStack() },
 			gotoQuestionnaire = { questionnaire ->
 				QuestionnaireCache.saveFormStarted(questionnaire.id)
 				navController.navigate("questionnaire/${questionnaire.id}/${questionnaire.getFirstPageIndex()}")
@@ -450,7 +450,7 @@ class MainActivity: ComponentActivity() {
 			questionnaire = questionnaire,
 			pageNumber = pageNumber,
 			goBack = {
-				onBackPressedDispatcher.onBackPressed()
+				navController.popBackStack()
 			},
 			goNext = {
 				val nextRelevantPageIndex = questionnaire.getNextRelevantPageIndex(pageNumber)
@@ -495,28 +495,28 @@ class MainActivity: ComponentActivity() {
 	}
 	
 	@Composable
-	fun PageMessages(studyId: Long) {
+	fun PageMessages(studyId: Long, navController: NavController) {
 		MessagesView(getStudy = { DbLogic.getStudy(studyId)!! }) {
-			onBackPressedDispatcher.onBackPressed()
+			navController.popBackStack()
 		}
 	}
 	
 	@Composable
-	fun PageStatistics(studyId: Long) {
+	fun PageStatistics(studyId: Long, navController: NavController) {
 		StatisticsView(getStudy = { DbLogic.getStudy(studyId)!! }) {
-			onBackPressedDispatcher.onBackPressed()
+			navController.popBackStack()
 		}
 	}
 	
 	@Composable
-	fun PageRewards(studyId: Long) {
+	fun PageRewards(studyId: Long, navController: NavController) {
 		RewardView(getStudy = { DbLogic.getStudy(studyId)!! }) {
-			onBackPressedDispatcher.onBackPressed()
+			navController.popBackStack()
 		}
 	}
 	
 	@Composable
-	fun PageUploadProtocol(studyId: Long) {
+	fun PageUploadProtocol(studyId: Long, navController: NavController) {
 		val context = LocalContext.current
 		UploadProtocolView(
 			getUploadData = { DbLogic.getSortedUploadData(studyId) },
@@ -528,43 +528,43 @@ class MainActivity: ComponentActivity() {
 					Toast.makeText(context, context.getString(R.string.info_sync_failed), Toast.LENGTH_SHORT).show()
 				
 			} },
-			goBack = { onBackPressedDispatcher.onBackPressed() }
+			goBack = { navController.popBackStack() }
 		)
 	}
 	
 	@Composable
-	fun PageStudyInformation(studyId: Long) {
+	fun PageStudyInformation(studyId: Long, navController: NavController) {
 		StudyInformationView(
 			userId = DbUser.getUid(),
 			getStudy = { DbLogic.getStudy(studyId)!! },
 			getCompletedQuestionnaireCount = { DbLogic.getQuestionnaireDataSetCount(studyId) },
 			hasNotifications = { study -> study.hasNotifications() },
 			getNextAlarm = { DbLogic.getNextAlarmWithNotifications(studyId) },
-			goBack = { onBackPressedDispatcher.onBackPressed() }
+			goBack = { navController.popBackStack() }
 		)
 	}
 
 	@Composable
-	fun PageLanguageSelect(studyId: Long) {
+	fun PageLanguageSelect(studyId: Long, navController: NavController) {
 		LanguageSelectView(
 			getStudy = { DbLogic.getStudy(studyId)!! },
-			goBack = { onBackPressedDispatcher.onBackPressed() },
+			goBack = { navController.popBackStack() },
 			afterUpdate = { reloadPage() }
 		)
 	}
 
 	@Composable
-	fun PageFaq(studyId: Long) {
+	fun PageFaq(studyId: Long, navController: NavController) {
 		FaqView(
 			getStudy = { DbLogic.getStudy(studyId)!! },
-			goBack = { onBackPressedDispatcher.onBackPressed() }
+			goBack = { navController.popBackStack() }
 		)
 	}
 
 	@Composable
-	fun PageAbout() {
+	fun PageAbout(navController: NavController) {
 		AboutView {
-			onBackPressedDispatcher.onBackPressed()
+			navController.popBackStack()
 		}
 	}
 	
