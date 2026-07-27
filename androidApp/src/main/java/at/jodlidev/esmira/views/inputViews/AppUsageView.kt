@@ -306,7 +306,7 @@ fun AppUsageTableView(
                 Text(" ")
                 Spacer(modifier = Modifier.height(5.dp))
                 Text(stringResource(R.string.colon_usageTime), fontWeight = FontWeight.Bold)
-                if (yesterdayUsageCount > 0) {
+                if (yesterdayUsageCount + todayUsageCount > 0) {
                     Text(stringResource(R.string.colon_usageCount), fontWeight = FontWeight.Bold)
                 }
             }
@@ -319,6 +319,8 @@ fun AppUsageTableView(
                 Text(yesterdayUsageTimeFormatted)
                 if (yesterdayUsageCount > 0) {
                     Text(yesterdayUsageCount.toString())
+                } else if (todayUsageCount > 0) {
+                    Text("—")
                 }
             }
 
@@ -330,6 +332,8 @@ fun AppUsageTableView(
                 Text(todayUsageTimeFormatted)
                 if (todayUsageCount > 0) {
                     Text(todayUsageCount.toString())
+                } else if (yesterdayUsageCount > 0) {
+                    Text("—")
                 }
             }
         }
@@ -412,6 +416,52 @@ fun PreviewAppUsageTableViewForAppUsage() {
                     Random.nextLong(1000L * 60 * 5, 1000L * 60 * 300)
                 )
             ),
+            true,
+            "at.jodlidev.esmira"
+        )
+    }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+fun PreviewAppUsageTableViewForAppUsageWithOnlyTodayData() {
+    ESMiraSurface {
+        AppUsageTableView(
+            -1,
+            -1,
+            listOf(),
+            Random.nextInt(1, 20),
+            Random.nextLong(1000L * 60 * 5, 1000L * 60 * 300),
+            listOf(
+                Pair(
+                    Random.nextLong(1000L * 60 * 5, 1000L * 60 * 300),
+                    Random.nextLong(1000L * 60 * 5, 1000L * 60 * 300)
+                )
+            ),
+            true,
+            "at.jodlidev.esmira"
+        )
+    }
+}
+
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+fun PreviewAppUsageTableViewForAppUsageWithOnlyYesterdayData() {
+    ESMiraSurface {
+        AppUsageTableView(
+            Random.nextInt(1, 20),
+            Random.nextLong(1000L * 60 * 5, 1000L * 60 * 300),
+            listOf(
+                Pair(
+                    Random.nextLong(1000L * 60 * 5, 1000L * 60 * 300),
+                    Random.nextLong(1000L * 60 * 5, 1000L * 60 * 300)
+                )
+            ),
+            -1,
+            -1,
+            listOf(),
             true,
             "at.jodlidev.esmira"
         )
