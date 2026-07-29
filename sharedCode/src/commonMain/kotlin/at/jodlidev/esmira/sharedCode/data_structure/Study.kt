@@ -64,6 +64,7 @@ class Study internal constructor(
     var rewardCalculationBase = 0.0
     var rewardCalculationMax = 0.0
     var rewardCalculationInfo = ""
+    var rewardCalculationCurrency = ""
 	var rewardVisibleAfterDays = 0
 	var rewardEmailContent = ""
 	var rewardInstructions = ""
@@ -252,6 +253,7 @@ class Study internal constructor(
         rewardCalculationMax = c.getDouble(35)
         rewardCalculationInfo = c.getString(36)
         cachedRewardAmount = c.getDouble(37)
+        rewardCalculationCurrency = c.getString(38)
 	}
 	
 	private fun loadQuestionnairesDB(): List<Questionnaire> {
@@ -534,6 +536,7 @@ class Study internal constructor(
             this.rewardCalculationBase = newStudy.rewardCalculationBase
             this.rewardCalculationMax = newStudy.rewardCalculationMax
             this.rewardCalculationInfo = newStudy.rewardCalculationInfo
+            this.rewardCalculationCurrency = newStudy.rewardCalculationCurrency
 			this.hasStatistics = newStudy.hasStatistics
 			this.langCodesString = newStudy.langCodesString
 			this._jsonQuestionnaires = newStudy.questionnaires
@@ -601,6 +604,7 @@ class Study internal constructor(
         values.putDouble(KEY_REWARD_CALCULATION_MAX, rewardCalculationMax)
         values.putString(KEY_REWARD_CALCULATION_INFO, rewardCalculationInfo)
         values.putDouble(KEY_CACHED_REWARD_AMOUNT, cachedRewardAmount)
+        values.putString(KEY_REWARD_CALCULATION_CURRENCY, rewardCalculationCurrency)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -852,6 +856,7 @@ class Study internal constructor(
         const val KEY_REWARD_CALCULATION_MAX = "rewardCalculationMax"
         const val KEY_REWARD_CALCULATION_INFO = "rewardCalculationInfo"
         const val KEY_CACHED_REWARD_AMOUNT = "cachedRewardAmount"
+        const val KEY_REWARD_CALCULATION_CURRENCY = "rewardCalculationCurrency"
 		
 		const val REWARD_SUCCESS = 0
 		const val REWARD_ERROR_DOES_NOT_EXIST = 1
@@ -898,6 +903,7 @@ class Study internal constructor(
             KEY_REWARD_CALCULATION_MAX,
             KEY_REWARD_CALCULATION_INFO,
             KEY_CACHED_REWARD_AMOUNT,
+            KEY_REWARD_CALCULATION_CURRENCY,
 		)
 		
 		val defaultSettings = hashMapOf(

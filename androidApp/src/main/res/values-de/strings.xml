@@ -330,8 +330,8 @@
     <string name="notification_unavailable_info_phone_type">Dieser Fragebogen is auf ihrem Betriebssystem nicht verfügbar.</string>
     <string name="notification_unavailable_info_empty_questionnaire">Dieser Fragebogen ist leer. Die Studienleitung hat ihn noch nicht mit Inhalt befüllt, und er ist daher nicht verfügbar. Es sind keine weiteren Schritte erforderlich.</string>
     <string name="notification_unavailable_info_inactive">Dieser Fragebogen ist inzwischen nicht mehr verfügbar, seit die Benachrichtigung gesendet wurde, und ESMira konnte diese nicht entfernen. Es sind keine weiteren Schritte erforderlich.</string>
-    <string name="reward_current_amount">Aktuelle Belohnung: %1$s</string>
-    <string name="reward_final_amount">Verdiente Belohnung: %1$s</string>
+    <string name="reward_current_amount">Aktuelle Belohnung: %1$s %2$s</string>
+    <string name="reward_final_amount">Verdiente Belohnung: %1$s %2$s</string>
     <string name="reward_generate_code">Belohnungscode generieren</string>
     <string name="reward_code_request">Belohnungscode beantragen</string>
     <string name="reward_code_request_action">Beantragen</string>

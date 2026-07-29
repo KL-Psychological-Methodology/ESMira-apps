@@ -209,14 +209,8 @@ fun RewardCodeView(study: Study, rewardCode: String) {
 			)
 		}
 	}
-	if(study.rewardInstructions.isNotEmpty()) {
-		Spacer(modifier = Modifier.size(20.dp))
-		Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-			HtmlHandler.HtmlText(study.rewardInstructions, modifier = Modifier.fillMaxWidth())
-		}
-	}
     if(study.enableRewardCalculation) {
-        Spacer(modifier = Modifier.size(30.dp))
+        Spacer(modifier = Modifier.size(20.dp))
         Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
             if(study.rewardCalculationInfo.isNotEmpty()) {
                 HtmlHandler.HtmlText(
@@ -225,9 +219,15 @@ fun RewardCodeView(study: Study, rewardCode: String) {
                 )
                 Spacer(modifier = Modifier.size(10.dp))
             }
-            Text(stringResource(R.string.reward_final_amount, "%.2f".format(study.cachedRewardAmount)))
+            Text(stringResource(R.string.reward_final_amount, "%.2f".format(study.cachedRewardAmount), study.rewardCalculationCurrency))
         }
     }
+	if(study.rewardInstructions.isNotEmpty()) {
+		Spacer(modifier = Modifier.size(20.dp))
+		Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
+			HtmlHandler.HtmlText(study.rewardInstructions, modifier = Modifier.fillMaxWidth())
+		}
+	}
 }
 
 
@@ -310,7 +310,8 @@ fun RewardDefaultView(study: Study, error: String, fulfilledQuestionnaires: Map<
             Text(
                 stringResource(
                     R.string.reward_current_amount,
-                    "%.2f".format(study.getRewardAmount())
+                    "%.2f".format(study.getRewardAmount()),
+                    study.rewardCalculationCurrency
                 )
             )
         }
