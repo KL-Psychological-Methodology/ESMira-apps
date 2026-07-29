@@ -246,8 +246,8 @@
 "notification_unavailable_info_phone_type" = "Dieser Fragebogen is auf ihrem Betriebssystem nicht verfügbar.";
 "notification_unavailable_info_empty_questionnaire" = "Dieser Fragebogen ist leer. Die Studienleitung hat ihn noch nicht mit Inhalt befüllt, und er ist daher nicht verfügbar. Es sind keine weiteren Schritte erforderlich.";
 "notification_unavailable_info_inactive" = "Dieser Fragebogen ist inzwischen nicht mehr verfügbar, seit die Benachrichtigung gesendet wurde, und ESMira konnte diese nicht entfernen. Es sind keine weiteren Schritte erforderlich.";
-"reward_current_amount" = "Aktuelle Belohnung: %.02f";
-"reward_final_amount" = "Verdiente Belohnung: %.02f";
+"reward_current_amount" = "Aktuelle Belohnung: %.02f %1$@";
+"reward_final_amount" = "Verdiente Belohnung: %.02f %1$@";
 "reward_generate_code" = "Belohnungscode generieren";
 "reward_code_request" = "Belohnungscode beantragen";
 "reward_code_request_action" = "Beantragen";

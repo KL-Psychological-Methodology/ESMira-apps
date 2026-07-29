@@ -60,7 +60,7 @@ struct RewardView: View {
 					if(!study.rewardCalculationInfo.isEmpty) {
 						ScrollableHtmlTextView(html: study.rewardCalculationInfo)
 					}
-					Text(String(format: NSLocalizedString("reward_current_amount", comment: ""), study.getRewardAmount()))
+					Text(String(format: NSLocalizedString("reward_current_amount", comment: ""), study.getRewardAmount(), study.rewardCalculationCurrency))
 				}
 			}
 			VStack {
@@ -150,19 +150,21 @@ struct RewardView: View {
 				}
 				Spacer()
 			}
+			if(study.enableRewardCalculation) {
+				VStack(alignment: .leading) {
+					Spacer(minLength: 10.0)
+					if(!study.rewardCalculationInfo.isEmpty) {
+						ScrollableHtmlTextView(html: study.rewardCalculationInfo)
+					}
+					Text(String(format: NSLocalizedString("reward_final_amount", comment: ""), study.cachedRewardAmount, study.rewardCalculationCurrency))
+				}
+			}
 			Spacer(minLength: 10.0)
 			if(!study.rewardInstructions.isEmpty) {
 				ScrollableHtmlTextView(html: study.rewardInstructions)
 			}
 			
-			if(study.enableRewardCalculation) {
-				VStack(alignment: .leading) {
-					if(!study.rewardCalculationInfo.isEmpty) {
-						ScrollableHtmlTextView(html: study.rewardCalculationInfo)
-					}
-					Text(String(format: NSLocalizedString("reward_final_amount", comment: ""), study.cachedRewardAmount))
-				}
-			}
+			
 				
 		}
 		.sheet(isPresented: $showShareSheet) {
