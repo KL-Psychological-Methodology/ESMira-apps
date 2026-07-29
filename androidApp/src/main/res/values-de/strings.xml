@@ -337,4 +337,5 @@
     <string name="reward_code_request_action">Beantragen</string>
     <string name="reward_code_request_info_calculation">Ein Belohnungscode kann nur EINMAL erstellt werden. Wenn Sie den Code jetzt erstellen, wird sich Ihre Belohnung nicht mehr erhöhen. Zusätzliche ausgefüllte Fragebögen zählen dann nicht mehr für die Belohnung.</string>
     <string name="reward_code_request_info">Ein Belohnungscode kann nur EINMAL erstellt werden. Wenn Sie den Code jetzt erstellen. Zusätzliche ausgefüllte Fragebögen zählen dann nicht mehr für die Belohnung.</string>
+    <string name="no_app_usage_yesterday_today">Keine Daten für gestern oder heute.</string>
 </resources>

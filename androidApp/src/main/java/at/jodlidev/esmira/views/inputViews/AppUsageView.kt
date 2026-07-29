@@ -287,109 +287,128 @@ fun AppUsageTableView(
             stringResource(if (displayAppUsage) R.string.colon_app_usage else R.string.colon_total_screenTime),
             fontWeight = FontWeight.Bold
         )
-        if (displayAppUsage) {
-            Text(
-                packageId,
-                fontSize = MaterialTheme.typography.labelLarge.fontSize,
-                modifier = Modifier.padding(start = 10.dp)
-            )
-        }
-
-        Spacer(modifier = Modifier.height(15.dp))
 
 
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Column {
-                Text(" ")
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(stringResource(R.string.colon_usageTime), fontWeight = FontWeight.Bold)
-                if (yesterdayUsageCount + todayUsageCount > 0) {
-                    Text(stringResource(R.string.colon_usageCount), fontWeight = FontWeight.Bold)
-                }
-            }
-
-            Spacer(modifier = Modifier.width(15.dp))
-
-            Column {
-                Text(stringResource(R.string.yesterday), fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(yesterdayUsageTimeFormatted)
-                if (yesterdayUsageCount > 0) {
-                    Text(yesterdayUsageCount.toString())
-                } else if (todayUsageCount > 0) {
-                    Text("—")
-                }
-            }
-
-            Spacer(modifier = Modifier.width(15.dp))
-
-            Column {
-                Text(stringResource(R.string.today), fontWeight = FontWeight.Bold)
-                Spacer(modifier = Modifier.height(5.dp))
-                Text(todayUsageTimeFormatted)
-                if (todayUsageCount > 0) {
-                    Text(todayUsageCount.toString())
-                } else if (yesterdayUsageCount > 0) {
-                    Text("—")
-                }
-            }
-        }
-        if (packageId != "") {
-            if (showDetailedData.value) {
-
-                ESMiraDialog(
-                    content = {
-                        LazyColumn(
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            item{Text(
-                                stringResource(R.string.app_usage_sessions_yesterday),
-                                fontWeight = FontWeight.Bold
-                            )}
-                            item{if (yesterdayUsageProtocol.isEmpty()) {
-                                Text(stringResource(R.string.app_usage_sessions_no_data_yesterday))
-                            }}
-                            items(yesterdayUsageProtocol) { item ->
-                                val start = NativeLink.formatTime(item.first)
-                                val end = NativeLink.formatTime(item.second)
-                                Column {
-                                    Text("$start - $end")
-                                }
-                            }
-
-                            item{Spacer(modifier = Modifier.height(15.dp))}
-
-                            item{Text(
-                                stringResource(R.string.app_usage_sessions_today),
-                                fontWeight = FontWeight.Bold
-                            )}
-                            item{if (todayUsageProtocol.isEmpty()) {
-                                Text(stringResource(R.string.app_usage_sessions_no_data_today))
-                            }}
-                            items(todayUsageProtocol) { item ->
-                                val start = NativeLink.formatTime(item.first)
-                                val end = NativeLink.formatTime(item.second)
-                                Column {
-                                    Text("$start - $end")
-                                }
-                            }
-                        }
-                    },
-                    confirmButtonLabel = stringResource(R.string.ok_),
-                    onConfirmRequest = { showDetailedData.value = false }
-                )
-            }
-            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()){
-                DefaultButton(
-                    "Show detailed Data",
-                    onClick = {
-                        showDetailedData.value = true
+        if(todayUsageCount + yesterdayUsageCount > 0){
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Column {
+                    Text(" ")
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(stringResource(R.string.colon_usageTime), fontWeight = FontWeight.Bold)
+                    if (yesterdayUsageCount + todayUsageCount > 0) {
+                        Text(
+                            stringResource(R.string.colon_usageCount),
+                            fontWeight = FontWeight.Bold
+                        )
                     }
-                )
+                }
+
+                Spacer(modifier = Modifier.width(15.dp))
+
+                Column {
+                    Text(stringResource(R.string.yesterday), fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(yesterdayUsageTimeFormatted)
+                    if (yesterdayUsageCount > 0) {
+                        Text(yesterdayUsageCount.toString())
+                    } else if (todayUsageCount > 0) {
+                        Text("—")
+                    }
+                }
+
+                Spacer(modifier = Modifier.width(15.dp))
+
+                Column {
+                    Text(stringResource(R.string.today), fontWeight = FontWeight.Bold)
+                    Spacer(modifier = Modifier.height(5.dp))
+                    Text(todayUsageTimeFormatted)
+                    if (todayUsageCount > 0) {
+                        Text(todayUsageCount.toString())
+                    } else if (yesterdayUsageCount > 0) {
+                        Text("—")
+                    }
+                }
             }
+            if (packageId != "") {
+                if (showDetailedData.value) {
+
+                    ESMiraDialog(
+                        content = {
+                            LazyColumn(
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                item {
+                                    if (displayAppUsage) {
+                                        Text(
+                                            packageId,
+                                            fontSize = MaterialTheme.typography.labelLarge.fontSize,
+                                            modifier = Modifier.padding(start = 10.dp)
+                                        )
+                                        Spacer(modifier = Modifier.height(15.dp))
+                                    }
+                                }
+                                item {
+                                    Text(
+                                        stringResource(R.string.app_usage_sessions_yesterday),
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                                item {
+                                    if (yesterdayUsageProtocol.isEmpty()) {
+                                        Text(stringResource(R.string.app_usage_sessions_no_data_yesterday))
+                                    }
+                                }
+                                items(yesterdayUsageProtocol) { item ->
+                                    val start = NativeLink.formatTime(item.first)
+                                    val end = NativeLink.formatTime(item.second)
+                                    Column {
+                                        Text("$start - $end")
+                                    }
+                                }
+
+                                item { Spacer(modifier = Modifier.height(15.dp)) }
+
+                                item {
+                                    Text(
+                                        stringResource(R.string.app_usage_sessions_today),
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                }
+                                item {
+                                    if (todayUsageProtocol.isEmpty()) {
+                                        Text(stringResource(R.string.app_usage_sessions_no_data_today))
+                                    }
+                                }
+                                items(todayUsageProtocol) { item ->
+                                    val start = NativeLink.formatTime(item.first)
+                                    val end = NativeLink.formatTime(item.second)
+                                    Column {
+                                        Text("$start - $end")
+                                    }
+                                }
+                            }
+                        },
+                        confirmButtonLabel = stringResource(R.string.ok_),
+                        onConfirmRequest = { showDetailedData.value = false }
+                    )
+                }
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    DefaultButton(
+                        "Show detailed Data",
+                        onClick = {
+                            showDetailedData.value = true
+                        }
+                    )
+                }
+            }
+        } else {
+            Text(stringResource(R.string.no_app_usage_yesterday_today))
         }
     }
 }
