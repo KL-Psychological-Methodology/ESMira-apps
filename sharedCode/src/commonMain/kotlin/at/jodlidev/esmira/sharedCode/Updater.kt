@@ -615,6 +615,7 @@ internal object Updater {
 
         if(oldVersion <= 58) {
             db.execSQL("ALTER TABLE studies ADD COLUMN rewardCalculationCurrency TEXT DEFAULT '';")
+            db.execSQL("ALTER TABLE studies ADD COLUMN rewardCodeAlreadyCreated INTEGER DEFAULT 0;")
         }
     }
 	

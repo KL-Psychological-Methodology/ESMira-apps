@@ -44,6 +44,7 @@ class Study internal constructor(
 	@Transient private var cachedRewardCode: String = ""
     @Transient var cachedRewardAmount: Double = -1.0
 	@Transient var hasStatistics: Boolean = false
+    @Transient var rewardCodeAlreadyCreated: Boolean = false
 	
 	var quitTimestamp = 0L
 	var publishedAndroid = true //not in db, only known when directly from server
@@ -254,6 +255,7 @@ class Study internal constructor(
         rewardCalculationInfo = c.getString(36)
         cachedRewardAmount = c.getDouble(37)
         rewardCalculationCurrency = c.getString(38)
+        rewardCodeAlreadyCreated = c.getBoolean(39)
 	}
 	
 	private fun loadQuestionnairesDB(): List<Questionnaire> {
@@ -605,6 +607,7 @@ class Study internal constructor(
         values.putString(KEY_REWARD_CALCULATION_INFO, rewardCalculationInfo)
         values.putDouble(KEY_CACHED_REWARD_AMOUNT, cachedRewardAmount)
         values.putString(KEY_REWARD_CALCULATION_CURRENCY, rewardCalculationCurrency)
+        values.putBoolean(KEY_REWARD_CODE_ALREADY_CREATED, rewardCodeAlreadyCreated)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -727,6 +730,16 @@ class Study internal constructor(
             val db = NativeLink.sql
             val values = db.getValueBox()
             values.putString(KEY_CACHED_REWARD_CODE, cachedRewardCode)
+            db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
+        }
+    }
+
+    fun saveRewardCodeAlreadyCreated() {
+        if (exists) {
+            rewardCodeAlreadyCreated = true
+            val db = NativeLink.sql
+            val values = db.getValueBox()
+            values.putBoolean(KEY_REWARD_CODE_ALREADY_CREATED, true)
             db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
         }
     }
@@ -857,6 +870,7 @@ class Study internal constructor(
         const val KEY_REWARD_CALCULATION_INFO = "rewardCalculationInfo"
         const val KEY_CACHED_REWARD_AMOUNT = "cachedRewardAmount"
         const val KEY_REWARD_CALCULATION_CURRENCY = "rewardCalculationCurrency"
+        const val KEY_REWARD_CODE_ALREADY_CREATED = "rewardCodeAlreadyCreated"
 		
 		const val REWARD_SUCCESS = 0
 		const val REWARD_ERROR_DOES_NOT_EXIST = 1
@@ -904,6 +918,7 @@ class Study internal constructor(
             KEY_REWARD_CALCULATION_INFO,
             KEY_CACHED_REWARD_AMOUNT,
             KEY_REWARD_CALCULATION_CURRENCY,
+            KEY_REWARD_CODE_ALREADY_CREATED,
 		)
 		
 		val defaultSettings = hashMapOf(

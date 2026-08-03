@@ -68,14 +68,19 @@ fun RewardView(
                             fulfilledQuestionnaires.putAll(rewardInfo.fulfilledQuestionnaires)
                         }
 
-                        Study.REWARD_ERROR_ALREADY_GENERATED ->
+                        Study.REWARD_ERROR_ALREADY_GENERATED -> {
                             error.value = context.getString(R.string.error_already_generated)
+                            study.saveRewardCodeAlreadyCreated()
+                        }
 
                         else -> error.value = rewardInfo.errorMessage
                     }
                 }
             )
         } else {
+            if(study.rewardCodeAlreadyCreated) {
+                error.value = context.getString(R.string.error_already_generated)
+            }
             fulfilledQuestionnaires.clear()
             fulfilledQuestionnaires.putAll(study.getRewardFulfillmentLocal())
             value = ""
@@ -250,32 +255,42 @@ fun RewardDefaultView(study: Study, error: String, fulfilledQuestionnaires: Map<
     val canRequest = rewardAvailable && fulfilledQuestionnaires.all{(_, fulfilled) -> fulfilled}
 
     Column(
-		modifier = Modifier.fillMaxWidth(),
-		horizontalAlignment = Alignment.CenterHorizontally
-	) {
-		Text(error, textAlign = TextAlign.Center)
-	}
-	
-	if(fulfilledQuestionnaires.isNotEmpty() && study.questionnaires.isNotEmpty()) {
-		Spacer(modifier = Modifier.size(30.dp))
-		Text(stringResource(id = R.string.error_reward_questionnaires_not_finished))
-		Spacer(modifier = Modifier.size(10.dp))
-		
-		val availableQuestionnaires = study.questionnaires.filter {
-			// always display unfulfilled questionnaires, for user feedback in case of older servers not marking inaccessible questionnaires as fulfilled
-			questionnaire: Questionnaire -> questionnaire.limitToGroup == 0 || questionnaire.limitToGroup == study.group || fulfilledQuestionnaires[questionnaire.internalId] != true
-		}
-		
-		availableQuestionnaires.forEach { questionnaire ->
-			Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
-				Text("${questionnaire.title}:", modifier = Modifier.weight(1F))
-				val modifier = Modifier.width(50.dp)
-				if(fulfilledQuestionnaires[questionnaire.internalId] == true)
-					Icon(Icons.Default.CheckCircle, "true", tint = colorGreen, modifier = modifier)
-				else
-					Icon(Icons.Default.Cancel, "false", tint = colorRed, modifier = modifier)
-			}
-		}
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(error, textAlign = TextAlign.Center)
+    }
+
+    if(!study.rewardCodeAlreadyCreated) {
+        if (fulfilledQuestionnaires.isNotEmpty() && study.questionnaires.isNotEmpty()) {
+            Spacer(modifier = Modifier.size(30.dp))
+            Text(stringResource(id = R.string.error_reward_questionnaires_not_finished))
+            Spacer(modifier = Modifier.size(10.dp))
+
+            val availableQuestionnaires = study.questionnaires.filter {
+                // always display unfulfilled questionnaires, for user feedback in case of older servers not marking inaccessible questionnaires as fulfilled
+                    questionnaire: Questionnaire ->
+                questionnaire.limitToGroup == 0 || questionnaire.limitToGroup == study.group || fulfilledQuestionnaires[questionnaire.internalId] != true
+            }
+
+            availableQuestionnaires.forEach { questionnaire ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text("${questionnaire.title}:", modifier = Modifier.weight(1F))
+                    val modifier = Modifier.width(50.dp)
+                    if (fulfilledQuestionnaires[questionnaire.internalId] == true)
+                        Icon(
+                            Icons.Default.CheckCircle,
+                            "true",
+                            tint = colorGreen,
+                            modifier = modifier
+                        )
+                    else
+                        Icon(Icons.Default.Cancel, "false", tint = colorRed, modifier = modifier)
+                }
+            }
 //		LazyVerticalGrid(
 //			columns = GridCells.Fixed(2),
 //			horizontalArrangement = Arrangement.Center,
@@ -295,65 +310,69 @@ fun RewardDefaultView(study: Study, error: String, fulfilledQuestionnaires: Map<
 //				}
 //			}
 //		}
-	}
+        }
 
-    if(study.enableRewardCalculation) {
+        if (study.enableRewardCalculation) {
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.size(30.dp))
+                if (study.rewardCalculationInfo.isNotEmpty()) {
+                    HtmlHandler.HtmlText(
+                        study.rewardCalculationInfo,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                    Spacer(modifier = Modifier.size(10.dp))
+                }
+                Text(
+                    stringResource(
+                        R.string.reward_current_amount,
+                        "%.2f".format(study.getRewardAmount()),
+                        study.rewardCalculationCurrency
+                    )
+                )
+            }
+        }
+
         Column(
             modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Spacer(modifier = Modifier.size(30.dp))
-            if(study.rewardCalculationInfo.isNotEmpty()) {
-                HtmlHandler.HtmlText(study.rewardCalculationInfo, modifier = Modifier.fillMaxWidth())
-                Spacer(modifier = Modifier.size(10.dp))
+            Spacer(modifier = Modifier.size(10.dp))
+            if (!rewardAvailable) {
+                val resources = LocalContext.current.resources
+                Text(
+                    resources.getQuantityString(
+                        R.plurals.info_reward_is_not_active_yet,
+                        untilActive,
+                        untilActive
+                    )
+                )
             }
-            Text(
-                stringResource(
-                    R.string.reward_current_amount,
-                    "%.2f".format(study.getRewardAmount()),
-                    study.rewardCalculationCurrency
-                )
-            )
-        }
-    }
-
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Spacer(modifier = Modifier.size(10.dp))
-        if(!rewardAvailable) {
-            val resources = LocalContext.current.resources
-            Text(
-                resources.getQuantityString(
-                    R.plurals.info_reward_is_not_active_yet,
-                    untilActive,
-                    untilActive
-                )
-            )
-        }
             Button(enabled = canRequest, onClick = {
-            showDialog.value = true
-        }) {
-            Text(stringResource(R.string.reward_code_request))
+                showDialog.value = true
+            }) {
+                Text(stringResource(R.string.reward_code_request))
+            }
         }
-    }
 
-    if(showDialog.value){
-        ESMiraDialog(confirmButtonLabel = stringResource(R.string.reward_code_request_action),
-            onConfirmRequest = { requestRewardCode() },
-            title = stringResource(R.string.reward_code_request),
-            dismissButtonLabel = stringResource(R.string.cancel),
-            onDismissRequest = { showDialog.value = false}
+        if (showDialog.value) {
+            ESMiraDialog(
+                confirmButtonLabel = stringResource(R.string.reward_code_request_action),
+                onConfirmRequest = { requestRewardCode() },
+                title = stringResource(R.string.reward_code_request),
+                dismissButtonLabel = stringResource(R.string.cancel),
+                onDismissRequest = { showDialog.value = false }
             ) {
-            if(study.enableRewardCalculation) {
-                Text(stringResource(R.string.reward_code_request_info_calculation))
-            } else {
-                Text(stringResource(R.string.reward_code_request_info))
+                if (study.enableRewardCalculation) {
+                    Text(stringResource(R.string.reward_code_request_info_calculation))
+                } else {
+                    Text(stringResource(R.string.reward_code_request_info))
+                }
             }
         }
     }
-
 }
 
 @Preview
