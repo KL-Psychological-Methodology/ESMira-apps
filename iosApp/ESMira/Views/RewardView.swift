@@ -37,46 +37,48 @@ struct RewardView: View {
 				Text(error)
 			}
 			
-			if(!self.fulfilledQuestionnaires.isEmpty) {
-				Text("error_reward_questionnaires_not_finished").padding(.vertical)
-				let availableQuestionnaires = self.study.questionnaires.filter{(questionnaire: Questionnaire) in
-					questionnaire.limitToGroup == 0 || questionnaire.limitToGroup == study.group || self.fulfilledQuestionnaires[KotlinLong(value: questionnaire.internalId)] ?? true != true
-				}
-				ForEach(availableQuestionnaires, id: \.internalId) { (questionnaire: Questionnaire) in
-					HStack {
-						Text(questionnaire.title)
-						Spacer()
-						if(self.fulfilledQuestionnaires[KotlinLong(value: questionnaire.internalId)] ?? true) as! Bool {
-							Image(systemName: "checkmark.circle.fill").foregroundColor(Color.green)
-						}
-						else {
-							Image(systemName: "xmark.circle.fill").foregroundColor(Color.red)
+			if(!study.rewardCodeAlreadyCreated){
+				if(!self.fulfilledQuestionnaires.isEmpty) {
+					Text("error_reward_questionnaires_not_finished").padding(.vertical)
+					let availableQuestionnaires = self.study.questionnaires.filter{(questionnaire: Questionnaire) in
+						questionnaire.limitToGroup == 0 || questionnaire.limitToGroup == study.group || self.fulfilledQuestionnaires[KotlinLong(value: questionnaire.internalId)] ?? true != true
+					}
+					ForEach(availableQuestionnaires, id: \.internalId) { (questionnaire: Questionnaire) in
+						HStack {
+							Text(questionnaire.title)
+							Spacer()
+							if(self.fulfilledQuestionnaires[KotlinLong(value: questionnaire.internalId)] ?? true) as! Bool {
+								Image(systemName: "checkmark.circle.fill").foregroundColor(Color.green)
+							}
+							else {
+								Image(systemName: "xmark.circle.fill").foregroundColor(Color.red)
+							}
 						}
 					}
 				}
-			}
-			if(study.enableRewardCalculation){
+				if(study.enableRewardCalculation){
+					VStack {
+						if(!study.rewardCalculationInfo.isEmpty) {
+							ScrollableHtmlTextView(html: study.rewardCalculationInfo)
+						}
+						Text(String(format: NSLocalizedString("reward_current_amount", comment: ""), study.getRewardAmount(), study.rewardCalculationCurrency))
+					}
+				}
 				VStack {
-					if(!study.rewardCalculationInfo.isEmpty) {
-						ScrollableHtmlTextView(html: study.rewardCalculationInfo)
+					let untilActive = self.study.daysUntilRewardsAreActive()
+					if untilActive > 0 {
+						Text(String(format: NSLocalizedString("info_reward_not_active_yet", comment: ""), untilActive))
 					}
-					Text(String(format: NSLocalizedString("reward_current_amount", comment: ""), study.getRewardAmount(), study.rewardCalculationCurrency))
+					Spacer()
+					Button(action: {
+						self.showRequestConfirmation = true
+					}) {
+						Text("reward_code_request")
+					}.disabled(!canRequest)
 				}
-			}
-			VStack {
-				let untilActive = self.study.daysUntilRewardsAreActive()
-				if untilActive > 0 {
-					Text(String(format: NSLocalizedString("info_reward_not_active_yet", comment: ""), untilActive))
-				}
+				
 				Spacer()
-				Button(action: {
-					self.showRequestConfirmation = true
-				}) {
-					Text("reward_code_request")
-				}.disabled(!canRequest)
 			}
-			
-			Spacer()
 		}
 		.padding()
 		.alert(isPresented: $showRequestConfirmation) {
@@ -193,6 +195,7 @@ struct RewardView: View {
 					fulfilledQuestionnaires = rewardInfo.fulfilledQuestionnaires
 				case Study.Companion().REWARD_ERROR_ALREADY_GENERATED:
 					error = NSLocalizedString("error_already_generated", comment: "")
+					self.study.saveRewardCodeAlreadyCreated()
 				default:
 					error = rewardInfo.errorMessage
 				}
@@ -237,6 +240,9 @@ struct RewardView: View {
 			if getCode {
 				fetchRewardCode()
 			} else {
+				if(study.rewardCodeAlreadyCreated) {
+					error = NSLocalizedString("error_already_generated", comment: "")
+				}
 				fulfilledQuestionnaires = (study.getRewardFulfillmentLocal() as? [KotlinLong : KotlinBoolean]) ?? [:]
 			}
 		}
