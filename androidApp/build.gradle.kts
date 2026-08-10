@@ -23,13 +23,13 @@ kotlin {
 }
 
 android {
-    compileSdk = 35
+    compileSdk = 36
     defaultConfig {
         applicationId = "at.jodlidev.esmira"
         minSdk = 21
-        targetSdk = 35
-        versionCode = 233
-        versionName = "2.21.7"
+        targetSdk = 36
+        versionCode = 235
+        versionName = "2.22.1"
 
         multiDexEnabled = true //project became too big. See: https://stackoverflow.com/a/59308589
     

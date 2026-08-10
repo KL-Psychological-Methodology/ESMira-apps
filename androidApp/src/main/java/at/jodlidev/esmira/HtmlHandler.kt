@@ -95,7 +95,7 @@ class HtmlHandler {
 					plugin.addSchemeHandler(OkHttpNetworkSchemeHandler.create())
 				})
 				.usePlugin(StrikethroughPlugin.create())
-				.usePlugin(LinkifyPlugin.create())
+				.usePlugin(LinkifyPlugin.create(android.text.util.Linkify.WEB_URLS))
 //				.usePlugin(SoftBreakAddsNewLinePlugin.create())
 				.build()
 		}

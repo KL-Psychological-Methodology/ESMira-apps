@@ -38,6 +38,8 @@ class Questionnaire {
 	var completableAtSpecificTimeEnd = -1
 	var limitToGroup = 0
 	var minDataSetsForReward = 0
+    var rewardRate = 0.0
+    var rewardMax = 0.0
 	var isBackEnabled = true
 	var endScriptBlock = ""
     var scriptFilter = ""
@@ -149,6 +151,8 @@ class Questionnaire {
 		showPagination = c.getBoolean(28)
 		showSkipToast = c.getBoolean(29)
         scriptFilter = c.getString(30)
+        rewardRate = c.getDouble(31)
+        rewardMax = c.getDouble(32)
 
         exists = true
 		fromJsonOrUpdated = false
@@ -273,6 +277,8 @@ class Questionnaire {
 		values.putBoolean(KEY_SHOW_PAGINATION, showPagination)
 		values.putBoolean(KEY_SHOW_SKIP_TOAST, showSkipToast)
         values.putString(KEY_SCRIPT_FILTER, scriptFilter)
+        values.putDouble(KEY_REWARD_RATE, rewardRate)
+        values.putDouble(KEY_REWARD_MAX, rewardMax)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -701,7 +707,9 @@ class Questionnaire {
 		const val KEY_PUBLISHED_ANDROID = "publishedAndroid"
 		const val KEY_PUBLISHED_IOS = "publishedIOS"
 		const val KEY_MIN_DATASETS_FOR_REWARD = "minDataSetsForReward"
-		const val KEY_IS_BACK_ENABLED = "isBackEnabled"
+        const val KEY_REWARD_RATE = "rewardRate"
+        const val KEY_REWARD_MAX = "rewardMax"
+        const val KEY_IS_BACK_ENABLED = "isBackEnabled"
 		const val KEY_SCRIPT_END_BLOCK = "scriptEndBlock"
 		const val KEY_VIRTUAL_INPUTS = "virtualInputs"
 		const val KEY_SHOW_IN_DISABLED_LIST = "showInDisabledList"
@@ -740,6 +748,8 @@ class Questionnaire {
 			KEY_SHOW_PAGINATION,
 			KEY_SHOW_SKIP_TOAST,
             KEY_SCRIPT_FILTER,
+            KEY_REWARD_RATE,
+            KEY_REWARD_MAX
 		)
 	}
 }

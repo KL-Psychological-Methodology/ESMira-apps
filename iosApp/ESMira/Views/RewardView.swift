@@ -14,39 +14,83 @@ struct RewardView: View {
 	@State private var error: String = ""
 	@State private var rewardCode: String = ""
 	@State private var fulfilledQuestionnaires: [KotlinLong : KotlinBoolean] = [:]
+	@State private var getCode: Bool = false
+	@State private var showRequestConfirmation: Bool = false
 	
 	@State private var showAlert: Bool = false
 	@State private var alertView: () -> Alert = { Alert(title: Text(""))}
+	
+	private var canRequest: Bool {
+		let untilActive = self.study.daysUntilRewardsAreActive()
+		let rewardAvailable = untilActive <= 0
+		let allFulfilled = fulfilledQuestionnaires.values.allSatisfy {$0.boolValue}
+		return rewardAvailable && allFulfilled
+	}
 	
 	init(study: Study) {
 		self.study = study
 	}
 	
-	private func getErrorView(error: String) -> some View {
+	private func getDefaultView(error: String) -> some View {
 		VStack(alignment: .leading) {
-			Text(error)
+			if(!error.isEmpty) {
+				Text(error)
+			}
 			
-			if(!self.fulfilledQuestionnaires.isEmpty) {
-				Text("error_reward_questionnaires_not_finished").padding(.vertical)
-				let availableQuestionnaires = self.study.questionnaires.filter{(questionnaire: Questionnaire) in
-					questionnaire.limitToGroup == 0 || questionnaire.limitToGroup == study.group || self.fulfilledQuestionnaires[KotlinLong(value: questionnaire.internalId)] ?? true != true
-				}
-				ForEach(availableQuestionnaires, id: \.internalId) { (questionnaire: Questionnaire) in
-					HStack {
-						Text(questionnaire.title)
-						Spacer()
-						if(self.fulfilledQuestionnaires[KotlinLong(value: questionnaire.internalId)] ?? true) as! Bool {
-							Image(systemName: "checkmark.circle.fill").foregroundColor(Color.green)
-						}
-						else {
-							Image(systemName: "xmark.circle.fill").foregroundColor(Color.red)
+			if(!study.rewardCodeAlreadyCreated){
+				if(!self.fulfilledQuestionnaires.isEmpty) {
+					Text("error_reward_questionnaires_not_finished").padding(.vertical)
+					let availableQuestionnaires = self.study.questionnaires.filter{(questionnaire: Questionnaire) in
+						questionnaire.limitToGroup == 0 || questionnaire.limitToGroup == study.group || self.fulfilledQuestionnaires[KotlinLong(value: questionnaire.internalId)] ?? true != true
+					}
+					ForEach(availableQuestionnaires, id: \.internalId) { (questionnaire: Questionnaire) in
+						HStack {
+							Text(questionnaire.title)
+							Spacer()
+							if(self.fulfilledQuestionnaires[KotlinLong(value: questionnaire.internalId)] ?? true) as! Bool {
+								Image(systemName: "checkmark.circle.fill").foregroundColor(Color.green)
+							}
+							else {
+								Image(systemName: "xmark.circle.fill").foregroundColor(Color.red)
+							}
 						}
 					}
 				}
+				if(study.enableRewardCalculation){
+					VStack {
+						if(!study.rewardCalculationInfo.isEmpty) {
+							ScrollableHtmlTextView(html: study.rewardCalculationInfo)
+						}
+						Text(String(format: NSLocalizedString("reward_current_amount", comment: ""), study.getRewardAmount(), study.rewardCalculationCurrency))
+					}
+				}
+				VStack {
+					let untilActive = self.study.daysUntilRewardsAreActive()
+					if untilActive > 0 {
+						Text(String(format: NSLocalizedString("info_reward_not_active_yet", comment: ""), untilActive))
+					}
+					Spacer()
+					Button(action: {
+						self.showRequestConfirmation = true
+					}) {
+						Text("reward_code_request")
+					}.disabled(!canRequest)
+				}
+				
+				Spacer()
 			}
-			Spacer()
 		}
 		.padding()
+		.alert(isPresented: $showRequestConfirmation) {
+			Alert(
+				title: Text("reward_code_request"),
+				message: Text(study.enableRewardCalculation ? NSLocalizedString("reward_code_request_info_calculation", comment: "") : NSLocalizedString("reward_code_request_info", comment: "")),
+				primaryButton: .default(Text("reward_code_request_action")) {
+					self.requestCode()
+				},
+				secondaryButton: .cancel(Text("cancel"))
+			)
+		}
 	}
 	private func getLoadingView() -> some View {
 		LoadingSpinner(isAnimating: .constant(true), style: .large)
@@ -108,10 +152,21 @@ struct RewardView: View {
 				}
 				Spacer()
 			}
+			if(study.enableRewardCalculation) {
+				VStack(alignment: .leading) {
+					Spacer(minLength: 10.0)
+					if(!study.rewardCalculationInfo.isEmpty) {
+						ScrollableHtmlTextView(html: study.rewardCalculationInfo)
+					}
+					Text(String(format: NSLocalizedString("reward_final_amount", comment: ""), study.cachedRewardAmount, study.rewardCalculationCurrency))
+				}
+			}
 			Spacer(minLength: 10.0)
 			if(!study.rewardInstructions.isEmpty) {
 				ScrollableHtmlTextView(html: study.rewardInstructions)
 			}
+			
+			
 				
 		}
 		.sheet(isPresented: $showShareSheet) {
@@ -120,46 +175,77 @@ struct RewardView: View {
 		.alert(isPresented: self.$showAlert, content: self.alertView)
 	}
 	
-	var body: some View {
-		HStack {
-			let untilActive = self.study.daysUntilRewardsAreActive()
-			if(!self.study.enableRewardSystem || untilActive != 0) {
-				self.getErrorView(error: String(format: NSLocalizedString("info_reward_is_not_active_yet", comment: ""), untilActive))
-			}
-			else {
-				if(!self.error.isEmpty) {
-					self.getErrorView(error: self.error)
+	private func requestCode() {
+		self.getCode = true
+		self.fetchRewardCode()
+	}
+	
+	private func fetchRewardCode() {
+		error = ""
+		self.study.getRewardCode(
+			onError: { msg in
+				error = msg
+			},
+			onSuccess: { rewardInfo in
+				switch rewardInfo.errorCode {
+				case Study.Companion().REWARD_SUCCESS:
+					rewardCode = rewardInfo.code
+				case Study.Companion().REWARD_ERROR_UNFULFILLED_REWARD_CONDITIONS:
+					error = NSLocalizedString("error_reward_conditions_not_met", comment: "")
+					fulfilledQuestionnaires = rewardInfo.fulfilledQuestionnaires
+				case Study.Companion().REWARD_ERROR_ALREADY_GENERATED:
+					error = NSLocalizedString("error_already_generated", comment: "")
+					self.study.saveRewardCodeAlreadyCreated()
+				default:
+					error = rewardInfo.errorMessage
 				}
-				else if(rewardCode.isEmpty) {
-					self.getLoadingView()
+			}
+		)
+	}
+	
+	var body: some View {
+		ScrollView{
+			HStack {
+				let untilActive = self.study.daysUntilRewardsAreActive()
+				if(!self.study.enableRewardSystem || untilActive != 0) {
+					self.getDefaultView(error: String(format: NSLocalizedString("info_reward_is_not_active_yet", comment: ""), untilActive))
+				}
+				else if(self.study.enableRewardCalculation) {
+					if(!self.error.isEmpty){
+						self.getDefaultView(error: self.error)
+					} else if(!self.rewardCode.isEmpty) {
+						self.getCodeView()
+					} else if(self.getCode){
+						self.getLoadingView()
+					} else {
+						self.getDefaultView(error: "")
+					}
 				}
 				else {
-					self.getCodeView()
+					if(!self.error.isEmpty) {
+						self.getDefaultView(error: self.error)
+					}
+					else if(rewardCode.isEmpty) {
+						self.getLoadingView()
+					}
+					else {
+						self.getCodeView()
+					}
 				}
-			}
+			}.padding()
 		}
 		.padding()
 		.esmiraScreenBackground()
 		.onAppear {
-			error = ""
-			self.study.getRewardCode(
-				onError: {msg in
-						error = msg
-					},
-				onSuccess: { rewardInfo in
-					switch(rewardInfo.errorCode) {
-						case Study.Companion().REWARD_SUCCESS:
-							rewardCode = rewardInfo.code
-						case Study.Companion().REWARD_ERROR_UNFULFILLED_REWARD_CONDITIONS:
-							error = NSLocalizedString("error_reward_conditions_not_met", comment: "")
-							fulfilledQuestionnaires = rewardInfo.fulfilledQuestionnaires
-						case Study.Companion().REWARD_ERROR_ALREADY_GENERATED:
-							error = NSLocalizedString("error_already_generated", comment: "")
-						default:
-							error = rewardInfo.errorMessage
-					}
+			getCode = study.hasCachedRewardCode()
+			if getCode {
+				fetchRewardCode()
+			} else {
+				if(study.rewardCodeAlreadyCreated) {
+					error = NSLocalizedString("error_already_generated", comment: "")
 				}
-			)
+				fulfilledQuestionnaires = (study.getRewardFulfillmentLocal() as? [KotlinLong : KotlinBoolean]) ?? [:]
+			}
 		}
 	}
 }

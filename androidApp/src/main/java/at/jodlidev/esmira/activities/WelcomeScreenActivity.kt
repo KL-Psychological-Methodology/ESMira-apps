@@ -300,14 +300,14 @@ class WelcomeScreenActivity: ComponentActivity() {
 						navController.navigate("qrScanning")
 					},
 					gotoPrevious = {
-						onBackPressedDispatcher.onBackPressed()
+						navController.popBackStack()
 					}
 				)
 			}
 			composable("qrScanning") {
 				QrScanningView(
 					gotoPrevious = {
-						onBackPressedDispatcher.onBackPressed()
+						navController.popBackStack()
 					},
 					gotoNext = { _serverUrl: String, _accessKey: String, studyId: Long, qId: Long, _fallbackUrl: String? ->
 						serverUrl.value = _serverUrl
@@ -322,7 +322,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 					initialServerUrl = serverUrl.value,
 					getServerList = getServerList,
 					gotoPrevious = {
-						onBackPressedDispatcher.onBackPressed()
+						navController.popBackStack()
 					},
 					gotoNext = { _serverUrl: String ->
 						serverUrl.value = _serverUrl
@@ -334,7 +334,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 				AccessKeyQuestionView(
 					accessKey = accessKey.value,
 					gotoPrevious = {
-						onBackPressedDispatcher.onBackPressed()
+						navController.popBackStack()
 					},
 					gotoNext = { _accessKey: String ->
 						accessKey.value = _accessKey
@@ -345,14 +345,14 @@ class WelcomeScreenActivity: ComponentActivity() {
 			composable("studyList") {
 				if(studyList().isEmpty()) {
 					StudyEmptyListView(accessKey.value) {
-						onBackPressedDispatcher.onBackPressed()
+						navController.popBackStack()
 					}
 				}
 				else {
 					StudyListView(
 						studies = studyList(),
 						gotoPrevious = {
-							onBackPressedDispatcher.onBackPressed()
+							navController.popBackStack()
 						},
 						gotoNext = { index ->
 							if(studyList().get(index).hasMultipleLanguages()) {
@@ -392,7 +392,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 						}
 					},
 					gotoPrevious = {
-						onBackPressedDispatcher.onBackPressed()
+						navController.popBackStack()
 					},
 					gotoNext = {
 						navController.navigate("studyInfo/$studyIndex")
@@ -412,7 +412,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 				StudyInfoView(
 					study = study,
 					gotoPrevious = {
-						onBackPressedDispatcher.onBackPressed()
+						navController.popBackStack()
 					},
 					gotoNext = {
 						if(study.needsPermissionScreen())
@@ -434,7 +434,7 @@ class WelcomeScreenActivity: ComponentActivity() {
 				StudyPermissionsView(
 					study = study,
 					gotoPrevious = {
-						onBackPressedDispatcher.onBackPressed()
+						navController.popBackStack()
 					},
 					gotoNext = {
 						joinStudy(study, navController)

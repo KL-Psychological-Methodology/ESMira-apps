@@ -70,6 +70,7 @@ struct QuestionnaireView: View {
 
 			ForEach(0..<activeInputs.count, id: \.self) { i in
 				InputView(input: activeInputs[i])
+					.id("\(self.questionnaire.id)_\(self.pageIndex)_\(activeInputs[i].name)")
 					.padding()
 //					.frame(width: width)
 					.uiTag(i)

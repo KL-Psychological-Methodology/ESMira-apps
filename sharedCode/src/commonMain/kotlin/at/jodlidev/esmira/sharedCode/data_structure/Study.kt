@@ -12,6 +12,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.Serializable
 import kotlin.math.ceil
+import kotlin.math.min
 import kotlin.random.Random
 
 /**
@@ -41,7 +42,9 @@ class Study internal constructor(
 	@Transient var msgTimestamp = 0L
 	@Transient var publicStatisticsNeeded = false
 	@Transient private var cachedRewardCode: String = ""
+    @Transient var cachedRewardAmount: Double = -1.0
 	@Transient var hasStatistics: Boolean = false
+    @Transient var rewardCodeAlreadyCreated: Boolean = false
 	
 	var quitTimestamp = 0L
 	var publishedAndroid = true //not in db, only known when directly from server
@@ -58,6 +61,11 @@ class Study internal constructor(
 	var randomGroups = 0 // will not be saved in deb, but Instead used to select group
 	var sendMessagesAllowed = true
 	var enableRewardSystem = false
+    var enableRewardCalculation = false
+    var rewardCalculationBase = 0.0
+    var rewardCalculationMax = 0.0
+    var rewardCalculationInfo = ""
+    var rewardCalculationCurrency = ""
 	var rewardVisibleAfterDays = 0
 	var rewardEmailContent = ""
 	var rewardInstructions = ""
@@ -241,6 +249,13 @@ class Study internal constructor(
 		langCodesString = c.getString(30)
         additionalDaysActive = c.getInt(31)
         legacyScheduling = c.getBoolean(32)
+        enableRewardCalculation = c.getBoolean(33)
+        rewardCalculationBase = c.getDouble(34)
+        rewardCalculationMax = c.getDouble(35)
+        rewardCalculationInfo = c.getString(36)
+        cachedRewardAmount = c.getDouble(37)
+        rewardCalculationCurrency = c.getString(38)
+        rewardCodeAlreadyCreated = c.getBoolean(39)
 	}
 	
 	private fun loadQuestionnairesDB(): List<Questionnaire> {
@@ -361,10 +376,15 @@ class Study internal constructor(
 	}
 	
 	fun daysUntilRewardsAreActive(): Int {
-		val oneDay = 86400000L
-		return ceil((((joinedTimestamp + rewardVisibleAfterDays.toLong() * oneDay) - NativeLink.getNowMillis()).toFloat() / oneDay))
-			.toInt()
-			.coerceAtLeast(0)
+        return if(legacyScheduling) {
+            val oneDay = 86400000L
+            ceil((((joinedTimestamp + rewardVisibleAfterDays.toLong() * oneDay) - NativeLink.getNowMillis()).toFloat() / oneDay))
+                .toInt()
+                .coerceAtLeast(0)
+        } else {
+            val studyDay = NativeLink.getDatesDiff(joinedTimestamp, NativeLink.getNowMillis()).toInt()
+            (rewardVisibleAfterDays - studyDay).coerceAtLeast(0)
+        }
 	}
 	
 	fun usesPostponedActions(): Boolean {
@@ -408,6 +428,41 @@ class Study internal constructor(
 	fun hasRewards(): Boolean {
 		return enableRewardSystem
 	}
+
+    fun hasCachedRewardCode(): Boolean {
+        return cachedRewardCode.isNotEmpty()
+    }
+
+    fun getRewardFulfillmentLocal(): MutableMap<Long, Boolean> {
+        val fulfilledQuestionnaires = mutableMapOf<Long, Boolean>()
+
+        for(questionnaire in questionnaires) {
+            val questionnaireFulfilled = questionnaire.metadata.timesCompleted >= questionnaire.minDataSetsForReward
+            fulfilledQuestionnaires[questionnaire.internalId] = questionnaireFulfilled
+        }
+
+        return fulfilledQuestionnaires
+    }
+
+    fun getRewardAmount(): Double {
+        if(!enableRewardCalculation) {
+            return Double.NaN
+        }
+        if(cachedRewardAmount != -1.0) {
+            return cachedRewardAmount
+        }
+        var amount = rewardCalculationBase
+        for(questionnaire in questionnaires) {
+            val questionnaireContribution = questionnaire.metadata.timesCompleted * questionnaire.rewardRate
+            amount += min(questionnaireContribution, questionnaire.rewardMax)
+        }
+
+        return if(rewardCalculationMax > 0.0) {
+            min(amount, rewardCalculationMax)
+        } else {
+            amount
+        }
+    }
 
 	fun getAvailableLangs(): List<String> {
 		return try {
@@ -479,6 +534,11 @@ class Study internal constructor(
 			this.faq = newStudy.faq
             this.additionalDaysActive = newStudy.additionalDaysActive
             this.legacyScheduling = newStudy.legacyScheduling
+            this.enableRewardCalculation = newStudy.enableRewardCalculation
+            this.rewardCalculationBase = newStudy.rewardCalculationBase
+            this.rewardCalculationMax = newStudy.rewardCalculationMax
+            this.rewardCalculationInfo = newStudy.rewardCalculationInfo
+            this.rewardCalculationCurrency = newStudy.rewardCalculationCurrency
 			this.hasStatistics = newStudy.hasStatistics
 			this.langCodesString = newStudy.langCodesString
 			this._jsonQuestionnaires = newStudy.questionnaires
@@ -541,6 +601,13 @@ class Study internal constructor(
 		values.putString(KEY_LANG_CODES, langCodesString)
         values.putInt(KEY_ADDITIONAL_DAYS_ACTIVE, additionalDaysActive)
         values.putBoolean(KEY_LEGACY_SCHEDULING, legacyScheduling)
+        values.putBoolean(KEY_ENABLE_REWARD_CALCULATION, enableRewardCalculation)
+        values.putDouble(KEY_REWARD_CALCULATION_BASE, rewardCalculationBase)
+        values.putDouble(KEY_REWARD_CALCULATION_MAX, rewardCalculationMax)
+        values.putString(KEY_REWARD_CALCULATION_INFO, rewardCalculationInfo)
+        values.putDouble(KEY_CACHED_REWARD_AMOUNT, cachedRewardAmount)
+        values.putString(KEY_REWARD_CALCULATION_CURRENCY, rewardCalculationCurrency)
+        values.putBoolean(KEY_REWARD_CODE_ALREADY_CREATED, rewardCodeAlreadyCreated)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -658,15 +725,24 @@ class Study internal constructor(
 	}
 	
 	fun saveRewardCode(code: String) {
-		cachedRewardCode = code
-		if(exists) {
-			val db = NativeLink.sql
-			val values = db.getValueBox()
-			values.putString(KEY_CACHED_REWARD_CODE, cachedRewardCode)
-			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
-		}
-		
-	}
+        cachedRewardCode = code
+        if (exists) {
+            val db = NativeLink.sql
+            val values = db.getValueBox()
+            values.putString(KEY_CACHED_REWARD_CODE, cachedRewardCode)
+            db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
+        }
+    }
+
+    fun saveRewardCodeAlreadyCreated() {
+        if (exists) {
+            rewardCodeAlreadyCreated = true
+            val db = NativeLink.sql
+            val values = db.getValueBox()
+            values.putBoolean(KEY_REWARD_CODE_ALREADY_CREATED, true)
+            db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
+        }
+    }
 	
 	fun getRewardCode(
 		onError: (msg: String) -> Unit,
@@ -679,7 +755,17 @@ class Study internal constructor(
 		DataSet.createShortDataSet(DataSet.EventTypes.requested_reward_code, this)
 		Web.loadRewardCode(this, onError, onSuccess)
 	}
-	
+
+    fun saveRewardAmount(amount: Double) {
+        cachedRewardAmount = amount
+        if(exists) {
+            val db = NativeLink.sql
+            val values = db.getValueBox()
+            values.putDouble(KEY_CACHED_REWARD_AMOUNT, cachedRewardAmount)
+            db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
+        }
+    }
+
 	fun delete() {
 		val db = NativeLink.sql
 		for(q in loadQuestionnairesDB()) {
@@ -689,7 +775,7 @@ class Study internal constructor(
 		db.delete(StatisticData_timed.TABLE, "${StatisticData_timed.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StatisticData_perValue.TABLE, "${StatisticData_perValue.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
         db.delete(StatisticData_perData.TABLE, "${StatisticData_perData.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
-		db.delete(DataSet.TABLE, "${DataSet.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
+        db.delete(DataSet.TABLE, "${DataSet.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(StudyToken.TABLE, "${StudyToken.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(QuestionnaireMetadata.TABLE, "${QuestionnaireMetadata.KEY_STUDY_ID} = ?", arrayOf(id.toString()))
 		db.delete(TABLE, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -778,6 +864,13 @@ class Study internal constructor(
 		const val KEY_LANG_CODES = "langCodes"
         const val KEY_ADDITIONAL_DAYS_ACTIVE = "additionalDaysActive"
         const val KEY_LEGACY_SCHEDULING = "legacyScheduling"
+        const val KEY_ENABLE_REWARD_CALCULATION = "enableRewardCalculation"
+        const val KEY_REWARD_CALCULATION_BASE = "rewardCalculationBase"
+        const val KEY_REWARD_CALCULATION_MAX = "rewardCalculationMax"
+        const val KEY_REWARD_CALCULATION_INFO = "rewardCalculationInfo"
+        const val KEY_CACHED_REWARD_AMOUNT = "cachedRewardAmount"
+        const val KEY_REWARD_CALCULATION_CURRENCY = "rewardCalculationCurrency"
+        const val KEY_REWARD_CODE_ALREADY_CREATED = "rewardCodeAlreadyCreated"
 		
 		const val REWARD_SUCCESS = 0
 		const val REWARD_ERROR_DOES_NOT_EXIST = 1
@@ -818,7 +911,14 @@ class Study internal constructor(
 			KEY_HAS_STATISTICS,
 			KEY_LANG_CODES,
             KEY_ADDITIONAL_DAYS_ACTIVE,
-            KEY_LEGACY_SCHEDULING
+            KEY_LEGACY_SCHEDULING,
+            KEY_ENABLE_REWARD_CALCULATION,
+            KEY_REWARD_CALCULATION_BASE,
+            KEY_REWARD_CALCULATION_MAX,
+            KEY_REWARD_CALCULATION_INFO,
+            KEY_CACHED_REWARD_AMOUNT,
+            KEY_REWARD_CALCULATION_CURRENCY,
+            KEY_REWARD_CODE_ALREADY_CREATED,
 		)
 		
 		val defaultSettings = hashMapOf(

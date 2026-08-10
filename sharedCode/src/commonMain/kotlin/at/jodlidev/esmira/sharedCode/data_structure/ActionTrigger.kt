@@ -318,7 +318,15 @@ class ActionTrigger {
 	}
 	
 	fun execAsPostponedNotifications(alarm: Alarm) { //for IOS where details of notifications have to be set beforehand
-		val actions = getActionArray()
+		if(alarm.timestamp < NativeLink.getNowMillis()) {
+            ErrorBox.log(
+                "Postponed Notification",
+                "Alarm time for notification (${NativeLink.formatDateTime(alarm.timestamp)}) has already passed. Skipping execution."
+            )
+            return
+        }
+
+        val actions = getActionArray()
 		if(actions.size == 0)
 			return
 		when(alarm.type) {
