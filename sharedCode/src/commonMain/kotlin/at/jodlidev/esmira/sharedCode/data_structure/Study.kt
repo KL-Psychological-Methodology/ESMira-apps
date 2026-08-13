@@ -378,7 +378,7 @@ class Study internal constructor(
 	fun daysUntilRewardsAreActive(): Int {
         return if(legacyScheduling) {
             val oneDay = 86400000L
-            ceil((((joinedTimestamp + rewardVisibleAfterDays.toLong() * oneDay) - NativeLink.getNowMillis()).toFloat() / oneDay))
+            ceil((((joinedTimestamp + rewardVisibleAfterDays.toLong() * oneDay) - NativeLink.getNowMillis()).toDouble() / oneDay))
                 .toInt()
                 .coerceAtLeast(0)
         } else {

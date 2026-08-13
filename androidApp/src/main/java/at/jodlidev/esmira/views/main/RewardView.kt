@@ -100,7 +100,7 @@ fun RewardView(
 					resources.getQuantityString(R.plurals.info_reward_is_not_active_yet, untilActive, untilActive),
 					HashMap()
                 ) {}
-            } else if (study.enableRewardCalculation) {
+            } else {
                 if(error.value.isNotEmpty()) {
                     RewardDefaultView(study, error.value, fulfilledQuestionnaires, requestRewardCode)
                 } else if(rewardCode.value.isNotEmpty()) {
@@ -111,14 +111,6 @@ fun RewardView(
                     RewardDefaultView(study, "", fulfilledQuestionnaires, requestRewardCode)
                 }
             }
-			else {
-				if(error.value.isNotEmpty())
-					RewardDefaultView(study, error.value, fulfilledQuestionnaires, requestRewardCode)
-				else if(rewardCode.value.isEmpty())
-					RewardLoadingView()
-				else
-					RewardCodeView(study, rewardCode.value)
-			}
 		}
 	}
 }
