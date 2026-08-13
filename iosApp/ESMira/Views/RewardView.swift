@@ -209,8 +209,7 @@ struct RewardView: View {
 				let untilActive = self.study.daysUntilRewardsAreActive()
 				if(!self.study.enableRewardSystem || untilActive != 0) {
 					self.getDefaultView(error: String(format: NSLocalizedString("info_reward_is_not_active_yet", comment: ""), untilActive))
-				}
-				else if(self.study.enableRewardCalculation) {
+				}else{
 					if(!self.error.isEmpty){
 						self.getDefaultView(error: self.error)
 					} else if(!self.rewardCode.isEmpty) {
@@ -219,17 +218,6 @@ struct RewardView: View {
 						self.getLoadingView()
 					} else {
 						self.getDefaultView(error: "")
-					}
-				}
-				else {
-					if(!self.error.isEmpty) {
-						self.getDefaultView(error: self.error)
-					}
-					else if(rewardCode.isEmpty) {
-						self.getLoadingView()
-					}
-					else {
-						self.getCodeView()
 					}
 				}
 			}.padding()
