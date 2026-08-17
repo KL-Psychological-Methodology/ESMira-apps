@@ -66,6 +66,7 @@ fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifi
 			Input.TYPES.time -> TimeView(input, get, setValue)
 			Input.TYPES.va_scale -> VaScaleView(input, get, setValue)
 			Input.TYPES.video -> VideoView(input, get, setValue)
+			Input.TYPES.wifi -> WlanDevicesView(input, get, setAdditionalValue)
 			else -> ErrorView(input)
 		}
 	}

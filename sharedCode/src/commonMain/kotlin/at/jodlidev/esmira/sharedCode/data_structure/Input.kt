@@ -53,6 +53,7 @@ class Input internal constructor( ) {
 		time,
 		va_scale,
 		video,
+		wifi,
 		ERROR
 	}
 	var name: String = "input"
