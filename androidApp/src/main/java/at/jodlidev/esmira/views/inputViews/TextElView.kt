@@ -16,10 +16,11 @@ import at.jodlidev.esmira.sharedCode.merlinInterpreter.MerlinRunner
  * Created by JodliDev on 23.01.2023.
  */
 @Composable
-fun TextElView(input: Input, modifier: Modifier = Modifier) {
+fun TextElView(input: Input, modifier: Modifier = Modifier, useLinkify: Boolean = true) {
 	HtmlHandler.HtmlText(
 		html = input.displayText.takeUnless { it == MerlinRunner.ERROR_MARKER } ?: stringResource(R.string.text_script_error),
-		modifier = modifier
+		modifier = modifier,
+        useLinkify = useLinkify
 	)
 }
 
