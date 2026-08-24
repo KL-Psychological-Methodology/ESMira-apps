@@ -4,7 +4,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import at.jodlidev.esmira.androidNative.ChooseInputView
 import at.jodlidev.esmira.sharedCode.data_structure.Input
-import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
 import at.jodlidev.esmira.sharedCode.data_structure.Study
 
 /**
@@ -14,5 +13,5 @@ import at.jodlidev.esmira.sharedCode.data_structure.Study
 
 @Composable
 fun DynamicView(input: Input, study: Study) {
-	ChooseInputView(input.questionnaire, input.getDynamicInput(), Modifier, study)
+	ChooseInputView(input.questionnaire, input.getDynamicInput(), Modifier)
 }

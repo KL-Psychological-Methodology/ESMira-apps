@@ -6,16 +6,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.data_structure.Input
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
-import at.jodlidev.esmira.sharedCode.data_structure.Study
 import at.jodlidev.esmira.views.inputViews.*
 
 /**
  * Created by JodliDev on 19.05.2020.
  */
 @Composable
-fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifier, study: Study) {
+fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifier) {
 	val response = remember { mutableStateOf(input.getValue()) }
 	
 	val get = {
@@ -36,7 +36,9 @@ fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifi
 		println("File: ${input.name} = $filePath")
 		input.setFile(filePath)
 	}
-	
+
+	val study = DbLogic.getStudy(questionnaire.studyId) ?:return
+
 	Column(modifier = modifier) {
 		TextElView(input)
 		Spacer(modifier = Modifier.height(10.dp))

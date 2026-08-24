@@ -268,7 +268,6 @@ class WlanScanner(val context: Context, val study: Study) {
     }
     private fun processResults(results: List<ScanResult>) {
         for (result in results) {
-            Log.d("SaltTest", "Salt-Wert ist: '${study.salt}'")
             val hashed = Input.anonymizeValue(result.BSSID + ":" + study.salt)
             if(!devices.contains(hashed)) {
                 ++deviceCount

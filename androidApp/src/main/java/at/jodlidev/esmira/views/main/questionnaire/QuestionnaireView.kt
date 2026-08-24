@@ -26,7 +26,6 @@ import at.jodlidev.esmira.androidNative.ChooseInputView
 import at.jodlidev.esmira.sharedCode.DbLogic
 import at.jodlidev.esmira.sharedCode.data_structure.Page
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
-import at.jodlidev.esmira.sharedCode.data_structure.Study
 import at.jodlidev.esmira.sharedCode.merlinInterpreter.MerlinRunner
 import at.jodlidev.esmira.views.TextButtonIconLeft
 import at.jodlidev.esmira.views.TextButtonIconRight
@@ -42,7 +41,6 @@ import kotlin.time.Duration.Companion.seconds
 fun QuestionnaireView(
 	questionnaire: Questionnaire,
 	pageNumber: Int,
-	study: Study,
 	goBack: () -> Unit,
 	goNext: () -> Unit
 ) {
@@ -66,8 +64,7 @@ fun QuestionnaireView(
 			questionnaire,
 			page,
 			questionnaire.isLastPage(pageNumber),
-			questionnaire.questionnairePageHasRequired(pageNumber),
-			study
+			questionnaire.questionnairePageHasRequired(pageNumber)
 		) {
 			val errorIndex = questionnaire.checkQuestionnaire(pageNumber)
 			if(errorIndex != -1) {
@@ -95,7 +92,6 @@ fun MainView(
 	page: Page,
 	isLastPage: Boolean,
 	hasRequired: Boolean,
-	study: Study,
 	clickBtn: () -> Unit
 ) {
 	val activeInputs = page.activeInputs
@@ -117,8 +113,7 @@ fun MainView(
 				Modifier
 					.fillMaxWidth()
 					.background(color = getBackgroundColor(i))
-					.padding(all = 10.dp),
-				study
+					.padding(all = 10.dp)
 			)
 		}
 		
@@ -167,17 +162,16 @@ fun MainView(
 	}
 }
 
-//@Preview
-//@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
-//@Composable
-//fun PreviewQuestionnaireView() {
-//	ESMiraSurface {
-//		QuestionnaireView(
-//			questionnaire = DbLogic.createJsonObj("""{"title": "Questionnaire", "pages": [{},{},{}]}"""),
-//			pageNumber = 1,
-//			study = //TODO: David fragen
-//			goBack = {},
-//			goNext = {}
-//		)
-//	}
-//}
+@Preview
+@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES, showBackground = true)
+@Composable
+fun PreviewQuestionnaireView() {
+	ESMiraSurface {
+		QuestionnaireView(
+			questionnaire = DbLogic.createJsonObj("""{"title": "Questionnaire", "pages": [{},{},{}]}"""),
+			pageNumber = 1,
+			goBack = {},
+			goNext = {}
+		)
+	}
+}
