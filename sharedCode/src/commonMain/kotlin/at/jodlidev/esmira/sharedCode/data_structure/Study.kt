@@ -45,6 +45,7 @@ class Study internal constructor(
     @Transient var cachedRewardAmount: Double = -1.0
 	@Transient var hasStatistics: Boolean = false
     @Transient var rewardCodeAlreadyCreated: Boolean = false
+	@Transient var salt: String = ""
 	
 	var quitTimestamp = 0L
 	var publishedAndroid = true //not in db, only known when directly from server
@@ -256,6 +257,7 @@ class Study internal constructor(
         cachedRewardAmount = c.getDouble(37)
         rewardCalculationCurrency = c.getString(38)
         rewardCodeAlreadyCreated = c.getBoolean(39)
+		salt = c.getString(40)
 	}
 	
 	private fun loadQuestionnairesDB(): List<Questionnaire> {
@@ -307,6 +309,13 @@ class Study internal constructor(
 		}
 		if(group == 0 && randomGroups != 0) {
 			group = Random.nextInt(1, randomGroups+1)
+		}
+
+		if(salt == "") {
+			val stringLength: Int = 10
+			val charPool: List<Char> = ('a'..'z') + ('A'..'Z') + ('0'..'9')
+			fun randomString() = List(stringLength) { charPool.random() }.joinToString("")
+			salt = randomString()
 		}
 	}
 	
@@ -608,6 +617,7 @@ class Study internal constructor(
         values.putDouble(KEY_CACHED_REWARD_AMOUNT, cachedRewardAmount)
         values.putString(KEY_REWARD_CALCULATION_CURRENCY, rewardCalculationCurrency)
         values.putBoolean(KEY_REWARD_CODE_ALREADY_CREATED, rewardCodeAlreadyCreated)
+		values.putString(KEY_SALT, salt)
 		
 		if(exists) {
 			db.update(TABLE, values, "$KEY_ID = ?", arrayOf(id.toString()))
@@ -871,6 +881,7 @@ class Study internal constructor(
         const val KEY_CACHED_REWARD_AMOUNT = "cachedRewardAmount"
         const val KEY_REWARD_CALCULATION_CURRENCY = "rewardCalculationCurrency"
         const val KEY_REWARD_CODE_ALREADY_CREATED = "rewardCodeAlreadyCreated"
+		const val KEY_SALT = "salt"
 		
 		const val REWARD_SUCCESS = 0
 		const val REWARD_ERROR_DOES_NOT_EXIST = 1
@@ -919,6 +930,7 @@ class Study internal constructor(
             KEY_CACHED_REWARD_AMOUNT,
             KEY_REWARD_CALCULATION_CURRENCY,
             KEY_REWARD_CODE_ALREADY_CREATED,
+			KEY_SALT,
 		)
 		
 		val defaultSettings = hashMapOf(

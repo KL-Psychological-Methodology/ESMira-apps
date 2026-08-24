@@ -8,13 +8,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import at.jodlidev.esmira.sharedCode.data_structure.Input
 import at.jodlidev.esmira.sharedCode.data_structure.Questionnaire
+import at.jodlidev.esmira.sharedCode.data_structure.Study
 import at.jodlidev.esmira.views.inputViews.*
 
 /**
  * Created by JodliDev on 19.05.2020.
  */
 @Composable
-fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifier) {
+fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifier, study: Study) {
 	val response = remember { mutableStateOf(input.getValue()) }
 	
 	val get = {
@@ -49,7 +50,7 @@ fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifi
 			Input.TYPES.countdown -> CountdownView(input, get, setValue)
 			Input.TYPES.date -> DateView(input, get, setValue)
 			Input.TYPES.duration -> DurationView(input, get, setValue)
-			Input.TYPES.dynamic_input -> DynamicView(input)
+			Input.TYPES.dynamic_input -> DynamicView(input, study)
 			Input.TYPES.image -> ImageView(input, get, setValue)
 			Input.TYPES.likert -> LikertView(input, get, setValue)
 			Input.TYPES.list_multiple -> ListMultipleView(input, get, setAdditionalValue)
@@ -66,7 +67,7 @@ fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifi
 			Input.TYPES.time -> TimeView(input, get, setValue)
 			Input.TYPES.va_scale -> VaScaleView(input, get, setValue)
 			Input.TYPES.video -> VideoView(input, get, setValue)
-			Input.TYPES.wifi -> WlanDevicesView(input, get, setAdditionalValue)
+			Input.TYPES.wifi -> WlanDevicesView(input, study, get, setAdditionalValue)
 			else -> ErrorView(input)
 		}
 	}

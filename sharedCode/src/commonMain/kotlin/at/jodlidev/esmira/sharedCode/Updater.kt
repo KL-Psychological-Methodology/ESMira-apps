@@ -13,7 +13,7 @@ import kotlinx.serialization.json.*
  */
 internal object Updater {
 	const val EXPECTED_SERVER_VERSION: Int = 13
-	const val DATABASE_VERSION = 59
+	const val DATABASE_VERSION = 60
 	const val LIBRARY_VERSION = 19 //this is mainly used for iOS so we can check that changes in the library have been used in the C library
 	const val MERLIN_VERSION = 1
 
@@ -617,6 +617,10 @@ internal object Updater {
             db.execSQL("ALTER TABLE studies ADD COLUMN rewardCalculationCurrency TEXT DEFAULT '';")
             db.execSQL("ALTER TABLE studies ADD COLUMN rewardCodeAlreadyCreated INTEGER DEFAULT 0;")
         }
+
+		if(oldVersion <= 59) {
+			db.execSQL("ALTER TABLE studies ADD COLUMN salt TEXT DEFAULT '';")
+		}
     }
 	
 	fun updateStudy(study: Study): Study {

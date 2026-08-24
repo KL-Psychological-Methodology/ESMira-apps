@@ -35,6 +35,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import at.jodlidev.esmira.androidNative.DialogOpener
+import at.jodlidev.esmira.sharedCode.data_structure.Study
 import at.jodlidev.esmira.views.main.LanguageSelectView
 import at.jodlidev.esmira.views.main.studyDashboard.StudyDashboardView
 import kotlinx.coroutines.delay
@@ -188,6 +189,9 @@ class MainActivity: ComponentActivity() {
 			WelcomeScreenActivity.start(LocalContext.current)
 			return
 		}
+
+		val study = DbLogic.getStudy(studyId.value) ?: return	//TODO: David fragen: hier ist der Zeitpunkt wo ich study holen kann um es zu übergeben oder? weil vorher (in MainView) ist es noch nicht bekannt.
+		//TODO: was tun wenn studyId nicht gefunden wird? Fehlermeldung? Oder wie in Zeile 188?
 		NavHost(
 			navController,
 			startDestination = "entrance",
@@ -240,7 +244,7 @@ class MainActivity: ComponentActivity() {
 			) { backStackEntry ->
 				val qId = backStackEntry.arguments?.getLong("qId") ?: return@composable
 				val pageNumber = backStackEntry.arguments?.getInt("pageNumber") ?: return@composable
-				PageQuestionnaire(qId, pageNumber, navController)
+				PageQuestionnaire(qId, pageNumber, study, navController)
 			}
 			
 			composable("finishedQuestionnaire") {
@@ -442,13 +446,14 @@ class MainActivity: ComponentActivity() {
 	}
 	
 	@Composable
-	fun PageQuestionnaire(qId: Long, pageNumber: Int, navController: NavHostController) {
+	fun PageQuestionnaire(qId: Long, pageNumber: Int, study: Study, navController: NavHostController) {
 		val questionnaire = remember { getQuestionnaire(qId) } ?: return
 		val context = LocalContext.current
 
 		QuestionnaireView(
 			questionnaire = questionnaire,
 			pageNumber = pageNumber,
+			study = study,
 			goBack = {
 				navController.popBackStack()
 			},

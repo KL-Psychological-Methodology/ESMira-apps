@@ -11,9 +11,9 @@ import android.content.pm.PackageManager
 import android.content.res.Configuration
 import android.net.wifi.ScanResult
 import android.os.SystemClock
+import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,7 +22,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bluetooth
 import androidx.compose.material.icons.filled.Wifi
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
@@ -43,12 +42,12 @@ import androidx.compose.ui.unit.dp
 import at.jodlidev.esmira.ESMiraSurface
 import at.jodlidev.esmira.R
 import at.jodlidev.esmira.sharedCode.DbLogic
+import at.jodlidev.esmira.sharedCode.data_structure.Study
 import at.jodlidev.esmira.views.DefaultButton
 import at.jodlidev.esmira.views.DefaultButtonIconLeft
 import at.jodlidev.esmira.views.ESMiraDialog
 import kotlinx.coroutines.delay
 import org.json.JSONObject
-
 private fun getDevices(input: Input): Map<String, Short> {
     return try {
         DbLogic.createJsonObj(input.getAdditional("devices") ?: "")
@@ -57,12 +56,16 @@ private fun getDevices(input: Input): Map<String, Short> {
         HashMap()
     }
 }
-
 @Composable
-fun WlanDevicesView(input: Input, get: () -> String, save: (String, Map<String, String>) -> Unit) {
+fun WlanDevicesView(
+    input: Input,
+    study: Study,
+    get: () -> String,
+    save: (String, Map<String, String>) -> Unit
+) {
     val context = LocalContext.current
     val progress = remember { mutableStateOf(0f) }
-    val wlanScanner = remember { WlanScanner(context) }
+    val wlanScanner = remember { WlanScanner(context, study) }
 
     DisposableEffect(Unit) {
         onDispose {
@@ -114,10 +117,8 @@ fun WlanDevicesView(input: Input, get: () -> String, save: (String, Map<String, 
                     progress = { progress.value },
                     modifier = Modifier.padding(all = 10.dp)
                 )
-
             }
-        }
-        else if(get().isNotEmpty()) {
+        } else if(get().isNotEmpty()) {
             val showData = remember { mutableStateOf(false) }
 
             if(showData.value) {
@@ -142,7 +143,7 @@ fun WlanDevicesView(input: Input, get: () -> String, save: (String, Map<String, 
                                 )
                             }
 
-                            val map = getDevices(input) //??
+                            val map = getDevices(input)
                             for(entry in map) {
                                 item {
                                     Text(entry.key,
@@ -184,7 +185,6 @@ fun WlanDevicesView(input: Input, get: () -> String, save: (String, Map<String, 
             }
         )
     }
-
 }
 
 @Preview
@@ -200,32 +200,30 @@ fun PreviewWifiDevicesView() {
         )
     }
 }
-
-class WlanScanner(val context: Context) {
-
+class WlanScanner(val context: Context, val study: Study) {
     var devices = HashMap<String, Int>()
     var deviceCount = 0
     var isScanning = mutableStateOf(false)
     private var isRegistered = true
     private val appContext = context.applicationContext
-
-
-
-
     val wifiManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         appContext.getSystemService(WifiManager::class.java)
     } else {
         @Suppress("DEPRECATION")
-        appContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager
+        appContext.getApplicationContext().getSystemService(Context.WIFI_SERVICE) as? WifiManager
     }
     val intentFilter = IntentFilter().apply {
         addAction(WifiManager.SCAN_RESULTS_AVAILABLE_ACTION)
 
     }
-
     val wifiScanReceiver = object : BroadcastReceiver() {
         override fun onReceive(appContext: Context, intent: Intent) {
-            val success = intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
+            val success = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                intent.getBooleanExtra(WifiManager.EXTRA_RESULTS_UPDATED, false)
+            } else {
+                true
+            }
+
             if(success) {
                 scanSuccess()
             } else {
@@ -233,8 +231,6 @@ class WlanScanner(val context: Context) {
             }
         }
     }
-
-
     private fun scanSuccess() {
         try {
             if(wifiManager != null) {
@@ -245,15 +241,12 @@ class WlanScanner(val context: Context) {
            //do nothing
         }
     }
-
     private fun scanFailure() {
         // handle failure: new scan did NOT succeed
         // consider using old scan results: these are the OLD results!
         try {
             if(wifiManager != null) {
                 val results = wifiManager.scanResults
-                processResults(results)
-
 
                 //check how od the results are
                 val timestampOldData = results.firstOrNull()?.timestamp
@@ -261,8 +254,9 @@ class WlanScanner(val context: Context) {
                 if (timestampOldData == null) {
                     return
                 }
-                val currentTime = SystemClock.elapsedRealtimeNanos() / 1000
-                val wlanDataAgeMinutes = (currentTime - timestampOldData) / 60_000_000
+
+                val currentTimeMicros = SystemClock.elapsedRealtimeNanos() / 1000 //microseconds since Boot
+                val wlanDataAgeMinutes = (currentTimeMicros - timestampOldData) / 60_000_000
 
                 if (wlanDataAgeMinutes < 10) {
                     processResults(results)
@@ -271,12 +265,11 @@ class WlanScanner(val context: Context) {
         } catch (e: SecurityException) {
             //do nothing
         }
-
     }
-
     private fun processResults(results: List<ScanResult>) {
         for (result in results) {
-            val hashed = Input.anonymizeValue(result.BSSID)
+            Log.d("SaltTest", "Salt-Wert ist: '${study.salt}'")
+            val hashed = Input.anonymizeValue(result.BSSID + ":" + study.salt)
             if(!devices.contains(hashed)) {
                 ++deviceCount
             }
@@ -292,12 +285,20 @@ class WlanScanner(val context: Context) {
            ContextCompat.RECEIVER_NOT_EXPORTED
        )
    }
-
-
     fun startScanning(){
         isScanning.value = true
         devices = HashMap()
         deviceCount = 0
+
+        if(!isRegistered) {
+            ContextCompat.registerReceiver(
+                appContext,
+                wifiScanReceiver,
+                intentFilter,
+                ContextCompat.RECEIVER_NOT_EXPORTED
+            )
+            isRegistered = true
+        }
 
         @Suppress("DEPRECATION")
         val success = wifiManager?.startScan()
@@ -310,9 +311,4 @@ class WlanScanner(val context: Context) {
             isRegistered = false
         }
     }
-
-
 }
-
-
-
