@@ -80,26 +80,16 @@ fun ESMiraDialogContent(
 					)
 				}
 				
-				//Workaround: Scrollable content seem to be buggy
-				// As far as I can tell, the box is sized correctly (full screen minus top and bottom constraints)
-				// but the scroll-state ignores top and bottom constraints. Meaning you cant scroll down all the way because it assumes more space available
-				// Workaround: We dont use top and bottom constraints and instead use a fixed padding
 				Column(modifier = Modifier
 					.padding(contentPadding)
 					.constrainAs(contentEl) {
-						top.linkTo(parent.top)
+						top.linkTo(if(title != null) titleEl.bottom else parent.top, margin = 20.dp)
 						bottom.linkTo(parent.bottom)
 						start.linkTo(parent.start)
 						end.linkTo(parent.end)
 						width = Dimension.fillToConstraints
-						height = Dimension.wrapContent
-						
-						//Would be buggy with scrollable content:
-//						top.linkTo(if(title != null) titleEl.bottom else parent.top, margin = 20.dp)
-//						bottom.linkTo(confirmButtonEl.top)
-//						height = Dimension.preferredWrapContent
+						height = Dimension.preferredWrapContent
 					}
-					.padding(top = if(title != null) 60.dp else 10.dp, bottom = 60.dp) //Workaround
 				) {
 					content()
 				}
