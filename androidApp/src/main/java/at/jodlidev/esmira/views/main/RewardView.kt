@@ -244,7 +244,8 @@ fun RewardDefaultView(study: Study, error: String, fulfilledQuestionnaires: Map<
     val untilActive = study.daysUntilRewardsAreActive()
     val rewardAvailable = untilActive <= 0
     val showDialog = remember { mutableStateOf(false) }
-    val canRequest = rewardAvailable && fulfilledQuestionnaires.all{(_, fulfilled) -> fulfilled}
+    val allQuestionnairesFulfilled = fulfilledQuestionnaires.all {(_, fulfilled) -> fulfilled}
+    val canRequest = rewardAvailable && allQuestionnairesFulfilled
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -255,9 +256,11 @@ fun RewardDefaultView(study: Study, error: String, fulfilledQuestionnaires: Map<
 
     if(!study.rewardCodeAlreadyCreated) {
         if (fulfilledQuestionnaires.isNotEmpty() && study.questionnaires.isNotEmpty()) {
-            Spacer(modifier = Modifier.size(30.dp))
-            Text(stringResource(id = R.string.error_reward_questionnaires_not_finished))
-            Spacer(modifier = Modifier.size(10.dp))
+            if (!allQuestionnairesFulfilled) {
+                Spacer(modifier = Modifier.size(30.dp))
+                Text(stringResource(id = R.string.error_reward_questionnaires_not_finished))
+                Spacer(modifier = Modifier.size(10.dp))
+            }
 
             val availableQuestionnaires = study.questionnaires.filter {
                 // always display unfulfilled questionnaires, for user feedback in case of older servers not marking inaccessible questionnaires as fulfilled
