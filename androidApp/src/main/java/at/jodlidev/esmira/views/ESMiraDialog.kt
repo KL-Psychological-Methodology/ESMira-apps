@@ -72,7 +72,7 @@ fun ESMiraDialogContent(
 						fontSize = MaterialTheme.typography.titleLarge.fontSize,
 						modifier = Modifier.constrainAs(titleEl) {
 							top.linkTo(parent.top, margin = 20.dp)
-//							bottom.linkTo(contentEl.top)
+							bottom.linkTo(contentEl.top)
 							start.linkTo(parent.start, margin = 20.dp)
 							end.linkTo(parent.end, margin = 20.dp)
 							width = Dimension.fillToConstraints
@@ -84,7 +84,7 @@ fun ESMiraDialogContent(
 					.padding(contentPadding)
 					.constrainAs(contentEl) {
 						top.linkTo(if(title != null) titleEl.bottom else parent.top, margin = 20.dp)
-						bottom.linkTo(parent.bottom)
+						bottom.linkTo(confirmButtonEl.top)
 						start.linkTo(parent.start)
 						end.linkTo(parent.end)
 						width = Dimension.fillToConstraints
