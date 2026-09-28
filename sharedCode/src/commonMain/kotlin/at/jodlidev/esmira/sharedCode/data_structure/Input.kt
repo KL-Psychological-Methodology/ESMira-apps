@@ -58,7 +58,7 @@ class Input internal constructor( ) {
 	var name: String = "input"
 	private var text: String = ""
 	var required: Boolean = false
-	var optional: Boolean = false
+	var counted: Boolean = true
 	var url: String = ""
 	var random: Boolean = false
 	var relevance: String = ""
@@ -246,12 +246,13 @@ class Input internal constructor( ) {
 			false
 	}
 
-	fun wantsValue(): Boolean {
-		return if(optional || type == TYPES.text || type == TYPES.countdown || type == TYPES.image || type == TYPES.video)
-			return false
-		else
-			getValue().isEmpty()
-	}
+    fun completable(): Boolean {
+        return !((!counted && !required) || type == TYPES.text || type == TYPES.countdown || type == TYPES.image || type == TYPES.video)
+    }
+
+    fun isCompleted(): Boolean {
+        return completable() && getValue().isEmpty()
+    }
 	
 	fun getFilledUrl(): String {
 		return url.replace("[[USER_ID]]", DbUser.getUid())

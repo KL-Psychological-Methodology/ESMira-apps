@@ -14,6 +14,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 class Page internal constructor( ) {
 	var randomized: Boolean = false
+    var showCompletionProgress: Boolean = true
 	var skipAfterSecs = 0
 	var header: String = ""
 	var footer: String = ""

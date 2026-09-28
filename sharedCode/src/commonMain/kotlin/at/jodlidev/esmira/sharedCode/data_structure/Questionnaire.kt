@@ -367,16 +367,27 @@ class Questionnaire {
 			nextAlarm = DbLogic.getNextAlarm(this)
 		}
 	}
-	fun checkQuestionnaire(pageI: Int, checkAll: Boolean = false): Int {
+    fun checkQuestionnaire(pageI: Int): Int {
 		val page = pages[pageI]
 		for((i, input) in page.activeInputs.withIndex()) {
-			val needsValue = input.needsValue()
-			val wantsValue = input.wantsValue()
-			if(checkAll && wantsValue || needsValue)
+			if(input.needsValue())
 				return i
 		}
 		return -1
 	}
+
+    fun completedOnPage(pageI: Int): Pair<Int, Int> {
+        val page = pages[pageI]
+        return page.activeInputs
+            .map{ input -> Pair(
+                if(input.isCompleted()) 1 else 0,
+                if(input.completable()) 1 else 0
+            )}
+            .fold(Pair(0, 0)){ acc, pair -> Pair(
+                acc.first + pair.first,
+                acc.second + pair.second
+            ) }
+    }
 	
 	fun updateLastNotification(timestamp: Long = NativeLink.getNowMillis()) { //we need this because we don't want to recreate all triggers again
 		metadata.lastNotification = timestamp
