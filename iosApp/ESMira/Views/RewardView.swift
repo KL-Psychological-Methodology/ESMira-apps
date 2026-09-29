@@ -20,10 +20,13 @@ struct RewardView: View {
 	@State private var showAlert: Bool = false
 	@State private var alertView: () -> Alert = { Alert(title: Text(""))}
 	
+	private var allFulfilled: Bool {
+		fulfilledQuestionnaires.values.allSatisfy {$0.boolValue}
+	}
+	
 	private var canRequest: Bool {
 		let untilActive = self.study.daysUntilRewardsAreActive()
 		let rewardAvailable = untilActive <= 0
-		let allFulfilled = fulfilledQuestionnaires.values.allSatisfy {$0.boolValue}
 		return rewardAvailable && allFulfilled
 	}
 	
@@ -39,7 +42,9 @@ struct RewardView: View {
 			
 			if(!study.rewardCodeAlreadyCreated){
 				if(!self.fulfilledQuestionnaires.isEmpty) {
-					Text("error_reward_questionnaires_not_finished").padding(.vertical)
+					if(!allFulfilled) {
+						Text("error_reward_questionnaires_not_finished").padding(.vertical)
+					}
 					let availableQuestionnaires = self.study.questionnaires.filter{(questionnaire: Questionnaire) in
 						questionnaire.limitToGroup == 0 || questionnaire.limitToGroup == study.group || self.fulfilledQuestionnaires[KotlinLong(value: questionnaire.internalId)] ?? true != true
 					}

@@ -35,7 +35,8 @@ class SimpleDialogActivity: ComponentActivity() {
 			) {
 				HtmlHandler.HtmlText(
 					html = extras.getString(EXTRAS_MSG) ?: "",
-					modifier = Modifier.fillMaxWidth()
+					modifier = Modifier.fillMaxWidth(),
+                    useLinkify = false
 				)
 			}
 		}

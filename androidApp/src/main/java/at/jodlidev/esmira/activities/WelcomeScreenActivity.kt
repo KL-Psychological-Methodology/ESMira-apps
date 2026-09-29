@@ -7,7 +7,6 @@ import android.os.Parcelable
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
@@ -373,7 +372,11 @@ class WelcomeScreenActivity: ComponentActivity() {
 				)
 			) { backStackEntry ->
 				val studyIndex = backStackEntry.arguments?.getInt("studyIndex") ?: 0
-				val study = studyList()[studyIndex]
+				val list = studyList()
+				if (studyIndex > list.size) {
+					return@composable
+				}
+				val study = list[studyIndex]
 
 				LangQuestionView(
 					study,
@@ -407,7 +410,11 @@ class WelcomeScreenActivity: ComponentActivity() {
 				)
 			) { backStackEntry ->
 				val studyIndex = backStackEntry.arguments?.getInt("studyIndex") ?: 0
-				val study = studyList()[studyIndex]
+				val list = studyList()
+				if (studyIndex > list.size) {
+					return@composable
+				}
+				val study = list[studyIndex]
 				
 				StudyInfoView(
 					study = study,
@@ -429,7 +436,11 @@ class WelcomeScreenActivity: ComponentActivity() {
 					}
 				)) { backStackEntry ->
 				val studyIndex = backStackEntry.arguments?.getInt("studyIndex") ?: 0
-				val study = studyList()[studyIndex]
+				val list = studyList()
+				if (studyIndex > list.size) {
+					return@composable
+				}
+				val study = list[studyIndex]
 				
 				StudyPermissionsView(
 					study = study,

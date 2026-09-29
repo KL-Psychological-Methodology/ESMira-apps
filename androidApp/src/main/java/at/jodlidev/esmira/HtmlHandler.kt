@@ -35,8 +35,8 @@ import org.commonmark.node.Heading
 
 class HtmlHandler {
 	companion object {
-		private fun getParser(context: Context): Markwon {
-			return Markwon.builder(context)
+		private fun getParser(context: Context, useLinkify: Boolean = true): Markwon {
+			val builder = Markwon.builder(context)
 				.usePlugin(object: AbstractMarkwonPlugin() {
 					override fun configureTheme(builder: MarkwonTheme.Builder) {
 						builder
@@ -95,9 +95,12 @@ class HtmlHandler {
 					plugin.addSchemeHandler(OkHttpNetworkSchemeHandler.create())
 				})
 				.usePlugin(StrikethroughPlugin.create())
-				.usePlugin(LinkifyPlugin.create(android.text.util.Linkify.WEB_URLS))
+
+                if(useLinkify){
+                    builder.usePlugin(LinkifyPlugin.create())
+                }
 //				.usePlugin(SoftBreakAddsNewLinePlugin.create())
-				.build()
+				return builder.build()
 		}
 		fun fromHtml(html: String, el: TextView): Spanned {
 			val parser = getParser(el.context)
@@ -107,13 +110,13 @@ class HtmlHandler {
 			val parser = getParser(context)
 			return parser.toMarkdown(html)
 		}
-		fun setHtml(html: String, el: TextView) {
-			val parser = getParser(el.context)
+		fun setHtml(html: String, el: TextView, useLinkify: Boolean = true) {
+			val parser = getParser(el.context, useLinkify)
 			parser.setMarkdown(el, html)
 		}
 
 		@Composable
-		fun HtmlText(html: String, modifier: Modifier = Modifier) {
+		fun HtmlText(html: String, modifier: Modifier = Modifier, useLinkify: Boolean = true) {
 			val color = LocalContentColor.current
 			val size = MaterialTheme.typography.bodyLarge.fontSize
 			Column(modifier = modifier) {
@@ -121,7 +124,7 @@ class HtmlHandler {
 					TextView(context).apply {
 						this.setTextColor(color.toArgb())
 						this.textSize = size.value
-						setHtml(html, this)
+						setHtml(html, this, useLinkify)
 					}
 				})
 			}

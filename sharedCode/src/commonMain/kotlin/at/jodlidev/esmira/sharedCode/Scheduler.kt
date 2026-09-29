@@ -7,7 +7,6 @@ import io.ktor.util.date.plus
 import kotlin.math.ceil
 import kotlin.math.max
 import kotlin.math.min
-import kotlin.math.sign
 import kotlin.random.Random
 
 /**
@@ -290,8 +289,34 @@ object Scheduler {
 			scheduleSignalTime(signalTime, actionTriggerId, max(timestampAnchor, NativeLink.getNowMillis()))
 	}
 	
+	/**
+	 * Makes sure that the filter `completableAtSpecificTime` is being considered when selecting the time frame for random notifications of SignalTime
+	 * Consider the following example:
+	 *```
+	 * Filter: 08:00 - 18:00
+	 * SignalTime: 09:00 - 22:00
+	 *
+	 *             |00|01|02|03|04|05|06|07|08|09|10|11|12|13|14|15|16|17|18|19|20|21|22|23|
+	 * Filter:     |  |  |  |  |  |  |  |  |##|##|##|##|##|##|##|##|##|##|  |  |  |  |  |  |
+	 * SignalTime: |  |  |  |  |  |  |  |  |  |##|##|##|##|##|##|##|##|##|##|##|##|##|  |  |
+	 * Overlap:    |  |  |  |  |  |  |  |  |  |##|##|##|##|##|##|##|##|##|  |  |  |  |  |  |
+	 * ```
+	 * Instead of 09:00 - 22:00, this method would return only the overlap of SignalTime and the filter: 09:00 - 18:00
+	 *
+	 * The following edge case leads to an error because it would lead to two disconnected overlaps:
+	 *```
+	 * Filter: 20:00 - 05:00
+	 * SignalTime: 02:00 - 21:00
+	 *
+	 *             |00|01|02|03|04|05|06|07|08|09|10|11|12|13|14|15|16|17|18|19|20|21|22|23|
+	 * Filter:     |##|##|##|##|##|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |##|##|##|##|
+	 * SignalTime: |  |  |##|##|##|##|##|##|##|##|##|##|##|##|##|##|##|##|##|##|##|  |  |  |
+	 * Overlap:    |  |  |##|##|##|  |  |  |  |  |  |  |  |  |  |  |  |  |  |  |##|  |  |  |
+	 * ```
+	 *
+	 */
 	private fun calculateRandomInterval(questionnaire: Questionnaire, signalTime: SignalTime): Interval? {
-        val signalInterval = Interval(signalTime.startTimeOfDay, if(signalTime.random) {signalTime.endTimeOfDay} else {signalTime.startTimeOfDay})
+		val signalInterval = Interval(signalTime.startTimeOfDay, if(signalTime.random) {signalTime.endTimeOfDay} else {signalTime.startTimeOfDay})
 		return if(questionnaire.completableAtSpecificTime) {
 			val filterStart = if(questionnaire.completableAtSpecificTimeStart != -1) {questionnaire.completableAtSpecificTimeStart} else {0}
 			val filterEnd = if(questionnaire.completableAtSpecificTimeEnd != -1) {questionnaire.completableAtSpecificTimeEnd} else {ONE_DAY_MS.toInt()}
@@ -311,7 +336,7 @@ object Scheduler {
 					"Scheduler",
 					"SignalTime ${signalTime.id}: Configuration of completableAtSpecificTime filter (${questionnaire.completableAtSpecificTimeStart}, ${questionnaire.completableAtSpecificTimeEnd}) and signalTime (${signalTime.startTimeOfDay}, ${signalTime.endTimeOfDay}) results in ${if(overlaps.isEmpty()){"no"}else{"more than one"}} interval overlaps."
 				)
-				return null
+				null
 			}
 			
 		}
