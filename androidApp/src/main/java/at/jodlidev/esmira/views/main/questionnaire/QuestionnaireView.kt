@@ -95,6 +95,8 @@ fun MainView(
 	clickBtn: () -> Unit
 ) {
 	val activeInputs = page.activeInputs
+	val maxCompletable = remember { page.completable() }
+	val complete = remember { mutableStateOf(page.completed()) }
 
 	LazyColumn(state = listState) {
 		if(page.header.isNotEmpty()) {
@@ -114,7 +116,9 @@ fun MainView(
 					.fillMaxWidth()
 					.background(color = getBackgroundColor(i))
 					.padding(all = 10.dp)
-			)
+			) {
+				complete.value = page.completed()
+			}
 		}
 		
 		var colorCount = activeInputs.size
@@ -137,6 +141,15 @@ fun MainView(
 					.background(color = getBackgroundColor(colorCount))
 					.padding(vertical = 20.dp)
 			) {
+
+				if(page.showCompletionProgress) {
+					Text(stringResource(R.string.completion_count_info, complete.value, maxCompletable), modifier = Modifier
+						.padding(all = 10.dp)
+						.align(Alignment.Start)
+					)
+				}
+
+
 				if(hasRequired) {
 					Text(stringResource(R.string.info_required), modifier = Modifier
 						.padding(all = 10.dp)

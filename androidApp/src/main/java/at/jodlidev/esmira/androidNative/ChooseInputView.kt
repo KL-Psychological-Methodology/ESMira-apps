@@ -14,7 +14,7 @@ import at.jodlidev.esmira.views.inputViews.*
  * Created by JodliDev on 19.05.2020.
  */
 @Composable
-fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifier) {
+fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifier, pageCallback: ()->Unit) {
 	val response = remember { mutableStateOf(input.getValue()) }
 	
 	val get = {
@@ -24,6 +24,7 @@ fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifi
 		println("${input.name} = $inputValue; $additionalValues")
 		response.value = inputValue
 		input.setValue(inputValue, additionalValues)
+		pageCallback()
 	}
 	val setValue = { inputValue: String ->
 		set(inputValue, null)
@@ -49,7 +50,7 @@ fun ChooseInputView(questionnaire: Questionnaire, input: Input, modifier: Modifi
 			Input.TYPES.countdown -> CountdownView(input, get, setValue)
 			Input.TYPES.date -> DateView(input, get, setValue)
 			Input.TYPES.duration -> DurationView(input, get, setValue)
-			Input.TYPES.dynamic_input -> DynamicView(input)
+			Input.TYPES.dynamic_input -> DynamicView(input, pageCallback)
 			Input.TYPES.image -> ImageView(input, get, setValue)
 			Input.TYPES.likert -> LikertView(input, get, setValue)
 			Input.TYPES.list_multiple -> ListMultipleView(input, get, setAdditionalValue)
