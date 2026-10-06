@@ -49,7 +49,15 @@ class Page internal constructor( ) {
 		}
 		return _activeInputs
 	}
-	
+
+	fun completable(): Int {
+		return activeInputs.count { it.completable() }
+	}
+
+	fun completed(): Int {
+		return activeInputs.count { it.isCompleted() }
+	}
+
 	fun hasScreenTracking(): Boolean {
 		for(input in inputs) {
 			if(input.hasScreenTracking())

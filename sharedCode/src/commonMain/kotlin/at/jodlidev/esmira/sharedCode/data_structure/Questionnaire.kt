@@ -375,20 +375,6 @@ class Questionnaire {
 		}
 		return -1
 	}
-
-    // The return value is a pair of completed items (first value) and maximum completable items (second value)
-    fun completedOnPage(pageI: Int): Pair<Int, Int> {
-        val page = pages[pageI]
-        return page.activeInputs
-            .map{ input -> Pair(
-                if(input.isCompleted()) 1 else 0,
-                if(input.completable()) 1 else 0
-            )}
-            .fold(Pair(0, 0)){ acc, pair -> Pair(
-                acc.first + pair.first,
-                acc.second + pair.second
-            ) }
-    }
 	
 	fun updateLastNotification(timestamp: Long = NativeLink.getNowMillis()) { //we need this because we don't want to recreate all triggers again
 		metadata.lastNotification = timestamp
