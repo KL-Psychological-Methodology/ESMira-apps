@@ -28,9 +28,11 @@ struct WelcomeView: View {
 					Text("continue_")
 					Image(systemName: "chevron.compact.right")
 				}
+				.foregroundColor(Color.primary)
 			}
 		}
 		.padding()
+		.esmiraScreenBackground()
 		.navigationBarTitle(Text(""), displayMode: .inline)
 	}
 }

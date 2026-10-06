@@ -29,15 +29,18 @@ struct StudyJoinedView: View {
 				}) {
 					Text("schedules")
 				}
+				.foregroundColor(Color.primary)
 				Spacer()
 				Button(action: {
 					self.navigationState.switchStudy(self.study.id)
 				}) {
 					Text("complete")
 				}
+				.foregroundColor(Color.primary)
 			}
 		}
 		.padding()
+		.esmiraScreenBackground()
 		.navigationBarBackButtonHidden(true)
 		.navigationBarTitle(Text("complete"), displayMode: .inline)
 	}

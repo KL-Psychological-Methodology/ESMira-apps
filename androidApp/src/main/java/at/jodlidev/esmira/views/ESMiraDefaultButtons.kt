@@ -3,7 +3,6 @@ package at.jodlidev.esmira.views
 import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.*
@@ -20,10 +19,10 @@ import at.jodlidev.esmira.ESMiraSurface
  */
 
 val defaultButtonPadding = PaddingValues(
-	start = 4.dp,
-	top = 1.dp,
-	end = 4.dp,
-	bottom = 1.dp
+	start = 16.dp,
+	top = 8.dp,
+	end = 16.dp,
+	bottom = 8.dp
 )
 
 @Composable
@@ -33,7 +32,7 @@ fun DefaultButton(
 	modifier: Modifier = Modifier
 ) {
 	Button(
-		shape = RoundedCornerShape(1.dp),
+		shape = MaterialTheme.shapes.medium,
 		colors = ButtonDefaults.buttonColors(
 			containerColor = MaterialTheme.colorScheme.surface,
 			contentColor = MaterialTheme.colorScheme.onSurface,
@@ -52,7 +51,7 @@ fun DefaultButton(
 	content: @Composable RowScope.() -> Unit
 ) {
 	Button(
-		shape = RoundedCornerShape(1.dp),
+		shape = MaterialTheme.shapes.medium,
 		colors = ButtonDefaults.buttonColors(
 			containerColor = MaterialTheme.colorScheme.surface,
 			contentColor = MaterialTheme.colorScheme.onSurface,
@@ -73,7 +72,7 @@ fun DefaultButtonIconLeft(
 	enabled: Boolean = true
 ) {
 	Button(
-		shape = RoundedCornerShape(1.dp),
+		shape = MaterialTheme.shapes.medium,
 		colors = ButtonDefaults.buttonColors(
 			containerColor = MaterialTheme.colorScheme.surface,
 			contentColor = MaterialTheme.colorScheme.onSurface,
@@ -101,7 +100,7 @@ fun DefaultButtonIconRight(
 	textModifier: Modifier = Modifier
 ) {
 	Button(
-		shape = RoundedCornerShape(5.dp),
+		shape = MaterialTheme.shapes.medium,
 		colors = ButtonDefaults.buttonColors(
 			containerColor = MaterialTheme.colorScheme.surface,
 			contentColor = MaterialTheme.colorScheme.onSurface,
@@ -127,7 +126,7 @@ fun DefaultButtonIconAbove(
 	modifier: Modifier = Modifier
 ) {
 	Button(
-		shape = RoundedCornerShape(5.dp),
+		shape = MaterialTheme.shapes.medium,
 		colors = ButtonDefaults.buttonColors(
 			containerColor = MaterialTheme.colorScheme.surface,
 			contentColor = MaterialTheme.colorScheme.onSurface,

@@ -27,11 +27,12 @@ struct StudyDetailView: View {
 				Spacer()
 				if(self.study.needsPermissionScreen()) {
 					NavigationLink("consent", destination: StudyPermissionsView(study: study))
+						.foregroundColor(Color.primary)
 				}
 				else {
 					Button("participate") {
 						self.study.join()
-						
+
 						if(self.study.needsJoinedScreen()) {
 							self.openStudyJoined = true
 						}
@@ -39,10 +40,12 @@ struct StudyDetailView: View {
 							self.navigationState.switchStudy(self.study.id)
 						}
 					}
+					.foregroundColor(Color.primary)
 				}
 			}
 		}
 		.padding()
+		.esmiraScreenBackground()
 		.navigationBarTitle(Text("add_a_study"), displayMode: .inline)
 	}
 }

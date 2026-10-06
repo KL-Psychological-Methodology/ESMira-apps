@@ -64,14 +64,16 @@ struct StudyPermissionsView: View, PermissionListProtocol {
 				Spacer()
 				Button("participate") {
 					self.study.join()
-					
+
 					if(self.study.needsJoinedScreen()) {
 						self.openStudyJoined = true
 					}
 					else {
 						self.navigationState.switchStudy(self.study.id)
 					}
-				}.disabled(!self.isDone)
+				}
+				.foregroundColor(self.isDone ? Color.primary : Color.gray)
+				.disabled(!self.isDone)
 			}
 		}
 		.onAppear {
@@ -91,6 +93,7 @@ struct StudyPermissionsView: View, PermissionListProtocol {
 		}
 		.alert(isPresented: self.$showAlert, content: self.alertView)
 		.padding()
+		.esmiraScreenBackground()
 		.navigationBarTitle(Text("add_a_study"), displayMode: .inline)
 	}
 	

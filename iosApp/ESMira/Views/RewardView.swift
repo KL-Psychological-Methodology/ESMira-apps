@@ -228,6 +228,7 @@ struct RewardView: View {
 			}.padding()
 		}
 		.padding()
+		.esmiraScreenBackground()
 		.onAppear {
 			getCode = study.hasCachedRewardCode()
 			if getCode {

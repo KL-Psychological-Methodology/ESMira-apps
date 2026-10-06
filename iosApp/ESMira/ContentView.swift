@@ -1,6 +1,7 @@
 import SwiftUI
 import sharedCode
 
+
 struct ContentView: View {
 	@EnvironmentObject var appState: AppState
 	@EnvironmentObject var navigationState: NavigationState
@@ -10,14 +11,16 @@ struct ContentView: View {
 	init() {
 		let appearance = UINavigationBarAppearance()
 		appearance.configureWithOpaqueBackground()
-		appearance.backgroundColor = UIColor(named: "Surface")
-		appearance.titleTextAttributes = [.foregroundColor: UIColor(named: "onSurface") ?? UIColor.white]
-		appearance.largeTitleTextAttributes = [.foregroundColor: UIColor(named: "onSurface") ?? UIColor.white]
+		appearance.backgroundColor = UIColor(named: "PrimaryDark")
+		appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
+		appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
 			
 		UINavigationBar.appearance().standardAppearance = appearance
 		UINavigationBar.appearance().scrollEdgeAppearance = appearance
 		UINavigationBar.appearance().compactAppearance = appearance
-		UINavigationBar.appearance().tintColor = UIColor(named: "onSurface") ?? UIColor.white
+		UINavigationBar.appearance().tintColor = .white
+
+		UIScrollView.appearance().backgroundColor = UIColor(named: "Background")
 	}
 	
 	func getScreenDialogView() -> some View {
@@ -27,8 +30,7 @@ struct ContentView: View {
 					SendErrorReportView().environmentObject(self.appState)
 						.environmentObject(appState)
 						.environmentObject(navigationState)
-						.accentColor(Color("onSurface"))
-				)
+					)
 			case .changeSchedule:
 				let study = self.navigationState.study
 				if(study != nil) {
@@ -126,7 +128,7 @@ struct ContentView: View {
 				return Alert(title: Text(self.appState.title), message: Text(self.appState.msg), dismissButton: .default(Text("OK")))
 			}
 			
-			.accentColor(Color("onSurface"))
 			.navigationViewStyle(.stack)
+			.accentColor(.white)
 	}
 }

@@ -16,6 +16,7 @@ struct QuestionnaireLineView: View {
 	let questionnaire: Questionnaire
 	
 	@State private var questionnaireIsOpened = false
+	@Environment(\.colorScheme) private var colorScheme
 	
 	var body: some View {
 		Button(action: {
@@ -24,6 +25,7 @@ struct QuestionnaireLineView: View {
 			VStack(alignment: .leading) {
 				HStack {
 					Image(systemName: "doc.text.fill")
+						.ESMiraTextShadow()
 					Text(questionnaire.title)
 					Spacer()
 					if(questionnaire.showJustFinishedBadge()) {
@@ -56,5 +58,7 @@ struct QuestionnaireLineView: View {
 		}
 		.foregroundColor(Color("onSurface"))
 		.background(Color("Surface"))
+		.clipShape(RoundedRectangle(cornerRadius: ESMiraButtonCornerRadius))
+		.shadow(color: colorScheme.cardShadowColor, radius: 5, y: 5)
 	}
 }
