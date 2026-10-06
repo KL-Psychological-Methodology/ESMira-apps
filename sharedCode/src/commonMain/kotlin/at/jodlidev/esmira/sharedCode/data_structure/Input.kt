@@ -251,7 +251,7 @@ class Input internal constructor( ) {
     }
 
     fun isCompleted(): Boolean {
-        return completable() && getValue().isEmpty()
+        return completable() && getValue().isNotEmpty()
     }
 	
 	fun getFilledUrl(): String {
