@@ -376,6 +376,7 @@ class Questionnaire {
 		return -1
 	}
 
+    // The return value is a pair of completed items (first value) and maximum completable items (second value)
     fun completedOnPage(pageI: Int): Pair<Int, Int> {
         val page = pages[pageI]
         return page.activeInputs
