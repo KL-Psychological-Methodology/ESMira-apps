@@ -413,8 +413,17 @@ class ActionTrigger {
 		val timestamp = alarm.timestamp
 		
 		if(reminderCount > 0) {
+
+			if(alarm.timestamp < NativeLink.getNowMillis()) {
+				ErrorBox.log(
+					"Postponed Reminder",
+					"Alarm time for postponed reminder (${NativeLink.formatDateTime(timestamp)}) has already passed. Skipping issuing of postponed reminder."
+				)
+				return
+			}
+
 			ErrorBox.log("Postponed Reminder", "Scheduling Postponed Reminder")
-			
+
 			//this will eventually call execAsPostponedNotifications() again with a different alarm of type Reminder and reduced reminderCount
 			val newAlarm = Scheduler.addReminder(
 				questionnaire.id,
