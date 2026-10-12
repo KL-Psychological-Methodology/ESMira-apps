@@ -9,8 +9,6 @@ import android.widget.TextView
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
@@ -97,7 +95,9 @@ class HtmlHandler {
 				.usePlugin(StrikethroughPlugin.create())
 
                 if(useLinkify){
-                    builder.usePlugin(LinkifyPlugin.create())
+                    builder.usePlugin(LinkifyPlugin.create(
+						android.text.util.Linkify.EMAIL_ADDRESSES or android.text.util.Linkify.WEB_URLS
+					))
                 }
 //				.usePlugin(SoftBreakAddsNewLinePlugin.create())
 				return builder.build()
