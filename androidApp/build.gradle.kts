@@ -28,8 +28,8 @@ android {
         applicationId = "at.jodlidev.esmira"
         minSdk = 21
         targetSdk = 36
-        versionCode = 238
-        versionName = "2.22.4"
+        versionCode = 239
+        versionName = "2.22.5"
 
         multiDexEnabled = true //project became too big. See: https://stackoverflow.com/a/59308589
     
