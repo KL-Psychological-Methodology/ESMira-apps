@@ -253,3 +253,4 @@
 "reward_code_request_action" = "Request";
 "reward_code_request_info_calculation" = "You can only generate a Reward Code ONCE! If you generate it now, your reward amount will not increase. Any additional questionnaires you fill out will not count towards your reward.";
 "reward_code_request_info" = "You can only generate a Reward Code ONCE! If you generate it now, any additional questionnaires you fill out will not count towards your reward.";
+"completion_count_info" = "Filled out %1d of %2d responses.";

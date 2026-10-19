@@ -29,10 +29,12 @@ class InputViewWrapper: InputViewInterface {
 
 class InputViewModel: ObservableObject {
 	let input: Input
+    var pageCallback: (() -> Void)? = nil
 	
 	@Published var value: String {
 		didSet {
 			input.setValue(value: self.value, additionalValues: nil)
+            pageCallback?()
 		}
 	}
 	
@@ -46,9 +48,10 @@ class InputViewModel: ObservableObject {
 		input.setFile(filePath: filePath, dataType: .image)
 	}
 	
-	init(_ input: Input) {
+    init(_ input: Input, pageCallback: (() -> Void)? = nil) {
 		self.input = input
 		self.value = input.getValue()
+        self.pageCallback = pageCallback
 	}
 }
 
@@ -57,8 +60,8 @@ struct InputView: View {
 	
 	@ObservedObject var viewModel: InputViewModel
 	
-	init(input: Input) {
-		self._viewModel = ObservedObject(initialValue: InputViewModel(input))
+    init(input: Input, pageCallback: (() -> Void)? = nil) {
+		self._viewModel = ObservedObject(initialValue: InputViewModel(input, pageCallback: pageCallback))
 		self.input = input
 	}
 	

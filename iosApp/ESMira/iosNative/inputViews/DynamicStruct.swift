@@ -11,6 +11,6 @@ struct DynamicStruct: View {
 	@ObservedObject var viewModel: InputViewModel
 	
 	var body: some View {
-		InputView(input: self.viewModel.input.getDynamicInput())
+        InputView(input: self.viewModel.input.getDynamicInput(), pageCallback: self.viewModel.pageCallback)
 	}
 }

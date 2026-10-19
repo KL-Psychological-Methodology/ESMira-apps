@@ -253,3 +253,4 @@
 "reward_code_request_action" = "Beantragen";
 "reward_code_request_info_calculation" = "Ein Belohnungscode kann nur EINMAL erstellt werden. Wird der Code jetzt erstellt, wird sich die Belohnung nicht mehr erhöhen. Zusätzlich ausgefüllte Fragebögen zählen dann nicht mehr für die Belohnung.";
 "reward_code_request_info" = "Ein Belohnungscode kann nur EINMAL erstellt werden. Wenn Sie den Code jetzt erstellen. Zusätzliche ausgefüllte Fragebögen zählen dann nicht mehr für die Belohnung.";
+"completion_count_info" = "%1d von %2d Antworten ausgefüllt.";

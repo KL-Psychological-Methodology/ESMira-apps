@@ -23,6 +23,7 @@ struct QuestionnaireView: View {
 	@State private var pageIsActive = true
 	
 	@State var skipPageTimer: DispatchSourceTimer? = nil
+    @State private var complete: Int32 = 0
 	
 	/**
 	 * Only called from ContentView
@@ -38,10 +39,12 @@ struct QuestionnaireView: View {
 		self.firstScreen = firstScreen
 		self.questionnaire = questionnaire
 		self._pageIndex = State(initialValue: pageIndex)
+        let page = questionnaire.getPage(pageNumber: Int32(pageIndex))
+        self._complete = State(initialValue: page.completed())
 	}
 	
 	private func noMissings() -> Bool {
-		let errorIndex = self.questionnaire.checkQuestionnaire(pageI: Int32(self.pageIndex), checkAll: false)
+		let errorIndex = self.questionnaire.checkQuestionnaire(pageI: Int32(self.pageIndex))
 		if(errorIndex == -1) {
 			return true
 		}
@@ -59,6 +62,7 @@ struct QuestionnaireView: View {
 //	private func drawInnerQuestionnaire(page: Page, width: CGFloat) -> some View {
 	private func drawInnerQuestionnaire(page: Page) -> some View {
 		let activeInputs = page.activeInputs
+        let maxCompletable = page.completable()
 		
 		return VStack {
 			if(!page.header.isEmpty) {
@@ -69,7 +73,9 @@ struct QuestionnaireView: View {
 			}
 
 			ForEach(0..<activeInputs.count, id: \.self) { i in
-				InputView(input: activeInputs[i])
+                InputView(input: activeInputs[i]) {
+                    self.complete = page.completed()
+                }
 					.id("\(self.questionnaire.id)_\(self.pageIndex)_\(activeInputs[i].name)")
 					.padding()
 //					.frame(width: width)
@@ -87,6 +93,10 @@ struct QuestionnaireView: View {
 			}
 			
 			VStack(alignment: .leading) {
+                if(page.showCompletionProgress) {
+                    Text(String(format: NSLocalizedString("completion_count_info", comment: ""), self.complete, maxCompletable))
+                        .padding()
+                }
 				if(questionnaire.questionnairePageHasRequired(index: Int32(pageIndex))) {
 					Text("info_required")
 						.padding(10)
@@ -235,6 +245,7 @@ struct QuestionnaireView: View {
 						if(self.firstScreen) { //The screen used by ContentView is cached. So pageIndex needs to be checked anytime
 							self.pageIndex = Int(questionnaire.getFirstPageIndex())
 						}
+                        self.complete = self.questionnaire.getPage(pageNumber: Int32(self.pageIndex)).completed()
 					}
 			}
 		}
