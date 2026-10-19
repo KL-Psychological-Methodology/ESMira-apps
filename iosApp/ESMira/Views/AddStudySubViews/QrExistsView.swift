@@ -26,5 +26,6 @@ struct QrExistsView: View {
 			Spacer()
 		}
 		.padding()
+		.esmiraScreenBackground()
 	}
 }

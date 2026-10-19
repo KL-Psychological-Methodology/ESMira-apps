@@ -51,9 +51,11 @@ struct ServerQuestionView: View {
 					Text("continue_")
 					Image(systemName: "chevron.compact.right")
 				}
+				.foregroundColor(Color.primary)
 			}
 		}
 		.padding()
+		.esmiraScreenBackground()
 		.textFieldAlert(isPresented: self.$askManualUrl, text: self.$manualUrl, title: "colon_enter_manually") {
 			self.addStudyState.serverUrl = self.manualUrl
 		}

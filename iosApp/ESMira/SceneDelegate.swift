@@ -38,6 +38,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 			self.window = window
 			window.makeKeyAndVisible()
 		}
+        
+        //App was started by clicking on a link (cold start)
+        if let url = connectionOptions.urlContexts.first?.url {
+            let urlData = QrInterpreter().check(s: url.absoluteString)
+            if(urlData != nil) {
+                navigationState.addStudyConnectData = urlData
+                navigationState.addStudyOpened = true
+            }
+        }
 	}
 	
 	func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {

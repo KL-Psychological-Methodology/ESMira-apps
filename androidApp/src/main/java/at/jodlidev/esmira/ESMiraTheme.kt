@@ -4,10 +4,10 @@ import android.content.res.Configuration
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-//import androidx.compose.material.MaterialTheme.shapes
-import androidx.compose.material3.MaterialTheme.shapes
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.MaterialTheme.typography
+import androidx.compose.material.icons.filled.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.unit.dp
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
@@ -30,6 +30,12 @@ val colorLineBackground2 = Color(0x3AFFFFFF)
 val colorLog = Color(0x34FFFFFF)
 val colorWarn = Color(0xFFFFBB00)
 val colorError = Color(0xFFFF0000)
+
+
+val ESMiraShapes = Shapes(
+	small = RoundedCornerShape(4.dp),
+	medium = RoundedCornerShape(16.dp)
+)
 
 private val blue1 = Color(0XFFe6f9ff)
 private val blue2 = Color(0xFF9fe0f7)
@@ -54,21 +60,21 @@ private val LightColorPalette = lightColorScheme(
 	tertiaryContainer = Color(0xFFff8fce),
 	onTertiaryContainer = Color.White,
 	
-	background = Color.White,
+	background = Color(0xFFEBF5FB),
 	onBackground = Color.Black,
 	
 	surfaceTint = Color.White,
-	surface = Color(0XFFe6f9ff),
+	surface = Color(0XFFC2E4F5),
 	onSurface = Color(0XFF2B98CA),
 //	surfaceVariant =  Color(0xFF9fe0f7),
 //	onSurfaceVariant = Color(0XFF2B98CA),
-	surfaceVariant =  Color(0XFFe6f9ff), //TextField
+	surfaceVariant =  Color(0XFFC2E4F5), //TextField
 	onSurfaceVariant = Color(0XFF2B98CA),
 	
 	outline = Color(0XFF2B98CA),
-	outlineVariant = Color(0XFF2B98CA),
-	
-	error = Color.Red,
+	outlineVariant = Color(0xFF9fe0f7),
+
+	error = Color(0xFFD32F2F),
 	onError = Color.White
 )
 private val DarkColorPalette = darkColorScheme(
@@ -88,7 +94,7 @@ private val DarkColorPalette = darkColorScheme(
 	tertiaryContainer = Color(0xFFDC4E9d),
 	onTertiaryContainer = Color.White,
 	
-	background = Color.Black,
+	background = Color(0xFF0A1F3A),
 	onBackground = Color.White,
 	
 	surface = Color(0XFF2B98CA),
@@ -97,9 +103,9 @@ private val DarkColorPalette = darkColorScheme(
 	onSurfaceVariant = Color.White,
 	
 	outline = Color(0XFF2B98CA),
-	outlineVariant = Color(0XFF2B98CA),
-	
-	error = Color.Red,
+	outlineVariant = Color(0xFF9fe0f7),
+
+	error = Color(0xFFD32F2F),
 	onError = Color.White
 )
 @Composable
@@ -110,7 +116,7 @@ fun ESMiraTheme (
 	MaterialTheme(
 		colorScheme = if(darkTheme) DarkColorPalette else LightColorPalette,
 		typography = typography,
-		shapes = shapes,
+		shapes = ESMiraShapes,
 		content = content
 	)
 }

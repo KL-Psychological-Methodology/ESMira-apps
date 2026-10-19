@@ -9,12 +9,54 @@
 import Foundation
 import SwiftUI
 
+let ESMiraButtonCornerRadius: CGFloat = 16
+
+extension ColorScheme {
+	var cardShadowColor: Color {
+		self == .dark
+			? Color(.sRGBLinear, white: 1, opacity: 0.35)
+			: Color(.sRGBLinear, white: 0, opacity: 0.25)
+	}
+}
+
+private struct ESMiraTextShadowModifier: ViewModifier {
+	@Environment(\.colorScheme) private var colorScheme
+	func body(content: Content) -> some View {
+		let shadowColor = colorScheme == .dark
+			? Color.white.opacity(0.18)
+			: Color.black.opacity(0.18)
+		return content.shadow(color: shadowColor, radius: 1, x: 1, y: 1)
+	}
+}
+
+extension View {
+	func ESMiraTextShadow() -> some View {
+		self.modifier(ESMiraTextShadowModifier())
+	}
+}
+
+private struct ESMiraScreenBackgroundModifier: ViewModifier {
+	func body(content: Content) -> some View {
+		content
+			.frame(maxWidth: .infinity, maxHeight: .infinity)
+			.background(Color("Background").edgesIgnoringSafeArea(.all))
+	}
+}
+
+extension View {
+	func esmiraScreenBackground() -> some View {
+		self.modifier(ESMiraScreenBackgroundModifier())
+	}
+}
+
 struct NavigationLinkModifier: ViewModifier {
 	func body(content: Content) -> some View {
 		content
 			.foregroundColor(Color("onSurface"))
-			.padding()
+			.padding(.horizontal, 16)
+			.padding(.vertical, 10)
 			.background(Color("Surface"))
+			.clipShape(RoundedRectangle(cornerRadius: ESMiraButtonCornerRadius))
 	}
 }
 
@@ -45,8 +87,10 @@ struct DefaultButton: View {
 		}
 			.opacity(self.disabled ? 0.3 : 1)
 			.disabled(self.disabled)
-			.padding()
+			.padding(.horizontal, 16)
+			.padding(.vertical, 10)
 			.background(Color("Surface"))
+			.clipShape(RoundedRectangle(cornerRadius: ESMiraButtonCornerRadius))
 	}
 }
 
@@ -76,8 +120,10 @@ struct DefaultIconButton: View {
 		}
 			.opacity(self.disabled ? 0.3 : 1)
 			.disabled(self.disabled)
-			.padding()
+			.padding(.horizontal, 16)
+			.padding(.vertical, 10)
 			.background(Color("Surface"))
+			.clipShape(RoundedRectangle(cornerRadius: ESMiraButtonCornerRadius))
 	}
 }
 
@@ -102,7 +148,9 @@ struct DefaultIconRightButton: View {
 			.frame(maxWidth: self.maxWidth)
 			.foregroundColor(Color("onSurface"))
 		}
-			.padding()
+			.padding(.horizontal, 16)
+			.padding(.vertical, 10)
 			.background(Color("Surface"))
+			.clipShape(RoundedRectangle(cornerRadius: ESMiraButtonCornerRadius))
 	}
 }

@@ -289,7 +289,7 @@ fun AppUsageTableView(
         )
 
 
-        if(todayUsageCount + yesterdayUsageCount > 0){
+        if(todayUsageCount > 0 || yesterdayUsageCount > 0){
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -298,12 +298,11 @@ fun AppUsageTableView(
                     Text(" ")
                     Spacer(modifier = Modifier.height(5.dp))
                     Text(stringResource(R.string.colon_usageTime), fontWeight = FontWeight.Bold)
-                    if (yesterdayUsageCount + todayUsageCount > 0) {
-                        Text(
-                            stringResource(R.string.colon_usageCount),
-                            fontWeight = FontWeight.Bold
-                        )
-                    }
+
+                    Text(
+                        stringResource(R.string.colon_usageCount),
+                        fontWeight = FontWeight.Bold
+                    )
                 }
 
                 Spacer(modifier = Modifier.width(15.dp))

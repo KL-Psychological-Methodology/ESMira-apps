@@ -139,10 +139,12 @@ struct AttributedText: UIViewRepresentable {
 		view.backgroundColor = .clear
 		view.isScrollEnabled = self.isScrollable
 		view.attributedText = attributedText
+		view.tintColor = UIColor.link
 		return view
 	}
 
 	func updateUIView(_ uiView: UITextView, context: Context) {
+		uiView.tintColor = UIColor.link
 		if(!self.isScrollable) {
 			DispatchQueue.main.async {
 				uiView.invalidateIntrinsicContentSize()

@@ -67,10 +67,12 @@ struct SendErrorReportView: View {
 					) {
 						Text("what_is_sent").padding(.bottom)
 					}
-					
+					.foregroundColor(Color.primary)
+
 					Spacer()
-					
+
 					Button(action: { self.shownToWhom = true}) { Text("sent_to_whom").padding(.bottom) }
+						.foregroundColor(Color.primary)
 				}
 				HStack {
 					CheckBoxView(label: NSLocalizedString("send_error_report_to_researcher", comment: ""), state: self.$sendAsMessage)
