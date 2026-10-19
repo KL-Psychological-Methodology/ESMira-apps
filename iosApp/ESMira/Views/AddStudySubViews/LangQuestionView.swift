@@ -11,7 +11,6 @@ struct LangQuestionView: View {
 	
 	init(study: Study) {
 		self.study = study
-		self.selectedLanguage = study.lang
 		self.addStudyState = AddStudyState(
 			serverUrl: study.serverUrl,
 			accessKey: study.accessKey,
@@ -27,7 +26,8 @@ struct LangQuestionView: View {
 			}
 		}
 		languages = languageMap
-	}
+        self.selectedLanguage = study.lang
+    }
 	
 	var body: some View {
 		if(self.gotoStudyLoader) {

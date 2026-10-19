@@ -10,7 +10,6 @@ struct LanguageSelect: View {
 	
 	init(study: Study) {
 		self.study = study
-		self.selectedLanguage = study.lang
 		let languageCodes = study.getAvailableLangs()
 		let currentLocale = Locale.current
 		var languageMap: [String: String] = [:]
@@ -20,7 +19,8 @@ struct LanguageSelect: View {
 			}
 		}
 		self.languages = languageMap
-	}
+        self.selectedLanguage = study.lang
+    }
 	
 	
 	var body: some View {
