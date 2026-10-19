@@ -11,14 +11,18 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Save
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import at.jodlidev.esmira.*
 import at.jodlidev.esmira.R
@@ -85,6 +89,16 @@ fun getBackgroundColor(i: Int): Color {
 	return if(i % 2 == 0) colorLineBackground1 else colorLineBackground2
 }
 
+fun Modifier.leftBorder(width: Dp, color: Color): Modifier = this.drawBehind {
+	val strokeWidth = width.toPx()
+	drawLine(
+		color = color,
+		start = Offset(strokeWidth / 2, 0f),
+		end = Offset(strokeWidth / 2, size.height),
+		strokeWidth = strokeWidth
+	)
+}
+
 @Composable
 fun MainView(
 	listState: LazyListState,
@@ -109,15 +123,24 @@ fun MainView(
 		}
 
 		itemsIndexed(activeInputs, { i, _ -> i }) { i, input ->
+			val inputCompleted = remember { mutableStateOf(input.isCompleted()) }
 			ChooseInputView(
 				questionnaire,
 				input,
 				Modifier
 					.fillMaxWidth()
 					.background(color = getBackgroundColor(i))
+					.then(
+						if(input.completable() && !inputCompleted.value) {
+							Modifier.leftBorder(width = 4.dp, color = MaterialTheme.colorScheme.primary)
+						} else {
+							Modifier
+						}
+					)
 					.padding(all = 10.dp)
 			) {
 				complete.value = page.completed()
+				inputCompleted.value = input.isCompleted()
 			}
 		}
 		
