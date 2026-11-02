@@ -52,7 +52,7 @@ struct ListSingleStruct: View {
 		var value = ""
 		if(self.viewModel.input.forceInt) {
 			if let i = Int(self.viewModel.value) {
-				if i == self.viewModel.input.listChoices.count - self.startValue {
+				if i == self.viewModel.input.listChoices.count + self.startValue {
 					value = String(NSLocalizedString("option_other", comment: ""))
 				} else {
 					value = self.viewModel.input.listChoices[i - self.startValue]
