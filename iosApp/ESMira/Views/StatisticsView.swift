@@ -80,7 +80,9 @@ struct StatisticsView: View {
 	}
 	private func loadPublicStudiesSuccess(json: String) {
 		let publicCollection = ChartInfoCollection(json: json, study: self.study)
-		personalCollection.addPublicData(publicChartCollection: publicCollection)
+        if(!self.personalCollection.hasPublicData){
+            personalCollection.addPublicData(publicChartCollection: publicCollection)
+        }
 		initCharts(publicCollection)
 		self.publicCollection = publicCollection
 		
@@ -115,7 +117,11 @@ struct StatisticsView: View {
 			else if(self.currentScreen == .publicStatistics) {
 				GeometryReader { geometry in
 					ScrollView {
-						self.drawStatistics(charts: self.publicCollection!.charts, width: geometry.size.width)
+                        if let loadedCollection = self.publicCollection {
+                            self.drawStatistics(charts: loadedCollection.charts, width: geometry.size.width)
+                        } else {
+                            ProgressView()
+                        }
 					}
 				}
 				.padding(.horizontal)
@@ -173,7 +179,7 @@ struct StatisticsView: View {
 			)
 			.onAppear {
 				if(self.study.publicStatisticsNeeded) {
-					if (!self.personalCollection.hasPublicData) {
+					if (self.publicCollection == nil) {
 						self.loadingState = .loading
 					}
 					else {
