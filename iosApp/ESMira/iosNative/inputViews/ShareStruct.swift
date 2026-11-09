@@ -13,7 +13,12 @@ struct ShareStruct: View {
 	var body: some View {
 		VStack(alignment: .center) {
 			DefaultIconButton(icon: "square.and.arrow.up", label: "open_url") {
-				UIApplication.shared.open(URL(string: viewModel.input.getFilledUrl())!, options: [:])
+                let urlString = viewModel.input.getFilledUrl()
+                guard let url = URL(string: urlString) else {
+                    ErrorBox.Companion().warn(title: "ShareStruct", msg: "\(urlString) is not a valid URL!")
+                    return
+                }
+                UIApplication.shared.open(url, options: [:])
 				viewModel.value = String((Int(viewModel.value) ?? 0) + 1)
 			}
 		}
