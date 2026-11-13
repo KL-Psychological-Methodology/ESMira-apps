@@ -53,6 +53,25 @@ class InputTest : BaseCommonTest() {
 		input.setFile("path/to/file")
 		assertEquals("path/to/file", input.getFileName())
 	}
+
+	@Test
+	fun addFileAndAdditionalValues() {
+		val input = Input()
+		val questionnaire = createJsonObj<Questionnaire>()
+		questionnaire.studyId = getBaseStudyId()
+		input.questionnaire = questionnaire
+		input.setFile("path/to/file")
+
+		val valueAfterSetFile = input.getValue()
+
+		input.setAdditionalValues(mapOf("val1" to testValue2, "val2" to testValue3))
+		val valueAfterSetAdditionalValues = input.getValue()
+
+		assertEquals(valueAfterSetFile, valueAfterSetAdditionalValues)
+		assertEquals("path/to/file", input.getFileName())
+		assertEquals(testValue2, input.getAdditional("val1"))
+		assertEquals(testValue3, input.getAdditional("val2"))
+	}
 	
 	private fun testDynamicInput(random: Boolean) {
 		val name = "dynamic"

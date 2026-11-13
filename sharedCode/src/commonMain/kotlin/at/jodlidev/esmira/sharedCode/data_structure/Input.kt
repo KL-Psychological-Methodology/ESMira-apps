@@ -171,6 +171,7 @@ class Input internal constructor( ) {
 	 * For connecting a File with this input
 	 * Saves a [FileUpload], sets [FileUpload.identifier] in [_value] and calls [QuestionnaireCache.saveCacheValue]
 	 * Cannot be combined with [setValue]
+	 * For saving additional values, combine with [setAdditionalValues]
 	 */
 	fun setFile(filePath: String, dataType: FileUpload.DataTypes = FileUpload.DataTypes.Image) {
 		val currentValue = getValue() // will also set _value
@@ -187,6 +188,19 @@ class Input internal constructor( ) {
 		fileUpload.save()
 		addedFiles.add(fileUpload)
 		_value = fileUpload.identifier.toString()
+		QuestionnaireCache.saveCacheValue(questionnaire.id, name, getBackupString())
+	}
+
+	/**
+	 * For setting additional values after [setFile]
+	 * Does not change [_value]
+	 */
+	fun setAdditionalValues(additionalValues: Map<String, String>) {
+		getValue()
+
+		this.additionalValues.clear()
+		this.additionalValues.putAll(additionalValues)
+
 		QuestionnaireCache.saveCacheValue(questionnaire.id, name, getBackupString())
 	}
 	fun getFileName(): String? {
