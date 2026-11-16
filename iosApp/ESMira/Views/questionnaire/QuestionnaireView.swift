@@ -42,7 +42,37 @@ struct QuestionnaireView: View {
         let page = questionnaire.getPage(pageNumber: Int32(pageIndex))
         self._complete = State(initialValue: page.completed())
 	}
-	
+    
+    private struct InputRowView: View {
+        let input: Input
+        let backgroundColor: Color
+        let onChange: () -> Void
+        
+        @State private var inputCompleted: Bool
+        
+        init(input: Input, backgroundColor: Color, onChange: @escaping () -> Void) {
+            self.input = input
+            self.backgroundColor = backgroundColor
+            self.onChange = onChange
+            self._inputCompleted = State(initialValue: input.isCompleted())
+        }
+        
+        var body: some View {
+            HStack(spacing: 0) {
+                if input.completable() {
+                    Rectangle().fill(inputCompleted ? Color.clear : Color("onSurface")).frame(width: 4)
+                }
+                InputView(input: input) {
+                    self.inputCompleted = input.isCompleted()
+                    self.onChange()
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+            }
+            .background(backgroundColor)
+        }
+    }
+     
 	private func noMissings() -> Bool {
 		let errorIndex = self.questionnaire.checkQuestionnaire(pageI: Int32(self.pageIndex))
 		if(errorIndex == -1) {
@@ -73,14 +103,15 @@ struct QuestionnaireView: View {
 			}
 
 			ForEach(0..<activeInputs.count, id: \.self) { i in
-                InputView(input: activeInputs[i]) {
+                InputRowView(
+                    input: activeInputs[i],
+                    backgroundColor: getBackgroundColor(i)
+                ){
                     self.complete = page.completed()
                 }
 					.id("\(self.questionnaire.id)_\(self.pageIndex)_\(activeInputs[i].name)")
-					.padding()
 //					.frame(width: width)
 					.uiTag(i)
-					.background(getBackgroundColor(i))
 
 			}
 
