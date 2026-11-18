@@ -28,6 +28,7 @@ class Input internal constructor( ) {
 	enum class TYPES {
 		ambient_light,
 		app_usage,
+		app_usage_detailed,
 		battery_level,
 		binary,
 		bluetooth_devices,
@@ -325,10 +326,10 @@ class Input internal constructor( ) {
 	}
 	
 	internal fun hasScreenTracking(): Boolean {
-		return type == TYPES.app_usage && packageId.isEmpty()
+		return (type == TYPES.app_usage || type == TYPES.app_usage_detailed) && packageId.isEmpty()
 	}
 	internal fun hasScreenOrAppTracking(): Boolean {
-		return type == TYPES.app_usage
+		return type == TYPES.app_usage || type == TYPES.app_usage_detailed
 	}
 	
 	internal fun fillIntoDataSet(dataSet: DataSet) {
