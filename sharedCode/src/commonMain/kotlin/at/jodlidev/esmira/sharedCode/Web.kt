@@ -82,6 +82,8 @@ class Web {
 							append(HttpHeaders.ContentType, "image/png")
 						FileUpload.DataTypes.Audio ->
 							append(HttpHeaders.ContentType, "video/mp4")
+						FileUpload.DataTypes.Data ->
+							append(HttpHeaders.ContentType, "text/csv")
 					}
 					append(HttpHeaders.ContentDisposition, "filename=${fileUpload.identifier}")
 				})
