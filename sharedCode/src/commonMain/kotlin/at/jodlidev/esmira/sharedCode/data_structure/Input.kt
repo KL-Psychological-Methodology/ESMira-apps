@@ -171,14 +171,21 @@ class Input internal constructor( ) {
 	 * For connecting a File with this input
 	 * Saves a [FileUpload], sets [FileUpload.identifier] in [_value] and calls [QuestionnaireCache.saveCacheValue]
 	 * Cannot be combined with [setValue]
-	 * For saving additional values, combine with [setAdditionalValues]
+	 * @param additionalValues Optional. Saved together with the file, [_value] keeps the file identifier
 	 */
-	fun setFile(filePath: String, dataType: FileUpload.DataTypes = FileUpload.DataTypes.Image) {
+	fun setFile(filePath: String, dataType: FileUpload.DataTypes = FileUpload.DataTypes.Image, additionalValues: Map<String, String>? = null) {
 		val currentValue = getValue() // will also set _value
+
+		if(additionalValues != null) {
+			this.additionalValues.clear()
+			this.additionalValues.putAll(additionalValues)
+		}
+
 		if(currentValue.isNotEmpty()) {
 			DbLogic.getFileUploadByIdentifier(currentValue)?.let { fileUpload ->
 				if(addedFiles.find { it.identifier == fileUpload.identifier } == null)
 					addedFiles.add(fileUpload)
+				QuestionnaireCache.saveCacheValue(questionnaire.id, name, getBackupString())
 				return
 			}
 		}
