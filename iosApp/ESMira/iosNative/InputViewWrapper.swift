@@ -43,7 +43,7 @@ class InputViewModel: ObservableObject {
 	}
 	
 	func setFilePath(filePath: String) {
-		input.setFile(filePath: filePath, dataType: .image)
+		input.setFile(filePath: filePath, dataType: .image, additionalValues: nil)
 	}
 	
 	init(_ input: Input) {

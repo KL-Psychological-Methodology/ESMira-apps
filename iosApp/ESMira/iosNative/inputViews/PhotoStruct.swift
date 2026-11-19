@@ -65,7 +65,7 @@ struct PhotoStruct: View {
 							} else {
 								try img.pngData()?.write(to: filePath, options: [])
 							}
-							self.viewModel.input.setFile(filePath: self.filename, dataType: FileUpload.DataTypes.image)
+							self.viewModel.input.setFile(filePath: self.filename, dataType: FileUpload.DataTypes.image, additionalValues: nil)
 						} catch {
 							ErrorBox.Companion().error(title: "PhotoStruct", msg: "Could not save image from camera. Error: \(error)")
 						}

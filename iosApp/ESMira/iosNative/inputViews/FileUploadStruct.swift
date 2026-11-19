@@ -76,7 +76,7 @@ struct FileUploadStruct: View {
 						do {
 							let toUrl = getURL(self.filename)
 							try FileManager.default.copyItem(at: url, to: toUrl)
-							self.viewModel.input.setFile(filePath: self.filename, dataType: FileUpload.DataTypes.image)
+							self.viewModel.input.setFile(filePath: self.filename, dataType: FileUpload.DataTypes.image, additionalValues: nil)
 							self.fileURL = toUrl
 						}
 						catch {

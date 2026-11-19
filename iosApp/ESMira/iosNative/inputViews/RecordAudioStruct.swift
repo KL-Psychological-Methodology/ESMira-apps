@@ -149,7 +149,7 @@ struct RecordAudioStruct: View {
 				DefaultIconButton(icon: "stop.circle", label: "stop_audio_record", maxWidth: 200) {
 					self.fileExists = true
 					self.audioClass.stopRecording()
-					self.viewModel.input.setFile(filePath: self.filename, dataType: FileUpload.DataTypes.audio)
+					self.viewModel.input.setFile(filePath: self.filename, dataType: FileUpload.DataTypes.audio, additionalValues: nil)
 				}
 			}
 			else {
