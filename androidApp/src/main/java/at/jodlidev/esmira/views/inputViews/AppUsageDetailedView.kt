@@ -1,12 +1,13 @@
 package at.jodlidev.esmira.views.inputViews
 
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import at.jodlidev.esmira.sharedCode.NativeLink
 import at.jodlidev.esmira.sharedCode.data_structure.FileUpload
 import at.jodlidev.esmira.sharedCode.data_structure.Input
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.io.File
 import kotlin.math.round
 
@@ -69,7 +70,9 @@ fun AppUsageDetailedView(input: Input) {
         folder.mkdir()
         val file = input.getFileName()?.let { File(it) } ?: File(folder, "${System.currentTimeMillis()}.csv")
 
-        file.writeText(csv)
+        withContext(Dispatchers.IO) {
+            file.writeText(csv)
+        }
         input.setFile(file.absolutePath, FileUpload.DataTypes.Data, mapOf(
             Pair("usageCountYesterday", yesterdayUsageCount.toString()),
             Pair("usageCountToday", todayUsageCount.toString()),
