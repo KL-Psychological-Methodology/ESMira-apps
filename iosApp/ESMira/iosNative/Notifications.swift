@@ -25,6 +25,7 @@ class Notifications: NotificationsInterface {
 		notification.body = msg.stripOutHtml()
 		notification.sound = UNNotificationSound(named: UNNotificationSoundName(rawValue: "notification.wav"))
 		notification.badge = 1
+        notification.interruptionLevel = .timeSensitive
 		
 		let request = UNNotificationRequest(identifier: id, content: notification, trigger: trigger)
 		
