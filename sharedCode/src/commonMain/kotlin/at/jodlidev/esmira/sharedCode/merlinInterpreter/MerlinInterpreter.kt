@@ -877,6 +877,31 @@ class MerlinInterpreter: MerlinExpr.Visitor<MerlinType>, MerlinStmt.Visitor<Unit
             },
 
             //
+            // String Functions
+            //
+
+            // splitAt(string, at)
+            // Splits up to the specified index (exclusive)
+            "splitAt" to object: MerlinFunction {
+                override fun arity(): Int {
+                    return 2
+                }
+
+                override fun call(
+                    interpreter: MerlinInterpreter,
+                    arguments: List<MerlinType>
+                ): MerlinType {
+                    val str = arguments[0].stringify()
+                    val at = arguments[1].asNumber()?.value?.toInt() ?: return MerlinArray(mutableListOf(MerlinString(str), MerlinString("")))
+
+                    val first = str.substring(0, at.coerceIn(0, str.length))
+                    val second = str.substring(at.coerceIn(0, str.length))
+
+                    return MerlinArray(mutableListOf(MerlinString(first), MerlinString(second)))
+                }
+            },
+
+            //
             // Random Functions
             //
 
