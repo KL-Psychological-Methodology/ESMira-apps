@@ -19,7 +19,7 @@ struct LanguageSelect: View {
 			}
 		}
 		self.languages = languageMap
-        self.selectedLanguage = study.lang
+        self._selectedLanguage = State(initialValue: study.lang)
     }
 	
 	

@@ -26,7 +26,7 @@ struct LangQuestionView: View {
 			}
 		}
 		languages = languageMap
-        self.selectedLanguage = study.lang
+        self._selectedLanguage = State(initialValue: study.lang)
     }
 	
 	var body: some View {
