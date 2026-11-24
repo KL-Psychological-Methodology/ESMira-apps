@@ -41,12 +41,12 @@ fun AppUsageDetailedView(input: Input) {
         val yesterdayPair = appUsageCalculator.countTotalEvents(from, to)
         yesterdayUsageCount = yesterdayPair.count
         yesterdayUsageTime = yesterdayPair.totalTime
-        yesterdayUsageProtocol = listOf() // Currently not implemented
+        yesterdayUsageProtocol = yesterdayPair.events
 
         val todayPair = appUsageCalculator.countTotalEvents(to, now)
         todayUsageCount = todayPair.count
         todayUsageTime = todayPair.totalTime
-        todayUsageProtocol = listOf() // Currently not implemented
+        todayUsageProtocol = todayPair.events
     }
 
     LaunchedEffect(Unit) {
