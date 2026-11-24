@@ -51,18 +51,18 @@ fun AppUsageDetailedView(input: Input) {
 
     LaunchedEffect(Unit) {
         val csv = buildString {
-            appendLine("day,start,end")
+            appendLine("day;start;end")
             for((start, end) in yesterdayUsageProtocol) {
                 val day = "yesterday"
                 val s = round(start / 1000.0).toLong()
                 val e = round(end / 1000.0).toLong()
-                appendLine("$day,$s,$e")
+                appendLine("$day;$s;$e")
             }
             for((start, end) in todayUsageProtocol) {
                 val day = "today"
                 val s = round(start / 1000.0).toLong()
                 val e = round(end / 1000.0).toLong()
-                appendLine("$day,$s,$e")
+                appendLine("$day;$s;$e")
             }
         }
 
